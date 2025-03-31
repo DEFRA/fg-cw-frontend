@@ -25,6 +25,9 @@ export default {
   entry: {
     application: {
       import: ['./javascripts/application.js', './stylesheets/application.scss']
+    },
+    govuk: {
+      import: [path.join(govukFrontendPath, 'dist/govuk/govuk-frontend.min.js')]
     }
   },
   experiments: {
