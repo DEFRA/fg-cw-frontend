@@ -4,11 +4,11 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 
 {% set tableHeaders = [
-  { text: "ID" },
-  { text: "Business" },
-  { text: "Date submitted" },
-  { text: "Status" },
-  { text: "Assigned" }
+  { text: "ID", classes: "govuk-!-width-one-quarter" },
+  { text: "Business", classes: "govuk-!-width-one-quarter" },
+  { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+  { text: "Status", classes: "govuk-!-width-one-quarter" },
+  { text: "Assigned", classes: "govuk-!-width-one-quarter" }
 ] %}
 
 {% set tableRows = [] %}
@@ -30,7 +30,7 @@
         text: case.businessName
       },
       {
-        text: case.dateReceived
+        text: case.dateReceived | formatDate("d MMMM yy")
       },
       {
         text: case.priority
@@ -48,7 +48,7 @@
   }) }}
 
   <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
+    <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
         {% set myCasesHtml %}
           <h2 class="govuk-heading-l">My Cases</h2>
