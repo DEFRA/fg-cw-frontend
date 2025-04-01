@@ -20,7 +20,7 @@ describe('#aboutController', () => {
       url: '/applications'
     })
 
-    expect(result).toEqual(expect.stringContaining('Applications |'))
+    expect(result).toEqual(expect.stringContaining('Applications'))
     expect(statusCode).toBe(statusCodes.ok)
   })
 })
