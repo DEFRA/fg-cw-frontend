@@ -6,8 +6,7 @@ import {
   Header,
   Radios,
   SkipLink,
-  Tabs,
-  Accordion
+  Tabs
 } from 'govuk-frontend'
 
 createAll(Button)
@@ -17,4 +16,3 @@ createAll(Header)
 createAll(Radios)
 createAll(SkipLink)
 createAll(Tabs)
-createAll(Accordion)
