@@ -1,0 +1,121 @@
+{% extends 'layouts/page.njk' %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{%
+  set tableHeaders = [
+    { text: "ID", classes: "govuk-!-width-one-quarter" },
+    { text: "Business", classes: "govuk-!-width-one-quarter" },
+    { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+    { text: "Status", classes: "govuk-!-width-one-quarter" },
+    { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+  ]
+%}
+{% set tableRows = [] %}
+{% for case in data.allCases %}
+  {%
+    set row = [
+        {
+            html: govukCheckboxes({
+                name: "selected_cases",
+                items: [
+                    {
+                        value: case.id,
+                        text: case.id
+
+                    }
+                ]
+            })
+        },
+        {
+          text: case.businessName
+        },
+        {
+          text: case.dateReceived | formatDate("d MMMM yy")
+        },
+        {
+          text: case.priority
+        },
+        {
+          text: case.assignedUser
+        }
+    ]
+  %}
+  {% set tableRows = (tableRows.push(row), tableRows) %}
+{% endfor %}
+
+{% block content %}
+  {{
+    appHeading({
+      text: heading
+    })
+  }}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-body" data-testid="app-page-body">
+        {% set myCasesHtml %}
+          <h2 class="govuk-heading-l">My Cases</h2>
+          {{
+            govukTable({
+              head: tableHeaders,
+              rows:[]
+            })
+          }}
+        {% endset -%}
+
+        {% set teamCasesHtml %}
+          <h2 class="govuk-heading-l">Team cases</h2>
+          {{
+            govukTable({
+              head: tableHeaders,
+              rows: []
+            })
+          }}
+        {% endset -%}
+
+        {% set allCasesHtml %}
+          <h2 class="govuk-heading-l">All cases</h2>
+          {{
+            govukTable({
+              head: tableHeaders,
+              rows: tableRows
+            })
+          }}
+        {% endset -%}
+
+        {{
+          govukTabs({
+            items: [
+              {
+                label: "My cases",
+                id: "my-cases",
+                panel: {
+                  html: myCasesHtml
+                }
+              },
+              {
+                label: "Team cases",
+                id: "team-cases",
+                panel: {
+                  html: teamCasesHtml
+                }
+              },
+              {
+                label: "All cases",
+                id: "all-cases",
+                panel: {
+                  html: allCasesHtml
+                }
+              }
+            ]
+          })
+        }}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+{% endblock %}

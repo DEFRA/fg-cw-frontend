@@ -5,60 +5,133 @@
 
 {# Import custom components globally #}
 {% from "heading/macro.njk" import appHeading %}
-
 {% set mainClasses = "app-main-wrapper" %}
 
 {% block head %}
-  <link href="{{ getAssetPath('stylesheets/application.scss') }}" rel="stylesheet">
+  <link
+    href="{{ getAssetPath('stylesheets/application.scss') }}"
+    rel="stylesheet"
+  />
 {% endblock %}
 
 {% block header %}
-  {{ govukHeader({
-    homepageUrl: "https://www.gov.uk/",
-    classes: "app-header",
-    containerClasses: "govuk-width-container",
-    serviceName: serviceName,
-    serviceUrl: serviceUrl,
-    useTudorCrown: true
-  }) }}
+  {{
+    govukHeader({
+      homepageUrl: "https://www.gov.uk/",
+      classes: "app-header",
+      containerClasses: "govuk-width-container",
+      serviceName: serviceName,
+      serviceUrl: serviceUrl,
+      useTudorCrown: true
+    })
+  }}
   {% include "partials/navigation/navigation.njk" %}
 {% endblock %}
 
 {% block pageTitle %}
-  {{ pageTitle }} | {{ serviceName }}
+  {{ pageTitle }}
+  | {{ serviceName }}
 {% endblock %}
 
 {% block beforeContent %}
   {% if breadcrumbs.length > 1 %}
-    {{ govukBreadcrumbs({
-      items: breadcrumbs
-    }) }}
+    {{
+      govukBreadcrumbs({
+        items: breadcrumbs
+      })
+    }}
   {% endif %}
 {% endblock %}
 
-{% block content %}{% endblock %}
+{% block content %}
+{% endblock %}
 
 {% block footer %}
-  {{ govukFooter({
-    meta: {
-      items: [
-        {
-          href: "https://www.gov.uk/help/privacy-notice",
-          text: "Privacy"
-        },
-        {
-          href: "https://www.gov.uk/help/cookies",
-          text: "Cookies"
-        },
-        {
-          href: "https://www.gov.uk/help/accessibility-statement",
-          text: "Accessibility statement"
-        }
-      ]
-    }
-  }) }}
+  {{
+    govukFooter({
+       navigation: [
+      {
+        title: "Footer links",
+        width: "two-thirds",
+        columns: 2,
+        items: [
+          {
+            href: "#",
+            text: "Navigation item 1"
+          },
+          {
+            href: "#",
+            text: "Navigation item 2"
+          },
+          {
+            href: "#",
+            text: "Navigation item 3"
+          },
+          {
+            href: "#",
+            text: "Navigation item 4"
+          },
+          {
+            href: "#",
+            text: "Navigation item 5"
+          },
+          {
+            href: "#",
+            text: "Navigation item 6"
+          }
+        ]
+      },
+      {
+        title: "Help and Support",
+        width: "one-third",
+        items: [
+          {
+            href: "#",
+            text: "Guidance"
+          },
+          {
+            href: "#",
+            text: "Help"
+          },
+          {
+            href: "#",
+            text: "Feedback"
+          }
+        ]
+      }
+    ],
+      meta: {
+        items: [
+          {
+            href: "https://www.gov.uk/help/privacy-notice",
+            text: "Privacy"
+          },
+          {
+            href: "https://www.gov.uk/help/cookies",
+            text: "Cookies"
+          },
+          {
+            href: "https://www.gov.uk/help/accessibility-statement",
+            text: "Accessibility statement"
+          }
+        ]
+      }
+    })
+  }}
 {% endblock %}
 
 {% block bodyEnd %}
+  <script>
+    document.body.className +=
+      ' js-enabled' +
+      ('noModule' in HTMLScriptElement.prototype
+        ? ' govuk-frontend-supported'
+        : '')
+  </script>
   <script type="module" src="{{ getAssetPath('application.js') }}"></script>
+  <script type="module" src="{{ getAssetPath('govuk.js') }}"></script>
+  <script type="module">
+    import { initAll } from "{{ getAssetPath('govuk.js') }}"
+    initAll()
+  </script>
 {% endblock %}
