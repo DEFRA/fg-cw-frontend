@@ -141,10 +141,6 @@
       selectAllCheckboxes.forEach(function (selectAllCheckbox) {
         const table = selectAllCheckbox.closest('table')
         if (!table) {
-          console.warn(
-            'Could not find parent table for select-all checkbox:',
-            selectAllCheckbox
-          )
           return
         }
 
