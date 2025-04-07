@@ -12,6 +12,12 @@ const isTest = process.env.NODE_ENV === 'test'
 const isDevelopment = process.env.NODE_ENV === 'development'
 
 export const config = convict({
+  fg_cw_backend_url: {
+    doc: 'The backend URL for the case worker service',
+    format: String,
+    default: 'https://fg-cw-backend.dev.platform.hmrc.gov.uk',
+    env: 'FG_CW_BACKEND'
+  },
   serviceVersion: {
     doc: 'The service version, this variable is injected into your docker container in CDP environments',
     format: String,

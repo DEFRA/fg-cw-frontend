@@ -27,7 +27,7 @@
     "postversion": "git add package.json package-lock.json && git commit -m $npm_package_version",
     "test": "jest --coverage --verbose",
     "test:watch": "jest --watch",
-    "server:watch": "nodemon --exec tsx --enable-source-maps ./src",
+    "server:watch": "nodemon --exec tsx --enable-source-maps ./src --env-file=fg-cw-frontend.env",
     "server:debug": "nodemon --exec tsx --enable-source-maps --inspect ./src",
     "prestart": "npm run build",
     "start": "NODE_ENV=production node --use-strict .",

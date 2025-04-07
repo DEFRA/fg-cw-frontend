@@ -4,6 +4,8 @@
  * @satisfies {Partial<ServerRoute>}
  */
 
+import { ProxyAgent, fetch } from 'undici'
+
 export const applicationsData = {
   allCases: [
     {
@@ -123,6 +125,23 @@ export const applicationsData = {
   ]
 }
 
+console.log('process shizzle', process.env)
+
+const getCases = async () => {
+  console.log('process.env.FG_CW_BACKEND', process.env.FG_CW_BACKEND)
+  try {
+    const response = await fetch(
+      'https://fg-cw-backend.dev.cdp-int.defra.cloud/cases'
+    )
+    const data = await response.json()
+    console.log('data', data)
+    return data
+  } catch (error) {
+    console.error('Error fetching cases:', error)
+    return []
+  }
+}
+
 export const applicationsController = {
   handler(_request, h) {
     return h.view('applications/index', {
@@ -138,7 +157,7 @@ export const applicationsController = {
         }
       ],
       data: {
-        allCases: applicationsData.allCases
+        allCases: getCases()
       }
     })
   }
