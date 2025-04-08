@@ -15,7 +15,7 @@ export const config = convict({
   fg_cw_backend_url: {
     doc: 'The backend URL for the case worker service',
     format: String,
-    default: 'https://fg-cw-backend.dev.platform.hmrc.gov.uk',
+    default: 'http://localhost:3001',
     env: 'FG_CW_BACKEND'
   },
   serviceVersion: {
