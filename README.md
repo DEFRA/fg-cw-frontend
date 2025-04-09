@@ -1,10 +1,6 @@
 # fg-cw-frontend
 
-[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fg-cw-frontend&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=DEFRA_fg-cw-frontend)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fg-cw-frontend&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=DEFRA_fg-cw-frontend)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=DEFRA_fg-cw-frontend&metric=coverage)](https://sonarcloud.io/summary/new_code?id=DEFRA_fg-cw-frontend)
-
-Core delivery platform Node.js Frontend Template.
+Case worker frontend application
 
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
@@ -92,7 +88,10 @@ npm install
 
 ### Development
 
-To run the application in `development` mode run:
+To run the application locally:
+
+1. Clone and run the backend service (https://github.com/DEFRA/fg-cw-backend) using `CW_PORT=3001 docker compose up` (Note: The backend service runs on port 3001 (not the default 3000))
+2. Once the backend is running, you can start the frontend application using the provided script
 
 ```bash
 npm run dev
