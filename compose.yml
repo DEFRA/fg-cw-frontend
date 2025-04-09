@@ -1,6 +1,4 @@
-version: '3.4'
 services:
-
   localstack:
     image: localstack/localstack:3.0.2
     ports:
@@ -23,6 +21,8 @@ services:
       retries: 3
     networks:
       - cdp-tenant
+    profiles:
+      - dev
 
   redis:
     image: redis:7.2.3-alpine3.18
@@ -31,6 +31,8 @@ services:
     restart: always
     networks:
       - cdp-tenant
+    profiles:
+      - dev
 
   mongodb:
     image: mongo:6.0.13
@@ -41,52 +43,51 @@ services:
     volumes:
       - mongodb-data:/data
     restart: always
+    profiles:
+      - dev
 
-################################################################################
+  fg-cw-backend:
+    image: defradigital/fg-cw-backend:latest
+    ports:
+      - '3001:3001'
+    links:
+      - 'localstack:localstack'
+      - 'mongodb:mongodb'
+    depends_on:
+      localstack:
+        condition: service_healthy
+      mongodb:
+        condition: service_started
+    env_file:
+      - 'compose/aws.env'
+    environment:
+      PORT: 3001
+      NODE_ENV: development
+      LOCALSTACK_ENDPOINT: http://localstack:4566
+      MONGO_URI: mongodb://mongodb:27017/
+    networks:
+      - cdp-tenant
+    volumes:
+      - ./package.json:/home/node/package.json
+    profiles:
+      - dev
+
+  ################################################################################
 
   your-frontend:
     build: ./
     ports:
       - '3000:3000'
-    links:
-      - 'localstack:localstack'
-      - 'redis:redis'
-    depends_on:
-      localstack:
-        condition: service_healthy
-      redis:
-        condition: service_started
+    # depends_on:
+    #   localstack:
+    #     condition: service_healthy
+    #   redis:
+    #     condition: service_started
     env_file:
       - 'compose/aws.env'
-    environment:
-      PORT: 3000
-      NODE_ENV: development
-      REDIS_HOST: redis
-      LOCALSTACK_ENDPOINT: http://localstack:4566
-      USE_SINGLE_INSTANCE_CACHE: true
+      - '.env.dev'
     networks:
       - cdp-tenant
-
-  # your-backend:
-  #   image: defradigital/your-backend:${YOUR_BACKEND_VERSION:-latest}
-  #   ports:
-  #     - '3555:3555'
-  #   links:
-  #     - 'localstack:localstack'
-  #     - 'mongodb:mongodb'
-  #   depends_on:
-  #     localstack:
-  #       condition: service_healthy
-  #     mongodb:
-  #       condition: service_started
-  #   env_file:
-  #     - 'compose/aws.env'
-  #   environment:
-  #     PORT: 3555
-  #     NODE_ENV: development
-  #     LOCALSTACK_ENDPOINT: http://localstack:4566
-  #   networks:
-  #     - cdp-tenant
 
 ################################################################################
 
@@ -96,3 +97,4 @@ volumes:
 networks:
   cdp-tenant:
     driver: bridge
+    name: cdp-tenant
