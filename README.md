@@ -114,6 +114,33 @@ To view them in your command line run:
 npm run
 ```
 
+### Docker Compose
+
+To run the frontend in a docker container run:
+
+```bash
+npm run docker
+```
+
+To include the latest backend service image from Docker Hub run:
+
+```bash
+npm run docker:dev
+```
+
+_nb: you will need to add a `.env.dev` file in the root of the project with the following_
+
+```bash
+FG_CW_BACKEND=http://fg-cw-backend:3001     # use with docker compose.dev.yml
+#FG_CW_BACKEND=http://localhost:3001        # use with local backend service running (npm run docker:dev)
+
+PORT=3000                                   # frontend port
+
+NODE_ENV=development
+REDIS_HOST=redis
+USE_SINGLE_INSTANCE_CACHE=true
+```
+
 ### Update dependencies
 
 To update dependencies use [npm-check-updates](https://github.com/raineorshine/npm-check-updates):
