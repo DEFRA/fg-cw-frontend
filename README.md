@@ -90,9 +90,8 @@ npm install
 
 To run the application locally:
 
-1. Clone and run the backend service (https://github.com/DEFRA/fg-cw-backend) using `docker compose up`
-2. Note: The backend service runs on port 3001 (not the default 3000)
-3. Once the backend is running, you can start the frontend application using the provided script
+1. Clone and run the backend service (https://github.com/DEFRA/fg-cw-backend) using `CW_PORT=3001 docker compose up` (Note: The backend service runs on port 3001 (not the default 3000))
+2. Once the backend is running, you can start the frontend application using the provided script
 
 ```bash
 npm run dev
