@@ -22,9 +22,10 @@
 {%
   set tableHeaders = [
     {
-      html: customCheckbox("select_all", "Select all", "select_all", "all")
+      html: customCheckbox("select_all", "Select all", "select_all", "all"),
+      classes: "govuk-!-padding-top-0"
     },
-    { text: "ID", classes: "govuk-!-width-one-quarter" },
+    { text: "ID"},
     { text: "Business", classes: "govuk-!-width-one-quarter" },
     { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
     { text: "Status", classes: "govuk-!-width-one-quarter" },
@@ -36,7 +37,8 @@
   {%
     set row = [
         {
-            html: customCheckbox(case.id, case.businessName, "selected_cases", case.id)
+          html: customCheckbox(case.id, case.businessName, "selected_cases", case.id),
+          classes: "govuk-!-padding-top-0"
         },
         {
           html: '<a href="#" class="govuk-link">' + case.id + '</a>'

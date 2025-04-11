@@ -40,7 +40,7 @@ export const config = convict({
   serviceName: {
     doc: 'Applications Service Name',
     format: String,
-    default: 'fg-cw-frontend'
+    default: 'Manage rural grant applications'
   },
   root: {
     doc: 'Project root',
