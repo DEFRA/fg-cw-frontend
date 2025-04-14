@@ -1,11 +1,9 @@
-version: '3.4'
 services:
-
   localstack:
     image: localstack/localstack:3.0.2
     ports:
-      - '4566:4566' # LocalStack Gateway
-      - '4510-4559:4510-4559' # external services port range
+      - '4567:4566' # Changed from 4566 to 4567
+      # - '4520-4559:4510-4559' # external services port range
     env_file:
       - 'compose/aws.env'
     environment:
@@ -27,7 +25,7 @@ services:
   redis:
     image: redis:7.2.3-alpine3.18
     ports:
-      - '6379:6379'
+      - '6380:6379'
     restart: always
     networks:
       - cdp-tenant
@@ -37,17 +35,17 @@ services:
     networks:
       - cdp-tenant
     ports:
-      - '27017:27017'
+      - '27018:27017'
     volumes:
       - mongodb-data:/data
     restart: always
 
-################################################################################
+  ################################################################################
 
   your-frontend:
     build: ./
     ports:
-      - '3000:3000'
+      - '3001:3000'
     links:
       - 'localstack:localstack'
       - 'redis:redis'
