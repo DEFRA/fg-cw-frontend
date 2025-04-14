@@ -36,14 +36,14 @@
 {% set tableRows = [] %}
 {% for case in data.allCases %}
   {% set priorityClass = 'govuk-tag--grey' %}
-  {%- if case.status == "NEW" %}
+  {%- if case.status | lower == "new" %}
     {% set priorityClass = 'govuk-tag--blue' %}
-  {%- elif case.status == "IN PROGRESS" -%}
+  {%- elif case.status | lower == "in progress" -%}
     {% set priorityClass = 'govuk-tag--yellow' %}
-  {%- elif case.status == "APPROVED" -%}
+  {%- elif case.status | lower == "approved" -%}
     {% set priorityClass = 'govuk-tag--green' %}
   {%- endif -%}
-  {%- set status = case.status | capitalize %}
+  {%- set status = case.status | lower | capitalize %}
   {%
     set row = [
         {
