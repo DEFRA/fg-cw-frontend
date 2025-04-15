@@ -4,23 +4,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "./caseListTab/macro.njk" import appCaseListTab %}
-
-{% macro customCheckbox(id, label, name, value) %}
-  <div
-    class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox"
-  >
-    <input
-      type="checkbox"
-      class="govuk-checkboxes__input"
-      id="{{ id }}"
-      name="{{ name }}"
-      value="{{ value }}"
-    />
-    <label class="govuk-label govuk-checkboxes__label" for="{{ id }}">
-      <span class="govuk-visually-hidden">Select {{ label }}</span>
-    </label>
-  </div>
-{% endmacro %}
+{% from "./checkbox/macro.njk" import customCheckbox %}
 {%
   set tableHeaders = [
     {
