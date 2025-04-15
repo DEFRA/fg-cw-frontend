@@ -52,7 +52,7 @@ describe('#context', () => {
             url: '/about'
           }
         ],
-        serviceName: 'Manage rural grant applications',
+        serviceName: 'fg-cw-frontend',
         serviceUrl: '/'
       })
     })
@@ -146,7 +146,7 @@ describe('#context cache', () => {
             url: '/about'
           }
         ],
-        serviceName: 'Manage rural grant applications',
+        serviceName: 'fg-cw-frontend',
         serviceUrl: '/'
       })
     })
