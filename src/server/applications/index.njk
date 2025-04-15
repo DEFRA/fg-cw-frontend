@@ -2,6 +2,7 @@
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% macro customCheckbox(id, label, name, value) %}
   <div
@@ -22,9 +23,10 @@
 {%
   set tableHeaders = [
     {
-      html: customCheckbox("select_all", "Select all", "select_all", "all")
+      html: customCheckbox("select_all", "Select all", "select_all", "all"),
+      classes: "govuk-!-padding-top-0"
     },
-    { text: "ID", classes: "govuk-!-width-one-quarter" },
+    { text: "ID"},
     { text: "Business", classes: "govuk-!-width-one-quarter" },
     { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
     { text: "Status", classes: "govuk-!-width-one-quarter" },
@@ -33,10 +35,20 @@
 %}
 {% set tableRows = [] %}
 {% for case in data.allCases %}
+  {% set priorityClass = 'govuk-tag--grey' %}
+  {%- if case.status | lower == "new" %}
+    {% set priorityClass = 'govuk-tag--blue' %}
+  {%- elif case.status | lower == "in progress" -%}
+    {% set priorityClass = 'govuk-tag--yellow' %}
+  {%- elif case.status | lower == "approved" -%}
+    {% set priorityClass = 'govuk-tag--green' %}
+  {%- endif -%}
+  {%- set status = case.status | lower | capitalize %}
   {%
     set row = [
         {
-            html: customCheckbox(case.id, case.businessName, "selected_cases", case.id)
+          html: customCheckbox(case.id, case.businessName, "selected_cases", case.id),
+          classes: "govuk-!-padding-top-0"
         },
         {
           html: '<a href="#" class="govuk-link">' + case.id + '</a>'
@@ -48,7 +60,10 @@
           text: case.dateReceived | formatDate("d MMMM yy")
         },
         {
-          text: case.priority
+          html:  govukTag({
+            text: status,
+            classes: priorityClass
+          })
         },
         {
           text: case.assignedUser
