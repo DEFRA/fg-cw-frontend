@@ -8,7 +8,12 @@
 {%
   set tableHeaders = [
     {
-      html: customCheckbox("select_all", "Select all", "select_all", "all"),
+      html: customCheckbox({
+        id: "select_all",
+        label: "Select all",
+        name: "select_all",
+        value: "all"
+      }),
       classes: "govuk-!-padding-top-0"
     },
     { text: "ID"},
@@ -130,5 +135,4 @@
       })
     })
   </script>
-  }
 {% endblock %}
