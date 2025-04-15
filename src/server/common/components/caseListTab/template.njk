@@ -19,11 +19,10 @@
     </label>
   </div>
 {% endmacro %}
-
 {% set tableRows = [] %}
 {% for case in params.data.allCases %}
   {% set priorityClass = 'govuk-tag--grey' %}
-  
+
   {%- if case.status == "NEW" %}
     {% set priorityClass = 'govuk-tag--blue' %}
   {%- elif case.status == "IN PROGRESS" -%}
@@ -31,7 +30,6 @@
   {%- elif case.status == "APPROVED" -%}
     {% set priorityClass = 'govuk-tag--green' %}
   {%- endif -%}
-
   {%- set status = case.status | capitalize %}
   {%
     set row = [
@@ -60,10 +58,11 @@
     ]
   %}
   {% set tableRows = (tableRows.push(row), tableRows) %}
-  {% endfor %}
+{% endfor %}
 
-
-<h2 class="govuk-heading-l" data-testid={{ params.tabTestId }}>{{ params.tabLabel }}</h2>
+<h2 class="govuk-heading-l" data-testid="{{ params.tabTestId }}">
+  {{ params.tabLabel }}
+</h2>
 {{
   govukTable({
     head: params.tableHeaders,
