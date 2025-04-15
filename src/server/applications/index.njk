@@ -3,6 +3,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "./caseListTab/macro.njk" import appCaseListTab %}
 
 {% macro customCheckbox(id, label, name, value) %}
   <div
@@ -33,45 +34,6 @@
     { text: "Assigned", classes: "govuk-!-width-one-quarter" }
   ]
 %}
-{% set tableRows = [] %}
-{% for case in data.allCases %}
-  {% set priorityClass = 'govuk-tag--grey' %}
-  {%- if case.status | lower == "new" %}
-    {% set priorityClass = 'govuk-tag--blue' %}
-  {%- elif case.status | lower == "in progress" -%}
-    {% set priorityClass = 'govuk-tag--yellow' %}
-  {%- elif case.status | lower == "approved" -%}
-    {% set priorityClass = 'govuk-tag--green' %}
-  {%- endif -%}
-  {%- set status = case.status | lower | capitalize %}
-  {%
-    set row = [
-        {
-          html: customCheckbox(case.id, case.businessName, "selected_cases", case.id),
-          classes: "govuk-!-padding-top-0"
-        },
-        {
-          html: '<a href="#" class="govuk-link">' + case.id + '</a>'
-        },
-        {
-          text: case.businessName
-        },
-        {
-          text: case.dateReceived | formatDate("d MMMM yy")
-        },
-        {
-          html:  govukTag({
-            text: status,
-            classes: priorityClass
-          })
-        },
-        {
-          text: case.assignedUser
-        }
-    ]
-  %}
-  {% set tableRows = (tableRows.push(row), tableRows) %}
-{% endfor %}
 
 {% block content %}
   {{
@@ -83,36 +45,6 @@
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
-        {% set myCasesHtml %}
-          <h2 class="govuk-heading-l">My Cases</h2>
-          {{
-            govukTable({
-              head: tableHeaders,
-              rows:[]
-            })
-          }}
-        {% endset -%}
-
-        {% set teamCasesHtml %}
-          <h2 class="govuk-heading-l">Team cases</h2>
-          {{
-            govukTable({
-              head: tableHeaders,
-              rows: []
-            })
-          }}
-        {% endset -%}
-
-        {% set allCasesHtml %}
-          <h2 class="govuk-heading-l">All cases</h2>
-          {{
-            govukTable({
-              head: tableHeaders,
-              rows: tableRows
-            })
-          }}
-        {% endset -%}
-
         {{
           govukTabs({
             items: [
@@ -120,21 +52,36 @@
                 label: "My cases",
                 id: "my-cases",
                 panel: {
-                  html: myCasesHtml
+                  html:  appCaseListTab({
+                      tabLabel: "My cases",
+                      tabTestId: "my-cases-tab",
+                      tableHeaders: tableHeaders,
+                      data: []
+                  })
                 }
               },
               {
                 label: "Team cases",
                 id: "team-cases",
                 panel: {
-                  html: teamCasesHtml
+                  html: appCaseListTab({
+                      tabLabel: "Team cases",
+                      tabTestId: "team-cases-tab",
+                      tableHeaders: tableHeaders,
+                      data: []
+                  })
                 }
               },
               {
-                label: "All cases",
+                label: "All Cases",
                 id: "all-cases",
                 panel: {
-                  html: allCasesHtml
+                  html: appCaseListTab({
+                      tabLabel: "All cases",
+                      tabTestId: "all-cases-tab",
+                      tableHeaders: tableHeaders,
+                      data: data
+                    })
                 }
               }
             ]

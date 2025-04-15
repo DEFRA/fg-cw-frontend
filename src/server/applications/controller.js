@@ -9,7 +9,8 @@ import { config } from '../../config/config.js'
 
 const getCases = async () => {
   try {
-    const response = await fetch(`${config.get('fg_cw_backend_url')}/cases`)
+    const backendUrl = config.get('fg_cw_backend_url')
+    const response = await fetch(`${backendUrl.toString()}/cases`)
     const { data } = await response.json()
     return data
   } catch (error) {
