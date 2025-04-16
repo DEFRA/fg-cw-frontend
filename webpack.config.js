@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import path from 'path'
 import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
 
@@ -28,6 +29,9 @@ export default {
     },
     govuk: {
       import: [path.join(govukFrontendPath, 'dist/govuk/govuk-frontend.min.js')]
+    },
+    checkbox: {
+      import: ['./javascripts/checkbox.js']
     }
   },
   experiments: {
@@ -185,6 +189,12 @@ export default {
           to: 'assets'
         }
       ]
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: './common/components/checkbox/macro.njk',
+      template: './common/components/checkbox/template.njk',
+      chunks: ['checkbox']
     })
   ],
   stats: {
