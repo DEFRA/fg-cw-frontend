@@ -4,11 +4,14 @@
   <input
     type="checkbox"
     class="govuk-checkboxes__input"
-    id="{{ id }}{{ suffix }}"
+    id="{{ params.id }}{{ params.suffix }}"
     name="{{ params.name }}"
     value="{{ params.value }}"
   />
-  <label class="govuk-label govuk-checkboxes__label" for="{{ id }}{{ suffix }}">
+  <label
+    class="govuk-label govuk-checkboxes__label"
+    for="{{ params.id }}{{ params.suffix }}"
+  >
     <span class="govuk-visually-hidden">Select {{ params.label }}</span>
   </label>
 </div>

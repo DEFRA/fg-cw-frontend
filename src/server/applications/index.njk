@@ -5,6 +5,7 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "./caseListTab/macro.njk" import appCaseListTab %}
 {% from "./checkbox/macro.njk" import customCheckbox %}
+
 {% block content %}
   {{
     appHeading({
@@ -27,7 +28,13 @@
                       tabTestId: "my-cases-tab",
                       tableHeaders: [
                         {
-                          html: customCheckbox("select_all", "Select all", "select_all", "all", "_mycases"),
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_mycases"
+                          }),
                           classes: "govuk-!-padding-top-0"
                         },
                         { text: "ID"},
@@ -49,7 +56,13 @@
                       tabTestId: "team-cases-tab",
                       tableHeaders: [
                         {
-                          html: customCheckbox("select_all", "Select all", "select_all", "all", "_teamcases"),
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_teamcases"
+                          }),
                           classes: "govuk-!-padding-top-0"
                         },
                         { text: "ID"},
@@ -71,7 +84,13 @@
                       tabTestId: "all-cases-tab",
                       tableHeaders: [
                         {
-                          html: customCheckbox("select_all", "Select all", "select_all", "all", "_allcases"),
+                           html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_allcases"
+                          }),
                           classes: "govuk-!-padding-top-0"
                         },
                         { text: "ID"},
@@ -94,5 +113,46 @@
 
 {% block bodyEnd %}
   {{ super() }}
-  <script src="/public/javascripts/checkboxes.js" type="module"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const selectAllCheckboxes = document.querySelectorAll(
+        'input[name="select_all"][value="all"]'
+      )
+
+      selectAllCheckboxes.forEach((selectAllCheckbox) => {
+        const table = selectAllCheckbox.closest('table')
+        if (!table) return
+
+        const rowCheckboxes = table.querySelectorAll(
+          'tbody input[name="selected_cases"]'
+        )
+
+        selectAllCheckbox.addEventListener('change', (event) => {
+          const isChecked = event.target.checked
+          rowCheckboxes.forEach((cb) => {
+            cb.checked = isChecked
+          })
+        })
+
+        rowCheckboxes.forEach((cb) => {
+          cb.addEventListener('change', () => {
+            if (!cb.checked) {
+              selectAllCheckbox.checked = false
+            } else {
+              const allChecked = Array.from(rowCheckboxes).every(
+                (c) => c.checked
+              )
+              selectAllCheckbox.checked = allChecked
+            }
+          })
+        })
+
+        // Init checkbox state on load
+        const allCheckedOnInit = Array.from(rowCheckboxes).every(
+          (cb) => cb.checked
+        )
+        selectAllCheckbox.checked = allCheckedOnInit
+      })
+    })
+  </script>
 {% endblock %}
