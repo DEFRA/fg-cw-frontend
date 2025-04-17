@@ -5,6 +5,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const { NODE_ENV = 'development' } = process.env
 
@@ -168,6 +169,18 @@ export default {
           to: 'assets'
         }
       ]
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: path.join(
+        dirname,
+        'src/server/common/components/checkbox/template.njk'
+      ),
+      template: path.join(
+        dirname,
+        'src/server/common/components/checkbox/template.njk'
+      ),
+      chunks: ['checkboxes']
     })
   ],
   stats: {

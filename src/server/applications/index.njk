@@ -4,27 +4,7 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "./caseListTab/macro.njk" import appCaseListTab %}
-
-{% macro customCheckbox(id, label, name, value, suffix='', isSelectAll=false) %}
-  <div
-    class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox"
-  >
-    <input
-      type="checkbox"
-      class="govuk-checkboxes__input"
-      id="{{ id }}{{ suffix }}"
-      name="{{ name }}"
-      value="{{ value }}"
-      {% if isSelectAll %}data-select-all="{{ suffix }}"{% endif %}
-    />
-    <label
-      class="govuk-label govuk-checkboxes__label"
-      for="{{ id }}{{ suffix }}"
-    >
-      <span class="govuk-visually-hidden">Select {{ label }}</span>
-    </label>
-  </div>
-{% endmacro %}
+{% from "./checkbox/macro.njk" import customCheckbox %}
 
 {% block content %}
   {{ appHeading({ text: heading }) }}
@@ -39,21 +19,27 @@
                 label: "My cases",
                 id: "my-cases",
                 panel: {
-                  html: appCaseListTab({
-                    tabLabel: "My cases",
-                    tabTestId: "my-cases-tab",
-                    tableHeaders: [
-                      {
-                        html: customCheckbox("select_all", "Select all", "select_all", "all", "_mycases", true),
-                        classes: "govuk-!-padding-top-0"
-                      },
-                      { text: "ID" },
-                      { text: "Business", classes: "govuk-!-width-one-quarter" },
-                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                      { text: "Status", classes: "govuk-!-width-one-quarter" },
-                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                    ],
-                    data: []
+                  html:  appCaseListTab({
+                      tabLabel: "My cases",
+                      tabTestId: "my-cases-tab",
+                      tableHeaders: [
+                        {
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_mycases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "ID"},
+                        { text: "Business", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
+                      data: []
                   })
                 }
               },
@@ -62,20 +48,26 @@
                 id: "team-cases",
                 panel: {
                   html: appCaseListTab({
-                    tabLabel: "Team cases",
-                    tabTestId: "team-cases-tab",
-                    tableHeaders: [
-                      {
-                        html: customCheckbox("select_all", "Select all", "select_all", "all", "_teamcases", true),
-                        classes: "govuk-!-padding-top-0"
-                      },
-                      { text: "ID" },
-                      { text: "Business", classes: "govuk-!-width-one-quarter" },
-                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                      { text: "Status", classes: "govuk-!-width-one-quarter" },
-                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                    ],
-                    data: []
+                      tabLabel: "Team cases",
+                      tabTestId: "team-cases-tab",
+                      tableHeaders: [
+                        {
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_teamcases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "ID"},
+                        { text: "Business", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
+                      data: []
                   })
                 }
               },
@@ -84,21 +76,27 @@
                 id: "all-cases",
                 panel: {
                   html: appCaseListTab({
-                    tabLabel: "All cases",
-                    tabTestId: "all-cases-tab",
-                    tableHeaders: [
-                      {
-                        html: customCheckbox("select_all", "Select all", "select_all", "all", "_allcases", true),
-                        classes: "govuk-!-padding-top-0"
-                      },
-                      { text: "ID" },
-                      { text: "Business", classes: "govuk-!-width-one-quarter" },
-                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                      { text: "Status", classes: "govuk-!-width-one-quarter" },
-                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                    ],
-                    data: data
-                  })
+                      tabLabel: "All cases",
+                      tabTestId: "all-cases-tab",
+                      tableHeaders: [
+                        {
+                           html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_allcases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "ID"},
+                        { text: "Business", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
+                      data: data
+                    })
                 }
               }
             ]
@@ -111,5 +109,4 @@
 
 {% block bodyEnd %}
   {{ super() }}
-  <script src="/public/javascripts/checkboxes.js" type="module"></script>
 {% endblock %}
