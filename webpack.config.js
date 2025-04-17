@@ -27,7 +27,7 @@ export default {
     application: {
       import: [
         './javascripts/application.js',
-        './javascripts/modules/checkbox-select-all.js', // ✅ Added here
+        './javascripts/modules/checkbox-select-all.js', 
         './stylesheets/application.scss'
       ]
     },
