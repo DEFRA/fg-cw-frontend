@@ -33,6 +33,9 @@ export default {
     },
     govuk: {
       import: [path.join(govukFrontendPath, 'dist/govuk/govuk-frontend.min.js')]
+    },
+    checkboxes: {
+      import: ['./javascripts/modules/checkbox-select-all.js']
     }
   },
   experiments: {
