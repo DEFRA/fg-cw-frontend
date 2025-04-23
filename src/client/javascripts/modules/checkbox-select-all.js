@@ -3,48 +3,56 @@ export function initSelectAllCheckboxes() {
     'input[name="select_all"][value="all"]'
   )
 
-  selectAllCheckboxes.forEach(function (selectAllCheckbox) {
+  selectAllCheckboxes.forEach((selectAllCheckbox) => {
     const table = selectAllCheckbox.closest('table')
-    if (!table) {
-      return
-    }
+    if (!table) return
 
     const rowCheckboxes = table.querySelectorAll(
       'tbody input[name="selected_cases"]'
     )
 
-    selectAllCheckbox.addEventListener('change', function (event) {
+    // Handler for select-all checkbox
+    selectAllCheckbox.addEventListener('change', (event) => {
       const isChecked = event.target.checked
+      selectAllCheckbox.indeterminate = false
 
-      rowCheckboxes.forEach(function (rowCheckbox) {
+      rowCheckboxes.forEach((rowCheckbox) => {
         rowCheckbox.checked = isChecked
       })
     })
 
-    rowCheckboxes.forEach(function (rowCheckbox) {
-      rowCheckbox.addEventListener('change', function () {
-        if (!this.checked) {
+    // Handler for individual row checkboxes
+    rowCheckboxes.forEach((rowCheckbox) => {
+      rowCheckbox.addEventListener('change', () => {
+        const total = rowCheckboxes.length
+        const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length
+
+        if (checkedCount === 0) {
           selectAllCheckbox.checked = false
+          selectAllCheckbox.indeterminate = false
+        } else if (checkedCount === total) {
+          selectAllCheckbox.checked = true
+          selectAllCheckbox.indeterminate = false
         } else {
-          let allChecked = true
-          rowCheckboxes.forEach(function (cb) {
-            if (!cb.checked) {
-              allChecked = false
-            }
-          })
-          selectAllCheckbox.checked = allChecked
+          selectAllCheckbox.checked = false
+          selectAllCheckbox.indeterminate = true
         }
       })
     })
 
-    let allCheckedOnInit = rowCheckboxes.length > 0
-    rowCheckboxes.forEach(function (cb) {
-      if (!cb.checked) {
-        allCheckedOnInit = false
-      }
-    })
-    if (allCheckedOnInit) {
+    // Set initial state on load
+    const total = rowCheckboxes.length
+    const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length
+
+    if (checkedCount === 0) {
+      selectAllCheckbox.checked = false
+      selectAllCheckbox.indeterminate = false
+    } else if (checkedCount === total) {
       selectAllCheckbox.checked = true
+      selectAllCheckbox.indeterminate = false
+    } else {
+      selectAllCheckbox.checked = false
+      selectAllCheckbox.indeterminate = true
     }
   })
 }

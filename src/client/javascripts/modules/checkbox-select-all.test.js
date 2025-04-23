@@ -61,18 +61,19 @@ describe('initSelectAllCheckboxes', () => {
 
   it('should set indeterminate when some but not all checkboxes are checked', () => {
     initSelectAllCheckboxes()
-
+  
     const selectAll = document.querySelector('#select_all_allcases')
     const rowCheckboxes = document.querySelectorAll(
       'input[name="selected_cases"]'
     )
-
+  
     rowCheckboxes[0].checked = true
     rowCheckboxes[0].dispatchEvent(new Event('change'))
-
+  
     expect(selectAll.checked).toBe(false)
-    // expect(selectAll.indeterminate).toBe(true)
-  })
+    expect(selectAll.indeterminate).toBe(true)
+  })  
+  
 
   it('should check the "select all" box if all checkboxes are checked manually', () => {
     initSelectAllCheckboxes()
