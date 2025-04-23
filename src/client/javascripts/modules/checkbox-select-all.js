@@ -1,40 +1,50 @@
 export function initSelectAllCheckboxes() {
-  const selectAllCheckboxes = document.querySelectorAll('[data-select-all]')
+  const selectAllCheckboxes = document.querySelectorAll(
+    'input[name="select_all"][value="all"]'
+  )
 
-  selectAllCheckboxes.forEach((selectAllCheckbox) => {
-    const suffix = selectAllCheckbox.dataset.selectAll || ''
+  selectAllCheckboxes.forEach(function (selectAllCheckbox) {
     const table = selectAllCheckbox.closest('table')
-    if (!table) return
+    if (!table) {
+      return
+    }
 
     const rowCheckboxes = table.querySelectorAll(
-      `tbody input[name="selected_cases"][id$="${suffix}"]`
+      'tbody input[name="selected_cases"]'
     )
-    if (rowCheckboxes.length === 0) return
 
-    // Select all logic
-    selectAllCheckbox.addEventListener('change', (event) => {
+    selectAllCheckbox.addEventListener('change', function (event) {
       const isChecked = event.target.checked
-      rowCheckboxes.forEach((cb) => {
-        cb.checked = isChecked
+
+      rowCheckboxes.forEach(function (rowCheckbox) {
+        rowCheckbox.checked = isChecked
       })
     })
 
-    // Update "select all" state when rows change
-    rowCheckboxes.forEach((cb) => {
-      cb.addEventListener('change', () => {
-        const allChecked = Array.from(rowCheckboxes).every((c) => c.checked)
-        const someChecked = Array.from(rowCheckboxes).some((c) => c.checked)
-
-        selectAllCheckbox.checked = allChecked
-        selectAllCheckbox.indeterminate = !allChecked && someChecked
+    rowCheckboxes.forEach(function (rowCheckbox) {
+      rowCheckbox.addEventListener('change', function () {
+        if (!this.checked) {
+          selectAllCheckbox.checked = false
+        } else {
+          let allChecked = true
+          rowCheckboxes.forEach(function (cb) {
+            if (!cb.checked) {
+              allChecked = false
+            }
+          })
+          selectAllCheckbox.checked = allChecked
+        }
       })
     })
 
-    // Initial state
-    const allChecked = Array.from(rowCheckboxes).every((c) => c.checked)
-    const someChecked = Array.from(rowCheckboxes).some((c) => c.checked)
-
-    selectAllCheckbox.checked = allChecked
-    selectAllCheckbox.indeterminate = !allChecked && someChecked
+    let allCheckedOnInit = rowCheckboxes.length > 0
+    rowCheckboxes.forEach(function (cb) {
+      if (!cb.checked) {
+        allCheckedOnInit = false
+      }
+    })
+    if (allCheckedOnInit) {
+      selectAllCheckbox.checked = true
+    }
   })
 }
