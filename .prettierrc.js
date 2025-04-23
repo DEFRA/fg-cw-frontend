@@ -1,5 +1,7 @@
+// @ts-check
+
 /**
- * @type {Options}
+ * @type {import("prettier").Options}
  */
 export default {
   plugins: ['prettier-plugin-jinja-template'],
@@ -16,7 +18,3 @@ export default {
     }
   ]
 }
-
-/**
- * @import { Options } from 'prettier'
- */

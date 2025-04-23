@@ -5,6 +5,7 @@ import CopyPlugin from 'copy-webpack-plugin'
 import { CleanWebpackPlugin } from 'clean-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 import WebpackAssetsManifest from 'webpack-assets-manifest'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
 
 const { NODE_ENV = 'development' } = process.env
 
@@ -18,16 +19,23 @@ const govukFrontendPath = path.dirname(
 const ruleTypeAssetResource = 'asset/resource'
 
 /**
- * @type {Configuration}
+ * @type {import('webpack').Configuration}
  */
 export default {
   context: path.resolve(dirname, 'src/client'),
   entry: {
     application: {
-      import: ['./javascripts/application.js', './stylesheets/application.scss']
+      import: [
+        './javascripts/application.js',
+        './javascripts/modules/checkbox-select-all.js',
+        './stylesheets/application.scss'
+      ]
     },
     govuk: {
       import: [path.join(govukFrontendPath, 'dist/govuk/govuk-frontend.min.js')]
+    },
+    checkboxes: {
+      import: ['./javascripts/modules/checkbox-select-all.js']
     }
   },
   experiments: {
@@ -44,12 +52,10 @@ export default {
       NODE_ENV === 'production'
         ? 'javascripts/[name].[contenthash:7].min.js'
         : 'javascripts/[name].js',
-
     chunkFilename:
       NODE_ENV === 'production'
         ? 'javascripts/[name].[chunkhash:7].min.js'
         : 'javascripts/[name].js',
-
     path: path.join(dirname, '.public'),
     publicPath: '/public/',
     libraryTarget: 'module',
@@ -79,20 +85,13 @@ export default {
             [
               '@babel/preset-env',
               {
-                // Apply bug fixes to avoid transforms
                 bugfixes: true,
-
-                // Apply smaller "loose" transforms for browsers
                 loose: true,
-
-                // Skip CommonJS modules transform
                 modules: false
               }
             ]
           ]
         },
-
-        // Flag loaded modules as side effect free
         sideEffects: false
       },
       {
@@ -152,25 +151,13 @@ export default {
     minimizer: [
       new TerserPlugin({
         terserOptions: {
-          // Use webpack default compress options
-          // https://webpack.js.org/configuration/optimization/#optimizationminimizer
           compress: { passes: 2 },
-
-          // Allow Terser to remove @preserve comments
           format: { comments: false },
-
-          // Include sources content from dependency source maps
-          sourceMap: {
-            includeSources: true
-          },
-
-          // Compatibility workarounds
+          sourceMap: { includeSources: true },
           safari10: true
         }
       })
     ],
-
-    // Skip bundling unused modules
     providedExports: true,
     sideEffects: true,
     usedExports: true
@@ -185,6 +172,18 @@ export default {
           to: 'assets'
         }
       ]
+    }),
+    new HtmlWebpackPlugin({
+      inject: false,
+      filename: path.join(
+        dirname,
+        'src/server/common/components/checkbox/template.njk'
+      ),
+      template: path.join(
+        dirname,
+        'src/server/common/components/checkbox/template.njk'
+      ),
+      chunks: ['checkboxes']
     })
   ],
   stats: {
@@ -194,7 +193,3 @@ export default {
   },
   target: 'browserslist:javascripts'
 }
-
-/**
- * @import { Configuration } from 'webpack'
- */
