@@ -25,7 +25,9 @@ export function initSelectAllCheckboxes() {
     rowCheckboxes.forEach((rowCheckbox) => {
       rowCheckbox.addEventListener('change', () => {
         const total = rowCheckboxes.length
-        const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length
+        const checkedCount = Array.from(rowCheckboxes).filter(
+          (cb) => cb.checked
+        ).length
 
         if (checkedCount === 0) {
           selectAllCheckbox.checked = false
@@ -42,7 +44,9 @@ export function initSelectAllCheckboxes() {
 
     // Set initial state on load
     const total = rowCheckboxes.length
-    const checkedCount = Array.from(rowCheckboxes).filter(cb => cb.checked).length
+    const checkedCount = Array.from(rowCheckboxes).filter(
+      (cb) => cb.checked
+    ).length
 
     if (checkedCount === 0) {
       selectAllCheckbox.checked = false
