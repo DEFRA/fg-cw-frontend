@@ -4,43 +4,10 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "./caseListTab/macro.njk" import appCaseListTab %}
-
-{% macro customCheckbox(id, label, name, value) %}
-  <div
-    class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox"
-  >
-    <input
-      type="checkbox"
-      class="govuk-checkboxes__input"
-      id="{{ id }}"
-      name="{{ name }}"
-      value="{{ value }}"
-    />
-    <label class="govuk-label govuk-checkboxes__label" for="{{ id }}">
-      <span class="govuk-visually-hidden">Select {{ label }}</span>
-    </label>
-  </div>
-{% endmacro %}
-{%
-  set tableHeaders = [
-    {
-      html: customCheckbox("select_all", "Select all", "select_all", "all"),
-      classes: "govuk-!-padding-top-0"
-    },
-    { text: "Client ref", classes: "govuk-!-width-one-quarter"},
-    { text: "Code", classes: "govuk-!-width-one-quarter" },
-    { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-    { text: "Status", classes: "govuk-!-width-one-quarter" },
-    { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-  ]
-%}
+{% from "./checkbox/macro.njk" import customCheckbox %}
 
 {% block content %}
-  {{
-    appHeading({
-      text: heading
-    })
-  }}
+  {{ appHeading({ text: heading }) }}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -55,7 +22,23 @@
                   html:  appCaseListTab({
                       tabLabel: "My cases",
                       tabTestId: "my-cases-tab",
-                      tableHeaders: tableHeaders,
+                      tableHeaders: [
+                        {
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_mycases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "Client ref"},
+                        { text: "Code", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
                       data: []
                   })
                 }
@@ -67,7 +50,23 @@
                   html: appCaseListTab({
                       tabLabel: "Team cases",
                       tabTestId: "team-cases-tab",
-                      tableHeaders: tableHeaders,
+                      tableHeaders: [
+                        {
+                          html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_teamcases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "Client ref"},
+                        { text: "Code", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
                       data: []
                   })
                 }
@@ -79,7 +78,23 @@
                   html: appCaseListTab({
                       tabLabel: "All cases",
                       tabTestId: "all-cases-tab",
-                      tableHeaders: tableHeaders,
+                      tableHeaders: [
+                        {
+                           html: customCheckbox({
+                            id: "select_all",
+                            label: "Select all",
+                            name: "select_all",
+                            value: "all",
+                            suffix: "_allcases"
+                          }),
+                          classes: "govuk-!-padding-top-0"
+                        },
+                        { text: "Client ref"},
+                        { text: "Code", classes: "govuk-!-width-one-quarter" },
+                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                        { text: "Status", classes: "govuk-!-width-one-quarter" },
+                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                      ],
                       data: data
                     })
                 }
@@ -94,57 +109,4 @@
 
 {% block bodyEnd %}
   {{ super() }}
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const selectAllCheckboxes = document.querySelectorAll(
-        'input[name="select_all"][value="all"]'
-      )
-
-      selectAllCheckboxes.forEach(function (selectAllCheckbox) {
-        const table = selectAllCheckbox.closest('table')
-        if (!table) {
-          return
-        }
-
-        const rowCheckboxes = table.querySelectorAll(
-          'tbody input[name="selected_cases"]'
-        )
-
-        selectAllCheckbox.addEventListener('change', function (event) {
-          const isChecked = event.target.checked
-
-          rowCheckboxes.forEach(function (rowCheckbox) {
-            rowCheckbox.checked = isChecked
-          })
-        })
-
-        rowCheckboxes.forEach(function (rowCheckbox) {
-          rowCheckbox.addEventListener('change', function () {
-            if (!this.checked) {
-              selectAllCheckbox.checked = false
-            } else {
-              let allChecked = true
-              rowCheckboxes.forEach(function (cb) {
-                if (!cb.checked) {
-                  allChecked = false
-                }
-              })
-              selectAllCheckbox.checked = allChecked
-            }
-          })
-        })
-
-        let allCheckedOnInit = rowCheckboxes.length > 0
-        rowCheckboxes.forEach(function (cb) {
-          if (!cb.checked) {
-            allCheckedOnInit = false
-          }
-        })
-        if (allCheckedOnInit) {
-          selectAllCheckbox.checked = true
-        }
-      })
-    })
-  </script>
-  }
 {% endblock %}

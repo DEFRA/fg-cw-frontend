@@ -2,23 +2,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
-
-{% macro customCheckbox(id, label, name, value) %}
-  <div
-    class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox"
-  >
-    <input
-      type="checkbox"
-      class="govuk-checkboxes__input"
-      id="{{ id }}"
-      name="{{ name }}"
-      value="{{ value }}"
-    />
-    <label class="govuk-label govuk-checkboxes__label" for="{{ id }}">
-      <span class="govuk-visually-hidden">Select {{ label }}</span>
-    </label>
-  </div>
-{% endmacro %}
+{% from "../checkbox/macro.njk" import customCheckbox %}
 {% set tableRows = [] %}
 {% for case in params.data.allCases %}
   {% set priorityClass = 'govuk-tag--grey' %}
@@ -34,7 +18,12 @@
   {%
     set row = [
         {
-          html: customCheckbox(case.payload.clientRef, case.businessName, "selected_cases", case.payload.clientRef),
+          html: customCheckbox({
+            id: case.payload.clientRef,
+            label: case.businessName,
+            name: "selected_cases",
+            value: case.payload.clientRef
+          }),
           classes: "govuk-!-padding-top-0"
         },
         {
