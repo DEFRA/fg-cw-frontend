@@ -34,14 +34,14 @@
   {%
     set row = [
         {
-          html: customCheckbox(case.id, case.businessName, "selected_cases", case.id),
+          html: customCheckbox(case.payload.clientRef, case.businessName, "selected_cases", case.payload.clientRef),
           classes: "govuk-!-padding-top-0"
         },
         {
-          html: '<a href="#" class="govuk-link govuk-!-font-weight-bold">' + case.id + '</a>'
+          html: '<a href="#" class="govuk-link govuk-!-font-weight-bold">' + case.payload.clientRef + '</a>'
         },
         {
-          text: case.businessName
+          text: case.payload.code
         },
         {
           text: case.dateReceived | formatDate("d MMMM yy")
