@@ -42,72 +42,128 @@
 #}
 
 {% block content %}
-  {{ appHeading({ text: heading }) }}
+  <h1 class="govuk-heading-xl">Application</h1>
+  <p class="govuk-body govuk-!-margin-bottom-6">
+    Application submitted: <strong>1 Jul 2024</strong>
+  </p>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
-        {{
-          govukTable({
-              caption: "Case details",
-              captionClasses: "govuk-table__caption--m",
-              firstCellIsHeader: true,
-              rows: [
-                  [
-                      { text: "workflowCode" },
-                      { text: caseData.workflowCode }
-                  ],
-                  [
-                      { text: "caseRef" },
-                      { text: caseData.caseRef }
-                  ],
-                  [
-                      { text: "status" },
-                      { text: caseData.status }
-                  ],
-                  [
-                      { text: "createdAt" },
-                      { text: caseData.payload.createdAt }
-                  ],
-                  [
-                      { text: "submittedAt" },
-                      { text: caseData.payload.caseRef }
-                  ],
-                  [
-                      { text: "dateReceived" },
-                      { text: caseData.dateReceived }
-                  ],
-                  [
-                      { text: "priority" },
-                      { text: caseData.priority }
-                  ],
-                  [
-                      { text: "assignedUser" },
-                      { text: caseData.assignedUser }
-                  ]
-              ]
-          })
-        }}
-        {{
-          govukTable({
-              caption: "Answers",
-              captionClasses: "govuk-table__caption--m",
-              firstCellIsHeader: true,
-              rows: [
-                  [
-                      { text: "scheme" },
-                      { text: caseData.payload.answers.scheme }
-                  ],
-                  [
-                      { text: "year" },
-                      { text: caseData.payload.answers.year }
-                  ],
-                  [
-                      { text: "hasCheckedLandIsUpToDate" },
-                      { text: caseData.payload.answers.hasCheckedLandIsUpToDate }
-                  ]
-              ]
-          })
-        }}
+        <h2
+          class="govuk-heading-m"
+          style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+        >
+          Applicant details
+        </h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">First name</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.firstName or "N/A" }}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Last name</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.lastName or "N/A" }}
+            </dd>
+          </div>
+        </dl>
+
+        <h2
+          class="govuk-heading-m"
+          style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+        >
+          Business details
+        </h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Business name</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.businessName }}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">SBI number</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.identifiers.sbi }}
+            </dd>
+          </div>
+        </dl>
+
+        <h2
+          class="govuk-heading-m"
+          style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+        >
+          Land details
+        </h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Do digital maps show correct land details?
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {% if caseData.payload.answers.hasCheckedLandIsUpToDate %}Yes{% else %}No{% endif %}
+            </dd>
+          </div>
+        </dl>
+
+        <h2
+          class="govuk-heading-m"
+          style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+        >
+          Land parcels
+        </h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Land parcel ID</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.answers.landParcelId }}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Total size</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.answers.totalSize }} ha
+            </dd>
+          </div>
+        </dl>
+
+        <h2
+          class="govuk-heading-m"
+          style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+        >
+          Answers
+        </h2>
+
+        <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Scheme</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.answers.scheme }}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">Year</dt>
+            <dd class="govuk-summary-list__value">
+              {{ caseData.payload.answers.year }}
+            </dd>
+          </div>
+          <div class="govuk-summary-list__row">
+            <dt class="govuk-summary-list__key">
+              Has checked land is up to date
+            </dt>
+            <dd class="govuk-summary-list__value">
+              {% if caseData.payload.answers.hasCheckedLandIsUpToDate %}Yes{% else %}No{% endif %}
+            </dd>
+          </div>
+        </dl>
+
         {# 
                    -- answers.actionApplications
 
@@ -119,34 +175,56 @@
                     appliedFor: { unit: 'ha', quantity: 20.23 }
                 }
                 ] #}
-        {% set actionRows = [] %}
-        {% for action in caseData.payload.answers.actionApplications %}
 
-          {%
-            set row = [
-                [
-                    {
-                        text: "parcelId"
-                    },
-                    {
-                        text: action.parcelId
-                    }
-                ],
-                [
-                    { text: "code" },
-                    { text: action.code }
-                ],
-                [
-                    { text: "appliedFor" },
-                    { text: action.appliedFor and (action.appliedFor.quantity + " " + action.appliedFor.unit) or "" }
-                ]
-            ]
-          %}
-          {% set actionRows = (actionRows.push(row), actionRows) %}
-        {% endfor %}
+        {% if caseData.payload.answers.actionApplications.length %}
+          <h2
+            class="govuk-heading-m"
+            style="border-bottom: 2px solid #1d70b8; padding-bottom: 4px;"
+          >
+            Actions
+          </h2>
 
-        <h2>Action applications data</h2>
-        <pre>{{ actionRows | dump }}</pre>
+          {% for action in caseData.payload.answers.actionApplications %}
+            <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">
+                  Selected land parcel<br />for action {{ loop.index }}
+                </dt>
+                <dd class="govuk-summary-list__value">
+                  {{ action.parcelId or "N/A" }}
+                </dd>
+              </div>
+
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Action {{ loop.index }}</dt>
+                <dd class="govuk-summary-list__value">
+                  {{ action.code }}: {{ action.description or "N/A" }}
+                </dd>
+              </div>
+
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Available</dt>
+                <dd class="govuk-summary-list__value">
+                  {{ action.available or "N/A" }}
+                </dd>
+              </div>
+
+              <div class="govuk-summary-list__row">
+                <dt class="govuk-summary-list__key">Quantity</dt>
+                <dd class="govuk-summary-list__value">
+                  {% if action.appliedFor %}
+                    {{ action.appliedFor.quantity }}
+                    {{ action.appliedFor.unit }}
+                  {% else %}
+                    Not specified
+                  {% endif %}
+                </dd>
+              </div>
+            </dl>
+          {% endfor %}
+        {% else %}
+          <p class="govuk-body">No action applications data available.</p>
+        {% endif %}
       </div>
     </div>
   </div>
