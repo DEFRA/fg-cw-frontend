@@ -32,7 +32,7 @@ const getCaseById = async (caseId) => {
 export const applicationsController = {
   handler: async (_request, h) => {
     const caseData = await getCases()
-    return h.view('applications/index', {
+    return h.view('applications/views/index', {
       pageTitle: 'Applications',
       heading: 'Applications',
       breadcrumbs: [{ text: 'Home', href: '/' }, { text: 'Applications' }],
@@ -48,7 +48,7 @@ export const applicationsController = {
       return h.response('Case not found').code(404)
     }
 
-    return h.view('applications/show', {
+    return h.view('applications/views/show', {
       pageTitle: 'Case Detail',
       heading: selectedCase.businessName || 'Case Detail',
       caseData: selectedCase

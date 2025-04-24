@@ -1,0 +1,157 @@
+{% extends 'layouts/page.njk' %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{#  
+-- caseData example
+{
+    _id: '6809fe3d6169ff02cc99ab2a',
+    workflowCode: 'GRANT-REF-1',
+    caseRef: 'APPLICATION-REF-1',
+    status: 'NEW',
+    dateReceived: '2025-03-27T11:34:52.000Z',
+    targetDate: '2025-04-27T11:34:52.000Z',
+    priority: 'MEDIUM',
+    assignedUser: 'Mark Ford',
+    taskSections: [
+        { id: '1', title: 'Check application', taskGroups: [Array] },
+        {
+        id: '2',
+        title: 'Make Application Decision',
+        taskGroups: [Array]
+        }
+    ],
+    payload: {
+        clientRef: 'APPLICATION-REF-1',
+        code: 'GRANT-REF-1',
+        createdAt: '2025-03-27T10:34:52.000Z',
+        submittedAt: '2025-03-28T11:30:52.000Z',
+        identifiers: {
+        sbi: 'SBI001',
+        frn: 'FIRM0001',
+        crn: 'CUST0001',
+        defraId: 'DEFRA0001'
+        },
+        answers: {
+        scheme: 'SFI',
+        year: 2025,
+        hasCheckedLandIsUpToDate: true,
+        actionApplications: [Array]
+        }
+    }
+    }
+#}
+
+{% block content %}
+  {{ appHeading({ text: heading }) }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-body" data-testid="app-page-body">
+        {{
+          govukTable({
+              caption: "Case details",
+              captionClasses: "govuk-table__caption--m",
+              firstCellIsHeader: true,
+              rows: [
+                  [
+                      { text: "workflowCode" },
+                      { text: caseData.workflowCode }
+                  ],
+                  [
+                      { text: "caseRef" },
+                      { text: caseData.caseRef }
+                  ],
+                  [
+                      { text: "status" },
+                      { text: caseData.status }
+                  ],
+                  [
+                      { text: "createdAt" },
+                      { text: caseData.payload.createdAt }
+                  ],
+                  [
+                      { text: "submittedAt" },
+                      { text: caseData.payload.caseRef }
+                  ],
+                  [
+                      { text: "dateReceived" },
+                      { text: caseData.dateReceived }
+                  ],
+                  [
+                      { text: "priority" },
+                      { text: caseData.priority }
+                  ],
+                  [
+                      { text: "assignedUser" },
+                      { text: caseData.assignedUser }
+                  ]
+              ]
+          })
+        }}
+        {{
+          govukTable({
+              caption: "Answers",
+              captionClasses: "govuk-table__caption--m",
+              firstCellIsHeader: true,
+              rows: [
+                  [
+                      { text: "scheme" },
+                      { text: caseData.payload.answers.scheme }
+                  ],
+                  [
+                      { text: "year" },
+                      { text: caseData.payload.answers.year }
+                  ],
+                  [
+                      { text: "hasCheckedLandIsUpToDate" },
+                      { text: caseData.payload.answers.hasCheckedLandIsUpToDate }
+                  ]
+              ]
+          })
+        }}
+        {# 
+                   -- answers.actionApplications
+
+                [
+                {
+                    parcelId: '9238',
+                    sheetId: 'SX0679',
+                    code: 'CSAM1',
+                    appliedFor: { unit: 'ha', quantity: 20.23 }
+                }
+                ] #}
+        {% set actionRows = [] %}
+        {% for action in caseData.payload.answers.actionApplications %}
+
+          {%
+            set row = [
+                [
+                    {
+                        text: "parcelId"
+                    },
+                    {
+                        text: action.parcelId
+                    }
+                ],
+                [
+                    { text: "code" },
+                    { text: action.code }
+                ],
+                [
+                    { text: "appliedFor" },
+                    { text: action.appliedFor and (action.appliedFor.quantity + " " + action.appliedFor.unit) or "" }
+                ]
+            ]
+          %}
+          {% set actionRows = (actionRows.push(row), actionRows) %}
+        {% endfor %}
+
+        <h2>Action applications data</h2>
+        <pre>{{ actionRows | dump }}</pre>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+{% endblock %}
