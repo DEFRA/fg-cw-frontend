@@ -1,6 +1,4 @@
-/**
- * @jest-environment jsdom
- */
+/* @jest-environment jsdom */
 
 import { initSelectAllCheckboxes } from './checkbox-select-all.js'
 
