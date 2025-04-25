@@ -186,7 +186,7 @@ When running both the frontend and backend services together, port conflicts hav
 - Frontend localstack uses port 4567 (mapped to container's internal 4566)
 - Frontend Redis uses port 6380 (mapped to container's internal 6379)
 - Frontend MongoDB uses port 27018 (mapped to container's internal 27017)
-- Frontend app runs on port 3001 (mapped to container's internal 3000)
+- Frontend app runs on port 3000 (mapped to container's internal 3000)
 
 To run both services:
 
@@ -206,8 +206,8 @@ docker compose up -d
 
 You can then access:
 
-- Backend API at http://localhost:3000
-- Frontend app at http://localhost:3001
+- Backend API at http://localhost:3001
+- Frontend app at http://localhost:3000
 
 ### Dependabot
 
