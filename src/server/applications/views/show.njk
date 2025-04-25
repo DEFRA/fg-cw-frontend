@@ -1,164 +1,70 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{#  
--- caseData example
-{
-    _id: '6809fe3d6169ff02cc99ab2a',
-    workflowCode: 'GRANT-REF-1',
-    caseRef: 'APPLICATION-REF-1',
-    status: 'NEW',
-    dateReceived: '2025-03-27T11:34:52.000Z',
-    targetDate: '2025-04-27T11:34:52.000Z',
-    priority: 'MEDIUM',
-    assignedUser: 'Mark Ford',
-    taskSections: [
-        { id: '1', title: 'Check application', taskGroups: [Array] },
-        {
-        id: '2',
-        title: 'Make Application Decision',
-        taskGroups: [Array]
-        }
-    ],
-    payload: {
-        clientRef: 'APPLICATION-REF-1',
-        code: 'GRANT-REF-1',
-        createdAt: '2025-03-27T10:34:52.000Z',
-        submittedAt: '2025-03-28T11:30:52.000Z',
-        identifiers: {
-        sbi: 'SBI001',
-        frn: 'FIRM0001',
-        crn: 'CUST0001',
-        defraId: 'DEFRA0001'
-        },
-        answers: {
-        scheme: 'SFI',
-        year: 2025,
-        hasCheckedLandIsUpToDate: true,
-        actionApplications: [Array]
-        }
-    }
-    }
-#}
-
 {% block content %}
-  {% set months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
-  {% set dateStr = caseData.payload.submittedAt %}
-  {% set year = dateStr.slice(0, 4) %}
-  {% set monthIndex = dateStr.slice(5, 7) | int - 1 %}
-  {% set day = dateStr.slice(8, 10) | int %}
-
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
   <p class="govuk-body govuk-!-margin-top-0">
     Application submitted:
-    <strong>{{ day }} {{ months[monthIndex] }} {{ year }}</strong>
+    <strong
+      >{{ caseData.payload.submittedAt|formatDate("do MMMM yyyy") }}</strong
+    >
   </p>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
+        {% set rows = [] %}
+        {% for key, value in caseData %}
+          {% if value is string %}
+            {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
+          {% endif %}
+        {% endfor %}
+
         {{
           govukTable({
               captionClasses: "govuk-table__caption--m",
               firstCellIsHeader: true,
-              rows: [
-                  [
-                      { text: "workflowCode" },
-                      { text: caseData.workflowCode }
-                  ],
-                  [
-                      { text: "caseRef" },
-                      { text: caseData.caseRef }
-                  ],
-                  [
-                      { text: "status" },
-                      { text: caseData.status }
-                  ],
-                  [
-                      { text: "createdAt" },
-                      { text: caseData.payload.createdAt }
-                  ],
-                  [
-                      { text: "submittedAt" },
-                      { text: caseData.payload.caseRef }
-                  ],
-                  [
-                      { text: "dateReceived" },
-                      { text: caseData.dateReceived }
-                  ],
-                  [
-                      { text: "priority" },
-                      { text: caseData.priority }
-                  ],
-                  [
-                      { text: "assignedUser" },
-                      { text: caseData.assignedUser }
-                  ]
-              ]
+              rows: rows
           })
         }}
+
+        {% set rows = [] %}
+        {% for key, value in caseData.payload.answers %}
+          {%- if key != "actionApplications" -%}
+            {%- set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) -%}
+          {%- endif -%}
+        {% endfor %}
         {{
           govukTable({
               caption: "Answers",
               captionClasses: "govuk-table__caption--m",
               firstCellIsHeader: true,
-              rows: [
-                  [
-                      { text: "scheme" },
-                      { text: caseData.payload.answers.scheme }
-                  ],
-                  [
-                      { text: "year" },
-                      { text: caseData.payload.answers.year }
-                  ],
-                  [
-                      { text: "hasCheckedLandIsUpToDate" },
-                      { text: caseData.payload.answers.hasCheckedLandIsUpToDate }
-                  ]
-              ]
+              rows: rows
           })
         }}
-        {# 
-                   -- answers.actionApplications
 
-                [
-                {
-                    parcelId: '9238',
-                    sheetId: 'SX0679',
-                    code: 'CSAM1',
-                    appliedFor: { unit: 'ha', quantity: 20.23 }
-                }
-                ] #}
         <h2 class="govuk-heading-m">Action applications data</h2>
-
         {% for action in caseData.payload.answers.actionApplications %}
           <h3 class="govuk-heading-s">
             Selected land parcel for action {{ loop.index }}
           </h3>
 
-          <dl class="govuk-summary-list govuk-!-margin-bottom-6">
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">
-                Selected land parcel for action {{ loop.index }}
-              </dt>
-              <dd class="govuk-summary-list__value">{{ action.parcelId }}</dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Action {{ loop.index }}</dt>
-              <dd class="govuk-summary-list__value">{{ action.code }}</dd>
-            </div>
-            <div class="govuk-summary-list__row">
-              <dt class="govuk-summary-list__key">Quantity</dt>
-              <dd class="govuk-summary-list__value">
-                {% if action.appliedFor %}
-                  {{ action.appliedFor.quantity }}
-                  {{ action.appliedFor.unit }}
-                {% else %}
-                  Not specified
-                {% endif %}
-              </dd>
-            </div>
-          </dl>
+          {% set rows = [] %}
+          {% for key, value in action %}
+            {% if key == "appliedFor" %}
+              {% set rowValue = value.quantity + " " + value.unit %}
+              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: rowValue}]), rows) %}
+            {% else %}
+              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
+            {% endif %}
+          {% endfor %}
+
+          {{
+            govukTable({
+                firstCellIsHeader: true,
+                rows: rows
+            })
+          }}
         {% endfor %}
       </div>
     </div>
