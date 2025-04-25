@@ -42,13 +42,23 @@
 #}
 
 {% block content %}
-  {{ appHeading({ text: heading }) }}
+  {% set months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] %}
+  {% set dateStr = caseData.payload.submittedAt %}
+  {% set year = dateStr.slice(0, 4) %}
+  {% set monthIndex = dateStr.slice(5, 7) | int - 1 %}
+  {% set day = dateStr.slice(8, 10) | int %}
+
+  <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
+  <p class="govuk-body govuk-!-margin-top-0">
+    Application submitted:
+    <strong>{{ day }} {{ months[monthIndex] }} {{ year }}</strong>
+  </p>
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
         {{
           govukTable({
-              caption: "Case details",
               captionClasses: "govuk-table__caption--m",
               firstCellIsHeader: true,
               rows: [
@@ -119,34 +129,37 @@
                     appliedFor: { unit: 'ha', quantity: 20.23 }
                 }
                 ] #}
-        {% set actionRows = [] %}
+        <h2 class="govuk-heading-m">Action applications data</h2>
+
         {% for action in caseData.payload.answers.actionApplications %}
+          <h3 class="govuk-heading-s">
+            Selected land parcel for action {{ loop.index }}
+          </h3>
 
-          {%
-            set row = [
-                [
-                    {
-                        text: "parcelId"
-                    },
-                    {
-                        text: action.parcelId
-                    }
-                ],
-                [
-                    { text: "code" },
-                    { text: action.code }
-                ],
-                [
-                    { text: "appliedFor" },
-                    { text: action.appliedFor and (action.appliedFor.quantity + " " + action.appliedFor.unit) or "" }
-                ]
-            ]
-          %}
-          {% set actionRows = (actionRows.push(row), actionRows) %}
+          <dl class="govuk-summary-list govuk-!-margin-bottom-6">
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">
+                Selected land parcel for action {{ loop.index }}
+              </dt>
+              <dd class="govuk-summary-list__value">{{ action.parcelId }}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Action {{ loop.index }}</dt>
+              <dd class="govuk-summary-list__value">{{ action.code }}</dd>
+            </div>
+            <div class="govuk-summary-list__row">
+              <dt class="govuk-summary-list__key">Quantity</dt>
+              <dd class="govuk-summary-list__value">
+                {% if action.appliedFor %}
+                  {{ action.appliedFor.quantity }}
+                  {{ action.appliedFor.unit }}
+                {% else %}
+                  Not specified
+                {% endif %}
+              </dd>
+            </div>
+          </dl>
         {% endfor %}
-
-        <h2>Action applications data</h2>
-        <pre>{{ actionRows | dump }}</pre>
       </div>
     </div>
   </div>
