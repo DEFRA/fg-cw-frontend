@@ -14,7 +14,12 @@ export const applications = {
         {
           method: 'GET',
           path: '/applications',
-          ...applicationsController
+          handler: applicationsController.handler
+        },
+        {
+          method: 'GET',
+          path: '/applications/{id}',
+          handler: applicationsController.show
         }
       ])
     }

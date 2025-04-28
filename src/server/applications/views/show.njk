@@ -1,0 +1,76 @@
+{% extends 'layouts/page.njk' %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
+  <p class="govuk-body govuk-!-margin-top-0">
+    Application submitted:
+    <strong
+      >{{ caseData.payload.submittedAt|formatDate("do MMMM yyyy") }}</strong
+    >
+  </p>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-body" data-testid="app-page-body">
+        {% set rows = [] %}
+        {% for key, value in caseData %}
+          {% if value is string %}
+            {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
+          {% endif %}
+        {% endfor %}
+
+        {{
+          govukTable({
+              captionClasses: "govuk-table__caption--m",
+              firstCellIsHeader: true,
+              rows: rows
+          })
+        }}
+
+        {% set rows = [] %}
+        {% for key, value in caseData.payload.answers %}
+          {%- if key != "actionApplications" -%}
+            {%- set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) -%}
+          {%- endif -%}
+        {% endfor %}
+        {{
+          govukTable({
+              caption: "Answers",
+              captionClasses: "govuk-table__caption--m",
+              firstCellIsHeader: true,
+              rows: rows
+          })
+        }}
+
+        <h2 class="govuk-heading-m">Action applications data</h2>
+        {% for action in caseData.payload.answers.actionApplications %}
+          <h3 class="govuk-heading-s">
+            Selected land parcel for action {{ loop.index }}
+          </h3>
+
+          {% set rows = [] %}
+          {% for key, value in action %}
+            {% if key == "appliedFor" %}
+              {% set rowValue = value.quantity + " " + value.unit %}
+              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: rowValue}]), rows) %}
+            {% else %}
+              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
+            {% endif %}
+          {% endfor %}
+
+          {{
+            govukTable({
+                firstCellIsHeader: true,
+                rows: rows
+            })
+          }}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+{% endblock %}
