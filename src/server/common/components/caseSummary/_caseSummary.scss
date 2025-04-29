@@ -1,0 +1,28 @@
+  @use 'govuk-frontend' as *;
+  
+  .app-case-banner {
+    background-color: #e7f4eb;
+    border-top: 8px solid #00a33b;
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+  }
+
+  .app-case-summary {
+    margin-bottom: govuk-spacing(4);
+  }
+
+  .app-case-row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: govuk-spacing(3);
+  }
+
+  .app-case-cell {
+    margin-right: govuk-spacing(4);
+    display: flex;
+    align-items: center;
+  }
