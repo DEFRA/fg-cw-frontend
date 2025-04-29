@@ -1,3 +1,5 @@
-// import custom component styles
+// import custom component styles - folder/scss file (actual filename prefixed with _ e.g. _defraHeading.scss)
 @use 'heading/heading';
+@use 'defraHeading/defraHeading';
 @use 'caseSummary/caseSummary';
+@use 'serviceNavigation/serviceNavigation';
