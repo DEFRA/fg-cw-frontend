@@ -1,37 +1,11 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "./taskList/macro.njk" import appTaskList %}
 
 {% block content %}
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
-  {% if taskSteps.length > 0 %}
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Tasks</h2>
-
-    {% for step in taskSteps %}
-      <h3 class="govuk-heading-m">{{ loop.index }}. {{ step.heading }}</h3>
-      <ul class="govuk-list govuk-!-margin-bottom-4">
-        {% for task in step.tasks %}
-          <li>
-            <div class="govuk-grid-row govuk-!-margin-bottom-2">
-              <div class="govuk-grid-column-three-quarters">
-                <a href="{{ task.link }}" class="govuk-link"
-                  >{{ task.label }}</a
-                >
-              </div>
-              <div class="govuk-grid-column-one-quarter">
-                {{
-                  govukTag({
-                    text: task.status | capitalize,
-                    classes: "govuk-tag--grey"
-                  })
-                }}
-              </div>
-            </div>
-          </li>
-        {% endfor %}
-      </ul>
-    {% endfor %}
-  {% endif %}
+  {{ appTaskList({taskSteps: taskSteps}) }}
 
   <p class="govuk-body govuk-!-margin-top-9">
     Application submitted:
