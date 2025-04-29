@@ -48,10 +48,21 @@ export const applicationsController = {
       return h.response('Case not found').code(404)
     }
 
+    const taskSteps =
+      selectedCase.taskSections?.map((section) => ({
+        heading: section.title,
+        tasks: (section.taskGroups || []).map((group) => ({
+          label: group.title,
+          link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
+          status: group.status
+        }))
+      })) || []
+
     return h.view('applications/views/show', {
       pageTitle: 'Case Detail',
       heading: selectedCase.businessName || 'Case Detail',
-      caseData: selectedCase
+      caseData: selectedCase,
+      taskSteps
     })
   }
 }
