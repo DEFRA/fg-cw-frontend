@@ -170,6 +170,10 @@ export default {
         {
           from: path.join(govukFrontendPath, 'dist/govuk/assets'),
           to: 'assets'
+        },
+        {
+          from: '../server/common/components/defraHeading/defra-crest.png',
+          to: 'assets/images/defra-crest.png'
         }
       ]
     }),
