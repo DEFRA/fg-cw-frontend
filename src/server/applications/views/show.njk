@@ -5,71 +5,77 @@
 
 {% block content %}
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
-  {{ appTaskList({taskSteps: taskSteps}) }}
+  {{ appTaskList({ taskSteps: taskSteps }) }}
 
   <p class="govuk-body govuk-!-margin-top-9">
     Application submitted:
     <strong
-      >{{ caseData.payload.submittedAt|formatDate("do MMMM yyyy") }}</strong
+      >{{ caseData.payload.submittedAt | formatDate("do MMMM yyyy") }}</strong
     >
   </p>
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
+        {# Table 1: top-level caseData string fields #}
         {% set rows = [] %}
         {% for key, value in caseData %}
           {% if value is string %}
-            {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
+            {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
           {% endif %}
         {% endfor %}
 
         {{
           govukTable({
-              captionClasses: "govuk-table__caption--m",
-              firstCellIsHeader: true,
-              rows: rows
+            captionClasses: "govuk-table__caption--m",
+            firstCellIsHeader: true,
+            rows: rows
           })
         }}
 
+        {# Table 2: answers excluding actionApplications #}
         {% set rows = [] %}
         {% for key, value in caseData.payload.answers %}
-          {%- if key != "actionApplications" -%}
-            {%- set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) -%}
-          {%- endif -%}
+          {% if key != "actionApplications" %}
+            {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
+          {% endif %}
         {% endfor %}
+
         {{
           govukTable({
-              caption: "Answers",
-              captionClasses: "govuk-table__caption--m",
-              firstCellIsHeader: true,
-              rows: rows
+            caption: "Answers",
+            captionClasses: "govuk-table__caption--m",
+            firstCellIsHeader: true,
+            rows: rows
           })
         }}
 
-        <h2 class="govuk-heading-m">Action applications data</h2>
-        {% for action in caseData.payload.answers.actionApplications %}
-          <h3 class="govuk-heading-s">
-            Selected land parcel for action {{ loop.index }}
-          </h3>
+        {# Table 3+: Action applications data #}
+        {% if caseData.payload.answers.actionApplications %}
+          <h2 class="govuk-heading-m">Action applications data</h2>
+          {% for action in caseData.payload.answers.actionApplications %}
+            <h3 class="govuk-heading-s">
+              Selected land parcel for action {{ loop.index }}
+            </h3>
 
-          {% set rows = [] %}
-          {% for key, value in action %}
-            {% if key == "appliedFor" %}
-              {% set rowValue = value.quantity + " " + value.unit %}
-              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: rowValue}]), rows) %}
-            {% else %}
-              {% set rows = (rows.push([{text: key, classes: "govuk-!-width-one-third"}, {text: value}]), rows) %}
-            {% endif %}
-          {% endfor %}
+            {% set rows = [] %}
+            {% for key, value in action %}
+              {% if key == "appliedFor" %}
+                {% set rowValue = value.quantity + " " + value.unit %}
+                {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: rowValue }]]) %}
+              {% else %}
+                {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
+              {% endif %}
+            {% endfor %}
 
-          {{
-            govukTable({
+            {{
+              govukTable({
                 firstCellIsHeader: true,
                 rows: rows
-            })
-          }}
-        {% endfor %}
+              })
+            }}
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>

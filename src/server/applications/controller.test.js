@@ -153,6 +153,59 @@ describe('#applicationsController', () => {
     expect(response.payload).toEqual(expect.stringContaining('Team cases'))
     expect(response.payload).toEqual(expect.stringContaining('All cases'))
   })
+
+  // Place your new test HERE 👇
+  test('Should render grouped and ungrouped tasks correctly in case view', async () => {
+    const mockCase = {
+      caseRef: 'GRANT-1',
+      businessName: 'Farming Group Ltd',
+      taskGroups: [
+        { id: '1', title: 'Ungrouped Task A', status: 'NOT STARTED' },
+        { id: '2', title: 'Grouped Task B', status: 'COMPLETED' }
+      ],
+      taskSections: [
+        {
+          title: 'Grouped Section',
+          taskGroups: [
+            { id: '2', title: 'Grouped Task B', status: 'COMPLETED' }
+          ]
+        }
+      ],
+      payload: {
+        submittedAt: '2025-03-28T00:00:00Z',
+        answers: {
+          scheme: 'SFI',
+          year: '2025',
+          hasCheckedLandsUpToDate: true,
+          actionApplications: [
+            {
+              parcelId: '9238',
+              sheetId: 'SX0679',
+              code: 'CSAM1',
+              appliedFor: { quantity: '20.23', unit: 'ha' }
+            }
+          ]
+        }
+      }
+    }
+
+    fetch.mockResolvedValueOnce({
+      json: () => Promise.resolve(mockCase)
+    })
+
+    const response = await server.inject({
+      method: 'GET',
+      url: '/applications/GRANT-1'
+    })
+
+    expect(response.statusCode).toBe(statusCodes.ok)
+    expect(response.payload).toContain('Grouped Section')
+    expect(response.payload).toContain('Other tasks')
+    expect(response.payload).toContain('Grouped Task B')
+    expect(response.payload).toContain('Ungrouped Task A')
+    expect(response.payload).toContain('Selected land parcel for action 1')
+    expect(response.payload).toContain('20.23 ha')
+  })
 })
 
 /**

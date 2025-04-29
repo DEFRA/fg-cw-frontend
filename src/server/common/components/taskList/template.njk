@@ -8,7 +8,6 @@
     Tasks
   </h2>
 
-  {{ params | dump }}
   {% for step in params.taskSteps %}
     <h3 class="govuk-heading-m">{{ loop.index }}. {{ step.heading }}</h3>
     <ul class="govuk-list govuk-!-margin-bottom-4" data-testid="taskList-list">
