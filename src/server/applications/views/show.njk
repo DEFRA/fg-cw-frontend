@@ -8,13 +8,23 @@
 
     {% for step in taskSteps %}
       <h3 class="govuk-heading-m">{{ loop.index }}. {{ step.heading }}</h3>
-      <ul class="govuk-list govuk-list--bullet">
+      <ul class="govuk-list govuk-!-margin-bottom-4">
         {% for task in step.tasks %}
           <li>
-            <a href="{{ task.link }}" class="govuk-link">{{ task.label }}</a>
-            <strong class="govuk-tag govuk-tag--grey" style="margin-left: 1rem"
-              >{{ task.status }}</strong
-            >
+            <div class="govuk-grid-row">
+              <div class="govuk-grid-column-three-quarters">
+                <a href="{{ task.link }}" class="govuk-link"
+                  >{{ task.label }}</a
+                >
+              </div>
+              <div
+                class="govuk-grid-column-one-quarter govuk-!-text-align-right"
+              >
+                <strong class="govuk-tag govuk-tag--grey"
+                  >{{ task.status }}</strong
+                >
+              </div>
+            </div>
           </li>
         {% endfor %}
       </ul>
