@@ -1,0 +1,50 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/applications" class="govuk-back-link">Back to applications</a>
+
+    <h1 class="govuk-heading-m">
+      {{ params.caseData.businessName or "Valley Farm" }}
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            {{ params.caseData.payload.identifiers.sbi }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            {{ params.caseData.caseRef }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            {{ params.caseData.payload.answers.scheme }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            {{ params.caseData.dateReceived|formatDate("d MMM yyyy") }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            {{ params.caseData.status }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
