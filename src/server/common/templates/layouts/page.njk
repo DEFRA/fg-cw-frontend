@@ -4,6 +4,7 @@
 
 {# Import custom components globally #}
 {% from "heading/macro.njk" import appHeading %}
+{% from "defraHeading/macro.njk" import appDefraHeading %}
 {% set mainClasses = "app-main-wrapper" %}
 
 {% block head %}
@@ -14,17 +15,7 @@
 {% endblock %}
 
 {% block header %}
-  {{
-    govukHeader({
-      homepageUrl: "https://www.gov.uk/",
-      classes: "app-header",
-      containerClasses: "govuk-width-container",
-      serviceName: "Manage rural grant applications",
-      serviceUrl: serviceUrl,
-      useTudorCrown: true
-    })
-  }}
-  {% include "partials/navigation/navigation.njk" %}
+  {{ appDefraHeading({serviceName: "Manage rural grant applications"}) }}
 {% endblock %}
 
 {% block pageTitle %}
