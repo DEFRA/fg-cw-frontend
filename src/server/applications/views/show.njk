@@ -1,9 +1,35 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "../../common/components/caseSummary/macro.njk" import appCaseSummary %}
 
 {% block content %}
-  <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
-  <p class="govuk-body govuk-!-margin-top-0">
+  {{ appCaseSummary({caseData: caseData}) }}
+
+  {{
+    govukServiceNavigation({
+      navigation: [
+        {
+          href: "#",
+          text: "Tasks"
+        },
+        {
+          href: "#",
+          text: "Application",
+          active: true
+        },
+        {
+          href: "#",
+          text: "Land Details"
+        }
+      ]
+    })
+  }}
+
+  <h1 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
+    Application
+  </h1>
+  <p class="govuk-body">
     Application submitted:
     <strong
       >{{ caseData.payload.submittedAt|formatDate("do MMMM yyyy") }}</strong
