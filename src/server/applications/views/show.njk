@@ -1,11 +1,13 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
-{% from "./taskList/macro.njk" import appTaskList %}
+{% from "./taskListSteps/macro.njk" import appTaskListSteps %}
+{% from "./tasksTab/macro.njk" import appTasksTab %}
 
 {% block content %}
   <h1 class="govuk-heading-xl govuk-!-margin-bottom-1">Application</h1>
-  {{ appTaskList({ taskSteps: taskSteps }) }}
+
+  {{ appTasksTab({taskSteps: taskSteps, tasks: tasks}) }}
 
   <p class="govuk-body govuk-!-margin-top-9">
     Application submitted:

@@ -33,28 +33,24 @@ describe('Task List Component', () => {
   ]
 
   beforeEach(() => {
-    $taskList = renderComponent('taskList', {
+    $taskList = renderComponent('taskListSteps', {
       taskSteps: tasks
     })
   })
 
   test('Should not render taskList component', () => {
-    $taskList = renderComponent('taskList', { taskSteps: [] })
-    expect($taskList('[data-testid="taskList-heading"]')).toHaveLength(0)
-  })
-
-  test('Should render header for taskList component', () => {
-    expect($taskList('[data-testid="taskList-heading"]')).toHaveLength(1)
+    $taskList = renderComponent('taskListSteps', { taskSteps: [] })
+    expect($taskList('[data-testid="taskListSteps-li"]')).toHaveLength(0)
   })
 
   test('Should render list items', () => {
-    expect($taskList('[data-testid="taskList-li"]')).toHaveLength(3)
+    expect($taskList('[data-testid="taskListSteps-li"]')).toHaveLength(3)
   })
 
   test('Should render task label', () => {
-    expect($taskList('[data-testid="taskList-list"]').text().trim()).toContain(
-      'Check for dual funding'
-    )
+    expect(
+      $taskList('[data-testid="taskListSteps-list"]').text().trim()
+    ).toContain('Check for dual funding')
   })
 })
 /**

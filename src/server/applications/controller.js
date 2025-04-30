@@ -29,43 +29,6 @@ const getCaseById = async (caseId) => {
   }
 }
 
-const buildTaskSteps = (selectedCase) => {
-  const groupedTaskIds = new Set()
-
-  const taskSteps = (selectedCase.taskSections || []).map((section) => {
-    const tasks = (section.taskGroups || []).map((group) => {
-      groupedTaskIds.add(group.id)
-      return {
-        label: group.title,
-        link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
-        status: group.status
-      }
-    })
-
-    return {
-      heading: section.title,
-      tasks
-    }
-  })
-
-  const ungrouped = (selectedCase.taskGroups || []).filter(
-    (group) => !groupedTaskIds.has(group.id)
-  )
-
-  if (ungrouped.length > 0) {
-    taskSteps.push({
-      heading: 'Other tasks',
-      tasks: ungrouped.map((group) => ({
-        label: group.title,
-        link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
-        status: group.status
-      }))
-    })
-  }
-
-  return taskSteps
-}
-
 export const applicationsController = {
   handler: async (_request, h) => {
     const caseData = await getCases()
@@ -85,13 +48,23 @@ export const applicationsController = {
       return h.response('Case not found').code(404)
     }
 
-    const taskSteps = buildTaskSteps(selectedCase)
+    const taskSteps =
+      selectedCase.taskSections?.map((section) => ({
+        heading: section.title,
+        tasks: (section.taskGroups || []).map((group) => ({
+          label: group.title,
+          link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
+          status: group.status
+        }))
+      })) || []
+
+    const tasks = selectedCase.tasks
 
     return h.view('applications/views/show', {
-      pageTitle: 'Case Detail',
-      heading: selectedCase.businessName || 'Case Detail',
+      pageTitle: 'Application',
       caseData: selectedCase,
-      taskSteps
+      taskSteps,
+      tasks
     })
   }
 }

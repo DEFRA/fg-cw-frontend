@@ -154,8 +154,7 @@ describe('#applicationsController', () => {
     expect(response.payload).toEqual(expect.stringContaining('All cases'))
   })
 
-  // Place your new test HERE 👇
-  test('Should render grouped and ungrouped tasks correctly in case view', async () => {
+  test('Should render grouped tasks correctly in case view', async () => {
     const mockCase = {
       caseRef: 'GRANT-1',
       businessName: 'Farming Group Ltd',
@@ -200,9 +199,7 @@ describe('#applicationsController', () => {
 
     expect(response.statusCode).toBe(statusCodes.ok)
     expect(response.payload).toContain('Grouped Section')
-    expect(response.payload).toContain('Other tasks')
     expect(response.payload).toContain('Grouped Task B')
-    expect(response.payload).toContain('Ungrouped Task A')
     expect(response.payload).toContain('Selected land parcel for action 1')
     expect(response.payload).toContain('20.23 ha')
   })
