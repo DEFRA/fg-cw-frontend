@@ -13,7 +13,7 @@ const getCases = async () => {
     const response = await fetch(`${backendUrl.toString()}/cases`)
     const { data } = await response.json()
     return data
-  } catch (error) {
+  } catch {
     return []
   }
 }
@@ -24,7 +24,7 @@ const getCaseById = async (caseId) => {
     const response = await fetch(`${backendUrl.toString()}/cases/${caseId}`)
     const data = await response.json()
     return data
-  } catch (error) {
+  } catch {
     return null
   }
 }
@@ -48,10 +48,23 @@ export const applicationsController = {
       return h.response('Case not found').code(404)
     }
 
+    const taskSteps =
+      selectedCase.taskSections?.map((section) => ({
+        heading: section.title,
+        tasks: (section.taskGroups || []).map((group) => ({
+          label: group.title,
+          link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
+          status: group.status
+        }))
+      })) || []
+
+    const tasks = selectedCase.tasks
+
     return h.view('applications/views/show', {
-      pageTitle: 'Case Detail',
-      heading: selectedCase.businessName || 'Case Detail',
-      caseData: selectedCase
+      pageTitle: 'Application',
+      caseData: selectedCase,
+      taskSteps,
+      tasks
     })
   }
 }
