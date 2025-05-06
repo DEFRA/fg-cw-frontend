@@ -2,13 +2,13 @@
 
 .app-case-banner {
   background-color: #e7f4eb;
-  border-top: 8px solid #00a33b;
   width: 100vw;
   position: relative;
   left: 50%;
   right: 50%;
   margin-left: -50vw;
   margin-right: -50vw;
+  top: -(govuk-spacing(4));
 }
 
 .app-case-row {
