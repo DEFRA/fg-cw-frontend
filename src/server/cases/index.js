@@ -14,6 +14,12 @@ export const cases = {
         {
           method: 'GET',
           path: '/cases',
+          options: {
+            auth: {
+              strategy: 'msEntraId',
+              mode: 'try'
+            }
+          },
           handler: casesController.handler
         },
         {
