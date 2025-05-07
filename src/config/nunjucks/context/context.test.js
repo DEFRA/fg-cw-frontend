@@ -38,18 +38,8 @@ describe('#context', () => {
         navigation: [
           {
             isActive: true,
-            text: 'Home',
-            url: '/'
-          },
-          {
-            isActive: false,
             text: 'Applications',
             url: '/applications'
-          },
-          {
-            isActive: false,
-            text: 'About',
-            url: '/about'
           }
         ],
         serviceName: 'fg-cw-frontend',
@@ -132,18 +122,8 @@ describe('#context cache', () => {
         navigation: [
           {
             isActive: true,
-            text: 'Home',
-            url: '/'
-          },
-          {
-            isActive: false,
             text: 'Applications',
             url: '/applications'
-          },
-          {
-            isActive: false,
-            text: 'About',
-            url: '/about'
           }
         ],
         serviceName: 'fg-cw-frontend',

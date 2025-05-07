@@ -35,7 +35,7 @@ export const applicationsController = {
     return h.view('applications/views/index', {
       pageTitle: 'Applications',
       heading: 'Applications',
-      breadcrumbs: [{ text: 'Home', href: '/' }, { text: 'Applications' }],
+      breadcrumbs: [],
       data: { allCases: caseData }
     })
   },

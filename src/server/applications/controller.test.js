@@ -125,7 +125,7 @@ describe('#applicationsController', () => {
     )
   })
 
-  test('Should render page with correct breadcrumbs', async () => {
+  test('Should render page with correct navigation', async () => {
     fetch.mockResolvedValueOnce({
       json: () => Promise.resolve({ data: [] })
     })
@@ -135,7 +135,9 @@ describe('#applicationsController', () => {
       url: '/applications'
     })
 
-    expect(response.payload).toEqual(expect.stringContaining('Home'))
+    expect(response.payload).toEqual(
+      expect.stringContaining('Manage rural grant applications')
+    )
     expect(response.payload).toEqual(expect.stringContaining('Applications'))
   })
 

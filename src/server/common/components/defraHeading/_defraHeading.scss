@@ -17,3 +17,23 @@
   font-size: 1.1875rem;
   line-height: 1.3158;
 }
+
+.defra-banner {
+  border-bottom: 8px solid #00a33b;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  top: -govuk-spacing(4);
+  
+  .govuk-grid-row {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
