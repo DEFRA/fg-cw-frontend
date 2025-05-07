@@ -14,6 +14,12 @@ export const applications = {
         {
           method: 'GET',
           path: '/applications',
+          options: {
+            auth: {
+              strategy: 'msEntraId',
+              mode: 'try'
+            }
+          },
           handler: applicationsController.handler
         },
         {

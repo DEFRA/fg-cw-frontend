@@ -12,6 +12,7 @@ import { getCacheEngine } from '~/src/server/common/helpers/session-cache/cache-
 import { pulse } from '~/src/server/common/helpers/pulse.js'
 import { requestTracing } from '~/src/server/common/helpers/request-tracing.js'
 import { setupProxy } from '~/src/server/common/helpers/proxy/setup-proxy.js'
+import { auth } from './common/helpers/auth.js'
 
 export async function createServer() {
   setupProxy()
@@ -53,6 +54,7 @@ export async function createServer() {
     }
   })
   await server.register([
+    auth,
     requestLogger,
     requestTracing,
     secureContext,

@@ -30,7 +30,7 @@ const getCaseById = async (caseId) => {
 }
 
 export const applicationsController = {
-  handler: async (_request, h) => {
+  handler: async (request, h) => {
     const caseData = await getCases()
     return h.view('applications/views/index', {
       pageTitle: 'Applications',
