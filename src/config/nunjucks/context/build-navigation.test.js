@@ -1,4 +1,4 @@
-import { buildNavigation } from '~/src/config/nunjucks/context/build-navigation.js'
+import { buildNavigation } from '../../../config/nunjucks/context/build-navigation.js'
 
 /**
  * @param {Partial<Request>} [options]
@@ -14,18 +14,8 @@ describe('#buildNavigation', () => {
     ).toEqual([
       {
         isActive: false,
-        text: 'Home',
-        url: '/'
-      },
-      {
-        isActive: false,
         text: 'Applications',
         url: '/applications'
-      },
-      {
-        isActive: false,
-        text: 'About',
-        url: '/about'
       }
     ])
   })
@@ -34,18 +24,8 @@ describe('#buildNavigation', () => {
     expect(buildNavigation(mockRequest({ path: '/' }))).toEqual([
       {
         isActive: true,
-        text: 'Home',
-        url: '/'
-      },
-      {
-        isActive: false,
         text: 'Applications',
         url: '/applications'
-      },
-      {
-        isActive: false,
-        text: 'About',
-        url: '/about'
       }
     ])
   })
