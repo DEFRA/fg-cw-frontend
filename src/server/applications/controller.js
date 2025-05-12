@@ -29,6 +29,18 @@ const getCaseById = async (caseId) => {
   }
 }
 
+const getWorkflowByCode = async (workflowCode) => {
+  try {
+    const backendUrl = config.get('fg_cw_backend_url')
+    const response = await fetch(
+      `${backendUrl.toString()}/workflows/${workflowCode}`
+    )
+    const data = await response.json()
+    return data
+  } catch {
+    return null
+  }
+}
 export const applicationsController = {
   handler: async (_request, h) => {
     const caseData = await getCases()
@@ -47,24 +59,156 @@ export const applicationsController = {
     if (!selectedCase) {
       return h.response('Case not found').code(404)
     }
+    const { workflowCode } = selectedCase
 
-    const taskSteps =
-      selectedCase.taskSections?.map((section) => ({
-        heading: section.title,
-        tasks: (section.taskGroups || []).map((group) => ({
-          label: group.title,
-          link: `/cases/${selectedCase.caseRef}/task-group/${group.id}`,
-          status: group.status
+    if (!workflowCode) {
+      return h.response('Workflow not found').code(404)
+    }
+    const workflow = await getWorkflowByCode(workflowCode)
+
+    // TODO: Remove this once we have the real data from workflow with stages info
+    workflow.stages = [
+      {
+        id: 'applicationReceipt',
+        title: 'Application Receipt',
+        taskGroups: [
+          {
+            id: 'applicationReceiptTasks',
+            title: 'Application Receipt Tasks',
+            tasks: [
+              {
+                id: 'simpleReview',
+                title: 'Simple Review',
+                type: 'boolean'
+              }
+            ]
+          }
+        ],
+        actions: [
+          {
+            id: 'approve',
+            label: 'Approve'
+          }
+        ]
+      },
+      {
+        id: 'contract',
+        title: 'Contract',
+        taskGroups: [],
+        actions: []
+      }
+    ]
+
+    // TODO: Remove this once we have the real data from workflow
+    // Has all the id that are needed to show the stages, task groups and tasks
+    // we need to use the id present to look up against the workflow to get the real label info
+    selectedCase.stages = [
+      {
+        id: 'applicationReceipt',
+        taskGroups: [
+          {
+            id: 'applicationReceiptTasks',
+            tasks: [
+              {
+                id: 'simpleReview',
+                type: 'boolean'
+              }
+            ]
+          }
+        ],
+        actions: [
+          {
+            id: 'approve'
+          }
+        ]
+      },
+      {
+        id: 'contract',
+        taskGroups: [],
+        actions: []
+      }
+    ]
+
+    // Add titles from workflow stages to selectedCase stages
+    selectedCase.stages = selectedCase.stages.map((stage) => {
+      const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
+
+      // Add title from workflow to the stage
+      const updatedStage = {
+        ...stage,
+        title: workflowStage?.title
+      }
+
+      // Add titles to task groups
+      if (stage.taskGroups && stage.taskGroups.length > 0) {
+        updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
+          const workflowTaskGroup = workflowStage?.taskGroups?.find(
+            (wtg) => wtg.id === taskGroup.id
+          )
+
+          // Add title to task group
+          const updatedTaskGroup = {
+            ...taskGroup,
+            title: workflowTaskGroup?.title
+          }
+
+          // Add titles to tasks
+          if (taskGroup.tasks && taskGroup.tasks.length > 0) {
+            updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
+              const workflowTask = workflowTaskGroup?.tasks?.find(
+                (wt) => wt.id === task.id
+              )
+
+              // Add title to task
+              return {
+                ...task,
+                title: workflowTask?.title
+              }
+            })
+          }
+
+          return updatedTaskGroup
+        })
+      }
+
+      // Add labels to actions
+      if (stage.actions && stage.actions.length > 0) {
+        updatedStage.actions = stage.actions.map((action) => {
+          const workflowAction = workflowStage?.actions?.find(
+            (wa) => wa.id === action.id
+          )
+
+          // Add label to action
+          return {
+            ...action,
+            label: workflowAction?.label
+          }
+        })
+      }
+
+      return updatedStage
+    })
+
+    // Create taskSteps from the updated selectedCase stages
+    const stages =
+      selectedCase.stages.map((stage) => ({
+        title: stage.title || stage.id,
+        groups: (stage.taskGroups || []).map((group) => ({
+          ...group,
+          tasks: (group.tasks || []).map((task) => ({
+            ...task,
+            label: task.title || task.id,
+            link: '#',
+            status: task.status || 'NOT STARTED'
+          }))
         }))
       })) || []
-
-    const tasks = selectedCase.tasks
 
     return h.view('applications/views/show', {
       pageTitle: 'Application',
       caseData: selectedCase,
-      taskSteps,
-      tasks
+      stages,
+      query: request.query
     })
   }
 }

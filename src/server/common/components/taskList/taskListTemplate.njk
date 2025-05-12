@@ -1,21 +1,27 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% if params.tasks.length > 0 %}
-  <ul class="govuk-list govuk-!-margin-bottom-4" data-testid="taskList-list">
+  <ul
+    class="govuk-task-list govuk-!-margin-bottom-4"
+    data-testid="taskList-list"
+  >
     {% for task in params.tasks %}
-      <li data-testid="taskList-li">
-        <div class="govuk-grid-row govuk-!-margin-bottom-2">
-          <div class="govuk-grid-column-three-quarters">
-            <a href="{{ task.link }}" class="govuk-link">{{ task.label }}</a>
-          </div>
-          <div class="govuk-grid-column-one-quarter">
-            {{
-              govukTag({
-                text: task.status | capitalize,
-                classes: "govuk-tag--grey"
-              })
-            }}
-          </div>
+      <li
+        class="govuk-task-list__item govuk-task-list__item--with-link"
+        data-testid="taskList-li"
+      >
+        <div class="govuk-task-list__name-and-hint">
+          <a href="{{ task.link }}" class="govuk-link govuk-task-list__link"
+            >{{ task.label }}</a
+          >
+        </div>
+        <div class="govuk-task-list__status">
+          {{
+            govukTag({
+              text: task.status | capitalize,
+              classes: "govuk-tag--grey"
+            })
+          }}
         </div>
       </li>
     {% endfor %}
