@@ -66,69 +66,6 @@ export const applicationsController = {
     }
     const workflow = await getWorkflowByCode(workflowCode)
 
-    // TODO: Remove this once we have the real data from workflow with stages info
-    workflow.stages = [
-      {
-        id: 'applicationReceipt',
-        title: 'Application Receipt',
-        taskGroups: [
-          {
-            id: 'applicationReceiptTasks',
-            title: 'Application Receipt Tasks',
-            tasks: [
-              {
-                id: 'simpleReview',
-                title: 'Simple Review',
-                type: 'boolean'
-              }
-            ]
-          }
-        ],
-        actions: [
-          {
-            id: 'approve',
-            label: 'Approve'
-          }
-        ]
-      },
-      {
-        id: 'contract',
-        title: 'Contract',
-        taskGroups: [],
-        actions: []
-      }
-    ]
-
-    // TODO: Remove this once we have the real data from workflow
-    // Has all the id that are needed to show the stages, task groups and tasks
-    // we need to use the id present to look up against the workflow to get the real label info
-    selectedCase.stages = [
-      {
-        id: 'applicationReceipt',
-        taskGroups: [
-          {
-            id: 'applicationReceiptTasks',
-            tasks: [
-              {
-                id: 'simpleReview',
-                type: 'boolean'
-              }
-            ]
-          }
-        ],
-        actions: [
-          {
-            id: 'approve'
-          }
-        ]
-      },
-      {
-        id: 'contract',
-        taskGroups: [],
-        actions: []
-      }
-    ]
-
     // Add titles from workflow stages to selectedCase stages
     selectedCase.stages = selectedCase.stages.map((stage) => {
       const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
@@ -197,7 +134,6 @@ export const applicationsController = {
           ...group,
           tasks: (group.tasks || []).map((task) => ({
             ...task,
-            label: task.title || task.id,
             link: '#',
             status: task.status || 'NOT STARTED'
           }))

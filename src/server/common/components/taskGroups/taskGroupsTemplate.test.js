@@ -12,12 +12,12 @@ describe('Task Groups Component', () => {
           title: 'Check application',
           tasks: [
             {
-              label: 'Check application and documents',
+              title: 'Check application and documents',
               link: '/cases/APPLICATION-REF-1/task-group/1',
               status: 'COMPLETED'
             },
             {
-              label: 'Check for dual funding',
+              title: 'Check for dual funding',
               link: '/cases/APPLICATION-REF-1/task-group/2',
               status: 'NOT STARTED'
             }
@@ -27,7 +27,7 @@ describe('Task Groups Component', () => {
           title: 'Make Application Decision',
           tasks: [
             {
-              label: 'Approve or reject application',
+              title: 'Approve or reject application',
               link: '/cases/APPLICATION-REF-1/task-group/1',
               status: 'NOT STARTED'
             }
