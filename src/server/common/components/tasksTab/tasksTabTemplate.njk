@@ -1,14 +1,3 @@
-{% from "../taskListSteps/macro.njk" import appTaskListSteps %}
-{% from "../taskList/macro.njk" import appTaskList %}
+{% from "../taskGroups/macro.njk" import appTaskGroups %}
 
-{% if params.taskSteps.length or params.tasks.length %}
-  <h2
-    class="govuk-heading-l govuk-!-margin-top-6"
-    data-testid="taskListSteps-heading"
-  >
-    Tasks
-  </h2>
-{% endif %}
-
-{{ appTaskListSteps({taskSteps: params.taskSteps}) }}
-{{ appTaskList({tasks: params.tasks}) }}
+{{ appTaskGroups({stages: params.stages}) }}

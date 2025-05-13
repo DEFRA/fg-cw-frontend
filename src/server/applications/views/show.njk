@@ -1,25 +1,29 @@
 {% extends 'layouts/page.njk' %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
-{% from "./taskListSteps/macro.njk" import appTaskListSteps %}
-{% from "./tasksTab/macro.njk" import appTasksTab %}
 {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "../../common/components/taskGroups/macro.njk" import appTaskGroups %}
+{% from "../../common/components/tasksTab/macro.njk" import appTasksTab %}
 {% from "../../common/components/caseSummary/macro.njk" import appCaseSummary %}
+{% from "../../common/components/applicationDetailsTab/applicationDetailsTabTemplate.njk" import applicationDetailsTab %}
 
 {% block content %}
   {{ appCaseSummary({caseData: caseData}) }}
+
+  {% set activeTab = query.tab | default('tasks') %}
 
   {{
     govukServiceNavigation({
       navigation: [
         {
-          href: "#",
-          text: "Tasks"
+          href: "?tab=tasks",
+          text: "Tasks",
+          active: activeTab == 'tasks'
         },
         {
-          href: "#",
+          href: "?tab=application",
           text: "Application",
-          active: true
+          active: activeTab == 'application'
         },
         {
           href: "#",
@@ -29,84 +33,13 @@
     })
   }}
 
-  <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
-    Application
-  </h2>
+  {% if activeTab == 'tasks' %}
+    {{ appTasksTab({stages: stages}) }}
+  {% endif %}
 
-  {{ appTasksTab({taskSteps: taskSteps, tasks: tasks}) }}
-
-  <p class="govuk-body">
-    Application submitted:
-    <strong
-      >{{ caseData.payload.submittedAt | formatDate("do MMMM yyyy") }}</strong
-    >
-  </p>
-
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <div class="govuk-body" data-testid="app-page-body">
-        {# Table 1: top-level caseData string fields #}
-        {% set rows = [] %}
-        {% for key, value in caseData %}
-          {% if value is string %}
-            {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
-          {% endif %}
-        {% endfor %}
-
-        {{
-          govukTable({
-            captionClasses: "govuk-table__caption--m",
-            firstCellIsHeader: true,
-            rows: rows
-          })
-        }}
-
-        {# Table 2: answers excluding actionApplications #}
-        {% set rows = [] %}
-        {% for key, value in caseData.payload.answers %}
-          {% if key != "actionApplications" %}
-            {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
-          {% endif %}
-        {% endfor %}
-
-        {{
-          govukTable({
-            caption: "Answers",
-            captionClasses: "govuk-table__caption--m",
-            firstCellIsHeader: true,
-            rows: rows
-          })
-        }}
-
-        {# Table 3+: Action applications data #}
-        {% if caseData.payload.answers.actionApplications %}
-          <h2 class="govuk-heading-m">Action applications data</h2>
-          {% for action in caseData.payload.answers.actionApplications %}
-            <h3 class="govuk-heading-s">
-              Selected land parcel for action {{ loop.index }}
-            </h3>
-
-            {% set rows = [] %}
-            {% for key, value in action %}
-              {% if key == "appliedFor" %}
-                {% set rowValue = value.quantity + " " + value.unit %}
-                {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: rowValue }]]) %}
-              {% else %}
-                {% set rows = rows.concat([[{ text: key, classes: "govuk-!-width-one-third" }, { text: value }]]) %}
-              {% endif %}
-            {% endfor %}
-
-            {{
-              govukTable({
-                firstCellIsHeader: true,
-                rows: rows
-              })
-            }}
-          {% endfor %}
-        {% endif %}
-      </div>
-    </div>
-  </div>
+  {% if activeTab == 'application' %}
+    {{ applicationDetailsTab({caseData: caseData}) }}
+  {% endif %}
 {% endblock %}
 
 {% block bodyEnd %}
