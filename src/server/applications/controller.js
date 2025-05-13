@@ -99,7 +99,8 @@ export const applicationsController = {
               // Add title to task
               return {
                 ...task,
-                title: workflowTask?.title
+                title: workflowTask?.title,
+                type: workflowTask?.type
               }
             })
           }
@@ -134,16 +135,25 @@ export const applicationsController = {
           ...group,
           tasks: (group.tasks || []).map((task) => ({
             ...task,
-            link: '#',
-            status: task.status || 'NOT STARTED'
+            link: `/applications/${caseId}?tab=tasks&groupId=${group.id}&taskId=${task.id}`,
+            status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
           }))
         }))
       })) || []
 
+    // Filter stages to only show the current stage
+    const currentStage = selectedCase.currentStage
+
+    // Get the matching stage directly
+    const stageIndex = selectedCase.stages.findIndex(
+      (stage) => stage.id === currentStage
+    )
+    const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
+
     return h.view('applications/views/show', {
       pageTitle: 'Application',
       caseData: selectedCase,
-      stages,
+      stage: filteredStage,
       query: request.query
     })
   }
