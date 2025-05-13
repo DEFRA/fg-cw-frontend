@@ -140,10 +140,7 @@ const showApplication = async (request, h) => {
   const currentStage = selectedCase.currentStage
 
   // Get the matching stage directly
-  const stageIndex = selectedCase.stages.findIndex(
-    (stage) => stage.id === currentStage
-  )
-  const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
+  const stage = selectedCase.stages.find(stage => stage.id === currentStage)
 
   return h.view('applications/views/show', {
     pageTitle: 'Application',
