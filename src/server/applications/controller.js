@@ -81,7 +81,7 @@ const showApplication = async (request, h) => {
         // Add title to task group
         const updatedTaskGroup = {
           ...taskGroup,
-          title: workflowTaskGroup?.title
+          title: workflowTaskGroup.title
         }
 
         // Add titles to tasks
