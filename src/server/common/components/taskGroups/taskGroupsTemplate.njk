@@ -1,5 +1,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "../taskList/macro.njk" import appTaskList %}
+{% from "../stageActionButtonGroup/macro.njk" import appStageActionButtonGroup %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -13,5 +14,14 @@
       <h3 class="govuk-heading-m">{{ loop.index }}. {{ group.title }}</h3>
       {{ appTaskList({tasks: group.tasks}) }}
     {% endfor %}
+
+    {% if params.stage.actions.length > 0 %}
+      {{
+        appStageActionButtonGroup({
+            buttons: params.stage.actions,
+            caseId: params.caseId
+        })
+      }}
+    {% endif %}
   </div>
 </div>
