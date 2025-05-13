@@ -74,7 +74,7 @@ const showApplication = async (request, h) => {
 
     // Add titles to task groups
       updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
-        const workflowTaskGroup = workflowStage?.taskGroups?.find(
+        const workflowTaskGroup = workflowStage.taskGroups.find(
           (wtg) => wtg.id === taskGroup.id
         )
 
