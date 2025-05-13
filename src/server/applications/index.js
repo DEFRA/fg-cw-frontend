@@ -20,6 +20,16 @@ export const applications = {
           method: 'GET',
           path: '/applications/{id}',
           handler: applicationsController.show
+        },
+        {
+          method: 'GET',
+          path: '/applications/{id}/stage',
+          handler: applicationsController.stage
+        },
+        {
+          method: 'POST',
+          path: '/applications/{id}/stage',
+          handler: applicationsController.updateStage
         }
       ])
     }

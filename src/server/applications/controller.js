@@ -29,6 +29,62 @@ const getCaseById = async (caseId) => {
   }
 }
 
+const stage = async (request, h) => {
+  const { id } = request.params
+  const selectedCase = await getCaseById(id)
+
+  if (!selectedCase) {
+    return h.response('Case not found').code(404)
+  }
+
+  const currentStage = 'applicationReceipt'
+  const stages = [
+    {
+      id: 'applicationReceipt',
+      title: 'Application Receipt',
+      taskGroups: [
+        {
+          id: 'applicationReceiptTasks',
+          title: 'Application Receipt Tasks',
+          tasks: [
+            {
+              id: 'simpleReview',
+              title: 'Simple Review',
+              type: 'boolean'
+            }
+          ]
+        }
+      ],
+      actions: [
+        {
+          id: 'approve',
+          label: 'Approve',
+          nextStage: 'contract'
+        },
+        {
+          id: 'deny',
+          label: 'Deny'
+        }
+      ]
+    },
+    {
+      id: 'contract',
+      title: 'Contract',
+      taskGroups: [],
+      actions: []
+    }
+  ]
+
+  const stageActions = stages.find((s) => s.id === currentStage).actions
+
+  return h.view('applications/views/stage', {
+    pageTitle: 'Application',
+    caseId: id,
+    currentStage,
+    stageActions
+  })
+}
+
 export const applicationsController = {
   handler: async (_request, h) => {
     const caseData = await getCases()
@@ -38,6 +94,23 @@ export const applicationsController = {
       breadcrumbs: [],
       data: { allCases: caseData }
     })
+  },
+
+  stage,
+
+  updateStage: async (request, h) => {
+    const { id } = request.params
+
+    const selectedCase = await getCaseById(id)
+
+    if (!selectedCase) {
+      return h.response('Case not found').code(404)
+    }
+
+    const { nextStage } = request.payload
+    // call backend with stage update
+    // redirect to stage
+    return stage(request, h)
   },
 
   show: async (request, h) => {

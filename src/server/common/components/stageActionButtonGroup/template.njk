@@ -1,0 +1,19 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<div class="govuk-button-group">
+  {% for action in params.buttons %}
+    <form method="POST">
+      <input type="hidden" name="nextStage" value="{{ action.nextStage }}" />
+      <button
+        type="submit"
+        data-prevent-double-click="true"
+        class="govuk-button"
+        data-module="govuk-button"
+        data-govuk-button-init=""
+        formaction="{{ "/applications/" + params.caseId + "/stage/" }}"
+      >
+        {{ action.label }}
+      </button>
+    </form>
+  {% endfor %}
+</div>
