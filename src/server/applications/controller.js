@@ -36,9 +36,7 @@ const updateStageAsync = async (caseId, nextStage) => {
       `${backendUrl.toString()}/cases/${caseId}/stage`,
       {
         method: 'POST',
-        body: {
-          nextStage
-        }
+        body: JSON.stringify({ nextStage })
       }
     )
     const data = await response.json()
