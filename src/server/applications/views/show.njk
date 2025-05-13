@@ -34,7 +34,7 @@
   }}
 
   {% if activeTab == 'tasks' %}
-    {{ appTasksTab({stage: stage, groupId: query.groupId, taskId: query.taskId}) }}
+    {{ appTasksTab({caseId: caseData._id, stage: stage, groupId: query.groupId, taskId: query.taskId}) }}
   {% endif %}
 
   {% if activeTab == 'application' %}

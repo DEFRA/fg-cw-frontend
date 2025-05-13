@@ -1,22 +1,66 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
+    {{
+      govukBackLink({
+        text: "Back to task list",
+        href: "/applications/" + params.caseId + "?tab=tasks",
+        attributes: {
+          "data-testid": "back-link"
+        }
+      })
+    }}
+
     <h2
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
     >
       {% set taskTitle = "" %}
+      {% set taskType = "" %}
       {% for group in params.groups %}
         {% if group.id === params.groupId %}
           {% for task in group.tasks %}
             {% if task.id === params.taskId %}
               {% set taskTitle = task.title %}
+              {% set taskType = task.type %}
             {% endif %}
           {% endfor %}
         {% endif %}
       {% endfor %}
       {{ taskTitle }}
     </h2>
+
+    {% if taskType === "boolean" %}
+      <div class="govuk-form-group">
+        {{
+          govukCheckboxes({
+            name: "app-review",
+            items: [
+              {
+                value: "true",
+                id: "app-review",
+                text: "Is application ready to be reviewed?"
+              }
+            ]
+          })
+        }}
+      </div>
+
+      <div class="govuk-button-group">
+        {{
+          govukButton({
+            text: "Save and continue",
+            href: "/applications/" + params.caseId + "?tab=tasks",
+            attributes: {
+              "data-testid": "save-and-continue-button"
+            }
+          })
+        }}
+      </div>
+    {% endif %}
   </div>
 </div>
