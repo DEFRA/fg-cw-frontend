@@ -1,0 +1,13 @@
+{# 
+    buttons: [
+      label: <string>,
+      testId: <string>,
+      nextStage: <string>
+    ],
+    stageId: <string>,
+    caseId:
+#}
+
+{% macro appStageActionButtonGroup(params) %}
+  {%- include "./template.njk" -%}
+{% endmacro %}

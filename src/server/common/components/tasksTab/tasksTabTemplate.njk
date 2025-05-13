@@ -4,5 +4,5 @@
 {% if params.taskId %}
   {{ appTaskDetails({caseId: params.caseId, groups: params.stage.groups, groupId: params.groupId, taskId: params.taskId }) }}
 {% else %}
-  {{ appTaskGroups({stage: params.stage}) }}
+  {{ appTaskGroups({caseId: params.caseId, stage: params.stage}) }}
 {% endif %}
