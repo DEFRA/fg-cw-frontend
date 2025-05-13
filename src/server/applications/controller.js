@@ -69,7 +69,7 @@ const showApplication = async (request, h) => {
     // Add title from workflow to the stage
     const updatedStage = {
       ...stage,
-      title: workflowStage?.title
+      title: workflowStage.title
     }
 
     // Add titles to task groups
