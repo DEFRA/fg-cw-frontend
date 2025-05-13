@@ -86,7 +86,7 @@ const showApplication = async (request, h) => {
 
         // Add titles to tasks
           updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
-            const workflowTask = workflowTaskGroup?.tasks?.find(
+            const workflowTask = workflowTaskGroup.tasks.find(
               (wt) => wt.id === task.id
             )
 
