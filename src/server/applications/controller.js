@@ -36,7 +36,7 @@ const updateStageAsync = async (caseId, nextStage) => {
       `${backendUrl.toString()}/cases/${caseId}/stage`,
       {
         method: 'POST',
-        data: {
+        body: {
           nextStage
         }
       }
@@ -105,19 +105,8 @@ const showApplication = async (request, h) => {
       })
     }
 
-    // Add labels to actions
-    if (stage.actions && stage.actions.length > 0) {
-      updatedStage.actions = stage.actions.map((action) => {
-        const workflowAction = workflowStage?.actions?.find(
-          (wa) => wa.id === action.id
-        )
-
-        // Add label to action
-        return {
-          ...action,
-          label: workflowAction?.label
-        }
-      })
+    if (workflowStage.actions) {
+      updatedStage.actions = workflowStage.actions
     }
 
     return updatedStage
@@ -189,8 +178,8 @@ export const applicationsController = {
 
     const { nextStage } = request.payload
 
-    await updateStageAsync(id, nextStage)
     // call backend with stage update
+    await updateStageAsync(id, nextStage)
     // redirect to stage
     return showApplication(request, h)
   },
