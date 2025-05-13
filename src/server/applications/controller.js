@@ -36,7 +36,7 @@ const updateStageAsync = async (caseId, nextStage) => {
       `${backendUrl.toString()}/cases/${caseId}/stage`,
       {
         method: 'POST',
-        data: {
+        body: {
           nextStage
         }
       }
@@ -178,8 +178,8 @@ export const applicationsController = {
 
     const { nextStage } = request.payload
 
-    await updateStageAsync(id, nextStage)
     // call backend with stage update
+    await updateStageAsync(id, nextStage)
     // redirect to stage
     return showApplication(request, h)
   },
