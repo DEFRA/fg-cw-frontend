@@ -29,7 +29,7 @@ const getCaseById = async (caseId) => {
   }
 }
 
-const updateStage = async (caseId, nextStage) => {
+const updateStageAsync = async (caseId, nextStage) => {
   try {
     const backendUrl = config.get('fg_cw_backend_url')
     const response = await fetch(
@@ -48,59 +48,110 @@ const updateStage = async (caseId, nextStage) => {
   }
 }
 
-const stage = async (request, h) => {
-  const { id } = request.params
-  const selectedCase = await getCaseById(id)
+const showApplication = async (request, h) => {
+  const caseId = request.params.id
+  const selectedCase = await getCaseById(caseId)
 
   if (!selectedCase) {
     return h.response('Case not found').code(404)
   }
+  const { workflowCode } = selectedCase
 
-  const currentStage = 'applicationReceipt'
-  const stages = [
-    {
-      id: 'applicationReceipt',
-      title: 'Application Receipt',
-      taskGroups: [
-        {
-          id: 'applicationReceiptTasks',
-          title: 'Application Receipt Tasks',
-          tasks: [
-            {
-              id: 'simpleReview',
-              title: 'Simple Review',
-              type: 'boolean'
-            }
-          ]
-        }
-      ],
-      actions: [
-        {
-          id: 'approve',
-          label: 'Approve',
-          nextStage: 'contract'
-        },
-        {
-          id: 'deny',
-          label: 'Deny'
-        }
-      ]
-    },
-    {
-      id: 'contract',
-      title: 'Contract',
-      taskGroups: [],
-      actions: []
+  if (!workflowCode) {
+    return h.response('Workflow not found').code(404)
+  }
+  const workflow = await getWorkflowByCode(workflowCode)
+
+  // Add titles from workflow stages to selectedCase stages
+  selectedCase.stages = selectedCase.stages.map((stage) => {
+    const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
+
+    // Add title from workflow to the stage
+    const updatedStage = {
+      ...stage,
+      title: workflowStage?.title
     }
-  ]
 
-  const stageActions = stages.find((s) => s.id === currentStage).actions
+    // Add titles to task groups
+    if (stage.taskGroups && stage.taskGroups.length > 0) {
+      updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
+        const workflowTaskGroup = workflowStage?.taskGroups?.find(
+          (wtg) => wtg.id === taskGroup.id
+        )
 
-  return h.view('applications/views/stage', {
+        // Add title to task group
+        const updatedTaskGroup = {
+          ...taskGroup,
+          title: workflowTaskGroup?.title
+        }
+
+        // Add titles to tasks
+        if (taskGroup.tasks && taskGroup.tasks.length > 0) {
+          updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
+            const workflowTask = workflowTaskGroup?.tasks?.find(
+              (wt) => wt.id === task.id
+            )
+
+            // Add title to task
+            return {
+              ...task,
+              title: workflowTask?.title,
+              type: workflowTask?.type
+            }
+          })
+        }
+
+        return updatedTaskGroup
+      })
+    }
+
+    // Add labels to actions
+    if (stage.actions && stage.actions.length > 0) {
+      updatedStage.actions = stage.actions.map((action) => {
+        const workflowAction = workflowStage?.actions?.find(
+          (wa) => wa.id === action.id
+        )
+
+        // Add label to action
+        return {
+          ...action,
+          label: workflowAction?.label
+        }
+      })
+    }
+
+    return updatedStage
+  })
+
+  // Create taskSteps from the updated selectedCase stages
+  const stages =
+    selectedCase.stages.map((stage) => ({
+      title: stage.title || stage.id,
+      actions: stage.actions,
+      groups: (stage.taskGroups || []).map((group) => ({
+        ...group,
+        tasks: (group.tasks || []).map((task) => ({
+          ...task,
+          link: `/applications/${caseId}?tab=tasks&groupId=${group.id}&taskId=${task.id}`,
+          status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
+        }))
+      }))
+    })) || []
+
+  // Filter stages to only show the current stage
+  const currentStage = selectedCase.currentStage
+
+  // Get the matching stage directly
+  const stageIndex = selectedCase.stages.findIndex(
+    (stage) => stage.id === currentStage
+  )
+  const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
+
+  return h.view('applications/views/show', {
     pageTitle: 'Application',
-    caseId: id,
-    currentStage,
-    stageActions
+    caseData: selectedCase,
+    stage: filteredStage,
+    query: request.query
   })
 }
 
@@ -127,8 +178,6 @@ export const applicationsController = {
     })
   },
 
-  stage,
-
   updateStage: async (request, h) => {
     const { id } = request.params
 
@@ -140,117 +189,13 @@ export const applicationsController = {
 
     const { nextStage } = request.payload
 
-    await updateStage(id, nextStage)
+    await updateStageAsync(id, nextStage)
     // call backend with stage update
     // redirect to stage
-    return stage(request, h)
+    return showApplication(request, h)
   },
 
-  show: async (request, h) => {
-    const caseId = request.params.id
-    const selectedCase = await getCaseById(caseId)
-
-    if (!selectedCase) {
-      return h.response('Case not found').code(404)
-    }
-    const { workflowCode } = selectedCase
-
-    if (!workflowCode) {
-      return h.response('Workflow not found').code(404)
-    }
-    const workflow = await getWorkflowByCode(workflowCode)
-
-    // Add titles from workflow stages to selectedCase stages
-    selectedCase.stages = selectedCase.stages.map((stage) => {
-      const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
-
-      // Add title from workflow to the stage
-      const updatedStage = {
-        ...stage,
-        title: workflowStage?.title
-      }
-
-      // Add titles to task groups
-      if (stage.taskGroups && stage.taskGroups.length > 0) {
-        updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
-          const workflowTaskGroup = workflowStage?.taskGroups?.find(
-            (wtg) => wtg.id === taskGroup.id
-          )
-
-          // Add title to task group
-          const updatedTaskGroup = {
-            ...taskGroup,
-            title: workflowTaskGroup?.title
-          }
-
-          // Add titles to tasks
-          if (taskGroup.tasks && taskGroup.tasks.length > 0) {
-            updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
-              const workflowTask = workflowTaskGroup?.tasks?.find(
-                (wt) => wt.id === task.id
-              )
-
-              // Add title to task
-              return {
-                ...task,
-                title: workflowTask?.title,
-                type: workflowTask?.type
-              }
-            })
-          }
-
-          return updatedTaskGroup
-        })
-      }
-
-      // Add labels to actions
-      if (stage.actions && stage.actions.length > 0) {
-        updatedStage.actions = stage.actions.map((action) => {
-          const workflowAction = workflowStage?.actions?.find(
-            (wa) => wa.id === action.id
-          )
-
-          // Add label to action
-          return {
-            ...action,
-            label: workflowAction?.label
-          }
-        })
-      }
-
-      return updatedStage
-    })
-
-    // Create taskSteps from the updated selectedCase stages
-    const stages =
-      selectedCase.stages.map((stage) => ({
-        title: stage.title || stage.id,
-        groups: (stage.taskGroups || []).map((group) => ({
-          ...group,
-          tasks: (group.tasks || []).map((task) => ({
-            ...task,
-            link: `/applications/${caseId}?tab=tasks&groupId=${group.id}&taskId=${task.id}`,
-            status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
-          }))
-        }))
-      })) || []
-
-    // Filter stages to only show the current stage
-    const currentStage = selectedCase.currentStage
-
-    // Get the matching stage directly
-    const stageIndex = selectedCase.stages.findIndex(
-      (stage) => stage.id === currentStage
-    )
-    const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
-
-    return h.view('applications/views/show', {
-      pageTitle: 'Application',
-      caseData: selectedCase,
-      stage: filteredStage,
-      query: request.query
-    })
-  }
+  show: showApplication
 }
 
 /**

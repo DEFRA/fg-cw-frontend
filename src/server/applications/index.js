@@ -22,13 +22,8 @@ export const applications = {
           handler: applicationsController.show
         },
         {
-          method: 'GET',
-          path: '/applications/{id}/stage',
-          handler: applicationsController.stage
-        },
-        {
           method: 'POST',
-          path: '/applications/{id}/stage',
+          path: '/applications/{id}',
           handler: applicationsController.updateStage
         }
       ])
