@@ -1,14 +1,8 @@
-{% from "../taskListSteps/macro.njk" import appTaskListSteps %}
-{% from "../taskList/macro.njk" import appTaskList %}
+{% from "../taskGroups/macro.njk" import appTaskGroups %}
+{% from "../taskDetails/macro.njk" import appTaskDetails %}
 
-{% if params.taskSteps.length or params.tasks.length %}
-  <h2
-    class="govuk-heading-l govuk-!-margin-top-6"
-    data-testid="taskListSteps-heading"
-  >
-    Tasks
-  </h2>
+{% if params.taskId %}
+  {{ appTaskDetails({caseId: params.caseId, groups: params.stage.groups, groupId: params.groupId, taskId: params.taskId }) }}
+{% else %}
+  {{ appTaskGroups({stage: params.stage}) }}
 {% endif %}
-
-{{ appTaskListSteps({taskSteps: params.taskSteps}) }}
-{{ appTaskList({tasks: params.tasks}) }}
