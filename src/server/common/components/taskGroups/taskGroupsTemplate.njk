@@ -2,20 +2,16 @@
 {% from "../taskList/macro.njk" import appTaskList %}
 
 <div class="govuk-grid-row">
-  {% if params.stages.length > 0 %}
-    {% for stage in params.stages %}
-      <div class="govuk-grid-column-two-thirds">
-        <h2
-          class="govuk-heading-l govuk-!-margin-top-6"
-          data-testid="stage-heading"
-        >
-          {{ stage.title }}
-        </h2>
-        {% for group in stage.groups %}
-          <h3 class="govuk-heading-m">{{ loop.index }}. {{ group.title }}</h3>
-          {{ appTaskList({tasks: group.tasks}) }}
-        {% endfor %}
-      </div>
+  <div class="govuk-grid-column-two-thirds">
+    <h2
+      class="govuk-heading-l govuk-!-margin-top-6"
+      data-testid="stage-heading"
+    >
+      {{ params.stage.title }}
+    </h2>
+    {% for group in params.stage.groups %}
+      <h3 class="govuk-heading-m">{{ loop.index }}. {{ group.title }}</h3>
+      {{ appTaskList({tasks: group.tasks}) }}
     {% endfor %}
-  {% endif %}
+  </div>
 </div>
