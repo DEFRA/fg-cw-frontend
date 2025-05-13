@@ -93,8 +93,8 @@ const showApplication = async (request, h) => {
             // Add title to task
             return {
               ...task,
-              title: workflowTask?.title,
-              type: workflowTask?.type
+              title: workflowTask.title,
+              type: workflowTask.type
             }
           })
         }
