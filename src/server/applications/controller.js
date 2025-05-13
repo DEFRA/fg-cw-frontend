@@ -69,32 +69,34 @@ const showApplication = async (request, h) => {
     // Add title from workflow to the stage
     const updatedStage = {
       ...stage,
-      title: workflowStage.title
+      title: workflowStage?.title
     }
 
     // Add titles to task groups
+    if (stage.taskGroups && stage.taskGroups.length > 0) {
       updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
-        const workflowTaskGroup = workflowStage.taskGroups.find(
+        const workflowTaskGroup = workflowStage?.taskGroups?.find(
           (wtg) => wtg.id === taskGroup.id
         )
 
         // Add title to task group
         const updatedTaskGroup = {
           ...taskGroup,
-          title: workflowTaskGroup.title
+          title: workflowTaskGroup?.title
         }
 
         // Add titles to tasks
+        if (taskGroup.tasks && taskGroup.tasks.length > 0) {
           updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
-            const workflowTask = workflowTaskGroup.tasks.find(
+            const workflowTask = workflowTaskGroup?.tasks?.find(
               (wt) => wt.id === task.id
             )
 
             // Add title to task
             return {
               ...task,
-              title: workflowTask.title,
-              type: workflowTask.type
+              title: workflowTask?.title,
+              type: workflowTask?.type
             }
           })
         }
@@ -140,7 +142,10 @@ const showApplication = async (request, h) => {
   const currentStage = selectedCase.currentStage
 
   // Get the matching stage directly
-  const stage = selectedCase.stages.find(stage => stage.id === currentStage)
+  const stageIndex = selectedCase.stages.findIndex(
+    (stage) => stage.id === currentStage
+  )
+  const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
 
   return h.view('applications/views/show', {
     pageTitle: 'Application',
