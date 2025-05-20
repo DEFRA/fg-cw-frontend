@@ -4,9 +4,9 @@
 export function buildNavigation(request) {
   return [
     {
-      text: 'Applications',
-      url: '/applications',
-      isActive: request?.path === '/applications' || request?.path === '/'
+      text: 'Cases',
+      url: '/cases',
+      isActive: request?.path === '/cases' || request?.path === '/'
     }
   ]
 }
