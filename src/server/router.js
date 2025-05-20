@@ -2,7 +2,7 @@ import inert from '@hapi/inert'
 
 import { health } from '~/src/server/health/index.js'
 import { serveStaticFiles } from '~/src/server/common/helpers/serve-static-files.js'
-import { applications } from '~/src/server/applications/index.js'
+import { cases } from '~/src/server/cases/index.js'
 /**
  * @satisfies {ServerRegisterPluginObject<void>}
  */
@@ -16,13 +16,13 @@ export const router = {
       await server.register([health])
 
       // Application specific routes
-      await server.register([applications])
+      await server.register([cases])
 
-      // Add a redirect from root to applications
+      // Add a redirect from root to cases
       server.route({
         method: 'GET',
         path: '/',
-        handler: (_request, h) => h.redirect('/applications')
+        handler: (_request, h) => h.redirect('/cases')
       })
 
       // Static assets

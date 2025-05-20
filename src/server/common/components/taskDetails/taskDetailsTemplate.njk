@@ -8,7 +8,7 @@
     {{
       govukBackLink({
         text: "Back to task list",
-        href: "/applications/" + params.caseId + "?tab=tasks",
+        href: "/case/" + params.caseId,
         attributes: {
           "data-testid": "back-link"
         }
@@ -53,7 +53,7 @@
         {{
           govukButton({
             text: "Save and continue",
-            href: "/applications/" + params.caseId + "?tab=tasks",
+            href: "/case/" + params.caseId,
             attributes: {
               "data-testid": "save-and-continue-button"
             }

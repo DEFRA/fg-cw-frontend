@@ -69,8 +69,8 @@ describe('Case Summary Component Template', () => {
     test('Should render the back link', () => {
       const backLink = $caseSummary('.govuk-back-link')
       expect(backLink).toHaveLength(1)
-      expect(backLink.text().trim()).toBe('Back to applications')
-      expect(backLink.attr('href')).toBe('/applications')
+      expect(backLink.text().trim()).toBe('Back to cases')
+      expect(backLink.attr('href')).toBe('/cases')
     })
   })
 
