@@ -8,13 +8,13 @@ import { config } from '../../config/config.js'
 import { fetch } from '../common/helpers/httpFetch.js'
 import { getRequestId } from '../common/helpers/getRequestId.js'
 
-const getCases = async (request) => {
+const getCases = async (requestId) => {
   try {
     const backendUrl = config.get('fg_cw_backend_url')
     const response = await fetch(
       `${backendUrl.toString()}/cases`,
       {},
-      getRequestId(request)
+      requestId
     )
     const { data } = await response.json()
     return data
@@ -23,31 +23,31 @@ const getCases = async (request) => {
   }
 }
 
-const getCaseById = async (caseId, request) => {
+const getCaseById = async (caseId, requestId) => {
   try {
     const backendUrl = config.get('fg_cw_backend_url')
     const response = await fetch(
       `${backendUrl.toString()}/cases/${caseId}`,
       {},
-      getRequestId(request)
+      requestId
     )
     const data = await response.json()
     return data
-  } catch {
+  } catch (error) {
     return null
   }
 }
 
-const updateStageAsync = async (caseId, nextStage, request) => {
+const updateStageAsync = async (caseId, nextStage, requestId) => {
   try {
     const backendUrl = config.get('fg_cw_backend_url')
     const response = await fetch(
-      `${backendUrl.toString()}/cases/${caseId}/stage`,
+      `${backendUrl.toString()}/case/${caseId}/stage`,
       {
         method: 'POST',
         body: JSON.stringify({ nextStage })
       },
-      getRequestId(request)
+      requestId
     )
     const data = await response.json()
     return data
@@ -56,19 +56,35 @@ const updateStageAsync = async (caseId, nextStage, request) => {
   }
 }
 
-const showApplication = async (request, h) => {
-  const caseId = request.params.id
-  const selectedCase = await getCaseById(caseId, request)
+const getWorkflowByCode = async (workflowCode, requestId) => {
+  try {
+    const backendUrl = config.get('fg_cw_backend_url')
+    const response = await fetch(
+      `${backendUrl.toString()}/workflows/${workflowCode}`,
+      {},
+      requestId
+    )
+    const data = await response.json()
+    return data
+  } catch {
+    return null
+  }
+}
 
+const processCaseWithWorkflow = async (selectedCase, requestId) => {
   if (!selectedCase) {
-    return h.response('Case not found').code(404)
+    return null
   }
-  const { workflowCode } = selectedCase
 
+  const { workflowCode } = selectedCase
   if (!workflowCode) {
-    return h.response('Workflow not found').code(404)
+    return null
   }
-  const workflow = await getWorkflowByCode(workflowCode, getRequestId(request))
+
+  const workflow = await getWorkflowByCode(workflowCode, requestId)
+  if (!workflow) {
+    return null
+  }
 
   // Add titles from workflow stages to selectedCase stages
   selectedCase.stages = selectedCase.stages.map((stage) => {
@@ -129,7 +145,7 @@ const showApplication = async (request, h) => {
         ...group,
         tasks: (group.tasks || []).map((task) => ({
           ...task,
-          link: `/applications/${caseId}?tab=tasks&groupId=${group.id}&taskId=${task.id}`,
+          link: `/case/${selectedCase._id}/tasks/${group.id}/${task.id}`,
           status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
         }))
       }))
@@ -137,41 +153,75 @@ const showApplication = async (request, h) => {
 
   // Filter stages to only show the current stage
   const currentStage = selectedCase.currentStage
-
-  // Get the matching stage directly
   const stageIndex = selectedCase.stages.findIndex(
     (stage) => stage.id === currentStage
   )
   const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
 
-  return h.view('applications/views/show', {
-    pageTitle: 'Application',
+  return {
     caseData: selectedCase,
-    stage: filteredStage,
-    query: request.query
+    stage: filteredStage
+  }
+}
+
+const showCase = async (request, h) => {
+  const caseId = request.params.id
+  const selectedCase = await getCaseById(caseId, getRequestId(request))
+
+  if (!selectedCase) {
+    return h.response('Case not found').code(404)
+  }
+
+  const processedData = await processCaseWithWorkflow(
+    selectedCase,
+    getRequestId(request)
+  )
+  if (!processedData) {
+    return h.response('Workflow not found').code(404)
+  }
+
+  return h.view('cases/views/show', {
+    pageTitle: 'Case',
+    ...processedData,
+    query: request.path.includes('/caseDetails')
+      ? { tab: 'caseDetails' }
+      : request.query
   })
 }
 
-const getWorkflowByCode = async (workflowCode, requestId) => {
-  try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/workflows/${workflowCode}`,
-      {},
-      requestId
-    )
-    const data = await response.json()
-    return data
-  } catch {
-    return null
+const showTask = async (request, h) => {
+  const { id, groupId, taskId } = request.params
+
+  if (!id) {
+    return h.response('Case ID is required').code(400)
   }
+
+  const requestId = getRequestId(request)
+
+  const selectedCase = await getCaseById(id, requestId)
+
+  if (!selectedCase) {
+    return h.response('Case not found').code(404)
+  }
+
+  const processedData = await processCaseWithWorkflow(selectedCase, requestId)
+  if (!processedData) {
+    return h.response('Workflow not found').code(404)
+  }
+
+  return h.view('cases/views/show', {
+    pageTitle: 'Case',
+    ...processedData,
+    query: { groupId, taskId }
+  })
 }
-export const applicationsController = {
+
+export const casesController = {
   handler: async (request, h) => {
-    const caseData = await getCases(request)
-    return h.view('applications/views/index', {
-      pageTitle: 'Applications',
-      heading: 'Applications',
+    const caseData = await getCases(getRequestId(request))
+    return h.view('cases/views/index', {
+      pageTitle: 'Cases',
+      heading: 'Cases',
       breadcrumbs: [],
       data: { allCases: caseData }
     })
@@ -180,7 +230,7 @@ export const applicationsController = {
   updateStage: async (request, h) => {
     const { id } = request.params
 
-    const selectedCase = await getCaseById(id, request)
+    const selectedCase = await getCaseById(id, getRequestId(request))
 
     if (!selectedCase) {
       return h.response('Case not found').code(404)
@@ -189,12 +239,13 @@ export const applicationsController = {
     const { nextStage } = request.payload
 
     // call backend with stage update
-    await updateStageAsync(id, nextStage, request)
+    await updateStageAsync(id, nextStage, getRequestId(request))
     // redirect to stage
-    return showApplication(request, h)
+    return showCase(request, h)
   },
 
-  show: showApplication
+  show: showCase,
+  showTask
 }
 
 /**

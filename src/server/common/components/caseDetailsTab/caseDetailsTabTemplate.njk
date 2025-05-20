@@ -1,12 +1,12 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
-{% macro applicationDetailsTab(params) %}
+{% macro caseDetailsTab(params) %}
   <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
-    Application
+    Case
   </h2>
 
   <p class="govuk-body">
-    Application submitted:
+    submitted:
     <strong
       >{{ params.caseData.payload.submittedAt | formatDate("do MMMM yyyy") }}</strong
     >
@@ -48,9 +48,9 @@
           })
         }}
 
-        {# Table 3+: Action applications data #}
+        {# Table 3+: Action cases data #}
         {% if params.caseData.payload.answers.actionApplications %}
-          <h2 class="govuk-heading-m">Action applications data</h2>
+          <h2 class="govuk-heading-m">Action cases data</h2>
           {% for action in params.caseData.payload.answers.actionApplications %}
             <h3 class="govuk-heading-s">
               Selected land parcel for action {{ loop.index }}
