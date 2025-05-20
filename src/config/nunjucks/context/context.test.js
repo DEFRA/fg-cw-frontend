@@ -38,8 +38,8 @@ describe('#context', () => {
         navigation: [
           {
             isActive: true,
-            text: 'Applications',
-            url: '/applications'
+            text: 'Cases',
+            url: '/cases'
           }
         ],
         serviceName: 'fg-cw-frontend',
@@ -122,8 +122,8 @@ describe('#context cache', () => {
         navigation: [
           {
             isActive: true,
-            text: 'Applications',
-            url: '/applications'
+            text: 'Cases',
+            url: '/cases'
           }
         ],
         serviceName: 'fg-cw-frontend',

@@ -5,7 +5,7 @@
 {% from "../../common/components/taskGroups/macro.njk" import appTaskGroups %}
 {% from "../../common/components/tasksTab/macro.njk" import appTasksTab %}
 {% from "../../common/components/caseSummary/macro.njk" import appCaseSummary %}
-{% from "../../common/components/applicationDetailsTab/applicationDetailsTabTemplate.njk" import applicationDetailsTab %}
+{% from "../../common/components/caseDetailsTab/caseDetailsTabTemplate.njk" import caseDetailsTab %}
 
 {% block content %}
   {{ appCaseSummary({caseData: caseData}) }}
@@ -16,14 +16,14 @@
     govukServiceNavigation({
       navigation: [
         {
-          href: "?tab=tasks",
+          href: "/case/" + caseData._id,
           text: "Tasks",
           active: activeTab == 'tasks'
         },
         {
-          href: "?tab=application",
-          text: "Application",
-          active: activeTab == 'application'
+          href: "/case/" + caseData._id + "/caseDetails",
+          text: "Case Details",
+          active: activeTab == 'caseDetails'
         },
         {
           href: "#",
@@ -37,8 +37,8 @@
     {{ appTasksTab({caseId: caseData._id, stage: stage, groupId: query.groupId, taskId: query.taskId}) }}
   {% endif %}
 
-  {% if activeTab == 'application' %}
-    {{ applicationDetailsTab({caseData: caseData}) }}
+  {% if activeTab == 'caseDetails' %}
+    {{ caseDetailsTab({caseData: caseData}) }}
   {% endif %}
 {% endblock %}
 

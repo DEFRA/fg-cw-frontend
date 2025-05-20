@@ -14,8 +14,8 @@ describe('#buildNavigation', () => {
     ).toEqual([
       {
         isActive: false,
-        text: 'Applications',
-        url: '/applications'
+        text: 'Cases',
+        url: '/cases'
       }
     ])
   })
@@ -24,8 +24,8 @@ describe('#buildNavigation', () => {
     expect(buildNavigation(mockRequest({ path: '/' }))).toEqual([
       {
         isActive: true,
-        text: 'Applications',
-        url: '/applications'
+        text: 'Cases',
+        url: '/cases'
       }
     ])
   })

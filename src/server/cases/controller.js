@@ -24,7 +24,7 @@ const getCaseById = async (caseId) => {
     const response = await fetch(`${backendUrl.toString()}/cases/${caseId}`)
     const data = await response.json()
     return data
-  } catch {
+  } catch (error) {
     return null
   }
 }
@@ -33,7 +33,7 @@ const updateStageAsync = async (caseId, nextStage) => {
   try {
     const backendUrl = config.get('fg_cw_backend_url')
     const response = await fetch(
-      `${backendUrl.toString()}/cases/${caseId}/stage`,
+      `${backendUrl.toString()}/case/${caseId}/stage`,
       {
         method: 'POST',
         body: JSON.stringify({ nextStage })
@@ -46,19 +46,33 @@ const updateStageAsync = async (caseId, nextStage) => {
   }
 }
 
-const showApplication = async (request, h) => {
-  const caseId = request.params.id
-  const selectedCase = await getCaseById(caseId)
+const getWorkflowByCode = async (workflowCode) => {
+  try {
+    const backendUrl = config.get('fg_cw_backend_url')
+    const response = await fetch(
+      `${backendUrl.toString()}/workflows/${workflowCode}`
+    )
+    const data = await response.json()
+    return data
+  } catch {
+    return null
+  }
+}
 
+const processCaseWithWorkflow = async (selectedCase) => {
   if (!selectedCase) {
-    return h.response('Case not found').code(404)
+    return null
   }
-  const { workflowCode } = selectedCase
 
+  const { workflowCode } = selectedCase
   if (!workflowCode) {
-    return h.response('Workflow not found').code(404)
+    return null
   }
+
   const workflow = await getWorkflowByCode(workflowCode)
+  if (!workflow) {
+    return null
+  }
 
   // Add titles from workflow stages to selectedCase stages
   selectedCase.stages = selectedCase.stages.map((stage) => {
@@ -119,7 +133,7 @@ const showApplication = async (request, h) => {
         ...group,
         tasks: (group.tasks || []).map((task) => ({
           ...task,
-          link: `/applications/${caseId}?tab=tasks&groupId=${group.id}&taskId=${task.id}`,
+          link: `/case/${selectedCase._id}/tasks/${group.id}/${task.id}`,
           status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
         }))
       }))
@@ -127,39 +141,70 @@ const showApplication = async (request, h) => {
 
   // Filter stages to only show the current stage
   const currentStage = selectedCase.currentStage
-
-  // Get the matching stage directly
   const stageIndex = selectedCase.stages.findIndex(
     (stage) => stage.id === currentStage
   )
   const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
 
-  return h.view('applications/views/show', {
-    pageTitle: 'Application',
+  return {
     caseData: selectedCase,
-    stage: filteredStage,
-    query: request.query
+    stage: filteredStage
+  }
+}
+
+const showCase = async (request, h) => {
+  const caseId = request.params.id
+  const selectedCase = await getCaseById(caseId)
+
+  if (!selectedCase) {
+    return h.response('Case not found').code(404)
+  }
+
+  const processedData = await processCaseWithWorkflow(selectedCase)
+  if (!processedData) {
+    return h.response('Workflow not found').code(404)
+  }
+
+  return h.view('cases/views/show', {
+    pageTitle: 'Application',
+    ...processedData,
+    query: request.path.includes('/caseDetails')
+      ? { tab: 'caseDetails' }
+      : request.query
   })
 }
 
-const getWorkflowByCode = async (workflowCode) => {
-  try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/workflows/${workflowCode}`
-    )
-    const data = await response.json()
-    return data
-  } catch {
-    return null
+const showTask = async (request, h) => {
+  const { id, groupId, taskId } = request.params
+
+  if (!id) {
+    return h.response('Case ID is required').code(400)
   }
+
+  const selectedCase = await getCaseById(id)
+
+  if (!selectedCase) {
+    return h.response('Case not found').code(404)
+  }
+
+  const processedData = await processCaseWithWorkflow(selectedCase)
+  if (!processedData) {
+    return h.response('Workflow not found').code(404)
+  }
+
+  return h.view('cases/views/show', {
+    pageTitle: 'Application',
+    ...processedData,
+    query: { groupId, taskId }
+  })
 }
-export const applicationsController = {
+
+export const casesController = {
   handler: async (_request, h) => {
     const caseData = await getCases()
-    return h.view('applications/views/index', {
-      pageTitle: 'Applications',
-      heading: 'Applications',
+    return h.view('cases/views/index', {
+      pageTitle: 'Cases',
+      heading: 'Cases',
       breadcrumbs: [],
       data: { allCases: caseData }
     })
@@ -179,10 +224,11 @@ export const applicationsController = {
     // call backend with stage update
     await updateStageAsync(id, nextStage)
     // redirect to stage
-    return showApplication(request, h)
+    return showCase(request, h)
   },
 
-  show: showApplication
+  show: showCase,
+  showTask
 }
 
 /**
