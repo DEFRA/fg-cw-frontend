@@ -4,14 +4,18 @@ import { wreck, _wreck } from './wreck.js'
 
 const id = 'ABCD-0987'
 
-describe('httpwreck', () => {
+const mockResponse = {}
+
+describe('wreck', () => {
   let requestSpy
   let readSpy
 
   beforeEach(() => {
     config.set('tracing', { header: 'FOO' })
-    requestSpy = vi.spyOn(_wreck, 'request')
-    readSpy = vi.spyOn(_wreck, 'read')
+    requestSpy = vi
+      .spyOn(_wreck, 'request')
+      .mockImplementation(() => mockResponse)
+    readSpy = vi.spyOn(_wreck, 'read').mockImplementation(() => ({}))
   })
 
   test('should add request id to headers', async () => {
