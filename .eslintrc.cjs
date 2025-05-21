@@ -1,6 +1,3 @@
-/**
- * @type {ESLint.ConfigData}
- */
 module.exports = {
   ignorePatterns: ['.server', '.public', 'coverage'],
   overrides: [
@@ -120,31 +117,6 @@ module.exports = {
         node: false
       },
       files: ['src/client/**/*.js']
-    },
-    {
-      env: {
-        'jest/globals': true
-      },
-      extends: [
-        'plugin:jest-formatting/recommended',
-        'plugin:jest/recommended',
-        'plugin:jest/style'
-      ],
-      files: ['**/*.test.{cjs,js}', '**/__mocks__/**'],
-      plugins: ['jest'],
-      rules: {
-        // Allow Jest to assert on mocked unbound methods
-        '@typescript-eslint/unbound-method': 'off',
-        'jest/unbound-method': 'error',
-
-        // Allow import devDependencies
-        'n/no-unpublished-import': [
-          'error',
-          {
-            allowModules: []
-          }
-        ]
-      }
     }
   ],
   root: true

@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest'
+import { describe, expect, test, vi, beforeEach } from 'vitest'
 import { Cluster, Redis } from 'ioredis'
 
 import { config } from '~/src/config/config.js'

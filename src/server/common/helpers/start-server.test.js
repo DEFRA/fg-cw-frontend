@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from 'vitest'
+import { describe, expect, test, vi, beforeAll, afterAll } from 'vitest'
 import hapi from '@hapi/hapi'
 import { startServer } from './start-server.js'
 import { createServer } from '../../index.js'
