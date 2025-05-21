@@ -3,20 +3,12 @@
  * Provided as an example, remove or modify as required.
  * @satisfies {Partial<ServerRoute>}
  */
-
-import { config } from '../../config/config.js'
-import { fetch } from '../common/helpers/httpFetch.js'
 import { getRequestId } from '../common/helpers/getRequestId.js'
+import { wreck } from '../common/helpers/wreck.js'
 
 const getCases = async (requestId) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/cases`,
-      {},
-      requestId
-    )
-    const { data } = await response.json()
+    const { data } = await wreck({ uri: '/cases' }, requestId)
     return data
   } catch {
     return []
@@ -25,14 +17,7 @@ const getCases = async (requestId) => {
 
 const getCaseById = async (caseId, requestId) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/cases/${caseId}`,
-      {},
-      requestId
-    )
-    const data = await response.json()
-    return data
+    return wreck({ uri: `/cases/${caseId}` }, requestId)
   } catch (error) {
     return null
   }
@@ -40,17 +25,14 @@ const getCaseById = async (caseId, requestId) => {
 
 const updateStageAsync = async (caseId, nextStage, requestId) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/case/${caseId}/stage`,
+    return wreck(
       {
+        uri: `/case/${caseId}/stage`,
         method: 'POST',
-        body: JSON.stringify({ nextStage })
+        payload: JSON.stringify({ nextStage })
       },
       requestId
     )
-    const data = await response.json()
-    return data
   } catch {
     return null
   }
@@ -58,14 +40,7 @@ const updateStageAsync = async (caseId, nextStage, requestId) => {
 
 const getWorkflowByCode = async (workflowCode, requestId) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/workflows/${workflowCode}`,
-      {},
-      requestId
-    )
-    const data = await response.json()
-    return data
+    return wreck({ uri: `/workflows/${workflowCode}` }, requestId)
   } catch {
     return null
   }
