@@ -1,49 +1,38 @@
+import { describe, expect, test, vi } from 'vitest'
 import hapi from '@hapi/hapi'
+import { startServer } from './start-server.js'
+import { createServer } from '../../index.js'
+import { config } from '../../../config/config.js'
 
-const mockLoggerInfo = jest.fn()
-const mockLoggerError = jest.fn()
+const mockLoggerInfo = vi.hoisted(() => vi.fn())
+const mockLoggerError = vi.hoisted(() => vi.fn())
 
-const mockHapiLoggerInfo = jest.fn()
-const mockHapiLoggerError = jest.fn()
-
-jest.mock('hapi-pino', () => ({
-  register: (server) => {
-    server.decorate('server', 'logger', {
-      info: mockHapiLoggerInfo,
-      error: mockHapiLoggerError
-    })
-  },
-  name: 'mock-hapi-pino'
+vi.mock('hapi-pino', () => ({
+  default: {
+    register: (server) => {
+      server.decorate('server', 'logger', {
+        info: vi.fn(),
+        error: vi.fn()
+      })
+    },
+    name: 'mock-hapi-pino'
+  }
 }))
-jest.mock('~/src/server/common/helpers/logging/logger.js', () => ({
+vi.mock('./logging/logger.js', () => ({
   createLogger: () => ({
-    info: (...args) => mockLoggerInfo(...args),
-    error: (...args) => mockLoggerError(...args)
+    info: mockLoggerInfo,
+    error: mockLoggerError
   })
 }))
+vi.mock('../../index.js', { spy: true })
+vi.mock('./start-server.js', { spy: true })
 
 describe('#startServer', () => {
-  const PROCESS_ENV = process.env
-  let createServerSpy
   let hapiServerSpy
-  let startServerImport
-  let createServerImport
 
-  beforeAll(async () => {
-    process.env = { ...PROCESS_ENV }
-    process.env.PORT = '3097' // Set to obscure port to avoid conflicts
-
-    createServerImport = await import('~/src/server/index.js')
-    startServerImport = await import(
-      '~/src/server/common/helpers/start-server.js'
-    )
-
-    createServerSpy = jest.spyOn(createServerImport, 'createServer')
-    hapiServerSpy = jest.spyOn(hapi, 'server')
-  })
-
-  afterAll(() => {
-    process.env = PROCESS_ENV
+  beforeAll(() => {
+    config.set('port', 3098)
+    hapiServerSpy = vi.spyOn(hapi, 'server')
   })
 
   describe('When server starts', () => {
@@ -54,35 +43,35 @@ describe('#startServer', () => {
     })
 
     test('Should start up server as expected', async () => {
-      server = await startServerImport.startServer()
+      server = await startServer()
 
-      expect(createServerSpy).toHaveBeenCalled()
+      expect(createServer).toHaveBeenCalled()
       expect(hapiServerSpy).toHaveBeenCalled()
       expect(mockLoggerInfo).toHaveBeenCalledWith(
         'Using Catbox Memory session cache'
       )
-      expect(mockHapiLoggerInfo).toHaveBeenNthCalledWith(
+      expect(server.logger.info).toHaveBeenNthCalledWith(
         1,
         'Custom secure context is disabled'
       )
-      expect(mockHapiLoggerInfo).toHaveBeenNthCalledWith(
+      expect(server.logger.info).toHaveBeenNthCalledWith(
         2,
         'Server started successfully'
       )
-      expect(mockHapiLoggerInfo).toHaveBeenNthCalledWith(
+      expect(server.logger.info).toHaveBeenNthCalledWith(
         3,
-        'Access your frontend on http://localhost:3097'
+        'Access your frontend on http://localhost:3098'
       )
     })
   })
 
   describe('When server start fails', () => {
     beforeAll(() => {
-      createServerSpy.mockRejectedValue(new Error('Server failed to start'))
+      createServer.mockRejectedValue(new Error('Server failed to start'))
     })
 
     test('Should log failed startup message', async () => {
-      await startServerImport.startServer()
+      await startServer()
 
       expect(mockLoggerInfo).toHaveBeenCalledWith('Server failed to start :(')
       expect(mockLoggerError).toHaveBeenCalledWith(
