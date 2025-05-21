@@ -1,3 +1,4 @@
+import { describe, expect, test, vi } from 'vitest'
 import { config } from '~/src/config/config.js'
 import { wreck, _wreck } from './wreck.js'
 
@@ -9,8 +10,8 @@ describe('httpwreck', () => {
 
   beforeEach(() => {
     config.set('tracing', { header: 'FOO' })
-    requestSpy = jest.spyOn(_wreck, 'request')
-    readSpy = jest.spyOn(_wreck, 'read')
+    requestSpy = vi.spyOn(_wreck, 'request')
+    readSpy = vi.spyOn(_wreck, 'read')
   })
 
   test('should add request id to headers', async () => {
