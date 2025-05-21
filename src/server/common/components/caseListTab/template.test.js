@@ -1,8 +1,8 @@
+import { describe, test, expect, beforeEach } from 'vitest'
 import { renderComponent } from '~/src/server/common/test-helpers/component-helpers.js'
 import data from '~/src/server/common/test-helpers/application-case-list.js'
 
 describe('Application Case List', () => {
-  /** @type {CheerioAPI} */
   let $list
 
   const tableHeaders = [
