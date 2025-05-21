@@ -1,5 +1,4 @@
-/* @jest-environment jsdom */
-
+import { describe, test, expect, beforeEach } from 'vitest'
 import { initSelectAllCheckboxes } from './checkbox-select-all.js'
 
 describe('initSelectAllCheckboxes', () => {
@@ -20,7 +19,7 @@ describe('initSelectAllCheckboxes', () => {
     `
   })
 
-  it('should check all row checkboxes when "select all" is checked', () => {
+  test('should check all row checkboxes when "select all" is checked', () => {
     initSelectAllCheckboxes()
 
     const selectAll = document.querySelector('#select_all_allcases')
@@ -36,7 +35,7 @@ describe('initSelectAllCheckboxes', () => {
     })
   })
 
-  it('should uncheck all row checkboxes when "select all" is unchecked', () => {
+  test('should uncheck all row checkboxes when "select all" is unchecked', () => {
     initSelectAllCheckboxes()
 
     const selectAll = document.querySelector('#select_all_allcases')
@@ -57,7 +56,7 @@ describe('initSelectAllCheckboxes', () => {
     })
   })
 
-  it('should set indeterminate when some but not all checkboxes are checked', () => {
+  test('should set indeterminate when some but not all checkboxes are checked', () => {
     initSelectAllCheckboxes()
 
     const selectAll = document.querySelector('#select_all_allcases')
@@ -72,7 +71,7 @@ describe('initSelectAllCheckboxes', () => {
     expect(selectAll.indeterminate).toBe(true)
   })
 
-  it('should check the "select all" box if all checkboxes are checked manually', () => {
+  test('should check the "select all" box if all checkboxes are checked manually', () => {
     initSelectAllCheckboxes()
 
     const selectAll = document.querySelector('#select_all_allcases')

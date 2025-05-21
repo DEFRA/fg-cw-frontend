@@ -25,8 +25,8 @@
     "lint:types": "tsc --build tsconfig.json",
     "lint:scss": "stylelint \"src/**/*.scss\" --cache --cache-location .cache/stylelint --cache-strategy content --color --ignore-path .gitignore",
     "postversion": "git add package.json package-lock.json && git commit -m $npm_package_version",
-    "test": "jest --coverage --verbose",
-    "test:watch": "jest --watch",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "server:watch": "nodemon --exec tsx --enable-source-maps ./src",
     "server:debug": "nodemon --exec tsx --enable-source-maps --inspect ./src",
     "prestart": "npm run build",
@@ -113,6 +113,7 @@
     "terser-webpack-plugin": "^5.3.10",
     "tsx": "^4.19.2",
     "typescript": "^5.6.3",
+    "vitest": "^3.1.4",
     "webpack": "^5.96.1",
     "webpack-assets-manifest": "^5.2.1",
     "webpack-cli": "^5.1.4"

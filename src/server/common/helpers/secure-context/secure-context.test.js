@@ -1,26 +1,30 @@
+import { describe, expect, test, vi } from 'vitest'
 import hapi from '@hapi/hapi'
-
 import { secureContext } from '~/src/server/common/helpers/secure-context/secure-context.js'
 import { requestLogger } from '~/src/server/common/helpers/logging/request-logger.js'
 import { config } from '~/src/config/config.js'
 
-const mockAddCACert = jest.fn()
-const mockTlsCreateSecureContext = jest
+const mockAddCACert = vi.fn()
+const mockTlsCreateSecureContext = vi
   .fn()
   .mockReturnValue({ context: { addCACert: mockAddCACert } })
 
-jest.mock('hapi-pino', () => ({
-  register: (server) => {
-    server.decorate('server', 'logger', {
-      info: jest.fn(),
-      error: jest.fn()
-    })
-  },
-  name: 'mock-hapi-pino'
+vi.mock('hapi-pino', () => ({
+  default: {
+    register: (server) => {
+      server.decorate('server', 'logger', {
+        info: vi.fn(),
+        error: vi.fn()
+      })
+    },
+    name: 'mock-hapi-pino'
+  }
 }))
-jest.mock('node:tls', () => ({
-  ...jest.requireActual('node:tls'),
-  createSecureContext: (...args) => mockTlsCreateSecureContext(...args)
+vi.mock('node:tls', async () => ({
+  default: {
+    ...(await vi.importActual('node:tls')),
+    createSecureContext: (...args) => mockTlsCreateSecureContext(...args)
+  }
 }))
 
 describe('#secureContext', () => {
