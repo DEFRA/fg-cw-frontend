@@ -1,7 +1,7 @@
+import { describe, test, expect, beforeEach } from 'vitest'
 import { renderComponent } from '../../test-helpers/component-helpers.js'
 
 describe('Case Summary Component Template', () => {
-  /** @type {CheerioAPI} */
   let $caseSummary
 
   const mockCaseData = {
