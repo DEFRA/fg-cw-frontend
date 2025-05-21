@@ -1,3 +1,4 @@
+import { describe, expect, test } from 'vitest'
 import { getRequestId } from './getRequestId.js'
 
 describe('getRequestId', () => {
