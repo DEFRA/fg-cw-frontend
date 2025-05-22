@@ -7,7 +7,7 @@ import { wreck } from '../common/helpers/wreck.js'
 
 const getCases = async () => {
   try {
-    const { data } = await wreck({ uri: '/cases' })
+    const { data } = await wreck.get('/cases')
     return data
   } catch {
     return []
@@ -16,7 +16,7 @@ const getCases = async () => {
 
 const getCaseById = async (caseId) => {
   try {
-    return wreck({ uri: `/cases/${caseId}` })
+    return wreck.get(`/cases/${caseId}`)
   } catch (error) {
     return null
   }
@@ -24,9 +24,7 @@ const getCaseById = async (caseId) => {
 
 const updateStageAsync = async (caseId, nextStage) => {
   try {
-    return wreck({
-      method: 'POST',
-      uri: `/case/${caseId}/stage`,
+    return wreck.post(`/case/${caseId}/stage`, {
       payload: JSON.stringify({ nextStage })
     })
   } catch {
@@ -36,7 +34,7 @@ const updateStageAsync = async (caseId, nextStage) => {
 
 const getWorkflowByCode = async (workflowCode) => {
   try {
-    return wreck({ uri: `/workflows/${workflowCode}` })
+    return wreck.get(`/workflows/${workflowCode}`)
   } catch {
     return null
   }
