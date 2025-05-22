@@ -5,7 +5,8 @@ import { getTraceId } from '@defra/hapi-tracing'
 export const wreck = Wreck.defaults({
   events: true,
   timeout: 3000,
-  baseUrl: config.get('fg_cw_backend_url')
+  baseUrl: config.get('fg_cw_backend_url'),
+  json: true
 })
 
 wreck.events.on('preRequest', (uri) => {
