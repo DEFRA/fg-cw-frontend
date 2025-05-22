@@ -6,7 +6,6 @@ const tracingHeader = config.get('tracing.header')
 export const requestTracing = {
   plugin: tracing.plugin,
   options: {
-    tracingHeader,
-    debug: true // Enable debug mode to see more information
+    tracingHeader
   }
 }

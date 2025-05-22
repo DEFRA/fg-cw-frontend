@@ -25,7 +25,7 @@ const getCaseById = async (caseId) => {
 const updateStageAsync = async (caseId, nextStage) => {
   try {
     return wreck.post(`/case/${caseId}/stage`, {
-      payload: JSON.stringify({ nextStage })
+      payload: { nextStage }
     })
   } catch {
     return null
