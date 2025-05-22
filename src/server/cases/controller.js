@@ -7,8 +7,8 @@ import { wreck } from '../common/helpers/wreck.js'
 
 const getCases = async () => {
   try {
-    const { data } = await wreck.get('/cases')
-    return data
+    const { payload } = await wreck.get('/cases')
+    return payload.data
   } catch {
     return []
   }
@@ -16,25 +16,26 @@ const getCases = async () => {
 
 const getCaseById = async (caseId) => {
   try {
-    return wreck.get(`/cases/${caseId}`)
+    const { payload } = await wreck.get(`/cases/${caseId}`)
+    return payload
   } catch (error) {
     return null
   }
 }
 
-const updateStageAsync = async (caseId, nextStage) => {
+const updateStageAsync = async (caseId) => {
   try {
-    return wreck.post(`/cases/${caseId}/stage`, {
-      payload: { nextStage }
-    })
-  } catch {
+    const { payload } = await wreck.post(`/cases/${caseId}/stage`)
+    return payload
+  } catch (e) {
     return null
   }
 }
 
 const getWorkflowByCode = async (workflowCode) => {
   try {
-    return wreck.get(`/workflows/${workflowCode}`)
+    const { payload } = await wreck.get(`/workflows/${workflowCode}`)
+    return payload
   } catch {
     return null
   }
@@ -200,10 +201,8 @@ export const casesController = {
       return h.response('Case not found').code(404)
     }
 
-    const { nextStage } = request.payload
-
     // call backend with stage update
-    await updateStageAsync(id, nextStage)
+    await updateStageAsync(id)
     // redirect to stage
     return showCase(request, h)
   },
