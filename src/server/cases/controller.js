@@ -3,15 +3,11 @@
  * Provided as an example, remove or modify as required.
  * @satisfies {Partial<ServerRoute>}
  */
-
-import { fetch } from 'undici'
-import { config } from '../../config/config.js'
+import { wreck } from '../common/helpers/wreck.js'
 
 const getCases = async () => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(`${backendUrl.toString()}/cases`)
-    const { data } = await response.json()
+    const { data } = await wreck.get('/cases')
     return data
   } catch {
     return []
@@ -20,10 +16,7 @@ const getCases = async () => {
 
 const getCaseById = async (caseId) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(`${backendUrl.toString()}/cases/${caseId}`)
-    const data = await response.json()
-    return data
+    return wreck.get(`/cases/${caseId}`)
   } catch (error) {
     return null
   }
@@ -31,16 +24,9 @@ const getCaseById = async (caseId) => {
 
 const updateStageAsync = async (caseId, nextStage) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/case/${caseId}/stage`,
-      {
-        method: 'POST',
-        body: JSON.stringify({ nextStage })
-      }
-    )
-    const data = await response.json()
-    return data
+    return wreck.post(`/case/${caseId}/stage`, {
+      payload: { nextStage }
+    })
   } catch {
     return null
   }
@@ -48,12 +34,7 @@ const updateStageAsync = async (caseId, nextStage) => {
 
 const getWorkflowByCode = async (workflowCode) => {
   try {
-    const backendUrl = config.get('fg_cw_backend_url')
-    const response = await fetch(
-      `${backendUrl.toString()}/workflows/${workflowCode}`
-    )
-    const data = await response.json()
-    return data
+    return wreck.get(`/workflows/${workflowCode}`)
   } catch {
     return null
   }
@@ -166,7 +147,7 @@ const showCase = async (request, h) => {
   }
 
   return h.view('cases/views/show', {
-    pageTitle: 'Application',
+    pageTitle: 'Case',
     ...processedData,
     query: request.path.includes('/caseDetails')
       ? { tab: 'caseDetails' }
@@ -193,14 +174,14 @@ const showTask = async (request, h) => {
   }
 
   return h.view('cases/views/show', {
-    pageTitle: 'Application',
+    pageTitle: 'Case',
     ...processedData,
     query: { groupId, taskId }
   })
 }
 
 export const casesController = {
-  handler: async (_request, h) => {
+  handler: async (request, h) => {
     const caseData = await getCases()
     return h.view('cases/views/index', {
       pageTitle: 'Cases',
