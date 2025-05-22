@@ -1,5 +1,6 @@
 import Wreck from '@hapi/wreck'
 import { config } from '~/src/config/config.js'
+import { getTraceId } from '@defra/hapi-tracing'
 
 export const _wreck = Wreck.defaults({
   events: true,
@@ -7,13 +8,20 @@ export const _wreck = Wreck.defaults({
   baseUrl: config.get('fg_cw_backend_url')
 })
 
-export const wreck = async (options = {}, requestId) => {
+_wreck.events.on('preRequest', (uri) => {
+  const traceId = getTraceId()
+
+  if (traceId) {
+    uri.headers[config.tracingHeader] = traceId
+  }
+})
+
+export const wreck = async (options = {}) => {
   const { uri, method = 'GET', headers = {}, ...rest } = options
   const reqOptions = {
     ...rest,
     headers: {
-      ...headers,
-      [config.get().tracing.header]: requestId
+      ...headers
     }
   }
 

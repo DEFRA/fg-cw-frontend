@@ -1,5 +1,4 @@
 import { describe, expect, beforeEach, test, vi } from 'vitest'
-import { config } from '~/src/config/config.js'
 import { wreck, _wreck } from './wreck.js'
 
 const id = 'ABCD-0987'
@@ -11,26 +10,13 @@ describe('wreck', () => {
   let readSpy
 
   beforeEach(() => {
-    config.set('tracing', { header: 'FOO' })
     requestSpy = vi
       .spyOn(_wreck, 'request')
       .mockImplementation(() => mockResponse)
     readSpy = vi.spyOn(_wreck, 'read').mockImplementation(() => ({}))
   })
 
-  test('should add request id to headers', async () => {
-    await wreck({ uri: 'some/url.com' }, id)
-
-    expect(requestSpy).toHaveBeenCalledTimes(1)
-    expect(requestSpy).toHaveBeenLastCalledWith('GET', 'some/url.com', {
-      headers: { FOO: 'ABCD-0987' }
-    })
-    expect(readSpy).toHaveBeenLastCalledWith(expect.any(Object), {
-      json: 'strict'
-    })
-  })
-
-  test('should add to existing options', async () => {
+  test('should merge options', async () => {
     const options = {
       method: 'POST',
       headers: {
@@ -42,7 +28,6 @@ describe('wreck', () => {
     expect(requestSpy).toHaveBeenCalledTimes(1)
     expect(requestSpy).toHaveBeenLastCalledWith('POST', 'some/url.com', {
       headers: {
-        FOO: 'ABCD-0987',
         'content-type': 'application/json'
       }
     })

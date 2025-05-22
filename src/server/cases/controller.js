@@ -3,50 +3,46 @@
  * Provided as an example, remove or modify as required.
  * @satisfies {Partial<ServerRoute>}
  */
-import { getRequestId } from '../common/helpers/getRequestId.js'
 import { wreck } from '../common/helpers/wreck.js'
 
-const getCases = async (requestId) => {
+const getCases = async () => {
   try {
-    const { data } = await wreck({ uri: '/cases' }, requestId)
+    const { data } = await wreck({ uri: '/cases' })
     return data
   } catch {
     return []
   }
 }
 
-const getCaseById = async (caseId, requestId) => {
+const getCaseById = async (caseId) => {
   try {
-    return wreck({ uri: `/cases/${caseId}` }, requestId)
+    return wreck({ uri: `/cases/${caseId}` })
   } catch (error) {
     return null
   }
 }
 
-const updateStageAsync = async (caseId, nextStage, requestId) => {
+const updateStageAsync = async (caseId, nextStage) => {
   try {
-    return wreck(
-      {
-        uri: `/case/${caseId}/stage`,
-        method: 'POST',
-        payload: JSON.stringify({ nextStage })
-      },
-      requestId
-    )
+    return wreck({
+      method: 'POST',
+      uri: `/case/${caseId}/stage`,
+      payload: JSON.stringify({ nextStage })
+    })
   } catch {
     return null
   }
 }
 
-const getWorkflowByCode = async (workflowCode, requestId) => {
+const getWorkflowByCode = async (workflowCode) => {
   try {
-    return wreck({ uri: `/workflows/${workflowCode}` }, requestId)
+    return wreck({ uri: `/workflows/${workflowCode}` })
   } catch {
     return null
   }
 }
 
-const processCaseWithWorkflow = async (selectedCase, requestId) => {
+const processCaseWithWorkflow = async (selectedCase) => {
   if (!selectedCase) {
     return null
   }
@@ -56,7 +52,7 @@ const processCaseWithWorkflow = async (selectedCase, requestId) => {
     return null
   }
 
-  const workflow = await getWorkflowByCode(workflowCode, requestId)
+  const workflow = await getWorkflowByCode(workflowCode)
   if (!workflow) {
     return null
   }
@@ -141,16 +137,13 @@ const processCaseWithWorkflow = async (selectedCase, requestId) => {
 
 const showCase = async (request, h) => {
   const caseId = request.params.id
-  const selectedCase = await getCaseById(caseId, getRequestId(request))
+  const selectedCase = await getCaseById(caseId)
 
   if (!selectedCase) {
     return h.response('Case not found').code(404)
   }
 
-  const processedData = await processCaseWithWorkflow(
-    selectedCase,
-    getRequestId(request)
-  )
+  const processedData = await processCaseWithWorkflow(selectedCase)
   if (!processedData) {
     return h.response('Workflow not found').code(404)
   }
@@ -171,15 +164,13 @@ const showTask = async (request, h) => {
     return h.response('Case ID is required').code(400)
   }
 
-  const requestId = getRequestId(request)
-
-  const selectedCase = await getCaseById(id, requestId)
+  const selectedCase = await getCaseById(id)
 
   if (!selectedCase) {
     return h.response('Case not found').code(404)
   }
 
-  const processedData = await processCaseWithWorkflow(selectedCase, requestId)
+  const processedData = await processCaseWithWorkflow(selectedCase)
   if (!processedData) {
     return h.response('Workflow not found').code(404)
   }
@@ -193,7 +184,7 @@ const showTask = async (request, h) => {
 
 export const casesController = {
   handler: async (request, h) => {
-    const caseData = await getCases(getRequestId(request))
+    const caseData = await getCases()
     return h.view('cases/views/index', {
       pageTitle: 'Cases',
       heading: 'Cases',
@@ -205,7 +196,7 @@ export const casesController = {
   updateStage: async (request, h) => {
     const { id } = request.params
 
-    const selectedCase = await getCaseById(id, getRequestId(request))
+    const selectedCase = await getCaseById(id)
 
     if (!selectedCase) {
       return h.response('Case not found').code(404)
@@ -214,7 +205,7 @@ export const casesController = {
     const { nextStage } = request.payload
 
     // call backend with stage update
-    await updateStageAsync(id, nextStage, getRequestId(request))
+    await updateStageAsync(id, nextStage)
     // redirect to stage
     return showCase(request, h)
   },
