@@ -201,10 +201,8 @@ export const casesController = {
       return h.response('Case not found').code(404)
     }
 
-    const { nextStage } = request.payload
-
     // call backend with stage update
-    await updateStageAsync(id, nextStage)
+    await updateStageAsync(id)
     // redirect to stage
     return showCase(request, h)
   },
