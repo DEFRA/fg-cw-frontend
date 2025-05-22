@@ -24,7 +24,7 @@ const getCaseById = async (caseId) => {
 
 const updateStageAsync = async (caseId, nextStage) => {
   try {
-    return wreck.post(`/case/${caseId}/stage`, {
+    return wreck.post(`/cases/${caseId}/stage`, {
       payload: { nextStage }
     })
   } catch {
