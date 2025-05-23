@@ -9,11 +9,11 @@ export const wreck = Wreck.defaults({
   json: true
 })
 
-wreck.events.on('preRequest', (request) => {
+wreck.events.on('preRequest', (uri) => {
   const traceId = getTraceId()
   const tracingHeader = config.get('tracing.header')
 
-  if (traceId && tracingHeader) {
-    request.headers[tracingHeader] = traceId
+  if (traceId) {
+    uri.headers[tracingHeader] = traceId
   }
 })
