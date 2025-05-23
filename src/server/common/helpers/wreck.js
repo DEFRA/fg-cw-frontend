@@ -11,8 +11,9 @@ export const wreck = Wreck.defaults({
 
 wreck.events.on('preRequest', (uri) => {
   const traceId = getTraceId()
+  const tracingHeader = config.get('tracing.header')
 
   if (traceId) {
-    uri.headers[config.tracingHeader] = traceId
+    uri.headers[tracingHeader] = traceId
   }
 })
