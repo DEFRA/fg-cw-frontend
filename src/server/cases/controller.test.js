@@ -2,13 +2,17 @@ import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
 import { casesController } from './controller.js'
 
 // Mock dependencies
-const mockFetch = vi.hoisted(() => vi.fn())
+const mockWreck = vi.hoisted(() => ({
+  get: vi.fn(),
+  post: vi.fn()
+}))
+
 const mockConfig = vi.hoisted(() => ({
   get: vi.fn()
 }))
 
-vi.mock('undici', () => ({
-  fetch: mockFetch
+vi.mock('../common/helpers/wreck.js', () => ({
+  wreck: mockWreck
 }))
 
 vi.mock('../../config/config.js', () => ({
@@ -58,8 +62,8 @@ describe('casesController', () => {
         { id: '2', name: 'Case 2' }
       ]
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({ data: mockCases })
+      mockWreck.get.mockResolvedValueOnce({
+        payload: { data: mockCases }
       })
 
       const request = mockRequest()
@@ -67,7 +71,7 @@ describe('casesController', () => {
 
       await casesController.handler(request, h)
 
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:3001/cases')
+      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
       expect(h.view).toHaveBeenCalledWith('cases/views/index', {
         pageTitle: 'Cases',
         heading: 'Cases',
@@ -77,14 +81,14 @@ describe('casesController', () => {
     })
 
     test('Should return cases view with empty array when API call fails', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Network error'))
+      mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
 
       const request = mockRequest()
       const h = mockResponseToolkit()
 
       await casesController.handler(request, h)
 
-      expect(mockFetch).toHaveBeenCalledWith('http://localhost:3001/cases')
+      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
       expect(h.view).toHaveBeenCalledWith('cases/views/index', {
         pageTitle: 'Cases',
         heading: 'Cases',
@@ -131,13 +135,13 @@ describe('casesController', () => {
 
     test('Should return case view with processed data when case and workflow exist', async () => {
       // Mock getCaseById
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock getWorkflowByCode
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
@@ -145,14 +149,10 @@ describe('casesController', () => {
 
       await casesController.show(request, h)
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/cases/case123'
-      )
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/workflows/workflow1'
-      )
+      expect(mockWreck.get).toHaveBeenCalledWith('/cases/case123')
+      expect(mockWreck.get).toHaveBeenCalledWith('/workflows/workflow1')
       expect(h.view).toHaveBeenCalledWith('cases/views/show', {
-        pageTitle: 'Application',
+        pageTitle: 'Case',
         caseData: expect.objectContaining({
           _id: 'case123',
           stages: expect.arrayContaining([
@@ -186,7 +186,7 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Not found'))
+      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({ params: { id: 'nonexistent' } })
       const h = mockResponseToolkit()
@@ -199,12 +199,12 @@ describe('casesController', () => {
 
     test('Should return 404 when workflow is not found', async () => {
       // Mock getCaseById success
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock getWorkflowByCode failure
-      mockFetch.mockRejectedValueOnce(new Error('Workflow not found'))
+      mockWreck.get.mockRejectedValueOnce(new Error('Workflow not found'))
 
       const request = mockRequest({ params: { id: 'case123' } })
       const h = mockResponseToolkit()
@@ -218,8 +218,8 @@ describe('casesController', () => {
     test('Should handle case without workflow code', async () => {
       const caseWithoutWorkflow = { ...mockCase, workflowCode: null }
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(caseWithoutWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: caseWithoutWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
@@ -232,12 +232,12 @@ describe('casesController', () => {
     })
 
     test('Should include caseDetails tab query when path contains caseDetails', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({
@@ -272,12 +272,12 @@ describe('casesController', () => {
         ]
       }
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(caseWithCompletedTask)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: caseWithCompletedTask
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
@@ -339,20 +339,16 @@ describe('casesController', () => {
     }
 
     test('Should return task view with correct query parameters', async () => {
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({
-        params: {
-          id: 'case123',
-          groupId: 'group1',
-          taskId: 'task1'
-        }
+        params: { id: 'case123', groupId: 'group1', taskId: 'task1' }
       })
       const h = mockResponseToolkit()
 
@@ -377,14 +373,10 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Not found'))
+      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({
-        params: {
-          id: 'nonexistent',
-          groupId: 'group1',
-          taskId: 'task1'
-        }
+        params: { id: 'nonexistent', groupId: 'group1', taskId: 'task1' }
       })
       const h = mockResponseToolkit()
 
@@ -418,6 +410,7 @@ describe('casesController', () => {
         {
           id: 'stage1',
           title: 'Stage 1 Title',
+          actions: [{ label: 'Approve', nextStage: 'stage2' }],
           taskGroups: [
             {
               id: 'group1',
@@ -431,40 +424,31 @@ describe('casesController', () => {
 
     test('Should update stage and return updated case view', async () => {
       // Mock getCaseById
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock updateStageAsync
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue({ success: true })
+      mockWreck.post.mockResolvedValueOnce({
+        payload: { success: true }
       })
 
       // Mock getCaseById for showCase
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock getWorkflowByCode for showCase
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
-      const request = mockRequest({
-        params: { id: 'case123' },
-        payload: { nextStage: 'stage2' }
-      })
+      const request = mockRequest({ params: { id: 'case123' } })
       const h = mockResponseToolkit()
 
       await casesController.updateStage(request, h)
 
-      expect(mockFetch).toHaveBeenCalledWith(
-        'http://localhost:3001/case/case123/stage',
-        {
-          method: 'POST',
-          body: JSON.stringify({ nextStage: 'stage2' })
-        }
-      )
+      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case123/stage')
       expect(h.view).toHaveBeenCalledWith(
         'cases/views/show',
         expect.any(Object)
@@ -472,12 +456,9 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockFetch.mockRejectedValueOnce(new Error('Not found'))
+      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
-      const request = mockRequest({
-        params: { id: 'nonexistent' },
-        payload: { nextStage: 'stage2' }
-      })
+      const request = mockRequest({ params: { id: 'nonexistent' } })
       const h = mockResponseToolkit()
 
       await casesController.updateStage(request, h)
@@ -488,33 +469,28 @@ describe('casesController', () => {
 
     test('Should handle updateStageAsync failure gracefully', async () => {
       // Mock getCaseById success
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock updateStageAsync failure
-      mockFetch.mockRejectedValueOnce(new Error('Update failed'))
+      mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
 
       // Mock getCaseById for showCase
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
       // Mock getWorkflowByCode for showCase
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
-      const request = mockRequest({
-        params: { id: 'case123' },
-        payload: { nextStage: 'stage2' }
-      })
+      const request = mockRequest({ params: { id: 'case123' } })
       const h = mockResponseToolkit()
 
-      // Should not throw and should still return the case view
-      await expect(
-        casesController.updateStage(request, h)
-      ).resolves.not.toThrow()
+      await casesController.updateStage(request, h)
+
       expect(h.view).toHaveBeenCalledWith(
         'cases/views/show',
         expect.any(Object)
@@ -532,15 +508,21 @@ describe('casesController', () => {
       }
 
       const mockWorkflow = {
-        stages: []
+        stages: [
+          {
+            id: 'stage1',
+            title: 'Stage 1 Title',
+            taskGroups: []
+          }
+        ]
       }
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(caseWithoutStages)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: caseWithoutStages
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
@@ -579,12 +561,12 @@ describe('casesController', () => {
         ]
       }
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(caseWithMismatchedStage)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: caseWithMismatchedStage
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
@@ -623,12 +605,12 @@ describe('casesController', () => {
         ]
       }
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockCase)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockCase
       })
 
-      mockFetch.mockResolvedValueOnce({
-        json: vi.fn().mockResolvedValue(mockWorkflow)
+      mockWreck.get.mockResolvedValueOnce({
+        payload: mockWorkflow
       })
 
       const request = mockRequest({ params: { id: 'case123' } })
