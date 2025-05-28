@@ -5,7 +5,7 @@
 {% from "../../common/components/taskGroups/macro.njk" import appTaskGroups %}
 {% from "../../common/components/tasksTab/macro.njk" import appTasksTab %}
 {% from "../../common/components/caseSummary/macro.njk" import appCaseSummary %}
-{% from "../../common/components/caseDetailsTab/caseDetailsTabTemplate.njk" import caseDetailsTab %}
+{% from "../../common/components/caseDetailsTab/template.njk" import caseDetailsTab %}
 
 {% block content %}
   {{ appCaseSummary({caseData: caseData}) }}
