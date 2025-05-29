@@ -1,3 +1,10 @@
+{# 
+    caseId: <string>,
+    groupId: <string>,
+    taskId: <string>,
+    groups: <array of task groups>
+#}
+
 {% macro appTaskDetails(params) %}
-  {%- include "./taskDetailsTemplate.njk" -%}
+  {%- include "./template.njk" -%}
 {% endmacro %}
