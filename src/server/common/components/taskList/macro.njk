@@ -1,3 +1,11 @@
+{# 
+    tasks: <array of {
+        title: <string>,
+        link: <string>,
+        status: <string>
+    }>
+#}
+
 {% macro appTaskList(params) %}
-  {%- include "./taskListTemplate.njk" -%}
+  {%- include "./template.njk" -%}
 {% endmacro %}
