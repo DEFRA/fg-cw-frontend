@@ -47,48 +47,6 @@ describe('application.js', () => {
     expect(mockCreateAll).toHaveBeenCalledWith(mockTabs)
   })
 
-  it('should call createAll with Button component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockButton)
-  })
-
-  it('should call createAll with Checkboxes component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockCheckboxes)
-  })
-
-  it('should call createAll with ErrorSummary component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockErrorSummary)
-  })
-
-  it('should call createAll with Header component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockHeader)
-  })
-
-  it('should call createAll with Radios component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockRadios)
-  })
-
-  it('should call createAll with SkipLink component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockSkipLink)
-  })
-
-  it('should call createAll with Tabs component', async () => {
-    await import('./application.js')
-
-    expect(mockCreateAll).toHaveBeenCalledWith(mockTabs)
-  })
-
   it('should initialize components in the correct order', async () => {
     await import('./application.js')
 
