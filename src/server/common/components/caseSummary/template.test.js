@@ -108,7 +108,3 @@ describe('Case Summary Component Template', () => {
     })
   })
 })
-
-/**
- * @import { CheerioAPI } from 'cheerio'
- */

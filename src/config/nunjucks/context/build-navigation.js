@@ -1,6 +1,3 @@
-/**
- * @param {Partial<Request> | null} request
- */
 export function buildNavigation(request) {
   return [
     {
@@ -10,7 +7,3 @@ export function buildNavigation(request) {
     }
   ]
 }
-
-/**
- * @import { Request } from '@hapi/hapi'
- */

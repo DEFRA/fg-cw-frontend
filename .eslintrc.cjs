@@ -5,32 +5,15 @@ module.exports = {
       extends: [
         'standard',
         'plugin:import/recommended',
-        'plugin:import/typescript',
-        'plugin:jsdoc/recommended-typescript-flavor',
         'plugin:n/recommended',
         'plugin:promise/recommended',
-        'plugin:@typescript-eslint/recommended-type-checked',
-        'plugin:@typescript-eslint/stylistic-type-checked',
         'prettier'
       ],
       env: {
         browser: false
       },
       files: ['**/*.{cjs,js}'],
-      parser: '@typescript-eslint/parser',
-      parserOptions: {
-        ecmaVersion: 'latest',
-        project: ['./tsconfig.json'],
-        tsconfigRootDir: __dirname
-      },
-      plugins: [
-        '@typescript-eslint',
-        'import',
-        'jsdoc',
-        'n',
-        'promise',
-        'prettier'
-      ],
+      plugins: ['import', 'jsdoc', 'n', 'promise', 'prettier'],
       rules: {
         'prettier/prettier': [
           'error',
@@ -39,13 +22,6 @@ module.exports = {
           }
         ],
         'no-console': 'error',
-
-        // Turn off strict type checking rules
-        '@typescript-eslint/no-unsafe-argument': 'off',
-        '@typescript-eslint/no-unsafe-assignment': 'off',
-        '@typescript-eslint/no-unsafe-call': 'off',
-        '@typescript-eslint/no-unsafe-member-access': 'off',
-        '@typescript-eslint/no-unsafe-return': 'off',
 
         // JSDoc blocks are optional by default
         'jsdoc/require-jsdoc': 'off',
@@ -65,23 +41,11 @@ module.exports = {
 
         // Check for mandatory file extensions
         // https://nodejs.org/api/esm.html#mandatory-file-extensions
-        'import/extensions': ['error', 'always', { ignorePackages: true }],
-
-        // Skip rules handled by TypeScript compiler
-        'import/default': 'off',
-        'import/namespace': 'off',
-        'n/no-extraneous-require': 'off',
-        'n/no-extraneous-import': 'off',
-        'n/no-missing-require': 'off',
-        'n/no-missing-import': 'off'
+        'import/extensions': ['error', 'always', { ignorePackages: true }]
       },
       settings: {
-        'import/parsers': {
-          '@typescript-eslint/parser': ['.cjs', '.js']
-        },
         'import/resolver': {
-          node: true,
-          typescript: true
+          node: true
         }
       }
     },
@@ -100,8 +64,6 @@ module.exports = {
         sourceType: 'commonjs'
       },
       rules: {
-        '@typescript-eslint/no-var-requires': 'off',
-
         // Allow require devDependencies
         'n/no-unpublished-require': [
           'error',
@@ -121,7 +83,3 @@ module.exports = {
   ],
   root: true
 }
-
-/**
- * @import { ESLint } from 'eslint'
- */

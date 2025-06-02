@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from 'vitest'
-import { renderComponent } from '~/src/server/common/test-helpers/component-helpers.js'
-import data from '~/src/server/common/test-helpers/application-case-list.js'
+import { renderComponent } from '../../test-helpers/component-helpers.js'
+import data from '../../test-helpers/application-case-list.js'
 
 describe('Application Case List', () => {
   let $list
@@ -52,7 +52,3 @@ describe('Application Case List', () => {
     })
   })
 })
-
-/**
- * @import { CheerioAPI } from 'cheerio'
- */
