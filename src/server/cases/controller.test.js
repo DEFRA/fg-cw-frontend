@@ -19,9 +19,6 @@ vi.mock('../../config/config.js', () => ({
   config: mockConfig
 }))
 
-/**
- * @param {Partial<import('@hapi/hapi').Request>} [options]
- */
 function mockRequest(options = {}) {
   return {
     params: {},
@@ -32,9 +29,6 @@ function mockRequest(options = {}) {
   }
 }
 
-/**
- * @param {Partial<import('@hapi/hapi').ResponseToolkit>} [options]
- */
 function mockResponseToolkit(options = {}) {
   const toolkit = {
     view: vi.fn().mockReturnThis(),
@@ -630,7 +624,3 @@ describe('casesController', () => {
     })
   })
 })
-
-/**
- * @import { Request, ResponseToolkit, ServerRoute } from '@hapi/hapi'
- */

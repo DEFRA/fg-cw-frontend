@@ -1,8 +1,8 @@
 import { describe, expect, test, vi, beforeEach } from 'vitest'
 import { Cluster, Redis } from 'ioredis'
 
-import { config } from '~/src/config/config.js'
-import { buildRedisClient } from '~/src/server/common/helpers/redis-client.js'
+import { config } from '../../../config/config.js'
+import { buildRedisClient } from './redis-client.js'
 
 vi.mock('ioredis', async () => ({
   ...(await vi.importActual('ioredis')),

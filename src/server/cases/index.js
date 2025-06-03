@@ -1,10 +1,4 @@
-import { casesController } from '~/src/server/cases/controller.js'
-
-/**
- * Sets up the routes used in the /cases page.
- * These routes are registered in src/server/router.js.
- * @satisfies {ServerRegisterPluginObject<void>}
- */
+import { casesController } from './controller.js'
 
 export const cases = {
   plugin: {
@@ -40,7 +34,3 @@ export const cases = {
     }
   }
 }
-
-/**
- * @import { ServerRegisterPluginObject } from '@hapi/hapi'
- */

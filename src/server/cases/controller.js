@@ -1,8 +1,3 @@
-/**
- * A GDS styled example about page controller.
- * Provided as an example, remove or modify as required.
- * @satisfies {Partial<ServerRoute>}
- */
 import { wreck } from '../common/helpers/wreck.js'
 
 const getCases = async () => {
@@ -210,7 +205,3 @@ export const casesController = {
   show: showCase,
   showTask
 }
-
-/**
- * @import { ServerRoute } from '@hapi/hapi'
- */
