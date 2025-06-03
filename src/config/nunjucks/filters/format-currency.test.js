@@ -1,5 +1,5 @@
 import { describe, test, expect } from 'vitest'
-import { formatCurrency } from '~/src/config/nunjucks/filters/filters.js'
+import { formatCurrency } from './filters.js'
 
 describe('formatCurrency', () => {
   test('should format value to GBP currency by default', () => {

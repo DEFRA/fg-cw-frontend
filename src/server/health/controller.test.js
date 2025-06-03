@@ -19,7 +19,3 @@ describe('healthController', () => {
     expect(result).toEqual(expectedResponse)
   })
 })
-
-/**
- * @import { Server } from '@hapi/hapi'
- */

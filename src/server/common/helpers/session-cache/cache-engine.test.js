@@ -3,7 +3,7 @@ import { Engine as CatboxRedis } from '@hapi/catbox-redis'
 import { Engine as CatboxMemory } from '@hapi/catbox-memory'
 
 import { getCacheEngine } from './cache-engine.js'
-import { config } from '~/src/config/config.js'
+import { config } from '../../../../config/config.js'
 
 vi.mock('@hapi/catbox-redis')
 vi.mock('@hapi/catbox-memory')

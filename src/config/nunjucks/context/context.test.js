@@ -19,15 +19,15 @@ vi.mock('node:fs', async () => {
   }
 })
 
-vi.mock('~/src/config/config.js', () => ({
+vi.mock('../../config.js', () => ({
   config: mockConfig
 }))
 
-vi.mock('~/src/server/common/helpers/logging/logger.js', () => ({
+vi.mock('../../../server/common/helpers/logging/logger.js', () => ({
   createLogger: () => ({ error: (...args) => mockLoggerError(...args) })
 }))
 
-vi.mock('~/src/config/nunjucks/context/build-navigation.js', () => ({
+vi.mock('./build-navigation.js', () => ({
   buildNavigation: mockBuildNavigation
 }))
 
@@ -62,9 +62,7 @@ describe('context', () => {
     })
 
     test('should return correct context object', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context({ path: '/' })
 
       expect(result).toEqual({
@@ -78,9 +76,7 @@ describe('context', () => {
     })
 
     test('should return correct asset path for known assets', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context({ path: '/' })
 
       expect(result.getAssetPath('app.js')).toBe('/public/js/app-123.js')
@@ -88,18 +84,14 @@ describe('context', () => {
     })
 
     test('should return fallback path for unknown assets', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context({ path: '/' })
 
       expect(result.getAssetPath('unknown.png')).toBe('/public/unknown.png')
     })
 
     test('should cache manifest after first read', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
 
       // First call
       context({ path: '/' })
@@ -119,9 +111,7 @@ describe('context', () => {
     })
 
     test('should log error and continue', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context({ path: '/' })
 
       expect(mockLoggerError).toHaveBeenCalledWith(
@@ -131,9 +121,7 @@ describe('context', () => {
     })
 
     test('should provide working context even when manifest is missing', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context({ path: '/' })
 
       expect(result).toEqual({
@@ -149,9 +137,7 @@ describe('context', () => {
 
   describe('with null request', () => {
     test('should handle null request gracefully', async () => {
-      const { context } = await import(
-        '~/src/config/nunjucks/context/context.js'
-      )
+      const { context } = await import('./context.js')
       const result = context(null)
 
       expect(result).toEqual({

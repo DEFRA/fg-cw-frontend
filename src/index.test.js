@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import process from 'node:process'
-import { createLogger } from '~/src/server/common/helpers/logging/logger.js'
-import { startServer } from '~/src/server/common/helpers/start-server.js'
+import { createLogger } from './server/common/helpers/logging/logger.js'
+import { startServer } from './server/common/helpers/start-server.js'
 
 // Mock the dependencies
 const mockLogger = {
@@ -9,11 +9,11 @@ const mockLogger = {
   error: vi.fn()
 }
 
-vi.mock('~/src/server/common/helpers/logging/logger.js', () => ({
+vi.mock('./server/common/helpers/logging/logger.js', () => ({
   createLogger: vi.fn(() => mockLogger)
 }))
 
-vi.mock('~/src/server/common/helpers/start-server.js', () => ({
+vi.mock('./server/common/helpers/start-server.js', () => ({
   startServer: vi.fn()
 }))
 
@@ -55,14 +55,12 @@ describe('index.js', () => {
     await import('./index.js')
 
     // Verify that process.on was called with 'unhandledRejection'
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     expect(process.on).toHaveBeenCalledWith(
       'unhandledRejection',
       expect.any(Function)
     )
 
     // Get the handler function safely
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     const mockCalls = vi.mocked(process.on).mock.calls
     const rejectionHandler = mockCalls[0][1]
     const mockError = new Error('Test error')

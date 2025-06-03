@@ -1,5 +1,5 @@
 import Wreck from '@hapi/wreck'
-import { config } from '~/src/config/config.js'
+import { config } from '../../../config/config.js'
 import { getTraceId } from '@defra/hapi-tracing'
 
 export const wreck = Wreck.defaults({

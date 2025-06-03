@@ -225,8 +225,3 @@ export const config = convict({
 })
 
 config.validate({ allowed: 'strict' })
-
-/**
- * @import { Schema, SchemaObj } from 'convict'
- * @import { RedisConfig } from '~/src/server/common/helpers/redis-client.js'
- */

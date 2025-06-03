@@ -1,6 +1,6 @@
 import { describe, test, expect, afterEach } from 'vitest'
-import { config } from '~/src/config/config.js'
-import { setupProxy } from '~/src/server/common/helpers/proxy/setup-proxy.js'
+import { config } from '../../../../config/config.js'
+import { setupProxy } from './setup-proxy.js'
 import { getGlobalDispatcher, ProxyAgent } from 'undici'
 
 describe('setupProxy', () => {
