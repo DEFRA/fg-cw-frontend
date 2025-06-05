@@ -1,0 +1,11 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "../components/case-summary/macro.njk" import appCaseSummary %}
+
+{% block caseContent %}
+  {{ appCaseSummary({ case: data.case }) }}
+
+  {# Future: Add case details, tasks, etc. #}
+  <div class="govuk-body">
+    <p>Case detail view - to be implemented</p>
+  </div>
+{% endblock %}

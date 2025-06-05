@@ -1,0 +1,60 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "components/checkbox/macro.njk" import customCheckbox %}
+
+{% set tableRows = [] %}
+{% for case in params.data.allCases %}
+  {% set priorityClass = 'govuk-tag--grey' %}
+
+  {%- if case.status == "NEW" %}
+    {% set priorityClass = 'govuk-tag--blue' %}
+  {%- elif case.status == "IN PROGRESS" -%}
+    {% set priorityClass = 'govuk-tag--yellow' %}
+  {%- elif case.status == "APPROVED" -%}
+    {% set priorityClass = 'govuk-tag--green' %}
+  {%- endif -%}
+
+  {%- set status = case.status | capitalize %}
+  {%
+    set row = [
+        {
+          html: customCheckbox({
+            id: case.clientRef,
+            label: case.clientRef,
+            name: "selected_cases",
+            value: case.clientRef
+          }),
+          classes: "govuk-!-padding-top-0"
+        },
+        {
+          html: '<a href="' + case.link + '" class="govuk-link govuk-!-font-weight-bold">' + case.clientRef + '</a>'
+        },
+        {
+          text: case.code
+        },
+        {
+          text: case.submittedDate
+        },
+        {
+          html: govukTag({
+            text: status,
+            classes: priorityClass
+          })
+        },
+        {
+          text: case.assignedTo
+        }
+    ]
+  %}
+  {% set tableRows = (tableRows.push(row), tableRows) %}
+{% endfor %}
+
+<h2 class="govuk-heading-l" data-testid="{{ params.tabTestId }}">
+  {{ params.tabLabel }}
+</h2>
+{{
+  govukTable({
+    head: params.tableHeaders,
+    rows: tableRows
+  })
+}}
