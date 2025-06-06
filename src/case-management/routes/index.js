@@ -10,7 +10,7 @@ export const caseManagement = {
           path: '/cases',
           handler: caseController.listCases
         }
-        // Future routes for case details, etc. will be added here
+        // Future routes for case details, etc. will be added here in next PRs
       ])
     }
   }

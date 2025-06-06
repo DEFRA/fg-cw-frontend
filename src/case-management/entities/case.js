@@ -9,7 +9,7 @@ export class Case {
     createdAt,
     submittedAt,
     status,
-    assignedTo
+    assignedUser
   }) {
     this._id = _id
     this.clientRef = clientRef
@@ -20,7 +20,7 @@ export class Case {
     this.createdAt = createdAt ?? new Date().toISOString()
     this.submittedAt = submittedAt
     this.status = status
-    this.assignedTo = assignedTo
+    this.assignedUser = assignedUser
   }
 
   getFormattedSubmittedDate() {
@@ -32,7 +32,7 @@ export class Case {
     return this.status || 'In Progress'
   }
 
-  getAssignedToDisplay() {
-    return this.assignedTo || 'Unassigned'
+  getAssignedUserDisplay() {
+    return this.assignedUser || 'Unassigned'
   }
 }

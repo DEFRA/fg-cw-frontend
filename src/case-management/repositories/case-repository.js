@@ -17,7 +17,7 @@ const toCase = (data) =>
     createdAt: data.payload?.createdAt || data.createdAt,
     submittedAt: data.payload?.submittedAt || data.submittedAt,
     status: data.status,
-    assignedTo: data.assignedUser
+    assignedUser: data.assignedUser
   })
 
 export const findAll = async () => {

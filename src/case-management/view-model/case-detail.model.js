@@ -1,3 +1,4 @@
+// TODO: Add case detail view model - Placeholder for now
 export const createCaseDetailViewModel = (caseItem) => {
   return {
     pageTitle: `Case ${caseItem.clientRef}`,
@@ -13,7 +14,7 @@ export const createCaseDetailViewModel = (caseItem) => {
         code: caseItem.code,
         submittedDate: caseItem.getFormattedSubmittedDate(),
         status: caseItem.getStatusDisplay(),
-        assignedTo: caseItem.getAssignedToDisplay(),
+        assignedUser: caseItem.getAssignedUserDisplay(),
         stages: caseItem.stages,
         currentStage: caseItem.currentStage
       }

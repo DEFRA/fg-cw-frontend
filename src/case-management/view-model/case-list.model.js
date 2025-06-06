@@ -6,7 +6,7 @@ export const transformCasesForList = (cases) => {
       code: caseItem.code,
       submittedDate: caseItem.getFormattedSubmittedDate(),
       status: caseItem.getStatusDisplay(),
-      assignedTo: caseItem.getAssignedToDisplay(),
+      assignedUser: caseItem.getAssignedUserDisplay(),
       link: `/case/${caseItem._id}`
     }))
   }
