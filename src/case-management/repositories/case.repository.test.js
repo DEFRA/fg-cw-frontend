@@ -1,6 +1,6 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
-import { findAll, findById, updateStage } from './case-repository.js'
-import { Case } from '../entities/case.js'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { findAll, findById, updateStage } from './case.repository.js'
+import { Case } from '../models/case.js'
 import {
   CaseRepositoryError,
   CaseNotFoundError,
@@ -27,21 +27,21 @@ describe('Case Repository', () => {
   })
 
   describe('findAll', () => {
-    test('returns array of Case instances when API call succeeds', async () => {
+    it('returns array of Case instances when API call succeeds', async () => {
       const mockApiResponse = {
         payload: {
           data: [
             {
               _id: 'case-1',
+              caseRef: 'client-ref-1',
               payload: {
-                clientRef: 'client-ref-1',
-                code: 'case-code-1',
-                createdAt: '2021-01-01T00:00:00.000Z',
-                submittedAt: '2021-01-15T10:30:00.000Z'
+                code: 'case-code-1'
               },
               workflowCode: 'workflow-1',
               currentStage: 'stage-1',
               stages: ['stage-1', 'stage-2'],
+              createdAt: '2021-01-01T00:00:00.000Z',
+              submittedAt: '2021-01-15T10:30:00.000Z',
               status: 'In Progress',
               assignedUser: 'user-1'
             },
@@ -93,7 +93,7 @@ describe('Case Repository', () => {
       })
     })
 
-    test('returns empty array when API returns no data', async () => {
+    it('returns empty array when API returns no data', async () => {
       const mockApiResponse = {
         payload: {
           data: []
@@ -108,7 +108,7 @@ describe('Case Repository', () => {
       expect(result).toEqual([])
     })
 
-    test('returns empty array when API returns null data', async () => {
+    it('returns empty array when API returns null data', async () => {
       const mockApiResponse = {
         payload: {
           data: null
@@ -123,7 +123,7 @@ describe('Case Repository', () => {
       expect(result).toEqual([])
     })
 
-    test('returns empty array when API returns undefined data', async () => {
+    it('returns empty array when API returns undefined data', async () => {
       const mockApiResponse = {
         payload: {}
       }
@@ -136,7 +136,7 @@ describe('Case Repository', () => {
       expect(result).toEqual([])
     })
 
-    test('throws CaseRepositoryError when API call fails', async () => {
+    it('throws CaseRepositoryError when API call fails', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
 
       await expect(findAll()).rejects.toThrow(CaseRepositoryError)
@@ -146,20 +146,20 @@ describe('Case Repository', () => {
   })
 
   describe('findById', () => {
-    test('returns Case instance when API call succeeds', async () => {
+    it('returns Case instance when API call succeeds', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: {
           _id: 'case-123',
+          caseRef: 'client-ref-123',
           payload: {
-            clientRef: 'client-ref-123',
-            code: 'case-code-123',
-            createdAt: '2021-01-01T00:00:00.000Z',
-            submittedAt: '2021-01-15T10:30:00.000Z'
+            code: 'case-code-123'
           },
           workflowCode: 'workflow-123',
           currentStage: 'stage-1',
           stages: ['stage-1'],
+          createdAt: '2021-01-01T00:00:00.000Z',
+          submittedAt: '2021-01-15T10:30:00.000Z',
           status: 'Active',
           assignedUser: 'user-123'
         }
@@ -185,7 +185,7 @@ describe('Case Repository', () => {
       })
     })
 
-    test('returns null when API returns null payload', async () => {
+    it('returns null when API returns null payload', async () => {
       const caseId = 'nonexistent-case'
       const mockApiResponse = {
         payload: null
@@ -199,7 +199,7 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    test('returns null when API returns undefined payload', async () => {
+    it('returns null when API returns undefined payload', async () => {
       const caseId = 'nonexistent-case'
       const mockApiResponse = {}
 
@@ -211,7 +211,7 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    test('throws CaseNotFoundError when API call fails', async () => {
+    it('throws CaseNotFoundError when API call fails', async () => {
       const caseId = 'case-123'
       mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
@@ -224,20 +224,20 @@ describe('Case Repository', () => {
   })
 
   describe('updateStage', () => {
-    test('returns updated Case instance when API call succeeds', async () => {
+    it('returns updated Case instance when API call succeeds', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: {
           _id: 'case-123',
+          caseRef: 'client-ref-123',
           payload: {
-            clientRef: 'client-ref-123',
-            code: 'case-code-123',
-            createdAt: '2021-01-01T00:00:00.000Z',
-            submittedAt: '2021-01-15T10:30:00.000Z'
+            code: 'case-code-123'
           },
           workflowCode: 'workflow-123',
           currentStage: 'stage-2',
           stages: ['stage-1', 'stage-2'],
+          createdAt: '2021-01-01T00:00:00.000Z',
+          submittedAt: '2021-01-15T10:30:00.000Z',
           status: 'Updated',
           assignedUser: 'user-123'
         }
@@ -263,7 +263,7 @@ describe('Case Repository', () => {
       })
     })
 
-    test('returns null when API returns null payload', async () => {
+    it('returns null when API returns null payload', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: null
@@ -277,7 +277,7 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    test('returns null when API returns undefined payload', async () => {
+    it('returns null when API returns undefined payload', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {}
 
@@ -289,7 +289,7 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    test('throws CaseUpdateError when API call fails', async () => {
+    it('throws CaseUpdateError when API call fails', async () => {
       const caseId = 'case-123'
       mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
 
@@ -302,21 +302,21 @@ describe('Case Repository', () => {
   })
 
   describe('toCase transformation', () => {
-    test('handles data with payload structure', async () => {
+    it('handles data with payload structure', async () => {
       const mockApiResponse = {
         payload: {
           data: [
             {
               _id: 'case-1',
+              caseRef: 'client-ref-1',
               payload: {
-                clientRef: 'client-ref-1',
-                code: 'case-code-1',
-                createdAt: '2021-01-01T00:00:00.000Z',
-                submittedAt: '2021-01-15T10:30:00.000Z'
+                code: 'case-code-1'
               },
               workflowCode: 'workflow-1',
               currentStage: 'stage-1',
               stages: ['stage-1'],
+              createdAt: '2021-01-01T00:00:00.000Z',
+              submittedAt: '2021-01-15T10:30:00.000Z',
               status: 'Active',
               assignedUser: 'user-1'
             }
@@ -334,7 +334,7 @@ describe('Case Repository', () => {
       expect(result[0].submittedAt).toBe('2021-01-15T10:30:00.000Z')
     })
 
-    test('handles data with direct structure (fallback)', async () => {
+    it('handles data with direct structure', async () => {
       const mockApiResponse = {
         payload: {
           data: [
@@ -362,7 +362,7 @@ describe('Case Repository', () => {
       expect(result[0].submittedAt).toBe('2021-02-15T10:30:00.000Z')
     })
 
-    test('handles missing stages array', async () => {
+    it('handles missing stages array', async () => {
       const mockApiResponse = {
         payload: {
           data: [

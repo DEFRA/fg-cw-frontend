@@ -1,4 +1,4 @@
-import { findAllCasesUseCase } from '../use-cases/find-all-cases.js'
+import { findAllCasesUseCase } from '../use-cases/find-all-cases.use-case.js'
 import { createCaseListViewModel } from '../view-model/case-list.model.js'
 
 export const caseController = {

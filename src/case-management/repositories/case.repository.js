@@ -1,5 +1,5 @@
 import { wreck } from '../../server/common/helpers/wreck.js'
-import { Case } from '../entities/case.js'
+import { Case } from '../models/case.js'
 import {
   CaseRepositoryError,
   CaseNotFoundError,
@@ -8,16 +8,9 @@ import {
 
 const toCase = (data) =>
   new Case({
-    _id: data._id,
-    clientRef: data.payload?.clientRef || data.caseRef,
-    code: data.payload?.code,
-    workflowCode: data.workflowCode,
-    currentStage: data.currentStage,
-    stages: data.stages || [],
-    createdAt: data.payload?.createdAt || data.createdAt,
-    submittedAt: data.payload?.submittedAt || data.submittedAt,
-    status: data.status,
-    assignedUser: data.assignedUser
+    ...data,
+    clientRef: data.caseRef,
+    code: data.payload?.code
   })
 
 export const findAll = async () => {

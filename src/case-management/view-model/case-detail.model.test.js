@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { createCaseDetailViewModel } from './case-detail.model.js'
 
 describe('createCaseDetailViewModel', () => {
@@ -10,7 +10,7 @@ describe('createCaseDetailViewModel', () => {
     vi.resetAllMocks()
   })
 
-  test('creates view model with all case properties', () => {
+  it('creates view model with all case properties', () => {
     const mockCase = {
       _id: 'case-123',
       clientRef: 'CLIENT-REF-001',
@@ -50,7 +50,7 @@ describe('createCaseDetailViewModel', () => {
     expect(mockCase.getAssignedUserDisplay).toHaveBeenCalledOnce()
   })
 
-  test('creates view model with minimal case properties', () => {
+  it('creates view model with minimal case properties', () => {
     const mockCase = {
       _id: 'case-minimal',
       clientRef: 'MIN-001',
@@ -83,7 +83,7 @@ describe('createCaseDetailViewModel', () => {
     })
   })
 
-  test('creates view model with completed case', () => {
+  it('creates view model with completed case', () => {
     const mockCase = {
       _id: 'case-completed',
       clientRef: 'COMP-001',
@@ -103,7 +103,7 @@ describe('createCaseDetailViewModel', () => {
     expect(result.data.case.currentStage).toBe('completed')
   })
 
-  test('creates correct breadcrumbs structure', () => {
+  it('creates correct breadcrumbs structure', () => {
     const mockCase = {
       _id: 'case-breadcrumb',
       clientRef: 'BREAD-001',
@@ -122,7 +122,7 @@ describe('createCaseDetailViewModel', () => {
     expect(result.breadcrumbs[1]).toEqual({ text: 'BREAD-001' })
   })
 
-  test('creates consistent page title and heading', () => {
+  it('creates consistent page title and heading', () => {
     const mockCase = {
       _id: 'case-title',
       clientRef: 'TITLE-001',
@@ -141,7 +141,7 @@ describe('createCaseDetailViewModel', () => {
     expect(result.pageTitle).toBe(result.heading)
   })
 
-  test('calls all case methods exactly once', () => {
+  it('calls all case methods exactly once', () => {
     const mockCase = {
       _id: 'case-methods',
       clientRef: 'METHOD-001',

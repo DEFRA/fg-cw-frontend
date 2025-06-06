@@ -1,11 +1,11 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
-import { caseController } from './case-controller.js'
+import { caseController } from './case.controller.js'
 
 // Mock dependencies
 const mockFindAllCasesUseCase = vi.hoisted(() => vi.fn())
 const mockCreateCaseListViewModel = vi.hoisted(() => vi.fn())
 
-vi.mock('../use-cases/find-all-cases.js', () => ({
+vi.mock('../use-cases/find-all-cases.use-case.js', () => ({
   findAllCasesUseCase: mockFindAllCasesUseCase
 }))
 

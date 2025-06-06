@@ -6,7 +6,7 @@ const mockCaseController = vi.hoisted(() => ({
   listCases: vi.fn()
 }))
 
-vi.mock('./case-controller.js', () => ({
+vi.mock('./case.controller.js', () => ({
   caseController: mockCaseController
 }))
 

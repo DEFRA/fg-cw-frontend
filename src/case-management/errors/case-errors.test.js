@@ -1,4 +1,4 @@
-import { describe, test, expect } from 'vitest'
+import { describe, it, expect } from 'vitest'
 import {
   CaseNotFoundError,
   InvalidCaseStateError,
@@ -8,7 +8,7 @@ import {
 
 describe('Case Errors', () => {
   describe('CaseNotFoundError', () => {
-    test('creates a CaseNotFoundError with correct properties', () => {
+    it('creates a CaseNotFoundError with correct properties', () => {
       const caseId = 'case-123'
       const error = new CaseNotFoundError(caseId)
 
@@ -19,7 +19,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(404)
     })
 
-    test('creates a CaseNotFoundError with null case ID', () => {
+    it('creates a CaseNotFoundError with null case ID', () => {
       const caseId = null
       const error = new CaseNotFoundError(caseId)
 
@@ -30,7 +30,7 @@ describe('Case Errors', () => {
   })
 
   describe('InvalidCaseStateError', () => {
-    test('creates an InvalidCaseStateError with correct properties', () => {
+    it('creates an InvalidCaseStateError with correct properties', () => {
       const message = 'Case is in an invalid state for this operation'
       const error = new InvalidCaseStateError(message)
 
@@ -43,7 +43,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(400)
     })
 
-    test('creates an InvalidCaseStateError with different message', () => {
+    it('creates an InvalidCaseStateError with different message', () => {
       const message = 'Cannot transition from current stage to target stage'
       const error = new InvalidCaseStateError(message)
 
@@ -54,7 +54,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(400)
     })
 
-    test('creates an InvalidCaseStateError with empty message', () => {
+    it('creates an InvalidCaseStateError with empty message', () => {
       const message = ''
       const error = new InvalidCaseStateError(message)
 
@@ -65,7 +65,7 @@ describe('Case Errors', () => {
   })
 
   describe('CaseRepositoryError', () => {
-    test('creates a CaseRepositoryError with correct properties', () => {
+    it('creates a CaseRepositoryError with correct properties', () => {
       const message = 'Database connection failed'
       const error = new CaseRepositoryError(message)
 
@@ -76,7 +76,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(500)
     })
 
-    test('creates a CaseRepositoryError with different message', () => {
+    it('creates a CaseRepositoryError with different message', () => {
       const message = 'Failed to retrieve case from repository'
       const error = new CaseRepositoryError(message)
 
@@ -85,7 +85,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(500)
     })
 
-    test('creates a CaseRepositoryError with null message', () => {
+    it('creates a CaseRepositoryError with null message', () => {
       const message = null
       const error = new CaseRepositoryError(message)
 
@@ -96,7 +96,7 @@ describe('Case Errors', () => {
   })
 
   describe('CaseUpdateError', () => {
-    test('creates a CaseUpdateError with correct properties', () => {
+    it('creates a CaseUpdateError with correct properties', () => {
       const message = 'Failed to update case in database'
       const error = new CaseUpdateError(message)
 
@@ -107,7 +107,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(500)
     })
 
-    test('creates a CaseUpdateError with different message', () => {
+    it('creates a CaseUpdateError with different message', () => {
       const message = 'Validation failed during case update'
       const error = new CaseUpdateError(message)
 
@@ -116,7 +116,7 @@ describe('Case Errors', () => {
       expect(error.statusCode).toBe(500)
     })
 
-    test('creates a CaseUpdateError with undefined message', () => {
+    it('creates a CaseUpdateError with undefined message', () => {
       const message = undefined
       const error = new CaseUpdateError(message)
 
@@ -127,7 +127,7 @@ describe('Case Errors', () => {
   })
 
   describe('Error inheritance', () => {
-    test('all custom errors inherit from Error', () => {
+    it('all custom errors inherit from Error', () => {
       const caseNotFoundError = new CaseNotFoundError('test-id')
       const invalidCaseStateError = new InvalidCaseStateError('test message')
       const caseRepositoryError = new CaseRepositoryError('test message')
@@ -139,7 +139,7 @@ describe('Case Errors', () => {
       expect(caseUpdateError).toBeInstanceOf(Error)
     })
 
-    test('all custom errors have stack traces', () => {
+    it('all custom errors have stack traces', () => {
       const caseNotFoundError = new CaseNotFoundError('test-id')
       const invalidCaseStateError = new InvalidCaseStateError('test message')
       const caseRepositoryError = new CaseRepositoryError('test message')

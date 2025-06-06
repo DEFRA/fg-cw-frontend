@@ -1,10 +1,10 @@
 import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
-import { findAllCasesUseCase } from './find-all-cases.js'
+import { findAllCasesUseCase } from './find-all-cases.use-case.js'
 
 // Mock dependencies
 const mockFindAll = vi.hoisted(() => vi.fn())
 
-vi.mock('../repositories/case-repository.js', () => ({
+vi.mock('../repositories/case.repository.js', () => ({
   findAll: mockFindAll
 }))
 

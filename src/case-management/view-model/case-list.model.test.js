@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import {
   transformCasesForList,
   createCaseListViewModel
@@ -14,7 +14,7 @@ describe('case-list.model', () => {
   })
 
   describe('transformCasesForList', () => {
-    test('transforms multiple cases correctly', () => {
+    it('transforms multiple cases correctly', () => {
       const mockCases = [
         {
           _id: 'case-1',
@@ -67,7 +67,7 @@ describe('case-list.model', () => {
       })
     })
 
-    test('transforms empty cases array', () => {
+    it('transforms empty cases array', () => {
       const mockCases = []
 
       const result = transformCasesForList(mockCases)
@@ -77,7 +77,7 @@ describe('case-list.model', () => {
       })
     })
 
-    test('transforms single case correctly', () => {
+    it('transforms single case correctly', () => {
       const mockCases = [
         {
           _id: 'case-single',
@@ -103,7 +103,7 @@ describe('case-list.model', () => {
       })
     })
 
-    test('generates correct case links', () => {
+    it('generates correct case links', () => {
       const mockCases = [
         {
           _id: 'case-link-1',
@@ -131,7 +131,7 @@ describe('case-list.model', () => {
   })
 
   describe('createCaseListViewModel', () => {
-    test('creates complete view model with cases', () => {
+    it('creates complete view model with cases', () => {
       const mockCases = [
         {
           _id: 'case-vm-1',
@@ -182,7 +182,7 @@ describe('case-list.model', () => {
       })
     })
 
-    test('creates view model with empty cases', () => {
+    it('creates view model with empty cases', () => {
       const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
@@ -197,7 +197,7 @@ describe('case-list.model', () => {
       })
     })
 
-    test('creates view model with single case', () => {
+    it('creates view model with single case', () => {
       const mockCases = [
         {
           _id: 'case-single-vm',
@@ -217,7 +217,7 @@ describe('case-list.model', () => {
       expect(result.heading).toBe('Cases')
     })
 
-    test('has consistent page title and heading', () => {
+    it('has consistent page title and heading', () => {
       const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
@@ -227,7 +227,7 @@ describe('case-list.model', () => {
       expect(result.pageTitle).toBe(result.heading)
     })
 
-    test('has empty breadcrumbs array', () => {
+    it('has empty breadcrumbs array', () => {
       const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
@@ -236,7 +236,7 @@ describe('case-list.model', () => {
       expect(Array.isArray(result.breadcrumbs)).toBe(true)
     })
 
-    test('calls transformCasesForList internally', () => {
+    it('calls transformCasesForList internally', () => {
       const mockCases = [
         {
           _id: 'case-transform',

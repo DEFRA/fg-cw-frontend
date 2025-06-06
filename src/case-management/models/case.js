@@ -17,7 +17,7 @@ export class Case {
     this.workflowCode = workflowCode
     this.currentStage = currentStage
     this.stages = stages
-    this.createdAt = createdAt ?? new Date().toISOString()
+    this.createdAt = createdAt
     this.submittedAt = submittedAt
     this.status = status
     this.assignedUser = assignedUser

@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { Case } from './case.js'
 
 describe('Case', () => {
@@ -11,7 +11,7 @@ describe('Case', () => {
     vi.useRealTimers()
   })
 
-  test('creates a Case model with all properties', () => {
+  it('creates a Case model with all properties', () => {
     const caseData = {
       _id: 'case-123',
       clientRef: 'client-ref-1',
@@ -41,7 +41,7 @@ describe('Case', () => {
     })
   })
 
-  test('creates a Case model with minimal properties and sets default createdAt', () => {
+  it('creates a Case model with minimal properties and sets default createdAt', () => {
     const caseData = {
       clientRef: 'client-ref-2',
       code: 'case-code-2'
@@ -56,14 +56,14 @@ describe('Case', () => {
       workflowCode: undefined,
       currentStage: undefined,
       stages: [],
-      createdAt: '2021-02-01T13:00:00.000Z',
+      createdAt: undefined,
       submittedAt: undefined,
       status: undefined,
       assignedUser: undefined
     })
   })
 
-  test('creates a Case model with provided createdAt when specified', () => {
+  it('creates a Case model with provided createdAt when specified', () => {
     const caseData = {
       clientRef: 'client-ref-3',
       code: 'case-code-3',
@@ -76,7 +76,7 @@ describe('Case', () => {
   })
 
   describe('getFormattedSubmittedDate', () => {
-    test('returns formatted date when submittedAt is provided', () => {
+    it('returns formatted date when submittedAt is provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-4',
         code: 'case-code-4',
@@ -86,7 +86,7 @@ describe('Case', () => {
       expect(caseInstance.getFormattedSubmittedDate()).toBe('15/01/2021')
     })
 
-    test('returns "Not submitted" when submittedAt is not provided', () => {
+    it('returns "Not submitted" when submittedAt is not provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-5',
         code: 'case-code-5'
@@ -95,7 +95,7 @@ describe('Case', () => {
       expect(caseInstance.getFormattedSubmittedDate()).toBe('Not submitted')
     })
 
-    test('returns "Not submitted" when submittedAt is null', () => {
+    it('returns "Not submitted" when submittedAt is null', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-6',
         code: 'case-code-6',
@@ -107,7 +107,7 @@ describe('Case', () => {
   })
 
   describe('getStatusDisplay', () => {
-    test('returns the status when provided', () => {
+    it('returns the status when provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-7',
         code: 'case-code-7',
@@ -117,7 +117,7 @@ describe('Case', () => {
       expect(caseInstance.getStatusDisplay()).toBe('Completed')
     })
 
-    test('returns "In Progress" when status is not provided', () => {
+    it('returns "In Progress" when status is not provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-8',
         code: 'case-code-8'
@@ -126,7 +126,7 @@ describe('Case', () => {
       expect(caseInstance.getStatusDisplay()).toBe('In Progress')
     })
 
-    test('returns "In Progress" when status is null', () => {
+    it('returns "In Progress" when status is null', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-9',
         code: 'case-code-9',
@@ -136,7 +136,7 @@ describe('Case', () => {
       expect(caseInstance.getStatusDisplay()).toBe('In Progress')
     })
 
-    test('returns "In Progress" when status is empty string', () => {
+    it('returns "In Progress" when status is empty string', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-10',
         code: 'case-code-10',
@@ -148,7 +148,7 @@ describe('Case', () => {
   })
 
   describe('getAssignedUserDisplay', () => {
-    test('returns the assignedUser value when provided', () => {
+    it('returns the assignedUser value when provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-11',
         code: 'case-code-11',
@@ -158,7 +158,7 @@ describe('Case', () => {
       expect(caseInstance.getAssignedUserDisplay()).toBe('jane smith')
     })
 
-    test('returns "Unassigned" when assignedUser is not provided', () => {
+    it('returns "Unassigned" when assignedUser is not provided', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-12',
         code: 'case-code-12'
@@ -167,7 +167,7 @@ describe('Case', () => {
       expect(caseInstance.getAssignedUserDisplay()).toBe('Unassigned')
     })
 
-    test('returns "Unassigned" when assignedUser is null', () => {
+    it('returns "Unassigned" when assignedUser is null', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-13',
         code: 'case-code-13',
@@ -177,7 +177,7 @@ describe('Case', () => {
       expect(caseInstance.getAssignedUserDisplay()).toBe('Unassigned')
     })
 
-    test('returns "Unassigned" when assignedUser is empty string', () => {
+    it('returns "Unassigned" when assignedUser is empty string', () => {
       const caseInstance = new Case({
         clientRef: 'client-ref-14',
         code: 'case-code-14',

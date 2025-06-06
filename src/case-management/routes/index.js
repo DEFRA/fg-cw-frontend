@@ -1,4 +1,4 @@
-import { caseController } from './case-controller.js'
+import { caseController } from './case.controller.js'
 
 export const caseManagement = {
   plugin: {
