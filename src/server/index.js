@@ -3,7 +3,7 @@ import hapi from '@hapi/hapi'
 
 import { config } from '../config/config.js'
 import { nunjucksConfig } from '../config/nunjucks/nunjucks.js'
-import { router } from './router.js'
+import { router } from '../router.js'
 import { requestLogger } from './common/helpers/logging/request-logger.js'
 import { catchAll } from './common/helpers/errors.js'
 import { secureContext } from './common/helpers/secure-context/index.js'
@@ -59,7 +59,7 @@ export async function createServer() {
     pulse,
     sessionCache,
     nunjucksConfig,
-    router // Register all the controllers/routes defined in src/server/router.js
+    router // Register all the controllers/routes defined in src/router.js
   ])
 
   server.ext('onPreResponse', catchAll)

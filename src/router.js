@@ -1,8 +1,8 @@
 import inert from '@hapi/inert'
 
 import { health } from './health/index.js'
-import { serveStaticFiles } from './common/helpers/serve-static-files.js'
-import { cases } from './cases/index.js'
+import { serveStaticFiles } from './server/common/helpers/serve-static-files.js'
+import { caseManagement } from './case-management/routes/index.js'
 
 export const router = {
   plugin: {
@@ -13,8 +13,8 @@ export const router = {
       // Health-check route. Used by platform to check if service is running, do not remove!
       await server.register([health])
 
-      // Application specific routes
-      await server.register([cases])
+      // Domain specific routes
+      await server.register([caseManagement])
 
       // Add a redirect from root to cases
       server.route({

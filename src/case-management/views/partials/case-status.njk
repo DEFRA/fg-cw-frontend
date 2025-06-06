@@ -1,0 +1,17 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% set priorityClass = 'govuk-tag--grey' %}
+{%- if status == "NEW" %}
+  {% set priorityClass = 'govuk-tag--blue' %}
+{%- elif status == "IN PROGRESS" -%}
+  {% set priorityClass = 'govuk-tag--yellow' %}
+{%- elif status == "APPROVED" -%}
+  {% set priorityClass = 'govuk-tag--green' %}
+{%- endif -%}
+
+{{
+  govukTag({
+    text: status | capitalize,
+    classes: priorityClass
+  })
+}}
