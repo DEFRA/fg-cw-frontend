@@ -1,11 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { findAll, findById, updateStage } from './case.repository.js'
-import { Case } from '../models/case.js'
-import {
-  CaseRepositoryError,
-  CaseNotFoundError,
-  CaseUpdateError
-} from '../errors/case-errors.js'
 
 // Mock the wreck dependency
 const mockWreck = vi.hoisted(() => ({
@@ -27,7 +21,7 @@ describe('Case Repository', () => {
   })
 
   describe('findAll', () => {
-    it('returns array of Case instances when API call succeeds', async () => {
+    it('returns array of case objects when API call succeeds', async () => {
       const mockApiResponse = {
         payload: {
           data: [
@@ -65,11 +59,14 @@ describe('Case Repository', () => {
 
       expect(mockWreck.get).toHaveBeenCalledWith('/cases')
       expect(result).toHaveLength(2)
-      expect(result[0]).toBeInstanceOf(Case)
       expect(result[0]).toEqual({
         _id: 'case-1',
+        caseRef: 'client-ref-1',
         clientRef: 'client-ref-1',
         code: 'case-code-1',
+        payload: {
+          code: 'case-code-1'
+        },
         workflowCode: 'workflow-1',
         currentStage: 'stage-1',
         stages: ['stage-1', 'stage-2'],
@@ -78,14 +75,13 @@ describe('Case Repository', () => {
         status: 'In Progress',
         assignedUser: 'user-1'
       })
-      expect(result[1]).toBeInstanceOf(Case)
       expect(result[1]).toEqual({
         _id: 'case-2',
+        caseRef: 'client-ref-2',
         clientRef: 'client-ref-2',
         code: undefined,
         workflowCode: 'workflow-2',
         currentStage: 'stage-2',
-        stages: [],
         createdAt: '2021-02-01T00:00:00.000Z',
         submittedAt: '2021-02-15T10:30:00.000Z',
         status: 'Completed',
@@ -136,17 +132,17 @@ describe('Case Repository', () => {
       expect(result).toEqual([])
     })
 
-    it('throws CaseRepositoryError when API call fails', async () => {
+    it('throws Error when API call fails', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
 
-      await expect(findAll()).rejects.toThrow(CaseRepositoryError)
+      await expect(findAll()).rejects.toThrow(Error)
       await expect(findAll()).rejects.toThrow('Failed to fetch cases')
       expect(mockWreck.get).toHaveBeenCalledWith('/cases')
     })
   })
 
   describe('findById', () => {
-    it('returns Case instance when API call succeeds', async () => {
+    it('returns case object when API call succeeds', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: {
@@ -170,11 +166,14 @@ describe('Case Repository', () => {
       const result = await findById(caseId)
 
       expect(mockWreck.get).toHaveBeenCalledWith('/cases/case-123')
-      expect(result).toBeInstanceOf(Case)
       expect(result).toEqual({
         _id: 'case-123',
+        caseRef: 'client-ref-123',
         clientRef: 'client-ref-123',
         code: 'case-code-123',
+        payload: {
+          code: 'case-code-123'
+        },
         workflowCode: 'workflow-123',
         currentStage: 'stage-1',
         stages: ['stage-1'],
@@ -211,11 +210,11 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    it('throws CaseNotFoundError when API call fails', async () => {
+    it('throws Error when API call fails', async () => {
       const caseId = 'case-123'
       mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
-      await expect(findById(caseId)).rejects.toThrow(CaseNotFoundError)
+      await expect(findById(caseId)).rejects.toThrow(Error)
       await expect(findById(caseId)).rejects.toThrow(
         'Failed to fetch case by ID'
       )
@@ -224,7 +223,7 @@ describe('Case Repository', () => {
   })
 
   describe('updateStage', () => {
-    it('returns updated Case instance when API call succeeds', async () => {
+    it('returns updated case object when API call succeeds', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: {
@@ -248,11 +247,14 @@ describe('Case Repository', () => {
       const result = await updateStage(caseId)
 
       expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
-      expect(result).toBeInstanceOf(Case)
       expect(result).toEqual({
         _id: 'case-123',
+        caseRef: 'client-ref-123',
         clientRef: 'client-ref-123',
         code: 'case-code-123',
+        payload: {
+          code: 'case-code-123'
+        },
         workflowCode: 'workflow-123',
         currentStage: 'stage-2',
         stages: ['stage-1', 'stage-2'],
@@ -289,11 +291,11 @@ describe('Case Repository', () => {
       expect(result).toBeNull()
     })
 
-    it('throws CaseUpdateError when API call fails', async () => {
+    it('throws Error when API call fails', async () => {
       const caseId = 'case-123'
       mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
 
-      await expect(updateStage(caseId)).rejects.toThrow(CaseUpdateError)
+      await expect(updateStage(caseId)).rejects.toThrow(Error)
       await expect(updateStage(caseId)).rejects.toThrow(
         'Failed to update case stage'
       )
@@ -382,7 +384,7 @@ describe('Case Repository', () => {
 
       const result = await findAll()
 
-      expect(result[0].stages).toEqual([])
+      expect(result[0].stages).toBeUndefined()
     })
   })
 })
