@@ -1,3 +1,5 @@
+import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
+
 // TODO: Add case detail view model - Placeholder for now
 export const createCaseDetailViewModel = (caseItem) => {
   return {
@@ -12,9 +14,9 @@ export const createCaseDetailViewModel = (caseItem) => {
         _id: caseItem._id,
         clientRef: caseItem.clientRef,
         code: caseItem.code,
-        submittedDate: caseItem.getFormattedSubmittedDate(),
-        status: caseItem.getStatusDisplay(),
-        assignedUser: caseItem.getAssignedUserDisplay(),
+        submittedAt: getFormattedGBDate(caseItem.submittedAt),
+        status: caseItem.status,
+        assignedUser: caseItem.assignedUser,
         stages: caseItem.stages,
         currentStage: caseItem.currentStage
       }

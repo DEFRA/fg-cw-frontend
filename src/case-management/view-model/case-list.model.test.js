@@ -3,6 +3,12 @@ import {
   transformCasesForList,
   createCaseListViewModel
 } from './case-list.model.js'
+import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
+
+// Mock the date helper
+vi.mock('../../common/helpers/date-helpers.js', () => ({
+  getFormattedGBDate: vi.fn()
+}))
 
 describe('case-list.model', () => {
   beforeEach(() => {
@@ -18,40 +24,46 @@ describe('case-list.model', () => {
       const mockCases = [
         {
           _id: 'case-1',
-          clientRef: 'CLIENT-001',
-          code: 'CODE-001',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('15/01/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('In Progress'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('john doe')
+          payload: {
+            clientRef: 'CLIENT-001',
+            code: 'CODE-001',
+            submittedAt: '2021-01-15T00:00:00.000Z'
+          },
+          status: 'In Progress',
+          assignedUser: 'john doe'
         },
         {
           _id: 'case-2',
-          clientRef: 'CLIENT-002',
-          code: 'CODE-002',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('20/02/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Completed'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('jane smith')
+          payload: {
+            clientRef: 'CLIENT-002',
+            code: 'CODE-002',
+            submittedAt: '2021-02-20T00:00:00.000Z'
+          },
+          status: 'Completed',
+          assignedUser: 'jane smith'
         }
       ]
+
+      getFormattedGBDate
+        .mockReturnValueOnce('15/01/2021')
+        .mockReturnValueOnce('20/02/2021')
 
       const result = transformCasesForList(mockCases)
 
       expect(result).toEqual({
         allCases: [
           {
-            _id: 'case-1',
             clientRef: 'CLIENT-001',
             code: 'CODE-001',
-            submittedDate: '15/01/2021',
+            submittedAt: '15/01/2021',
             status: 'In Progress',
             assignedUser: 'john doe',
             link: '/case/case-1'
           },
           {
-            _id: 'case-2',
             clientRef: 'CLIENT-002',
             code: 'CODE-002',
-            submittedDate: '20/02/2021',
+            submittedAt: '20/02/2021',
             status: 'Completed',
             assignedUser: 'jane smith',
             link: '/case/case-2'
@@ -59,12 +71,13 @@ describe('case-list.model', () => {
         ]
       })
 
-      // Verify all methods were called
-      mockCases.forEach((mockCase) => {
-        expect(mockCase.getFormattedSubmittedDate).toHaveBeenCalledOnce()
-        expect(mockCase.getStatusDisplay).toHaveBeenCalledOnce()
-        expect(mockCase.getAssignedUserDisplay).toHaveBeenCalledOnce()
-      })
+      expect(getFormattedGBDate).toHaveBeenCalledWith(
+        '2021-01-15T00:00:00.000Z'
+      )
+      expect(getFormattedGBDate).toHaveBeenCalledWith(
+        '2021-02-20T00:00:00.000Z'
+      )
+      expect(getFormattedGBDate).toHaveBeenCalledTimes(2)
     })
 
     it('transforms empty cases array', () => {
@@ -75,53 +88,68 @@ describe('case-list.model', () => {
       expect(result).toEqual({
         allCases: []
       })
+
+      expect(getFormattedGBDate).not.toHaveBeenCalled()
     })
 
     it('transforms single case correctly', () => {
       const mockCases = [
         {
           _id: 'case-single',
-          clientRef: 'SINGLE-001',
-          code: 'SINGLE-CODE',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('Not submitted'),
-          getStatusDisplay: vi.fn().mockReturnValue('Draft'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('Unassigned')
+          payload: {
+            clientRef: 'SINGLE-001',
+            code: 'SINGLE-CODE',
+            submittedAt: null
+          },
+          status: 'Draft',
+          assignedUser: 'Unassigned'
         }
       ]
+
+      getFormattedGBDate.mockReturnValue('Not submitted')
 
       const result = transformCasesForList(mockCases)
 
       expect(result.allCases).toHaveLength(1)
       expect(result.allCases[0]).toEqual({
-        _id: 'case-single',
         clientRef: 'SINGLE-001',
         code: 'SINGLE-CODE',
-        submittedDate: 'Not submitted',
+        submittedAt: 'Not submitted',
         status: 'Draft',
         assignedUser: 'Unassigned',
         link: '/case/case-single'
       })
+
+      expect(getFormattedGBDate).toHaveBeenCalledWith(null)
     })
 
     it('generates correct case links', () => {
       const mockCases = [
         {
           _id: 'case-link-1',
-          clientRef: 'LINK-001',
-          code: 'LINK-CODE-1',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('01/01/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Active'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('user1')
+          payload: {
+            clientRef: 'LINK-001',
+            code: 'LINK-CODE-1',
+            submittedAt: '2021-01-01T00:00:00.000Z'
+          },
+          status: 'Active',
+          assignedUser: 'user1'
         },
         {
           _id: 'case-link-2',
-          clientRef: 'LINK-002',
-          code: 'LINK-CODE-2',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('02/01/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Active'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('user2')
+          payload: {
+            clientRef: 'LINK-002',
+            code: 'LINK-CODE-2',
+            submittedAt: '2021-01-02T00:00:00.000Z'
+          },
+          status: 'Active',
+          assignedUser: 'user2'
         }
       ]
+
+      getFormattedGBDate
+        .mockReturnValueOnce('01/01/2021')
+        .mockReturnValueOnce('02/01/2021')
 
       const result = transformCasesForList(mockCases)
 
@@ -135,21 +163,29 @@ describe('case-list.model', () => {
       const mockCases = [
         {
           _id: 'case-vm-1',
-          clientRef: 'VM-001',
-          code: 'VM-CODE-1',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('10/03/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Review'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('reviewer1')
+          payload: {
+            clientRef: 'VM-001',
+            code: 'VM-CODE-1',
+            submittedAt: '2021-03-10T00:00:00.000Z'
+          },
+          status: 'Review',
+          assignedUser: 'reviewer1'
         },
         {
           _id: 'case-vm-2',
-          clientRef: 'VM-002',
-          code: 'VM-CODE-2',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('15/03/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Approved'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('approver1')
+          payload: {
+            clientRef: 'VM-002',
+            code: 'VM-CODE-2',
+            submittedAt: '2021-03-15T00:00:00.000Z'
+          },
+          status: 'Approved',
+          assignedUser: 'approver1'
         }
       ]
+
+      getFormattedGBDate
+        .mockReturnValueOnce('10/03/2021')
+        .mockReturnValueOnce('15/03/2021')
 
       const result = createCaseListViewModel(mockCases)
 
@@ -160,19 +196,17 @@ describe('case-list.model', () => {
         data: {
           allCases: [
             {
-              _id: 'case-vm-1',
               clientRef: 'VM-001',
               code: 'VM-CODE-1',
-              submittedDate: '10/03/2021',
+              submittedAt: '10/03/2021',
               status: 'Review',
               assignedUser: 'reviewer1',
               link: '/case/case-vm-1'
             },
             {
-              _id: 'case-vm-2',
               clientRef: 'VM-002',
               code: 'VM-CODE-2',
-              submittedDate: '15/03/2021',
+              submittedAt: '15/03/2021',
               status: 'Approved',
               assignedUser: 'approver1',
               link: '/case/case-vm-2'
@@ -195,19 +229,25 @@ describe('case-list.model', () => {
           allCases: []
         }
       })
+
+      expect(getFormattedGBDate).not.toHaveBeenCalled()
     })
 
     it('creates view model with single case', () => {
       const mockCases = [
         {
           _id: 'case-single-vm',
-          clientRef: 'SINGLE-VM-001',
-          code: 'SINGLE-VM-CODE',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('25/04/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Pending'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('pending user')
+          payload: {
+            clientRef: 'SINGLE-VM-001',
+            code: 'SINGLE-VM-CODE',
+            submittedAt: '2021-04-25T00:00:00.000Z'
+          },
+          status: 'Pending',
+          assignedUser: 'pending user'
         }
       ]
+
+      getFormattedGBDate.mockReturnValue('25/04/2021')
 
       const result = createCaseListViewModel(mockCases)
 
@@ -240,13 +280,17 @@ describe('case-list.model', () => {
       const mockCases = [
         {
           _id: 'case-transform',
-          clientRef: 'TRANSFORM-001',
-          code: 'TRANSFORM-CODE',
-          getFormattedSubmittedDate: vi.fn().mockReturnValue('01/05/2021'),
-          getStatusDisplay: vi.fn().mockReturnValue('Processing'),
-          getAssignedUserDisplay: vi.fn().mockReturnValue('processor')
+          payload: {
+            clientRef: 'TRANSFORM-001',
+            code: 'TRANSFORM-CODE',
+            submittedAt: '2021-05-01T00:00:00.000Z'
+          },
+          status: 'Processing',
+          assignedUser: 'processor'
         }
       ]
+
+      getFormattedGBDate.mockReturnValue('01/05/2021')
 
       const result = createCaseListViewModel(mockCases)
 

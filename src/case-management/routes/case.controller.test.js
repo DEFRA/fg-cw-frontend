@@ -78,7 +78,7 @@ describe('Case Controller', () => {
           id: c._id,
           clientRef: c.clientRef,
           status: c.status,
-          submittedDate: c.getFormattedSubmittedDate?.() || 'Not submitted',
+          submittedAt: c.submittedAt || 'Not submitted',
           assignedUser: c.assignedUser || 'Unassigned'
         }))
       }
@@ -143,7 +143,7 @@ describe('Case Controller', () => {
             id: 'case-single',
             clientRef: 'client-ref-single',
             status: 'Active',
-            submittedDate: '15/01/2021',
+            submittedAt: '15/01/2021',
             assignedUser: 'user-single'
           }
         ]

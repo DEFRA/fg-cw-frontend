@@ -1,12 +1,12 @@
+import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 export const transformCasesForList = (cases) => {
   return {
     allCases: cases.map((caseItem) => ({
-      _id: caseItem._id,
-      clientRef: caseItem.clientRef,
-      code: caseItem.code,
-      submittedDate: caseItem.getFormattedSubmittedDate(),
-      status: caseItem.getStatusDisplay(),
-      assignedUser: caseItem.getAssignedUserDisplay(),
+      clientRef: caseItem.payload.clientRef,
+      code: caseItem.payload.code,
+      submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
+      status: caseItem.status,
+      assignedUser: caseItem.assignedUser,
       link: `/case/${caseItem._id}`
     }))
   }
