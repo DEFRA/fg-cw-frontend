@@ -7,5 +7,9 @@ process.on('unhandledRejection', (error) => {
   process.exitCode = 1
 })
 
-const server = await createServer()
-await server.start()
+const main = async () => {
+  const server = await createServer()
+  await server.start()
+}
+
+main()

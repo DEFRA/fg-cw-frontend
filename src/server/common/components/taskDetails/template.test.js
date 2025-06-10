@@ -8,6 +8,14 @@ describe('Task Details', () => {
     caseId: '123',
     groupId: 'group1',
     taskId: 'task1',
+    currentTask: {
+      id: 'task1',
+      title: 'Test Task',
+      description: 'hello',
+      status: 'not started',
+      link: '/case/123/task/1',
+      type: 'boolean'
+    },
     groups: [
       {
         id: 'group1',
@@ -42,7 +50,7 @@ describe('Task Details', () => {
     test('Should render checkbox for boolean task type', () => {
       expect($taskDetails('.govuk-checkboxes')).toHaveLength(1)
       expect($taskDetails('.govuk-checkboxes__label').text().trim()).toBe(
-        'Is application ready to be reviewed?'
+        'hello'
       )
     })
 
@@ -52,7 +60,6 @@ describe('Task Details', () => {
       )
       expect(saveButton).toHaveLength(1)
       expect(saveButton.text().trim()).toBe('Save and continue')
-      expect(saveButton.attr('href')).toBe('/case/123')
     })
   })
 })

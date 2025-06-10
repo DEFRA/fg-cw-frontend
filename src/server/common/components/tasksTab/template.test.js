@@ -8,6 +8,13 @@ describe('Tasks Tab', () => {
     caseId: '123',
     taskId: 'task1',
     groupId: 'group1',
+    currentTask: {
+      id: 'task1',
+      title: 'Task 1',
+      description: 'hello',
+      status: 'not started',
+      link: '/case/123/task/1'
+    },
     stage: {
       title: 'Test Stage',
       groups: [
@@ -18,6 +25,7 @@ describe('Tasks Tab', () => {
             {
               id: 'task1',
               title: 'Task 1',
+              description: 'hello',
               status: 'not started',
               link: '/case/123/task/1'
             }

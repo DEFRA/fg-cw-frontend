@@ -1,0 +1,35 @@
+{% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+<form
+  method="post"
+  id="taskCompleteForm"
+  action="{{ "/case/" + params.caseId + "/tasks/" + params.groupId + "/" + params.taskId }}"
+>
+  <div class="govuk-form-group">
+    {{
+      govukCheckboxes({
+        name: "isComplete",
+        items: [
+          {
+            value: true,
+            id: "task-" + params.taskId,
+            text: params.description,
+            checked: params.isComplete
+          }
+        ]
+      })
+    }}
+  </div>
+  <div class="govuk-button-group">
+    <input type="hidden" name="taskId" value="{{ params.taskId }}" />
+    <button
+      type="submit"
+      data-prevent-double-click="true"
+      data-testid="save-and-continue-button"
+      class="govuk-button"
+      data-module="govuk-button"
+      data-govuk-button-init=""
+    >
+      Save and continue
+    </button>
+  </div>
+</form>
