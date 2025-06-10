@@ -2,7 +2,6 @@ import { getTraceId } from '@defra/hapi-tracing'
 import { ecsFormat } from '@elastic/ecs-pino-format'
 import { pino } from 'pino'
 import { config } from './config.js'
-import { getTraceParent } from './trace-parent.js'
 
 const level = config.get('log.level')
 const format = {
@@ -32,7 +31,7 @@ export const logger = pino({
   mixin() {
     const mixinValues = {}
 
-    const id = getTraceId() ?? getTraceParent()
+    const id = getTraceId()
 
     if (id) {
       mixinValues.trace = {

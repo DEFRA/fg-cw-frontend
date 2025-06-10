@@ -4,7 +4,6 @@ import Inert from '@hapi/inert'
 import Vision from '@hapi/vision'
 import hapiPino from 'hapi-pino'
 import hapiPulse from 'hapi-pulse'
-import HapiSwagger from 'hapi-swagger'
 import { cases } from './case-management/index.js'
 import { config } from './common/config.js'
 import { logger } from './common/logger.js'
@@ -64,16 +63,7 @@ export const createServer = async () => {
     },
     Inert,
     Vision,
-    nunjucksConfig,
-    {
-      plugin: HapiSwagger,
-      options: {
-        info: {
-          title: 'Case Working UI',
-          version: config.get('serviceVersion')
-        }
-      }
-    }
+    nunjucksConfig
   ])
 
   await server.register([health, cases])

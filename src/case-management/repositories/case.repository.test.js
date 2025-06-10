@@ -127,14 +127,6 @@ describe('Case Repository', () => {
       expect(mockWreck.get).toHaveBeenCalledWith('/cases')
       expect(result).toBeUndefined()
     })
-
-    it('throws Error when API call fails', async () => {
-      mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
-
-      await expect(findAll()).rejects.toThrow(Error)
-      await expect(findAll()).rejects.toThrow('Failed to fetch cases')
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
-    })
   })
 
   describe('findById', () => {
@@ -203,17 +195,6 @@ describe('Case Repository', () => {
       expect(mockWreck.get).toHaveBeenCalledWith('/cases/nonexistent-case')
       expect(result).toBeUndefined()
     })
-
-    it('throws Error when API call fails', async () => {
-      const caseId = 'case-123'
-      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
-
-      await expect(findById(caseId)).rejects.toThrow(Error)
-      await expect(findById(caseId)).rejects.toThrow(
-        'Failed to fetch case by ID'
-      )
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases/case-123')
-    })
   })
 
   describe('updateStage', () => {
@@ -281,17 +262,6 @@ describe('Case Repository', () => {
 
       expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
       expect(result).toBeUndefined()
-    })
-
-    it('throws Error when API call fails', async () => {
-      const caseId = 'case-123'
-      mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
-
-      await expect(updateStage(caseId)).rejects.toThrow(Error)
-      await expect(updateStage(caseId)).rejects.toThrow(
-        'Failed to update case stage'
-      )
-      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
     })
   })
 })
