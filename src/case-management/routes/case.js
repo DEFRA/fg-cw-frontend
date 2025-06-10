@@ -1,9 +1,9 @@
-import { caseController } from './case.controller.js'
+import { caseController } from '../controller/case.controller.js'
 
-export const caseManagement = {
+export const casesRoutes = {
   plugin: {
     name: 'case-management',
-    register(server) {
+    async register(server) {
       server.route([
         {
           method: 'GET',
