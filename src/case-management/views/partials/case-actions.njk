@@ -1,0 +1,13 @@
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+<div class="app-case-actions">
+  {{
+    govukButton({
+      text: "View case",
+      href: "/case/" + caseId,
+      classes: "govuk-button--secondary"
+    })
+  }}
+
+  {# Future: Add more action buttons like assign, update stage, etc. #}
+</div>

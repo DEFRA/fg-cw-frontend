@@ -1,0 +1,10 @@
+{# 
+    tabLabel: <string>,
+    tabTestId: <string>,
+    tableHeaders: <array>,
+    data: <object>
+#}
+
+{% macro appCaseListTab(params) %}
+  {%- include "./case-tabs.template.njk" -%}
+{% endmacro %}

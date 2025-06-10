@@ -13,7 +13,9 @@ const nunjucksEnvironment = nunjucks.configure(
   [
     'node_modules/govuk-frontend/dist/',
     path.resolve(dirname, '../../server/common/templates'),
-    path.resolve(dirname, '../../server/common/components')
+    path.resolve(dirname, '../../server/common/components'),
+    path.resolve(dirname, '../../case-management/views'),
+    path.resolve(dirname, '../../common/presentation')
   ],
   {
     autoescape: true,
@@ -40,7 +42,7 @@ export const nunjucksConfig = {
       environment: nunjucksEnvironment
     },
     relativeTo: path.resolve(dirname, '../..'),
-    path: 'server',
+    path: ['server', 'case-management/views', 'common/presentation'],
     isCached: config.get('isProduction'),
     context
   }

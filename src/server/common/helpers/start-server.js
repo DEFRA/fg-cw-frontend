@@ -1,13 +1,11 @@
 import { config } from '../../../config/config.js'
 
-import { createServer } from '../../index.js'
 import { createLogger } from './logging/logger.js'
 
 async function startServer() {
   let server
 
   try {
-    server = await createServer()
     await server.start()
 
     server.logger.info('Server started successfully')
