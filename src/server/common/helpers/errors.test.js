@@ -1,20 +1,24 @@
-import { describe, it, vi, expect } from 'vitest'
+import { describe, it, vi, expect, beforeEach } from 'vitest'
 import { catchAll } from './errors.js'
 import { statusCodes } from '../constants/status-codes.js'
 
 describe('catchAll', () => {
-  const mockResponseToolkit = {
-    view: vi.fn().mockReturnThis(),
-    code: vi.fn().mockReturnThis(),
-    continue: Symbol('continue')
-  }
+  let mockResponseToolkit
+  let mockRequest
 
-  const mockRequest = {
-    logger: {
-      error: vi.fn(),
-      info: vi.fn()
+  beforeEach(() => {
+    mockResponseToolkit = {
+      view: vi.fn().mockReturnThis(),
+      code: vi.fn().mockReturnThis(),
+      continue: Symbol('continue')
     }
-  }
+    mockRequest = {
+      logger: {
+        error: vi.fn(),
+        info: vi.fn()
+      }
+    }
+  })
 
   it('should pass through if response is not Boom', () => {
     const requestWithNonBoomResponse = {

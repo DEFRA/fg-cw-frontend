@@ -1,24 +1,15 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import {
   transformCasesForList,
   createCaseListViewModel
 } from './case-list.model.js'
 import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 
-// Mock the date helper
 vi.mock('../../common/helpers/date-helpers.js', () => ({
   getFormattedGBDate: vi.fn()
 }))
 
 describe('case-list.model', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   describe('transformCasesForList', () => {
     it('transforms multiple cases correctly', () => {
       const mockCases = {
