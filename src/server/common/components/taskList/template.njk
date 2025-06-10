@@ -1,6 +1,7 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 
 {% if params.tasks.length > 0 %}
+  <a id="tasks"></a>
   <ul
     class="govuk-task-list govuk-!-margin-bottom-4"
     data-testid="taskList-list"
