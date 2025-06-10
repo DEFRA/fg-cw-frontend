@@ -1,0 +1,137 @@
+import { wreck } from '../../server/common/helpers/wreck.js'
+
+export const getProcessedCaseData = async (request) => {
+  const selectedCase = await getCaseById(request.params.id)
+  if (!selectedCase) {
+    throw new Error('Case not found')
+  }
+
+  const processedData = await processCaseWithWorkflow(selectedCase)
+  if (!processedData) {
+    throw new Error('Workflow not found')
+  }
+
+  return processedData
+}
+
+export const getCaseById = async (caseId) => {
+  try {
+    const { payload } = await wreck.get(`/cases/${caseId}`)
+    return payload
+  } catch (error) {
+    return null
+  }
+}
+
+export const getWorkflowByCode = async (workflowCode) => {
+  try {
+    const { payload } = await wreck.get(`/workflows/${workflowCode}`)
+    return payload
+  } catch {
+    return null
+  }
+}
+
+export const processCaseWithWorkflow = async (selectedCase) => {
+  if (!selectedCase) {
+    return null
+  }
+
+  const { workflowCode } = selectedCase
+  if (!workflowCode) {
+    return null
+  }
+
+  const workflow = await getWorkflowByCode(workflowCode)
+  if (!workflow) {
+    return null
+  }
+
+  // Add titles from workflow stages to selectedCase stages
+  selectedCase.stages = selectedCase.stages.map((stage) => {
+    const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
+
+    // Add title from workflow to the stage
+    const updatedStage = {
+      ...stage,
+      title: workflowStage?.title
+    }
+
+    // Add titles to task groups
+    if (stage.taskGroups && stage.taskGroups.length > 0) {
+      updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
+        const workflowTaskGroup = workflowStage?.taskGroups?.find(
+          (wtg) => wtg.id === taskGroup.id
+        )
+
+        // Add title to task group
+        const updatedTaskGroup = {
+          ...taskGroup,
+          title: workflowTaskGroup?.title,
+          description: workflowTaskGroup?.description
+        }
+
+        // Add titles to tasks
+        if (taskGroup.tasks && taskGroup.tasks.length > 0) {
+          updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
+            const workflowTask = workflowTaskGroup?.tasks?.find(
+              (wt) => wt.id === task.id
+            )
+            // Add title to task
+            return {
+              ...task,
+              title: workflowTask?.title,
+              description: workflowTask?.description,
+              type: workflowTask?.type
+            }
+          })
+        }
+
+        return updatedTaskGroup
+      })
+    }
+
+    if (workflowStage.actions) {
+      updatedStage.actions = workflowStage.actions
+    }
+
+    return updatedStage
+  })
+
+  const allStageTasks = []
+
+  // Create taskSteps from the updated selectedCase stages
+  const stages =
+    selectedCase.stages.map((stage) => ({
+      title: stage.title || stage.id,
+      actions: stage.actions,
+      groups: (stage.taskGroups || []).map((group) => ({
+        ...group,
+        tasks: (group.tasks || []).map((task) => {
+          if (stage.id === selectedCase.currentStage) {
+            allStageTasks.push(task)
+          }
+
+          return {
+            ...task,
+            link: `/case/${selectedCase._id}/tasks/${group.id}/${task.id}`,
+            status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
+          }
+        })
+      }))
+    })) || []
+
+  const tasksComplete = allStageTasks.every((t) => t.isComplete)
+
+  // Filter stages to only show the current stage
+  const currentStage = selectedCase.currentStage
+  const stageIndex = selectedCase.stages.findIndex(
+    (stage) => stage.id === currentStage
+  )
+  const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
+
+  return {
+    caseData: selectedCase,
+    stage: { ...filteredStage, tasksComplete }
+  }
+}

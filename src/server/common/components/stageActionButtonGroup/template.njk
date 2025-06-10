@@ -2,7 +2,7 @@
 
 <div class="govuk-button-group">
   {% for action in params.buttons %}
-    <form method="POST">
+    <form method="POST" id="updateStageForm">
       <button
         type="submit"
         data-prevent-double-click="true"
@@ -14,5 +14,17 @@
         {{ action.label }}
       </button>
     </form>
+    {# <script>
+      {
+        const form = document.getElementById("updateStageForm");
+        const valid = {{ params.tasksComplete }}
+        form.onsubmit = function(event) { 
+          if(!valid) { 
+            event.preventDefault(); 
+            return valid;  
+          }
+        }
+      }
+    </script> #}
   {% endfor %}
 </div>

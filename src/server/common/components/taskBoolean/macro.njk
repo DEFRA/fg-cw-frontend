@@ -1,0 +1,11 @@
+{# 
+    caseId: <string>,
+    groupId: <string>,
+    taskId: <string>,
+    description: <string>,
+    isComplete: <boolean>
+#}
+
+{% macro appTaskBoolean(params) %}
+  {%- include "./template.njk" -%}
+{% endmacro %}

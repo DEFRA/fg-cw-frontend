@@ -1,4 +1,4 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { casesController } from './controller.js'
 
 // Mock dependencies
@@ -50,7 +50,7 @@ describe('casesController', () => {
   })
 
   describe('handler (getCases)', () => {
-    test('Should return cases view with data when API call succeeds', async () => {
+    it('Should return cases view with data when API call succeeds', async () => {
       const mockCases = [
         { id: '1', name: 'Case 1' },
         { id: '2', name: 'Case 2' }
@@ -74,7 +74,7 @@ describe('casesController', () => {
       })
     })
 
-    test('Should return cases view with empty array when API call fails', async () => {
+    it('Should return cases view with empty array when API call fails', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
 
       const request = mockRequest()
@@ -127,7 +127,7 @@ describe('casesController', () => {
       ]
     }
 
-    test('Should return case view with processed data when case and workflow exist', async () => {
+    it('Should return case view with processed data when case and workflow exist', async () => {
       // Mock getCaseById
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
@@ -146,7 +146,8 @@ describe('casesController', () => {
       expect(mockWreck.get).toHaveBeenCalledWith('/cases/case123')
       expect(mockWreck.get).toHaveBeenCalledWith('/workflows/workflow1')
       expect(h.view).toHaveBeenCalledWith('cases/views/show', {
-        pageTitle: 'Case',
+        error: undefined,
+        pageTitle: 'Case details',
         caseData: expect.objectContaining({
           _id: 'case123',
           stages: expect.arrayContaining([
@@ -154,22 +155,27 @@ describe('casesController', () => {
               title: 'Stage 1 Title',
               actions: mockWorkflow.stages[0].actions
             })
-          ])
+          ]),
+          currentStage: 'stage1'
         }),
         stage: expect.objectContaining({
           title: 'Stage 1 Title',
           actions: mockWorkflow.stages[0].actions,
+          tasksComplete: false,
           groups: expect.arrayContaining([
             expect.objectContaining({
               id: 'group1',
               title: 'Group 1 Title',
+              description: undefined,
               tasks: expect.arrayContaining([
                 expect.objectContaining({
                   id: 'task1',
                   title: 'Task 1 Title',
                   type: 'form',
                   link: '/case/case123/tasks/group1/task1',
-                  status: 'INCOMPLETE'
+                  status: 'INCOMPLETE',
+                  isComplete: false,
+                  description: undefined
                 })
               ])
             })
@@ -179,7 +185,7 @@ describe('casesController', () => {
       })
     })
 
-    test('Should return 404 when case is not found', async () => {
+    it('Should return 404 when case is not found', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({ params: { id: 'nonexistent' } })
@@ -191,7 +197,7 @@ describe('casesController', () => {
       expect(h.code).toHaveBeenCalledWith(404)
     })
 
-    test('Should return 404 when workflow is not found', async () => {
+    it('Should return 404 when workflow is not found', async () => {
       // Mock getCaseById success
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
@@ -209,7 +215,7 @@ describe('casesController', () => {
       expect(h.code).toHaveBeenCalledWith(404)
     })
 
-    test('Should handle case without workflow code', async () => {
+    it('Should handle case without workflow code', async () => {
       const caseWithoutWorkflow = { ...mockCase, workflowCode: null }
 
       mockWreck.get.mockResolvedValueOnce({
@@ -225,7 +231,7 @@ describe('casesController', () => {
       expect(h.code).toHaveBeenCalledWith(404)
     })
 
-    test('Should include caseDetails tab query when path contains caseDetails', async () => {
+    it('Should include caseDetails tab query when path contains caseDetails', async () => {
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
@@ -250,7 +256,7 @@ describe('casesController', () => {
       )
     })
 
-    test('Should handle completed tasks correctly', async () => {
+    it('Should handle completed tasks correctly', async () => {
       const caseWithCompletedTask = {
         ...mockCase,
         stages: [
@@ -332,7 +338,7 @@ describe('casesController', () => {
       ]
     }
 
-    test('Should return task view with correct query parameters', async () => {
+    it('Should return task view with correct query parameters', async () => {
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
@@ -349,24 +355,15 @@ describe('casesController', () => {
       await casesController.showTask(request, h)
 
       expect(h.view).toHaveBeenCalledWith(
-        'cases/views/show',
+        'cases/views/stage',
         expect.objectContaining({
+          pageTitle: 'Case',
           query: { groupId: 'group1', taskId: 'task1' }
         })
       )
     })
 
-    test('Should return 400 when case ID is missing', async () => {
-      const request = mockRequest({ params: {} })
-      const h = mockResponseToolkit()
-
-      await casesController.showTask(request, h)
-
-      expect(h.response).toHaveBeenCalledWith('Case ID is required')
-      expect(h.code).toHaveBeenCalledWith(400)
-    })
-
-    test('Should return 404 when case is not found', async () => {
+    it('Should return 404 when case is not found', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({
@@ -416,7 +413,7 @@ describe('casesController', () => {
       ]
     }
 
-    test('Should update stage and return updated case view', async () => {
+    it('Should update stage and return updated case view', async () => {
       // Mock getCaseById
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
@@ -444,12 +441,12 @@ describe('casesController', () => {
 
       expect(mockWreck.post).toHaveBeenCalledWith('/cases/case123/stage')
       expect(h.view).toHaveBeenCalledWith(
-        'cases/views/show',
+        'cases/views/stage',
         expect.any(Object)
       )
     })
 
-    test('Should return 404 when case is not found', async () => {
+    it('Should return 404 when case is not found', async () => {
       mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({ params: { id: 'nonexistent' } })
@@ -461,14 +458,16 @@ describe('casesController', () => {
       expect(h.code).toHaveBeenCalledWith(404)
     })
 
-    test('Should handle updateStageAsync failure gracefully', async () => {
+    it('Should handle updateStageAsync failure gracefully', async () => {
       // Mock getCaseById success
       mockWreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock updateStageAsync failure
-      mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
+      mockWreck.post.mockRejectedValueOnce({
+        data: { payload: 'Could not update' }
+      })
 
       // Mock getCaseById for showCase
       mockWreck.get.mockResolvedValueOnce({
@@ -486,14 +485,14 @@ describe('casesController', () => {
       await casesController.updateStage(request, h)
 
       expect(h.view).toHaveBeenCalledWith(
-        'cases/views/show',
+        'cases/views/stage',
         expect.any(Object)
       )
     })
   })
 
   describe('Edge cases and error handling', () => {
-    test('Should handle case with no stages', async () => {
+    it('Should handle case with no stages', async () => {
       const caseWithoutStages = {
         _id: 'case123',
         workflowCode: 'workflow1',
@@ -527,12 +526,14 @@ describe('casesController', () => {
       expect(h.view).toHaveBeenCalledWith(
         'cases/views/show',
         expect.objectContaining({
-          stage: null
+          stage: {
+            tasksComplete: true
+          }
         })
       )
     })
 
-    test('Should handle case with stage not found in current stage', async () => {
+    it('Should handle case with stage not found in current stage', async () => {
       const caseWithMismatchedStage = {
         _id: 'case123',
         workflowCode: 'workflow1',
@@ -571,12 +572,14 @@ describe('casesController', () => {
       expect(h.view).toHaveBeenCalledWith(
         'cases/views/show',
         expect.objectContaining({
-          stage: null
+          stage: {
+            tasksComplete: true
+          }
         })
       )
     })
 
-    test('Should handle workflow stage without taskGroups', async () => {
+    it('Should handle workflow stage without taskGroups', async () => {
       const mockCase = {
         _id: 'case123',
         workflowCode: 'workflow1',

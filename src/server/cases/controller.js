@@ -1,5 +1,10 @@
 import { wreck } from '../common/helpers/wreck.js'
-
+import { updateTaskAsync } from '../../case-management/controller/update-task-async.js'
+import {
+  getCaseById,
+  getProcessedCaseData
+} from '../../case-management/controller/helpers.js'
+import { showStage } from '../../case-management/controller/show-stage.controller.js'
 const getCases = async () => {
   try {
     const { payload } = await wreck.get('/cases')
@@ -9,142 +14,30 @@ const getCases = async () => {
   }
 }
 
-const getCaseById = async (caseId) => {
-  try {
-    const { payload } = await wreck.get(`/cases/${caseId}`)
-    return payload
-  } catch (error) {
-    return null
-  }
-}
-
 const updateStageAsync = async (caseId) => {
   try {
     const { payload } = await wreck.post(`/cases/${caseId}/stage`)
     return payload
   } catch (e) {
-    return null
+    if (e.data?.payload) {
+      return { error: e.data.payload }
+    }
+    return { error: 'Update failed' }
   }
 }
 
-const getWorkflowByCode = async (workflowCode) => {
+const showCase = async (request, h, error) => {
+  let processedData
   try {
-    const { payload } = await wreck.get(`/workflows/${workflowCode}`)
-    return payload
-  } catch {
-    return null
-  }
-}
-
-const processCaseWithWorkflow = async (selectedCase) => {
-  if (!selectedCase) {
-    return null
-  }
-
-  const { workflowCode } = selectedCase
-  if (!workflowCode) {
-    return null
-  }
-
-  const workflow = await getWorkflowByCode(workflowCode)
-  if (!workflow) {
-    return null
-  }
-
-  // Add titles from workflow stages to selectedCase stages
-  selectedCase.stages = selectedCase.stages.map((stage) => {
-    const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)
-
-    // Add title from workflow to the stage
-    const updatedStage = {
-      ...stage,
-      title: workflowStage?.title
-    }
-
-    // Add titles to task groups
-    if (stage.taskGroups && stage.taskGroups.length > 0) {
-      updatedStage.taskGroups = stage.taskGroups.map((taskGroup) => {
-        const workflowTaskGroup = workflowStage?.taskGroups?.find(
-          (wtg) => wtg.id === taskGroup.id
-        )
-
-        // Add title to task group
-        const updatedTaskGroup = {
-          ...taskGroup,
-          title: workflowTaskGroup?.title
-        }
-
-        // Add titles to tasks
-        if (taskGroup.tasks && taskGroup.tasks.length > 0) {
-          updatedTaskGroup.tasks = taskGroup.tasks.map((task) => {
-            const workflowTask = workflowTaskGroup?.tasks?.find(
-              (wt) => wt.id === task.id
-            )
-
-            // Add title to task
-            return {
-              ...task,
-              title: workflowTask?.title,
-              type: workflowTask?.type
-            }
-          })
-        }
-
-        return updatedTaskGroup
-      })
-    }
-
-    if (workflowStage.actions) {
-      updatedStage.actions = workflowStage.actions
-    }
-
-    return updatedStage
-  })
-
-  // Create taskSteps from the updated selectedCase stages
-  const stages =
-    selectedCase.stages.map((stage) => ({
-      title: stage.title || stage.id,
-      actions: stage.actions,
-      groups: (stage.taskGroups || []).map((group) => ({
-        ...group,
-        tasks: (group.tasks || []).map((task) => ({
-          ...task,
-          link: `/case/${selectedCase._id}/tasks/${group.id}/${task.id}`,
-          status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
-        }))
-      }))
-    })) || []
-
-  // Filter stages to only show the current stage
-  const currentStage = selectedCase.currentStage
-  const stageIndex = selectedCase.stages.findIndex(
-    (stage) => stage.id === currentStage
-  )
-  const filteredStage = stageIndex >= 0 ? stages[stageIndex] : null
-
-  return {
-    caseData: selectedCase,
-    stage: filteredStage
-  }
-}
-
-const showCase = async (request, h) => {
-  const caseId = request.params.id
-  const selectedCase = await getCaseById(caseId)
-
-  if (!selectedCase) {
-    return h.response('Case not found').code(404)
-  }
-
-  const processedData = await processCaseWithWorkflow(selectedCase)
-  if (!processedData) {
-    return h.response('Workflow not found').code(404)
+    processedData = await getProcessedCaseData(request)
+  } catch (error) {
+    return h.response(error.message).code(404)
   }
 
   return h.view('cases/views/show', {
-    pageTitle: 'Case',
+    pageTitle: 'Case details',
     ...processedData,
+    error,
     query: request.path.includes('/caseDetails')
       ? { tab: 'caseDetails' }
       : request.query
@@ -152,24 +45,21 @@ const showCase = async (request, h) => {
 }
 
 const showTask = async (request, h) => {
-  const { id, groupId, taskId } = request.params
-
-  if (!id) {
-    return h.response('Case ID is required').code(400)
+  let processedData
+  try {
+    processedData = await getProcessedCaseData(request)
+  } catch (error) {
+    return h.response(error.message).code(404)
   }
+  const { groupId, taskId } = request.params
+  const currentGroup = processedData.stage.groups.find((g) => g.id === groupId)
+  const currentGroupTasks = currentGroup?.tasks
 
-  const selectedCase = await getCaseById(id)
+  const currentTask = currentGroupTasks.find((t) => t.id === taskId)
 
-  if (!selectedCase) {
-    return h.response('Case not found').code(404)
-  }
+  processedData.currentTask = currentTask
 
-  const processedData = await processCaseWithWorkflow(selectedCase)
-  if (!processedData) {
-    return h.response('Workflow not found').code(404)
-  }
-
-  return h.view('cases/views/show', {
+  return h.view('cases/views/stage', {
     pageTitle: 'Case',
     ...processedData,
     query: { groupId, taskId }
@@ -197,11 +87,32 @@ export const casesController = {
     }
 
     // call backend with stage update
-    await updateStageAsync(id)
-    // redirect to stage
-    return showCase(request, h)
+    const response = await updateStageAsync(id)
+    // redirect to stage/tasks
+    return showStage(request, h, response.error)
   },
 
   show: showCase,
-  showTask
+  showTask,
+  showStage,
+  completeTask: async (request, h) => {
+    const { id, groupId } = request.params
+
+    const selectedCase = await getCaseById(id)
+
+    if (!selectedCase) {
+      return h.response('Case not found').code(404)
+    }
+
+    const { isComplete = false, taskId } = request.payload
+
+    await updateTaskAsync({
+      caseId: id,
+      groupId,
+      taskId,
+      isComplete: !!isComplete
+    })
+
+    return showStage(request, h)
+  }
 }

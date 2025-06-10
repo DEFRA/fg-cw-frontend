@@ -13,12 +13,17 @@ export const cases = {
         {
           method: 'GET',
           path: '/case/{id}',
-          handler: casesController.show
+          handler: casesController.showStage
         },
         {
           method: 'GET',
           path: '/case/{id}/tasks/{groupId}/{taskId}',
           handler: casesController.showTask
+        },
+        {
+          method: 'POST',
+          path: '/case/{id}/tasks/{groupId}/{taskId}',
+          handler: casesController.completeTask
         },
         {
           method: 'GET',

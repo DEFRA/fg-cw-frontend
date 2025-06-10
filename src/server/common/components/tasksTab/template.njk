@@ -2,7 +2,7 @@
 {% from "../taskDetails/macro.njk" import appTaskDetails %}
 
 {% if params.taskId %}
-  {{ appTaskDetails({caseId: params.caseId, groups: params.stage.groups, groupId: params.groupId, taskId: params.taskId }) }}
+  {{ appTaskDetails({caseId: params.caseId, groups: params.stage.groups, groupId: params.groupId, taskId: params.taskId, currentTask: params.currentTask }) }}
 {% else %}
   {{ appTaskGroups({caseId: params.caseId, stage: params.stage}) }}
 {% endif %}
