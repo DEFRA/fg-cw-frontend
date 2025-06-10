@@ -31,17 +31,17 @@ export const config = convict({
     default: 'development',
     env: 'NODE_ENV'
   },
-  port: {
-    doc: 'The port to bind.',
-    format: 'port',
-    default: 3000,
-    env: 'PORT'
-  },
   host: {
     doc: 'The host to bind.',
     format: String,
     default: 'localhost',
     env: 'HOST'
+  },
+  port: {
+    doc: 'The port to bind.',
+    format: 'port',
+    default: 3000,
+    env: 'PORT'
   },
   staticCacheTimeout: {
     doc: 'Static cache timeout in milliseconds',
