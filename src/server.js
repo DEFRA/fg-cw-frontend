@@ -69,6 +69,19 @@ export const createServer = async () => {
 
   await server.register([health, cases, casesDeprecated])
 
+  // Add static file serving
+  server.route({
+    method: 'GET',
+    path: '/public/{param*}',
+    handler: {
+      directory: {
+        path: '.public',
+        redirectToSlash: true,
+        index: true
+      }
+    }
+  })
+
   // Add a redirect from root to cases
   server.route({
     method: 'GET',
