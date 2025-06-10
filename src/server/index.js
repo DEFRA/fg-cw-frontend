@@ -3,10 +3,8 @@ import hapi from '@hapi/hapi'
 
 import { config } from '../config/config.js'
 import { nunjucksConfig } from '../config/nunjucks/nunjucks.js'
-import { router } from '../router.js'
 import { requestLogger } from './common/helpers/logging/request-logger.js'
 import { catchAll } from './common/helpers/errors.js'
-import { secureContext } from './common/helpers/secure-context/index.js'
 import { sessionCache } from './common/helpers/session-cache/session-cache.js'
 import { getCacheEngine } from './common/helpers/session-cache/cache-engine.js'
 import { pulse } from './common/helpers/pulse.js'
@@ -55,7 +53,6 @@ export async function createServer() {
   await server.register([
     requestLogger,
     requestTracing,
-    secureContext,
     pulse,
     sessionCache,
     nunjucksConfig,
