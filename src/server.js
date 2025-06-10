@@ -5,6 +5,7 @@ import Vision from '@hapi/vision'
 import hapiPino from 'hapi-pino'
 import hapiPulse from 'hapi-pulse'
 import { cases } from './case-management/index.js'
+import { casesDeprecated } from './server/cases/index.js'
 import { config } from './common/config.js'
 import { logger } from './common/logger.js'
 import { health } from './health/index.js'
@@ -66,7 +67,7 @@ export const createServer = async () => {
     nunjucksConfig
   ])
 
-  await server.register([health, cases])
+  await server.register([health, cases, casesDeprecated])
 
   // Add a redirect from root to cases
   server.route({
