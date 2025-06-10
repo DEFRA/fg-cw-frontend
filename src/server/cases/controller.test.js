@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { casesController } from './controller.js'
+import { createLogger } from '../common/helpers/logging/logger.js'
+import { loggerOptions } from '../common/helpers/logging/logger-options.js'
 
 // Mock dependencies
 const mockWreck = vi.hoisted(() => ({
@@ -9,6 +11,11 @@ const mockWreck = vi.hoisted(() => ({
 
 const mockConfig = vi.hoisted(() => ({
   get: vi.fn()
+}))
+
+vi.mock('../common/helpers/logging/logger.js')
+vi.mock('../common/helpers/logging/logger-options.js', () => ({
+  loggerOptions: {}
 }))
 
 vi.mock('../common/helpers/wreck.js', () => ({
