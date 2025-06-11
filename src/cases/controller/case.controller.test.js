@@ -34,14 +34,6 @@ function mockResponseToolkit(options = {}) {
 }
 
 describe('Case Controller', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   describe('listCases', () => {
     test('returns case list view with processed data when use case succeeds', async () => {
       const mockCases = [
