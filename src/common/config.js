@@ -227,6 +227,29 @@ export const config = convict({
       default: 'x-cdp-request-id',
       env: 'TRACING_HEADER'
     }
+  },
+  auth: {
+    msEntraId: {
+      tenantId: {
+        doc: 'The tenant ID for Microsoft Entra ID',
+        format: String,
+        default: '',
+        env: 'AZURE_TENANT_ID'
+      },
+      clientId: {
+        doc: 'The client ID for Microsoft Entra ID',
+        format: String,
+        default: '',
+        env: 'AZURE_CLIENT_ID'
+      },
+      clientSecret: {
+        doc: 'The client secret for Microsoft Entra ID',
+        format: String,
+        default: '',
+        sensitive: true,
+        env: 'AZURE_CLIENT_SECRET'
+      }
+    }
   }
 })
 
