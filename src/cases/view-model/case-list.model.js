@@ -1,7 +1,7 @@
 import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 export const transformCasesForList = (cases) => {
   return {
-    allCases: cases.data.map((caseItem) => ({
+    allCases: cases.map((caseItem) => ({
       clientRef: caseItem.payload.clientRef,
       code: caseItem.payload.code,
       submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
