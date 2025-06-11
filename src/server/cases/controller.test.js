@@ -1,19 +1,12 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, test, expect, vi, beforeEach } from 'vitest'
 import { casesController } from './controller.js'
-
-// Mock dependencies
-const mockWreck = vi.hoisted(() => ({
-  get: vi.fn(),
-  post: vi.fn()
-}))
+import { wreck } from '../common/helpers/wreck.js'
 
 const mockConfig = vi.hoisted(() => ({
   get: vi.fn()
 }))
 
-vi.mock('../common/helpers/wreck.js', () => ({
-  wreck: mockWreck
-}))
+vi.mock('../common/helpers/wreck.js')
 
 vi.mock('../../config/config.js', () => ({
   config: mockConfig
@@ -41,12 +34,7 @@ function mockResponseToolkit(options = {}) {
 
 describe('casesController', () => {
   beforeEach(() => {
-    vi.clearAllMocks()
     mockConfig.get.mockReturnValue('http://localhost:3001')
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
   })
 
   describe('handler (getCases)', () => {
@@ -56,7 +44,7 @@ describe('casesController', () => {
         { id: '2', name: 'Case 2' }
       ]
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: { data: mockCases }
       })
 
@@ -65,7 +53,7 @@ describe('casesController', () => {
 
       await casesController.handler(request, h)
 
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
+      expect(wreck.get).toHaveBeenCalledWith('/cases')
       expect(h.view).toHaveBeenCalledWith('cases/views/index', {
         pageTitle: 'Cases',
         heading: 'Cases',
@@ -75,14 +63,14 @@ describe('casesController', () => {
     })
 
     test('Should return cases view with empty array when API call fails', async () => {
-      mockWreck.get.mockRejectedValueOnce(new Error('Network error'))
+      wreck.get.mockRejectedValueOnce(new Error('Network error'))
 
       const request = mockRequest()
       const h = mockResponseToolkit()
 
       await casesController.handler(request, h)
 
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
+      expect(wreck.get).toHaveBeenCalledWith('/cases')
       expect(h.view).toHaveBeenCalledWith('cases/views/index', {
         pageTitle: 'Cases',
         heading: 'Cases',
@@ -129,12 +117,12 @@ describe('casesController', () => {
 
     test('Should return case view with processed data when case and workflow exist', async () => {
       // Mock getCaseById
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock getWorkflowByCode
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -143,8 +131,8 @@ describe('casesController', () => {
 
       await casesController.show(request, h)
 
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases/case123')
-      expect(mockWreck.get).toHaveBeenCalledWith('/workflows/workflow1')
+      expect(wreck.get).toHaveBeenCalledWith('/cases/case123')
+      expect(wreck.get).toHaveBeenCalledWith('/workflows/workflow1')
       expect(h.view).toHaveBeenCalledWith('cases/views/show', {
         pageTitle: 'Case',
         caseData: expect.objectContaining({
@@ -180,7 +168,7 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
+      wreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({ params: { id: 'nonexistent' } })
       const h = mockResponseToolkit()
@@ -193,12 +181,12 @@ describe('casesController', () => {
 
     test('Should return 404 when workflow is not found', async () => {
       // Mock getCaseById success
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock getWorkflowByCode failure
-      mockWreck.get.mockRejectedValueOnce(new Error('Workflow not found'))
+      wreck.get.mockRejectedValueOnce(new Error('Workflow not found'))
 
       const request = mockRequest({ params: { id: 'case123' } })
       const h = mockResponseToolkit()
@@ -212,7 +200,7 @@ describe('casesController', () => {
     test('Should handle case without workflow code', async () => {
       const caseWithoutWorkflow = { ...mockCase, workflowCode: null }
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: caseWithoutWorkflow
       })
 
@@ -226,11 +214,11 @@ describe('casesController', () => {
     })
 
     test('Should include caseDetails tab query when path contains caseDetails', async () => {
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -266,11 +254,11 @@ describe('casesController', () => {
         ]
       }
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: caseWithCompletedTask
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -333,11 +321,11 @@ describe('casesController', () => {
     }
 
     test('Should return task view with correct query parameters', async () => {
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -367,7 +355,7 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
+      wreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({
         params: { id: 'nonexistent', groupId: 'group1', taskId: 'task1' }
@@ -418,22 +406,22 @@ describe('casesController', () => {
 
     test('Should update stage and return updated case view', async () => {
       // Mock getCaseById
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock updateStageAsync
-      mockWreck.post.mockResolvedValueOnce({
+      wreck.post.mockResolvedValueOnce({
         payload: { success: true }
       })
 
       // Mock getCaseById for showCase
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock getWorkflowByCode for showCase
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -442,7 +430,7 @@ describe('casesController', () => {
 
       await casesController.updateStage(request, h)
 
-      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case123/stage')
+      expect(wreck.post).toHaveBeenCalledWith('/cases/case123/stage')
       expect(h.view).toHaveBeenCalledWith(
         'cases/views/show',
         expect.any(Object)
@@ -450,7 +438,7 @@ describe('casesController', () => {
     })
 
     test('Should return 404 when case is not found', async () => {
-      mockWreck.get.mockRejectedValueOnce(new Error('Not found'))
+      wreck.get.mockRejectedValueOnce(new Error('Not found'))
 
       const request = mockRequest({ params: { id: 'nonexistent' } })
       const h = mockResponseToolkit()
@@ -463,20 +451,20 @@ describe('casesController', () => {
 
     test('Should handle updateStageAsync failure gracefully', async () => {
       // Mock getCaseById success
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock updateStageAsync failure
-      mockWreck.post.mockRejectedValueOnce(new Error('Update failed'))
+      wreck.post.mockRejectedValueOnce(new Error('Update failed'))
 
       // Mock getCaseById for showCase
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
       // Mock getWorkflowByCode for showCase
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -511,11 +499,11 @@ describe('casesController', () => {
         ]
       }
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: caseWithoutStages
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -555,11 +543,11 @@ describe('casesController', () => {
         ]
       }
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: caseWithMismatchedStage
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 
@@ -599,11 +587,11 @@ describe('casesController', () => {
         ]
       }
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockCase
       })
 
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: mockWorkflow
       })
 

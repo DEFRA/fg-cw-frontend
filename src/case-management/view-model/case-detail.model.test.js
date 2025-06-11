@@ -8,14 +8,6 @@ vi.mock('../../common/helpers/date-helpers.js', () => ({
 }))
 
 describe('createCaseDetailViewModel', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   it('creates view model with all case properties', () => {
     const mockCase = {
       _id: 'case-123',

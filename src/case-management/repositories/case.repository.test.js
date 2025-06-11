@@ -12,14 +12,6 @@ vi.mock('../../server/common/helpers/wreck.js', () => ({
 }))
 
 describe('Case Repository', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   describe('findAll', () => {
     it('returns array of case objects when API call succeeds', async () => {
       mockWreck.get.mockResolvedValueOnce({
