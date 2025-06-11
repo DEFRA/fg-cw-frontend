@@ -1,5 +1,5 @@
-{% from "../taskGroups/macro.njk" import appTaskGroups %}
-{% from "../taskDetails/macro.njk" import appTaskDetails %}
+{% from "../task-group/macro.njk" import appTaskGroups %}
+{% from "../task-details/macro.njk" import appTaskDetails %}
 
 {% if params.taskId %}
   {{ appTaskDetails({caseId: params.caseId, groups: params.stage.groups, groupId: params.groupId, taskId: params.taskId }) }}

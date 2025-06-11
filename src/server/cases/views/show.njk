@@ -2,8 +2,6 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-{% from "../../common/components/taskGroups/macro.njk" import appTaskGroups %}
-{% from "../../common/components/tasksTab/macro.njk" import appTasksTab %}
 {% from "../../common/components/caseSummary/macro.njk" import appCaseSummary %}
 {% from "../../common/components/caseDetailsTab/template.njk" import caseDetailsTab %}
 
@@ -32,10 +30,6 @@
       ]
     })
   }}
-
-  {% if activeTab == 'tasks' %}
-    {{ appTasksTab({caseId: caseData._id, stage: stage, groupId: query.groupId, taskId: query.taskId}) }}
-  {% endif %}
 
   {% if activeTab == 'caseDetails' %}
     {{ caseDetailsTab({caseData: caseData}) }}
