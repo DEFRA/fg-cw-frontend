@@ -11,6 +11,7 @@ export default defineConfig({
     }
   },
   test: {
+    mockReset: true,
     testTimeout: 40000,
     hookTimeout: 40000,
     exclude: [
@@ -23,7 +24,6 @@ export default defineConfig({
     ],
     globals: true,
     environment: 'jsdom',
-    clearMocks: true,
     coverage: {
       enabled: true,
       provider: 'v8',
