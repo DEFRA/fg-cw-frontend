@@ -15,5 +15,12 @@ export const caseController = {
     const caseData = await findCaseByIdUseCase(caseId)
     const viewModel = createCaseDetailViewModel(caseData)
     return h.view('pages/case-detail', viewModel)
+  },
+  async listTasks(request, h) {
+    return h.view('pages/list-tasks', {
+      case: {},
+      caseDataId: '0987',
+      active: true
+    })
   }
 }
