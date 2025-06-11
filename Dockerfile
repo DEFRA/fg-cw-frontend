@@ -46,11 +46,13 @@ LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 COPY --from=production_build /home/node/package*.json ./
 COPY --from=production_build /home/node/.server ./.server/
 COPY --from=production_build /home/node/.public/ ./.public/
+COPY --chown=node:node scripts/run.sh scripts/run.sh
 
-RUN npm ci --omit=dev  --ignore-scripts
+RUN npm ci --omit=dev  --ignore-scripts \
+  chmod +x scripts/run.sh
 
 ARG PORT
 ENV PORT=${PORT}
 EXPOSE ${PORT}
 
-CMD [ "node", "." ]
+CMD [ "scripts/run.sh" ]
