@@ -15,6 +15,10 @@ const nunjucksEnvironment = nunjucks.configure(
     path.resolve(dirname, '../../server/common/templates'),
     path.resolve(dirname, '../../server/common/components'),
     path.resolve(dirname, '../../case-management/views'),
+    path.resolve(dirname, '../../case-management/views/layouts'),
+    path.resolve(dirname, '../../case-management/views/components'),
+    path.resolve(dirname, '../../case-management/views/pages'),
+    path.resolve(dirname, '../../case-management/views/partials'),
     path.resolve(dirname, '../../common/presentation')
   ],
   {

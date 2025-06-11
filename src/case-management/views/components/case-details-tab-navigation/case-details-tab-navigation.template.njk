@@ -1,0 +1,22 @@
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{{
+  govukServiceNavigation({
+    navigation: [
+      {
+        href: "/cases/" + params.caseDataId,
+        text: "Tasks",
+        active: params.active == 'tasks'
+      },
+      {
+        href: "/cases/" + params.caseDataId + "/caseDetails",
+        text: "Case Details",
+        active: params.active == 'caseDetails'
+      },
+      {
+        href: "#",
+        text: "Land Details",
+        active: params.active == 'landDetails'
+      }
+    ]
+  })
+}}
