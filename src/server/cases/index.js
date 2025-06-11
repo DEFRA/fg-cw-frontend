@@ -1,15 +1,10 @@
 import { casesController } from './controller.js'
 
-export const cases = {
+export const casesDeprecated = {
   plugin: {
-    name: 'cases',
+    name: 'cases-deprecated',
     register(server) {
       server.route([
-        {
-          method: 'GET',
-          path: '/cases',
-          handler: casesController.handler
-        },
         {
           method: 'GET',
           path: '/case/{id}',
