@@ -5,20 +5,22 @@ export const createCaseDetailViewModel = (caseItem) => {
   return {
     pageTitle: `Case ${caseItem.clientRef}`,
     heading: `Case ${caseItem.clientRef}`,
-    breadcrumbs: [
-      { text: 'Cases', href: '/cases' },
-      { text: caseItem.clientRef }
-    ],
+    breadcrumbs: [],
     data: {
       case: {
         _id: caseItem._id,
-        clientRef: caseItem.clientRef,
-        code: caseItem.code,
-        submittedAt: getFormattedGBDate(caseItem.submittedAt),
+        clientRef: caseItem.caseRef,
+        businessName: caseItem.payload?.answers?.agreementName,
+        code: caseItem.payload?.code,
+        sbi: caseItem.payload?.identifiers?.sbi,
+        scheme: caseItem.payload?.answers?.scheme,
+        dateReceived: caseItem.dateReceived,
+        submittedAt: getFormattedGBDate(caseItem.payload?.submittedAt),
         status: caseItem.status,
         assignedUser: caseItem.assignedUser,
         stages: caseItem.stages,
-        currentStage: caseItem.currentStage
+        currentStage: caseItem.currentStage,
+        payload: caseItem.payload
       }
     }
   }
