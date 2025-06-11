@@ -2,10 +2,11 @@ import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 import { getWorkflowByCode } from '../repositories/workflow.repository.js'
 
 export const transformCase = (caseData) => {
+  console.log({caseData})
   return {
     id: caseData._id,
     clientRef: caseData.clientRef,
-    workflowCode: caseData.code,
+    workflowCode: caseData.workflowCode,
     submittedAt: getFormattedGBDate(caseData.submittedAt),
     status: caseData.status,
     assignedUser: caseData.assignedUser,
@@ -110,11 +111,13 @@ export const processCaseWithWorkflow = async (selectedCase) => {
 }
 
 export const createTaskListViewModel = async (caseData) => {
-  const transformedCase = await processCaseWithWorkflow(transformCase(caseData))
+  const caseWithWorkflow = await processCaseWithWorkflow(
+    transformCase(caseData)
+  )
   return {
     pageTitle: 'Case tasks',
     heading: 'Case',
     breadcrumbs: [],
-    data: transformedCase
+    data: caseWithWorkflow
   }
 }
