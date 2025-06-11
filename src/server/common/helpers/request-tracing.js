@@ -1,11 +1,11 @@
-import { config } from '../../../config/config.js'
-import { tracing } from '@defra/hapi-tracing'
+import { tracing } from "@defra/hapi-tracing";
+import { config } from "../../../config/config.js";
 
-const tracingHeader = config.get('tracing.header')
+const tracingHeader = config.get("tracing.header");
 
 export const requestTracing = {
   plugin: tracing.plugin,
   options: {
-    tracingHeader
-  }
-}
+    tracingHeader,
+  },
+};
