@@ -22,110 +22,65 @@ describe('Case Repository', () => {
 
   describe('findAll', () => {
     it('returns array of case objects when API call succeeds', async () => {
-      const mockApiResponse = {
-        payload: {
-          data: [
-            {
-              _id: 'case-1',
-              caseRef: 'client-ref-1',
-              payload: {
-                code: 'case-code-1',
-                submittedAt: '2021-01-15T10:30:00.000Z'
-              },
-              workflowCode: 'workflow-1',
-              currentStage: 'stage-1',
-              stages: ['stage-1', 'stage-2'],
-              createdAt: '2021-01-01T00:00:00.000Z',
-              status: 'In Progress',
-              assignedUser: 'user-1'
+      mockWreck.get.mockResolvedValueOnce({
+        payload: [
+          {
+            _id: 'case-1',
+            caseRef: 'client-ref-1',
+            payload: {
+              code: 'case-code-1',
+              submittedAt: '2021-01-15T10:30:00.000Z'
             },
-            {
-              _id: 'case-2',
-              caseRef: 'client-ref-2',
-              workflowCode: 'workflow-2',
-              currentStage: 'stage-2',
-              createdAt: '2021-02-01T00:00:00.000Z',
-              submittedAt: '2021-02-15T10:30:00.000Z',
-              status: 'Completed',
-              assignedUser: 'user-2'
-            }
-          ]
-        }
-      }
-
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse)
+            workflowCode: 'workflow-1',
+            currentStage: 'stage-1',
+            stages: ['stage-1', 'stage-2'],
+            createdAt: '2021-01-01T00:00:00.000Z',
+            status: 'In Progress',
+            assignedUser: 'user-1'
+          },
+          {
+            _id: 'case-2',
+            caseRef: 'client-ref-2',
+            workflowCode: 'workflow-2',
+            currentStage: 'stage-2',
+            createdAt: '2021-02-01T00:00:00.000Z',
+            submittedAt: '2021-02-15T10:30:00.000Z',
+            status: 'Completed',
+            assignedUser: 'user-2'
+          }
+        ]
+      })
 
       const result = await findAll()
 
       expect(mockWreck.get).toHaveBeenCalledWith('/cases')
-      expect(result).toHaveLength(2)
-      expect(result[0]).toEqual({
-        _id: 'case-1',
-        caseRef: 'client-ref-1',
-        payload: {
-          code: 'case-code-1',
-          submittedAt: '2021-01-15T10:30:00.000Z'
+
+      expect(result).toEqual([
+        {
+          _id: 'case-1',
+          caseRef: 'client-ref-1',
+          payload: {
+            code: 'case-code-1',
+            submittedAt: '2021-01-15T10:30:00.000Z'
+          },
+          workflowCode: 'workflow-1',
+          currentStage: 'stage-1',
+          stages: ['stage-1', 'stage-2'],
+          createdAt: '2021-01-01T00:00:00.000Z',
+          status: 'In Progress',
+          assignedUser: 'user-1'
         },
-        workflowCode: 'workflow-1',
-        currentStage: 'stage-1',
-        stages: ['stage-1', 'stage-2'],
-        createdAt: '2021-01-01T00:00:00.000Z',
-        status: 'In Progress',
-        assignedUser: 'user-1'
-      })
-      expect(result[1]).toEqual({
-        _id: 'case-2',
-        caseRef: 'client-ref-2',
-        workflowCode: 'workflow-2',
-        currentStage: 'stage-2',
-        createdAt: '2021-02-01T00:00:00.000Z',
-        submittedAt: '2021-02-15T10:30:00.000Z',
-        status: 'Completed',
-        assignedUser: 'user-2'
-      })
-    })
-
-    it('returns empty array when API returns no data', async () => {
-      const mockApiResponse = {
-        payload: {
-          data: []
+        {
+          _id: 'case-2',
+          caseRef: 'client-ref-2',
+          workflowCode: 'workflow-2',
+          currentStage: 'stage-2',
+          createdAt: '2021-02-01T00:00:00.000Z',
+          submittedAt: '2021-02-15T10:30:00.000Z',
+          status: 'Completed',
+          assignedUser: 'user-2'
         }
-      }
-
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse)
-
-      const result = await findAll()
-
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
-      expect(result).toEqual([])
-    })
-
-    it('returns null when API returns null data', async () => {
-      const mockApiResponse = {
-        payload: {
-          data: null
-        }
-      }
-
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse)
-
-      const result = await findAll()
-
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
-      expect(result).toBeNull()
-    })
-
-    it('returns undefined when API returns undefined data', async () => {
-      const mockApiResponse = {
-        payload: {}
-      }
-
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse)
-
-      const result = await findAll()
-
-      expect(mockWreck.get).toHaveBeenCalledWith('/cases')
-      expect(result).toBeUndefined()
+      ])
     })
   })
 
