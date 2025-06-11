@@ -1,22 +1,12 @@
-import { describe, test, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, test, expect, vi } from 'vitest'
 import { findAllCasesUseCase } from './find-all-cases.use-case.js'
+import { findAll } from '../repositories/case.repository.js'
 
 // Mock dependencies
-const mockFindAll = vi.hoisted(() => vi.fn())
 
-vi.mock('../repositories/case.repository.js', () => ({
-  findAll: mockFindAll
-}))
+vi.mock('../repositories/case.repository.js')
 
 describe('findAllCasesUseCase', () => {
-  beforeEach(() => {
-    vi.clearAllMocks()
-  })
-
-  afterEach(() => {
-    vi.resetAllMocks()
-  })
-
   test('returns all cases when repository succeeds', async () => {
     const mockCases = [
       {
@@ -45,24 +35,24 @@ describe('findAllCasesUseCase', () => {
       }
     ]
 
-    mockFindAll.mockResolvedValueOnce(mockCases)
+    findAll.mockResolvedValueOnce(mockCases)
 
     const result = await findAllCasesUseCase()
 
-    expect(mockFindAll).toHaveBeenCalledOnce()
-    expect(mockFindAll).toHaveBeenCalledWith()
+    expect(findAll).toHaveBeenCalledOnce()
+    expect(findAll).toHaveBeenCalledWith()
     expect(result).toEqual(mockCases)
   })
 
   test('returns empty array when no cases exist', async () => {
     const mockCases = []
 
-    mockFindAll.mockResolvedValueOnce(mockCases)
+    findAll.mockResolvedValueOnce(mockCases)
 
     const result = await findAllCasesUseCase()
 
-    expect(mockFindAll).toHaveBeenCalledOnce()
-    expect(mockFindAll).toHaveBeenCalledWith()
+    expect(findAll).toHaveBeenCalledOnce()
+    expect(findAll).toHaveBeenCalledWith()
     expect(result).toEqual([])
   })
 
@@ -82,29 +72,29 @@ describe('findAllCasesUseCase', () => {
       }
     ]
 
-    mockFindAll.mockResolvedValueOnce(mockCases)
+    findAll.mockResolvedValueOnce(mockCases)
 
     const result = await findAllCasesUseCase()
 
-    expect(mockFindAll).toHaveBeenCalledOnce()
+    expect(findAll).toHaveBeenCalledOnce()
     expect(result).toEqual(mockCases)
     expect(result).toHaveLength(1)
   })
 
   test('propagates error when repository throws', async () => {
     const error = new Error('Repository failed')
-    mockFindAll.mockRejectedValueOnce(error)
+    findAll.mockRejectedValueOnce(error)
 
     await expect(findAllCasesUseCase()).rejects.toThrow('Repository failed')
-    expect(mockFindAll).toHaveBeenCalledOnce()
+    expect(findAll).toHaveBeenCalledOnce()
   })
 
   test('calls repository without parameters', async () => {
     const mockCases = []
-    mockFindAll.mockResolvedValueOnce(mockCases)
+    findAll.mockResolvedValueOnce(mockCases)
 
     await findAllCasesUseCase()
 
-    expect(mockFindAll).toHaveBeenCalledWith()
+    expect(findAll).toHaveBeenCalledWith()
   })
 })
