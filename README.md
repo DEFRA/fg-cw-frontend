@@ -65,15 +65,15 @@ If you are not using Wreck, Axios or Undici or a similar http that uses `Request
 To add the dispatcher to your own client:
 
 ```javascript
-import { ProxyAgent } from 'undici'
+import { ProxyAgent } from "undici";
 
 return await fetch(url, {
   dispatcher: new ProxyAgent({
     uri: proxyUrl,
     keepAliveTimeout: 10,
-    keepAliveMaxTimeout: 10
-  })
-})
+    keepAliveMaxTimeout: 10,
+  }),
+});
 ```
 
 ## Local Development

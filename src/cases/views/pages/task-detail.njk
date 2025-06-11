@@ -2,11 +2,22 @@
 {% from "../components/case-summary/macro.njk" import appCaseSummary %}
 {% from "../components/case-details-tab-navigation/macro.njk" import appCaseDetailsTabNavigation %}
 {% from "../components/task-details/macro.njk" import appTaskDetails %}
-
 {% block content %}
   {{ appCaseSummary({ case: data.case }) }}
   <div class="govuk-body">
-    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data.case.id }) }}
-    {{ appTaskDetails({caseId: data.case.id, groups: data.stage.groups, groupId: data.groupId, taskId: data.taskId }) }}
+    {{
+      appCaseDetailsTabNavigation({
+        active: 'tasks',
+        caseDataId: data.case.id
+      })
+    }}
+    {{
+      appTaskDetails({
+        caseId: data.case.id,
+        taskGroups: data.stage.taskGroups,
+        taskGroupId: data.taskGroupId,
+        taskId: data.taskId
+      })
+    }}
   </div>
 {% endblock %}

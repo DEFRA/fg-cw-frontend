@@ -113,17 +113,17 @@
 {% block bodyEnd %}
   <script>
     document.body.className +=
-      ' js-enabled' +
-      ('noModule' in HTMLScriptElement.prototype
-        ? ' govuk-frontend-supported'
-        : '')
+      " js-enabled" +
+      ("noModule" in HTMLScriptElement.prototype
+        ? " govuk-frontend-supported"
+        : "");
   </script>
   <script type="module" src="{{ getAssetPath('application.js') }}"></script>
   <script type="module" src="{{ getAssetPath('govuk.js') }}"></script>
   <script type="module">
-    import { initSelectAllCheckboxes } from "{{ getAssetPath('checkboxes.js') }}"
-    import { initAll } from "{{ getAssetPath('govuk.js') }}"
-    initSelectAllCheckboxes()
-    initAll()
+    import { initSelectAllCheckboxes } from "{{ getAssetPath('checkboxes.js') }}";
+    import { initAll } from "{{ getAssetPath('govuk.js') }}";
+    initSelectAllCheckboxes();
+    initAll();
   </script>
 {% endblock %}

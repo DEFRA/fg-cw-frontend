@@ -1,4 +1,5 @@
-import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
+import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+
 export const transformCasesForList = (cases) => {
   return {
     allCases: cases.map((caseItem) => ({
@@ -7,16 +8,16 @@ export const transformCasesForList = (cases) => {
       submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
       status: caseItem.status,
       assignedUser: caseItem.assignedUser,
-      link: `/cases/${caseItem._id}`
-    }))
-  }
-}
+      link: `/cases/${caseItem._id}`,
+    })),
+  };
+};
 
 export const createCaseListViewModel = (cases) => {
   return {
-    pageTitle: 'Cases',
-    heading: 'Cases',
+    pageTitle: "Cases",
+    heading: "Cases",
     breadcrumbs: [],
-    data: transformCasesForList(cases)
-  }
-}
+    data: transformCasesForList(cases),
+  };
+};

@@ -2,20 +2,20 @@ services:
   localstack:
     image: localstack/localstack:3.0.2
     ports:
-      - '4567:4566' # Changed from 4566 to 4567
+      - "4567:4566" # Changed from 4566 to 4567
       # - '4520-4559:4510-4559' # external services port range
     env_file:
-      - 'compose/aws.env'
+      - "compose/aws.env"
     environment:
       DEBUG: ${DEBUG:-1}
       LS_LOG: WARN # Localstack DEBUG Level
       SERVICES: s3,sqs,sns,firehose
       LOCALSTACK_HOST: 127.0.0.1
     volumes:
-      - '${TMPDIR:-/tmp}/localstack:/var/lib/localstack'
+      - "${TMPDIR:-/tmp}/localstack:/var/lib/localstack"
       - ./compose/start-localstack.sh:/etc/localstack/init/ready.d/start-localstack.sh
     healthcheck:
-      test: ['CMD', 'curl', 'localhost:4566']
+      test: ["CMD", "curl", "localhost:4566"]
       interval: 5s
       start_period: 5s
       retries: 3
@@ -25,7 +25,7 @@ services:
   redis:
     image: redis:7.2.3-alpine3.18
     ports:
-      - '6380:6379'
+      - "6380:6379"
     restart: always
     networks:
       - cdp-tenant
@@ -35,7 +35,7 @@ services:
     networks:
       - cdp-tenant
     ports:
-      - '27018:27017'
+      - "27018:27017"
     volumes:
       - mongodb-data:/data
     restart: always
@@ -45,17 +45,17 @@ services:
   your-frontend:
     build: ./
     ports:
-      - '3000:3000'
+      - "3000:3000"
     links:
-      - 'localstack:localstack'
-      - 'redis:redis'
+      - "localstack:localstack"
+      - "redis:redis"
     depends_on:
       localstack:
         condition: service_healthy
       redis:
         condition: service_started
     env_file:
-      - 'compose/aws.env'
+      - "compose/aws.env"
     environment:
       PORT: 3000
       NODE_ENV: development

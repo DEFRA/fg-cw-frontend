@@ -1,90 +1,90 @@
-import { beforeEach, describe, expect, test, vi } from 'vitest'
-import { StorageResolution, Unit } from 'aws-embedded-metrics'
+import { StorageResolution, Unit } from "aws-embedded-metrics";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { metricsCounter } from './metrics.js'
-import { config } from '../../../config/config.js'
+import { config } from "../../../config/config.js";
+import { metricsCounter } from "./metrics.js";
 
-const mockPutMetric = vi.fn()
-const mockFlush = vi.fn()
-const mockLoggerError = vi.fn()
+const mockPutMetric = vi.fn();
+const mockFlush = vi.fn();
+const mockLoggerError = vi.fn();
 
-vi.mock('./logging/logger.js', () => ({
-  createLogger: () => ({ error: (...args) => mockLoggerError(...args) })
-}))
-vi.mock('aws-embedded-metrics', () => ({
+vi.mock("./logging/logger.js", () => ({
+  createLogger: () => ({ error: (...args) => mockLoggerError(...args) }),
+}));
+vi.mock("aws-embedded-metrics", () => ({
   createMetricsLogger: () => ({
     putMetric: mockPutMetric,
-    flush: mockFlush
+    flush: mockFlush,
   }),
   Unit: vi.fn(),
-  StorageResolution: vi.fn()
-}))
+  StorageResolution: vi.fn(),
+}));
 
-const mockMetricsName = 'mock-metrics-name'
-const defaultMetricsValue = 1
-const mockValue = 200
+const mockMetricsName = "mock-metrics-name";
+const defaultMetricsValue = 1;
+const mockValue = 200;
 
-describe('#metrics', () => {
-  describe('When metrics is not enabled', () => {
+describe("#metrics", () => {
+  describe("When metrics is not enabled", () => {
     beforeEach(async () => {
-      config.set('isMetricsEnabled', false)
-      await metricsCounter(mockMetricsName, mockValue)
-    })
+      config.set("isMetricsEnabled", false);
+      await metricsCounter(mockMetricsName, mockValue);
+    });
 
-    test('Should not call metric', () => {
-      expect(mockPutMetric).not.toHaveBeenCalled()
-    })
+    test("Should not call metric", () => {
+      expect(mockPutMetric).not.toHaveBeenCalled();
+    });
 
-    test('Should not call flush', () => {
-      expect(mockFlush).not.toHaveBeenCalled()
-    })
-  })
+    test("Should not call flush", () => {
+      expect(mockFlush).not.toHaveBeenCalled();
+    });
+  });
 
-  describe('When metrics is enabled', () => {
+  describe("When metrics is enabled", () => {
     beforeEach(() => {
-      config.set('isMetricsEnabled', true)
-    })
+      config.set("isMetricsEnabled", true);
+    });
 
-    test('Should send metric with default value', async () => {
-      await metricsCounter(mockMetricsName)
+    test("Should send metric with default value", async () => {
+      await metricsCounter(mockMetricsName);
 
       expect(mockPutMetric).toHaveBeenCalledWith(
         mockMetricsName,
         defaultMetricsValue,
         Unit.Count,
-        StorageResolution.Standard
-      )
-    })
+        StorageResolution.Standard,
+      );
+    });
 
-    test('Should send metric', async () => {
-      await metricsCounter(mockMetricsName, mockValue)
+    test("Should send metric", async () => {
+      await metricsCounter(mockMetricsName, mockValue);
 
       expect(mockPutMetric).toHaveBeenCalledWith(
         mockMetricsName,
         mockValue,
         Unit.Count,
-        StorageResolution.Standard
-      )
-    })
+        StorageResolution.Standard,
+      );
+    });
 
-    test('Should not call flush', async () => {
-      await metricsCounter(mockMetricsName, mockValue)
-      expect(mockFlush).toHaveBeenCalled()
-    })
-  })
+    test("Should not call flush", async () => {
+      await metricsCounter(mockMetricsName, mockValue);
+      expect(mockFlush).toHaveBeenCalled();
+    });
+  });
 
-  describe('When metrics throws', () => {
-    const mockError = 'mock-metrics-put-error'
+  describe("When metrics throws", () => {
+    const mockError = "mock-metrics-put-error";
 
     beforeEach(async () => {
-      config.set('isMetricsEnabled', true)
-      mockFlush.mockRejectedValue(new Error(mockError))
+      config.set("isMetricsEnabled", true);
+      mockFlush.mockRejectedValue(new Error(mockError));
 
-      await metricsCounter(mockMetricsName, mockValue)
-    })
+      await metricsCounter(mockMetricsName, mockValue);
+    });
 
-    test('Should log expected error', () => {
-      expect(mockLoggerError).toHaveBeenCalledWith(Error(mockError), mockError)
-    })
-  })
-})
+    test("Should log expected error", () => {
+      expect(mockLoggerError).toHaveBeenCalledWith(Error(mockError), mockError);
+    });
+  });
+});

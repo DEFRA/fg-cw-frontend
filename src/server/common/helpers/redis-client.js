@@ -1,23 +1,23 @@
-import { Cluster, Redis } from 'ioredis'
+import { Cluster, Redis } from "ioredis";
 
-import { createLogger } from './logging/logger.js'
+import { createLogger } from "./logging/logger.js";
 
-export function buildRedisClient(redisConfig) {
-  const logger = createLogger()
-  const port = 6379
-  const db = 0
-  const keyPrefix = redisConfig.keyPrefix
-  const host = redisConfig.host
-  let redisClient
+export const buildRedisClient = (redisConfig) => {
+  const logger = createLogger();
+  const port = 6379;
+  const db = 0;
+  const keyPrefix = redisConfig.keyPrefix;
+  const host = redisConfig.host;
+  let redisClient;
 
   const credentials =
-    redisConfig.username === ''
+    redisConfig.username === ""
       ? {}
       : {
           username: redisConfig.username,
-          password: redisConfig.password
-        }
-  const tls = redisConfig.useTLS ? { tls: {} } : {}
+          password: redisConfig.password,
+        };
+  const tls = redisConfig.useTLS ? { tls: {} } : {};
 
   if (redisConfig.useSingleInstanceCache) {
     redisClient = new Redis({
@@ -26,15 +26,15 @@ export function buildRedisClient(redisConfig) {
       db,
       keyPrefix,
       ...credentials,
-      ...tls
-    })
+      ...tls,
+    });
   } else {
     redisClient = new Cluster(
       [
         {
           host,
-          port
-        }
+          port,
+        },
       ],
       {
         keyPrefix,
@@ -43,19 +43,19 @@ export function buildRedisClient(redisConfig) {
         redisOptions: {
           db,
           ...credentials,
-          ...tls
-        }
-      }
-    )
+          ...tls,
+        },
+      },
+    );
   }
 
-  redisClient.on('connect', () => {
-    logger.info('Connected to Redis server')
-  })
+  redisClient.on("connect", () => {
+    logger.info("Connected to Redis server");
+  });
 
-  redisClient.on('error', (error) => {
-    logger.error(`Redis connection error ${error}`)
-  })
+  redisClient.on("error", (error) => {
+    logger.error(`Redis connection error ${error}`);
+  });
 
-  return redisClient
-}
+  return redisClient;
+};
