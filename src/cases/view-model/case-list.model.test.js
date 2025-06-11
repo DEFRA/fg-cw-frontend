@@ -12,30 +12,28 @@ vi.mock('../../common/helpers/date-helpers.js', () => ({
 describe('case-list.model', () => {
   describe('transformCasesForList', () => {
     it('transforms multiple cases correctly', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-1',
-            payload: {
-              clientRef: 'CLIENT-001',
-              code: 'CODE-001',
-              submittedAt: '2021-01-15T00:00:00.000Z'
-            },
-            status: 'In Progress',
-            assignedUser: 'john doe'
+      const mockCases = [
+        {
+          _id: 'case-1',
+          payload: {
+            clientRef: 'CLIENT-001',
+            code: 'CODE-001',
+            submittedAt: '2021-01-15T00:00:00.000Z'
           },
-          {
-            _id: 'case-2',
-            payload: {
-              clientRef: 'CLIENT-002',
-              code: 'CODE-002',
-              submittedAt: '2021-02-20T00:00:00.000Z'
-            },
-            status: 'Completed',
-            assignedUser: 'jane smith'
-          }
-        ]
-      }
+          status: 'In Progress',
+          assignedUser: 'john doe'
+        },
+        {
+          _id: 'case-2',
+          payload: {
+            clientRef: 'CLIENT-002',
+            code: 'CODE-002',
+            submittedAt: '2021-02-20T00:00:00.000Z'
+          },
+          status: 'Completed',
+          assignedUser: 'jane smith'
+        }
+      ]
 
       getFormattedGBDate
         .mockReturnValueOnce('15/01/2021')
@@ -74,9 +72,7 @@ describe('case-list.model', () => {
     })
 
     it('transforms empty cases array', () => {
-      const mockCases = {
-        data: []
-      }
+      const mockCases = []
 
       const result = transformCasesForList(mockCases)
 
@@ -88,20 +84,18 @@ describe('case-list.model', () => {
     })
 
     it('transforms single case correctly', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-single',
-            payload: {
-              clientRef: 'SINGLE-001',
-              code: 'SINGLE-CODE',
-              submittedAt: null
-            },
-            status: 'Draft',
-            assignedUser: 'Unassigned'
-          }
-        ]
-      }
+      const mockCases = [
+        {
+          _id: 'case-single',
+          payload: {
+            clientRef: 'SINGLE-001',
+            code: 'SINGLE-CODE',
+            submittedAt: null
+          },
+          status: 'Draft',
+          assignedUser: 'Unassigned'
+        }
+      ]
 
       getFormattedGBDate.mockReturnValue('Not submitted')
 
@@ -121,30 +115,28 @@ describe('case-list.model', () => {
     })
 
     it('generates correct case links', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-link-1',
-            payload: {
-              clientRef: 'LINK-001',
-              code: 'LINK-CODE-1',
-              submittedAt: '2021-01-01T00:00:00.000Z'
-            },
-            status: 'Active',
-            assignedUser: 'user1'
+      const mockCases = [
+        {
+          _id: 'case-link-1',
+          payload: {
+            clientRef: 'LINK-001',
+            code: 'LINK-CODE-1',
+            submittedAt: '2021-01-01T00:00:00.000Z'
           },
-          {
-            _id: 'case-link-2',
-            payload: {
-              clientRef: 'LINK-002',
-              code: 'LINK-CODE-2',
-              submittedAt: '2021-01-02T00:00:00.000Z'
-            },
-            status: 'Active',
-            assignedUser: 'user2'
-          }
-        ]
-      }
+          status: 'Active',
+          assignedUser: 'user1'
+        },
+        {
+          _id: 'case-link-2',
+          payload: {
+            clientRef: 'LINK-002',
+            code: 'LINK-CODE-2',
+            submittedAt: '2021-01-02T00:00:00.000Z'
+          },
+          status: 'Active',
+          assignedUser: 'user2'
+        }
+      ]
 
       getFormattedGBDate
         .mockReturnValueOnce('01/01/2021')
@@ -159,30 +151,28 @@ describe('case-list.model', () => {
 
   describe('createCaseListViewModel', () => {
     it('creates complete view model with cases', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-vm-1',
-            payload: {
-              clientRef: 'VM-001',
-              code: 'VM-CODE-1',
-              submittedAt: '2021-03-10T00:00:00.000Z'
-            },
-            status: 'Review',
-            assignedUser: 'reviewer1'
+      const mockCases = [
+        {
+          _id: 'case-vm-1',
+          payload: {
+            clientRef: 'VM-001',
+            code: 'VM-CODE-1',
+            submittedAt: '2021-03-10T00:00:00.000Z'
           },
-          {
-            _id: 'case-vm-2',
-            payload: {
-              clientRef: 'VM-002',
-              code: 'VM-CODE-2',
-              submittedAt: '2021-03-15T00:00:00.000Z'
-            },
-            status: 'Approved',
-            assignedUser: 'approver1'
-          }
-        ]
-      }
+          status: 'Review',
+          assignedUser: 'reviewer1'
+        },
+        {
+          _id: 'case-vm-2',
+          payload: {
+            clientRef: 'VM-002',
+            code: 'VM-CODE-2',
+            submittedAt: '2021-03-15T00:00:00.000Z'
+          },
+          status: 'Approved',
+          assignedUser: 'approver1'
+        }
+      ]
 
       getFormattedGBDate
         .mockReturnValueOnce('10/03/2021')
@@ -218,9 +208,7 @@ describe('case-list.model', () => {
     })
 
     it('creates view model with empty cases', () => {
-      const mockCases = {
-        data: []
-      }
+      const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
 
@@ -237,20 +225,18 @@ describe('case-list.model', () => {
     })
 
     it('creates view model with single case', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-single-vm',
-            payload: {
-              clientRef: 'SINGLE-VM-001',
-              code: 'SINGLE-VM-CODE',
-              submittedAt: '2021-04-25T00:00:00.000Z'
-            },
-            status: 'Pending',
-            assignedUser: 'pending user'
-          }
-        ]
-      }
+      const mockCases = [
+        {
+          _id: 'case-single-vm',
+          payload: {
+            clientRef: 'SINGLE-VM-001',
+            code: 'SINGLE-VM-CODE',
+            submittedAt: '2021-04-25T00:00:00.000Z'
+          },
+          status: 'Pending',
+          assignedUser: 'pending user'
+        }
+      ]
 
       getFormattedGBDate.mockReturnValue('25/04/2021')
 
@@ -263,9 +249,7 @@ describe('case-list.model', () => {
     })
 
     it('has consistent page title and heading', () => {
-      const mockCases = {
-        data: []
-      }
+      const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
 
@@ -275,9 +259,7 @@ describe('case-list.model', () => {
     })
 
     it('has empty breadcrumbs array', () => {
-      const mockCases = {
-        data: []
-      }
+      const mockCases = []
 
       const result = createCaseListViewModel(mockCases)
 
@@ -286,20 +268,18 @@ describe('case-list.model', () => {
     })
 
     it('calls transformCasesForList internally', () => {
-      const mockCases = {
-        data: [
-          {
-            _id: 'case-transform',
-            payload: {
-              clientRef: 'TRANSFORM-001',
-              code: 'TRANSFORM-CODE',
-              submittedAt: '2021-05-01T00:00:00.000Z'
-            },
-            status: 'Processing',
-            assignedUser: 'processor'
-          }
-        ]
-      }
+      const mockCases = [
+        {
+          _id: 'case-transform',
+          payload: {
+            clientRef: 'TRANSFORM-001',
+            code: 'TRANSFORM-CODE',
+            submittedAt: '2021-05-01T00:00:00.000Z'
+          },
+          status: 'Processing',
+          assignedUser: 'processor'
+        }
+      ]
 
       getFormattedGBDate.mockReturnValue('01/05/2021')
 
