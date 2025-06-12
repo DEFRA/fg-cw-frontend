@@ -20,7 +20,7 @@ export const caseController = {
     return h.view('pages/case-detail', viewModel)
   },
   async listTasks(request, h) {
-    const caseData = await findCaseByIdUseCase(request.params.id)
+    const caseData = await findCaseByIdUseCase(request.params.caseId)
     const workflow = await findWorkflowByCode(caseData.workflowCode)
     const viewModel = await createTaskListViewModel(caseData, workflow)
     return h.view('pages/task-list', {
@@ -29,7 +29,7 @@ export const caseController = {
   },
 
   async getTask(request, h) {
-    const caseData = await findCaseByIdUseCase(request.params.id)
+    const caseData = await findCaseByIdUseCase(request.params.caseId)
     const workflow = await findWorkflowByCode(caseData.workflowCode)
     const viewModel = await createTaskDetailViewModel(
       caseData,
