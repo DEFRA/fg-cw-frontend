@@ -21,7 +21,7 @@ export const caseController = {
     })
   },
 
-  async displayTask(request, h) {
+  async getTask(request, h) {
     const caseData = await findCaseByIdUseCase(request.params.id)
     const workflow = await getWorkflowByCode(caseData.workflowCode)
     const viewModel = await createTaskDetailViewModel(
