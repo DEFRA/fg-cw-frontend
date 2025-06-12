@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { createCaseDetailViewModel } from './case-detail.model.js'
 import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 
@@ -11,13 +11,22 @@ describe('createCaseDetailViewModel', () => {
   it('creates view model with all case properties', () => {
     const mockCase = {
       _id: 'case-123',
-      clientRef: 'CLIENT-REF-001',
-      code: 'CASE-CODE-001',
+      caseRef: 'CLIENT-REF-001',
+      workflowCode: 'CASE-CODE-001',
       submittedAt: '2021-01-15T00:00:00.000Z',
-      stages: ['stage-1', 'stage-2', 'stage-3'],
-      currentStage: 'stage-2',
+      dateReceived: '2021-01-10T00:00:00.000Z',
       status: 'In Progress',
-      assignedUser: 'john doe'
+      assignedUser: 'john doe',
+      payload: {
+        answers: {
+          agreementName: 'Test Agreement',
+          scheme: 'Test Scheme'
+        },
+        identifiers: {
+          sbi: '123456789'
+        },
+        submittedAt: '2021-01-15T00:00:00.000Z'
+      }
     }
 
     getFormattedGBDate.mockReturnValue('15/01/2021')
@@ -35,12 +44,15 @@ describe('createCaseDetailViewModel', () => {
         case: {
           _id: 'case-123',
           clientRef: 'CLIENT-REF-001',
+          businessName: 'Test Agreement',
           code: 'CASE-CODE-001',
+          sbi: '123456789',
+          scheme: 'Test Scheme',
+          dateReceived: '2021-01-10T00:00:00.000Z',
           submittedAt: '15/01/2021',
           status: 'In Progress',
           assignedUser: 'john doe',
-          stages: ['stage-1', 'stage-2', 'stage-3'],
-          currentStage: 'stage-2'
+          payload: mockCase.payload
         }
       }
     })
@@ -52,11 +64,8 @@ describe('createCaseDetailViewModel', () => {
   it('creates view model with minimal case properties', () => {
     const mockCase = {
       _id: 'case-minimal',
-      clientRef: 'MIN-001',
-      code: 'MIN-CODE',
-      submittedAt: null,
-      stages: [],
-      currentStage: null,
+      caseRef: 'MIN-001',
+      workflowCode: 'MIN-CODE',
       status: 'In Progress',
       assignedUser: 'Unassigned'
     }
@@ -73,12 +82,15 @@ describe('createCaseDetailViewModel', () => {
         case: {
           _id: 'case-minimal',
           clientRef: 'MIN-001',
+          businessName: undefined,
           code: 'MIN-CODE',
+          sbi: undefined,
+          scheme: undefined,
+          dateReceived: undefined,
           submittedAt: 'Not submitted',
           status: 'In Progress',
           assignedUser: 'Unassigned',
-          stages: [],
-          currentStage: null
+          payload: undefined
         }
       }
     })
@@ -86,16 +98,19 @@ describe('createCaseDetailViewModel', () => {
     expect(getFormattedGBDate).toHaveBeenCalledWith(undefined)
   })
 
-  it('creates view model with completed case', () => {
+  it('creates view model using payload submittedAt when main submittedAt is missing', () => {
     const mockCase = {
-      _id: 'case-completed',
-      clientRef: 'COMP-001',
-      code: 'COMP-CODE',
-      submittedAt: '2021-03-20T00:00:00.000Z',
-      stages: ['initial', 'review', 'completed'],
-      currentStage: 'completed',
+      _id: 'case-payload-date',
+      caseRef: 'PAYLOAD-001',
+      workflowCode: 'PAYLOAD-CODE',
       status: 'Completed',
-      assignedUser: 'jane smith'
+      assignedUser: 'jane smith',
+      payload: {
+        submittedAt: '2021-03-20T00:00:00.000Z',
+        answers: {
+          agreementName: 'Payload Agreement'
+        }
+      }
     }
 
     getFormattedGBDate.mockReturnValue('20/03/2021')
@@ -105,18 +120,15 @@ describe('createCaseDetailViewModel', () => {
     expect(result.data.case.status).toBe('Completed')
     expect(result.data.case.assignedUser).toBe('jane smith')
     expect(result.data.case.submittedAt).toBe('20/03/2021')
-    expect(result.data.case.currentStage).toBe('completed')
+    expect(result.data.case.businessName).toBe('Payload Agreement')
     expect(getFormattedGBDate).toHaveBeenCalledWith('2021-03-20T00:00:00.000Z')
   })
 
   it('creates correct breadcrumbs structure', () => {
     const mockCase = {
       _id: 'case-breadcrumb',
-      clientRef: 'BREAD-001',
-      code: 'BREAD-CODE',
-      submittedAt: null,
-      stages: [],
-      currentStage: null,
+      caseRef: 'BREAD-001',
+      workflowCode: 'BREAD-CODE',
       status: 'In Progress',
       assignedUser: 'Unassigned'
     }
@@ -133,11 +145,8 @@ describe('createCaseDetailViewModel', () => {
   it('creates consistent page title and heading', () => {
     const mockCase = {
       _id: 'case-title',
-      clientRef: 'TITLE-001',
-      code: 'TITLE-CODE',
-      submittedAt: null,
-      stages: [],
-      currentStage: null,
+      caseRef: 'TITLE-001',
+      workflowCode: 'TITLE-CODE',
       status: 'In Progress',
       assignedUser: 'Unassigned'
     }
@@ -154,11 +163,9 @@ describe('createCaseDetailViewModel', () => {
   it('calls date helper function exactly once', () => {
     const mockCase = {
       _id: 'case-methods',
-      clientRef: 'METHOD-001',
-      code: 'METHOD-CODE',
+      caseRef: 'METHOD-001',
+      workflowCode: 'METHOD-CODE',
       submittedAt: '2021-01-01T00:00:00.000Z',
-      stages: ['stage-1'],
-      currentStage: 'stage-1',
       status: 'Active',
       assignedUser: 'test user'
     }
@@ -169,5 +176,33 @@ describe('createCaseDetailViewModel', () => {
 
     expect(getFormattedGBDate).toHaveBeenCalledTimes(1)
     expect(getFormattedGBDate).toHaveBeenCalledWith('2021-01-01T00:00:00.000Z')
+  })
+
+  it('handles nested payload properties correctly', () => {
+    const mockCase = {
+      _id: 'case-nested',
+      caseRef: 'NESTED-001',
+      workflowCode: 'NESTED-CODE',
+      status: 'Processing',
+      assignedUser: 'processor',
+      payload: {
+        answers: {
+          agreementName: 'Complex Agreement',
+          scheme: 'Premium Scheme'
+        },
+        identifiers: {
+          sbi: '987654321'
+        }
+      }
+    }
+
+    getFormattedGBDate.mockReturnValue('Not submitted')
+
+    const result = createCaseDetailViewModel(mockCase)
+
+    expect(result.data.case.businessName).toBe('Complex Agreement')
+    expect(result.data.case.scheme).toBe('Premium Scheme')
+    expect(result.data.case.sbi).toBe('987654321')
+    expect(result.data.case.payload).toBe(mockCase.payload)
   })
 })
