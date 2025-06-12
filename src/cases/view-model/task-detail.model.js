@@ -1,5 +1,5 @@
-import { createCaseFromData } from '../../common/helpers/createCaseFromData.js'
-import { processCaseWithWorkflow } from '../../common/helpers/processCaseWithWorkflow.js'
+import { createCaseFromData } from '../../common/helpers/create-case-from-data.js'
+import { processCaseWithWorkflow } from '../../common/helpers/process-case-with-workflow.js'
 
 export const createTaskDetailViewModel = async (caseData, workflow, query) => {
   const caseAndStageData = await processCaseWithWorkflow(

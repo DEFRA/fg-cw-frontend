@@ -8,7 +8,7 @@ export const createCaseFromData = (caseData) => {
     submittedAt: getFormattedGBDate(caseData.submittedAt),
     status: caseData.status,
     assignedUser: caseData.assignedUser,
-    link: `/case/${caseData._id}`,
+    link: `/cases/${caseData._id}`,
     stages: caseData.stages,
     currentStage: caseData.currentStage
   }
