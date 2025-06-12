@@ -49,7 +49,7 @@ describe('case-list.model', () => {
             submittedAt: '15/01/2021',
             status: 'In Progress',
             assignedUser: 'john doe',
-            link: '/case/case-1'
+            link: '/cases/case-1'
           },
           {
             clientRef: 'CLIENT-002',
@@ -57,7 +57,7 @@ describe('case-list.model', () => {
             submittedAt: '20/02/2021',
             status: 'Completed',
             assignedUser: 'jane smith',
-            link: '/case/case-2'
+            link: '/cases/case-2'
           }
         ]
       })
@@ -108,7 +108,7 @@ describe('case-list.model', () => {
         submittedAt: 'Not submitted',
         status: 'Draft',
         assignedUser: 'Unassigned',
-        link: '/case/case-single'
+        link: '/cases/case-single'
       })
 
       expect(getFormattedGBDate).toHaveBeenCalledWith(null)
@@ -144,35 +144,37 @@ describe('case-list.model', () => {
 
       const result = transformCasesForList(mockCases)
 
-      expect(result.allCases[0].link).toBe('/case/case-link-1')
-      expect(result.allCases[1].link).toBe('/case/case-link-2')
+      expect(result.allCases[0].link).toBe('/cases/case-link-1')
+      expect(result.allCases[1].link).toBe('/cases/case-link-2')
     })
   })
 
   describe('createCaseListViewModel', () => {
     it('creates complete view model with cases', () => {
-      const mockCases = [
-        {
-          _id: 'case-vm-1',
-          payload: {
-            clientRef: 'VM-001',
-            code: 'VM-CODE-1',
-            submittedAt: '2021-03-10T00:00:00.000Z'
+      const mockCases = {
+        data: [
+          {
+            _id: 'case-vm-1',
+            payload: {
+              clientRef: 'VM-001',
+              code: 'VM-CODE-1',
+              submittedAt: '2021-03-10T00:00:00.000Z'
+            },
+            status: 'Review',
+            assignedUser: 'reviewer1'
           },
-          status: 'Review',
-          assignedUser: 'reviewer1'
-        },
-        {
-          _id: 'case-vm-2',
-          payload: {
-            clientRef: 'VM-002',
-            code: 'VM-CODE-2',
-            submittedAt: '2021-03-15T00:00:00.000Z'
-          },
-          status: 'Approved',
-          assignedUser: 'approver1'
-        }
-      ]
+          {
+            _id: 'case-vm-2',
+            payload: {
+              clientRef: 'VM-002',
+              code: 'VM-CODE-2',
+              submittedAt: '2021-03-15T00:00:00.000Z'
+            },
+            status: 'Approved',
+            assignedUser: 'approver1'
+          }
+        ]
+      }
 
       getFormattedGBDate
         .mockReturnValueOnce('10/03/2021')
@@ -192,7 +194,7 @@ describe('case-list.model', () => {
               submittedAt: '10/03/2021',
               status: 'Review',
               assignedUser: 'reviewer1',
-              link: '/case/case-vm-1'
+              link: '/cases/case-vm-1'
             },
             {
               clientRef: 'VM-002',
@@ -200,7 +202,7 @@ describe('case-list.model', () => {
               submittedAt: '15/03/2021',
               status: 'Approved',
               assignedUser: 'approver1',
-              link: '/case/case-vm-2'
+              link: '/cases/case-vm-2'
             }
           ]
         }
@@ -208,7 +210,7 @@ describe('case-list.model', () => {
     })
 
     it('creates view model with empty cases', () => {
-      const mockCases = []
+      const mockCases = { data: [] }
 
       const result = createCaseListViewModel(mockCases)
 
@@ -225,18 +227,20 @@ describe('case-list.model', () => {
     })
 
     it('creates view model with single case', () => {
-      const mockCases = [
-        {
-          _id: 'case-single-vm',
-          payload: {
-            clientRef: 'SINGLE-VM-001',
-            code: 'SINGLE-VM-CODE',
-            submittedAt: '2021-04-25T00:00:00.000Z'
-          },
-          status: 'Pending',
-          assignedUser: 'pending user'
-        }
-      ]
+      const mockCases = {
+        data: [
+          {
+            _id: 'case-single-vm',
+            payload: {
+              clientRef: 'SINGLE-VM-001',
+              code: 'SINGLE-VM-CODE',
+              submittedAt: '2021-04-25T00:00:00.000Z'
+            },
+            status: 'Pending',
+            assignedUser: 'pending user'
+          }
+        ]
+      }
 
       getFormattedGBDate.mockReturnValue('25/04/2021')
 
@@ -249,7 +253,7 @@ describe('case-list.model', () => {
     })
 
     it('has consistent page title and heading', () => {
-      const mockCases = []
+      const mockCases = { data: [] }
 
       const result = createCaseListViewModel(mockCases)
 
@@ -259,7 +263,7 @@ describe('case-list.model', () => {
     })
 
     it('has empty breadcrumbs array', () => {
-      const mockCases = []
+      const mockCases = { data: [] }
 
       const result = createCaseListViewModel(mockCases)
 
@@ -268,18 +272,20 @@ describe('case-list.model', () => {
     })
 
     it('calls transformCasesForList internally', () => {
-      const mockCases = [
-        {
-          _id: 'case-transform',
-          payload: {
-            clientRef: 'TRANSFORM-001',
-            code: 'TRANSFORM-CODE',
-            submittedAt: '2021-05-01T00:00:00.000Z'
-          },
-          status: 'Processing',
-          assignedUser: 'processor'
-        }
-      ]
+      const mockCases = {
+        data: [
+          {
+            _id: 'case-transform',
+            payload: {
+              clientRef: 'TRANSFORM-001',
+              code: 'TRANSFORM-CODE',
+              submittedAt: '2021-05-01T00:00:00.000Z'
+            },
+            status: 'Processing',
+            assignedUser: 'processor'
+          }
+        ]
+      }
 
       getFormattedGBDate.mockReturnValue('01/05/2021')
 
@@ -288,7 +294,7 @@ describe('case-list.model', () => {
       // Verify the transformation happened by checking the structure
       expect(result.data).toHaveProperty('allCases')
       expect(result.data.allCases[0]).toHaveProperty('link')
-      expect(result.data.allCases[0].link).toBe('/case/case-transform')
+      expect(result.data.allCases[0].link).toBe('/cases/case-transform')
     })
   })
 })

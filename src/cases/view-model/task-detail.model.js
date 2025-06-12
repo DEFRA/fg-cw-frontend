@@ -1,15 +1,20 @@
 import { createCaseFromData } from '../../common/helpers/createCaseFromData.js'
 import { processCaseWithWorkflow } from '../../common/helpers/processCaseWithWorkflow.js'
 
-export const createTaskListViewModel = async (caseData, workflow) => {
+export const createTaskDetailViewModel = async (caseData, workflow, query) => {
   const caseAndStageData = await processCaseWithWorkflow(
     createCaseFromData(caseData),
     workflow
   )
+
   return {
-    pageTitle: 'Case tasks',
+    pageTitle: 'Case task',
     heading: 'Case',
     breadcrumbs: [],
-    data: caseAndStageData
+    data: {
+      ...caseAndStageData,
+      taskId: query.taskId,
+      groupId: query.groupId
+    }
   }
 }

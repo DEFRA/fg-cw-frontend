@@ -7,7 +7,7 @@ export const transformCasesForList = (cases) => {
       submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
       status: caseItem.status,
       assignedUser: caseItem.assignedUser,
-      link: `/case/${caseItem._id}`
+      link: `/cases/${caseItem._id}`
     }))
   }
 }
@@ -17,6 +17,6 @@ export const createCaseListViewModel = (cases) => {
     pageTitle: 'Cases',
     heading: 'Cases',
     breadcrumbs: [],
-    data: transformCasesForList(cases)
+    data: transformCasesForList(cases.data)
   }
 }
