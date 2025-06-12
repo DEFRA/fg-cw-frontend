@@ -1,17 +1,129 @@
-{% extends 'layouts/page.njk' %}
+{% extends "govuk/template.njk" %}
+{# Import GOVUK components globally #}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{# Import custom components globally #}
+{% from "heading/macro.njk" import appHeading %}
+{% from "defraHeading/macro.njk" import appDefraHeading %}
+{% set mainClasses = "app-main-wrapper" %}
+
+{% block head %}
+  <link
+    href="{{ getAssetPath('stylesheets/application.scss') }}"
+    rel="stylesheet"
+  />
+{% endblock %}
+
+{% block header %}
+  {{ appDefraHeading({serviceName: "Manage rural grant applications"}) }}
+{% endblock %}
+
+{% block pageTitle %}
+  {{ pageTitle }}
+  | {{ serviceName }}
+{% endblock %}
+
+{% block beforeContent %}
+  {% if breadcrumbs.length > 1 %}
+    {{
+      govukBreadcrumbs({
+        items: breadcrumbs
+      })
+    }}
+  {% endif %}
+{% endblock %}
 
 {% block content %}
-  {{ appHeading({ text: heading }) }}
+{% endblock %}
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <div class="govuk-body" data-testid="app-page-body">
-        {% block caseContent %}{% endblock %}
-      </div>
-    </div>
-  </div>
+{% block footer %}
+  {{
+    govukFooter({
+       navigation: [
+      {
+        title: "Footer links",
+        width: "two-thirds",
+        columns: 2,
+        items: [
+          {
+            href: "#",
+            text: "Navigation item 1"
+          },
+          {
+            href: "#",
+            text: "Navigation item 2"
+          },
+          {
+            href: "#",
+            text: "Navigation item 3"
+          },
+          {
+            href: "#",
+            text: "Navigation item 4"
+          },
+          {
+            href: "#",
+            text: "Navigation item 5"
+          },
+          {
+            href: "#",
+            text: "Navigation item 6"
+          }
+        ]
+      },
+      {
+        title: "Help and Support",
+        width: "one-third",
+        items: [
+          {
+            href: "#",
+            text: "Guidance"
+          },
+          {
+            href: "#",
+            text: "Help"
+          },
+          {
+            href: "#",
+            text: "Feedback"
+          }
+        ]
+      }
+    ],
+      meta: {
+        items: [
+          {
+            href: "https://www.gov.uk/help/privacy-notice",
+            text: "Privacy"
+          },
+          {
+            href: "https://www.gov.uk/help/cookies",
+            text: "Cookies"
+          },
+          {
+            href: "https://www.gov.uk/help/accessibility-statement",
+            text: "Accessibility statement"
+          }
+        ]
+      }
+    })
+  }}
 {% endblock %}
 
 {% block bodyEnd %}
-  {{ super() }}
+  <script>
+    document.body.className +=
+      ' js-enabled' +
+      ('noModule' in HTMLScriptElement.prototype
+        ? ' govuk-frontend-supported'
+        : '')
+  </script>
+  <script type="module" src="{{ getAssetPath('application.js') }}"></script>
+  <script type="module" src="{{ getAssetPath('govuk.js') }}"></script>
+  <script type="module">
+    import { initSelectAllCheckboxes } from "{{ getAssetPath('checkboxes.js') }}"
+    import { initAll } from "{{ getAssetPath('govuk.js') }}"
+    initSelectAllCheckboxes()
+    initAll()
+  </script>
 {% endblock %}

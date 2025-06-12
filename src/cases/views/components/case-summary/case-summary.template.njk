@@ -1,13 +1,49 @@
-<div class="app-case-summary">
-  <h3 class="govuk-heading-m">{{ params.case.clientRef }}</h3>
-  <dl class="govuk-summary-list govuk-summary-list--no-border">
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Code</dt>
-      <dd class="govuk-summary-list__value">{{ params.case.code }}</dd>
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">{{ params.case.businessName }}</h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            {{ params.case.sbi }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            {{ params.case.code }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            {{ params.case.scheme }}
+            {{ params.case.dateReceived|formatDate("yyyy") if params.case.dateReceived }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            {{ params.case.dateReceived|formatDate("d MMM yyyy") if params.case.dateReceived }}
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            {{ params.case.status }}
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="govuk-summary-list__row">
-      <dt class="govuk-summary-list__key">Status</dt>
-      <dd class="govuk-summary-list__value">{{ params.case.status }}</dd>
-    </div>
-  </dl>
+  </div>
 </div>
