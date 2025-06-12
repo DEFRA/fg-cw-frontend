@@ -83,7 +83,7 @@ describe('createCaseDetailViewModel', () => {
       }
     })
 
-    expect(getFormattedGBDate).toHaveBeenCalledWith(null)
+    expect(getFormattedGBDate).toHaveBeenCalledWith(undefined)
   })
 
   it('creates view model with completed case', () => {

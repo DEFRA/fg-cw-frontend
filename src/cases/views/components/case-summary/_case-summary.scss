@@ -1,0 +1,24 @@
+@use 'govuk-frontend' as *;
+
+.app-case-banner {
+  background-color: #e7f4eb;
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  top: -(govuk-spacing(4));
+}
+
+.app-case-row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: govuk-spacing(3);
+}
+
+.app-case-cell {
+  margin-right: govuk-spacing(4);
+  display: flex;
+  align-items: center;
+} 

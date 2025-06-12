@@ -7,7 +7,7 @@ export const transformCasesForList = (cases) => {
       submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
       status: caseItem.status,
       assignedUser: caseItem.assignedUser,
-      link: `/case/${caseItem._id}`
+      link: `/cases/${caseItem._id}`
     }))
   }
 }
