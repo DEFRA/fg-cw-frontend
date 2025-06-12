@@ -1,5 +1,5 @@
 import { findAllCasesUseCase } from '../use-cases/find-all-cases.use-case.js'
-import { findOneCaseUseCase } from '../use-cases/find-one-case.use-case.js'
+import { findCaseByIdUseCase } from '../use-cases/find-case-by-id.use-case.js'
 import { createCaseListViewModel } from '../view-model/case-list.model.js'
 import { createTaskListViewModel } from '../view-model/task-list.model.js'
 
@@ -11,11 +11,11 @@ export const caseController = {
   },
 
   async listTasks(request, h) {
-    const caseData = await findOneCaseUseCase(request.params.caseId)
+    const caseData = await findCaseByIdUseCase(request.params.caseId)
 
     const viewModel = await createTaskListViewModel(caseData)
 
-    return h.view('pages/list-tasks', {
+    return h.view('pages/tasks-list', {
       ...viewModel
     })
   }

@@ -2,7 +2,7 @@ import { getFormattedGBDate } from '../../common/helpers/date-helpers.js'
 import { getWorkflowByCode } from '../repositories/workflow.repository.js'
 
 export const transformCase = (caseData) => {
-  console.log({caseData})
+  console.log({ caseData })
   return {
     id: caseData._id,
     clientRef: caseData.clientRef,
