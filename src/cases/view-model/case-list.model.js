@@ -17,6 +17,6 @@ export const createCaseListViewModel = (cases) => {
     pageTitle: 'Cases',
     heading: 'Cases',
     breadcrumbs: [],
-    data: transformCasesForList(cases.data)
+    data: transformCasesForList(cases)
   }
 }
