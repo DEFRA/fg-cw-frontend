@@ -15,7 +15,7 @@ export const caseController = {
 
     const viewModel = await createTaskListViewModel(caseData)
 
-    return h.view('pages/tasks-list', {
+    return h.view('pages/task-list', {
       ...viewModel
     })
   }

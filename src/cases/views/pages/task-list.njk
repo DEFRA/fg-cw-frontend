@@ -7,7 +7,7 @@
   {{ appCaseSummary({ case: data.case }) }}
 
   <div class="govuk-body">
-    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data._id, taskGroupId: query.groupId}) }}
+    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data.case.id, taskGroupId: query.groupId}) }}
 
     {{ appTasksTab({caseId: data.case.id, stage: data.stage, groupId: data.groupId, taskId: data.taskId }) }}
   </div>
