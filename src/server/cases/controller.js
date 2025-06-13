@@ -111,7 +111,7 @@ const processCaseWithWorkflow = async (selectedCase) => {
         tasks: (group.tasks || []).map((task) => ({
           ...task,
           link: `/cases/${selectedCase._id}/tasks/${group.id}/${task.id}`,
-          status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
+          status: task.status === 'complete' ? 'COMPLETE' : 'INCOMPLETE'
         }))
       }))
     })) || []
