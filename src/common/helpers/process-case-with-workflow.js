@@ -1,4 +1,4 @@
-export const processCaseWithWorkflow = async (selectedCase, workflow) => {
+export const processCaseWithWorkflow = (selectedCase, workflow) => {
   // Add titles from workflow stages to selectedCase stages
   selectedCase.stages = selectedCase.stages.map((stage) => {
     const workflowStage = workflow.stages.find((ws) => ws.id === stage.id)

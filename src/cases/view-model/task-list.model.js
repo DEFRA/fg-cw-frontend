@@ -2,7 +2,7 @@ import { createCaseFromData } from '../../common/helpers/create-case-from-data.j
 import { processCaseWithWorkflow } from '../../common/helpers/process-case-with-workflow.js'
 
 export const createTaskListViewModel = async (caseData, workflow) => {
-  const caseAndStageData = await processCaseWithWorkflow(
+  const caseAndStageData = processCaseWithWorkflow(
     createCaseFromData(caseData),
     workflow
   )
