@@ -7,8 +7,15 @@ export const createTaskDetailViewModel = async (caseData, workflow, query) => {
     workflow
   )
 
+  const { groupId, taskId } = query
+  const currentGroup = caseAndStageData.stage.groups.find(
+    (g) => g.id === groupId
+  )
+  const currentGroupTasks = currentGroup?.tasks
+  const currentTask = currentGroupTasks.find((t) => t.id === taskId)
+
   return {
-    pageTitle: 'Case task',
+    pageTitle: 'Case task - ' + currentTask.title,
     heading: 'Case',
     breadcrumbs: [
       { text: 'Cases', href: '/cases' },
@@ -17,7 +24,8 @@ export const createTaskDetailViewModel = async (caseData, workflow, query) => {
     data: {
       ...caseAndStageData,
       taskId: query.taskId,
-      groupId: query.groupId
+      groupId: query.groupId,
+      currentTask
     }
   }
 }

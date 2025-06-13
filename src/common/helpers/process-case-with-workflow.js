@@ -19,7 +19,8 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
         // Add title to task group
         const updatedTaskGroup = {
           ...taskGroup,
-          title: workflowTaskGroup?.title
+          title: workflowTaskGroup?.title,
+          description: workflowTaskGroup?.description
         }
 
         // Add titles to tasks
@@ -33,6 +34,7 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
             return {
               ...task,
               title: workflowTask?.title,
+              description: workflowTask?.description,
               type: workflowTask?.type
             }
           })
@@ -49,6 +51,8 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
     return updatedStage
   })
 
+  const allStageTasks = []
+
   // Create taskSteps from the updated selectedCase stages
   const stages =
     selectedCase.stages.map((stage) => ({
@@ -56,13 +60,20 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
       actions: stage.actions,
       groups: (stage.taskGroups || []).map((group) => ({
         ...group,
-        tasks: (group.tasks || []).map((task) => ({
-          ...task,
-          link: `/cases/${selectedCase.id}/tasks/${group.id}/${task.id}`,
-          status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
-        }))
+        tasks: (group.tasks || []).map((task) => {
+          if (stage.id === selectedCase.currentStage) {
+            allStageTasks.push(task)
+          }
+          return {
+            ...task,
+            link: `/cases/${selectedCase.id}/tasks/${group.id}/${task.id}`,
+            status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
+          }
+        })
       }))
     })) || []
+
+  const tasksComplete = allStageTasks.every((t) => t.isComplete)
 
   // Filter stages to only show the current stage
   const currentStage = selectedCase.currentStage
@@ -74,6 +85,6 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
 
   return {
     case: selectedCase,
-    stage: filteredStage
+    stage: { ...filteredStage, tasksComplete }
   }
 }

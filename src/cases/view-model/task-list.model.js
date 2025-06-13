@@ -7,7 +7,7 @@ export const createTaskListViewModel = async (caseData, workflow) => {
     workflow
   )
   return {
-    pageTitle: 'Case tasks',
+    pageTitle: 'Case tasks - ' + caseAndStageData.stage.title,
     heading: 'Case',
     breadcrumbs: [
       { text: 'Cases', href: '/cases' },
