@@ -14,3 +14,10 @@ export const updateStage = async (caseId) => {
   const { payload } = await wreck.post(`/cases/${caseId}/stage`)
   return payload
 }
+
+export const completeTask = async ({ caseId, groupId, taskId, isComplete }) => {
+  const data = { caseId, groupId, taskId, isComplete }
+  return await wreck.post(`/cases/${caseId}/task/`, {
+    payload: data
+  })
+}

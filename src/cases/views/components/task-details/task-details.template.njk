@@ -26,7 +26,16 @@
     </h2>
 
     {% if params.currentTask.type === "boolean" %}
-      {{ appTaskBoolean({ caseId:params.caseId, groupId:params.groupId, taskId:params.taskId, isComplete: params.currentTask.isComplete, title: params.currentTask.title}) }}
+      {# appTaskBoolean should be task.descripion... it just doesn't exist yet #}
+      {{
+        appTaskBoolean({
+        caseId:params.caseId,
+        groupId:params.groupId,
+        taskId:params.taskId,
+        isComplete: params.currentTask.isComplete,
+        title: params.currentTask.title
+        })
+      }}
     {% endif %}
   </div>
 </div>
