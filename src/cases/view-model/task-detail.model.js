@@ -10,7 +10,10 @@ export const createTaskDetailViewModel = async (caseData, workflow, query) => {
   return {
     pageTitle: 'Case task',
     heading: 'Case',
-    breadcrumbs: [],
+    breadcrumbs: [
+      { text: 'Cases', href: '/cases' },
+      { text: caseData.caseRef, href: '/cases/' + caseData._id }
+    ],
     data: {
       ...caseAndStageData,
       taskId: query.taskId,
