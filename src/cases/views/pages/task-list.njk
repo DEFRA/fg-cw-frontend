@@ -1,14 +1,14 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "../components/case-summary/macro.njk" import appCaseSummary %}
 {% from "../components/case-details-tab-navigation/macro.njk" import appCaseDetailsTabNavigation %}
+{% from "../components/task-group/macro.njk" import appTaskGroup %}
 
 {% block content %}
   {{ appCaseSummary({ case: data.case }) }}
 
-  {# Future: Add case details, tasks, etc. #}
   <div class="govuk-body">
-    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data._id, taskGroupId: query.groupId}) }}
+    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data.case.id }) }}
 
-    <p>Tasks list view - to be implemented</p>
+    {{ appTaskGroup({caseId: data.case.id, stage: data.stage }) }}
   </div>
 {% endblock %}

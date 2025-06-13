@@ -151,31 +151,6 @@ const showCase = async (request, h) => {
   })
 }
 
-const showTask = async (request, h) => {
-  const { id, groupId, taskId } = request.params
-
-  if (!id) {
-    return h.response('Case ID is required').code(400)
-  }
-
-  const selectedCase = await getCaseById(id)
-
-  if (!selectedCase) {
-    return h.response('Case not found').code(404)
-  }
-
-  const processedData = await processCaseWithWorkflow(selectedCase)
-  if (!processedData) {
-    return h.response('Workflow not found').code(404)
-  }
-
-  return h.view('cases/views/show', {
-    pageTitle: 'Case',
-    ...processedData,
-    query: { groupId, taskId }
-  })
-}
-
 export const casesController = {
   handler: async (request, h) => {
     const caseData = await getCases()
@@ -202,6 +177,5 @@ export const casesController = {
     return showCase(request, h)
   },
 
-  show: showCase,
-  showTask
+  show: showCase
 }

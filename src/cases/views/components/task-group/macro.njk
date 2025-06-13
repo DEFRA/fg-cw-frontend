@@ -1,0 +1,11 @@
+{# 
+    caseId: <string>,
+    stage: {
+        title: <string>,
+        groups: <array of task groups>
+    }
+#}
+
+{% macro appTaskGroup(params) %}
+  {%- include "./task-group.template.njk" -%}
+{% endmacro %}
