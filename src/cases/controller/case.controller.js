@@ -1,8 +1,10 @@
 import { findAllCasesUseCase } from '../use-cases/find-all-cases.use-case.js'
 import { findCaseByIdUseCase } from '../use-cases/find-case-by-id.use-case.js'
-
 import { createCaseListViewModel } from '../view-model/case-list.model.js'
 import { createCaseDetailViewModel } from '../view-model/case-detail.model.js'
+import { createTaskListViewModel } from '../view-model/task-list.model.js'
+import { createTaskDetailViewModel } from '../view-model/task-detail.model.js'
+import { findWorkflowByCode } from '../repositories/workflow.repository.js'
 
 export const caseController = {
   async listCases(request, h) {
@@ -18,10 +20,22 @@ export const caseController = {
     return h.view('pages/case-detail', viewModel)
   },
   async listTasks(request, h) {
-    return h.view('pages/list-tasks', {
-      case: {},
-      caseDataId: '0987',
-      active: true
+    const caseData = await findCaseByIdUseCase(request.params.caseId)
+    const workflow = await findWorkflowByCode(caseData.workflowCode)
+    const viewModel = await createTaskListViewModel(caseData, workflow)
+    return h.view('pages/task-list', {
+      ...viewModel
     })
+  },
+
+  async getTask(request, h) {
+    const caseData = await findCaseByIdUseCase(request.params.caseId)
+    const workflow = await findWorkflowByCode(caseData.workflowCode)
+    const viewModel = await createTaskDetailViewModel(
+      caseData,
+      workflow,
+      request.params
+    )
+    return h.view('pages/task-detail', viewModel)
   }
 }

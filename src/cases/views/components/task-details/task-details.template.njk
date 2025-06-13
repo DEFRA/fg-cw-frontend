@@ -3,12 +3,13 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 
+{% set caseLink = "/cases/" + params.caseId %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{
       govukBackLink({
         text: "Back to task list",
-        href: "/case/" + params.caseId,
+        href: caseLink,
         attributes: {
           "data-testid": "back-link"
         }
@@ -53,7 +54,7 @@
         {{
           govukButton({
             text: "Save and continue",
-            href: "/case/" + params.caseId,
+            href: caseLink,
             attributes: {
               "data-testid": "save-and-continue-button"
             }
