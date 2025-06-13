@@ -27,7 +27,6 @@ export const caseController = {
       ...viewModel
     })
   },
-
   async getTask(request, h) {
     const caseData = await findCaseByIdUseCase(request.params.caseId)
     const workflow = await findWorkflowByCode(caseData.workflowCode)
