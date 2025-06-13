@@ -1,6 +1,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "../task-list/macro.njk" import appTaskList %}
-{% from "../stage-action-button-group/macro.njk" import appStageActionButtonGroup %}
+{% from "../../partials/stage-action-button-group/macro.njk" import appStageActionButtonGroup %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -8,7 +8,7 @@
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="stage-heading"
     >
-      {{ stage.title }}
+      {{ params.stage.title }}
     </h2>
     {% for group in params.stage.groups %}
       <h3 class="govuk-heading-m">{{ loop.index }}. {{ group.title }}</h3>
