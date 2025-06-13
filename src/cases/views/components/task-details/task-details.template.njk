@@ -2,8 +2,10 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
 
 {% set caseLink = "/cases/" + params.caseId %}
+
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     {{
@@ -20,47 +22,11 @@
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
     >
-      {% set taskTitle = "" %}
-      {% set taskType = "" %}
-      {% for group in params.groups %}
-        {% if group.id === params.groupId %}
-          {% for task in group.tasks %}
-            {% if task.id === params.taskId %}
-              {% set taskTitle = task.title %}
-              {% set taskType = task.type %}
-            {% endif %}
-          {% endfor %}
-        {% endif %}
-      {% endfor %}
-      {{ taskTitle }}
+      {{ params.currentTask.title }}
     </h2>
 
-    {% if taskType === "boolean" %}
-      <div class="govuk-form-group">
-        {{
-          govukCheckboxes({
-            name: "app-review",
-            items: [
-              {
-                value: "true",
-                id: "app-review",
-                text: "Is application ready to be reviewed?"
-              }
-            ]
-          })
-        }}
-      </div>
-      <div class="govuk-button-group">
-        {{
-          govukButton({
-            text: "Save and continue",
-            href: caseLink,
-            attributes: {
-              "data-testid": "save-and-continue-button"
-            }
-          })
-        }}
-      </div>
+    {% if params.currentTask.type === "boolean" %}
+      {{ appTaskBoolean({ caseId:params.caseId, groupId:params.groupId, taskId:params.taskId, isComplete: params.currentTask.isComplete, title: params.currentTask.title}) }}
     {% endif %}
   </div>
 </div>

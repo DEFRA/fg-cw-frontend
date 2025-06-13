@@ -7,6 +7,6 @@
   {{ appCaseSummary({ case: data.case }) }}
   <div class="govuk-body">
     {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data.case.id }) }}
-    {{ appTaskDetails({caseId: data.case.id, groups: data.stage.groups, groupId: data.groupId, taskId: data.taskId }) }}
+    {{ appTaskDetails({caseId: data.case.id, currentTask: data.currentTask, groupId: data.groupId, taskId: data.taskId }) }}
   </div>
 {% endblock %}
