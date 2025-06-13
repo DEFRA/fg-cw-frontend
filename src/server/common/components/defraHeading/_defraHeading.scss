@@ -1,7 +1,7 @@
-@use 'govuk-frontend' as *;
+@use "govuk-frontend" as *;
 
 .defra-crest {
-  background: url('/public/assets/images/defra-crest.png') no-repeat 8px 0;
+  background: url("/public/assets/images/defra-crest.png") no-repeat 8px 0;
   background-size: auto 32px;
   border-left: 2px solid #00a33b;
   padding-top: 35px;
@@ -9,7 +9,7 @@
 }
 
 .defra-logo-name {
-  font-family: HelveticaNeue, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+  font-family: HelveticaNeue, "Helvetica Neue", Arial, Helvetica, sans-serif;
   font-weight: 400;
   margin: 0;
   -webkit-font-smoothing: antialiased;

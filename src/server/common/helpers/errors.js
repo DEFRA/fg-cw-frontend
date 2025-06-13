@@ -1,39 +1,33 @@
-import { statusCodes } from '../constants/status-codes.js'
+const messages = {
+  400: "Bad Request",
+  401: "Unauthorized",
+  403: "Forbidden",
+  404: "Page not found",
+  500: "Something went wrong",
+};
 
-function statusCodeMessage(statusCode) {
-  switch (statusCode) {
-    case statusCodes.notFound:
-      return 'Page not found'
-    case statusCodes.forbidden:
-      return 'Forbidden'
-    case statusCodes.unauthorized:
-      return 'Unauthorized'
-    case statusCodes.badRequest:
-      return 'Bad Request'
-    default:
-      return 'Something went wrong'
-  }
-}
+const statusCodeMessage = (statusCode) =>
+  messages[statusCode] || "Something went wrong";
 
-export function catchAll(request, h) {
-  const { response } = request
+export const catchAll = (request, h) => {
+  const { response } = request;
 
-  if (!('isBoom' in response)) {
-    return h.continue
+  if (!("isBoom" in response)) {
+    return h.continue;
   }
 
-  const statusCode = response.output.statusCode
-  const errorMessage = statusCodeMessage(statusCode)
+  const statusCode = response.output.statusCode;
+  const errorMessage = statusCodeMessage(statusCode);
 
-  if (statusCode >= statusCodes.internalServerError) {
-    request.logger.error(response?.stack)
+  if (statusCode >= 500) {
+    request.logger.error(response?.stack);
   }
 
   return h
-    .view('error/index', {
+    .view("error/index", {
       pageTitle: errorMessage,
       heading: statusCode,
-      message: errorMessage
+      message: errorMessage,
     })
-    .code(statusCode)
-}
+    .code(statusCode);
+};
