@@ -6,7 +6,6 @@ const messages = {
   403: "Forbidden",
   404: "Page not found",
   500: "Something went wrong",
-  502: "Service unavailable",
 };
 
 const statusCodeMessage = (statusCode) =>
