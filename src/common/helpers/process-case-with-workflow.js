@@ -67,13 +67,14 @@ export const processCaseWithWorkflow = (selectedCase, workflow) => {
           return {
             ...task,
             link: `/cases/${selectedCase.id}/tasks/${group.id}/${task.id}`,
-            status: task.isComplete ? 'COMPLETE' : 'INCOMPLETE'
+            status: task.status,
+            isComplete: task.status === 'complete'
           }
         })
       }))
     })) || []
 
-  const tasksComplete = allStageTasks.every((t) => t.isComplete)
+  const tasksComplete = allStageTasks.every((t) => t.status === 'complete')
 
   // Filter stages to only show the current stage
   const currentStage = selectedCase.currentStage

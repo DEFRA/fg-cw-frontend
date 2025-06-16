@@ -17,7 +17,6 @@
         }
       })
     }}
-
     <h2
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
@@ -26,13 +25,12 @@
     </h2>
 
     {% if params.currentTask.type === "boolean" %}
-      {# appTaskBoolean should be task.descripion... it just doesn't exist yet #}
       {{
         appTaskBoolean({
         caseId:params.caseId,
         groupId:params.groupId,
         taskId:params.taskId,
-        isComplete: params.currentTask.isComplete,
+        isComplete: params.currentTask.status === "complete",
         title: params.currentTask.title
         })
       }}

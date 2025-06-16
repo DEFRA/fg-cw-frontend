@@ -2,8 +2,8 @@ import { listCasesRoutes } from './routes/list-case.route.js'
 import { listTasksRoutes } from './routes/list-tasks.route.js'
 import { displayTaskRoutes } from './routes/display-task.route.js'
 import { showCaseRoutes } from './routes/show-case.route.js'
-import { completeTaskRoutes } from './routes/complete-task.route.js'
 import { completeStageRoutes } from './routes/complete-stage.route.js'
+import { updateTaskStatusRoutes } from './routes/update-task-status.route.js'
 
 export const cases = {
   plugin: {
@@ -14,7 +14,7 @@ export const cases = {
         showCaseRoutes,
         listTasksRoutes,
         displayTaskRoutes,
-        completeTaskRoutes,
+        updateTaskStatusRoutes,
         completeStageRoutes
       ])
     }

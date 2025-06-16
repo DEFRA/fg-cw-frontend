@@ -5,7 +5,10 @@ import { createCaseDetailViewModel } from '../view-model/case-detail.model.js'
 import { createTaskListViewModel } from '../view-model/task-list.model.js'
 import { createTaskDetailViewModel } from '../view-model/task-detail.model.js'
 import { findWorkflowByCode } from '../repositories/workflow.repository.js'
-import { completeTask, completeStage } from '../repositories/case.repository.js'
+import {
+  updateTaskStatus,
+  completeStage
+} from '../repositories/case.repository.js'
 
 export const caseController = {
   async listCases(request, h) {
@@ -38,31 +41,43 @@ export const caseController = {
     )
     return h.view('pages/task-detail', viewModel)
   },
-  async completeTask(request, h) {
+  async updateTaskStatus(request, h) {
     const { caseId, groupId } = request.params
     const { isComplete = false, taskId } = request.payload
 
-    await completeTask({
+    const { currentStage } = await findCaseByIdUseCase(caseId)
+
+    await updateTaskStatus({
       caseId,
+      stageId: currentStage,
       groupId,
       taskId,
       isComplete: !!isComplete
     })
 
-    const caseData = await findCaseByIdUseCase(request.params.caseId)
+    const params = { groupId, taskId }
+    const caseData = await findCaseByIdUseCase(caseId)
     const workflow = await findWorkflowByCode(caseData.workflowCode)
-    const viewModel = await createTaskListViewModel(caseData, workflow)
-    return h.view('pages/task-list', viewModel)
+    const viewModel = await createTaskDetailViewModel(
+      caseData,
+      workflow,
+      params
+    )
+    return h.view('pages/task-detail', viewModel)
   },
   async completeStage(request, h) {
     const {
       params: { caseId }
     } = request
-    const { error } = await completeStage(caseId)
+    const result = await completeStage(caseId)
 
     const caseData = await findCaseByIdUseCase(caseId)
     const workflow = await findWorkflowByCode(caseData.workflowCode)
-    const viewModel = await createTaskListViewModel(caseData, workflow, error)
+    const viewModel = await createTaskListViewModel(
+      caseData,
+      workflow,
+      result?.error
+    )
     return h.view('pages/task-list', {
       ...viewModel
     })

@@ -1,6 +1,6 @@
 import { caseController } from '../controller/case.controller.js'
-export const completeTaskRoutes = {
+export const updateTaskStatusRoutes = {
   method: 'POST',
   path: '/cases/{caseId}/tasks/{groupId}/{taskId}',
-  handler: caseController.completeTask
+  handler: caseController.updateTaskStatus
 }
