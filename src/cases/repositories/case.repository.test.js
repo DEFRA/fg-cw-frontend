@@ -155,7 +155,7 @@ describe("Case Repository", () => {
       const params = {
         stageId: "stage-1",
         caseId: "1234-0909",
-        groupId: "tg-01",
+        taskGroupId: "tg-01",
         taskId: "t-01",
       };
       await updateTaskStatus({ ...params, isComplete: true });

@@ -1,12 +1,12 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
-export const createTaskListViewModel = (caseData) => {
+export const createTaskListViewModel = (caseData, error) => {
   const stage = caseData.stages.find(
     (stage) => stage.id === caseData.currentStage,
   );
 
   return {
-    pageTitle: "Case tasks",
+    pageTitle: "Case tasks - " + stage.title,
     heading: "Case",
     breadcrumbs: [
       { text: "Cases", href: "/cases" },
@@ -35,6 +35,7 @@ export const createTaskListViewModel = (caseData) => {
             ...task,
             link: `/cases/${caseData._id}/tasks/${taskGroup.id}/${task.id}`,
             status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
+            isComplete: task.status === "complete",
           })),
         })),
       },

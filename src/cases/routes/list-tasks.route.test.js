@@ -30,7 +30,7 @@ describe("listTasksRoute", () => {
       workflowCode: "frps-private-beta",
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
-      currentStage: "contract",
+      currentStage: "application-receipt",
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",

@@ -9,7 +9,6 @@ import { config } from "./common/config.js";
 import { logger } from "./common/logger.js";
 import { nunjucksConfig } from "./config/nunjucks/nunjucks.js";
 import { health } from "./health/index.js";
-import { casesDeprecated } from "./server/cases/index.js";
 
 export const createServer = async () => {
   const server = hapi.server({
@@ -67,7 +66,7 @@ export const createServer = async () => {
     nunjucksConfig,
   ]);
 
-  await server.register([health, cases, casesDeprecated]);
+  await server.register([health, cases]);
 
   // Add static file serving
   server.route({
