@@ -28,9 +28,9 @@
       {{
         appTaskBoolean({
         caseId:params.caseId,
-        groupId:params.groupId,
+        taskGroupId:params.taskGroupId,
         taskId:params.taskId,
-        isComplete: params.currentTask.status === "complete",
+        isComplete: params.currentTask.isComplete,
         title: params.currentTask.title
         })
       }}

@@ -1,0 +1,221 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`viewCaseRoute > returns a list of cases 1`] = `
+"
+  
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">Test application name 1</h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            SBI001
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            frps-private-beta
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            SFI
+            2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            11 Jun 2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            NEW
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="govuk-body">
+    
+  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation">
+
+            
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
+                                    
+Tasks
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details" aria-current="true">
+                                    
+                  <strong class="govuk-service-navigation__active-fallback">Case Details</strong>
+
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="#">
+                                    
+Land Details
+                  </a>
+              </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    </div>
+
+  </div>
+
+
+
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
+      Case
+    </h2>
+
+    <p class="govuk-body">
+      submitted:
+      <strong>1st October 2023</strong>
+    </p>
+
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-body" data-testid="app-page-body">
+          
+
+          <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">_id</th>
+      <td class="govuk-table__cell">68495db5afe2d27b09b2ee47</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">clientRef</th>
+      <td class="govuk-table__cell">banana-123</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">businessName</th>
+      <td class="govuk-table__cell">Test application name 1</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">code</th>
+      <td class="govuk-table__cell">frps-private-beta</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">sbi</th>
+      <td class="govuk-table__cell">SBI001</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">scheme</th>
+      <td class="govuk-table__cell">SFI</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">dateReceived</th>
+      <td class="govuk-table__cell">2025-06-11T10:43:01.603Z</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">submittedAt</th>
+      <td class="govuk-table__cell">01/10/2023</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">status</th>
+      <td class="govuk-table__cell">NEW</td>
+    </tr>
+  </tbody>
+</table>
+
+
+          
+
+          <table class="govuk-table">
+  <caption class="govuk-table__caption govuk-table__caption--m">Answers</caption>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">agreementName</th>
+      <td class="govuk-table__cell">Test application name 1</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">scheme</th>
+      <td class="govuk-table__cell">SFI</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">year</th>
+      <td class="govuk-table__cell">2025</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">hasCheckedLandIsUpToDate</th>
+      <td class="govuk-table__cell">true</td>
+    </tr>
+  </tbody>
+</table>
+
+
+          
+            <h2 class="govuk-heading-m">Action cases data</h2>
+              <h3 class="govuk-heading-s">
+                Selected land parcel for action 1
+              </h3>
+
+
+              <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">parcelId</th>
+      <td class="govuk-table__cell">9238</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">sheetId</th>
+      <td class="govuk-table__cell">SX0679</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">code</th>
+      <td class="govuk-table__cell">CSAM1</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">appliedFor</th>
+      <td class="govuk-table__cell">20.23 ha</td>
+    </tr>
+  </tbody>
+</table>
+
+        </div>
+      </div>
+    </div>
+  </div>
+        "
+`;

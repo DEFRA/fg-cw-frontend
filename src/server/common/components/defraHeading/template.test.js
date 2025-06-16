@@ -1,26 +1,26 @@
-import { describe, test, expect, beforeEach } from 'vitest'
-import { renderComponent } from '../../test-helpers/component-helpers.js'
+import { beforeEach, describe, expect, test } from "vitest";
+import { renderComponent } from "../../test-helpers/component-helpers.js";
 
-describe('Heading Component', () => {
-  let $defraHeading
+describe("Heading Component", () => {
+  let $defraHeading;
 
-  describe('defra heading', () => {
+  describe("defra heading", () => {
     beforeEach(() => {
-      $defraHeading = renderComponent('defraHeading', {
-        serviceName: 'Manage rural grant applications'
-      })
-    })
+      $defraHeading = renderComponent("defraHeading", {
+        serviceName: "Manage rural grant applications",
+      });
+    });
 
-    test('Should render defra heading component', () => {
+    test("Should render defra heading component", () => {
       expect(
-        $defraHeading('[data-testid="defra-heading-logo"]').text().trim()
-      ).toContain('Departmentfor Environment,Food & Rural Affairs')
+        $defraHeading('[data-testid="defra-heading-logo"]').text().trim(),
+      ).toContain("Departmentfor Environment,Food & Rural Affairs");
 
       expect(
         $defraHeading('[data-testid="defra-heading-service-name"]')
           .text()
-          .trim()
-      ).toContain('Manage rural grant applications')
-    })
-  })
-})
+          .trim(),
+      ).toContain("Manage rural grant applications");
+    });
+  });
+});
