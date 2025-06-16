@@ -2,7 +2,6 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
-
 {% set caseLink = "/cases/" + params.caseId %}
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -15,16 +14,15 @@
         }
       })
     }}
-
     <h2
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
     >
       {% set taskTitle = "" %}
       {% set taskType = "" %}
-      {% for group in params.groups %}
-        {% if group.id === params.groupId %}
-          {% for task in group.tasks %}
+      {% for taskGroup in params.taskGroups %}
+        {% if taskGroup.id === params.taskGroupId %}
+          {% for task in taskGroup.tasks %}
             {% if task.id === params.taskId %}
               {% set taskTitle = task.title %}
               {% set taskType = task.type %}
@@ -34,7 +32,6 @@
       {% endfor %}
       {{ taskTitle }}
     </h2>
-
     {% if taskType === "boolean" %}
       <div class="govuk-form-group">
         {{

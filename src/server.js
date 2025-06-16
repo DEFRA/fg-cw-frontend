@@ -1,93 +1,93 @@
-import { tracing } from '@defra/hapi-tracing'
-import hapi from '@hapi/hapi'
-import Inert from '@hapi/inert'
-import Vision from '@hapi/vision'
-import hapiPino from 'hapi-pino'
-import hapiPulse from 'hapi-pulse'
-import { cases } from './cases/index.js'
-import { config } from './common/config.js'
-import { logger } from './common/logger.js'
-import { health } from './health/index.js'
-import { nunjucksConfig } from './config/nunjucks/nunjucks.js'
-import { casesDeprecated } from './server/cases/index.js'
+import { tracing } from "@defra/hapi-tracing";
+import hapi from "@hapi/hapi";
+import Inert from "@hapi/inert";
+import Vision from "@hapi/vision";
+import hapiPino from "hapi-pino";
+import hapiPulse from "hapi-pulse";
+import { cases } from "./cases/index.js";
+import { config } from "./common/config.js";
+import { logger } from "./common/logger.js";
+import { nunjucksConfig } from "./config/nunjucks/nunjucks.js";
+import { health } from "./health/index.js";
+import { casesDeprecated } from "./server/cases/index.js";
 
 export const createServer = async () => {
   const server = hapi.server({
-    host: config.get('host'),
-    port: config.get('port'),
+    host: config.get("host"),
+    port: config.get("port"),
     routes: {
       validate: {
         options: {
-          abortEarly: false
+          abortEarly: false,
         },
         failAction: (_request, _h, error) => {
-          logger.warn(error, error?.message)
-          throw error
-        }
+          logger.warn(error, error?.message);
+          throw error;
+        },
       },
       security: {
         hsts: {
           maxAge: 31536000,
           includeSubDomains: true,
-          preload: false
+          preload: false,
         },
-        xss: 'enabled',
+        xss: "enabled",
         noSniff: true,
-        xframe: true
-      }
+        xframe: true,
+      },
     },
     router: {
-      stripTrailingSlash: true
-    }
-  })
+      stripTrailingSlash: true,
+    },
+  });
 
   await server.register([
     {
       plugin: hapiPino,
       options: {
-        ignorePaths: ['/health'],
-        instance: logger
-      }
+        ignorePaths: ["/health"],
+        instance: logger,
+      },
     },
     {
       plugin: tracing.plugin,
       options: {
-        tracingHeader: config.get('tracing.header')
-      }
+        tracingHeader: config.get("tracing.header"),
+      },
     },
     {
       plugin: hapiPulse,
       options: {
         logger,
-        timeout: 10_000
-      }
+        timeout: 10_000,
+      },
     },
     Inert,
     Vision,
-    nunjucksConfig
-  ])
+    nunjucksConfig,
+  ]);
 
-  await server.register([health, cases, casesDeprecated])
+  await server.register([health, cases, casesDeprecated]);
 
   // Add static file serving
   server.route({
-    method: 'GET',
-    path: '/public/{param*}',
+    method: "GET",
+    path: "/public/{param*}",
     handler: {
       directory: {
-        path: '.public',
+        path: ".public",
         redirectToSlash: true,
-        index: true
-      }
-    }
-  })
+        index: true,
+      },
+    },
+  });
 
   // Add a redirect from root to cases
   server.route({
-    method: 'GET',
-    path: '/',
-    handler: (_request, h) => h.redirect('/cases')
-  })
+    method: "GET",
+    path: "/",
+    handler: (_request, h) => h.redirect("/cases"),
+  });
 
-  return server
-}
+  return server;
+};

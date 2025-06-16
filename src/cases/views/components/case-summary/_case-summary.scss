@@ -1,4 +1,4 @@
-@use 'govuk-frontend' as *;
+@use "govuk-frontend" as *;
 
 .app-case-banner {
   background-color: #e7f4eb;
@@ -21,4 +21,4 @@
   margin-right: govuk-spacing(4);
   display: flex;
   align-items: center;
-} 
+}

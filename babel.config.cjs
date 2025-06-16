@@ -1,35 +1,35 @@
-const { NODE_ENV } = process.env
+const { NODE_ENV } = process.env;
 
 /**
  * @type {TransformOptions}
  */
 module.exports = {
-  browserslistEnv: 'node',
+  browserslistEnv: "node",
   presets: [
     [
-      '@babel/preset-env',
+      "@babel/preset-env",
       {
-        modules: NODE_ENV === 'test' ? 'auto' : false
-      }
-    ]
+        modules: NODE_ENV === "test" ? "auto" : false,
+      },
+    ],
   ],
   plugins: [
     [
-      'module-resolver',
+      "module-resolver",
       {
-        root: ['./'],
+        root: ["./"],
         alias: {
-          '~': '.'
-        }
-      }
-    ]
+          "~": ".",
+        },
+      },
+    ],
   ],
   env: {
     test: {
-      plugins: ['babel-plugin-transform-import-meta']
-    }
-  }
-}
+      plugins: ["babel-plugin-transform-import-meta"],
+    },
+  },
+};
 
 /**
  * @import { TransformOptions } from '@babel/core'

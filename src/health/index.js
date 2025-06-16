@@ -1,14 +1,14 @@
-import { healthController } from './controller.js'
+import { healthController } from "./controller.js";
 
 export const health = {
   plugin: {
-    name: 'health',
+    name: "health",
     register(server) {
       server.route({
-        method: 'GET',
-        path: '/health',
-        ...healthController
-      })
-    }
-  }
-}
+        method: "GET",
+        path: "/health",
+        ...healthController,
+      });
+    },
+  },
+};

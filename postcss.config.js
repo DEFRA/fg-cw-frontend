@@ -1,6 +1,6 @@
-import autoprefixer from 'autoprefixer'
-import cssnano from 'cssnano'
-import cssnanoPresetDefault from 'cssnano-preset-default'
+import autoprefixer from "autoprefixer";
+import cssnano from "cssnano";
+import cssnanoPresetDefault from "cssnano-preset-default";
 
 /**
  * @type {Config}
@@ -9,17 +9,17 @@ export default {
   plugins: [
     // Add vendor prefixes
     autoprefixer({
-      env: 'stylesheets'
+      env: "stylesheets",
     }),
 
     // Apply CSS optimisations
     cssnano({
       preset: cssnanoPresetDefault({
-        env: 'stylesheets'
-      })
-    })
-  ]
-}
+        env: "stylesheets",
+      }),
+    }),
+  ],
+};
 
 /**
  * @import { Config } from 'postcss-load-config'

@@ -1,43 +1,42 @@
-import { config } from '../../../config/config.js'
-import { statusCodes } from '../constants/status-codes.js'
+import { config } from "../../../config/config.js";
 
 export const serveStaticFiles = {
   plugin: {
-    name: 'staticFiles',
+    name: "staticFiles",
     register(server) {
       server.route([
         {
           options: {
             auth: false,
             cache: {
-              expiresIn: config.get('staticCacheTimeout'),
-              privacy: 'private'
-            }
+              expiresIn: config.get("staticCacheTimeout"),
+              privacy: "private",
+            },
           },
-          method: 'GET',
-          path: '/favicon.ico',
+          method: "GET",
+          path: "/favicon.ico",
           handler(_request, h) {
-            return h.response().code(statusCodes.noContent).type('image/x-icon')
-          }
+            return h.response().code(204).type("image/x-icon");
+          },
         },
         {
           options: {
             auth: false,
             cache: {
-              expiresIn: config.get('staticCacheTimeout'),
-              privacy: 'private'
-            }
+              expiresIn: config.get("staticCacheTimeout"),
+              privacy: "private",
+            },
           },
-          method: 'GET',
-          path: `${config.get('assetPath')}/{param*}`,
+          method: "GET",
+          path: `${config.get("assetPath")}/{param*}`,
           handler: {
             directory: {
-              path: '.',
-              redirectToSlash: true
-            }
-          }
-        }
-      ])
-    }
-  }
-}
+              path: ".",
+              redirectToSlash: true,
+            },
+          },
+        },
+      ]);
+    },
+  },
+};
