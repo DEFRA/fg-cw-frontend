@@ -2,8 +2,7 @@ services:
   localstack:
     image: localstack/localstack:3.0.2
     ports:
-      - "4567:4566" # Changed from 4566 to 4567
-      # - '4520-4559:4510-4559' # external services port range
+      - "4567:4566"
     env_file:
       - "compose/aws.env"
     environment:
@@ -21,26 +20,6 @@ services:
       retries: 3
     networks:
       - cdp-tenant
-
-  redis:
-    image: redis:7.2.3-alpine3.18
-    ports:
-      - "6380:6379"
-    restart: always
-    networks:
-      - cdp-tenant
-
-  mongodb:
-    image: mongo:6.0.13
-    networks:
-      - cdp-tenant
-    ports:
-      - "27018:27017"
-    volumes:
-      - mongodb-data:/data
-    restart: always
-
-  ################################################################################
 
   your-frontend:
     build: ./
@@ -64,29 +43,6 @@ services:
       USE_SINGLE_INSTANCE_CACHE: true
     networks:
       - cdp-tenant
-
-  # your-backend:
-  #   image: defradigital/your-backend:${YOUR_BACKEND_VERSION:-latest}
-  #   ports:
-  #     - '3555:3555'
-  #   links:
-  #     - 'localstack:localstack'
-  #     - 'mongodb:mongodb'
-  #   depends_on:
-  #     localstack:
-  #       condition: service_healthy
-  #     mongodb:
-  #       condition: service_started
-  #   env_file:
-  #     - 'compose/aws.env'
-  #   environment:
-  #     PORT: 3555
-  #     NODE_ENV: development
-  #     LOCALSTACK_ENDPOINT: http://localstack:4566
-  #   networks:
-  #     - cdp-tenant
-
-################################################################################
 
 volumes:
   mongodb-data:

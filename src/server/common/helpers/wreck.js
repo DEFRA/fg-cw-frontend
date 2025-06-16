@@ -1,6 +1,6 @@
 import { getTraceId } from "@defra/hapi-tracing";
 import Wreck from "@hapi/wreck";
-import { config } from "../../../config/config.js";
+import { config } from "../../../common/config.js";
 
 export const wreck = Wreck.defaults({
   events: true,
