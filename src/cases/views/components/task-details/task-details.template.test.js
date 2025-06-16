@@ -1,58 +1,58 @@
-import { describe, test, expect, beforeEach } from 'vitest'
-import { renderComponent } from '../../../../server/common/test-helpers/component-helpers.js'
+import { beforeEach, describe, expect, test } from "vitest";
+import { renderComponent } from "../../../../server/common/test-helpers/component-helpers.js";
 
-describe.skip('Task Details', () => {
-  let $taskDetails
+describe.skip("Task Details", () => {
+  let $taskDetails;
 
   const mockParams = {
-    caseId: '123',
-    groupId: 'group1',
-    taskId: 'task1',
-    groups: [
+    caseId: "123",
+    taskGroupId: "group1",
+    taskId: "task1",
+    taskGroups: [
       {
-        id: 'group1',
+        id: "group1",
         tasks: [
           {
-            id: 'task1',
-            title: 'Test Task',
-            type: 'boolean'
-          }
-        ]
-      }
-    ]
-  }
+            id: "task1",
+            title: "Test Task",
+            type: "boolean",
+          },
+        ],
+      },
+    ],
+  };
 
-  describe('Component', () => {
+  describe("Component", () => {
     beforeEach(() => {
-      $taskDetails = renderComponent('taskDetails', mockParams)
-    })
+      $taskDetails = renderComponent("taskDetails", mockParams);
+    });
 
-    test('Should render task details component with expected heading', () => {
-      expect($taskDetails('h2')).toHaveLength(1)
-      expect($taskDetails('h2').text().trim()).toBe('Test Task')
-    })
+    test("Should render task details component with expected heading", () => {
+      expect($taskDetails("h2")).toHaveLength(1);
+      expect($taskDetails("h2").text().trim()).toBe("Test Task");
+    });
 
-    test('Should render back link with correct attributes', () => {
-      const backLink = $taskDetails('[data-testid="back-link"]')
-      expect(backLink).toHaveLength(1)
-      expect(backLink.attr('href')).toBe('/case/123')
-      expect(backLink.text().trim()).toBe('Back to task list')
-    })
+    test("Should render back link with correct attributes", () => {
+      const backLink = $taskDetails('[data-testid="back-link"]');
+      expect(backLink).toHaveLength(1);
+      expect(backLink.attr("href")).toBe("/cases/123");
+      expect(backLink.text().trim()).toBe("Back to task list");
+    });
 
-    test('Should render checkbox for boolean task type', () => {
-      expect($taskDetails('.govuk-checkboxes')).toHaveLength(1)
-      expect($taskDetails('.govuk-checkboxes__label').text().trim()).toBe(
-        'Is application ready to be reviewed?'
-      )
-    })
+    test("Should render checkbox for boolean task type", () => {
+      expect($taskDetails(".govuk-checkboxes")).toHaveLength(1);
+      expect($taskDetails(".govuk-checkboxes__label").text().trim()).toBe(
+        "Is application ready to be reviewed?",
+      );
+    });
 
-    test('Should render save and continue button', () => {
+    test("Should render save and continue button", () => {
       const saveButton = $taskDetails(
-        '[data-testid="save-and-continue-button"]'
-      )
-      expect(saveButton).toHaveLength(1)
-      expect(saveButton.text().trim()).toBe('Save and continue')
-      expect(saveButton.attr('href')).toBe('/case/123')
-    })
-  })
-})
+        '[data-testid="save-and-continue-button"]',
+      );
+      expect(saveButton).toHaveLength(1);
+      expect(saveButton.text().trim()).toBe("Save and continue");
+      expect(saveButton.attr("href")).toBe("/cases/123");
+    });
+  });
+});

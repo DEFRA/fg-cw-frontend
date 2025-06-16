@@ -1,25 +1,25 @@
-import { buildRedisClient } from '../redis-client.js'
-import { Engine as CatboxRedis } from '@hapi/catbox-redis'
-import { Engine as CatboxMemory } from '@hapi/catbox-memory'
+import { Engine as CatboxMemory } from "@hapi/catbox-memory";
+import { Engine as CatboxRedis } from "@hapi/catbox-redis";
+import { buildRedisClient } from "../redis-client.js";
 
-import { config } from '../../../../config/config.js'
-import { createLogger } from '../logging/logger.js'
+import { config } from "../../../../config/config.js";
+import { createLogger } from "../logging/logger.js";
 
-export function getCacheEngine(engine) {
-  const logger = createLogger()
+export const getCacheEngine = (engine) => {
+  const logger = createLogger();
 
-  if (engine === 'redis') {
-    logger.info('Using Redis session cache')
-    const redisClient = buildRedisClient(config.get('redis'))
-    return new CatboxRedis({ client: redisClient })
+  if (engine === "redis") {
+    logger.info("Using Redis session cache");
+    const redisClient = buildRedisClient(config.get("redis"));
+    return new CatboxRedis({ client: redisClient });
   }
 
-  if (config.get('isProduction')) {
+  if (config.get("isProduction")) {
     logger.error(
-      'Catbox Memory is for local development only, it should not be used in production!'
-    )
+      "Catbox Memory is for local development only, it should not be used in production!",
+    );
   }
 
-  logger.info('Using Catbox Memory session cache')
-  return new CatboxMemory()
-}
+  logger.info("Using Catbox Memory session cache");
+  return new CatboxMemory();
+};

@@ -1,5 +1,4 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
-
 <div class="govuk-button-group">
   {% for action in params.buttons %}
     <form method="POST">
@@ -9,7 +8,7 @@
         class="govuk-button"
         data-module="govuk-button"
         data-govuk-button-init=""
-        formaction="{{ "/case/" + params.caseId }}"
+        formaction="{{ "/cases/" + params.caseId }}"
       >
         {{ action.label }}
       </button>
