@@ -1,59 +1,38 @@
+import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { logger } from "../../../common/logger.js";
+import { buildNavigation } from "./build-navigation.js";
 
-// Mock dependencies
-const mockReadFileSync = vi.hoisted(() => vi.fn());
-const mockLoggerError = vi.hoisted(() => vi.fn());
-const mockConfig = vi.hoisted(() => ({
-  get: vi.fn(),
-}));
-const mockBuildNavigation = vi.hoisted(() => vi.fn());
+vi.mock("node:fs");
 
-vi.mock("node:fs", async () => {
-  const actualFs = await vi.importActual("node:fs");
-  return {
-    ...actualFs,
-    default: {
-      readFileSync: mockReadFileSync,
-    },
-    readFileSync: mockReadFileSync,
-  };
-});
-
-vi.mock("../../config.js", () => ({
-  config: mockConfig,
-}));
-
-vi.mock("../../../server/common/helpers/logging/logger.js", () => ({
-  createLogger: () => ({ error: (...args) => mockLoggerError(...args) }),
-}));
-
-vi.mock("./build-navigation.js", () => ({
-  buildNavigation: mockBuildNavigation,
-}));
-
-describe("context", () => {
-  beforeEach(() => {
-    // Reset module between tests
-    vi.resetModules();
-
-    // Setup default mock returns
-    mockConfig.get.mockImplementation((key) => {
-      const values = {
+vi.mock("../../../common/config.js", () => ({
+  config: {
+    get: (key) =>
+      ({
         assetPath: "/public",
         root: "/app",
         serviceName: "Test Service",
-      };
-      return values[key];
-    });
+        "log.redact": ["password", "secret"],
+        "log.level": "info",
+      })[key],
+  },
+}));
 
-    mockBuildNavigation.mockReturnValue([
+vi.mock("../../../common/logger.js");
+vi.mock("./build-navigation.js");
+
+describe("context", () => {
+  beforeEach(() => {
+    vi.resetModules();
+
+    buildNavigation.mockReturnValue([
       { text: "Home", url: "/", isActive: true },
     ]);
   });
 
   describe("when webpack manifest exists", () => {
     beforeEach(() => {
-      mockReadFileSync.mockReturnValue(
+      readFileSync.mockReturnValue(
         JSON.stringify({
           "app.js": "js/app-123.js",
           "style.css": "css/style-123.css",
@@ -95,19 +74,17 @@ describe("context", () => {
     test("should cache manifest after first read", async () => {
       const { context } = await import("./context.js");
 
-      // First call
       context({ path: "/" });
-      expect(mockReadFileSync).toHaveBeenCalledTimes(1);
+      expect(readFileSync).toHaveBeenCalledTimes(1);
 
-      // Second call
       context({ path: "/" });
-      expect(mockReadFileSync).toHaveBeenCalledTimes(1); // Still 1, not 2
+      expect(readFileSync).toHaveBeenCalledTimes(1); // Still 1, not 2
     });
   });
 
   describe("when webpack manifest read fails", () => {
     beforeEach(() => {
-      mockReadFileSync.mockImplementation(() => {
+      readFileSync.mockImplementation(() => {
         throw new Error("File not found");
       });
     });
@@ -116,7 +93,7 @@ describe("context", () => {
       const { context } = await import("./context.js");
       const result = context({ path: "/" });
 
-      expect(mockLoggerError).toHaveBeenCalledWith(
+      expect(logger.error).toHaveBeenCalledWith(
         "Webpack assets-manifest.json not found",
       );
       expect(result.getAssetPath("app.js")).toBe("/public/app.js");
