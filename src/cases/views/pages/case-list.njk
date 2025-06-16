@@ -1,10 +1,10 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
-{% from "components/case-tabs/macro.njk" import appCaseListTab %}
-{% from "components/checkbox/macro.njk" import customCheckbox %}
+{% from "components/case-tabs/macro.njk" import caseTabs %}
+{% from "checkbox/macro.njk" import checkbox %}
 
 {% block content %}
-  {{ appHeading({ text: heading }) }}
+  {{ heading({ text: pageHeading }) }}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -16,12 +16,12 @@
                 label: "My cases",
                 id: "my-cases",
                 panel: {
-                  html: appCaseListTab({
+                  html: caseTabs({
                       tabLabel: "My cases",
                       tabTestId: "my-cases-tab",
                       tableHeaders: [
                         {
-                          html: customCheckbox({
+                          html: checkbox({
                             id: "select_all",
                             label: "Select all",
                             name: "select_all",
@@ -44,12 +44,12 @@
                 label: "Team cases",
                 id: "team-cases",
                 panel: {
-                  html: appCaseListTab({
+                  html: caseTabs({
                       tabLabel: "Team cases",
                       tabTestId: "team-cases-tab",
                       tableHeaders: [
                         {
-                          html: customCheckbox({
+                          html: checkbox({
                             id: "select_all",
                             label: "Select all",
                             name: "select_all",
@@ -72,12 +72,12 @@
                 label: "All Cases",
                 id: "all-cases",
                 panel: {
-                  html: appCaseListTab({
+                  html: caseTabs({
                       tabLabel: "All cases",
                       tabTestId: "all-cases-tab",
                       tableHeaders: [
                         {
-                           html: customCheckbox({
+                           html: checkbox({
                             id: "select_all",
                             label: "Select all",
                             name: "select_all",

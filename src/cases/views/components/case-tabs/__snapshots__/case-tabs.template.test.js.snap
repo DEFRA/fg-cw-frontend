@@ -1,0 +1,109 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`case-summary > renders 1`] = `
+"
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Test Business
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            SBI001
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            frps-private-beta
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            SFI
+            2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            11 Jun 2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            NEW
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+"
+`;
+
+exports[`case-tabs > renders 1`] = `
+"
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Test Business
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            SBI001
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            frps-private-beta
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            SFI
+            2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            11 Jun 2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            NEW
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+"
+`;

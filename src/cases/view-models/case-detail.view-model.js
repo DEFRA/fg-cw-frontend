@@ -6,7 +6,7 @@ export const createCaseDetailViewModel = (caseItem) => {
 
   return {
     pageTitle: `Case ${caseRef}`,
-    heading: `Case ${caseRef}`,
+    pageHeading: `Case ${caseRef}`,
     breadcrumbs: [],
     data: {
       case: {
