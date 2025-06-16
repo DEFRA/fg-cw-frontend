@@ -23,16 +23,6 @@
   | {{ serviceName }}
 {% endblock %}
 
-{% block beforeContent %}
-  {% if breadcrumbs.length > 1 %}
-    {{
-      govukBreadcrumbs({
-        items: breadcrumbs
-      })
-    }}
-  {% endif %}
-{% endblock %}
-
 {% block content %}
 {% endblock %}
 

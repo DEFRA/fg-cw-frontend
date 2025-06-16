@@ -33,10 +33,7 @@ describe("createCaseDetailViewModel", () => {
     expect(result).toEqual({
       pageTitle: "Case CLIENT-REF-001",
       heading: "Case CLIENT-REF-001",
-      breadcrumbs: [
-        { text: "Cases", href: "/cases" },
-        { text: "CLIENT-REF-001" },
-      ],
+      breadcrumbs: [],
       data: {
         case: {
           _id: "case-123",
@@ -75,7 +72,7 @@ describe("createCaseDetailViewModel", () => {
     expect(result).toEqual({
       pageTitle: "Case MIN-001",
       heading: "Case MIN-001",
-      breadcrumbs: [{ text: "Cases", href: "/cases" }, { text: "MIN-001" }],
+      breadcrumbs: [],
       data: {
         case: {
           _id: "case-minimal",
@@ -136,9 +133,8 @@ describe("createCaseDetailViewModel", () => {
 
     const result = createCaseDetailViewModel(mockCase);
 
-    expect(result.breadcrumbs).toHaveLength(2);
-    expect(result.breadcrumbs[0]).toEqual({ text: "Cases", href: "/cases" });
-    expect(result.breadcrumbs[1]).toEqual({ text: "BREAD-001" });
+    expect(result.breadcrumbs).toHaveLength(0);
+    expect(result.breadcrumbs).toEqual([]);
   });
 
   it("creates consistent page title and heading", () => {
