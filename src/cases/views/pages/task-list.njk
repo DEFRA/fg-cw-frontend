@@ -2,8 +2,24 @@
 {% from "../components/case-summary/macro.njk" import appCaseSummary %}
 {% from "../components/case-details-tab-navigation/macro.njk" import appCaseDetailsTabNavigation %}
 {% from "../components/task-group/macro.njk" import appTaskGroup %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block content %}
+  {% if error %}
+
+    {{
+      govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: [
+          {
+            text: error,
+            href: "#stage-heading"
+          }
+        ]
+      })
+    }}
+  {% endif %}
+
   {{ appCaseSummary({ case: data.case }) }}
 
   <div class="govuk-body">

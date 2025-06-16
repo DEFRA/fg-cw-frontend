@@ -1,5 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { findAll, findById, updateStage } from './case.repository.js'
+import {
+  findAll,
+  findById,
+  completeStage,
+  completeTask
+} from './case.repository.js'
 
 // Mock the wreck dependency
 const mockWreck = vi.hoisted(() => ({
@@ -144,8 +149,24 @@ describe('Case Repository', () => {
     })
   })
 
-  describe('updateStage', () => {
-    it('returns updated case object when API call succeeds', async () => {
+  describe('comleteTask', () => {
+    it('calls api with payload data', async () => {
+      const params = {
+        caseId: '1234-0909',
+        groupId: 'tg-01',
+        taskId: 't-01',
+        isComplete: true
+      }
+      await completeTask(params)
+      expect(mockWreck.post).toHaveBeenCalledWith(
+        `/cases/${params.caseId}/task/`,
+        { payload: params }
+      )
+    })
+  })
+
+  describe('completeStage', () => {
+    it('returns with undefined when API call succeeds', async () => {
       const caseId = 'case-123'
       const mockApiResponse = {
         payload: {
@@ -166,49 +187,38 @@ describe('Case Repository', () => {
 
       mockWreck.post.mockResolvedValueOnce(mockApiResponse)
 
-      const result = await updateStage(caseId)
-
-      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
-      expect(result).toEqual({
-        _id: 'case-123',
-        caseRef: 'client-ref-123',
-        payload: {
-          code: 'case-code-123'
-        },
-        workflowCode: 'workflow-123',
-        currentStage: 'stage-2',
-        stages: ['stage-1', 'stage-2'],
-        createdAt: '2021-01-01T00:00:00.000Z',
-        submittedAt: '2021-01-15T10:30:00.000Z',
-        status: 'Updated',
-        assignedUser: 'user-123'
-      })
-    })
-
-    it('returns null when API returns null payload', async () => {
-      const caseId = 'case-123'
-      const mockApiResponse = {
-        payload: null
-      }
-
-      mockWreck.post.mockResolvedValueOnce(mockApiResponse)
-
-      const result = await updateStage(caseId)
-
-      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
-      expect(result).toBeNull()
-    })
-
-    it('returns undefined when API returns undefined payload', async () => {
-      const caseId = 'case-123'
-      const mockApiResponse = {}
-
-      mockWreck.post.mockResolvedValueOnce(mockApiResponse)
-
-      const result = await updateStage(caseId)
+      const result = await completeStage(caseId)
 
       expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
       expect(result).toBeUndefined()
+    })
+
+    it('returns "update failed" on unexpected error', async () => {
+      const caseId = 'case-123'
+      const mockApiResponse = new Error('Error')
+
+      mockWreck.post.mockRejectedValueOnce(mockApiResponse)
+
+      const result = await completeStage(caseId)
+
+      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
+      expect(result).toEqual({ error: 'Update failed' })
+    })
+
+    it('returns payload error when api throws', async () => {
+      const caseId = 'case-123'
+      const mockApiResponse = {
+        data: {
+          payload: 'All tasks must be complete.'
+        }
+      }
+
+      mockWreck.post.mockRejectedValueOnce(mockApiResponse)
+
+      const result = await completeStage(caseId)
+
+      expect(mockWreck.post).toHaveBeenCalledWith('/cases/case-123/stage')
+      expect(result).toEqual({ error: 'All tasks must be complete.' })
     })
   })
 })
