@@ -3,13 +3,14 @@ import {
   findAll,
   findById,
   completeStage,
-  completeTask
+  updateTaskStatus
 } from './case.repository.js'
 
 // Mock the wreck dependency
 const mockWreck = vi.hoisted(() => ({
   get: vi.fn(),
-  post: vi.fn()
+  post: vi.fn(),
+  patch: vi.fn()
 }))
 
 vi.mock('../../server/common/helpers/wreck.js', () => ({
@@ -149,18 +150,18 @@ describe('Case Repository', () => {
     })
   })
 
-  describe('comleteTask', () => {
+  describe('updateTaskStatus', () => {
     it('calls api with payload data', async () => {
       const params = {
+        stageId: 'stage-1',
         caseId: '1234-0909',
         groupId: 'tg-01',
-        taskId: 't-01',
-        isComplete: true
+        taskId: 't-01'
       }
-      await completeTask(params)
-      expect(mockWreck.post).toHaveBeenCalledWith(
-        `/cases/${params.caseId}/task/`,
-        { payload: params }
+      await updateTaskStatus({ ...params, isComplete: true })
+      expect(mockWreck.patch).toHaveBeenCalledWith(
+        '/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status',
+        { payload: { status: 'complete' } }
       )
     })
   })
