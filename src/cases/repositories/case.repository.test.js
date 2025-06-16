@@ -1,20 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
+import { wreck } from "../../common/wreck.js";
 import { findAll, findById, updateStage } from "./case.repository.js";
 
-// Mock the wreck dependency
-const mockWreck = vi.hoisted(() => ({
-  get: vi.fn(),
-  post: vi.fn(),
-}));
-
-vi.mock("../../server/common/helpers/wreck.js", () => ({
-  wreck: mockWreck,
-}));
+vi.mock("../../common/wreck.js");
 
 describe("Case Repository", () => {
   describe("findAll", () => {
     it("returns array of case objects when API call succeeds", async () => {
-      mockWreck.get.mockResolvedValueOnce({
+      wreck.get.mockResolvedValueOnce({
         payload: [
           {
             _id: "case-1",
@@ -45,7 +38,7 @@ describe("Case Repository", () => {
 
       const result = await findAll();
 
-      expect(mockWreck.get).toHaveBeenCalledWith("/cases");
+      expect(wreck.get).toHaveBeenCalledWith("/cases");
 
       expect(result).toEqual([
         {
@@ -96,11 +89,11 @@ describe("Case Repository", () => {
         },
       };
 
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse);
+      wreck.get.mockResolvedValueOnce(mockApiResponse);
 
       const result = await findById(caseId);
 
-      expect(mockWreck.get).toHaveBeenCalledWith("/cases/case-123");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/case-123");
       expect(result).toEqual({
         _id: "case-123",
         caseRef: "client-ref-123",
@@ -123,11 +116,11 @@ describe("Case Repository", () => {
         payload: null,
       };
 
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse);
+      wreck.get.mockResolvedValueOnce(mockApiResponse);
 
       const result = await findById(caseId);
 
-      expect(mockWreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
       expect(result).toBeNull();
     });
 
@@ -135,11 +128,11 @@ describe("Case Repository", () => {
       const caseId = "nonexistent-case";
       const mockApiResponse = {};
 
-      mockWreck.get.mockResolvedValueOnce(mockApiResponse);
+      wreck.get.mockResolvedValueOnce(mockApiResponse);
 
       const result = await findById(caseId);
 
-      expect(mockWreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
       expect(result).toBeUndefined();
     });
   });
@@ -164,11 +157,11 @@ describe("Case Repository", () => {
         },
       };
 
-      mockWreck.post.mockResolvedValueOnce(mockApiResponse);
+      wreck.post.mockResolvedValueOnce(mockApiResponse);
 
       const result = await updateStage(caseId);
 
-      expect(mockWreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toEqual({
         _id: "case-123",
         caseRef: "client-ref-123",
@@ -191,11 +184,11 @@ describe("Case Repository", () => {
         payload: null,
       };
 
-      mockWreck.post.mockResolvedValueOnce(mockApiResponse);
+      wreck.post.mockResolvedValueOnce(mockApiResponse);
 
       const result = await updateStage(caseId);
 
-      expect(mockWreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toBeNull();
     });
 
@@ -203,11 +196,11 @@ describe("Case Repository", () => {
       const caseId = "case-123";
       const mockApiResponse = {};
 
-      mockWreck.post.mockResolvedValueOnce(mockApiResponse);
+      wreck.post.mockResolvedValueOnce(mockApiResponse);
 
       const result = await updateStage(caseId);
 
-      expect(mockWreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toBeUndefined();
     });
   });
