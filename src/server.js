@@ -9,6 +9,7 @@ import { config } from "./common/config.js";
 import { logger } from "./common/logger.js";
 import { nunjucksConfig } from "./config/nunjucks/nunjucks.js";
 import { health } from "./health/index.js";
+import { catchAll } from "./server/common/helpers/errors.js";
 
 export const createServer = async () => {
   const server = hapi.server({
@@ -67,6 +68,9 @@ export const createServer = async () => {
   ]);
 
   await server.register([health, cases]);
+
+  // Register error handler
+  server.ext("onPreResponse", catchAll);
 
   // Add static file serving
   server.route({
