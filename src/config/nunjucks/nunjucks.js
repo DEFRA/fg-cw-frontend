@@ -3,7 +3,7 @@ import { fileURLToPath } from "node:url";
 import nunjucks from "nunjucks";
 import path from "path";
 
-import { config } from "../config.js";
+import { config } from "../../common/config.js";
 import { context } from "./context/context.js";
 import * as filters from "./filters/filters.js";
 import * as globals from "./globals.js";

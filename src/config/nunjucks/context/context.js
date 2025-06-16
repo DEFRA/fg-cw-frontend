@@ -1,23 +1,18 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 
-import { createLogger } from "../../../server/common/helpers/logging/logger.js";
-import { config } from "../../config.js";
+import { config } from "../../../common/config.js";
+import { logger } from "../../../common/logger.js";
 import { buildNavigation } from "./build-navigation.js";
 
-const logger = createLogger();
 const assetPath = config.get("assetPath");
 const manifestPath = path.join(
   config.get("root"),
   ".public/assets-manifest.json",
 );
 
-/** @type {Record<string, string> | undefined} */
 let webpackManifest;
 
-/**
- * @param {Request | null} request
- */
 export const context = (request) => {
   if (!webpackManifest) {
     try {
