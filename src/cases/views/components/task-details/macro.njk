@@ -1,11 +1,10 @@
-{# 
+{#
     caseId: <string>,
-    groupId: <string>,
-    taskId: <string>,
+    stageId: <string>,
+    taskGroupId: <string>,
     currentTask: <task to display>
-    groups: <array of task groups>
 #}
 
-{% macro appTaskDetails(params) %}
+{% macro taskDetails(params) %}
   {%- include "./task-details.template.njk" -%}
 {% endmacro %}

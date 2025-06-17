@@ -28,14 +28,14 @@
           <p>
             <strong class="govuk-!-margin-right-1">Scheme:</strong>
             {{ params.case.scheme }}
-            {{ params.case.dateReceived|formatDate("yyyy") if params.case.dateReceived }}
+            {{ params.case.dateReceived | formatDate("yyyy") if params.case.dateReceived }}
           </p>
         </div>
 
         <div class="app-case-cell">
           <p>
             <strong class="govuk-!-margin-right-1">Date received:</strong>
-            {{ params.case.dateReceived|formatDate("d MMM yyyy") if params.case.dateReceived }}
+            {{ params.case.dateReceived | formatDate("d MMM yyyy") if params.case.dateReceived }}
           </p>
         </div>
 

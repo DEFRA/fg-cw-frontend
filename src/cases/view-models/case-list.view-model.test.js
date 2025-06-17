@@ -180,7 +180,7 @@ describe("case-list.model", () => {
 
       expect(result).toEqual({
         pageTitle: "Cases",
-        heading: "Cases",
+        pageHeading: "Cases",
         breadcrumbs: [],
         data: {
           allCases: [
@@ -212,7 +212,7 @@ describe("case-list.model", () => {
 
       expect(result).toEqual({
         pageTitle: "Cases",
-        heading: "Cases",
+        pageHeading: "Cases",
         breadcrumbs: [],
         data: {
           allCases: [],
@@ -243,17 +243,17 @@ describe("case-list.model", () => {
       expect(result.data.allCases).toHaveLength(1);
       expect(result.data.allCases[0].clientRef).toBe("SINGLE-VM-001");
       expect(result.pageTitle).toBe("Cases");
-      expect(result.heading).toBe("Cases");
+      expect(result.pageHeading).toBe("Cases");
     });
 
-    it("has consistent page title and heading", () => {
+    it("has consistent page title and page heading", () => {
       const mockCases = [];
 
       const result = createCaseListViewModel(mockCases);
 
       expect(result.pageTitle).toBe("Cases");
-      expect(result.heading).toBe("Cases");
-      expect(result.pageTitle).toBe(result.heading);
+      expect(result.pageHeading).toBe("Cases");
+      expect(result.pageTitle).toBe(result.pageHeading);
     });
 
     it("has empty breadcrumbs array", () => {

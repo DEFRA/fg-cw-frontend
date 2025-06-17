@@ -1,8 +1,7 @@
 import hapi from "@hapi/hapi";
-import Vision from "@hapi/vision";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { nunjucksConfig } from "../../config/nunjucks/nunjucks.js";
+import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { viewTaskRoute } from "./view-task.route.js";
 
@@ -14,7 +13,7 @@ describe("viewTaskRoute", () => {
   beforeAll(async () => {
     server = hapi.server();
     server.route(viewTaskRoute);
-    await server.register([Vision, nunjucksConfig]);
+    await server.register([nunjucks]);
 
     await server.initialize();
   });

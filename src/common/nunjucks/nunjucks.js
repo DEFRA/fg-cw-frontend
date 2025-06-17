@@ -1,0 +1,56 @@
+import Vision from "@hapi/vision";
+import Nunjucks from "nunjucks";
+
+import { glob } from "node:fs/promises";
+import { config } from "../config.js";
+import { context } from "./context/context.js";
+import { formatDate } from "./filters/format-date.js";
+
+const njkPaths = [
+  "node_modules/govuk-frontend/dist/",
+  "src/common/components",
+  ...(await Array.fromAsync(
+    glob(["**/views", "**/*(layouts|components|pages|partials)/"], {
+      exclude: ["node_modules", "*.*"],
+    }),
+  )),
+];
+
+export const environment = Nunjucks.configure(njkPaths, {
+  autoescape: true,
+  throwOnUndefined: false,
+  trimBlocks: true,
+  lstripBlocks: true,
+  watch: config.get("nunjucks.watch"),
+  noCache: config.get("nunjucks.noCache"),
+  filter: {
+    formatDate,
+  },
+});
+
+environment.addFilter("formatDate", formatDate);
+
+export const nunjucks = {
+  plugin: Vision,
+  options: {
+    engines: {
+      njk: {
+        compile(src, options) {
+          const template = Nunjucks.compile(src, options.environment);
+          return (ctx) => template.render(ctx);
+        },
+      },
+    },
+    compileOptions: {
+      environment,
+    },
+    relativeTo: config.get("root"),
+    path: await Array.fromAsync(
+      glob("**/views", {
+        exclude: ["node_modules", "*.*"],
+      }),
+    ),
+    isCached: config.get("isProduction"),
+    context,
+  },
+};

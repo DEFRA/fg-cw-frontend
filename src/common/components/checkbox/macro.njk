@@ -1,0 +1,10 @@
+{#
+    id: <string>,
+    label: <string>,
+    name: <string>,
+    suffix: <string> (optional)
+#}
+
+{% macro checkbox(params) %}
+  {%- include "./checkbox.template.njk" -%}
+{% endmacro %}

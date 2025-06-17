@@ -1,8 +1,7 @@
 import hapi from "@hapi/hapi";
-import Vision from "@hapi/vision";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { nunjucksConfig } from "../../config/nunjucks/nunjucks.js";
+import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { completeStageUseCase } from "../use-cases/complete-stage.use-case.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { completeStageRoute } from "./complete-stage.route.js";
@@ -16,7 +15,7 @@ describe("completeStageRoute", () => {
   beforeAll(async () => {
     server = hapi.server();
     server.route(completeStageRoute);
-    await server.register([Vision, nunjucksConfig]);
+    await server.register([nunjucks]);
 
     await server.initialize();
   });

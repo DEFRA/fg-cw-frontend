@@ -1,0 +1,22 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`checkbox > renders 1`] = `
+"<div
+  class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox"
+>
+  <input
+    type="checkbox"
+    class="govuk-checkboxes__input"
+    id="checkbox-idCheckbox Suffix"
+    name="checkbox-name"
+    value="checkbox-value"
+  />
+  <label
+    class="govuk-label govuk-checkboxes__label"
+    for="checkbox-idCheckbox Suffix"
+  >
+    <span class="govuk-visually-hidden">Select Checkbox Label</span>
+  </label>
+</div>
+"
+`;

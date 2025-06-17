@@ -1,12 +1,23 @@
 {% extends '../layouts/case-layout.njk' %}
-{% from "../components/case-summary/macro.njk" import appCaseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import appCaseDetailsTabNavigation %}
-{% from "../components/task-details/macro.njk" import appTaskDetails %}
-
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
+{% from "../components/task-details/macro.njk" import taskDetails %}
 {% block content %}
-  {{ appCaseSummary({ case: data.case }) }}
+  {{ caseSummary({ case: data.case }) }}
   <div class="govuk-body">
-    {{ appCaseDetailsTabNavigation({active: 'tasks', caseDataId: data.case.id }) }}
-    {{ appTaskDetails({caseId: data.case.id, stageId: data.case.currentStage, currentTask: data.currentTask, taskGroupId: data.taskGroupId, taskId: data.taskId }) }}
+    {{
+      caseDetailsTabNavigation({
+        active: 'tasks',
+        caseId: data.case.id
+      })
+    }}
+    {{
+      taskDetails({
+        caseId: data.case.id,
+        stageId: data.case.currentStage,
+        taskGroupId: data.taskGroupId,
+        currentTask: data.currentTask
+      })
+    }}
   </div>
 {% endblock %}
