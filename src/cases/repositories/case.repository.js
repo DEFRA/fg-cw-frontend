@@ -1,4 +1,4 @@
-import { wreck } from "../../server/common/helpers/wreck.js";
+import { wreck } from "../../common/wreck.js";
 
 export const findAll = async () => {
   const { payload } = await wreck.get("/cases");

@@ -1,3 +1,5 @@
+import { logger } from "../../../common/logger.js";
+
 const messages = {
   400: "Bad Request",
   401: "Unauthorized",
@@ -20,7 +22,7 @@ export const catchAll = (request, h) => {
   const errorMessage = statusCodeMessage(statusCode);
 
   if (statusCode >= 500) {
-    request.logger.error(response?.stack);
+    logger.error(response?.stack);
   }
 
   return h

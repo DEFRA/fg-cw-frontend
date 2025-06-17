@@ -4,7 +4,9 @@
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">{{ params.case.businessName }}</h1>
+    <h1 class="govuk-heading-m">
+      {{ params.case.businessName or "Valley Farm" }}
+    </h1>
 
     <div>
       <div class="app-case-row">

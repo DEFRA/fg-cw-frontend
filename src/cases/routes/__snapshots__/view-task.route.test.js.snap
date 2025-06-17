@@ -1,121 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`viewTaskRoute > returns a list of cases 1`] = `
-"
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
-  <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-
-    <h1 class="govuk-heading-m"></h1>
-
-    <div>
-      <div class="app-case-row">
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">SBI:</strong>
-            SBI001
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Reference:</strong>
-            frps-private-beta
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Scheme:</strong>
-            SFI
-            2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Date received:</strong>
-            11 Jun 2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Status:</strong>
-            NEW
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-  <div class="govuk-body">
-    
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
-      <div class="govuk-width-container">
-
-    <div class="govuk-service-navigation__container">
-      
-
-      
-        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
-            Menu
-          </button>
-
-          <ul class="govuk-service-navigation__list" id="navigation">
-
-            
-              
-              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47" aria-current="true">
-                                    
-                  <strong class="govuk-service-navigation__active-fallback">Tasks</strong>
-
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details">
-                                    
-Case Details
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
-                                    
-Land Details
-                  </a>
-              </li>
-
-            </ul>
-        </nav>
-    </div>
-
-    </div>
-
-  </div>
-
-
-    <div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="task-details-heading">
-      
-    </h2>
-  </div>
-</div>
-
-  </div>
-        "
-`;
-
 exports[`viewTaskRoute > returns a task 1`] = `
 "
   
@@ -123,7 +7,9 @@ exports[`viewTaskRoute > returns a task 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m"></h1>
+    <h1 class="govuk-heading-m">
+      Valley Farm
+    </h1>
 
     <div>
       <div class="app-case-row">
