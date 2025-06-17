@@ -32,7 +32,7 @@ describe("createCaseDetailViewModel", () => {
 
     expect(result).toEqual({
       pageTitle: "Case CLIENT-REF-001",
-      heading: "Case CLIENT-REF-001",
+      pageHeading: "Case CLIENT-REF-001",
       breadcrumbs: [],
       data: {
         case: {
@@ -71,7 +71,7 @@ describe("createCaseDetailViewModel", () => {
 
     expect(result).toEqual({
       pageTitle: "Case MIN-001",
-      heading: "Case MIN-001",
+      pageHeading: "Case MIN-001",
       breadcrumbs: [],
       data: {
         case: {
@@ -152,8 +152,8 @@ describe("createCaseDetailViewModel", () => {
     const result = createCaseDetailViewModel(mockCase);
 
     expect(result.pageTitle).toBe("Case TITLE-001");
-    expect(result.heading).toBe("Case TITLE-001");
-    expect(result.pageTitle).toBe(result.heading);
+    expect(result.pageHeading).toBe("Case TITLE-001");
+    expect(result.pageTitle).toBe(result.pageHeading);
   });
 
   it("calls date helper function exactly once", () => {

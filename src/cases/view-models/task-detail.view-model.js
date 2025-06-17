@@ -12,7 +12,7 @@ export const createTaskDetailViewModel = (caseData, query) => {
 
   return {
     pageTitle: "Case task",
-    heading: "Case",
+    pageHeading: "Case",
     breadcrumbs: [
       { text: "Cases", href: "/cases" },
       { text: caseData.caseRef, href: "/cases/" + caseData._id },
@@ -33,11 +33,10 @@ export const createTaskDetailViewModel = (caseData, query) => {
         currentStage: caseData.currentStage,
       },
       stage,
-      taskId,
       taskGroupId,
       currentTask: {
         ...currentTask,
-        link: `/cases/${caseData._id}/tasks/${taskGroupId}/${taskId}`,
+        link: `/cases/${caseData._id}/tasks/${taskGroupId}/${currentTask.id}`,
         status: currentTask.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: currentTask.status === "complete",
       },

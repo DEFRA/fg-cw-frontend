@@ -1,6 +1,5 @@
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import CopyPlugin from "copy-webpack-plugin";
-import HtmlWebpackPlugin from "html-webpack-plugin";
 import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "path";
@@ -18,184 +17,185 @@ const govukFrontendPath = path.dirname(
 
 const ruleTypeAssetResource = "asset/resource";
 
-/**
- * @type {import('webpack').Configuration}
- */
-export default {
-  context: path.resolve(dirname, "src/client"),
-  entry: {
-    application: {
-      import: [
-        "./javascripts/application.js",
-        "./javascripts/modules/checkbox-select-all.js",
-        "./stylesheets/application.scss",
-      ],
-    },
-    govuk: {
-      import: [
-        path.join(govukFrontendPath, "dist/govuk/govuk-frontend.min.js"),
-      ],
-    },
-    checkboxes: {
-      import: ["./javascripts/modules/checkbox-select-all.js"],
-    },
-  },
-  experiments: {
-    outputModule: true,
-  },
-  mode: NODE_ENV === "production" ? "production" : "development",
-  devtool: NODE_ENV === "production" ? "source-map" : "inline-source-map",
-  watchOptions: {
-    aggregateTimeout: 200,
-    poll: 1000,
-  },
-  output: {
-    filename:
-      NODE_ENV === "production"
-        ? "javascripts/[name].[contenthash:7].min.js"
-        : "javascripts/[name].js",
-    chunkFilename:
-      NODE_ENV === "production"
-        ? "javascripts/[name].[chunkhash:7].min.js"
-        : "javascripts/[name].js",
-    path: path.join(dirname, ".public"),
-    publicPath: "/public/",
-    libraryTarget: "module",
-    module: true,
-  },
-  resolve: {
-    alias: {
-      "/public/assets": path.join(govukFrontendPath, "dist/govuk/assets"),
-    },
-  },
-  module: {
-    rules: [
-      {
-        test: /\.(js|mjs|scss)$/,
-        loader: "source-map-loader",
-        enforce: "pre",
-      },
-      {
-        test: /\.js$/,
-        loader: "babel-loader",
-        exclude: /node_modules/,
-        options: {
-          browserslistEnv: "javascripts",
-          cacheDirectory: true,
-          extends: path.join(dirname, "babel.config.cjs"),
-          presets: [
-            [
-              "@babel/preset-env",
-              {
-                bugfixes: true,
-                loose: true,
-                modules: false,
-              },
-            ],
-          ],
-        },
-        sideEffects: false,
-      },
-      {
-        test: /\.scss$/,
-        type: ruleTypeAssetResource,
-        generator: {
-          binary: false,
-          filename:
-            NODE_ENV === "production"
-              ? "stylesheets/[name].[contenthash:7].min.css"
-              : "stylesheets/[name].css",
-        },
-        use: [
-          "postcss-loader",
-          {
-            loader: "sass-loader",
-            options: {
-              sassOptions: {
-                loadPaths: [
-                  path.join(dirname, "src/client/stylesheets"),
-                  path.join(dirname, "src/server/common/components"),
-                ],
-                quietDeps: true,
-                sourceMapIncludeSources: true,
-                style: "expanded",
-              },
-              warnRuleAsWarning: true,
-            },
-          },
+export default async () => {
+  // Use dynamic import to avoid issues with ESM and CommonJS interop
+  const { glob } = await import("node:fs/promises");
+
+  const components = (
+    await Array.fromAsync(
+      glob("**/components", {
+        exclude: ["node_modules", "*.*"],
+      }),
+    )
+  ).map((p) => path.join(dirname, p));
+
+  /**
+   * @type {import('webpack').Configuration}
+   */
+  return {
+    context: path.resolve(dirname, "src/client"),
+    entry: {
+      application: {
+        import: [
+          "./javascripts/application.js",
+          "./javascripts/modules/checkbox-select-all.js",
+          "./stylesheets/application.scss",
         ],
       },
-      {
-        test: /\.(png|svg|jpe?g|gif)$/,
-        type: ruleTypeAssetResource,
-        generator: {
-          filename: "assets/images/[name][ext]",
-        },
+      govuk: {
+        import: [
+          path.join(govukFrontendPath, "dist/govuk/govuk-frontend.min.js"),
+        ],
       },
-      {
-        test: /\.(ico)$/,
-        type: ruleTypeAssetResource,
-        generator: {
-          filename: "assets/images/[name][ext]",
-        },
+      checkboxes: {
+        import: ["./javascripts/modules/checkbox-select-all.js"],
       },
-      {
-        test: /\.(woff|woff2|eot|ttf|otf)$/,
-        type: ruleTypeAssetResource,
-        generator: {
-          filename: "assets/fonts/[name][ext]",
-        },
+    },
+    experiments: {
+      outputModule: true,
+    },
+    mode: NODE_ENV === "production" ? "production" : "development",
+    devtool: NODE_ENV === "production" ? "source-map" : "inline-source-map",
+    watchOptions: {
+      aggregateTimeout: 200,
+      poll: 1000,
+    },
+    output: {
+      filename:
+        NODE_ENV === "production"
+          ? "javascripts/[name].[contenthash:7].min.js"
+          : "javascripts/[name].js",
+      chunkFilename:
+        NODE_ENV === "production"
+          ? "javascripts/[name].[chunkhash:7].min.js"
+          : "javascripts/[name].js",
+      path: path.join(dirname, ".public"),
+      publicPath: "/public/",
+      libraryTarget: "module",
+      module: true,
+    },
+    resolve: {
+      alias: {
+        "/public/assets": path.join(govukFrontendPath, "dist/govuk/assets"),
       },
-    ],
-  },
-  optimization: {
-    minimize: NODE_ENV === "production",
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          compress: { passes: 2 },
-          format: { comments: false },
-          sourceMap: { includeSources: true },
-          safari10: true,
-        },
-      }),
-    ],
-    providedExports: true,
-    sideEffects: true,
-    usedExports: true,
-  },
-  plugins: [
-    new CleanWebpackPlugin(),
-    new WebpackAssetsManifest(),
-    new CopyPlugin({
-      patterns: [
+    },
+    module: {
+      rules: [
         {
-          from: path.join(govukFrontendPath, "dist/govuk/assets"),
-          to: "assets",
+          test: /\.(js|mjs|scss)$/,
+          loader: "source-map-loader",
+          enforce: "pre",
         },
         {
-          from: "../server/common/components/defraHeading/defra-crest.png",
-          to: "assets/images/defra-crest.png",
+          test: /\.js$/,
+          loader: "babel-loader",
+          exclude: /node_modules/,
+          options: {
+            browserslistEnv: "javascripts",
+            cacheDirectory: true,
+            extends: path.join(dirname, "babel.config.cjs"),
+            presets: [
+              [
+                "@babel/preset-env",
+                {
+                  bugfixes: true,
+                  loose: true,
+                  modules: false,
+                },
+              ],
+            ],
+          },
+          sideEffects: false,
+        },
+        {
+          test: /\.scss$/,
+          type: ruleTypeAssetResource,
+          generator: {
+            binary: false,
+            filename:
+              NODE_ENV === "production"
+                ? "stylesheets/[name].[contenthash:7].min.css"
+                : "stylesheets/[name].css",
+          },
+          use: [
+            "postcss-loader",
+            {
+              loader: "sass-loader",
+              options: {
+                sassOptions: {
+                  loadPaths: [
+                    path.join(dirname, "src/client/stylesheets"),
+                    ...components,
+                  ],
+                  quietDeps: true,
+                  sourceMapIncludeSources: true,
+                  style: "expanded",
+                },
+                warnRuleAsWarning: true,
+              },
+            },
+          ],
+        },
+        {
+          test: /\.(png|svg|jpe?g|gif)$/,
+          type: ruleTypeAssetResource,
+          generator: {
+            filename: "assets/images/[name][ext]",
+          },
+        },
+        {
+          test: /\.(ico)$/,
+          type: ruleTypeAssetResource,
+          generator: {
+            filename: "assets/images/[name][ext]",
+          },
+        },
+        {
+          test: /\.(woff|woff2|eot|ttf|otf)$/,
+          type: ruleTypeAssetResource,
+          generator: {
+            filename: "assets/fonts/[name][ext]",
+          },
         },
       ],
-    }),
-    new HtmlWebpackPlugin({
-      inject: false,
-      filename: path.join(
-        dirname,
-        "src/server/common/components/checkbox/template.njk",
-      ),
-      template: path.join(
-        dirname,
-        "src/server/common/components/checkbox/template.njk",
-      ),
-      chunks: ["checkboxes"],
-    }),
-  ],
-  stats: {
-    errorDetails: true,
-    loggingDebug: ["sass-loader"],
-    preset: "minimal",
-  },
-  target: "browserslist:javascripts",
+    },
+    optimization: {
+      minimize: NODE_ENV === "production",
+      minimizer: [
+        new TerserPlugin({
+          terserOptions: {
+            compress: { passes: 2 },
+            format: { comments: false },
+            sourceMap: { includeSources: true },
+            safari10: true,
+          },
+        }),
+      ],
+      providedExports: true,
+      sideEffects: true,
+      usedExports: true,
+    },
+    plugins: [
+      new CleanWebpackPlugin(),
+      new WebpackAssetsManifest(),
+      new CopyPlugin({
+        patterns: [
+          {
+            from: path.join(govukFrontendPath, "dist/govuk/assets"),
+            to: "assets",
+          },
+          {
+            from: "../common/components/defra-heading/defra-crest.png",
+            to: "assets/images/defra-crest.png",
+          },
+        ],
+      }),
+    ],
+    stats: {
+      errorDetails: true,
+      loggingDebug: ["sass-loader"],
+      preset: "minimal",
+    },
+    target: "browserslist:javascripts",
+  };
 };
