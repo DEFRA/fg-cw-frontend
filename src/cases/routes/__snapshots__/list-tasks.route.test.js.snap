@@ -2,7 +2,6 @@
 
 exports[`listTasksRoute > returns a case with tasks 1`] = `
 "
-
   
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
@@ -110,7 +109,7 @@ Land Details
     
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading" id="stage-heading">
+    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading">
       Application Receipt
     </h2>
       <h3 class="govuk-heading-m">1. Application Receipt Tasks</h3>
