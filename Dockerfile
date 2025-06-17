@@ -1,4 +1,4 @@
-ARG PARENT_VERSION=2.8.4-node22.16.0
+ARG PARENT_VERSION=latest-22
 ARG PORT=3000
 ARG PORT_DEBUG=9229
 
@@ -44,7 +44,7 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
 COPY --from=production_build /home/node/package*.json ./
-COPY --from=production_build /home/node/.server ./.server/
+COPY --chown=node:node src src
 COPY --from=production_build /home/node/.public/ ./.public/
 COPY --chown=node:node scripts/run.sh scripts/run.sh
 
