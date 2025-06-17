@@ -3,15 +3,13 @@
   "version": "0.0.0",
   "description": "FG Caseworking Frontend",
   "sideEffects": false,
-  "main": ".server/main.js",
+  "main": "src/main.js",
   "type": "module",
   "engines": {
     "node": ">=22.14.0"
   },
   "scripts": {
-    "build": "run-s build:frontend build:server",
-    "build:frontend": "NODE_ENV=production webpack",
-    "build:server": "NODE_ENV=production babel --delete-dir-on-start --ignore \"**/*.test.js\" --ignore \"**/test-helpers\" --copy-files --no-copy-ignored --out-dir ./.server ./src",
+    "build": "NODE_ENV=production webpack",
     "dev": "run-p frontend:watch server:watch",
     "dev:debug": "run-p frontend:watch server:debug",
     "format": "prettier --write \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\"",

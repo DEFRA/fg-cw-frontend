@@ -34,7 +34,7 @@ export const config = convict({
   host: {
     doc: "The host to bind.",
     format: String,
-    default: "localhost",
+    default: "0.0.0.0",
     env: "HOST",
   },
   port: {
