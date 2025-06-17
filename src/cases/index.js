@@ -8,7 +8,7 @@ import { viewTaskRoute } from "./routes/view-task.route.js";
 export const cases = {
   plugin: {
     name: "cases",
-    async register(server, _options) {
+    register(server) {
       server.route([
         listCasesRoute,
         viewCaseRoute,
