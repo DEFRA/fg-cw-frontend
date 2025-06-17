@@ -30,7 +30,7 @@ describe("listTasksRoute", () => {
       workflowCode: "frps-private-beta",
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
-      currentStage: "contract",
+      currentStage: "application-receipt",
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",
@@ -92,6 +92,7 @@ describe("listTasksRoute", () => {
     });
 
     expect(statusCode).toEqual(200);
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith("xxxxxxxx");
 
     const $ = load(result);
     const view = $("#main-content").html();

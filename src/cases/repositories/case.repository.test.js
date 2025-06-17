@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { findAll, findById, updateStage } from "./case.repository.js";
+import {
+  completeStage,
+  findAll,
+  findById,
+  updateTaskStatus,
+} from "./case.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -137,8 +142,25 @@ describe("Case Repository", () => {
     });
   });
 
-  describe("updateStage", () => {
-    it("returns updated case object when API call succeeds", async () => {
+  describe("updateTaskStatus", () => {
+    it("calls api with payload data", async () => {
+      wreck.patch.mockResolvedValueOnce({});
+      const params = {
+        stageId: "stage-1",
+        caseId: "1234-0909",
+        taskGroupId: "tg-01",
+        taskId: "t-01",
+      };
+      await updateTaskStatus({ ...params, isComplete: true });
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
+        { payload: { status: "complete" } },
+      );
+    });
+  });
+
+  describe("completeStage", () => {
+    it("returns with undefined when API call succeeds", async () => {
       const caseId = "case-123";
       const mockApiResponse = {
         payload: {
@@ -159,46 +181,7 @@ describe("Case Repository", () => {
 
       wreck.post.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await updateStage(caseId);
-
-      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
-      expect(result).toEqual({
-        _id: "case-123",
-        caseRef: "client-ref-123",
-        payload: {
-          code: "case-code-123",
-        },
-        workflowCode: "workflow-123",
-        currentStage: "stage-2",
-        stages: ["stage-1", "stage-2"],
-        createdAt: "2021-01-01T00:00:00.000Z",
-        submittedAt: "2021-01-15T10:30:00.000Z",
-        status: "Updated",
-        assignedUser: "user-123",
-      });
-    });
-
-    it("returns null when API returns null payload", async () => {
-      const caseId = "case-123";
-      const mockApiResponse = {
-        payload: null,
-      };
-
-      wreck.post.mockResolvedValueOnce(mockApiResponse);
-
-      const result = await updateStage(caseId);
-
-      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
-      expect(result).toBeNull();
-    });
-
-    it("returns undefined when API returns undefined payload", async () => {
-      const caseId = "case-123";
-      const mockApiResponse = {};
-
-      wreck.post.mockResolvedValueOnce(mockApiResponse);
-
-      const result = await updateStage(caseId);
+      const result = await completeStage(caseId);
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toBeUndefined();
