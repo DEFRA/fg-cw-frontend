@@ -1,19 +1,21 @@
 import hapi from "@hapi/hapi";
 import Vision from "@hapi/vision";
-import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucksConfig } from "../../config/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
+import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
 import { listTasksRoute } from "./list-tasks.route.js";
+import { updateTaskStatusRoute } from "./update-task-status.route.js";
 
+vi.mock("../use-cases/update-task-status.use-case.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 
-describe("listTasksRoute", () => {
+describe("update task status route", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
-    server.route(listTasksRoute);
+    server.route([updateTaskStatusRoute, listTasksRoute]);
     await server.register([Vision, nunjucksConfig]);
 
     await server.initialize();
@@ -23,7 +25,7 @@ describe("listTasksRoute", () => {
     await server.stop();
   });
 
-  it("returns a case with tasks", async () => {
+  it("updates the task status", async () => {
     findCaseByIdUseCase.mockResolvedValue({
       _id: "68495db5afe2d27b09b2ee47",
       caseRef: "banana-123",
@@ -86,17 +88,26 @@ describe("listTasksRoute", () => {
       ],
     });
 
-    const { statusCode, result } = await server.inject({
-      method: "GET",
-      url: "/cases/xxxxxxxx",
+    updateTaskStatusUseCase.mockResolvedValue({});
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/tasks/tg01/t01",
+      payload: {
+        isComplete: true,
+      },
     });
 
-    expect(statusCode).toEqual(200);
-    expect(findCaseByIdUseCase).toHaveBeenCalledWith("xxxxxxxx");
-
-    const $ = load(result);
-    const view = $("#main-content").html();
-
-    expect(view).toMatchSnapshot();
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      "68495db5afe2d27b09b2ee47",
+    );
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith({
+      caseId: "68495db5afe2d27b09b2ee47",
+      stageId: "application-receipt",
+      taskGroupId: "tg01",
+      taskId: "t01",
+      isComplete: true,
+    });
+    expect(statusCode).toEqual(302);
   });
 });

@@ -1,0 +1,138 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`completeStageRoute > completes a stage 1`] = `
+"
+
+  
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Valley Farm
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">SBI:</strong>
+            SBI001
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Reference:</strong>
+            frps-private-beta
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Scheme:</strong>
+            SFI
+            2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Date received:</strong>
+            11 Jun 2025
+          </p>
+        </div>
+
+        <div class="app-case-cell">
+          <p>
+            <strong class="govuk-!-margin-right-1">Status:</strong>
+            NEW
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  <div class="govuk-body">
+    
+  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation">
+
+            
+              
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47" aria-current="true">
+                                    
+                  <strong class="govuk-service-navigation__active-fallback">Tasks</strong>
+
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details">
+                                    
+Case Details
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="#">
+                                    
+Land Details
+                  </a>
+              </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    </div>
+
+  </div>
+
+
+
+    
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading" id="stage-heading">
+      Application Receipt
+    </h2>
+      <h3 class="govuk-heading-m">1. Application Receipt Tasks</h3>
+      
+  <ul class="govuk-task-list govuk-!-margin-bottom-4" data-testid="taskList-list">
+      <li class="govuk-task-list__item govuk-task-list__item--with-link" data-testid="taskList-li">
+        <div class="govuk-task-list__name-and-hint">
+          <a href="/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review" class="govuk-link govuk-task-list__link">Simple Review</a>
+        </div>
+        <div class="govuk-task-list__status">
+          <strong class="govuk-tag govuk-tag govuk-tag--blue">
+  Incomplete
+</strong>
+
+        </div>
+      </li>
+  </ul>
+
+
+  </div>
+</div>
+
+  </div>
+        "
+`;

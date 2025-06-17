@@ -4,16 +4,16 @@ import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucksConfig } from "../../config/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { listTasksRoute } from "./list-tasks.route.js";
+import { completeStageRoute } from "./complete-stage.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 
-describe("listTasksRoute", () => {
+describe("completeStageRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
-    server.route(listTasksRoute);
+    server.route(completeStageRoute);
     await server.register([Vision, nunjucksConfig]);
 
     await server.initialize();
@@ -23,7 +23,7 @@ describe("listTasksRoute", () => {
     await server.stop();
   });
 
-  it("returns a case with tasks", async () => {
+  it("completes a stage", async () => {
     findCaseByIdUseCase.mockResolvedValue({
       _id: "68495db5afe2d27b09b2ee47",
       caseRef: "banana-123",
@@ -87,12 +87,12 @@ describe("listTasksRoute", () => {
     });
 
     const { statusCode, result } = await server.inject({
-      method: "GET",
-      url: "/cases/xxxxxxxx",
+      method: "POST",
+      url: "/cases/1234",
     });
 
     expect(statusCode).toEqual(200);
-    expect(findCaseByIdUseCase).toHaveBeenCalledWith("xxxxxxxx");
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith("1234");
 
     const $ = load(result);
     const view = $("#main-content").html();
