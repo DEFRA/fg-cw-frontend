@@ -1,18 +1,15 @@
-import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
 
 export const updateTaskStatusRoute = {
   method: "POST",
-  path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}",
+  path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",
   handler: async (request, h) => {
-    const { caseId, taskGroupId, taskId } = request.params;
+    const { caseId, taskGroupId, taskId, stageId } = request.params;
     const { isComplete = false } = request.payload;
-
-    const { currentStage } = await findCaseByIdUseCase(caseId);
 
     await updateTaskStatusUseCase({
       caseId,
-      stageId: currentStage,
+      stageId,
       taskGroupId,
       taskId,
       isComplete: !!isComplete,

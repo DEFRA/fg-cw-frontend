@@ -9,7 +9,7 @@ export const cases = {
   plugin: {
     name: "cases",
     async register(server, _options) {
-      await server.route([
+      server.route([
         listCasesRoute,
         viewCaseRoute,
         listTasksRoute,

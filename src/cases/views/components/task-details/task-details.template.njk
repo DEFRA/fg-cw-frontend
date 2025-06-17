@@ -27,9 +27,10 @@
     {% if params.currentTask.type === "boolean" %}
       {{
         appTaskBoolean({
-        caseId:params.caseId,
-        taskGroupId:params.taskGroupId,
-        taskId:params.taskId,
+        caseId: params.caseId,
+        stageId: params.stageId,
+        taskGroupId: params.taskGroupId,
+        taskId: params.taskId,
         isComplete: params.currentTask.isComplete,
         title: params.currentTask.title
         })

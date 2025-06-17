@@ -3,7 +3,7 @@
 <form
   method="post"
   id="completeTaskForm"
-  action="{{ "/cases/" + params.caseId + "/tasks/" + params.taskGroupId + "/" + params.taskId }}"
+  action="{{ "/cases/" + params.caseId + "/stages/" + params.stageId + "/task-groups/" + params.taskGroupId + "/tasks/" + params.taskId + "/status" }}"
 >
   <div class="govuk-form-group">
     {{
@@ -21,7 +21,6 @@
     }}
   </div>
   <div class="govuk-button-group">
-    <input type="hidden" name="taskId" value="{{ params.taskId }}" />
     <button
       type="submit"
       data-prevent-double-click="true"
