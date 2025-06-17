@@ -10,7 +10,21 @@ export const findById = async (caseId) => {
   return payload;
 };
 
-export const updateStage = async (caseId) => {
-  const { payload } = await wreck.post(`/cases/${caseId}/stage`);
-  return payload;
+export const updateTaskStatus = async ({
+  caseId,
+  stageId,
+  taskGroupId,
+  taskId,
+  isComplete,
+}) => {
+  await wreck.patch(
+    `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
+    {
+      payload: { status: isComplete ? "complete" : "pending" },
+    },
+  );
+};
+
+export const completeStage = async (caseId) => {
+  await wreck.post(`/cases/${caseId}/stage`);
 };

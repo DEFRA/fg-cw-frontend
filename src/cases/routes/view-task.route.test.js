@@ -23,14 +23,14 @@ describe("viewTaskRoute", () => {
     await server.stop();
   });
 
-  it("returns a list of cases", async () => {
+  it("returns a task", async () => {
     findCaseByIdUseCase.mockResolvedValue({
       _id: "68495db5afe2d27b09b2ee47",
       caseRef: "banana-123",
       workflowCode: "frps-private-beta",
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
-      currentStage: "contract",
+      currentStage: "application-receipt",
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",
