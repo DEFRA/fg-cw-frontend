@@ -8,13 +8,18 @@ import { formatDate } from "./filters/format-date.js";
 
 const njkPaths = [
   "node_modules/govuk-frontend/dist/",
-  "src/common/components",
   ...(await Array.fromAsync(
     glob(["**/views", "**/*(layouts|components|pages|partials)/"], {
       exclude: ["node_modules", "*.*"],
     }),
   )),
 ];
+
+const viewPaths = await Array.fromAsync(
+  glob(["**/views"], {
+    exclude: ["node_modules", "*.*"],
+  }),
+);
 
 export const environment = Nunjucks.configure(njkPaths, {
   autoescape: true,
@@ -45,11 +50,7 @@ export const nunjucks = {
       environment,
     },
     relativeTo: config.get("root"),
-    path: await Array.fromAsync(
-      glob("**/views", {
-        exclude: ["node_modules", "*.*"],
-      }),
-    ),
+    path: viewPaths,
     isCached: config.get("isProduction"),
     context,
   },
