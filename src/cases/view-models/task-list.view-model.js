@@ -1,6 +1,6 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
-export const createTaskListViewModel = (caseData, error) => {
+export const createTaskListViewModel = (caseData) => {
   const stage = caseData.stages.find(
     (stage) => stage.id === caseData.currentStage,
   );
