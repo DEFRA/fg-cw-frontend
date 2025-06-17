@@ -3,10 +3,12 @@ import Vision from "@hapi/vision";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucksConfig } from "../../config/nunjucks/nunjucks.js";
+import { completeStageUseCase } from "../use-cases/complete-stage.use-case.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { completeStageRoute } from "./complete-stage.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
+vi.mock("../use-cases/complete-stage.use-case.js");
 
 describe("completeStageRoute", () => {
   let server;
@@ -85,6 +87,8 @@ describe("completeStageRoute", () => {
         },
       ],
     });
+
+    completeStageUseCase.mockResolvedValue({});
 
     const { statusCode, result } = await server.inject({
       method: "POST",

@@ -17,7 +17,7 @@ export const updateTaskStatus = async ({
   taskId,
   isComplete,
 }) => {
-  return await wreck.patch(
+  await wreck.patch(
     `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
     {
       payload: { status: isComplete ? "complete" : "pending" },
@@ -26,12 +26,5 @@ export const updateTaskStatus = async ({
 };
 
 export const completeStage = async (caseId) => {
-  try {
-    await wreck.post(`/cases/${caseId}/stage`);
-  } catch (e) {
-    if (e.data?.payload) {
-      return { error: e.data.payload };
-    }
-    return { error: "Update failed" };
-  }
+  await wreck.post(`/cases/${caseId}/stage`);
 };

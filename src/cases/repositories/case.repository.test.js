@@ -7,16 +7,7 @@ import {
   updateTaskStatus,
 } from "./case.repository.js";
 
-// Mock the wreck dependency
-const mockWreck = vi.hoisted(() => ({
-  get: vi.fn(),
-  post: vi.fn(),
-  patch: vi.fn(),
-}));
-
-vi.mock("../../common/wreck.js", () => ({
-  wreck: mockWreck,
-}));
+vi.mock("../../common/wreck.js");
 
 describe("Case Repository", () => {
   describe("findAll", () => {
@@ -153,6 +144,7 @@ describe("Case Repository", () => {
 
   describe("updateTaskStatus", () => {
     it("calls api with payload data", async () => {
+      wreck.patch.mockResolvedValueOnce({});
       const params = {
         stageId: "stage-1",
         caseId: "1234-0909",
@@ -160,7 +152,7 @@ describe("Case Repository", () => {
         taskId: "t-01",
       };
       await updateTaskStatus({ ...params, isComplete: true });
-      expect(mockWreck.patch).toHaveBeenCalledWith(
+      expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
         { payload: { status: "complete" } },
       );
@@ -193,34 +185,6 @@ describe("Case Repository", () => {
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toBeUndefined();
-    });
-
-    it('returns "update failed" on unexpected error', async () => {
-      const caseId = "case-123";
-      const mockApiResponse = new Error("Error");
-
-      mockWreck.post.mockRejectedValueOnce(mockApiResponse);
-
-      const result = await completeStage(caseId);
-
-      expect(mockWreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
-      expect(result).toEqual({ error: "Update failed" });
-    });
-
-    it("returns payload error when api throws", async () => {
-      const caseId = "case-123";
-      const mockApiResponse = {
-        data: {
-          payload: "All tasks must be complete.",
-        },
-      };
-
-      mockWreck.post.mockRejectedValueOnce(mockApiResponse);
-
-      const result = await completeStage(caseId);
-
-      expect(mockWreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
-      expect(result).toEqual({ error: "All tasks must be complete." });
     });
   });
 });
