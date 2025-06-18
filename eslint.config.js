@@ -27,10 +27,7 @@ export default [
       "import-x/no-extraneous-dependencies": [
         "error",
         {
-          devDependencies: [
-            "src/**/*.test.js",
-            "src/common/nunjucks/render-component.js",
-          ],
+          devDependencies: ["src/**/*.test.js"],
         },
       ],
       "import-x/no-restricted-paths": [
@@ -39,7 +36,7 @@ export default [
           zones: [
             {
               target: "**/repositories/**/!(*.test).js",
-              from: ["**/routes/**", "**/subscribers/**", "**/use-cases/**"],
+              from: ["**/routes/**", "**/use-cases/**"],
               message:
                 "Respositories should not import routes, use cases or view models",
             },
