@@ -112,13 +112,14 @@ export const auth = {
               profile: request.auth.credentials.profile,
               token: request.auth.credentials.token,
             });
+            
+            // try redirect
+            const next = request.auth?.credentials?.query?.next;
+            if( next ) {
+              return h.redirect(next)
+            }
 
-            return h.redirect("/secret");
-
-            // Perform any account lookup or registration, setup local session,
-            // and redirect to the application. The third-party credentials are
-            // stored in request.auth.credentials. Any query parameters from
-            // the initial request are passed back via request.auth.credentials.query.
+            return h.redirect("/cases");
           },
         },
       });
