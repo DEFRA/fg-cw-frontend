@@ -1,4 +1,5 @@
 import { completeStageRoute } from "./routes/complete-stage.route.js";
+import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
@@ -16,6 +17,7 @@ export const cases = {
         viewTaskRoute,
         updateTaskStatusRoute,
         completeStageRoute,
+        getSecretRoute,
       ]);
     },
   },

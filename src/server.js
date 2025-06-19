@@ -9,7 +9,6 @@ import { config } from "./common/config.js";
 import { logger } from "./common/logger.js";
 import { nunjucks } from "./common/nunjucks/nunjucks.js";
 import { health } from "./health/index.js";
-import { secret } from "./secret/index.js";
 
 const messages = {
   400: "Bad Request",
@@ -78,7 +77,7 @@ export const createServer = async () => {
     auth.plugin,
   ]);
 
-  await server.register([secret, health, cases]);
+  await server.register([health, cases]);
 
   server.ext("onPreResponse", (request, h) => {
     const { response } = request;
