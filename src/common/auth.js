@@ -2,14 +2,6 @@ import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
 
-export const withSessionAuth = (options = {}) => ({
-  ...options,
-  auth: {
-    mode: "required",
-    strategy: "session",
-  },
-});
-
 export const auth = {
   plugin: {
     name: "auth",
@@ -103,7 +95,8 @@ export const auth = {
             });
 
             // try redirect to original destination
-            const next = request.auth?.credentials?.query?.next;
+            const next = request.auth.credentials.query.next;
+
             if (next) {
               return h.redirect(next);
             }
