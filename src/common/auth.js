@@ -12,21 +12,6 @@ export const auth = {
       }
       await server.register([Cookie, Bell]);
 
-      // server.state('redirectTo', {
-      //   ttl: 360,
-      //   isSecure: true,
-      //   isHttpOnly: true,
-      //   clearInvalid: true,
-      //   strictHeader: true
-      // });
-
-      // server.ext('onPreAuth', (request, h) => {
-      //   console.log("pre auth")
-      //   console.log(request.route.path)
-      //   console.log(request.auth.isAuthenticated)
-      //   return h.continue;
-      // })
-
       server.auth.strategy("session", "cookie", {
         cookie: {
           name: "session-auth",
@@ -112,7 +97,7 @@ export const auth = {
               profile: request.auth.credentials.profile,
               token: request.auth.credentials.token,
             });
-            
+
             // try redirect
             const next = request.auth?.credentials?.query?.next;
             if( next ) {
