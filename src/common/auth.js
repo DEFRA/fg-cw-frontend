@@ -6,8 +6,8 @@ export const withSessionAuth = (options = {}) => ({
   ...options,
   auth: {
     mode: "required",
-    strategy: "session"
-  }
+    strategy: "session",
+  },
 });
 
 export const auth = {
@@ -41,7 +41,7 @@ export const auth = {
         },
       });
 
-      server.auth.strategy("ms", "bell", {
+      server.auth.strategy("msEntraId", "bell", {
         provider: "azure",
         password: config.get("session.cookie.password"),
         clientId: config.get("auth.msEntraId.clientId"),
@@ -51,7 +51,7 @@ export const auth = {
           tenant: config.get("auth.msEntraId.tenantId"),
         },
         location(request) {
-          return `${config.get("isProduction")? "https://" : "http://"}${request.info.host}/login/callback`;
+          return `${config.get("isProduction") ? "https://" : "http://"}${request.info.host}/login/callback`;
         },
         isSecure: config.get("isProduction"),
       });
@@ -63,7 +63,7 @@ export const auth = {
         options: { auth: false },
         handler: (request, h) => {
           request.cookieAuth.clear();
-          return h.redirect("/cases");
+          return h.redirect("/");
         },
       });
 
@@ -74,7 +74,7 @@ export const auth = {
         options: {
           auth: {
             mode: "try",
-            strategy: "ms",
+            strategy: "msEntraId",
           },
         },
         handler: () => {
@@ -94,25 +94,21 @@ export const auth = {
         options: {
           auth: {
             mode: "try",
-            strategy: "ms",
+            strategy: "msEntraId",
           },
           handler: function (request, h) {
-            if (!request.auth.isAuthenticated) {
-              return `Authentication failed due to: ${request.auth.error.message}`;
-            }
-
             request.cookieAuth.set({
               profile: request.auth.credentials.profile,
               token: request.auth.credentials.token,
             });
 
-            // try redirect
+            // try redirect to original destination
             const next = request.auth?.credentials?.query?.next;
-            if( next ) {
-              return h.redirect(next)
+            if (next) {
+              return h.redirect(next);
             }
 
-            return h.redirect("/cases");
+            return h.redirect("/");
           },
         },
       });
