@@ -5,7 +5,6 @@ describe("case-summary", () => {
   test("renders", () => {
     const component = render("case-summary", {
       case: {
-        caseRef: "banana-123",
         status: "NEW",
         businessName: "Test Business",
         sbi: "SBI001",
