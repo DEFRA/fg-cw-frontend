@@ -2,6 +2,14 @@ import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
 
+export const withSessionAuth = (options = {}) => ({
+  ...options,
+  auth: {
+    mode: "required",
+    strategy: "session"
+  }
+});
+
 export const auth = {
   plugin: {
     name: "auth",
@@ -42,8 +50,8 @@ export const auth = {
         config: {
           tenant: config.get("auth.msEntraId.tenantId"),
         },
-        location() {
-          return config.get("auth.redirectUrl");
+        location(request) {
+          return `${config.get("isProduction")? "https://" : "http://"}${request.info.host}/login/callback`;
         },
         isSecure: config.get("isProduction"),
       });

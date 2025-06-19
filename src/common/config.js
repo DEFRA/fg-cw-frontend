@@ -223,7 +223,6 @@ export const config = convict({
   },
   auth: {
     enabled: true,
-    redirectUrl: "http://localhost:3000/login/callback",
     msEntraId: {
       tenantId: {
         doc: "The tenant ID for Microsoft Entra ID",
