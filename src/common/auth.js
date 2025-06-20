@@ -1,6 +1,7 @@
 import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
+import { jwtDecode } from "jwt-decode";
 
 export const auth = {
   plugin: {
@@ -93,6 +94,9 @@ export const auth = {
               profile: request.auth.credentials.profile,
               token: request.auth.credentials.token,
             });
+
+            console.log(JSON.stringify(request.auth, null, 2));
+            console.log(request);
 
             // try redirect to original destination
             const next = request.auth.credentials.query.next;
