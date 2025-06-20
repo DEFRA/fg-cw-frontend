@@ -95,11 +95,11 @@ export const auth = {
               token: request.auth.credentials.token,
             });
 
+            console.log("callback")
             console.log(JSON.stringify(request.auth, null, 2));
-            console.log(request);
 
             // try redirect to original destination
-            const next = request.auth.credentials.query.next;
+            const next = request?.auth?.credentials?.query?.next;
 
             if (next) {
               return h.redirect(next);
