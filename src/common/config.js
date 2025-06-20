@@ -222,6 +222,7 @@ export const config = convict({
     },
   },
   auth: {
+    enabled: true,
     msEntraId: {
       tenantId: {
         doc: "The tenant ID for Microsoft Entra ID",
