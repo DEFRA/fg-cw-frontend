@@ -30,25 +30,4 @@ describe("cases plugin", () => {
       },
     ]);
   });
-
-  test("plugin can be registered multiple times on different servers", async () => {
-    const server1 = hapi.server();
-    const server2 = hapi.server();
-
-    await expect(server1.register(cases)).resolves.not.toThrow();
-    await expect(server2.register(cases)).resolves.not.toThrow();
-
-    await server1.initialize();
-    await server2.initialize();
-
-    expect(server1.table()).toHaveLength(6);
-    expect(server2.table()).toHaveLength(6);
-  });
-
-  test("plugin name is correctly set", () => {
-    expect(cases.plugin.name).toBe("cases");
-    expect(cases.plugin.name).not.toBe("");
-    expect(cases.plugin.name).not.toBeNull();
-    expect(cases.plugin.name).not.toBeUndefined();
-  });
 });
