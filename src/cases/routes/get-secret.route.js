@@ -10,8 +10,8 @@ export const getSecretRoute = {
   handler(request, h) {
     return h.view("pages/secret", {
       authBlob: JSON.stringify(request.auth, null, 2),
-      isAuthenticated: request.state["session-auth"].authenticated,
-      isAuthorised: request.state["session-auth"].authorised,
+      isAuthenticated: request.auth.credentials.authenticated,
+      isAuthorised: request.auth.credentials.authorised,
     });
   },
 };

@@ -2,6 +2,14 @@ import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
 
+export const validateSession = (_request, session) => {
+  if (!session || !session.profile) {
+    return { isValid: false };
+  }
+
+  return { isValid: true, credentials: session };
+};
+
 export const auth = {
   plugin: {
     name: "auth",
@@ -26,13 +34,7 @@ export const auth = {
         keepAlive: true,
         appendNext: true,
         redirectTo: "/login/callback",
-        validate: async (_request, session) => {
-          if (!session || !session.profile) {
-            return { isValid: false };
-          }
-
-          return { isValid: true, credentials: session };
-        },
+        validate: validateSession,
       });
 
       server.auth.strategy("msEntraId", "bell", {
