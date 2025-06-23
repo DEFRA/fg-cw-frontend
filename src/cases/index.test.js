@@ -1,102 +1,48 @@
-import { describe, expect, test, vi } from "vitest";
+import hapi from "@hapi/hapi";
+import { beforeEach, describe, expect, test } from "vitest";
 import { cases } from "./index.js";
-import { completeStageRoute } from "./routes/complete-stage.route.js";
-import { listCasesRoute } from "./routes/list-cases.route.js";
-import { listTasksRoute } from "./routes/list-tasks.route.js";
-import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
-import { viewCaseRoute } from "./routes/view-case.route.js";
-import { viewTaskRoute } from "./routes/view-task.route.js";
-
-vi.mock("./routes/complete-stage.route.js");
-vi.mock("./routes/list-cases.route.js");
-vi.mock("./routes/list-tasks.route.js");
-vi.mock("./routes/update-task-status.route.js");
-vi.mock("./routes/view-case.route.js");
-vi.mock("./routes/view-task.route.js");
 
 describe("cases plugin", () => {
-  test("exports plugin object with correct name", () => {
-    expect(cases).toBeDefined();
-    expect(cases.plugin).toBeDefined();
-    expect(cases.plugin.name).toBe("cases");
-    expect(typeof cases.plugin.register).toBe("function");
+  let server;
+
+  beforeEach(async () => {
+    server = hapi.server();
   });
 
-  test("register function calls server.route with all routes", () => {
-    const mockServer = {
-      route: vi.fn(),
-    };
+  test("registers all expected routes when plugged into server", async () => {
+    await server.register(cases);
+    await server.initialize();
 
-    cases.plugin.register(mockServer);
+    const routes = server.table().map((r) => ({
+      path: r.path,
+      method: r.method,
+    }));
 
-    expect(mockServer.route).toHaveBeenCalledOnce();
-    expect(mockServer.route).toHaveBeenCalledWith([
-      listCasesRoute,
-      viewCaseRoute,
-      listTasksRoute,
-      viewTaskRoute,
-      updateTaskStatusRoute,
-      completeStageRoute,
+    expect(routes).toEqual([
+      { method: "get", path: "/cases" },
+      { method: "get", path: "/cases/{caseId}" },
+      { method: "get", path: "/cases/{caseId}/case-details" },
+      { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
+      { method: "post", path: "/cases/{caseId}" },
+      {
+        method: "post",
+        path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",
+      },
     ]);
   });
 
-  test("register function handles server without route method gracefully", () => {
-    const mockServer = {};
+  test("plugin can be registered multiple times on different servers", async () => {
+    const server1 = hapi.server();
+    const server2 = hapi.server();
 
-    expect(() => {
-      cases.plugin.register(mockServer);
-    }).toThrow();
-  });
+    await expect(server1.register(cases)).resolves.not.toThrow();
+    await expect(server2.register(cases)).resolves.not.toThrow();
 
-  test("plugin structure matches Hapi.js plugin format", () => {
-    expect(cases.plugin).toHaveProperty("name");
-    expect(cases.plugin).toHaveProperty("register");
-    expect(typeof cases.plugin.name).toBe("string");
-    expect(typeof cases.plugin.register).toBe("function");
-  });
+    await server1.initialize();
+    await server2.initialize();
 
-  test("register function accepts server parameter", () => {
-    const mockServer = {
-      route: vi.fn(),
-    };
-
-    // Should not throw when called with proper server object
-    expect(() => {
-      cases.plugin.register(mockServer);
-    }).not.toThrow();
-  });
-
-  test("routes array contains all expected route imports", () => {
-    const mockServer = {
-      route: vi.fn(),
-    };
-
-    cases.plugin.register(mockServer);
-
-    const routesArray = mockServer.route.mock.calls[0][0];
-
-    expect(routesArray).toContain(listCasesRoute);
-    expect(routesArray).toContain(viewCaseRoute);
-    expect(routesArray).toContain(listTasksRoute);
-    expect(routesArray).toContain(viewTaskRoute);
-    expect(routesArray).toContain(updateTaskStatusRoute);
-    expect(routesArray).toContain(completeStageRoute);
-    expect(routesArray).toHaveLength(6);
-  });
-
-  test("register function can be called multiple times", () => {
-    const mockServer1 = {
-      route: vi.fn(),
-    };
-    const mockServer2 = {
-      route: vi.fn(),
-    };
-
-    cases.plugin.register(mockServer1);
-    cases.plugin.register(mockServer2);
-
-    expect(mockServer1.route).toHaveBeenCalledOnce();
-    expect(mockServer2.route).toHaveBeenCalledOnce();
+    expect(server1.table()).toHaveLength(6);
+    expect(server2.table()).toHaveLength(6);
   });
 
   test("plugin name is correctly set", () => {
