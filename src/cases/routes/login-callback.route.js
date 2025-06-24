@@ -1,16 +1,29 @@
 import { jwtDecode } from "jwt-decode";
 
+const caseWorkingRoles = [
+  "FCP.Casework.Read",
+  "FCP.Casework.ReadWrite",
+  "FCP.Casework.Admin",
+];
+
 const getNextDestination = (credentials) => {
   return credentials.query?.next;
 };
 
-export const getIdToken = (artifacts) => {
-  return artifacts?.id_token;
+export const getRoles = (artifacts) => {
+  if (!artifacts || !artifacts.id_token) return;
+  const token = jwtDecode(artifacts?.id_token);
+  return token.roles;
 };
 
 export const notAuthorised = () => {
   // TODO: handle not authorised
   return "Not authorised";
+};
+
+export const validateRoles = (userRoles) => {
+  if (!userRoles) return false;
+  return userRoles.some((role) => caseWorkingRoles.includes(role));
 };
 
 export const loginCallbackRoute = {
@@ -25,9 +38,9 @@ export const loginCallbackRoute = {
   handler: async function (request, h) {
     if (request.auth.isAuthenticated === false) return notAuthorised();
 
-    const roles = jwtDecode(getIdToken(request.auth.artifacts)).roles;
+    const roles = getRoles(request.auth.artifacts);
 
-    if (!roles) return notAuthorised();
+    if (!validateRoles(roles)) return notAuthorised();
 
     const next = getNextDestination(request.auth.credentials);
 
