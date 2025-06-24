@@ -15,11 +15,6 @@ export const auth = {
     name: "auth",
     once: true,
     async register(server) {
-      if (!config.get("auth.enabled")) {
-        server.logger.warn("Authentication is disabled");
-        return;
-      }
-
       await server.register([Bell, Cookie]);
 
       server.auth.strategy("session", "cookie", {
