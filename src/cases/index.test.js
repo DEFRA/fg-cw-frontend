@@ -1,6 +1,7 @@
 import hapi from "@hapi/hapi";
 import { beforeEach, describe, expect, test } from "vitest";
 import { cases } from "./index.js";
+import { auth } from "../common/auth.js";
 
 describe("cases plugin", () => {
   let server;
@@ -10,6 +11,7 @@ describe("cases plugin", () => {
   });
 
   test("registers all expected routes when plugged into server", async () => {
+    await server.register([auth.plugin]);
     await server.register(cases);
     await server.initialize();
 
@@ -20,7 +22,10 @@ describe("cases plugin", () => {
 
     expect(routes).toEqual([
       { method: "get", path: "/cases" },
+      { method: "get", path: "/logout" },
+      { method: "get", path: "/secret" },
       { method: "get", path: "/cases/{caseId}" },
+      { method: "get", path: "/login/callback" },
       { method: "get", path: "/cases/{caseId}/case-details" },
       { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
       { method: "post", path: "/cases/{caseId}" },

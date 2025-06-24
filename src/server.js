@@ -4,6 +4,7 @@ import Inert from "@hapi/inert";
 import hapiPino from "hapi-pino";
 import hapiPulse from "hapi-pulse";
 import { cases } from "./cases/index.js";
+import { auth } from "./common/auth.js";
 import { config } from "./common/config.js";
 import { logger } from "./common/logger.js";
 import { nunjucks } from "./common/nunjucks/nunjucks.js";
@@ -73,6 +74,7 @@ export const createServer = async () => {
     },
     Inert,
     nunjucks,
+    auth.plugin,
   ]);
 
   await server.register([health, cases]);
@@ -103,6 +105,9 @@ export const createServer = async () => {
   server.route({
     method: "GET",
     path: "/public/{param*}",
+    options: {
+      auth: false,
+    },
     handler: {
       directory: {
         path: ".public",

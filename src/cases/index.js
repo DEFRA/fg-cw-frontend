@@ -1,6 +1,8 @@
 import { completeStageRoute } from "./routes/complete-stage.route.js";
+import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
+import { loginCallbackRoute } from "./routes/login-callback.route.js";
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
 import { viewCaseRoute } from "./routes/view-case.route.js";
 import { viewTaskRoute } from "./routes/view-task.route.js";
@@ -10,12 +12,14 @@ export const cases = {
     name: "cases",
     register(server) {
       server.route([
+        loginCallbackRoute,
         listCasesRoute,
         viewCaseRoute,
         listTasksRoute,
         viewTaskRoute,
         updateTaskStatusRoute,
         completeStageRoute,
+        getSecretRoute,
       ]);
     },
   },
