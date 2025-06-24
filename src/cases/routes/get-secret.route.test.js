@@ -48,8 +48,8 @@ describe("getSecret", () => {
         credentials: {
           profile: {
             id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Julian Kimmings (esynergy)",
-            email: "julian.kimmings@Defra.onmicrosoft.com",
+            displayName: "Joe Bloggs",
+            email: "joe@bloggs.com",
           },
           authenticated: true,
           authorised: true,
@@ -57,8 +57,8 @@ describe("getSecret", () => {
         artifacts: {
           profile: {
             id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Julian Kimmings (esynergy)",
-            email: "julian.kimmings@Defra.onmicrosoft.com",
+            displayName: "Joe Bloggs",
+            email: "joe@bloggs.com",
           },
           authenticated: true,
           authorised: true,
