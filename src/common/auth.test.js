@@ -7,9 +7,7 @@ describe("auth", () => {
   describe("auth methods", () => {
     it("should validate session", () => {
       const session = {
-        profile: {
-          displayName: "Joseph Bloggs",
-        },
+        authenticated: true,
       };
       expect(validateSession({}, session)).toEqual({
         isValid: true,

@@ -1,7 +1,7 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import Bell from "@hapi/bell";
 import hapi from "@hapi/hapi";
 import { jwtDecode } from "jwt-decode";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { auth } from "../../common/auth.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { loginCallbackRoute, validateRoles } from "./login-callback.route.js";
