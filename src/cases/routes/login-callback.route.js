@@ -37,18 +37,15 @@ export const loginCallbackRoute = {
   },
   handler: async function (request, h) {
     if (request.auth.isAuthenticated === false) return notAuthorised();
-
     const roles = getRoles(request.auth.artifacts);
-
-    if (!validateRoles(roles)) return notAuthorised();
-
+    const authorised = validateRoles(roles);
+    if (!authorised) return notAuthorised();
     const next = getNextDestination(request.auth.credentials);
 
     request.cookieAuth.set({
-      profile: request.auth.credentials.profile,
       token: request.auth.credentials.token,
       authenticated: request.auth.isAuthenticated,
-      authorised: roles.includes("FCP.Casework.Read"),
+      authorised,
     });
 
     if (next) {

@@ -1,7 +1,7 @@
 import hapi from "@hapi/hapi";
 import { beforeEach, describe, expect, test } from "vitest";
-import { cases } from "./index.js";
 import { auth } from "../common/auth.js";
+import { cases } from "./index.js";
 
 describe("cases plugin", () => {
   let server;
