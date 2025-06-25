@@ -1,100 +1,182 @@
 import Bell from "@hapi/bell";
 import hapi from "@hapi/hapi";
-import { jwtDecode } from "jwt-decode";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { auth } from "../../common/auth.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
-import { loginCallbackRoute, validateRoles } from "./login-callback.route.js";
+import { loginCallbackRoute } from "./login-callback.route.js";
 
-vi.mock("jwt-decode");
+const createToken = (data) => {
+  const header = Buffer.from(
+    JSON.stringify({
+      alg: "HS256",
+      typ: "JWT",
+    }),
+  ).toString("base64");
+
+  const payload = Buffer.from(
+    JSON.stringify({
+      sub: "1234567890",
+      iat: 1516239022,
+      oid: "12345678-1234-1234-1234-123456789012",
+      ...data,
+    }),
+  ).toString("base64");
+
+  const signature = "qWxFhcz_GLCRL6LCDCUBg3JBdqw79Y31-_kkM--8nwQ";
+
+  return `${header}.${payload}.${signature}`;
+};
 
 describe("loginCallbackRoute", () => {
-  describe("validateRoles", () => {
-    it("should validate that a user role exists in case working roles", () => {
-      const userRoles = ["FCP.Casework.Read"];
-      expect(validateRoles(userRoles)).toBeTruthy();
+  let server;
+
+  beforeAll(async () => {
+    Bell.simulate(async () => ({}));
+    server = hapi.server();
+    await server.register([nunjucks, auth.plugin]);
+    server.route(loginCallbackRoute);
+    await server.initialize();
+  });
+
+  afterAll(async () => {
+    await server.stop();
+    Bell.simulate(false);
+  });
+
+  it("redirects to destination when logged in", async () => {
+    const { statusCode, headers } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {
+          query: {
+            next: "/cases",
+          },
+        },
+        artifacts: {
+          id_token: createToken({
+            roles: ["FCP.Casework.Read"],
+          }),
+        },
+      },
     });
 
-    it("should validate multiple roles", () => {
-      expect(validateRoles(["Some.Role", "FCP.Casework.Read"])).toBeTruthy();
-    });
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toEqual("/cases");
+  });
 
-    it("should validate multiple roles", () => {
-      expect(
-        validateRoles(["FCP.Casework.Admin", "FCP.Casework.Read"]),
-      ).toBeTruthy();
+  it("redirects to / when no next query param is provided", async () => {
+    const { statusCode, headers } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {
+          query: {},
+        },
+        artifacts: {
+          id_token: createToken({
+            roles: ["FCP.Casework.Read"],
+          }),
+        },
+      },
     });
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toEqual("/");
+  });
 
-    it("should return false if role doesn't exist", () => {
-      expect(validateRoles(["Some.Role"])).toBeFalsy();
+  it("throws Boom.unauthorized when ID token cannot be decoded", async () => {
+    const { result, statusCode } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {},
+        artifacts: {
+          id_token: "invalid.token.string",
+          authenticated: true,
+          authorised: true,
+        },
+      },
     });
-
-    it("should return false if no roles are passed", () => {
-      expect(validateRoles()).toBeFalsy();
+    expect(statusCode).toEqual(400);
+    expect(result).toEqual({
+      statusCode: 400,
+      error: "Bad Request",
+      message:
+        "User's ID token cannot be decoded: Invalid token specified: invalid base64 for part #2 (base64 string is not of the correct length)",
     });
   });
 
-  describe("route", () => {
-    let server;
-
-    beforeAll(async () => {
-      Bell.simulate(() => {
-        return {
-          provider: "msEntraId",
-          query: {},
-          artifacts: {},
-          credentials: {},
-        };
-      });
-      server = hapi.server();
-      await server.register([nunjucks, auth.plugin]);
-      server.route(loginCallbackRoute);
-      await server.initialize();
-    });
-
-    afterAll(async () => {
-      await server.stop();
-      Bell.simulate(false);
-    });
-
-    it("returns 302 redirect", async () => {
-      jwtDecode.mockReturnValue({
-        roles: ["FCP.Casework.Read"],
-      });
-
-      const { statusCode } = await server.inject({
-        method: "GET",
-        url: "/login/callback",
-        auth: {
-          isAuthenticated: true,
-          isAuthorized: false,
-          isInjected: true,
-          credentials: {
-            profile: {
-              id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-              displayName: "Joe Bloggs",
-              email: "joe.bloggs@defra.gov",
-            },
-            authenticated: true,
-            authorised: true,
-          },
-          artifacts: {
-            profile: {
-              id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-              displayName: "Joe Bloggs",
-              email: "joe.bloggs@defra.gov",
-            },
-            id_token: "OIUY&*&*(  ",
-            authenticated: true,
-            authorised: true,
-          },
-          strategy: "session",
-          mode: "required",
-          error: null,
+  it("throws Boom.badRequest when ID token is missing", async () => {
+    const { result, statusCode } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {},
+        artifacts: {
+          id_token: null,
         },
-      });
+      },
+    });
 
-      expect(statusCode).toEqual(302);
+    expect(statusCode).toEqual(400);
+    expect(result).toEqual({
+      statusCode: 400,
+      error: "Bad Request",
+      message: "User has no ID token. Cannot verify roles.",
+    });
+  });
+
+  it("throws Boom.badRequest when roles not in ID token", async () => {
+    const { result, statusCode } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {},
+        artifacts: {
+          id_token: createToken(),
+          authenticated: true,
+          authorised: true,
+        },
+      },
+    });
+
+    expect(statusCode).toEqual(400);
+    expect(result).toEqual({
+      statusCode: 400,
+      error: "Bad Request",
+      message:
+        "User with IDP id '12345678-1234-1234-1234-123456789012' has no 'roles' claim in ID token",
+    });
+  });
+
+  it("throws Boom.unauthorized when roles in token but no valid roles found", async () => {
+    const { result, statusCode } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {
+          query: {},
+        },
+        artifacts: {
+          id_token: createToken({
+            roles: [],
+          }),
+        },
+      },
+    });
+
+    expect(statusCode).toEqual(401);
+    expect(result).toEqual({
+      statusCode: 401,
+      error: "Unauthorized",
+      message:
+        "User with IDP id '12345678-1234-1234-1234-123456789012' has not been assigned a valid role. Expected one of [FCP.Casework.Read, FCP.Casework.ReadWrite, FCP.Casework.Admin], got []",
     });
   });
 });

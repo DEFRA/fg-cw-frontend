@@ -42,12 +42,12 @@ export const auth = {
           tenant: config.get("auth.msEntraId.tenantId"),
         },
         location(request) {
-          return `${config.get("isProduction") ? "https://" : "http://"}${request.info.host}/login/callback`;
+          const protocol = config.get("isProduction") ? "https" : "http";
+          return `${protocol}://${request.info.host}/login/callback`;
         },
         isSecure: config.get("isProduction"),
       });
 
-      // Logout
       server.route({
         method: "GET",
         path: "/logout",
