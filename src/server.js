@@ -89,9 +89,7 @@ export const createServer = async () => {
     const statusCode = response.output.statusCode;
     const errorMessage = statusCodeMessage(statusCode);
 
-    if (statusCode >= 500) {
-      logger.error(response?.stack);
-    }
+    logger[statusCode < 500 ? "warn" : "error"](response);
 
     return h
       .view("pages/error", {
