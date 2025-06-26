@@ -1,29 +1,33 @@
+import Boom from "@hapi/boom";
 import { jwtDecode } from "jwt-decode";
 
-const caseWorkingRoles = [
+const getIdToken = (artifacts) => {
+  const { id_token: idToken } = artifacts;
+
+  if (!idToken) {
+    throw Boom.badRequest("User has no ID token. Cannot verify roles.");
+  }
+
+  try {
+    return jwtDecode(artifacts.id_token);
+  } catch (error) {
+    throw Boom.badRequest(
+      `User's ID token cannot be decoded: ${error.message}`,
+    );
+  }
+};
+
+const validRoles = [
   "FCP.Casework.Read",
   "FCP.Casework.ReadWrite",
   "FCP.Casework.Admin",
 ];
 
-const getNextDestination = (credentials) => {
-  return credentials.query?.next;
-};
-
-export const getRoles = (artifacts) => {
-  if (!artifacts || !artifacts.id_token) return;
-  const token = jwtDecode(artifacts?.id_token);
-  return token.roles;
-};
-
-export const notAuthorised = () => {
-  // TODO: handle not authorised
-  return "Not authorised";
-};
-
-export const validateRoles = (userRoles) => {
-  if (!userRoles) return false;
-  return userRoles.some((role) => caseWorkingRoles.includes(role));
+const getAssignedRoles = (tokenRoles) => {
+  const validRoleSet = new Set(validRoles);
+  const tokenRoleSet = new Set(tokenRoles);
+  const intersection = validRoleSet.intersection(tokenRoleSet);
+  return Array.from(intersection);
 };
 
 export const loginCallbackRoute = {
@@ -35,23 +39,36 @@ export const loginCallbackRoute = {
       strategy: "msEntraId",
     },
   },
-  handler: async function (request, h) {
-    if (request.auth.isAuthenticated === false) return notAuthorised();
-    const roles = getRoles(request.auth.artifacts);
-    const authorised = validateRoles(roles);
-    if (!authorised) return notAuthorised();
-    const next = getNextDestination(request.auth.credentials);
+  // eslint-disable-next-line complexity
+  async handler(request, h) {
+    const { auth } = request;
 
-    request.cookieAuth.set({
-      token: request.auth.credentials.token,
-      authenticated: request.auth.isAuthenticated,
-      authorised,
-    });
-
-    if (next) {
-      return h.redirect(next);
+    if (!auth.isAuthenticated) {
+      throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
 
-    return h.redirect("/");
+    const idToken = getIdToken(auth.artifacts);
+
+    if (!idToken.roles) {
+      throw Boom.badRequest(
+        `User with IDP id '${idToken.oid}' has no 'roles' claim in ID token`,
+      );
+    }
+
+    const roles = getAssignedRoles(idToken.roles);
+
+    if (roles.length === 0) {
+      throw Boom.unauthorized(
+        `User with IDP id '${idToken.oid}' has not been assigned a valid role. Expected one of [${validRoles.join(", ")}], got [${idToken.roles.join(", ")}]`,
+      );
+    }
+
+    request.cookieAuth.set({
+      token: auth.credentials.token,
+      authenticated: auth.isAuthenticated,
+      authorised: true,
+    });
+
+    return h.redirect(auth.credentials.query.next ?? "/");
   },
 };
