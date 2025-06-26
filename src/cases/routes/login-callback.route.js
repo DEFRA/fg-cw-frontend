@@ -43,6 +43,9 @@ export const loginCallbackRoute = {
   async handler(request, h) {
     const { auth } = request;
 
+    // eslint-disable-next-line no-console
+    console.log(`Auth: ${JSON.stringify(auth)}`);
+
     if (!auth.isAuthenticated) {
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
