@@ -49,6 +49,7 @@ export const auth = {
           return location;
         },
         isSecure: config.get("isProduction"),
+        forceHttps: config.get("isProduction"),
       });
 
       server.route({
