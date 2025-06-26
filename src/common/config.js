@@ -162,6 +162,12 @@ export const config = convict({
       },
     },
   },
+  httpProxy: {
+    doc: "Proxy settings",
+    format: String,
+    default: "",
+    env: "HTTP_PROXY",
+  },
   redis: /** @type {Schema<RedisConfig>} */ ({
     host: {
       doc: "Redis cache host",
