@@ -15,7 +15,6 @@ const messages = {
   401: "Unauthorized",
   403: "Forbidden",
   404: "Page not found",
-  500: "Something went wrong",
 };
 
 const statusCodeMessage = (statusCode) =>
@@ -89,7 +88,9 @@ export const createServer = async () => {
     const statusCode = response.output.statusCode;
     const errorMessage = statusCodeMessage(statusCode);
 
-    logger[statusCode < 500 ? "warn" : "error"](response);
+    if (statusCode !== 404) {
+      logger[statusCode >= 500 ? "error" : "warn"](response);
+    }
 
     return h
       .view("pages/error", {
