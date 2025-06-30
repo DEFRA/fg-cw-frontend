@@ -1,7 +1,6 @@
 import Bell from "@hapi/bell";
 import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
-import { logger } from "./logger.js";
 
 export const validateSession = (_request, session) => {
   if (!session || !session.authenticated) {
@@ -45,7 +44,6 @@ export const auth = {
         location(request) {
           const protocol = config.get("isProduction") ? "https" : "http";
           const location = `${protocol}://${request.info.host}/login/callback`;
-          logger.info(`After login will redirect to: ${location}`);
           return location;
         },
         isSecure: config.get("isProduction"),
