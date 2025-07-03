@@ -1,10 +1,8 @@
 import Bell from "@hapi/bell";
-import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { jwtDecode } from "jwt-decode";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { auth } from "../../common/auth.js";
-import { nunjucks } from "../../common/nunjucks/nunjucks.js";
+import { createServer } from "../../server.js";
 import { getSecretRoute } from "./get-secret.route.js";
 
 vi.mock("jwt-decode");
@@ -13,16 +11,8 @@ describe("getSecret", () => {
   let server;
 
   beforeAll(async () => {
-    Bell.simulate(() => {
-      return {
-        provider: "msEntraId",
-        query: {},
-        artifacts: {},
-        credentials: {},
-      };
-    });
-    server = hapi.server();
-    await server.register([nunjucks, auth.plugin]);
+    Bell.simulate(() => ({}));
+    server = await createServer();
     server.route(getSecretRoute);
 
     await server.initialize();
@@ -70,8 +60,10 @@ describe("getSecret", () => {
     });
 
     expect(statusCode).toEqual(200);
+
     const $ = load(result);
     const view = $("#main-content").html();
+
     expect(view).toMatchSnapshot();
   });
 });
