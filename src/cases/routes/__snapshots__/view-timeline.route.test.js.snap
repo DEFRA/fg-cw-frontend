@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`completeStageRoute > completes a stage 1`] = `
+exports[`timelineRoute > displays a timeline 1`] = `
 "
   
 <div class="govuk-!-margin-bottom-6 app-case-banner">
@@ -8,7 +8,7 @@ exports[`completeStageRoute > completes a stage 1`] = `
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
     <h1 class="govuk-heading-m">
-      Valley Farm
+      Test application name 1
     </h1>
 
     <div>
@@ -72,11 +72,10 @@ exports[`completeStageRoute > completes a stage 1`] = `
 
             
               
-              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47" aria-current="true">
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
                                     
-                  <strong class="govuk-service-navigation__active-fallback">Tasks</strong>
-
+Tasks
                   </a>
               </li>
 
@@ -89,10 +88,11 @@ Case Details
               </li>
 
               
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline" aria-current="true">
                                     
-Timeline
+                  <strong class="govuk-service-navigation__active-fallback">Timeline</strong>
+
                   </a>
               </li>
 
@@ -114,32 +114,64 @@ Land Details
 
 
 
-    
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading">
-      Application Receipt
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
+      Timeline
     </h2>
-      <h3 class="govuk-heading-m">1. Application Receipt Tasks</h3>
-      
-  <ul class="govuk-task-list govuk-!-margin-bottom-4" data-testid="taskList-list">
-      <li class="govuk-task-list__item govuk-task-list__item--with-link" data-testid="taskList-li">
-        <div class="govuk-task-list__name-and-hint">
-          <a href="/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review" class="govuk-link govuk-task-list__link">Simple Review</a>
-        </div>
-        <div class="govuk-task-list__status">
-          <strong class="govuk-tag govuk-tag govuk-tag--blue">
-  Incomplete
-</strong>
 
-        </div>
-      </li>
-  </ul>
-
-
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-body" data-testid="app-page-body">
+          <div class="timeline govuk-!-margin-top-3">
+            <div class="timeline__item">
+              <div class="timeline__header">
+                <h2>Case received</h2>
+                <p class="timeline__byline">by Julian Kimmings</p>
+              </div>
+              <p class="timeline__date">
+                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+              </p>
+              
+  <div class="timeline__description">
   </div>
-</div>
 
+
+            </div>
+            <div class="timeline__item">
+              <div class="timeline__header">
+                <h2>Case assigned to martinUserId</h2>
+                <p class="timeline__byline">by Julian Kimmings</p>
+              </div>
+              <p class="timeline__date">
+                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+              </p>
+              
+  <div class="timeline__description">
+    <p>
+      Assigned to martinUserId by nickUserId
+    </p> 
+  </div>
+
+
+            </div>
+            <div class="timeline__item">
+              <div class="timeline__header">
+                <h2>Task completed</h2>
+                <p class="timeline__byline">by Nicholai Hel</p>
+              </div>
+              <p class="timeline__date">
+                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+              </p>
+              
+  <div class="timeline__description">
+    <!-- TODO  task link? -->
+  </div>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
         "
 `;

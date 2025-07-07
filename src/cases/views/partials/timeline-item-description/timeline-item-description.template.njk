@@ -1,0 +1,12 @@
+<div class="timeline__description">
+  {% if params.eventType == "NOTE_ADDED" %}
+    <!-- TODO  note link? -->
+    <a class="govuk-link" href="/notes">View note</a>
+  {% elif params.eventType == "TASK_COMPLETED" %}
+    <!-- TODO  task link? -->
+  {% elif params.eventType == "CASE_ASSIGNED" %}
+    <p>
+      Assigned to {{ params.data.assignedTo }} by {{ params.data.assignedBy }}
+    </p>
+  {% endif %}
+</div>
