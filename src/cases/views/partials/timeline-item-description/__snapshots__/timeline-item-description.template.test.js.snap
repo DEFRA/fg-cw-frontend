@@ -1,22 +1,18 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`timeline-item-description > renders case assigned view 1`] = `
-"
-  <div class="timeline__description">
+"<div class="timeline__description">
     <p>
       Assigned to Mickey Mouse by Donald Duck
-    </p> 
-  </div>
-
+    </p>
+</div>
 "
 `;
 
 exports[`timeline-item-description > renders other view 1`] = `
-"
-  <div class="timeline__description">
+"<div class="timeline__description">
     <!-- TODO  note link? -->
     <a class="govuk-link" href="/notes">View note</a>
-  </div>
-
+</div>
 "
 `;

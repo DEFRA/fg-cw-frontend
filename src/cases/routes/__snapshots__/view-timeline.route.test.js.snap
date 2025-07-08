@@ -122,52 +122,51 @@ Land Details
       <div class="govuk-grid-column-full">
         <div class="govuk-body" data-testid="app-page-body">
           <div class="timeline govuk-!-margin-top-3">
-            <div class="timeline__item">
-              <div class="timeline__header">
-                <h2>Case received</h2>
-                <p class="timeline__byline">by Julian Kimmings</p>
-              </div>
-              <p class="timeline__date">
-                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
-              </p>
-              
-  <div class="timeline__description">
-  </div>
+              <div class="timeline__item">
+                <div class="timeline__header">
+                  <h2>    Case received</h2>
 
+                  <p class="timeline__byline">by Julian Kimmings</p>
+                </div>
+                <p class="timeline__date">
+                  <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+                </p>
+                <div class="timeline__description">
+</div>
 
-            </div>
-            <div class="timeline__item">
-              <div class="timeline__header">
-                <h2>Case assigned to martinUserId</h2>
-                <p class="timeline__byline">by Julian Kimmings</p>
               </div>
-              <p class="timeline__date">
-                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
-              </p>
-              
-  <div class="timeline__description">
+              <div class="timeline__item">
+                <div class="timeline__header">
+                  <h2>    Case assigned
+    to martinUserId</h2>
+
+                  <p class="timeline__byline">by Julian Kimmings</p>
+                </div>
+                <p class="timeline__date">
+                  <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+                </p>
+                <div class="timeline__description">
     <p>
       Assigned to martinUserId by nickUserId
-    </p> 
-  </div>
+    </p>
+</div>
 
-
-            </div>
-            <div class="timeline__item">
-              <div class="timeline__header">
-                <h2>Task completed</h2>
-                <p class="timeline__byline">by Nicholai Hel</p>
               </div>
-              <p class="timeline__date">
-                <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
-              </p>
-              
-  <div class="timeline__description">
+              <div class="timeline__item">
+                <div class="timeline__header">
+                  <h2>    Task completed</h2>
+
+                  <p class="timeline__byline">by Nicholai Hel</p>
+                </div>
+                <p class="timeline__date">
+                  <time datetime="2025-06-16T09:01:14.072Z">10 Sept 2025 at 4:02pm</time>
+                </p>
+                <div class="timeline__description">
     <!-- TODO  task link? -->
-  </div>
+    <a class="govuk-link" href="/cases//tasks//">View task</a>
+</div>
 
-
-            </div>
+              </div>
           </div>
         </div>
       </div>
