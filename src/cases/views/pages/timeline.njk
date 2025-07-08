@@ -27,7 +27,7 @@
                 </div>
                 <p class="timeline__date">
                   <time datetime="{{ item.createdAt }}"
-                    >10 Sept 2025 at 4:02pm</time
+                    >{{ item.createdAt | formatDate("d MMM yyyy hh:mm") if item.createdAt }}</time
                   >
                 </p>
                 {{ timelineItemDescription({ data: item.data, eventType: item.eventType }) }}
