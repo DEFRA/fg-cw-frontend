@@ -1,0 +1,102 @@
+@use "govuk-frontend" as *;
+
+.timeline {
+  position: relative;
+  margin-bottom: govuk-spacing(4);
+  overflow: hidden;
+
+  $timeline-blue: #1d70b8;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: govuk-spacing(2);
+    left: 0;
+    width: govuk-spacing(1);
+    height: 100%;
+    background-color: $timeline-blue;
+  }
+
+  &__item {
+    position: relative;
+    padding-bottom: govuk-spacing(6);
+    padding-left: govuk-spacing(4);
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: 10px;
+      left: 0;
+      width: 15px;
+      height: 5px;
+      background-color: $timeline-blue;
+    }
+  }
+
+  h2 {
+    display: inline;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  &__byline {
+    display: inline;
+    margin: 0;
+    color: #505a5f;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  &__date {
+    margin-top: govuk-spacing(1);
+    margin-bottom: 0;
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.143;
+  }
+
+  &__description {
+    margin-top: govuk-spacing(4);
+    font-family: "GDS Transport", arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+}
+
+@media (min-width: 40.06em) {
+  .timeline h2 {
+    font-size: 1.188rem;
+    line-height: 1.316;
+  }
+
+  .timeline__byline {
+    font-size: 1.188rem;
+    line-height: 1.316;
+  }
+
+  .timeline__date {
+    font-size: 1rem;
+    line-height: 1.25;
+  }
+
+  .timeline__description {
+    p {
+      font-size: 1rem;
+    }
+    line-height: 1.316;
+  }
+}

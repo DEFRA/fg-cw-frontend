@@ -5,6 +5,7 @@ import { listTasksRoute } from "./routes/list-tasks.route.js";
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
 import { viewCaseRoute } from "./routes/view-case.route.js";
 import { viewTaskRoute } from "./routes/view-task.route.js";
+import { timelineRoute } from "./routes/view-timeline.route.js";
 
 export const cases = {
   plugin: {
@@ -13,6 +14,7 @@ export const cases = {
       server.route([
         listCasesRoute,
         viewCaseRoute,
+        timelineRoute,
         listTasksRoute,
         viewTaskRoute,
         updateTaskStatusRoute,
