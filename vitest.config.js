@@ -7,9 +7,13 @@ export default defineConfig({
     environment: "jsdom",
     env: {
       NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
+      FG_CW_BACKEND: "http://localhost:3001",
+      REDIS_PASSWORD: "",
+      SESSION_COOKIE_PASSWORD:
+        "the-password-must-be-at-least-32-characters-long",
       AZURE_CLIENT_ID: "client-id",
       AZURE_TENANT_ID: "tenant-id",
-      AZURE_SECRET_ID: "secret-id",
+      AZURE_CLIENT_SECRET: "secret-id",
     },
     coverage: {
       enabled: true,
