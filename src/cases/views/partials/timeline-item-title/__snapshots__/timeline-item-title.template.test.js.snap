@@ -1,0 +1,12 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`timeline-item-title > renders case assigned view 1`] = `
+"<h2>    Case assigned
+    to Mickey Mouse</h2>
+"
+`;
+
+exports[`timeline-item-title > renders other view 1`] = `
+"<h2>    Note added</h2>
+"
+`;

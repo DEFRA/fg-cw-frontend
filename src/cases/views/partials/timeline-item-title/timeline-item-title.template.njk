@@ -1,0 +1,8 @@
+<h2>
+  {%- if params.eventType == "CASE_ASSIGNED" %}
+    {{ params.description }}
+    to {{ params.data.assignedTo }}
+  {%- else %}
+    {{ params.description }}
+  {%- endif -%}
+</h2>

@@ -37,6 +37,14 @@ Case Details
 
               
               <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/123/timeline">
+                                    
+Timeline
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
                   <a class="govuk-service-navigation__link" href="#">
                                     
 Land Details
