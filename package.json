@@ -28,7 +28,7 @@
     "prestart": "npm run build",
     "start": "NODE_ENV=production node --use-strict .",
     "setup:husky": "node -e \"try { (await import('husky')).default() } catch (e) { if (e.code !== 'ERR_MODULE_NOT_FOUND') throw e }\" --input-type module",
-    "setup:env": "cp -n .env.example .env"
+    "setup:env": "cp -i .env.example .env"
   },
   "author": "Defra DDTS",
   "license": "OGL-UK-3.0",
