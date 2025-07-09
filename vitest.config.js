@@ -14,6 +14,7 @@ export default defineConfig({
       AZURE_CLIENT_ID: "client-id",
       AZURE_TENANT_ID: "tenant-id",
       AZURE_CLIENT_SECRET: "secret-id",
+      TZ: "Europe/London",
     },
     coverage: {
       enabled: true,
