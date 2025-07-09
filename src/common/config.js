@@ -15,7 +15,7 @@ export const config = convict({
   fg_cw_backend_url: {
     doc: "The backend URL for the case worker service",
     format: String,
-    default: "http://localhost:3001",
+    default: null,
     env: "FG_CW_BACKEND",
   },
   serviceVersion: {
@@ -150,7 +150,7 @@ export const config = convict({
       password: {
         doc: "session cookie password",
         format: String,
-        default: "the-password-must-be-at-least-32-characters-long",
+        default: null,
         env: "SESSION_COOKIE_PASSWORD",
         sensitive: true,
       },
@@ -184,7 +184,7 @@ export const config = convict({
     password: {
       doc: "Redis cache password",
       format: "*",
-      default: "",
+      default: null,
       sensitive: true,
       env: "REDIS_PASSWORD",
     },
@@ -232,19 +232,19 @@ export const config = convict({
       tenantId: {
         doc: "The tenant ID for Microsoft Entra ID",
         format: String,
-        default: "",
+        default: null,
         env: "AZURE_TENANT_ID",
       },
       clientId: {
         doc: "The client ID for Microsoft Entra ID",
         format: String,
-        default: "",
+        default: null,
         env: "AZURE_CLIENT_ID",
       },
       clientSecret: {
         doc: "The client secret for Microsoft Entra ID",
         format: String,
-        default: "",
+        default: null,
         sensitive: true,
         env: "AZURE_CLIENT_SECRET",
       },
