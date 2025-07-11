@@ -28,3 +28,9 @@ export const updateTaskStatus = async ({
 export const completeStage = async (caseId) => {
   await wreck.post(`/cases/${caseId}/stage`);
 };
+
+export const assignUserToCase = async ({ caseId, assignedUserId }) => {
+  await wreck.patch(`/cases/${caseId}/assigned-user`, {
+    payload: { assignedUserId },
+  });
+};

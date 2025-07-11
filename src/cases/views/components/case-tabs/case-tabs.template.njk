@@ -1,6 +1,22 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "checkbox/macro.njk" import checkbox %}
+
+{% macro radio(params) %}
+  {% set id = "caseId-" + params.value %}
+  <div class="govuk-radios__item">
+    <input
+      class="govuk-radios__input"
+      id="{{ id }}"
+      name="{{ params.name }}"
+      type="radio"
+      value="{{ params.value }}"
+      aria-label="{{ params.value }}"
+    /><label class="govuk-label govuk-radios__label" for="{{ id }}"></label>
+  </div>
+{% endmacro %}
 
 {% set tableRows = [] %}
 {% for case in params.data.allCases %}
@@ -17,34 +33,17 @@
   {%- set status = case.status | capitalize %}
   {%
     set row = [
-        {
-          html: checkbox({
-            id: case.clientRef,
-            label: case.clientRef,
-            name: "selected_cases",
-            value: case.clientRef
-          }),
-          classes: "govuk-!-padding-top-0"
-        },
-        {
-          html: '<a href="' + case.link + '" class="govuk-link govuk-!-font-weight-bold">' + case.clientRef + '</a>'
-        },
-        {
-          text: case.code
-        },
-        {
-          text: case.submittedAt
-        },
-        {
-          html: govukTag({
-            text: status,
-            classes: priorityClass
-          })
-        },
-        {
-          text: case.assignedUser
-        }
-    ]
+    {
+      html: radio({
+        name: "caseId",
+        value: case._id
+      })
+    }, { html: '<a
+      href="' + case.link + '"
+      class="govuk-link govuk-!-font-weight-bold"
+      >' + case.clientRef + '</a
+    >' }, { text: case.code }, { text: case.submittedAt }, { html: govukTag({
+    text: status, classes: priorityClass }) }, { text: case.assignedUser } ]
   %}
   {% set tableRows = (tableRows.push(row), tableRows) %}
 {% endfor %}
@@ -52,9 +51,18 @@
 <h2 class="govuk-heading-l" data-testid="{{ params.tabTestId }}">
   {{ params.tabLabel }}
 </h2>
-{{
-  govukTable({
-    head: params.tableHeaders,
-    rows: tableRows
-  })
-}}
+
+<form method="GET" action="/cases/assign-user">
+  {{
+    govukButton({
+      text: "Assign"
+    })
+  }}
+
+  {{
+    govukTable({
+      head: params.tableHeaders,
+      rows: tableRows
+    })
+  }}
+</form>
