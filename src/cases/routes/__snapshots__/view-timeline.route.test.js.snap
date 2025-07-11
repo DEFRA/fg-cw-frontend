@@ -129,7 +129,7 @@ Land Details
                   <p class="timeline__byline">by Julian Kimmings</p>
                 </div>
                 <p class="timeline__date">
-                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01</time>
+                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
 </div>
@@ -143,7 +143,7 @@ Land Details
                   <p class="timeline__byline">by Julian Kimmings</p>
                 </div>
                 <p class="timeline__date">
-                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01</time>
+                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
     <p>
@@ -159,7 +159,7 @@ Land Details
                   <p class="timeline__byline">by Nicholai Hel</p>
                 </div>
                 <p class="timeline__date">
-                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01</time>
+                  <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
     <!-- TODO  task link? -->
