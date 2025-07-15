@@ -1,0 +1,47 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`viewAssignUserToCaseRoute > returns a case and list of valid users 1`] = `
+"
+  <div class="govuk-grid-row app-heading" data-testid="app-heading">
+  <div class="govuk-grid-column-two-thirds">
+    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
+      Assign
+    </h1>
+
+  </div>
+</div>
+
+
+  <div class="govuk-body" data-testid="app-page-body">
+    <form action="/cases/assign-user" method="post">
+      <input type="hidden" name="caseId" value="case-123">
+
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="assignedUserId">
+    Case Worker
+  </label>
+  <select class="govuk-select" id="assignedUserId" name="assignedUserId">
+    <option value="">Select a user</option>
+    <option value="user-1" selected="">John Doe</option>
+    <option value="user-2">Jane Smith</option>
+  </select>
+</div>
+
+
+      <div class="govuk-form-group">
+  <h1 class="govuk-label-wrapper">
+    <label class="govuk-label govuk-label--l" for="notes">
+      Notes (optional)
+    </label>
+  </h1>
+  <textarea class="govuk-textarea" id="notes" name="notes" rows="5"></textarea>
+</div>
+
+
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+  Assign
+</button>
+    </form>
+  </div>
+        "
+`;
