@@ -23,7 +23,7 @@
               <div class="timeline__item">
                 <div class="timeline__header">
                   {{ timelineItemTitle({ eventType: item.eventType, description: item.description, data: item.data }) }}
-                  <p class="timeline__byline">by {{ item.createdBy }}</p>
+                  <p class="timeline__byline">by {{ item.createdBy.name }}</p>
                 </div>
                 <p class="timeline__date">
                   <time datetime="{{ item.createdAt }}"
