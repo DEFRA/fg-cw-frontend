@@ -40,7 +40,13 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     <h2 class="govuk-heading-l" data-testid="my-cases-tab">
       My cases
     </h2>
-    <table class="govuk-table">
+    
+    <form method="GET" action="/cases/assign-user">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+      Assign
+    </button>
+    
+      <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
@@ -60,12 +66,20 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       <tbody class="govuk-table__body">
       </tbody>
     </table>
+    
+    </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="team-cases">
     <h2 class="govuk-heading-l" data-testid="team-cases-tab">
       Team cases
     </h2>
-    <table class="govuk-table">
+    
+    <form method="GET" action="/cases/assign-user">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+      Assign
+    </button>
+    
+      <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
@@ -85,21 +99,23 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       <tbody class="govuk-table__body">
       </tbody>
     </table>
+    
+    </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="all-cases">
     <h2 class="govuk-heading-l" data-testid="all-cases-tab">
       All cases
     </h2>
-    <table class="govuk-table">
+    
+    <form method="GET" action="/cases/assign-user">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+      Assign
+    </button>
+    
+      <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-      <input type="checkbox" class="govuk-checkboxes__input" id="select_all_allcases" name="select_all" value="all">
-      <label class="govuk-label govuk-checkboxes__label" for="select_all_allcases">
-        <span class="govuk-visually-hidden">Select Select all</span>
-      </label>
-    </div>
-    </th>
+          <th scope="col" class="govuk-table__header">Select</th>
           <th scope="col" class="govuk-table__header">Client ref</th>
           <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
           <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
@@ -109,12 +125,9 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-      <input type="checkbox" class="govuk-checkboxes__input" id="banana-123" name="selected_cases" value="banana-123">
-      <label class="govuk-label govuk-checkboxes__label" for="banana-123">
-        <span class="govuk-visually-hidden">Select banana-123</span>
-      </label>
-    </div>
+          <td class="govuk-table__cell">  <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
+      </div>
     </td>
           <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
           <td class="govuk-table__cell">frps-private-beta</td>
@@ -126,12 +139,9 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
           <td class="govuk-table__cell"></td>
         </tr>
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-      <input type="checkbox" class="govuk-checkboxes__input" id="banana-123" name="selected_cases" value="banana-123">
-      <label class="govuk-label govuk-checkboxes__label" for="banana-123">
-        <span class="govuk-visually-hidden">Select banana-123</span>
-      </label>
-    </div>
+          <td class="govuk-table__cell">  <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
+      </div>
     </td>
           <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
           <td class="govuk-table__cell">frps-private-beta</td>
@@ -144,6 +154,8 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </tr>
       </tbody>
     </table>
+    
+    </form>
   </div>
 </div>
 
