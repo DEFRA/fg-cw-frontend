@@ -1,0 +1,47 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+
+{% block content %}
+  {{ heading({ text: pageHeading }) }}
+
+  <div class="govuk-body" data-testid="app-page-body">
+    <form action="/cases/assign-user" method="post">
+      <input type="hidden" name="caseId" value="{{ data.caseId }}" />
+
+      {{
+        govukSelect({
+        id: "assignedUserId",
+        name: "assignedUserId",
+        label: {
+          text: "Case Worker"
+        },
+        items: data.usersSelect
+        })
+      }}
+
+      {{
+        govukTextarea({
+        name: "notes",
+        id: "notes",
+        label: {
+        text: "Notes (optional)",
+        classes: "govuk-label--l",
+        isPageHeading: true
+        }
+        })
+      }}
+
+      {{
+        govukButton({
+          text: 'Assign'
+        })
+      }}
+    </form>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+{% endblock %}

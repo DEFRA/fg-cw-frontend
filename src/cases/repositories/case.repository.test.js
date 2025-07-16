@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
 import {
+  assignUserToCase,
   completeStage,
   findAll,
   findById,
@@ -185,6 +186,78 @@ describe("Case Repository", () => {
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe("assignUserToCase", () => {
+    it("assigns user to case successfully", async () => {
+      const caseId = "case-123";
+      const assignedUserId = "user-456";
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      const result = await assignUserToCase({ caseId, assignedUserId });
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-123/assigned-user",
+        {
+          payload: { assignedUserId: "user-456" },
+        },
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it("unassigns user from case with null assignedUserId", async () => {
+      const caseId = "case-789";
+      const assignedUserId = null;
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      const result = await assignUserToCase({ caseId, assignedUserId });
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-789/assigned-user",
+        {
+          payload: { assignedUserId: null },
+        },
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it("handles assignment with empty string assignedUserId", async () => {
+      const caseId = "case-999";
+      const assignedUserId = "";
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      const result = await assignUserToCase({ caseId, assignedUserId });
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-999/assigned-user",
+        {
+          payload: { assignedUserId: "" },
+        },
+      );
+      expect(result).toBeUndefined();
+    });
+
+    it("handles API errors during assignment", async () => {
+      const caseId = "case-error";
+      const assignedUserId = "user-error";
+      const apiError = new Error("API Error");
+
+      wreck.patch.mockRejectedValueOnce(apiError);
+
+      await expect(
+        assignUserToCase({ caseId, assignedUserId }),
+      ).rejects.toThrow("API Error");
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-error/assigned-user",
+        {
+          payload: { assignedUserId: "user-error" },
+        },
+      );
     });
   });
 });
