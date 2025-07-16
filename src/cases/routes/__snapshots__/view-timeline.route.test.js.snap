@@ -126,7 +126,7 @@ Land Details
                 <div class="timeline__header">
                   <h2>    Case received</h2>
 
-                  <p class="timeline__byline">by [object Object]</p>
+                  <p class="timeline__byline">by Julian Kimmings</p>
                 </div>
                 <p class="timeline__date">
                   <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
@@ -140,15 +140,13 @@ Land Details
                   <h2>    Case assigned
     to martin smith</h2>
 
-                  <p class="timeline__byline">by [object Object]</p>
+                  <p class="timeline__byline">by Julian Kimmings</p>
                 </div>
                 <p class="timeline__date">
                   <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
-    <p>
-      Assigned to martin smith
-    </p>
+    <p>Assigned to martin smith</p>
 </div>
 
               </div>
@@ -156,7 +154,7 @@ Land Details
                 <div class="timeline__header">
                   <h2>    Task completed</h2>
 
-                  <p class="timeline__byline">by [object Object]</p>
+                  <p class="timeline__byline">by Nicholai Hel</p>
                 </div>
                 <p class="timeline__date">
                   <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
