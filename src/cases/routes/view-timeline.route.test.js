@@ -88,7 +88,7 @@ describe("timelineRoute", () => {
           eventType: "CASE_CREATED",
           createdAt: "2025-06-16T09:01:14.072Z",
           description: "Case received",
-          createdBy: "Example Author",
+          createdBy: { name: "Example Author" },
           data: {
             caseRef: "APPLICATION-REF-3",
           },
@@ -97,17 +97,16 @@ describe("timelineRoute", () => {
           eventType: "CASE_ASSIGNED",
           description: "Case assigned",
           createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: "Example Author",
+          createdBy: { name: "Example Author" },
           data: {
-            assignedBy: "nickUserId",
-            assignedTo: "martinUserId",
+            assignedTo: { name: "example reviewer" },
           },
         },
         {
           eventType: "TASK_COMPLETED",
           description: "Task completed",
           createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: "Example Auditor",
+          createdBy: { name: "Example Auditor" },
         },
       ],
     });

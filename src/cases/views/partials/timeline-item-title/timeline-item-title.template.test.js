@@ -6,7 +6,7 @@ describe("timeline-item-title", () => {
     const component = render("timeline-item-title", {
       eventType: "CASE_ASSIGNED",
       description: "Case assigned",
-      data: { assignedTo: "Mickey Mouse" },
+      data: { assignedTo: { name: "Mickey Mouse" } },
     });
     expect(component).toMatchSnapshot();
   });
