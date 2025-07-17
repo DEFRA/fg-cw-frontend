@@ -381,4 +381,89 @@ describe("case-list.model", () => {
       expect(result[0]._id).toBe("case-undefined-user");
     });
   });
+
+  describe("createCaseListViewModel - assignedUserSuccessMessage", () => {
+    const mockCasesWithUsers = [
+      {
+        _id: "case-with-user-1",
+        payload: {
+          clientRef: "CLIENT-001",
+          code: "CODE-001",
+          submittedAt: "2021-01-15T00:00:00.000Z",
+        },
+        status: "In Progress",
+        assignedUser: {
+          id: "user-1",
+          name: "John Doe",
+        },
+      },
+      {
+        _id: "case-with-user-2",
+        payload: {
+          clientRef: "CLIENT-002",
+          code: "CODE-002",
+          submittedAt: "2021-02-20T00:00:00.000Z",
+        },
+        status: "New",
+        assignedUser: {
+          id: "user-2",
+          name: "Jane Smith",
+        },
+      },
+      {
+        _id: "case-without-user",
+        payload: {
+          clientRef: "CLIENT-003",
+          code: "CODE-003",
+          submittedAt: "2021-03-10T00:00:00.000Z",
+        },
+        status: "Draft",
+        assignedUser: null,
+      },
+    ];
+
+    it("returns null success message when assignedCaseId is undefined", () => {
+      const result = createCaseListViewModel(mockCasesWithUsers, undefined);
+
+      expect(result.data.assignedUserSuccessMessage).toBeNull();
+    });
+
+    it("returns null success message when assignedCaseId is empty string", () => {
+      const result = createCaseListViewModel(mockCasesWithUsers, "");
+
+      expect(result.data.assignedUserSuccessMessage).toBeNull();
+    });
+
+    it("returns null success message when case not found", () => {
+      const result = createCaseListViewModel(
+        mockCasesWithUsers,
+        "non-existent-case",
+      );
+
+      expect(result.data.assignedUserSuccessMessage).toBeNull();
+    });
+
+    it("returns null success message when case found but no assigned user", () => {
+      const result = createCaseListViewModel(
+        mockCasesWithUsers,
+        "case-without-user",
+      );
+
+      expect(result.data.assignedUserSuccessMessage).toBeNull();
+    });
+
+    it("returns success message when case found with assigned user", () => {
+      const result = createCaseListViewModel(
+        mockCasesWithUsers,
+        "case-with-user-1",
+      );
+
+      expect(result.data.assignedUserSuccessMessage).toEqual({
+        heading: "Case assigned successfully",
+        caseId: "case-with-user-1",
+        caseLink: "/cases/case-with-user-1",
+        assignedUserName: "John Doe",
+      });
+    });
+  });
 });
