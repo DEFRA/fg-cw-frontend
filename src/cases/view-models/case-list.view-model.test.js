@@ -45,28 +45,26 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result).toEqual({
-        allCases: [
-          {
-            _id: "case-1",
-            clientRef: "CLIENT-001",
-            code: "CODE-001",
-            submittedAt: "15/01/2021",
-            status: "In Progress",
-            assignedUser: "john doe",
-            link: "/cases/case-1",
-          },
-          {
-            _id: "case-2",
-            clientRef: "CLIENT-002",
-            code: "CODE-002",
-            submittedAt: "20/02/2021",
-            status: "Completed",
-            assignedUser: "jane smith",
-            link: "/cases/case-2",
-          },
-        ],
-      });
+      expect(result).toEqual([
+        {
+          _id: "case-1",
+          clientRef: "CLIENT-001",
+          code: "CODE-001",
+          submittedAt: "15/01/2021",
+          status: "In Progress",
+          assignedUser: "john doe",
+          link: "/cases/case-1",
+        },
+        {
+          _id: "case-2",
+          clientRef: "CLIENT-002",
+          code: "CODE-002",
+          submittedAt: "20/02/2021",
+          status: "Completed",
+          assignedUser: "jane smith",
+          link: "/cases/case-2",
+        },
+      ]);
 
       expect(getFormattedGBDate).toHaveBeenCalledWith(
         "2021-01-15T00:00:00.000Z",
@@ -82,9 +80,7 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result).toEqual({
-        allCases: [],
-      });
+      expect(result).toEqual([]);
 
       expect(getFormattedGBDate).not.toHaveBeenCalled();
     });
@@ -107,8 +103,8 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result.allCases).toHaveLength(1);
-      expect(result.allCases[0]).toEqual({
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({
         _id: "case-single",
         clientRef: "SINGLE-001",
         code: "SINGLE-CODE",
@@ -157,8 +153,8 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result.allCases[0].link).toBe("/cases/case-link-1");
-      expect(result.allCases[1].link).toBe("/cases/case-link-2");
+      expect(result[0].link).toBe("/cases/case-link-1");
+      expect(result[1].link).toBe("/cases/case-link-2");
     });
   });
 
@@ -224,6 +220,7 @@ describe("case-list.model", () => {
               link: "/cases/case-vm-2",
             },
           ],
+          assignedUserSuccessMessage: null,
         },
       });
     });
@@ -239,6 +236,7 @@ describe("case-list.model", () => {
         breadcrumbs: [],
         data: {
           allCases: [],
+          assignedUserSuccessMessage: null,
         },
       });
 
@@ -339,8 +337,8 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result.allCases[0].assignedUser).toBe("John Doe");
-      expect(result.allCases[0]._id).toBe("case-user-object");
+      expect(result[0].assignedUser).toBe("John Doe");
+      expect(result[0]._id).toBe("case-user-object");
     });
 
     it("handles null assignedUser", () => {
@@ -359,8 +357,8 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result.allCases[0].assignedUser).toBeUndefined();
-      expect(result.allCases[0]._id).toBe("case-null-user");
+      expect(result[0].assignedUser).toBeUndefined();
+      expect(result[0]._id).toBe("case-null-user");
     });
 
     it("handles undefined assignedUser", () => {
@@ -379,8 +377,8 @@ describe("case-list.model", () => {
 
       const result = transformCasesForList(mockCases);
 
-      expect(result.allCases[0].assignedUser).toBeUndefined();
-      expect(result.allCases[0]._id).toBe("case-undefined-user");
+      expect(result[0].assignedUser).toBeUndefined();
+      expect(result[0]._id).toBe("case-undefined-user");
     });
   });
 });

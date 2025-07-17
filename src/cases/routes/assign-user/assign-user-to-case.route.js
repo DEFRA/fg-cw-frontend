@@ -5,6 +5,9 @@ export const assignUserToCaseRoute = {
   path: "/cases/assign-user",
   handler: async (request, h) => {
     await assignUserToCaseUseCase(request.payload);
-    return h.redirect(`/cases#all-cases`);
+
+    return h.redirect(
+      `/cases?assignedCaseId=${request.payload.caseId}#all-cases`,
+    );
   },
 };
