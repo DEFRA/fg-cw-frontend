@@ -3,6 +3,7 @@
 .timeline {
   position: relative;
   margin-bottom: govuk-spacing(4);
+  padding-top: govuk-spacing(6);
   overflow: hidden;
 
   $timeline-blue: #1d70b8;
@@ -10,14 +11,15 @@
   &::before {
     content: "";
     position: absolute;
-    top: govuk-spacing(2);
+    top: 0;
     left: 0;
     width: govuk-spacing(1);
-    height: 100%;
+    height: 90%;
     background-color: $timeline-blue;
   }
 
   &__item {
+    $top: govuk-spacing(2);
     position: relative;
     padding-bottom: govuk-spacing(6);
     padding-left: govuk-spacing(4);
@@ -25,11 +27,25 @@
     &::before {
       content: "";
       position: absolute;
-      top: 10px;
+      top: $top;
       left: 0;
       width: 15px;
       height: 5px;
       background-color: $timeline-blue;
+    }
+
+    &::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: govuk-spacing(1);
+      left: 0;
+      height: $top;
+      background-color: $timeline-blue;
+    }
+
+    &:last-child {
+      background-color: #ffffff;
     }
   }
 
