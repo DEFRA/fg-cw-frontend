@@ -1,8 +1,8 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "govuk/components/tabs/macro.njk" import govukTabs %}
-{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
 {% from "components/case-tabs/macro.njk" import caseTabs %}
 {% from "checkbox/macro.njk" import checkbox %}
+{% from "notification-banner/macro.njk" import notificationBanner %}
 
 {% block content %}
   {% if data.assignedUserSuccessMessage %}
