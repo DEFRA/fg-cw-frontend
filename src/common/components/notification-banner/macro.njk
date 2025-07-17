@@ -1,0 +1,10 @@
+{#
+    heading: <string> (optional) - Banner heading text
+    text: <string> (optional) - Simple text content, component wraps in <p> tag
+    html: <string> (optional) - Complex HTML content, overrides text if both provided
+    type: <string> (optional) - Banner type, defaults to "success"
+#}
+
+{% macro notificationBanner(params) %}
+  {%- include "./notification-banner.template.njk" -%}
+{% endmacro %}

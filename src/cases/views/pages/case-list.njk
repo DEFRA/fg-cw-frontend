@@ -6,25 +6,20 @@
 
 {% block content %}
   {% if data.assignedUserSuccessMessage %}
-    {% set html %}
-      <h3 class="govuk-notification-banner__heading">
-        {{ data.assignedUserSuccessMessage.heading }}
-      </h3>
-      <p class="govuk-body">
-        <a
-          class="govuk-notification-banner__link"
-          href="{{ data.assignedUserSuccessMessage.caseLink }}"
-          >Case ID {{ data.assignedUserSuccessMessage.caseId }}</a
-        >
-        has been assigned to
-        {{ data.assignedUserSuccessMessage.assignedUserName }}
-      </p>
+    {% set assignmentHtml %}
+      <a
+        class="govuk-notification-banner__link"
+        href="{{ data.assignedUserSuccessMessage.caseLink }}"
+        >Case ID {{ data.assignedUserSuccessMessage.caseId }}</a
+      >
+      has been assigned to
+      {{ data.assignedUserSuccessMessage.assignedUserName }}
     {% endset %}
 
     {{
-      govukNotificationBanner({
-        html: html,
-        type: "success"
+      notificationBanner({
+        heading: data.assignedUserSuccessMessage.heading,
+        html: assignmentHtml
       })
     }}
   {% endif %}
