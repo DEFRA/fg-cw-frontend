@@ -383,45 +383,6 @@ describe("case-list.model", () => {
   });
 
   describe("createCaseListViewModel - assignedUserSuccessMessage", () => {
-    const mockCasesWithUsers = [
-      {
-        _id: "case-with-user-1",
-        payload: {
-          clientRef: "CLIENT-001",
-          code: "CODE-001",
-          submittedAt: "2021-01-15T00:00:00.000Z",
-        },
-        status: "In Progress",
-        assignedUser: {
-          id: "user-1",
-          name: "John Doe",
-        },
-      },
-      {
-        _id: "case-with-user-2",
-        payload: {
-          clientRef: "CLIENT-002",
-          code: "CODE-002",
-          submittedAt: "2021-02-20T00:00:00.000Z",
-        },
-        status: "New",
-        assignedUser: {
-          id: "user-2",
-          name: "Jane Smith",
-        },
-      },
-      {
-        _id: "case-without-user",
-        payload: {
-          clientRef: "CLIENT-003",
-          code: "CODE-003",
-          submittedAt: "2021-03-10T00:00:00.000Z",
-        },
-        status: "Draft",
-        assignedUser: null,
-      },
-    ];
-
     it("returns null success message when assignedCaseId is undefined", () => {
       const result = createCaseListViewModel(mockCasesWithUsers, undefined);
 
@@ -467,3 +428,42 @@ describe("case-list.model", () => {
     });
   });
 });
+
+const mockCasesWithUsers = [
+  {
+    _id: "case-with-user-1",
+    payload: {
+      clientRef: "CLIENT-001",
+      code: "CODE-001",
+      submittedAt: "2021-01-15T00:00:00.000Z",
+    },
+    status: "In Progress",
+    assignedUser: {
+      id: "user-1",
+      name: "John Doe",
+    },
+  },
+  {
+    _id: "case-with-user-2",
+    payload: {
+      clientRef: "CLIENT-002",
+      code: "CODE-002",
+      submittedAt: "2021-02-20T00:00:00.000Z",
+    },
+    status: "New",
+    assignedUser: {
+      id: "user-2",
+      name: "Jane Smith",
+    },
+  },
+  {
+    _id: "case-without-user",
+    payload: {
+      clientRef: "CLIENT-003",
+      code: "CODE-003",
+      submittedAt: "2021-03-10T00:00:00.000Z",
+    },
+    status: "Draft",
+    assignedUser: null,
+  },
+];
