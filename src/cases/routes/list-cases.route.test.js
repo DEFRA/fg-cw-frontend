@@ -38,7 +38,7 @@ describe("listCasesRoute", () => {
     expect(view).toMatchSnapshot();
   });
 
-  it("extracts assignedCaseId from query parameters and passes to view model", async () => {
+  it("extracts assignedCaseId from query parameters and renders notification banner", async () => {
     findAllCasesUseCase.mockResolvedValue(mockCases);
 
     const { statusCode, result } = await server.inject({
@@ -49,7 +49,7 @@ describe("listCasesRoute", () => {
     expect(statusCode).toEqual(200);
 
     const $ = load(result);
-    const view = $("#main-content").html();
+    const view = $(".govuk-notification-banner--success").html();
 
     expect(view).toMatchSnapshot();
   });

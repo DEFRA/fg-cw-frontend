@@ -37,8 +37,6 @@ describe("assignUserToCaseRoute", () => {
     });
 
     expect(statusCode).toEqual(302);
-    expect(headers.location).toEqual(
-      "/cases?assignedCaseId=case-id-1#all-cases",
-    );
+    expect(headers.location).toEqual("/cases?assignedCaseId=case-id-1");
   });
 });

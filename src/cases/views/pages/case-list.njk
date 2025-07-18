@@ -9,8 +9,8 @@
     {% set assignmentHtml %}
       <a
         class="govuk-notification-banner__link"
-        href="{{ data.assignedUserSuccessMessage.caseLink }}"
-        >Case ID {{ data.assignedUserSuccessMessage.caseId }}</a
+        href="{{ data.assignedUserSuccessMessage.link }}"
+        >Case {{ data.assignedUserSuccessMessage.ref }}</a
       >
       has been assigned to
       {{ data.assignedUserSuccessMessage.assignedUserName }}
@@ -32,30 +32,49 @@
           govukTabs({
             items: [
               {
+                label: "All Cases",
+                id: "all-cases",
+                panel: {
+                  html: caseTabs({
+                    tabLabel: "All cases",
+                    tabTestId: "all-cases-tab",
+                    tableHeaders: [
+                      { text: "Select" },
+                      { text: "Client ref" },
+                      { text: "Code", classes: "govuk-!-width-one-quarter" },
+                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                      { text: "Status", classes: "govuk-!-width-one-quarter" },
+                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                    ],
+                    data: data
+                  })
+                }
+              },
+              {
                 label: "My cases",
                 id: "my-cases",
                 panel: {
                   html: caseTabs({
-                      tabLabel: "My cases",
-                      tabTestId: "my-cases-tab",
-                      tableHeaders: [
-                        {
-                          html: checkbox({
-                            id: "select_all",
-                            label: "Select all",
-                            name: "select_all",
-                            value: "all",
-                            suffix: "_mycases"
-                          }),
-                          classes: "govuk-!-padding-top-0"
-                        },
-                        { text: "Client ref"},
-                        { text: "Code", classes: "govuk-!-width-one-quarter" },
-                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                        { text: "Status", classes: "govuk-!-width-one-quarter" },
-                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                      ],
-                      data: { allCases: [] }
+                    tabLabel: "My cases",
+                    tabTestId: "my-cases-tab",
+                    tableHeaders: [
+                      {
+                        html: checkbox({
+                          id: "select_all",
+                          label: "Select all",
+                          name: "select_all",
+                          value: "all",
+                          suffix: "_mycases"
+                        }),
+                        classes: "govuk-!-padding-top-0"
+                      },
+                      { text: "Client ref" },
+                      { text: "Code", classes: "govuk-!-width-one-quarter" },
+                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                      { text: "Status", classes: "govuk-!-width-one-quarter" },
+                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                    ],
+                    data: { allCases: [] }
                   })
                 }
               },
@@ -64,46 +83,27 @@
                 id: "team-cases",
                 panel: {
                   html: caseTabs({
-                      tabLabel: "Team cases",
-                      tabTestId: "team-cases-tab",
-                      tableHeaders: [
-                        {
-                          html: checkbox({
-                            id: "select_all",
-                            label: "Select all",
-                            name: "select_all",
-                            value: "all",
-                            suffix: "_teamcases"
-                          }),
-                          classes: "govuk-!-padding-top-0"
-                        },
-                        { text: "Client ref"},
-                        { text: "Code", classes: "govuk-!-width-one-quarter" },
-                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                        { text: "Status", classes: "govuk-!-width-one-quarter" },
-                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                      ],
-                      data: { allCases: [] }
+                    tabLabel: "Team cases",
+                    tabTestId: "team-cases-tab",
+                    tableHeaders: [
+                      {
+                        html: checkbox({
+                          id: "select_all",
+                          label: "Select all",
+                          name: "select_all",
+                          value: "all",
+                          suffix: "_teamcases"
+                        }),
+                        classes: "govuk-!-padding-top-0"
+                      },
+                      { text: "Client ref" },
+                      { text: "Code", classes: "govuk-!-width-one-quarter" },
+                      { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
+                      { text: "Status", classes: "govuk-!-width-one-quarter" },
+                      { text: "Assigned", classes: "govuk-!-width-one-quarter" }
+                    ],
+                    data: { allCases: [] }
                   })
-                }
-              },
-              {
-                label: "All Cases",
-                id: "all-cases",
-                panel: {
-                  html: caseTabs({
-                      tabLabel: "All cases",
-                      tabTestId: "all-cases-tab",
-                      tableHeaders: [
-                        { text: "Select" },
-                        { text: "Client ref"},
-                        { text: "Code", classes: "govuk-!-width-one-quarter" },
-                        { text: "Date submitted", classes: "govuk-!-width-one-quarter" },
-                        { text: "Status", classes: "govuk-!-width-one-quarter" },
-                        { text: "Assigned", classes: "govuk-!-width-one-quarter" }
-                      ],
-                      data: data
-                    })
                 }
               }
             ]

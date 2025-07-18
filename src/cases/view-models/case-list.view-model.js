@@ -23,9 +23,9 @@ const createAssignedUserSuccessMessage = (cases, assignedCaseId) => {
     if (assignedCase && assignedCase.assignedUser) {
       successMessage = {
         heading: "Case assigned successfully",
-        caseId: assignedCase._id,
-        caseLink: `/cases/${assignedCase._id}`,
-        assignedUserName: assignedCase.assignedUser.name,
+        ref: assignedCase.clientRef,
+        link: assignedCase.link,
+        assignedUserName: assignedCase.assignedUser,
       };
     }
   }
@@ -36,7 +36,7 @@ const createAssignedUserSuccessMessage = (cases, assignedCaseId) => {
 export const createCaseListViewModel = (cases, assignedCaseId) => {
   const allCases = transformCasesForList(cases);
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
-    cases,
+    allCases,
     assignedCaseId,
   );
 

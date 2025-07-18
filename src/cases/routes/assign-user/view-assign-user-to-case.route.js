@@ -9,7 +9,7 @@ export const viewAssignUserToCaseRoute = {
     const { caseId } = request.query;
 
     if (!caseId) {
-      return h.redirect(`/cases#all-cases`);
+      return h.redirect(`/cases`);
     }
 
     const kase = await findCaseByIdUseCase(caseId);

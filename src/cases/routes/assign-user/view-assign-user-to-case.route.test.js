@@ -48,7 +48,7 @@ describe("viewAssignUserToCaseRoute", () => {
     });
 
     expect(statusCode).toEqual(302);
-    expect(headers.location).toEqual("/cases#all-cases");
+    expect(headers.location).toEqual("/cases");
   });
 });
 

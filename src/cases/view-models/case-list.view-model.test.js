@@ -460,8 +460,8 @@ describe("case-list.model", () => {
 
       expect(result.data.assignedUserSuccessMessage).toEqual({
         heading: "Case assigned successfully",
-        caseId: "case-with-user-1",
-        caseLink: "/cases/case-with-user-1",
+        ref: "CLIENT-001",
+        link: "/cases/case-with-user-1",
         assignedUserName: "John Doe",
       });
     });

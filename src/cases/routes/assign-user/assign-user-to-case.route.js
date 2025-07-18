@@ -6,8 +6,6 @@ export const assignUserToCaseRoute = {
   handler: async (request, h) => {
     await assignUserToCaseUseCase(request.payload);
 
-    return h.redirect(
-      `/cases?assignedCaseId=${request.payload.caseId}#all-cases`,
-    );
+    return h.redirect(`/cases?assignedCaseId=${request.payload.caseId}`);
   },
 };
