@@ -30,7 +30,7 @@ describe("viewAssignUserToCaseRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/cases/assign-user",
+      url: "/cases/assign-user?caseId=6870ee690cdf25de1301a300",
     });
 
     expect(statusCode).toEqual(200);
@@ -39,6 +39,16 @@ describe("viewAssignUserToCaseRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+  });
+
+  it("redirects back to cases list if no caseId supplied", async () => {
+    const { statusCode, headers } = await server.inject({
+      method: "GET",
+      url: "/cases/assign-user",
+    });
+
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toEqual("/cases");
   });
 });
 
