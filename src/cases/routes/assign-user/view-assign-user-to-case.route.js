@@ -8,6 +8,10 @@ export const viewAssignUserToCaseRoute = {
   handler: async (request, h) => {
     const { caseId } = request.query;
 
+    if (!caseId) {
+      return h.redirect(`/cases`);
+    }
+
     const kase = await findCaseByIdUseCase(caseId);
 
     const users = await findAllUsersUseCase({

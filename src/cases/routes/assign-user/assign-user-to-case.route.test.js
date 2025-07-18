@@ -21,8 +21,8 @@ describe("assignUserToCaseRoute", () => {
     await server.stop();
   });
 
-  it("assigns user to case and redirects to case list", async () => {
-    const { statusCode } = await server.inject({
+  it("assigns user to case and redirects to case list with assignedCaseId parameter", async () => {
+    const { statusCode, headers } = await server.inject({
       method: "POST",
       url: "/cases/assign-user",
       payload: {
@@ -37,5 +37,6 @@ describe("assignUserToCaseRoute", () => {
     });
 
     expect(statusCode).toEqual(302);
+    expect(headers.location).toEqual("/cases?assignedCaseId=case-id-1");
   });
 });

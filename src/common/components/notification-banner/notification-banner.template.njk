@@ -1,0 +1,21 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+
+{% if params.text or params.html %}
+  {% set notificationBannerHtml %}
+    {% if params.heading %}
+      <h3 class="govuk-notification-banner__heading">{{ params.heading }}</h3>
+    {% endif %}
+    {% if params.html %}
+      <p class="govuk-body">{{ params.html | safe }}</p>
+    {% elif params.text %}
+      <p class="govuk-body">{{ params.text }}</p>
+    {% endif %}
+  {% endset %}
+
+  {{
+    govukNotificationBanner({
+      html: notificationBannerHtml,
+      type: params.type or "success"
+    })
+  }}
+{% endif %}
