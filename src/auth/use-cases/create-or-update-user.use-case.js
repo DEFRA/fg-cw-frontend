@@ -36,15 +36,13 @@ export const createOrUpdateUserUseCase = async ({ idToken, email }) => {
   });
 
   if (existingUser) {
-    await update(existingUser.id, {
+    return await update(existingUser.id, {
       idpRoles,
       name: idToken.name,
     });
-
-    return;
   }
 
-  await create({
+  return await create({
     email,
     idpId,
     idpRoles,

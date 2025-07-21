@@ -58,6 +58,9 @@ describe("loginCallbackRoute", () => {
           },
         },
         artifacts: {
+          access_token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
+          }),
           id_token: createToken({
             roles: ["FCP.Casework.Read"],
             name: "Bob Bill",
@@ -79,6 +82,16 @@ describe("loginCallbackRoute", () => {
   });
 
   it("redirects to original destination when login successful", async () => {
+    const user = {
+      id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+      idpRoles: ["FCP.Casework.Read"],
+      appRoles: ["SING_AND_DANCE"],
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/login/callback",
@@ -93,6 +106,9 @@ describe("loginCallbackRoute", () => {
           },
         },
         artifacts: {
+          access_token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
+          }),
           id_token: createToken({
             roles: ["FCP.Casework.Read"],
             name: "Bob Bill",
@@ -106,6 +122,16 @@ describe("loginCallbackRoute", () => {
   });
 
   it("redirects to / when no next query param is provided", async () => {
+    const user = {
+      id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+      idpRoles: ["FCP.Casework.Read"],
+      appRoles: ["SING_AND_DANCE"],
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/login/callback",
@@ -118,6 +144,9 @@ describe("loginCallbackRoute", () => {
           },
         },
         artifacts: {
+          access_token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
+          }),
           id_token: createToken({
             roles: ["FCP.Casework.Read"],
           }),
@@ -149,7 +178,7 @@ describe("loginCallbackRoute", () => {
 
     expect(statusCode).toEqual(400);
     expect(result).toContain(
-      "User&#39;s ID token cannot be decoded: Invalid token specified: invalid base64 for part #2 (base64 string is not of the correct length)",
+      "User&#39;s Entra ID token cannot be decoded: Invalid token specified: invalid base64 for part #2 (base64 string is not of the correct length)",
     );
   });
 

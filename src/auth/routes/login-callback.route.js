@@ -2,12 +2,12 @@ import Boom from "@hapi/boom";
 import { jwtDecode } from "jwt-decode";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
 
-const decode = (idToken) => {
+const decode = (token) => {
   try {
-    return jwtDecode(idToken);
+    return jwtDecode(token);
   } catch (error) {
     throw Boom.badRequest(
-      `User's ID token cannot be decoded: ${error.message}`,
+      `User's Entra ID token cannot be decoded: ${error.message}`,
     );
   }
 };
@@ -28,22 +28,30 @@ export const loginCallbackRoute = {
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
 
-    const idToken = auth.artifacts.id_token;
-
-    if (!idToken) {
+    if (!auth.artifacts.id_token) {
       throw Boom.badRequest("User has no ID token. Cannot verify roles.");
     }
 
-    await createOrUpdateUserUseCase({
+    const idToken = decode(auth.artifacts.id_token);
+
+    const user = await createOrUpdateUserUseCase({
       email: auth.credentials.profile.email,
-      idToken: decode(idToken),
+      idToken,
     });
 
-    // TODO: change to use session auth
-    request.cookieAuth.set({
-      token: auth.credentials.token,
-      authenticated: auth.isAuthenticated,
-      authorised: true,
+    const accessToken = decode(auth.artifacts.access_token);
+
+    request.yar.set("entra", {
+      expiresAt: accessToken.exp * 1000,
+      refreshToken: auth.credentials.refreshToken,
+    });
+
+    request.yar.set("credentials", {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      // scope is used by hapi to determine permissions
+      scope: user.idpRoles.concat(user.appRoles),
     });
 
     return h.redirect(auth.credentials.query.next ?? "/");

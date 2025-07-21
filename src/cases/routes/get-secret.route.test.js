@@ -36,22 +36,10 @@ describe("getSecret", () => {
         isAuthorized: false,
         isInjected: true,
         credentials: {
-          profile: {
-            id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Joe Bloggs",
-            email: "joe@bloggs.com",
-          },
-          authenticated: true,
-          authorised: true,
-        },
-        artifacts: {
-          profile: {
-            id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Joe Bloggs",
-            email: "joe@bloggs.com",
-          },
-          authenticated: true,
-          authorised: true,
+          id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+          name: "Joe Bloggs",
+          email: "joe@bloggs.com",
+          scope: ["FCP.Casework.Read"],
         },
         strategy: "session",
         mode: "required",

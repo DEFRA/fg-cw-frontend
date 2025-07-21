@@ -5,13 +5,14 @@ export const getSecretRoute = {
     auth: {
       mode: "required",
       strategy: "session",
+      access: {
+        scope: ["FCP.Casework.Read"],
+      },
     },
   },
   handler(request, h) {
     return h.view("pages/secret", {
-      authBlob: JSON.stringify(request.auth, null, 2),
-      isAuthenticated: request.auth.credentials.authenticated,
-      isAuthorised: request.auth.credentials.authorised,
+      auth: request.auth,
     });
   },
 };

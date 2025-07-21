@@ -83,6 +83,7 @@ describe("server", () => {
     await server.initialize();
 
     expect(server.states.cookies.session).toEqual({
+      clearInvalid: true,
       domain: null,
       encoding: "iron",
       ignoreErrors: true,

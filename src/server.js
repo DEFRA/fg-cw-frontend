@@ -1,13 +1,16 @@
 import { tracing } from "@defra/hapi-tracing";
 import Bell from "@hapi/bell";
-import Cookie from "@hapi/cookie";
+import { Engine as CatboxMemory } from "@hapi/catbox-memory";
+import { Engine as CatboxRedis } from "@hapi/catbox-redis";
 import hapi from "@hapi/hapi";
 import Inert from "@hapi/inert";
+import yar from "@hapi/yar";
 import hapiPino from "hapi-pino";
 import hapiPulse from "hapi-pulse";
 import { config } from "./common/config.js";
 import { logger } from "./common/logger.js";
 import { nunjucks } from "./common/nunjucks/nunjucks.js";
+import { redisClient } from "./common/redis-client.js";
 
 export const createServer = async () => {
   const server = hapi.server({
@@ -37,6 +40,17 @@ export const createServer = async () => {
     router: {
       stripTrailingSlash: true,
     },
+    cache: [
+      {
+        name: config.get("session.cache.name"),
+        engine:
+          config.get("session.cache.engine") === "redis"
+            ? new CatboxRedis({
+                client: redisClient,
+              })
+            : new CatboxMemory(),
+      },
+    ],
   });
 
   await server.register([
@@ -64,28 +78,32 @@ export const createServer = async () => {
     nunjucks,
   ]);
 
-  // ---------------- Authentication ----------------
+  // ---------------- Session ----------------
 
-  await server.register([Bell, Cookie]);
-
-  server.auth.strategy("session", "cookie", {
-    cookie: {
-      name: "session",
-      password: config.get("session.cookie.password"),
-      ttl: config.get("session.cookie.ttl"),
-      path: "/",
-      isSecure: config.get("isProduction"),
-      isSameSite: "Strict",
-    },
-    keepAlive: true,
-    appendNext: true,
-    redirectTo: "/login",
-    validate(_request, session) {
-      return session?.authenticated
-        ? { isValid: true, credentials: session }
-        : { isValid: false };
+  await server.register({
+    plugin: yar,
+    options: {
+      name: config.get("session.cache.name"),
+      cache: {
+        cache: config.get("session.cache.name"),
+        expiresIn: config.get("session.cache.ttl"),
+      },
+      maxCookieSize: 0, // store all session data in redis
+      storeBlank: false,
+      errorOnCacheNotReady: true,
+      cookieOptions: {
+        password: config.get("session.cookie.password"),
+        ttl: config.get("session.cookie.ttl"),
+        isSecure: config.get("session.cookie.secure"),
+        clearInvalid: true,
+        isSameSite: "Strict",
+      },
     },
   });
+
+  // ---------------- Authentication ----------------
+
+  await server.register(Bell);
 
   server.auth.strategy("msEntraId", "bell", {
     provider: "azure",
@@ -103,6 +121,34 @@ export const createServer = async () => {
     isSecure: config.get("isProduction"),
     forceHttps: config.get("isProduction"),
   });
+
+  server.auth.scheme("yar", () => ({
+    authenticate: async (request, h) => {
+      const entra = request.yar.get("entra");
+
+      if (entra?.expiresAt > Date.now()) {
+        return h.authenticated({
+          credentials: request.yar.get("credentials"),
+        });
+      }
+
+      const params = new URLSearchParams({
+        next: request.url.href,
+      });
+      return h.redirect(`/login?${params}`).takeover();
+    },
+  }));
+
+  server.auth.strategy("session", "yar");
+
+  // server.auth.default({
+  //   strategy: "session",
+  //   scope: [
+  //     "FCP.Casework.Read",
+  //     "FCP.Casework.ReadWrite",
+  //     "FCP.Casework.Admin",
+  //   ],
+  // });
 
   // ---------------- Error Handling ----------------
 
