@@ -1,5 +1,5 @@
 import { beforeEach, describe, expect, it } from "vitest";
-import { createServer } from "../server.js";
+import { createServer } from "../server/index.js";
 import { auth } from "./index.js";
 
 describe("auth", () => {
