@@ -4,7 +4,7 @@ export const loginRoute = {
   options: {
     auth: {
       mode: "required",
-      strategy: "msEntraId",
+      strategy: "entra",
     },
   },
   handler(_request, h) {

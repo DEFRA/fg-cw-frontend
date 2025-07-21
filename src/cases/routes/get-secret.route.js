@@ -1,3 +1,5 @@
+import { findSecretUseCase } from "../use-cases/find-secret.use-case.js";
+
 export const getSecretRoute = {
   method: "GET",
   path: "/secret",
@@ -7,11 +9,16 @@ export const getSecretRoute = {
       strategy: "session",
     },
   },
-  handler(request, h) {
+  async handler(request, h) {
+    const { credentials } = request.auth;
+
+    const responseFromApi = await findSecretUseCase(credentials.token);
+
     return h.view("pages/secret", {
-      authBlob: JSON.stringify(request.auth, null, 2),
-      isAuthenticated: request.auth.credentials.authenticated,
-      isAuthorised: request.auth.credentials.authorised,
+      data: {
+        credentials,
+        responseFromApi,
+      },
     });
   },
 };

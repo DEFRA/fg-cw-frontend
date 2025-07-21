@@ -6,7 +6,9 @@
   <div class="govuk-grid-row">
     <p>{{ message }}</p>
     {% if(error) %}
-      <pre style="background-color:#EEEEEE;padding:1rem">{{ error.stack }}</pre>
+      <pre style="background-color:#EEEEEE;padding:1rem;white-space:pre-wrap;">
+{{ error.stack }}</pre
+      >
     {% endif %}
   </div>
 {% endblock %}
