@@ -1,5 +1,22 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`listCasesRoute > extracts assignedCaseId from query parameters and renders notification banner 1`] = `
+"
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <h3 class="govuk-notification-banner__heading">Case assigned successfully</h3>
+          <p class="govuk-body">      <a class="govuk-notification-banner__link" href="/cases/68495db5afe2d27b09b2ee47">Case banana-123</a>
+          has been assigned to
+          John Smith
+    </p>
+  </div>
+"
+`;
+
 exports[`listCasesRoute > returns a list of cases 1`] = `
 "
   <div class="govuk-grid-row app-heading" data-testid="app-heading">
@@ -21,6 +38,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   </h2>
   <ul class="govuk-tabs__list">
     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#all-cases">
+        All Cases
+      </a>
+    </li>
+    <li class="govuk-tabs__list-item">
       <a class="govuk-tabs__tab" href="#my-cases">
         My cases
       </a>
@@ -30,13 +52,63 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         Team cases
       </a>
     </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#all-cases">
-        All Cases
-      </a>
-    </li>
   </ul>
-  <div class="govuk-tabs__panel" id="my-cases">
+  <div class="govuk-tabs__panel" id="all-cases">
+    <h2 class="govuk-heading-l" data-testid="all-cases-tab">
+      All cases
+    </h2>
+    
+    <form method="GET" action="/cases/assign-user">
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+      Assign
+    </button>
+    
+      <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Select</th>
+          <th scope="col" class="govuk-table__header">Client ref</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
+          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Assigned</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">  <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
+      </div>
+    </td>
+          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
+          <td class="govuk-table__cell">frps-private-beta</td>
+          <td class="govuk-table__cell">01/10/2023</td>
+          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">
+      New
+    </strong>
+    </td>
+          <td class="govuk-table__cell">John Smith</td>
+        </tr>
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell">  <div class="govuk-radios__item">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99"></label>
+      </div>
+    </td>
+          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
+          <td class="govuk-table__cell">frps-private-beta</td>
+          <td class="govuk-table__cell">01/10/2023</td>
+          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">
+      Old
+    </strong>
+    </td>
+          <td class="govuk-table__cell"></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    </form>
+  </div>
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="my-cases">
     <h2 class="govuk-heading-l" data-testid="my-cases-tab">
       My cases
     </h2>
@@ -97,61 +169,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-      </tbody>
-    </table>
-    
-    </form>
-  </div>
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="all-cases">
-    <h2 class="govuk-heading-l" data-testid="all-cases-tab">
-      All cases
-    </h2>
-    
-    <form method="GET" action="/cases/assign-user">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
-      Assign
-    </button>
-    
-      <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header">Client ref</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Assigned</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
-      </div>
-    </td>
-          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
-          <td class="govuk-table__cell">frps-private-beta</td>
-          <td class="govuk-table__cell">01/10/2023</td>
-          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">
-      New
-    </strong>
-    </td>
-          <td class="govuk-table__cell"></td>
-        </tr>
-        <tr class="govuk-table__row">
-          <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
-      </div>
-    </td>
-          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
-          <td class="govuk-table__cell">frps-private-beta</td>
-          <td class="govuk-table__cell">01/10/2023</td>
-          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">
-      Old
-    </strong>
-    </td>
-          <td class="govuk-table__cell"></td>
-        </tr>
       </tbody>
     </table>
     
