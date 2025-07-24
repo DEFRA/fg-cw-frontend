@@ -1,17 +1,15 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`List component > renders list with fields and payload 1`] = `undefined`;
-
 exports[`list > renders list with fields and payload 1`] = `
 "
     
+
     
+
     
+
     
-    
-    
-    
-    
+
 
   <table class="govuk-table">
   <tbody class="govuk-table__body">
@@ -26,5 +24,5 @@ exports[`list > renders list with fields and payload 1`] = `
   </tbody>
 </table>
 
- "
+"
 `;
