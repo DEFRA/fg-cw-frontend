@@ -3,7 +3,7 @@ import Cookie from "@hapi/cookie";
 import { config } from "./config.js";
 
 export const validateSession = (_request, session) => {
-  if (!session || !session.authenticated) {
+  if (!session?.authenticated) {
     return { isValid: false };
   }
 

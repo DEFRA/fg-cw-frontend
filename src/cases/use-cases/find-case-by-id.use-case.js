@@ -2,6 +2,7 @@ import { findById } from "../repositories/case.repository.js";
 import { findByCode } from "../repositories/workflow.repository.js";
 
 // TODO: move to the backend
+// https://eaflood.atlassian.net/jira/software/projects/FUT/boards/1668?selectedIssue=FUT-563
 const addTitles = (kase, workflow) => ({
   ...kase,
   stages: kase.stages.map((stage) => {

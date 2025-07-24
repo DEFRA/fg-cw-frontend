@@ -20,7 +20,7 @@ const createAssignedUserSuccessMessage = (cases, assignedCaseId) => {
       (caseItem) => caseItem._id === assignedCaseId,
     );
 
-    if (assignedCase && assignedCase.assignedUser) {
+    if (assignedCase?.assignedUser) {
       successMessage = {
         heading: "Case assigned successfully",
         ref: assignedCase.clientRef,
