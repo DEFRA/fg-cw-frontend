@@ -14,13 +14,17 @@ const addTitles = (kase, workflow, overrideTabs, customTabs) => ({
       title: workflowStage.title,
       actions: workflowStage.actions,
       taskGroups: stage.taskGroups.map((tg) => {
-        const wtg = workflowStage.taskGroups.find((wtg) => wtg.id === tg.id);
+        const wfTaskGroup = workflowStage.taskGroups.find(
+          (wtg) => wtg.id === tg.id,
+        );
 
         return {
           ...tg,
-          title: wtg.title,
+          title: wfTaskGroup.title,
           tasks: tg.tasks.map((task) => {
-            const workflowTask = wtg.tasks.find((wt) => wt.id === task.id);
+            const workflowTask = wfTaskGroup.tasks.find(
+              (wt) => wt.id === task.id,
+            );
 
             return {
               ...task,
