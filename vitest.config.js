@@ -17,7 +17,6 @@ export default defineConfig({
       TZ: "Europe/London",
     },
     coverage: {
-      enabled: true,
       include: ["src"],
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
