@@ -4,38 +4,45 @@ import { findByCode } from "../repositories/workflow.repository.js";
 const defaultTabs = ["tasks", "caseDetails", "notes", "timeline"];
 
 // TODO: move to the backend: https://eaflood.atlassian.net/jira/software/projects/FUT/boards/1668?selectedIssue=FUT-563
+
+const processTask = (task, wfTaskGroup) => {
+  const workflowTask = wfTaskGroup.tasks.find((wt) => wt.id === task.id);
+
+  return {
+    ...task,
+    title: workflowTask.title,
+    type: workflowTask.type,
+  };
+};
+
+const processTaskGroup = (taskGroup, workflowStage) => {
+  const wfTaskGroup = workflowStage.taskGroups.find(
+    (wtg) => wtg.id === taskGroup.id,
+  );
+
+  return {
+    ...taskGroup,
+    title: wfTaskGroup.title,
+    tasks: taskGroup.tasks.map((task) => processTask(task, wfTaskGroup)),
+  };
+};
+
+const processStage = (stage, workflow) => {
+  const workflowStage = workflow.stages.find((ws) => ws.id === stage.id);
+
+  return {
+    ...stage,
+    title: workflowStage.title,
+    actions: workflowStage.actions,
+    taskGroups: stage.taskGroups.map((taskGroup) =>
+      processTaskGroup(taskGroup, workflowStage),
+    ),
+  };
+};
+
 const addTitles = (kase, workflow, overrideTabs, customTabs) => ({
   ...kase,
-  stages: kase.stages.map((stage) => {
-    const workflowStage = workflow.stages.find((ws) => ws.id === stage.id);
-
-    return {
-      ...stage,
-      title: workflowStage.title,
-      actions: workflowStage.actions,
-      taskGroups: stage.taskGroups.map((tg) => {
-        const wfTaskGroup = workflowStage.taskGroups.find(
-          (wtg) => wtg.id === tg.id,
-        );
-
-        return {
-          ...tg,
-          title: wfTaskGroup.title,
-          tasks: tg.tasks.map((task) => {
-            const workflowTask = wfTaskGroup.tasks.find(
-              (wt) => wt.id === task.id,
-            );
-
-            return {
-              ...task,
-              title: workflowTask.title,
-              type: workflowTask.type,
-            };
-          }),
-        };
-      }),
-    };
-  }),
+  stages: kase.stages.map((stage) => processStage(stage, workflow)),
   overrideTabs,
   customTabs,
 });
