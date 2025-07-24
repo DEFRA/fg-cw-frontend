@@ -48,7 +48,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "john doe",
           payload: mockCase.payload,
-          caseDetails: undefined,
+          defaultTitle: "Case",
         },
       },
     });
@@ -89,7 +89,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "Unassigned",
           payload: {},
-          caseDetails: undefined,
+          defaultTitle: "Case",
         },
       },
     });
@@ -220,6 +220,18 @@ describe("createCaseDetailViewModel", () => {
       id: "caseDetails",
       title: "Case Details",
       content: "Custom case details content",
+      sections: [
+        {
+          title: "Section 1",
+          fields: [
+            {
+              ref: "$.payload.answers.testField",
+              type: "string",
+              label: "Test Field",
+            },
+          ],
+        },
+      ],
     };
 
     const mockCase = {
@@ -242,6 +254,21 @@ describe("createCaseDetailViewModel", () => {
 
     const result = createCaseDetailViewModel(mockCase);
 
-    expect(result.data.case.caseDetails).toBe(mockCaseDetailsTab);
+    expect(result.data.case.caseDetails).toEqual({
+      ...mockCaseDetailsTab,
+      sections: [
+        {
+          title: "Section 1",
+          fields: [
+            {
+              ref: "$.payload.answers.testField",
+              type: "string",
+              label: "Test Field",
+              value: undefined,
+            },
+          ],
+        },
+      ],
+    });
   });
 });

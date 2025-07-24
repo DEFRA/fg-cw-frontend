@@ -1,7 +1,49 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`list > renders list with fields and payload 1`] = `
+exports[`list > renders empty table when fields array is empty 1`] = `
 "
+
+  <table class="govuk-table">
+  <tbody class="govuk-table__body">
+  </tbody>
+</table>
+
+"
+`;
+
+exports[`list > renders table with boolean values converted to Yes/No 1`] = `
+"
+    
+
+    
+
+    
+
+    
+
+
+  <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Are you a pig farmer?</th>
+      <td class="govuk-table__cell">Yes</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Do you have a license?</th>
+      <td class="govuk-table__cell">No</td>
+    </tr>
+  </tbody>
+</table>
+
+"
+`;
+
+exports[`list > renders table with fields and processed values 1`] = `
+"
+    
+
+    
+
     
 
     
@@ -20,6 +62,64 @@ exports[`list > renders list with fields and payload 1`] = `
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header govuk-!-width-one-third">Are you a pig farmer?</th>
       <td class="govuk-table__cell">Yes</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
+      <td class="govuk-table__cell">Green Acres Farm</td>
+    </tr>
+  </tbody>
+</table>
+
+"
+`;
+
+exports[`list > renders table with null and undefined values 1`] = `
+"
+    
+
+    
+
+    
+
+    
+
+
+  <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
+      <td class="govuk-table__cell"></td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
+      <td class="govuk-table__cell"></td>
+    </tr>
+  </tbody>
+</table>
+
+"
+`;
+
+exports[`list > renders table with zero and empty string values 1`] = `
+"
+    
+
+    
+
+    
+
+    
+
+
+  <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
+      <td class="govuk-table__cell">0</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
+      <td class="govuk-table__cell"></td>
     </tr>
   </tbody>
 </table>

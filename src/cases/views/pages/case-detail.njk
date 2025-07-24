@@ -13,7 +13,7 @@
       {% if data.case.caseDetails %}
         {{ data.case.caseDetails.title }}
       {% else %}
-        Case
+        {{ data.case.defaultTitle }}
       {% endif %}
     </h2>
 
@@ -34,8 +34,7 @@
               {% if section.type == "list" %}
                 {{
                   list({
-                    fields: section.fields,
-                    payload: data.case.payload
+                    fields: section.fields
                   })
                 }}
               {% endif %}

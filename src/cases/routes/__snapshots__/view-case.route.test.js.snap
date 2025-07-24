@@ -166,6 +166,10 @@ Timeline
       <th scope="row" class="govuk-table__header govuk-!-width-one-third">status</th>
       <td class="govuk-table__cell">NEW</td>
     </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">defaultTitle</th>
+      <td class="govuk-table__cell">Case</td>
+    </tr>
   </tbody>
 </table>
 
