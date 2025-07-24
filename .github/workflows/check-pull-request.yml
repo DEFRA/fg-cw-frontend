@@ -31,7 +31,7 @@ jobs:
           npm run build
           npm run format:check
           npm run lint
-          npm test
+          npm test -- --coverage
 
       - name: Test Docker Image Build
         run: |
@@ -39,9 +39,9 @@ jobs:
           docker build --no-cache --tag cdp-node-frontend-template .
           exit $?
 
-#      - name: SonarCloud Scan
-#        if: github.actor != 'dependabot[bot]'
-#        uses: SonarSource/sonarcloud-github-action@master
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: SonarCloud Scan
+        if: github.actor != 'dependabot[bot]'
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

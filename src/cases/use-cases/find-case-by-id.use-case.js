@@ -3,7 +3,7 @@ import { findByCode } from "../repositories/workflow.repository.js";
 
 const defaultTabs = ["tasks", "caseDetails", "notes", "timeline"];
 
-// TODO: move to the backend
+// TODO: move to the backend: https://eaflood.atlassian.net/jira/software/projects/FUT/boards/1668?selectedIssue=FUT-563
 const addTitles = (kase, workflow, overrideTabs, customTabs) => ({
   ...kase,
   stages: kase.stages.map((stage) => {

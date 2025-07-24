@@ -12,7 +12,7 @@ export const completeStageRoute = {
     await completeStageUseCase(caseId);
 
     const caseData = await findCaseByIdUseCase(caseId);
-    const viewModel = await createTaskListViewModel(caseData);
+    const viewModel = createTaskListViewModel(caseData);
     return h.view("pages/task-list", {
       ...viewModel,
     });
