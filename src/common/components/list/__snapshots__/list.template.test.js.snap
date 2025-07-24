@@ -1,0 +1,30 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`List component > renders list with fields and payload 1`] = `undefined`;
+
+exports[`list > renders list with fields and payload 1`] = `
+"
+    
+    
+    
+    
+    
+    
+    
+    
+
+  <table class="govuk-table">
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
+      <td class="govuk-table__cell">10</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Are you a pig farmer?</th>
+      <td class="govuk-table__cell">Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+ "
+`;

@@ -1,0 +1,31 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% if params.fields and params.payload %}
+  {% set rows = [] %}
+  {% for field in params.fields %}
+    {# Extract the path after $.payload.answers. #}
+    {% set fieldPath = field.ref | replace("$.payload.answers.", "") %}
+    {% set fieldValue = params.payload.answers[fieldPath] %}
+
+    {# Handle different field types #}
+    {% if field.type == "boolean" %}
+      {% set displayValue = "Yes" if fieldValue else "No" %}
+    {% else %}
+      {% set displayValue = fieldValue %}
+    {% endif %}
+
+    {%
+      set rows = (rows.push([
+        { text: field.label, classes: "govuk-!-width-one-third" },
+        { text: displayValue }
+      ]), rows)
+    %}
+  {% endfor %}
+
+  {{
+    govukTable({
+      firstCellIsHeader: true,
+      rows: rows
+    })
+  }}
+{% endif %}

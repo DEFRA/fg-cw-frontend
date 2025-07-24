@@ -1,8 +1,9 @@
 import { findById } from "../repositories/case.repository.js";
 import { findByCode } from "../repositories/workflow.repository.js";
 
-// TODO: move to the backend
-const addTitles = (kase, workflow) => ({
+const defaultTabs = ["tasks", "caseDetails", "notes", "timeline"];
+
+const addTitles = (kase, workflow, overrideTabs, customTabs) => ({
   ...kase,
   stages: kase.stages.map((stage) => {
     const workflowStage = workflow.stages.find((ws) => ws.id === stage.id);
@@ -30,11 +31,29 @@ const addTitles = (kase, workflow) => ({
       }),
     };
   }),
+  overrideTabs,
+  customTabs,
+});
+
+const createTabObject = (tabId, tabConfig) => ({
+  id: tabId,
+  ...tabConfig,
 });
 
 export const findCaseByIdUseCase = async (caseId) => {
   const kase = await findById(caseId);
   const workflow = await findByCode(kase.workflowCode);
+  const workflowTabs = workflow.pages.cases.details.tabs;
 
-  return addTitles(kase, workflow);
+  const overrideTabs = defaultTabs
+    .filter((tabId) => tabId in workflowTabs)
+    .map((tabId) => createTabObject(tabId, workflowTabs[tabId]));
+
+  const customTabs = Object.entries(workflowTabs)
+    .filter(([tabId]) => !defaultTabs.includes(tabId))
+    .map(([tabId, config]) => createTabObject(tabId, config));
+
+  const caseWithTitles = addTitles(kase, workflow, overrideTabs, customTabs);
+
+  return caseWithTitles;
 };

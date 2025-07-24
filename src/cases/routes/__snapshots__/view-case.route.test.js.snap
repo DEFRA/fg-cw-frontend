@@ -90,17 +90,17 @@ Tasks
 
               
               <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
+                  <a class="govuk-service-navigation__link" href="#">
                                     
-Timeline
+Notes
                   </a>
               </li>
 
               
               <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
                                     
-Land Details
+Timeline
                   </a>
               </li>
 
@@ -113,10 +113,9 @@ Land Details
   </div>
 
 
-
-    <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
-      Case
-    </h2>
+      <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
+          Case
+      </h2>
 
     <p class="govuk-body">
       submitted:
@@ -126,9 +125,10 @@ Land Details
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <div class="govuk-body" data-testid="app-page-body">
-          
+            
+            
 
-          <table class="govuk-table">
+            <table class="govuk-table">
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header govuk-!-width-one-third">_id</th>
@@ -170,9 +170,9 @@ Land Details
 </table>
 
 
-          
+            
 
-          <table class="govuk-table">
+            <table class="govuk-table">
   <caption class="govuk-table__caption govuk-table__caption--m">Answers</caption>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
@@ -195,14 +195,14 @@ Land Details
 </table>
 
 
-          
-            <h2 class="govuk-heading-m">Action cases data</h2>
-              <h3 class="govuk-heading-s">
-                Selected land parcel for action 1
-              </h3>
+            
+              <h2 class="govuk-heading-m">Action cases data</h2>
+                <h3 class="govuk-heading-s">
+                  Selected land parcel for action 1
+                </h3>
 
 
-              <table class="govuk-table">
+                <table class="govuk-table">
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
       <th scope="row" class="govuk-table__header govuk-!-width-one-third">parcelId</th>
