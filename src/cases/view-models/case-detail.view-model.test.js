@@ -14,6 +14,7 @@ describe("createCaseDetailViewModel", () => {
       dateReceived: "2021-01-10T00:00:00.000Z",
       status: "In Progress",
       assignedUser: "john doe",
+      overrideTabs: [],
       payload: {
         answers: {
           agreementName: "Test Agreement",
@@ -47,6 +48,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "john doe",
           payload: mockCase.payload,
+          title: "Case",
         },
       },
     });
@@ -62,6 +64,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "MIN-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
+      overrideTabs: [],
       payload: {},
     };
 
@@ -86,6 +89,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "Unassigned",
           payload: {},
+          title: "Case",
         },
       },
     });
@@ -100,6 +104,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "PAYLOAD-CODE",
       status: "Completed",
       assignedUser: "jane smith",
+      overrideTabs: [],
       payload: {
         submittedAt: "2021-03-20T00:00:00.000Z",
         answers: {
@@ -116,6 +121,7 @@ describe("createCaseDetailViewModel", () => {
     expect(result.data.case.assignedUser).toBe("jane smith");
     expect(result.data.case.submittedAt).toBe("20/03/2021");
     expect(result.data.case.businessName).toBe("Payload Agreement");
+    expect(result.data.case.caseDetails).toBe(undefined);
     expect(getFormattedGBDate).toHaveBeenCalledWith("2021-03-20T00:00:00.000Z");
   });
 
@@ -126,6 +132,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "BREAD-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
+      overrideTabs: [],
       payload: {},
     };
 
@@ -144,6 +151,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "TITLE-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
+      overrideTabs: [],
       payload: {},
     };
 
@@ -163,6 +171,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "METHOD-CODE",
       status: "Active",
       assignedUser: "test user",
+      overrideTabs: [],
       payload: {
         submittedAt: "2021-01-01T00:00:00.000Z",
       },
@@ -183,6 +192,7 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "NESTED-CODE",
       status: "Processing",
       assignedUser: "processor",
+      overrideTabs: [],
       payload: {
         answers: {
           agreementName: "Complex Agreement",
@@ -202,5 +212,136 @@ describe("createCaseDetailViewModel", () => {
     expect(result.data.case.scheme).toBe("Premium Scheme");
     expect(result.data.case.sbi).toBe("987654321");
     expect(result.data.case.payload).toBe(mockCase.payload);
+    expect(result.data.case.caseDetails).toBe(undefined);
+  });
+
+  it("finds caseDetails tab when overrideTabs contains matching tab", () => {
+    const mockCaseDetailsTab = {
+      id: "caseDetails",
+      title: "Case Details",
+      content: "Custom case details content",
+      sections: [
+        {
+          title: "Section 1",
+          fields: [
+            {
+              ref: "$.payload.answers.testField",
+              type: "string",
+              label: "Test Field",
+            },
+          ],
+        },
+      ],
+    };
+
+    const mockCase = {
+      _id: "case-with-tabs",
+      caseRef: "TABS-001",
+      workflowCode: "TABS-CODE",
+      status: "Active",
+      assignedUser: "test user",
+      overrideTabs: [
+        { id: "otherTab", title: "Other Tab" },
+        mockCaseDetailsTab,
+        { id: "anotherTab", title: "Another Tab" },
+      ],
+      payload: {
+        submittedAt: "2021-01-01T00:00:00.000Z",
+      },
+    };
+
+    getFormattedGBDate.mockReturnValue("01/01/2021");
+
+    const result = createCaseDetailViewModel(mockCase);
+
+    expect(result.data.case.caseDetails).toEqual({
+      ...mockCaseDetailsTab,
+      sections: [
+        {
+          title: "Section 1",
+          fields: [
+            {
+              key: {
+                text: "Test Field",
+              },
+              value: {
+                text: undefined,
+              },
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("converts boolean values to Yes/No in case details", () => {
+    const mockCaseDetailsTab = {
+      id: "caseDetails",
+      title: "Case Details",
+      sections: [
+        {
+          title: "Boolean Section",
+          fields: [
+            {
+              ref: "$.payload.answers.isPigFarmer",
+              type: "boolean",
+              label: "Are you a pig farmer?",
+            },
+            {
+              ref: "$.payload.answers.hasLicense",
+              type: "boolean",
+              label: "Do you have a license?",
+            },
+          ],
+        },
+      ],
+    };
+
+    const mockCase = {
+      _id: "case-with-booleans",
+      caseRef: "BOOL-001",
+      workflowCode: "BOOL-CODE",
+      status: "Active",
+      assignedUser: "test user",
+      overrideTabs: [mockCaseDetailsTab],
+      payload: {
+        answers: {
+          isPigFarmer: true,
+          hasLicense: false,
+        },
+        submittedAt: "2021-01-01T00:00:00.000Z",
+      },
+    };
+
+    getFormattedGBDate.mockReturnValue("01/01/2021");
+
+    const result = createCaseDetailViewModel(mockCase);
+
+    expect(result.data.case.caseDetails).toEqual({
+      ...mockCaseDetailsTab,
+      sections: [
+        {
+          title: "Boolean Section",
+          fields: [
+            {
+              key: {
+                text: "Are you a pig farmer?",
+              },
+              value: {
+                text: "Yes",
+              },
+            },
+            {
+              key: {
+                text: "Do you have a license?",
+              },
+              value: {
+                text: "No",
+              },
+            },
+          ],
+        },
+      ],
+    });
   });
 });
