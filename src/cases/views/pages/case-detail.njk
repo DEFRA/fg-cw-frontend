@@ -10,11 +10,7 @@
   <div class="govuk-body">
     {{ caseDetailsTabNavigation({active: 'caseDetails', caseId: data.case._id, taskGroupId: query.taskGroupId}) }}
     <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
-      {% if data.case.caseDetails %}
-        {{ data.case.caseDetails.title }}
-      {% else %}
-        {{ data.case.defaultTitle }}
-      {% endif %}
+      {{ data.case.title }}
     </h2>
 
     <p class="govuk-body">

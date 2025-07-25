@@ -48,7 +48,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "john doe",
           payload: mockCase.payload,
-          defaultTitle: "Case",
+          title: "Case",
         },
       },
     });
@@ -89,7 +89,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "Unassigned",
           payload: {},
-          defaultTitle: "Case",
+          title: "Case",
         },
       },
     });
@@ -261,10 +261,83 @@ describe("createCaseDetailViewModel", () => {
           title: "Section 1",
           fields: [
             {
-              ref: "$.payload.answers.testField",
-              type: "string",
-              label: "Test Field",
-              value: undefined,
+              key: {
+                text: "Test Field",
+              },
+              value: {
+                text: undefined,
+              },
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("converts boolean values to Yes/No in case details", () => {
+    const mockCaseDetailsTab = {
+      id: "caseDetails",
+      title: "Case Details",
+      sections: [
+        {
+          title: "Boolean Section",
+          fields: [
+            {
+              ref: "$.payload.answers.isPigFarmer",
+              type: "boolean",
+              label: "Are you a pig farmer?",
+            },
+            {
+              ref: "$.payload.answers.hasLicense",
+              type: "boolean",
+              label: "Do you have a license?",
+            },
+          ],
+        },
+      ],
+    };
+
+    const mockCase = {
+      _id: "case-with-booleans",
+      caseRef: "BOOL-001",
+      workflowCode: "BOOL-CODE",
+      status: "Active",
+      assignedUser: "test user",
+      overrideTabs: [mockCaseDetailsTab],
+      payload: {
+        answers: {
+          isPigFarmer: true,
+          hasLicense: false,
+        },
+        submittedAt: "2021-01-01T00:00:00.000Z",
+      },
+    };
+
+    getFormattedGBDate.mockReturnValue("01/01/2021");
+
+    const result = createCaseDetailViewModel(mockCase);
+
+    expect(result.data.case.caseDetails).toEqual({
+      ...mockCaseDetailsTab,
+      sections: [
+        {
+          title: "Boolean Section",
+          fields: [
+            {
+              key: {
+                text: "Are you a pig farmer?",
+              },
+              value: {
+                text: "Yes",
+              },
+            },
+            {
+              key: {
+                text: "Do you have a license?",
+              },
+              value: {
+                text: "No",
+              },
             },
           ],
         },

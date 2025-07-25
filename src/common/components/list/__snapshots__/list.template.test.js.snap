@@ -1,128 +1,103 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`list > renders empty table when fields array is empty 1`] = `
+exports[`list > renders empty summary list when fields array is empty 1`] = `
 "
-
-  <table class="govuk-table">
-  <tbody class="govuk-table__body">
-  </tbody>
-</table>
-
-"
+<dl class="govuk-summary-list">
+</dl>"
 `;
 
-exports[`list > renders table with boolean values converted to Yes/No 1`] = `
+exports[`list > renders summary list with boolean values converted to Yes/No 1`] = `
 "
-    
-
-    
-
-    
-
-    
-
-
-  <table class="govuk-table">
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Are you a pig farmer?</th>
-      <td class="govuk-table__cell">Yes</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Do you have a license?</th>
-      <td class="govuk-table__cell">No</td>
-    </tr>
-  </tbody>
-</table>
-
-"
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Are you a pig farmer?
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Yes
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Do you have a license?
+    </dt>
+    <dd class="govuk-summary-list__value">
+      No
+    </dd>
+  </div>
+</dl>"
 `;
 
-exports[`list > renders table with fields and processed values 1`] = `
+exports[`list > renders summary list with fields and processed values 1`] = `
 "
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-
-  <table class="govuk-table">
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
-      <td class="govuk-table__cell">10</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Are you a pig farmer?</th>
-      <td class="govuk-table__cell">Yes</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
-      <td class="govuk-table__cell">Green Acres Farm</td>
-    </tr>
-  </tbody>
-</table>
-
-"
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Total Pigs
+    </dt>
+    <dd class="govuk-summary-list__value">
+      10
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Are you a pig farmer?
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Yes
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Farm Name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      Green Acres Farm
+    </dd>
+  </div>
+</dl>"
 `;
 
-exports[`list > renders table with null and undefined values 1`] = `
+exports[`list > renders summary list with null and undefined values 1`] = `
 "
-    
-
-    
-
-    
-
-    
-
-
-  <table class="govuk-table">
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
-      <td class="govuk-table__cell"></td>
-    </tr>
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
-      <td class="govuk-table__cell"></td>
-    </tr>
-  </tbody>
-</table>
-
-"
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Total Pigs
+    </dt>
+    <dd class="govuk-summary-list__value">
+      
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Farm Name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      
+    </dd>
+  </div>
+</dl>"
 `;
 
-exports[`list > renders table with zero and empty string values 1`] = `
+exports[`list > renders summary list with zero and empty string values 1`] = `
 "
-    
-
-    
-
-    
-
-    
-
-
-  <table class="govuk-table">
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Total Pigs</th>
-      <td class="govuk-table__cell">0</td>
-    </tr>
-    <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header govuk-!-width-one-third">Farm Name</th>
-      <td class="govuk-table__cell"></td>
-    </tr>
-  </tbody>
-</table>
-
-"
+<dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Total Pigs
+    </dt>
+    <dd class="govuk-summary-list__value">
+      0
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Farm Name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      
+    </dd>
+  </div>
+</dl>"
 `;

@@ -1,30 +1,7 @@
-{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 
-{% if params.fields %}
-  {% set rows = [] %}
-  {% for field in params.fields %}
-    {# Use the resolved value from the processed field #}
-    {% set fieldValue = field.value %}
-
-    {# Handle different field types #}
-    {% if field.type == "boolean" %}
-      {% set displayValue = "Yes" if fieldValue else "No" %}
-    {% else %}
-      {% set displayValue = fieldValue %}
-    {% endif %}
-
-    {%
-      set rows = (rows.push([
-        { text: field.label, classes: "govuk-!-width-one-third" },
-        { text: displayValue }
-      ]), rows)
-    %}
-  {% endfor %}
-
-  {{
-    govukTable({
-      firstCellIsHeader: true,
-      rows: rows
-    })
-  }}
-{% endif %}
+{{
+  govukSummaryList({
+    rows: params.fields
+  })
+}}

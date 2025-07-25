@@ -1,31 +1,38 @@
+import jsonpath from "jsonpath";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
   return (overrideTabs || []).find((tab) => tab.id === "caseDetails");
 };
 
-const navigateObject = (obj, keys) => {
-  return keys.reduce((value, key) => {
-    if (!value || typeof value !== "object" || !(key in value)) {
-      return undefined;
-    }
-    return value[key];
-  }, obj);
-};
-
 const resolvePayloadReference = (ref, payload) => {
-  const path = ref.replace("$.payload.", "");
-  const keys = path.split(".");
-  return navigateObject(payload, keys);
+  if (!ref || !payload) return undefined;
+
+  try {
+    return jsonpath.value(payload, ref.replace("$.payload.", "$."));
+  } catch (error) {
+    return undefined;
+  }
 };
 
 const processSectionFields = (section, payload) => {
   if (section.fields) {
     const processedFields = section.fields.map((field) => {
       const resolvedValue = resolvePayloadReference(field.ref, payload);
+
+      // Convert boolean values to Yes/No
+      let displayValue = resolvedValue;
+      if (field.type === "boolean") {
+        displayValue = resolvedValue ? "Yes" : "No";
+      }
+
       return {
-        ...field,
-        value: resolvedValue,
+        key: {
+          text: field.label,
+        },
+        value: {
+          text: displayValue,
+        },
       };
     });
 
@@ -36,6 +43,11 @@ const processSectionFields = (section, payload) => {
   }
 
   return section;
+};
+
+const getCaseTitle = (caseItem) => {
+  const caseDetails = findCaseDetailsTab(caseItem.overrideTabs);
+  return caseDetails ? caseDetails.title : "Case";
 };
 
 const addCaseDetailsIfPresent = (data, caseItem) => {
@@ -68,7 +80,7 @@ const buildCaseData = (caseItem, caseRef, code) => {
     status: caseItem.status,
     assignedUser: caseItem.assignedUser,
     payload: caseItem.payload,
-    defaultTitle: "Case",
+    title: getCaseTitle(caseItem),
   };
 
   return addCaseDetailsIfPresent(data, caseItem);
