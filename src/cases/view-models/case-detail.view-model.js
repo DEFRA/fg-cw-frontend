@@ -6,7 +6,9 @@ const findCaseDetailsTab = (overrideTabs) => {
 };
 
 const resolvePayloadReference = (ref, payload) => {
-  if (!ref || !payload) return undefined;
+  if (!ref || !payload) {
+    return undefined;
+  }
 
   try {
     return jsonpath.value(payload, ref.replace("$.payload.", "$."));
