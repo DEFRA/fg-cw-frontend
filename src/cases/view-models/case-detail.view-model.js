@@ -5,22 +5,10 @@ const findCaseDetailsTab = (overrideTabs) => {
   return (overrideTabs || []).find((tab) => tab.id === "caseDetails");
 };
 
-const resolvePayloadReference = (ref, payload) => {
-  if (!ref || !payload) {
-    return undefined;
-  }
-
-  try {
-    return jsonpath.value(payload, ref.replace("$.payload.", "$."));
-  } catch (error) {
-    return undefined;
-  }
-};
-
 const processSectionFields = (section, payload) => {
   if (section.fields) {
     const processedFields = section.fields.map((field) => {
-      const resolvedValue = resolvePayloadReference(field.ref, payload);
+      const resolvedValue = jsonpath.value(payload, field.ref);
 
       // Convert boolean values to Yes/No
       let displayValue = resolvedValue;
@@ -57,7 +45,7 @@ const addCaseDetailsIfPresent = (data, caseItem) => {
   if (caseDetails) {
     // Process sections to resolve payload references
     const processedSections = caseDetails.sections.map((section) =>
-      processSectionFields(section, caseItem.payload),
+      processSectionFields(section, caseItem),
     );
 
     data.caseDetails = {
