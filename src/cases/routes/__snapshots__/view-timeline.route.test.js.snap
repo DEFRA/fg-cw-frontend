@@ -88,19 +88,19 @@ Case Details
               </li>
 
               
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="#">
+                                    
+Notes
+                  </a>
+              </li>
+
+              
               <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
                   <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline" aria-current="true">
                                     
                   <strong class="govuk-service-navigation__active-fallback">Timeline</strong>
 
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
-                                    
-Land Details
                   </a>
               </li>
 

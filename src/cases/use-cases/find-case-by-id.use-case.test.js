@@ -59,6 +59,17 @@ describe("findCaseByIdUseCase", () => {
           ],
         },
       ],
+      pages: {
+        cases: {
+          details: {
+            tabs: {
+              tasks: { title: "Custom Tasks" },
+              caseDetails: { title: "Case Info" },
+              customTab: { title: "Custom Tab" },
+            },
+          },
+        },
+      },
     };
 
     const expectedResult = {
@@ -92,6 +103,11 @@ describe("findCaseByIdUseCase", () => {
       submittedAt: "2021-01-15T10:30:00.000Z",
       status: "In Progress",
       assignedUser: "john doe",
+      overrideTabs: [
+        { id: "tasks", title: "Custom Tasks" },
+        { id: "caseDetails", title: "Case Info" },
+      ],
+      customTabs: [{ id: "customTab", title: "Custom Tab" }],
     };
 
     findById.mockResolvedValueOnce(mockCase);
@@ -170,6 +186,16 @@ describe("findCaseByIdUseCase", () => {
           ],
         },
       ],
+      pages: {
+        cases: {
+          details: {
+            tabs: {
+              tasks: { title: "Tasks List" },
+              timeline: { title: "Timeline View" },
+            },
+          },
+        },
+      },
     };
 
     findById.mockResolvedValueOnce(mockCase);
@@ -182,6 +208,11 @@ describe("findCaseByIdUseCase", () => {
     expect(result.stages[0].taskGroups).toHaveLength(2);
     expect(result.stages[1].title).toBe("Stage Two");
     expect(result.stages[1].taskGroups[0].tasks[0].title).toBe("Task Three");
+    expect(result.overrideTabs).toEqual([
+      { id: "tasks", title: "Tasks List" },
+      { id: "timeline", title: "Timeline View" },
+    ]);
+    expect(result.customTabs).toEqual([]);
   });
 
   test("propagates error when case repository throws", async () => {
@@ -229,6 +260,13 @@ describe("findCaseByIdUseCase", () => {
     const mockWorkflow = {
       code: "workflow-empty",
       stages: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
     };
 
     findById.mockResolvedValueOnce(mockCase);
@@ -237,6 +275,8 @@ describe("findCaseByIdUseCase", () => {
     const result = await findCaseByIdUseCase(caseId);
 
     expect(result.stages).toEqual([]);
+    expect(result.overrideTabs).toEqual([]);
+    expect(result.customTabs).toEqual([]);
     expect(findById).toHaveBeenCalledWith(caseId);
     expect(findByCode).toHaveBeenCalledWith("workflow-empty");
   });
@@ -251,14 +291,25 @@ describe("findCaseByIdUseCase", () => {
     const mockWorkflow = {
       code: "specific-workflow-code",
       stages: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {
+              tasks: { title: "Tasks" },
+            },
+          },
+        },
+      },
     };
 
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockResolvedValueOnce(mockWorkflow);
 
-    await findCaseByIdUseCase(caseId);
+    const result = await findCaseByIdUseCase(caseId);
 
     expect(findById).toHaveBeenCalledWith(caseId);
     expect(findByCode).toHaveBeenCalledWith("specific-workflow-code");
+    expect(result.overrideTabs).toEqual([{ id: "tasks", title: "Tasks" }]);
+    expect(result.customTabs).toEqual([]);
   });
 });
