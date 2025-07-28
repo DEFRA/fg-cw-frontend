@@ -1,11 +1,12 @@
 import jsonpath from "jsonpath";
+import { format } from "../../common/format/format.js";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
   return (overrideTabs || []).find((tab) => tab.id === "caseDetails");
 };
 
-const processSectionFields = (section, payload) => {
+const mapListSection = (section, payload) => {
   if (section.fields) {
     const processedFields = section.fields.map((field) => {
       const resolvedValue = jsonpath.value(payload, field.ref);
@@ -44,9 +45,16 @@ const addCaseDetailsIfPresent = (data, caseItem) => {
   const caseDetails = findCaseDetailsTab(caseItem.overrideTabs);
   if (caseDetails) {
     // Process sections to resolve payload references
-    const processedSections = caseDetails.sections.map((section) =>
-      processSectionFields(section, caseItem),
-    );
+    const processedSections = caseDetails.sections.map((section) => {
+      switch (section.type) {
+        case "list":
+          return mapListSection(section, caseItem);
+        case "table":
+          return mapTableSection(section, caseItem);
+        default:
+          return section;
+      }
+    });
 
     data.caseDetails = {
       ...caseDetails,
@@ -88,4 +96,43 @@ export const createCaseDetailViewModel = (caseItem) => {
       case: buildCaseData(caseItem, caseRef, code),
     },
   };
+};
+
+const createTable = (title, head = [], rows = []) => ({
+  type: "table",
+  title: title || "",
+  head,
+  rows,
+});
+
+const createTableRow = (input, fields, rowIndex) => {
+  return fields.map((field) => {
+    const matches = jsonpath.query(input, field.ref);
+    const value = matches[rowIndex];
+    return { text: format(value, field.format) };
+  });
+};
+
+const hasValidFields = (section) => {
+  return (
+    section?.fields &&
+    Array.isArray(section.fields) &&
+    section.fields.length > 0
+  );
+};
+
+export const mapTableSection = (section, kase) => {
+  if (!hasValidFields(section)) {
+    return createTable(section.title);
+  }
+
+  const fields = section.fields;
+  const head = fields.map((f) => ({ text: f.label }));
+  const rowCount = jsonpath.query(kase, fields[0].ref).length;
+
+  const rows = Array.from({ length: rowCount }, (_, i) =>
+    createTableRow(kase, fields, i),
+  );
+
+  return createTable(section.title, head, rows);
 };

@@ -34,6 +34,17 @@
                   })
                 }}
               {% endif %}
+
+              {% if section.type == "table" %}
+                {{
+                  govukTable({
+                      captionClasses: "govuk-table__caption--m",
+                      firstCellIsHeader: true,
+                      head: section.head,
+                      rows: section.rows
+                  })
+                }}
+              {% endif %}
             {% endfor %}
           {% else %}
             {# Default content #}

@@ -1,6 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
-import { createCaseDetailViewModel } from "./case-detail.view-model.js";
+import {
+  createCaseDetailViewModel,
+  mapTableSection,
+} from "./case-detail.view-model.js";
 
 vi.mock("../../common/helpers/date-helpers.js");
 
@@ -223,6 +226,7 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Section 1",
+          type: "list",
           fields: [
             {
               ref: "$.payload.answers.testField",
@@ -259,6 +263,7 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Section 1",
+          type: "list",
           fields: [
             {
               key: {
@@ -281,6 +286,7 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Boolean Section",
+          type: "list",
           fields: [
             {
               ref: "$.payload.answers.isPigFarmer",
@@ -322,6 +328,7 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Boolean Section",
+          type: "list",
           fields: [
             {
               key: {
@@ -344,4 +351,190 @@ describe("createCaseDetailViewModel", () => {
       ],
     });
   });
+
+  it("can map tables", () => {
+    const actual = mapTableSection(mockTableSection, mockCaseWithPages);
+    expect(actual).toEqual(expectedTableOutput);
+  });
 });
+
+const mockTableSection = {
+  title: "Action cases data table",
+  type: "table",
+  fields: [
+    {
+      ref: "$.payload.answers.actionApplications[*].parcelId",
+      type: "string",
+      label: "Parcel Id",
+    },
+    {
+      ref: "$.payload.answers.actionApplications[*].sheetId",
+      type: "string",
+      label: "Sheet Id",
+    },
+    {
+      ref: "$.payload.answers.actionApplications[*].code",
+      type: "string",
+      label: "Code",
+    },
+    {
+      ref: "$.payload.answers.actionApplications[*].appliedFor",
+      type: "string",
+      label: "Applied For",
+      format: "{{quantity}} {{unit}}",
+    },
+  ],
+};
+
+const mockCaseWithPages = {
+  caseRef: "fb7-33b-261",
+  workflowCode: "frps-private-beta",
+  status: "NEW",
+  dateReceived: "2025-07-22T14:22:14.827+0000",
+  payload: {
+    clientRef: "fb7-33b-261",
+    code: "frps-private-beta",
+    createdAt: "2025-07-22T14:22:14.717Z",
+    submittedAt: "2025-07-22T14:22:14.659Z",
+    identifiers: {
+      sbi: "sbi",
+      frn: "frn",
+      crn: "crn",
+      defraId: "defraId",
+    },
+    answers: {
+      hasCheckedLandIsUpToDate: true,
+      agreementName: "Mayank's Test 8",
+      scheme: "SFI",
+      year: 2025,
+      actionApplications: [
+        {
+          code: "CSAM1",
+          sheetId: "SX0679",
+          parcelId: "9238",
+          appliedFor: {
+            unit: "ha",
+            quantity: 20.23,
+          },
+        },
+        {
+          code: "CSAM2",
+          sheetId: "SX0680",
+          parcelId: "9239",
+          appliedFor: {
+            unit: "ha",
+            quantity: 21.24,
+          },
+        },
+      ],
+    },
+  },
+  pages: {
+    cases: {
+      details: {
+        banner: {
+          summary: {
+            sbi: {
+              label: "SBI",
+              ref: "$.payload.identifiers.sbi",
+              type: "string",
+            },
+            clientReference: {
+              label: "Client Reference",
+              ref: "$.payload.clientRef",
+              type: "string",
+            },
+            submittedAt: {
+              label: "Submitted Date",
+              ref: "$.payload.submittedAt",
+              type: "date",
+            },
+          },
+        },
+        tabs: {
+          caseDetails: {
+            title: "Application",
+            sections: [
+              {
+                title: "Answers",
+                type: "list",
+                fields: [
+                  {
+                    ref: "$.payload.answers.scheme",
+                    type: "string",
+                    label: "Scheme",
+                  },
+                  {
+                    ref: "$.payload.answers.year",
+                    type: "number",
+                    label: "Year",
+                  },
+                  {
+                    ref: "$.payload.answers.hasCheckedLandIsUpToDate",
+                    type: "boolean",
+                    label: "Has checked land is up to date?",
+                  },
+                  {
+                    ref: "$.payload.answers.agreementName",
+                    type: "string",
+                    label: "Agreement Name",
+                  },
+                ],
+              },
+              mockTableSection,
+            ],
+          },
+        },
+      },
+    },
+  },
+};
+
+const expectedTableOutput = {
+  type: "table",
+  title: "Action cases data table",
+  head: [
+    {
+      text: "Parcel Id",
+    },
+    {
+      text: "Sheet Id",
+    },
+    {
+      text: "Code",
+    },
+    {
+      text: "Applied For",
+    },
+  ],
+  rows: [
+    [
+      {
+        text: "9238",
+      },
+      {
+        text: "SX0679",
+      },
+      {
+        text: "CSAM1",
+      },
+      {
+        text: "20.23 ha",
+      },
+    ],
+    [
+      {
+        text: "9239",
+      },
+      {
+        text: "SX0680",
+      },
+      {
+        text: "CSAM2",
+      },
+      {
+        text: "21.24 ha",
+      },
+    ],
+  ],
+};
