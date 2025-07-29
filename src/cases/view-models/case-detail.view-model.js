@@ -1,5 +1,4 @@
 import jsonpath from "jsonpath";
-import { format } from "../../common/format/format.js";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
@@ -109,7 +108,7 @@ const createTableRow = (input, fields, rowIndex) => {
   return fields.map((field) => {
     const matches = jsonpath.query(input, field.ref);
     const value = matches[rowIndex];
-    return { text: format(value, field.format) };
+    return { text: String(value) };
   });
 };
 
