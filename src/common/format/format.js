@@ -2,7 +2,9 @@ import { logger } from "../logger.js";
 import { filters } from "./format-filters.js";
 
 export const format = (data, template) => {
-  if (!template) return String(data);
+  if (!template) {
+    return String(data);
+  }
 
   return template.replace(/\{\{([^}]+)\}\}/g, (match, expression) => {
     return processExpression(data, match, expression);
@@ -15,7 +17,9 @@ const processExpression = (data, match, expression) => {
   const filterExpression = parts[1];
 
   const value = getValue(data, key);
-  if (value === undefined) return match;
+  if (value === undefined) {
+    return match;
+  }
 
   if (filterExpression) {
     const result = applyFilter(value, filterExpression);
@@ -34,7 +38,9 @@ const getValue = (data, key) => {
 
 const parseFilter = (filterExpression) => {
   const filterMatch = filterExpression.match(/^(\w+)(?:\(([^)]*)\))?$/);
-  if (!filterMatch) return null;
+  if (!filterMatch) {
+    return null;
+  }
 
   return {
     name: filterMatch[1],
@@ -53,7 +59,9 @@ const executeFilter = (filterFunction, value, args, filterName) => {
 
 const applyFilter = (value, filterExpression) => {
   const filterInfo = parseFilter(filterExpression);
-  if (!filterInfo) return value;
+  if (!filterInfo) {
+    return value;
+  }
 
   const filterFunction = filters[filterInfo.name];
   if (!filterFunction) {
@@ -79,7 +87,9 @@ const parseArgument = (arg) => {
   }
 
   const parsed = parseNumber(trimmed);
-  if (parsed !== null) return parsed;
+  if (parsed !== null) {
+    return parsed;
+  }
 
   return parseBoolean(trimmed);
 };
@@ -97,7 +107,11 @@ const parseNumber = (arg) => {
 };
 
 const parseBoolean = (arg) => {
-  if (arg === "true") return true;
-  if (arg === "false") return false;
+  if (arg === "true") {
+    return true;
+  }
+  if (arg === "false") {
+    return false;
+  }
   return arg;
 };
