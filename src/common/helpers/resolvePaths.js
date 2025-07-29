@@ -3,7 +3,9 @@ import { getFormattedGBDate } from "./date-helpers.js";
 
 // Simple function to resolve JSON path references in banner configuration
 const resolveBannerPaths = (banner, caseData) => {
-  if (!banner) return banner;
+  if (!banner) {
+    return banner;
+  }
 
   const resolved = JSON.parse(JSON.stringify(banner));
 
@@ -48,7 +50,7 @@ const processFieldWithRef = (field, caseData) => {
 
 // Helper to check if field has JSON path reference
 const hasJsonPathRef = (field) => {
-  return field.ref && field.ref.startsWith("$");
+  return field.ref?.startsWith("$");
 };
 
 // Helper to resolve a JSON path value

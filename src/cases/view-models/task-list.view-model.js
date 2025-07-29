@@ -3,7 +3,7 @@ import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 export const createTaskListViewModel = (caseData) => {
   const stage = caseData.stages.find(
-    (stage) => stage.id === caseData.currentStage,
+    (stageInfo) => stageInfo.id === caseData.currentStage,
   );
 
   return {
