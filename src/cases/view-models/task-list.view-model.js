@@ -1,4 +1,5 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 export const createTaskListViewModel = (caseData) => {
   const stage = caseData.stages.find(
@@ -26,6 +27,7 @@ export const createTaskListViewModel = (caseData) => {
         link: `/cases/${caseData._id}`,
         stages: caseData.stages,
         currentStage: caseData.currentStage,
+        banner: resolveBannerPaths(caseData.banner, caseData),
       },
       stage: {
         ...stage,
