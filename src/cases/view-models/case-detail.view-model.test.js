@@ -223,7 +223,8 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Section 1",
-          type: "list",
+          type: "object",
+          component: "list",
           fields: [
             {
               ref: "$.payload.answers.testField",
@@ -260,7 +261,8 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Section 1",
-          type: "list",
+          type: "object",
+          component: "list",
           fields: [
             {
               key: {
@@ -283,7 +285,8 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Boolean Section",
-          type: "list",
+          type: "object",
+          component: "list",
           fields: [
             {
               ref: "$.payload.answers.isPigFarmer",
@@ -325,7 +328,8 @@ describe("createCaseDetailViewModel", () => {
       sections: [
         {
           title: "Boolean Section",
-          type: "list",
+          type: "object",
+          component: "list",
           fields: [
             {
               key: {
@@ -352,17 +356,18 @@ describe("createCaseDetailViewModel", () => {
   it("can map table section", () => {
     const mockTableSection = {
       title: "Action cases data table",
-      type: "table",
+      type: "array",
+      component: "table",
       fields: [
-        {
-          ref: "$.payload.answers.actionApplications[*].parcelId",
-          type: "string",
-          label: "Parcel Id",
-        },
         {
           ref: "$.payload.answers.actionApplications[*].sheetId",
           type: "string",
           label: "Sheet Id",
+        },
+        {
+          ref: "$.payload.answers.actionApplications[*].parcelId",
+          type: "string",
+          label: "Parcel Id",
         },
         {
           ref: "$.payload.answers.actionApplications[*].code",
@@ -373,6 +378,7 @@ describe("createCaseDetailViewModel", () => {
           ref: "$.payload.answers.actionApplications[*].appliedFor",
           type: "string",
           label: "Applied For",
+          format: "{{quantity | fixed(4)}} {{unit}}",
         },
       ],
     };
@@ -381,14 +387,14 @@ describe("createCaseDetailViewModel", () => {
     const result = createCaseDetailViewModel(mockCase);
 
     expect(result.data.case.caseDetails.sections[0]).toEqual({
-      type: "table",
+      component: "table",
       title: "Action cases data table",
       head: [
         {
-          text: "Parcel Id",
+          text: "Sheet Id",
         },
         {
-          text: "Sheet Id",
+          text: "Parcel Id",
         },
         {
           text: "Code",
@@ -400,30 +406,30 @@ describe("createCaseDetailViewModel", () => {
       rows: [
         [
           {
-            text: "9238",
+            text: "SX0679",
           },
           {
-            text: "SX0679",
+            text: "9238",
           },
           {
             text: "CSAM1",
           },
           {
-            text: "[object Object]",
+            text: "20.2300 ha",
           },
         ],
         [
           {
-            text: "9239",
+            text: "SX0680",
           },
           {
-            text: "SX0680",
+            text: "9239",
           },
           {
             text: "CSAM2",
           },
           {
-            text: "[object Object]",
+            text: "21.2400 ha",
           },
         ],
       ],
