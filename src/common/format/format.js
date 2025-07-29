@@ -6,12 +6,8 @@ export const format = (data, template) => {
     return String(data);
   }
 
-  // Prevent ReDoS by limiting template size
-  if (template.length > 10000) {
-    throw new Error("Template too large");
-  }
-
-  return template.replace(/\{\{([^}]+)\}\}/g, (match, expression) => {
+  // Use a safer regex that limits the expression length
+  return template.replace(/\{\{([^}]{1,100})\}\}/g, (match, expression) => {
     return processExpression(data, match, expression);
   });
 };
