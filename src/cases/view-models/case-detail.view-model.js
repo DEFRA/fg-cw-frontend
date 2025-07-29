@@ -1,4 +1,5 @@
 import jsonpath from "jsonpath";
+import { format } from "../../common/format/format.js";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
@@ -45,7 +46,7 @@ const addCaseDetailsIfPresent = (data, caseItem) => {
   if (caseDetails) {
     // Process sections to resolve payload references
     const processedSections = caseDetails.sections.map((section) => {
-      switch (section.type) {
+      switch (section.component) {
         case "list":
           return mapListSection(section, caseItem);
         case "table":
@@ -98,7 +99,7 @@ export const createCaseDetailViewModel = (caseItem) => {
 };
 
 const createTable = (title, head = [], rows = []) => ({
-  type: "table",
+  component: "table",
   title: title || "",
   head,
   rows,
@@ -108,7 +109,7 @@ const createTableRow = (input, fields, rowIndex) => {
   return fields.map((field) => {
     const matches = jsonpath.query(input, field.ref);
     const value = matches[rowIndex];
-    return { text: String(value) };
+    return { text: format(value, field.format) };
   });
 };
 
