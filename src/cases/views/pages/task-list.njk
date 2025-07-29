@@ -4,7 +4,7 @@
 {% from "../components/task-group/macro.njk" import taskGroup %}
 
 {% block content %}
-  {{ caseSummary({ case: data.case }) }}
+  {{ caseSummary(data.case) }}
 
   <div class="govuk-body">
     {{ caseDetailsTabNavigation({active: 'tasks', caseId: data.case.id }) }}
