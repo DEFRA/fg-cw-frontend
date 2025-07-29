@@ -6,13 +6,18 @@ export const format = (data, template) => {
     return String(data);
   }
 
+  // Prevent ReDoS by limiting template size
+  if (template.length > 10000) {
+    throw new Error("Template too large");
+  }
+
   return template.replace(/\{\{([^}]+)\}\}/g, (match, expression) => {
     return processExpression(data, match, expression);
   });
 };
 
 const processExpression = (data, match, expression) => {
-  const parts = expression.split(/\s*\|\s*/);
+  const parts = expression.split(/\s{0,10}\|\s{0,10}/);
   const key = parts[0].trim();
   const filterExpression = parts[1];
 
