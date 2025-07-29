@@ -1,5 +1,6 @@
 import jsonpath from "jsonpath";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
   return (overrideTabs || []).find((tab) => tab.id === "caseDetails");
@@ -64,7 +65,7 @@ const addCaseDetailsIfPresent = (data, caseItem) => {
   return data;
 };
 
-const buildCaseData = (caseItem, caseRef, code) => {
+const buildCaseData = (caseItem, caseRef, code, banner) => {
   const data = {
     _id: caseItem._id,
     clientRef: caseRef,
@@ -77,6 +78,7 @@ const buildCaseData = (caseItem, caseRef, code) => {
     status: caseItem.status,
     assignedUser: caseItem.assignedUser,
     payload: caseItem.payload,
+    banner: resolveBannerPaths(banner, caseItem),
     title: getCaseTitle(caseItem),
   };
 
@@ -86,13 +88,14 @@ const buildCaseData = (caseItem, caseRef, code) => {
 export const createCaseDetailViewModel = (caseItem) => {
   const caseRef = caseItem.caseRef;
   const code = caseItem.workflowCode;
+  const banner = caseItem.banner;
 
   return {
     pageTitle: `Case ${caseRef}`,
     pageHeading: `Case ${caseRef}`,
     breadcrumbs: [],
     data: {
-      case: buildCaseData(caseItem, caseRef, code),
+      case: buildCaseData(caseItem, caseRef, code, banner),
     },
   };
 };
