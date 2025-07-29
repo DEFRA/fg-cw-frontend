@@ -6,7 +6,7 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 
 {% block content %}
-  {{ caseSummary(data) }}
+  {{ caseSummary(data.case) }}
 
   <div class="govuk-body">
     {{ caseDetailsTabNavigation({active: 'timeline', caseId: data.case._id }) }}

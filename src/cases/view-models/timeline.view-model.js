@@ -1,4 +1,5 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 export const createTimelineViewModel = (caseItem) => {
   const caseRef = caseItem.caseRef;
@@ -22,6 +23,7 @@ export const createTimelineViewModel = (caseItem) => {
         assignedUser: caseItem.assignedUser,
         payload: caseItem.payload,
         timeline: caseItem.timeline,
+        banner: resolveBannerPaths(caseItem.banner, caseItem),
       },
     },
   };

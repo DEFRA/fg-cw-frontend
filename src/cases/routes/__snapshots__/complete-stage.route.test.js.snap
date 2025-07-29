@@ -13,41 +13,6 @@ exports[`completeStageRoute > completes a stage 1`] = `
 
     <div>
       <div class="app-case-row">
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">SBI:</strong>
-            SBI001
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Reference:</strong>
-            frps-private-beta
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Scheme:</strong>
-            SFI
-            2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Date received:</strong>
-            11 Jun 2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Status:</strong>
-            NEW
-          </p>
-        </div>
       </div>
     </div>
   </div>
