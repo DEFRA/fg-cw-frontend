@@ -27,7 +27,7 @@
             {% for section in data.case.caseDetails.sections %}
               <h3 class="govuk-heading-m">{{ section.title }}</h3>
 
-              {% if section.type == "list" %}
+              {% if section.component == "list" %}
                 {{
                   list({
                     fields: section.fields
@@ -35,7 +35,7 @@
                 }}
               {% endif %}
 
-              {% if section.type == "table" %}
+              {% if section.component == "table" %}
                 {{
                   govukTable({
                       captionClasses: "govuk-table__caption--m",
