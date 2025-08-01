@@ -1,217 +1,185 @@
 import { describe, expect, test, vi } from "vitest";
 import { findById } from "../repositories/case.repository.js";
-import { findByCode } from "../repositories/workflow.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
 vi.mock("../repositories/case.repository.js");
-vi.mock("../repositories/workflow.repository.js");
 
 describe("findCaseByIdUseCase", () => {
-  test("returns case with titles when both repositories succeed", async () => {
+  test("returns case when repository succeeds", async () => {
     const caseId = "case-123";
     const mockCase = {
-      _id: "case-123",
-      clientRef: "client-ref-123",
-      code: "case-code-123",
-      workflowCode: "workflow-123",
-      currentStage: "stage-1",
+      _id: "121234124",
+      caseRef: "PMF-REF-1",
+      workflowCode: "pigs-might-fly",
+      status: "NEW",
+      dateReceived: "2025-03-27T11:34:52Z",
+      currentStage: "application-received",
+      assignedUser: null,
+      payload: {
+        clientRef: "PMF-REF-1",
+        code: "pigs-might-fly",
+        createdAt: "2025-03-27T10:34:52.000Z",
+        submittedAt: "2025-03-28T11:30:52.000Z",
+        answers: {
+          isPigFarmer: true,
+          totalPigs: 10,
+          whitePigsCount: 2,
+          britishLandracePigsCount: 2,
+          berkshirePigsCount: 3,
+          otherPigsCount: 3,
+        },
+      },
       stages: [
         {
-          id: "stage-1",
+          id: "application-received",
           taskGroups: [
             {
-              id: "taskgroup-1",
+              id: "review-automated-checks",
               tasks: [
                 {
-                  id: "task-1",
+                  id: "review-application-data",
                   status: "pending",
+                  title: "Review application data",
+                  type: "boolean",
                 },
               ],
+              title: "Review Automated Checks",
             },
           ],
-        },
-      ],
-      createdAt: "2021-01-01T00:00:00.000Z",
-      submittedAt: "2021-01-15T10:30:00.000Z",
-      status: "In Progress",
-      assignedUser: "john doe",
-    };
-
-    const mockWorkflow = {
-      code: "workflow-123",
-      stages: [
-        {
-          id: "stage-1",
-          title: "Initial Stage",
-          actions: ["submit", "cancel"],
-          taskGroups: [
+          title: "Application Received",
+          actions: [
             {
-              id: "taskgroup-1",
-              title: "First Task Group",
-              tasks: [
-                {
-                  id: "task-1",
-                  title: "First Task",
-                  type: "text",
-                },
-              ],
+              id: "accept",
+              label: "Accept",
+            },
+            {
+              id: "reject",
+              label: "Reject",
             },
           ],
         },
       ],
-      pages: {
-        cases: {
-          details: {
-            tabs: {
-              tasks: { title: "Custom Tasks" },
-              caseDetails: { title: "Case Info" },
-              customTab: { title: "Custom Tab" },
-            },
+      timeline: [],
+      requiredRoles: {
+        allOf: ["ROLE_RPA_ADMIN"],
+        anyOf: ["ROLE_RPA_ADMIN"],
+      },
+      banner: {
+        title: {
+          ref: "$.payload.businessName",
+          type: "string",
+        },
+        summary: {
+          reference: {
+            label: "Reference",
+            ref: "$.caseRef",
+            type: "string",
+          },
+          status: {
+            label: "Status",
+            ref: "$.status",
+            type: "string",
+          },
+          dateReceived: {
+            label: "Date Received",
+            ref: "$.dateReceived",
+            type: "date",
           },
         },
       },
-    };
-
-    const expectedResult = {
-      _id: "case-123",
-      clientRef: "client-ref-123",
-      code: "case-code-123",
-      workflowCode: "workflow-123",
-      currentStage: "stage-1",
-      stages: [
+      overrideTabs: [
         {
-          id: "stage-1",
-          title: "Initial Stage",
-          actions: ["submit", "cancel"],
-          taskGroups: [
+          id: "caseDetails",
+          title: "Application",
+          sections: [
             {
-              id: "taskgroup-1",
-              title: "First Task Group",
-              tasks: [
+              title: "Applicant Details",
+              type: "object",
+              component: "list",
+              fields: [
                 {
-                  id: "task-1",
-                  title: "First Task",
-                  type: "text",
-                  status: "pending",
+                  ref: "$.payload.answers.isPigFarmer",
+                  type: "boolean",
+                  label: "Are you a pig farmer?",
                 },
               ],
             },
           ],
         },
       ],
-      createdAt: "2021-01-01T00:00:00.000Z",
-      submittedAt: "2021-01-15T10:30:00.000Z",
-      status: "In Progress",
-      assignedUser: "john doe",
-      overrideTabs: [
-        { id: "tasks", title: "Custom Tasks" },
-        { id: "caseDetails", title: "Case Info" },
-      ],
-      customTabs: [{ id: "customTab", title: "Custom Tab" }],
+      customTabs: [],
     };
 
     findById.mockResolvedValueOnce(mockCase);
-    findByCode.mockResolvedValueOnce(mockWorkflow);
 
     const result = await findCaseByIdUseCase(caseId);
 
     expect(findById).toHaveBeenCalledOnce();
     expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).toHaveBeenCalledOnce();
-    expect(findByCode).toHaveBeenCalledWith("workflow-123");
-    expect(result).toEqual(expectedResult);
+    expect(result).toEqual(mockCase);
+    expect(result.overrideTabs).toBeDefined();
+    expect(result.customTabs).toBeDefined();
+    expect(result.banner).toBeDefined();
+    expect(result.requiredRoles).toBeDefined();
   });
 
   test("handles case with multiple stages and task groups", async () => {
     const caseId = "case-456";
     const mockCase = {
       _id: "case-456",
+      caseRef: "PMF-REF-2",
       workflowCode: "workflow-456",
+      status: "IN_PROGRESS",
+      currentStage: "assessment",
       stages: [
         {
-          id: "stage-1",
+          id: "application-received",
           taskGroups: [
             {
               id: "taskgroup-1",
               tasks: [{ id: "task-1", status: "completed" }],
+              title: "Initial Review",
             },
             {
               id: "taskgroup-2",
               tasks: [{ id: "task-2", status: "pending" }],
+              title: "Secondary Review",
             },
           ],
+          title: "Application Received",
+          actions: [],
         },
         {
-          id: "stage-2",
+          id: "assessment",
           taskGroups: [
             {
               id: "taskgroup-3",
               tasks: [{ id: "task-3", status: "not-started" }],
+              title: "Assessment Tasks",
             },
           ],
+          title: "Assessment",
+          actions: [],
         },
       ],
-    };
-
-    const mockWorkflow = {
-      code: "workflow-456",
-      stages: [
-        {
-          id: "stage-1",
-          title: "Stage One",
-          actions: ["next"],
-          taskGroups: [
-            {
-              id: "taskgroup-1",
-              title: "Task Group One",
-              tasks: [{ id: "task-1", title: "Task One", type: "boolean" }],
-            },
-            {
-              id: "taskgroup-2",
-              title: "Task Group Two",
-              tasks: [{ id: "task-2", title: "Task Two", type: "text" }],
-            },
-          ],
-        },
-        {
-          id: "stage-2",
-          title: "Stage Two",
-          actions: ["complete"],
-          taskGroups: [
-            {
-              id: "taskgroup-3",
-              title: "Task Group Three",
-              tasks: [{ id: "task-3", title: "Task Three", type: "file" }],
-            },
-          ],
-        },
-      ],
-      pages: {
-        cases: {
-          details: {
-            tabs: {
-              tasks: { title: "Tasks List" },
-              timeline: { title: "Timeline View" },
-            },
-          },
-        },
+      overrideTabs: [],
+      customTabs: [],
+      requiredRoles: {
+        allOf: ["ROLE_RPA_ADMIN"],
+        anyOf: ["ROLE_RPA_ADMIN"],
       },
     };
 
     findById.mockResolvedValueOnce(mockCase);
-    findByCode.mockResolvedValueOnce(mockWorkflow);
 
     const result = await findCaseByIdUseCase(caseId);
 
+    expect(findById).toHaveBeenCalledWith(caseId);
+    expect(result).toEqual(mockCase);
     expect(result.stages).toHaveLength(2);
-    expect(result.stages[0].title).toBe("Stage One");
     expect(result.stages[0].taskGroups).toHaveLength(2);
-    expect(result.stages[1].title).toBe("Stage Two");
-    expect(result.stages[1].taskGroups[0].tasks[0].title).toBe("Task Three");
-    expect(result.overrideTabs).toEqual([
-      { id: "tasks", title: "Tasks List" },
-      { id: "timeline", title: "Timeline View" },
-    ]);
+    expect(result.stages[1].taskGroups).toHaveLength(1);
+    expect(result.overrideTabs).toEqual([]);
     expect(result.customTabs).toEqual([]);
   });
 
@@ -226,51 +194,26 @@ describe("findCaseByIdUseCase", () => {
     );
     expect(findById).toHaveBeenCalledOnce();
     expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).not.toHaveBeenCalled();
-  });
-
-  test("propagates error when workflow repository throws", async () => {
-    const caseId = "case-123";
-    const mockCase = {
-      _id: "case-123",
-      workflowCode: "workflow-123",
-      stages: [],
-    };
-    const error = new Error("Workflow repository failed");
-
-    findById.mockResolvedValueOnce(mockCase);
-    findByCode.mockRejectedValueOnce(error);
-
-    await expect(findCaseByIdUseCase(caseId)).rejects.toThrow(
-      "Workflow repository failed",
-    );
-    expect(findById).toHaveBeenCalledOnce();
-    expect(findByCode).toHaveBeenCalledOnce();
-    expect(findByCode).toHaveBeenCalledWith("workflow-123");
   });
 
   test("handles case with empty stages", async () => {
     const caseId = "case-empty";
     const mockCase = {
       _id: "case-empty",
+      caseRef: "EMPTY-REF",
       workflowCode: "workflow-empty",
+      status: "NEW",
+      currentStage: "initial",
       stages: [],
-    };
-
-    const mockWorkflow = {
-      code: "workflow-empty",
-      stages: [],
-      pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
-        },
+      overrideTabs: [],
+      customTabs: [],
+      requiredRoles: {
+        allOf: ["ROLE_RPA_ADMIN"],
+        anyOf: ["ROLE_RPA_ADMIN"],
       },
     };
 
     findById.mockResolvedValueOnce(mockCase);
-    findByCode.mockResolvedValueOnce(mockWorkflow);
 
     const result = await findCaseByIdUseCase(caseId);
 
@@ -278,38 +221,37 @@ describe("findCaseByIdUseCase", () => {
     expect(result.overrideTabs).toEqual([]);
     expect(result.customTabs).toEqual([]);
     expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).toHaveBeenCalledWith("workflow-empty");
   });
 
-  test("calls repositories with correct parameters", async () => {
+  test("calls repository with correct parameters", async () => {
     const caseId = "specific-case-id";
     const mockCase = {
       _id: caseId,
+      caseRef: "SPECIFIC-REF",
       workflowCode: "specific-workflow-code",
+      status: "NEW",
+      currentStage: "initial",
       stages: [],
-    };
-    const mockWorkflow = {
-      code: "specific-workflow-code",
-      stages: [],
-      pages: {
-        cases: {
-          details: {
-            tabs: {
-              tasks: { title: "Tasks" },
-            },
-          },
+      overrideTabs: [
+        {
+          id: "tasks",
+          title: "Tasks",
         },
+      ],
+      customTabs: [],
+      requiredRoles: {
+        allOf: ["ROLE_RPA_ADMIN"],
+        anyOf: ["ROLE_RPA_ADMIN"],
       },
     };
 
     findById.mockResolvedValueOnce(mockCase);
-    findByCode.mockResolvedValueOnce(mockWorkflow);
 
     const result = await findCaseByIdUseCase(caseId);
 
     expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).toHaveBeenCalledWith("specific-workflow-code");
-    expect(result.overrideTabs).toEqual([{ id: "tasks", title: "Tasks" }]);
-    expect(result.customTabs).toEqual([]);
+    expect(result).toEqual(mockCase);
+    expect(result.overrideTabs).toHaveLength(1);
+    expect(result.overrideTabs[0].id).toBe("tasks");
   });
 });
