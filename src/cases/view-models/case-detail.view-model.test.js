@@ -1,10 +1,17 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 import { createCaseDetailViewModel } from "./case-detail.view-model.js";
 
 vi.mock("../../common/helpers/date-helpers.js");
+vi.mock("../../common/helpers/resolvePaths.js");
 
 describe("createCaseDetailViewModel", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    resolveBannerPaths.mockReturnValue(undefined);
+  });
+
   it("creates view model with all case properties", () => {
     const mockCase = {
       _id: "case-123",
@@ -14,11 +21,96 @@ describe("createCaseDetailViewModel", () => {
       dateReceived: "2021-01-10T00:00:00.000Z",
       status: "In Progress",
       assignedUser: "john doe",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            banner: {
+              title: {
+                ref: "$.payload.businessName",
+                type: "string",
+              },
+              summary: {
+                reference: {
+                  label: "Reference",
+                  ref: "$.caseRef",
+                  type: "string",
+                },
+                status: {
+                  label: "Status",
+                  ref: "$.status",
+                  type: "string",
+                },
+                dateReceived: {
+                  label: "Date Received",
+                  ref: "$.dateReceived",
+                  type: "date",
+                },
+              },
+            },
+            tabs: {
+              caseDetails: {
+                title: "Application",
+                sections: [
+                  {
+                    title: "Applicant Details",
+                    type: "object",
+                    component: "list",
+                    fields: [
+                      {
+                        ref: "$.payload.answers.isPigFarmer",
+                        type: "boolean",
+                        label: "Are you a pig farmer?",
+                      },
+                    ],
+                  },
+                  {
+                    title: "Pig Stock Details",
+                    type: "object",
+                    component: "list",
+                    fields: [
+                      {
+                        ref: "$.payload.answers.totalPigs",
+                        type: "number",
+                        label: "Total Pigs",
+                      },
+                      {
+                        ref: "$.payload.answers.whitePigsCount",
+                        type: "number",
+                        label: "How many White pigs do you have?",
+                      },
+                      {
+                        ref: "$.payload.answers.britishLandracePigsCount",
+                        type: "number",
+                        label: "How many British Landrace pigs do you have?",
+                      },
+                      {
+                        ref: "$.payload.answers.berkshirePigsCount",
+                        type: "number",
+                        label: "How many Berkshire pigs do you have?",
+                      },
+                      {
+                        ref: "$.payload.answers.otherPigsCount",
+                        type: "number",
+                        label: "How many Other pigs do you have?",
+                      },
+                    ],
+                  },
+                ],
+              },
+            },
+          },
+        },
+      },
       payload: {
         answers: {
           agreementName: "Test Agreement",
           scheme: "Test Scheme",
+          isPigFarmer: true,
+          totalPigs: 10,
+          whitePigsCount: 2,
+          britishLandracePigsCount: 2,
+          berkshirePigsCount: 3,
+          otherPigsCount: 3,
         },
         identifiers: {
           sbi: "123456789",
@@ -48,7 +140,76 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "john doe",
           payload: mockCase.payload,
-          title: "Case",
+          banner: undefined,
+          title: "Application",
+          caseDetails: {
+            id: "caseDetails",
+            title: "Application",
+            sections: [
+              {
+                title: "Applicant Details",
+                type: "object",
+                component: "list",
+                fields: [
+                  {
+                    key: {
+                      text: "Are you a pig farmer?",
+                    },
+                    value: {
+                      text: "Yes",
+                    },
+                  },
+                ],
+              },
+              {
+                title: "Pig Stock Details",
+                type: "object",
+                component: "list",
+                fields: [
+                  {
+                    key: {
+                      text: "Total Pigs",
+                    },
+                    value: {
+                      text: 10,
+                    },
+                  },
+                  {
+                    key: {
+                      text: "How many White pigs do you have?",
+                    },
+                    value: {
+                      text: 2,
+                    },
+                  },
+                  {
+                    key: {
+                      text: "How many British Landrace pigs do you have?",
+                    },
+                    value: {
+                      text: 2,
+                    },
+                  },
+                  {
+                    key: {
+                      text: "How many Berkshire pigs do you have?",
+                    },
+                    value: {
+                      text: 3,
+                    },
+                  },
+                  {
+                    key: {
+                      text: "How many Other pigs do you have?",
+                    },
+                    value: {
+                      text: 3,
+                    },
+                  },
+                ],
+              },
+            ],
+          },
         },
       },
     });
@@ -64,7 +225,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "MIN-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {},
     };
 
@@ -89,6 +256,7 @@ describe("createCaseDetailViewModel", () => {
           status: "In Progress",
           assignedUser: "Unassigned",
           payload: {},
+          banner: undefined,
           title: "Case",
         },
       },
@@ -104,7 +272,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "PAYLOAD-CODE",
       status: "Completed",
       assignedUser: "jane smith",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {
         submittedAt: "2021-03-20T00:00:00.000Z",
         answers: {
@@ -132,7 +306,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "BREAD-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {},
     };
 
@@ -151,7 +331,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "TITLE-CODE",
       status: "In Progress",
       assignedUser: "Unassigned",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {},
     };
 
@@ -171,7 +357,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "METHOD-CODE",
       status: "Active",
       assignedUser: "test user",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {
         submittedAt: "2021-01-01T00:00:00.000Z",
       },
@@ -192,7 +384,13 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "NESTED-CODE",
       status: "Processing",
       assignedUser: "processor",
-      overrideTabs: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
       payload: {
         answers: {
           agreementName: "Complex Agreement",
@@ -215,7 +413,7 @@ describe("createCaseDetailViewModel", () => {
     expect(result.data.case.caseDetails).toBe(undefined);
   });
 
-  it("finds caseDetails tab when overrideTabs contains matching tab", () => {
+  it("finds caseDetails tab when pages contains matching tab", () => {
     const mockCaseDetailsTab = {
       id: "caseDetails",
       title: "Case Details",
@@ -242,11 +440,17 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "TABS-CODE",
       status: "Active",
       assignedUser: "test user",
-      overrideTabs: [
-        { id: "otherTab", title: "Other Tab" },
-        mockCaseDetailsTab,
-        { id: "anotherTab", title: "Another Tab" },
-      ],
+      pages: {
+        cases: {
+          details: {
+            tabs: {
+              otherTab: { id: "otherTab", title: "Other Tab" },
+              caseDetails: mockCaseDetailsTab,
+              anotherTab: { id: "anotherTab", title: "Another Tab" },
+            },
+          },
+        },
+      },
       payload: {
         submittedAt: "2021-01-01T00:00:00.000Z",
       },
@@ -309,7 +513,15 @@ describe("createCaseDetailViewModel", () => {
       workflowCode: "BOOL-CODE",
       status: "Active",
       assignedUser: "test user",
-      overrideTabs: [mockCaseDetailsTab],
+      pages: {
+        cases: {
+          details: {
+            tabs: {
+              caseDetails: mockCaseDetailsTab,
+            },
+          },
+        },
+      },
       payload: {
         answers: {
           isPigFarmer: true,
@@ -443,9 +655,18 @@ const createMockCaseWithSection = (section) => {
     workflowCode: "frps-private-beta",
     status: "NEW",
     dateReceived: "2025-07-22T14:22:14.827+0000",
-    overrideTabs: [
-      { id: "caseDetails", title: "Case Details", sections: [section] },
-    ],
+    pages: {
+      cases: {
+        details: {
+          tabs: {
+            caseDetails: {
+              title: "Application",
+              sections: [section],
+            },
+          },
+        },
+      },
+    },
     payload: {
       clientRef: "fb7-33b-261",
       code: "frps-private-beta",
@@ -482,64 +703,6 @@ const createMockCaseWithSection = (section) => {
             },
           },
         ],
-      },
-    },
-    pages: {
-      cases: {
-        details: {
-          banner: {
-            summary: {
-              sbi: {
-                label: "SBI",
-                ref: "$.payload.identifiers.sbi",
-                type: "string",
-              },
-              clientReference: {
-                label: "Client Reference",
-                ref: "$.payload.clientRef",
-                type: "string",
-              },
-              submittedAt: {
-                label: "Submitted Date",
-                ref: "$.payload.submittedAt",
-                type: "date",
-              },
-            },
-          },
-          tabs: {
-            caseDetails: {
-              title: "Application",
-              sections: [
-                {
-                  title: "Answers",
-                  type: "list",
-                  fields: [
-                    {
-                      ref: "$.payload.answers.scheme",
-                      type: "string",
-                      label: "Scheme",
-                    },
-                    {
-                      ref: "$.payload.answers.year",
-                      type: "number",
-                      label: "Year",
-                    },
-                    {
-                      ref: "$.payload.answers.hasCheckedLandIsUpToDate",
-                      type: "boolean",
-                      label: "Has checked land is up to date?",
-                    },
-                    {
-                      ref: "$.payload.answers.agreementName",
-                      type: "string",
-                      label: "Agreement Name",
-                    },
-                  ],
-                },
-              ],
-            },
-          },
-        },
       },
     },
   };

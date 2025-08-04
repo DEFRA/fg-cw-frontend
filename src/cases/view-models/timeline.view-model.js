@@ -1,9 +1,14 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
+const extractBanner = (caseItem) => {
+  return caseItem.pages?.cases?.details?.banner;
+};
+
 export const createTimelineViewModel = (caseItem) => {
   const caseRef = caseItem.caseRef;
   const code = caseItem.workflowCode;
+  const banner = extractBanner(caseItem);
 
   return {
     pageTitle: `Timeline ${caseRef}`,
@@ -23,7 +28,7 @@ export const createTimelineViewModel = (caseItem) => {
         assignedUser: caseItem.assignedUser,
         payload: caseItem.payload,
         timeline: caseItem.timeline,
-        banner: resolveBannerPaths(caseItem.banner, caseItem),
+        banner: resolveBannerPaths(banner, caseItem),
       },
     },
   };

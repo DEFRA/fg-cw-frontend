@@ -16,11 +16,21 @@ describe("Timeline view model", () => {
       payload: {
         identifiers: {
           sbi: "HHG-1",
-          submittedAt: "2025-03-28T11:30:52.000Z",
         },
         answers: {
           scheme: "JKI-009",
           agreementName: "Donald's Agreement",
+        },
+        submittedAt: "2025-03-28T11:30:52.000Z",
+      },
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+            banner: {
+              title: "Timeline",
+            },
+          },
         },
       },
     };
@@ -39,20 +49,23 @@ describe("Timeline view model", () => {
           sbi: "HHG-1",
           scheme: "JKI-009",
           dateReceived: { $date: "2025-06-16T09:01:14.072Z" },
-          submittedAt: "Invalid Date",
+          submittedAt: "28/03/2025",
           status: "great",
           assignedUser: "Dumbledore",
           payload: {
             identifiers: {
               sbi: "HHG-1",
-              submittedAt: "2025-03-28T11:30:52.000Z",
             },
             answers: {
               scheme: "JKI-009",
               agreementName: "Donald's Agreement",
             },
+            submittedAt: "2025-03-28T11:30:52.000Z",
           },
           timeline: [],
+          banner: {
+            title: "Timeline",
+          },
         },
       },
     };
