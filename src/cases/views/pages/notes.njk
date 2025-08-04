@@ -1,0 +1,55 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block content %}
+  {{ caseSummary(data) }}
+
+  <div class="govuk-body">
+    {{ caseDetailsTabNavigation({active: 'notes', caseId: data.caseId }) }}
+
+    <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
+      {{ pageHeading }}
+    </h2>
+
+    <form action="/cases/{{ data.caseId }}/notes" method="post">
+      <input type="hidden" name="type" value="NOTE_ADDED" />
+
+      {{
+        govukTextarea({
+          name: "text",
+          id: "text",
+          label: {
+            text: "Note",
+            classes: "govuk-label govuk-label--m",
+            isPageHeading: false
+          },
+          hint: {
+            text: "All notes will be saved for auditing purposes"
+          }
+        })
+      }}
+
+      {{
+        govukButton({
+          text: 'Save'
+        })
+      }}
+    </form>
+
+    {% if data.notes.rows.length > 0 %}
+      {{
+        govukTable({
+          caption: data.notes.title,
+          captionClasses: "govuk-table__caption--m",
+          firstCellIsHeader: false,
+          head: data.notes.head,
+          rows: data.notes.rows
+        })
+      }}
+    {% endif %}
+  </div>
+{% endblock %}
