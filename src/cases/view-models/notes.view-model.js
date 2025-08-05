@@ -9,7 +9,7 @@ export const createNotesViewModel = (caseItem) => {
     data: {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),
-      notes: mapNotes(caseItem.notes),
+      notes: mapNotes(caseItem.comments),
     },
   };
 };
