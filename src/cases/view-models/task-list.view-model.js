@@ -2,7 +2,7 @@ import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 const extractBanner = (caseItem) => {
-  return caseItem.pages?.cases?.details?.banner;
+  return caseItem.pages?.details?.banner;
 };
 
 export const createTaskListViewModel = (caseData) => {

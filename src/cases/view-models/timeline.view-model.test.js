@@ -24,12 +24,10 @@ describe("Timeline view model", () => {
         submittedAt: "2025-03-28T11:30:52.000Z",
       },
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-            banner: {
-              title: "Timeline",
-            },
+        details: {
+          tabs: {},
+          banner: {
+            title: "Timeline",
           },
         },
       },

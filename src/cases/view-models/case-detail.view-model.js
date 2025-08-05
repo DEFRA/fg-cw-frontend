@@ -25,7 +25,7 @@ const transformTabs = (oldTabs) => {
 };
 
 const extractBanner = (caseItem) => {
-  return caseItem.pages?.cases?.details?.banner;
+  return caseItem.pages?.details?.banner;
 };
 
 const removePagesStructure = (transformedCase) => {
@@ -36,7 +36,7 @@ const removePagesStructure = (transformedCase) => {
 };
 
 const transformCaseData = (caseItem) => {
-  const tabs = caseItem.pages.cases.details.tabs;
+  const tabs = caseItem.pages.details.tabs;
   const banner = extractBanner(caseItem);
 
   const transformedCase = { ...caseItem };

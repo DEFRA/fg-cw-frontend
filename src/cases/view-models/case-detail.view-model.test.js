@@ -22,81 +22,79 @@ describe("createCaseDetailViewModel", () => {
       status: "In Progress",
       assignedUser: "john doe",
       pages: {
-        cases: {
-          details: {
-            banner: {
-              title: {
-                ref: "$.payload.businessName",
+        details: {
+          banner: {
+            title: {
+              ref: "$.payload.businessName",
+              type: "string",
+            },
+            summary: {
+              reference: {
+                label: "Reference",
+                ref: "$.caseRef",
                 type: "string",
               },
-              summary: {
-                reference: {
-                  label: "Reference",
-                  ref: "$.caseRef",
-                  type: "string",
-                },
-                status: {
-                  label: "Status",
-                  ref: "$.status",
-                  type: "string",
-                },
-                dateReceived: {
-                  label: "Date Received",
-                  ref: "$.dateReceived",
-                  type: "date",
-                },
+              status: {
+                label: "Status",
+                ref: "$.status",
+                type: "string",
+              },
+              dateReceived: {
+                label: "Date Received",
+                ref: "$.dateReceived",
+                type: "date",
               },
             },
-            tabs: {
-              caseDetails: {
-                title: "Application",
-                sections: [
-                  {
-                    title: "Applicant Details",
-                    type: "object",
-                    component: "list",
-                    fields: [
-                      {
-                        ref: "$.payload.answers.isPigFarmer",
-                        type: "boolean",
-                        label: "Are you a pig farmer?",
-                      },
-                    ],
-                  },
-                  {
-                    title: "Pig Stock Details",
-                    type: "object",
-                    component: "list",
-                    fields: [
-                      {
-                        ref: "$.payload.answers.totalPigs",
-                        type: "number",
-                        label: "Total Pigs",
-                      },
-                      {
-                        ref: "$.payload.answers.whitePigsCount",
-                        type: "number",
-                        label: "How many White pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.britishLandracePigsCount",
-                        type: "number",
-                        label: "How many British Landrace pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.berkshirePigsCount",
-                        type: "number",
-                        label: "How many Berkshire pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.otherPigsCount",
-                        type: "number",
-                        label: "How many Other pigs do you have?",
-                      },
-                    ],
-                  },
-                ],
-              },
+          },
+          tabs: {
+            caseDetails: {
+              title: "Application",
+              sections: [
+                {
+                  title: "Applicant Details",
+                  type: "object",
+                  component: "list",
+                  fields: [
+                    {
+                      ref: "$.payload.answers.isPigFarmer",
+                      type: "boolean",
+                      label: "Are you a pig farmer?",
+                    },
+                  ],
+                },
+                {
+                  title: "Pig Stock Details",
+                  type: "object",
+                  component: "list",
+                  fields: [
+                    {
+                      ref: "$.payload.answers.totalPigs",
+                      type: "number",
+                      label: "Total Pigs",
+                    },
+                    {
+                      ref: "$.payload.answers.whitePigsCount",
+                      type: "number",
+                      label: "How many White pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.britishLandracePigsCount",
+                      type: "number",
+                      label: "How many British Landrace pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.berkshirePigsCount",
+                      type: "number",
+                      label: "How many Berkshire pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.otherPigsCount",
+                      type: "number",
+                      label: "How many Other pigs do you have?",
+                    },
+                  ],
+                },
+              ],
             },
           },
         },
@@ -226,10 +224,8 @@ describe("createCaseDetailViewModel", () => {
       status: "In Progress",
       assignedUser: "Unassigned",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {},
@@ -273,10 +269,8 @@ describe("createCaseDetailViewModel", () => {
       status: "Completed",
       assignedUser: "jane smith",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {
@@ -307,10 +301,8 @@ describe("createCaseDetailViewModel", () => {
       status: "In Progress",
       assignedUser: "Unassigned",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {},
@@ -332,10 +324,8 @@ describe("createCaseDetailViewModel", () => {
       status: "In Progress",
       assignedUser: "Unassigned",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {},
@@ -358,10 +348,8 @@ describe("createCaseDetailViewModel", () => {
       status: "Active",
       assignedUser: "test user",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {
@@ -385,10 +373,8 @@ describe("createCaseDetailViewModel", () => {
       status: "Processing",
       assignedUser: "processor",
       pages: {
-        cases: {
-          details: {
-            tabs: {},
-          },
+        details: {
+          tabs: {},
         },
       },
       payload: {
@@ -441,13 +427,11 @@ describe("createCaseDetailViewModel", () => {
       status: "Active",
       assignedUser: "test user",
       pages: {
-        cases: {
-          details: {
-            tabs: {
-              otherTab: { id: "otherTab", title: "Other Tab" },
-              caseDetails: mockCaseDetailsTab,
-              anotherTab: { id: "anotherTab", title: "Another Tab" },
-            },
+        details: {
+          tabs: {
+            otherTab: { id: "otherTab", title: "Other Tab" },
+            caseDetails: mockCaseDetailsTab,
+            anotherTab: { id: "anotherTab", title: "Another Tab" },
           },
         },
       },
@@ -514,11 +498,9 @@ describe("createCaseDetailViewModel", () => {
       status: "Active",
       assignedUser: "test user",
       pages: {
-        cases: {
-          details: {
-            tabs: {
-              caseDetails: mockCaseDetailsTab,
-            },
+        details: {
+          tabs: {
+            caseDetails: mockCaseDetailsTab,
           },
         },
       },
@@ -656,13 +638,11 @@ const createMockCaseWithSection = (section) => {
     status: "NEW",
     dateReceived: "2025-07-22T14:22:14.827+0000",
     pages: {
-      cases: {
-        details: {
-          tabs: {
-            caseDetails: {
-              title: "Application",
-              sections: [section],
-            },
+      details: {
+        tabs: {
+          caseDetails: {
+            title: "Application",
+            sections: [section],
           },
         },
       },

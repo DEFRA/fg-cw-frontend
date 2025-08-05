@@ -145,81 +145,79 @@ describe("viewCaseRoute", () => {
         anyOf: ["ROLE_RPA_ADMIN"],
       },
       pages: {
-        cases: {
-          details: {
-            banner: {
-              title: {
-                ref: "$.payload.businessName",
+        details: {
+          banner: {
+            title: {
+              ref: "$.payload.businessName",
+              type: "string",
+            },
+            summary: {
+              reference: {
+                label: "Reference",
+                ref: "$.caseRef",
                 type: "string",
               },
-              summary: {
-                reference: {
-                  label: "Reference",
-                  ref: "$.caseRef",
-                  type: "string",
-                },
-                status: {
-                  label: "Status",
-                  ref: "$.status",
-                  type: "string",
-                },
-                dateReceived: {
-                  label: "Date Received",
-                  ref: "$.dateReceived",
-                  type: "date",
-                },
+              status: {
+                label: "Status",
+                ref: "$.status",
+                type: "string",
+              },
+              dateReceived: {
+                label: "Date Received",
+                ref: "$.dateReceived",
+                type: "date",
               },
             },
-            tabs: {
-              caseDetails: {
-                title: "Application",
-                sections: [
-                  {
-                    title: "Applicant Details",
-                    type: "object",
-                    component: "list",
-                    fields: [
-                      {
-                        ref: "$.payload.answers.isPigFarmer",
-                        type: "boolean",
-                        label: "Are you a pig farmer?",
-                      },
-                    ],
-                  },
-                  {
-                    title: "Pig Stock Details",
-                    type: "object",
-                    component: "list",
-                    fields: [
-                      {
-                        ref: "$.payload.answers.totalPigs",
-                        type: "number",
-                        label: "Total Pigs",
-                      },
-                      {
-                        ref: "$.payload.answers.whitePigsCount",
-                        type: "number",
-                        label: "How many White pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.britishLandracePigsCount",
-                        type: "number",
-                        label: "How many British Landrace pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.berkshirePigsCount",
-                        type: "number",
-                        label: "How many Berkshire pigs do you have?",
-                      },
-                      {
-                        ref: "$.payload.answers.otherPigsCount",
-                        type: "number",
-                        label: "How many Other pigs do you have?",
-                      },
-                    ],
-                  },
-                ],
-              },
+          },
+          tabs: {
+            caseDetails: {
+              title: "Application",
+              sections: [
+                {
+                  title: "Applicant Details",
+                  type: "object",
+                  component: "list",
+                  fields: [
+                    {
+                      ref: "$.payload.answers.isPigFarmer",
+                      type: "boolean",
+                      label: "Are you a pig farmer?",
+                    },
+                  ],
+                },
+                {
+                  title: "Pig Stock Details",
+                  type: "object",
+                  component: "list",
+                  fields: [
+                    {
+                      ref: "$.payload.answers.totalPigs",
+                      type: "number",
+                      label: "Total Pigs",
+                    },
+                    {
+                      ref: "$.payload.answers.whitePigsCount",
+                      type: "number",
+                      label: "How many White pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.britishLandracePigsCount",
+                      type: "number",
+                      label: "How many British Landrace pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.berkshirePigsCount",
+                      type: "number",
+                      label: "How many Berkshire pigs do you have?",
+                    },
+                    {
+                      ref: "$.payload.answers.otherPigsCount",
+                      type: "number",
+                      label: "How many Other pigs do you have?",
+                    },
+                  ],
+                },
+              ],
             },
           },
         },
