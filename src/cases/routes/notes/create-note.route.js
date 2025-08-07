@@ -1,6 +1,6 @@
 import { addNoteToCaseUseCase } from "../../use-cases/add-note-to-case.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
-import { createViewNotesViewModel } from "../../view-models/notes/view-notes.view-model.js";
+import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-model.js";
 
 export const createNoteRoute = {
   method: "POST",
@@ -9,16 +9,40 @@ export const createNoteRoute = {
     const { caseId } = request.params;
     const { text } = request.payload;
 
-    if (!text || text.trim() === "") {
-      const caseData = await findCaseByIdUseCase(caseId);
-      const viewModel = createViewNotesViewModel(caseData, {
-        text: "You must enter a note",
-      });
-      return h.view(`pages/notes/new-note`, viewModel);
+    const validationErrors = validateNote(text);
+    if (validationErrors) {
+      return renderFormWithError(h, caseId, validationErrors, request.payload);
     }
 
-    await addNoteToCaseUseCase({ caseId, ...request.payload });
+    try {
+      await addNoteToCaseUseCase({ caseId, ...request.payload });
+      return h.redirect(`/cases/${caseId}/notes`);
+    } catch (error) {
+      request.log("error", {
+        message: "Failed to save note",
+        caseId,
+        error: error.message,
+        stack: error.stack,
+      });
 
-    return h.redirect(`/cases/${caseId}/notes`);
+      const serverErrors = {
+        save: "There was a problem saving the note. Please try again.",
+      };
+
+      return renderFormWithError(h, caseId, serverErrors, request.payload);
+    }
   },
+};
+
+const validateNote = (text) => {
+  if (!text || text.trim() === "") {
+    return { text: "You must enter a note" };
+  }
+  return null;
+};
+
+const renderFormWithError = async (h, caseId, errors, formData) => {
+  const caseData = await findCaseByIdUseCase(caseId);
+  const viewModel = createNewNoteViewModel(caseData, errors, formData);
+  return h.view(`pages/notes/new-note`, viewModel);
 };

@@ -8,16 +8,11 @@
 {% block content %}
   {{ caseSummary(data) }}
 
-  {% if errors %}
+  {% if errorList.length > 0 %}
     {{
       govukErrorSummary({
         titleText: "There is a problem",
-        errorList: [
-          {
-            text: "You must enter a note",
-            href: "#text"
-          }
-        ]
+        errorList: errorList
       })
     }}
   {% endif %}
@@ -32,6 +27,7 @@
         govukTextarea({
           name: "text",
           id: "text",
+          value: data.formData.text,
           label: {
             text: "Add a note",
             classes: "govuk-label govuk-label--l govuk-!-margin-top-6",
@@ -40,7 +36,7 @@
           hint: {
             text: "All notes will be saved for auditing purposes"
           },
-          errorMessage: errors.text
+          errorMessage: errors.text and { text: errors.text }
         })
       }}
 

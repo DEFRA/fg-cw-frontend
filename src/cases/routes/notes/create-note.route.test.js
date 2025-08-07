@@ -120,6 +120,36 @@ describe("createNoteRoute", () => {
 
     expect(view).toMatchSnapshot();
   });
+
+  it("shows save error when save fails", async () => {
+    const mockCaseData = createMockCaseData();
+    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    addNoteToCaseUseCase.mockRejectedValue(new Error("API Error"));
+
+    const { statusCode, result } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/notes",
+      payload: {
+        type: "NOTE_ADDED",
+        text: "This will fail to save",
+      },
+    });
+
+    expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
+      caseId: "68495db5afe2d27b09b2ee47",
+      type: "NOTE_ADDED",
+      text: "This will fail to save",
+    });
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      "68495db5afe2d27b09b2ee47",
+    );
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    const view = $("#main-content").html();
+
+    expect(view).toMatchSnapshot();
+  });
 });
 
 const createMockCaseData = (overrides = {}) => ({

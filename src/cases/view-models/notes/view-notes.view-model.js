@@ -4,7 +4,7 @@ import {
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
-export const createViewNotesViewModel = (caseItem, errors) => {
+export const createViewNotesViewModel = (caseItem) => {
   return {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
@@ -14,7 +14,6 @@ export const createViewNotesViewModel = (caseItem, errors) => {
       banner: resolveBannerPaths(caseItem.banner, caseItem),
       notes: mapNotes(caseItem.comments),
     },
-    errors,
   };
 };
 
