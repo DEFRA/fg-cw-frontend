@@ -1,7 +1,10 @@
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
-import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
+import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
+import {
+  DATE_FORMAT_SHORT_MONTH,
+  formatDate,
+} from "../../../common/nunjucks/filters/format-date.js";
 
-export const createNotesViewModel = (caseItem) => {
+export const createViewNotesViewModel = (caseItem, errors) => {
   return {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
@@ -11,6 +14,7 @@ export const createNotesViewModel = (caseItem) => {
       banner: resolveBannerPaths(caseItem.banner, caseItem),
       notes: mapNotes(caseItem.comments),
     },
+    errors,
   };
 };
 
@@ -24,10 +28,12 @@ const mapNotes = (notes) => {
     head: [
       {
         text: "Date",
-        classes: "govuk-!-width-one-quarter",
         attributes: {
           "aria-sort": "ascending",
         },
+      },
+      {
+        text: "Type",
       },
       {
         text: "Note",
@@ -39,24 +45,12 @@ const mapNotes = (notes) => {
       },
     ],
     rows: notes.map(({ createdAt, createdBy, title, text }) => [
-      { text: getFormattedGBDate(createdAt) },
+      { text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH) },
+      { text: title },
       {
-        html: createDetailsHtml(title, text),
+        text,
       },
       { text: createdBy },
     ]),
   };
 };
-
-const createDetailsHtml = (summaryText, text) => `
-<details class="govuk-details">
-  <summary class="govuk-details__summary">
-    <span class="govuk-details__summary-text">
-      ${summaryText}
-    </span>
-  </summary>
-  <div class="govuk-details__text">
-    ${text}
-  </div>
-</details>
-`;
