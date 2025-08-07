@@ -41,7 +41,6 @@ const mapNotes = (notes) => {
       },
       {
         text: "Added by",
-        classes: "govuk-!-width-one-quarter",
       },
     ],
     rows: notes.map(({ createdAt, createdBy, title, text }) => [
