@@ -55,6 +55,9 @@ describe("createViewNotesViewModel", () => {
       },
       {
         text: "Type",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
       {
         text: "Note",
@@ -62,6 +65,9 @@ describe("createViewNotesViewModel", () => {
       },
       {
         text: "Added by",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
     ]);
 

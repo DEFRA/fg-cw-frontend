@@ -1,6 +1,7 @@
 import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
+  DATE_FORMAT_SORTABLE_DATE,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
@@ -33,6 +34,9 @@ const mapNotes = (notes) => {
       },
       {
         text: "Type",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
       {
         text: "Note",
@@ -40,10 +44,18 @@ const mapNotes = (notes) => {
       },
       {
         text: "Added by",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
     ],
-    rows: notes.map(({ createdAt, createdBy, title, text }) => [
-      { text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH) },
+    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => [
+      {
+        html: `<a id="note-ref-${ref}"></a>${formatDate(createdAt, DATE_FORMAT_SHORT_MONTH)}`,
+        attributes: {
+          "data-sort-value": formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
+        },
+      },
       { text: title },
       {
         text,

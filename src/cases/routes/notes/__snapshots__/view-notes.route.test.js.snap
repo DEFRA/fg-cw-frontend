@@ -371,18 +371,18 @@ Timeline
       Add note
     </a>
 
-      <table class="govuk-table">
+      <table class="govuk-table" data-module="moj-sortable-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header" aria-sort="ascending">Date</th>
-      <th scope="col" class="govuk-table__header">Type</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Type</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
-      <th scope="col" class="govuk-table__header">Added by</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell">01 Jan 2025</td>
+      <td class="govuk-table__cell" data-sort-value="2025-01-01"><a id="note-ref-undefined"></a>01 Jan 2025</td>
       <td class="govuk-table__cell">NOTE_ADDED</td>
       <td class="govuk-table__cell">This is a test note</td>
       <td class="govuk-table__cell">John Smith</td>
