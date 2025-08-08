@@ -15,6 +15,10 @@ const govukFrontendPath = path.dirname(
   require.resolve("govuk-frontend/package.json"),
 );
 
+const mojFrontendPath = path.dirname(
+  require.resolve("@ministryofjustice/frontend/package.json"),
+);
+
 const ruleTypeAssetResource = "asset/resource";
 
 export default async () => {
@@ -46,6 +50,9 @@ export default async () => {
         import: [
           path.join(govukFrontendPath, "dist/govuk/govuk-frontend.min.js"),
         ],
+      },
+      moj: {
+        import: [path.join(mojFrontendPath, "moj/moj-frontend.min.js")],
       },
       checkboxes: {
         import: ["./javascripts/modules/checkbox-select-all.js"],
@@ -124,6 +131,8 @@ export default async () => {
               options: {
                 sassOptions: {
                   loadPaths: [
+                    ".",
+                    "node_modules",
                     path.join(dirname, "src/client/stylesheets"),
                     ...components,
                   ],
@@ -182,6 +191,10 @@ export default async () => {
         patterns: [
           {
             from: path.join(govukFrontendPath, "dist/govuk/assets"),
+            to: "assets",
+          },
+          {
+            from: path.join(mojFrontendPath, "moj/assets"),
             to: "assets",
           },
           {
