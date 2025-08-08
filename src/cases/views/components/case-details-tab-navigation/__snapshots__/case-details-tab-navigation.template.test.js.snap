@@ -37,7 +37,7 @@ Case Details
 
               
               <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
+                  <a class="govuk-service-navigation__link" href="/cases/123/notes">
                                     
 Notes
                   </a>
