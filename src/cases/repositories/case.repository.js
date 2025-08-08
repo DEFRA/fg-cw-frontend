@@ -34,3 +34,9 @@ export const assignUserToCase = async ({ caseId, assignedUserId }) => {
     payload: { assignedUserId },
   });
 };
+
+export const addNoteToCase = async ({ caseId, type, text }) => {
+  await wreck.post(`/cases/${caseId}/notes`, {
+    payload: { type, text },
+  });
+};

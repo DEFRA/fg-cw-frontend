@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
 import {
+  addNoteToCase,
   assignUserToCase,
   completeStage,
   findAll,
@@ -258,6 +259,41 @@ describe("Case Repository", () => {
           payload: { assignedUserId: "user-error" },
         },
       );
+    });
+  });
+
+  describe("addNoteToCase", () => {
+    it("calls API with correct endpoint and payload", async () => {
+      const mockData = {
+        caseId: "case-123",
+        type: "NOTE_ADDED",
+        text: "This is a test note",
+      };
+
+      wreck.post.mockResolvedValueOnce({});
+
+      await addNoteToCase(mockData);
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/notes", {
+        payload: { type: "NOTE_ADDED", text: "This is a test note" },
+      });
+    });
+
+    it("propagates API errors", async () => {
+      const mockData = {
+        caseId: "case-error",
+        type: "NOTE_ADDED",
+        text: "This will fail",
+      };
+
+      const apiError = new Error("API Error");
+      wreck.post.mockRejectedValueOnce(apiError);
+
+      await expect(addNoteToCase(mockData)).rejects.toThrow("API Error");
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-error/notes", {
+        payload: { type: "NOTE_ADDED", text: "This will fail" },
+      });
     });
   });
 });
