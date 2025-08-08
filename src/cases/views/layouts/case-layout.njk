@@ -110,10 +110,13 @@
   </script>
   <script type="module" src="{{ getAssetPath('application.js') }}"></script>
   <script type="module" src="{{ getAssetPath('govuk.js') }}"></script>
+  <script type="module" src="{{ getAssetPath('moj.js') }}"></script>
   <script type="module">
     import { initSelectAllCheckboxes } from "{{ getAssetPath('checkboxes.js') }}";
     import { initAll } from "{{ getAssetPath('govuk.js') }}";
+    import { initAll as initMOJ } from "{{ getAssetPath('moj.js') }}";
     initSelectAllCheckboxes();
     initAll();
+    initMOJ();
   </script>
 {% endblock %}
