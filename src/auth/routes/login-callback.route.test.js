@@ -1,6 +1,6 @@
 import Bell from "@hapi/bell";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { createServer } from "../../server.js";
+import { createServer } from "../../server/index.js";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
 import { loginCallbackRoute } from "./login-callback.route.js";
 
@@ -35,7 +35,6 @@ describe("loginCallbackRoute", () => {
     Bell.simulate(async () => ({}));
     server = await createServer();
     server.route(loginCallbackRoute);
-    await server.initialize();
   });
 
   afterAll(async () => {
@@ -44,46 +43,122 @@ describe("loginCallbackRoute", () => {
   });
 
   it("creates or updates the user's account when authenticated and has IDP roles", async () => {
+    await server.initialize();
+
     await server.inject({
       method: "GET",
       url: "/login/callback",
       auth: {
-        strategy: "msEntraId",
+        strategy: "entra",
         credentials: {
           query: {
             next: "/cases",
           },
           profile: {
-            email: "bob.bill.defra.gov.uk",
-          },
-        },
-        artifacts: {
-          id_token: createToken({
-            roles: ["FCP.Casework.Read"],
+            oid: "12345678-1234-1234-1234-123456789012",
             name: "Bob Bill",
-          }),
+            email: "bob.bill.defra.gov.uk",
+            roles: ["FCP.Casework.Read"],
+          },
         },
       },
     });
 
     expect(createOrUpdateUserUseCase).toHaveBeenCalledWith({
-      idToken: {
-        sub: "1234567890",
-        iat: 1516239022,
-        oid: "12345678-1234-1234-1234-123456789012",
-        name: "Bob Bill",
-        roles: ["FCP.Casework.Read"],
-      },
+      oid: "12345678-1234-1234-1234-123456789012",
+      name: "Bob Bill",
       email: "bob.bill.defra.gov.uk",
+      roles: ["FCP.Casework.Read"],
+    });
+  });
+
+  it("stores credentials and user in session", async () => {
+    server.route({
+      method: "GET",
+      path: "/credentials",
+      handler(request) {
+        return request.yar.get("credentials");
+      },
+    });
+
+    await server.initialize();
+
+    const user = {
+      id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+      idpRoles: ["FCP.Casework.Read"],
+      appRoles: ["ROLE_SING_AND_DANCE"],
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+
+    const response = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "entra",
+        credentials: {
+          query: {
+            next: "/cases",
+          },
+          profile: {
+            oid: "12345678-1234-1234-1234-123456789012",
+            name: "Bob Bill",
+            email: "bob.bill.defra.gov.uk",
+            roles: ["FCP.Casework.Read"],
+          },
+          token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
+          }),
+          refreshToken: createToken({
+            exp: new Date("2060-01-01T00:00:00Z").getTime() / 1000,
+          }),
+          expiresIn: 3600,
+        },
+      },
+    });
+
+    const credentialsResponse = await server.inject({
+      method: "GET",
+      url: "/credentials",
+      headers: {
+        cookie: response.headers["set-cookie"][0].split(";")[0],
+      },
+    });
+
+    expect(credentialsResponse.result).toEqual({
+      token: expect.any(String),
+      refreshToken: expect.any(String),
+      expiresAt: expect.any(Number),
+      user: {
+        id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+        name: "Bob Bill",
+        email: "bob.bill.defra.gov.uk",
+        idpRoles: ["FCP.Casework.Read"],
+        appRoles: ["ROLE_SING_AND_DANCE"],
+      },
     });
   });
 
   it("redirects to original destination when login successful", async () => {
+    await server.initialize();
+
+    const user = {
+      id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+      idpRoles: ["FCP.Casework.Read"],
+      appRoles: ["ROLE_SING_AND_DANCE"],
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/login/callback",
       auth: {
-        strategy: "msEntraId",
+        strategy: "entra",
         credentials: {
           query: {
             next: "/cases",
@@ -93,9 +168,8 @@ describe("loginCallbackRoute", () => {
           },
         },
         artifacts: {
-          id_token: createToken({
-            roles: ["FCP.Casework.Read"],
-            name: "Bob Bill",
+          access_token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
           }),
         },
       },
@@ -106,11 +180,23 @@ describe("loginCallbackRoute", () => {
   });
 
   it("redirects to / when no next query param is provided", async () => {
+    await server.initialize();
+
+    const user = {
+      id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+      idpRoles: ["FCP.Casework.Read"],
+      appRoles: ["SING_AND_DANCE"],
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/login/callback",
       auth: {
-        strategy: "msEntraId",
+        strategy: "entra",
         credentials: {
           query: {},
           profile: {
@@ -118,6 +204,9 @@ describe("loginCallbackRoute", () => {
           },
         },
         artifacts: {
+          access_token: createToken({
+            exp: new Date("2050-01-01T00:00:00Z").getTime() / 1000,
+          }),
           id_token: createToken({
             roles: ["FCP.Casework.Read"],
           }),
@@ -126,47 +215,5 @@ describe("loginCallbackRoute", () => {
     });
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/");
-  });
-
-  it("throws Boom.unauthorized when ID token cannot be decoded", async () => {
-    const { result, statusCode } = await server.inject({
-      method: "GET",
-      url: "/login/callback",
-      auth: {
-        strategy: "msEntraId",
-        credentials: {
-          profile: {
-            email: "bob.bill.defra.gov.uk",
-          },
-        },
-        artifacts: {
-          id_token: "invalid.token.string",
-          authenticated: true,
-          authorised: true,
-        },
-      },
-    });
-
-    expect(statusCode).toEqual(400);
-    expect(result).toContain(
-      "User&#39;s ID token cannot be decoded: Invalid token specified: invalid base64 for part #2 (base64 string is not of the correct length)",
-    );
-  });
-
-  it("throws Boom.badRequest when ID token is missing", async () => {
-    const { result, statusCode } = await server.inject({
-      method: "GET",
-      url: "/login/callback",
-      auth: {
-        strategy: "msEntraId",
-        credentials: {},
-        artifacts: {
-          id_token: null,
-        },
-      },
-    });
-
-    expect(statusCode).toEqual(400);
-    expect(result).toContain("User has no ID token. Cannot verify roles.");
   });
 });

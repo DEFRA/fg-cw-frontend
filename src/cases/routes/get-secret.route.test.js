@@ -1,11 +1,11 @@
 import Bell from "@hapi/bell";
 import { load } from "cheerio";
-import { jwtDecode } from "jwt-decode";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { createServer } from "../../server.js";
+import { createServer } from "../../server/index.js";
+import { findSecretUseCase } from "../use-cases/find-secret.use-case.js";
 import { getSecretRoute } from "./get-secret.route.js";
 
-vi.mock("jwt-decode");
+vi.mock("../use-cases/find-secret.use-case.js");
 
 describe("getSecret", () => {
   let server;
@@ -24,10 +24,6 @@ describe("getSecret", () => {
   });
 
   it("returns 200", async () => {
-    jwtDecode.mockReturnValueOnce({
-      roles: ["FCP.Casework.Read"],
-    });
-
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/secret",
@@ -36,22 +32,16 @@ describe("getSecret", () => {
         isAuthorized: false,
         isInjected: true,
         credentials: {
-          profile: {
-            id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Joe Bloggs",
+          token: "access-token",
+          refreshToken: "refresh-token",
+          expiresAt: new Date("2050-01-01T00:00:00Z").getTime(),
+          user: {
+            id: "43e8508b6cbd4ac1b29ee73792ab0f4b",
+            name: "Joe Bloggs",
             email: "joe@bloggs.com",
+            idpRoles: ["FCP.Casework.Read"],
+            appRoles: ["ROLE_SING_AND_DANCE"],
           },
-          authenticated: true,
-          authorised: true,
-        },
-        artifacts: {
-          profile: {
-            id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-            displayName: "Joe Bloggs",
-            email: "joe@bloggs.com",
-          },
-          authenticated: true,
-          authorised: true,
         },
         strategy: "session",
         mode: "required",
@@ -63,6 +53,8 @@ describe("getSecret", () => {
 
     const $ = load(result);
     const view = $("#main-content").html();
+
+    expect(findSecretUseCase).toHaveBeenCalledWith("access-token");
 
     expect(view).toMatchSnapshot();
   });
