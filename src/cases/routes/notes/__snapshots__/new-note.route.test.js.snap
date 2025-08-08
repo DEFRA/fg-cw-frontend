@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`completeStageRoute > completes a stage 1`] = `
+exports[`newNoteRoute > renders page and returns 200 ok 1`] = `
 "
   
 <div class="govuk-!-margin-bottom-6 app-case-banner">
@@ -17,6 +17,7 @@ exports[`completeStageRoute > completes a stage 1`] = `
     </div>
   </div>
 </div>
+
 
 
   <div class="govuk-body">
@@ -37,11 +38,10 @@ exports[`completeStageRoute > completes a stage 1`] = `
 
             
               
-              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47" aria-current="true">
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
                                     
-                  <strong class="govuk-service-navigation__active-fallback">Tasks</strong>
-
+Tasks
                   </a>
               </li>
 
@@ -54,10 +54,11 @@ Case Details
               </li>
 
               
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes">
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes" aria-current="true">
                                     
-Notes
+                  <strong class="govuk-service-navigation__active-fallback">Notes</strong>
+
                   </a>
               </li>
 
@@ -79,32 +80,24 @@ Timeline
 
 
 
-    
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading">
-      Application Receipt
-    </h2>
-      <h3 class="govuk-heading-m">1. Application Receipt Tasks</h3>
-      
-  <ul class="govuk-task-list govuk-!-margin-bottom-4" data-testid="taskList-list">
-      <li class="govuk-task-list__item govuk-task-list__item--with-link" data-testid="taskList-li">
-        <div class="govuk-task-list__name-and-hint">
-          <a href="/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review" class="govuk-link govuk-task-list__link">Simple Review</a>
-        </div>
-        <div class="govuk-task-list__status">
-          <strong class="govuk-tag govuk-tag govuk-tag--blue">
-  Incomplete
-</strong>
+    <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
+      <input type="hidden" name="type" value="NOTE_ADDED">
 
-        </div>
-      </li>
-  </ul>
-
-
+      <div class="govuk-form-group">
+  <label class="govuk-label govuk-label govuk-label--l govuk-!-margin-top-6" for="text">
+    Add a note
+  </label>
+  <div id="text-hint" class="govuk-hint">
+    All notes will be saved for auditing purposes
   </div>
+  <textarea class="govuk-textarea" id="text" name="text" rows="5" aria-describedby="text-hint"></textarea>
 </div>
 
+
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+  Save
+</button>
+    </form>
   </div>
         "
 `;
