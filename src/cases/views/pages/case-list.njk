@@ -23,7 +23,6 @@
       })
     }}
   {% endif %}
-  {{ heading({ text: pageHeading }) }}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -36,7 +35,6 @@
                 id: "all-cases",
                 panel: {
                   html: caseTabs({
-                    tabLabel: "All cases",
                     tabTestId: "all-cases-tab",
                     tableHeaders: [
                       { text: "Select" },

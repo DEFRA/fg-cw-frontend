@@ -1,23 +1,5 @@
 @use "govuk-frontend" as *;
 
-.defra-crest {
-  background: url("/public/assets/images/defra-crest.png") no-repeat 8px 0;
-  background-size: auto 32px;
-  border-left: 2px solid #00a33b;
-  padding-top: 35px;
-  padding-left: 8px;
-}
-
-.defra-logo-name {
-  font-family: HelveticaNeue, "Helvetica Neue", Arial, Helvetica, sans-serif;
-  font-weight: 400;
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-size: 1.1875rem;
-  line-height: 1.3158;
-}
-
 .defra-banner {
   border-bottom: 8px solid #00a33b;
   width: 100vw;
@@ -37,3 +19,47 @@
     align-items: center;
   }
 }
+
+.defra-internal-service-name {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 2em;
+}
+
+
+.defra-internal-service-name__link {
+  text-decoration: none;
+  font-size: 24px;
+  font-weight: 400;
+}
+
+.defra-internal-service-name__link:link,
+.defra-internal-service-name__link:visited {
+  color: #0b0c0c;
+}
+
+.defra-logo {
+  border-left: 2px solid #00a33b;
+  padding-left: 8px;
+}
+
+.defra-logo__link {
+  display: table;
+}
+
+.defra-logo__link::before {
+  content: "";
+  display: table-cell;
+  background: url("/public/assets/images/defra_logo.png") no-repeat;
+  background-size: 100% 100%;
+  width: 138px;
+  height: 75px;
+}
+
+.defra-logo__link:link,
+.defra-logo__link:visited {
+  text-decoration: none;
+  font-size: 20px;
+  color: #0b0c0c;
+}
+

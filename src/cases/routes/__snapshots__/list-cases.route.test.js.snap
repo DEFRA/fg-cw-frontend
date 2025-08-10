@@ -19,15 +19,6 @@ exports[`listCasesRoute > extracts assignedCaseId from query parameters and rend
 
 exports[`listCasesRoute > returns a list of cases 1`] = `
 "
-  <div class="govuk-grid-row app-heading" data-testid="app-heading">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
-      Cases
-    </h1>
-
-  </div>
-</div>
-
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -55,7 +46,7 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
     <h2 class="govuk-heading-l" data-testid="all-cases-tab">
-      All cases
+      
     </h2>
     
     <form method="GET" action="/cases/assign-user">
