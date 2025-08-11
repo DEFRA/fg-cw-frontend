@@ -1,25 +1,23 @@
-<h1 class="govuk-visually-hidden">
-  Department for Environment, Food &amp; Rural Affairs
-</h1>
-<div class="govuk-width-container">
-  <main
-    class="govuk-main-wrapper govuk-!-padding-top-4 govuk-!-padding-bottom-4 defra-banner"
-  >
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-one-third govuk-!-padding-left-0">
-        <div class="defra-crest" data-testid="defra-heading-logo">
-          <span class="defra-logo-name">
-            Department<br />for Environment,<br />Food &amp; Rural Affairs
-          </span>
-        </div>
-      </div>
-      <div class="govuk-grid-column-two-thirds">
-        <div class="govuk-grid-column-two-thirds govuk-!-static-padding-top-5">
-          <h1 class="govuk-heading-m" data-testid="defra-heading-service-name">
-            {{ params.serviceName }}
-          </h1>
-        </div>
-      </div>
-    </div>
-  </main>
-</div>
+<header class="defra-header">
+  <div class="defra-header__inner">
+    <a
+      href="/"
+      class="defra-header__logo-link"
+      data-testid="defra-heading-logo"
+    >
+      <img
+        class="logo-light"
+        src="/public/assets/images/defra-logo.svg"
+        alt="Department for Environment Food & Rural Affairs"
+      />
+    </a>
+    <a
+      href="/"
+      title="Go to the homepage"
+      class="defra-header__service-link"
+      data-testid="defra-heading-service-name"
+    >
+      {{ params.serviceName }}
+    </a>
+  </div>
+</header>

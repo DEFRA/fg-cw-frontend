@@ -19,15 +19,6 @@ exports[`listCasesRoute > extracts assignedCaseId from query parameters and rend
 
 exports[`listCasesRoute > returns a list of cases 1`] = `
 "
-  <div class="govuk-grid-row app-heading" data-testid="app-heading">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
-      Cases
-    </h1>
-
-  </div>
-</div>
-
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
@@ -54,10 +45,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
-    <h2 class="govuk-heading-l" data-testid="all-cases-tab">
-      All cases
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
@@ -109,10 +96,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="my-cases">
-    <h2 class="govuk-heading-l" data-testid="my-cases-tab">
-      My cases
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
@@ -142,10 +125,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="team-cases">
-    <h2 class="govuk-heading-l" data-testid="team-cases-tab">
-      Team cases
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
