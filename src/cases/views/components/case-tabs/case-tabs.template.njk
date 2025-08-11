@@ -48,10 +48,6 @@
   {% set tableRows = (tableRows.push(row), tableRows) %}
 {% endfor %}
 
-<h2 class="govuk-heading-l" data-testid="{{ params.tabTestId }}">
-  {{ params.tabLabel }}
-</h2>
-
 <form method="GET" action="/cases/assign-user">
   {{
     govukButton({

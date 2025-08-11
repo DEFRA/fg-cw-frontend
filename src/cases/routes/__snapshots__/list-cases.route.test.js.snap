@@ -45,10 +45,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
-    <h2 class="govuk-heading-l" data-testid="all-cases-tab">
-      
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
@@ -100,10 +96,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="my-cases">
-    <h2 class="govuk-heading-l" data-testid="my-cases-tab">
-      My cases
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
@@ -133,10 +125,6 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </form>
   </div>
   <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="team-cases">
-    <h2 class="govuk-heading-l" data-testid="team-cases-tab">
-      Team cases
-    </h2>
-    
     <form method="GET" action="/cases/assign-user">
       <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
