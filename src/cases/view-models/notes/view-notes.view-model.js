@@ -5,7 +5,7 @@ import {
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
-export const createViewNotesViewModel = (caseItem) => {
+export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
   return {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
@@ -13,12 +13,12 @@ export const createViewNotesViewModel = (caseItem) => {
     data: {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),
-      notes: mapNotes(caseItem.comments),
+      notes: mapNotes(caseItem.comments, selectedNoteRef),
     },
   };
 };
 
-const mapNotes = (notes) => {
+const mapNotes = (notes, selectedNoteRef) => {
   if (!notes) {
     return undefined;
   }
@@ -29,7 +29,7 @@ const mapNotes = (notes) => {
       {
         text: "Date",
         attributes: {
-          "aria-sort": "ascending",
+          "aria-sort": "descending",
         },
       },
       {
@@ -49,18 +49,19 @@ const mapNotes = (notes) => {
         },
       },
     ],
-    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => [
-      {
-        html: `<a id="note-ref-${ref}"></a>${formatDate(createdAt, DATE_FORMAT_SHORT_MONTH)}`,
-        attributes: {
-          "data-sort-value": formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
-        },
+    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => ({
+      createdAt: {
+        ref,
+        text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
+        sortValue: formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
       },
-      { text: title },
-      {
+      type: { text: title },
+      note: {
+        href: `?selectedNoteRef=${ref}#note-${ref}`,
+        isSelected: ref === selectedNoteRef,
         text,
       },
-      { text: createdBy },
-    ]),
+      addedBy: { text: createdBy },
+    })),
   };
 };

@@ -178,114 +178,6 @@ Timeline
         "
 `;
 
-exports[`viewNotesRoute > renders page and returns 200 Ok 1`] = `
-"
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
-  <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
-
-    <div>
-      <div class="app-case-row">
-      </div>
-    </div>
-  </div>
-</div>
-
-
-  <div class="govuk-body">
-    
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
-      <div class="govuk-width-container">
-
-    <div class="govuk-service-navigation__container">
-      
-
-      
-        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
-            Menu
-          </button>
-
-          <ul class="govuk-service-navigation__list" id="navigation">
-
-            
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
-                                    
-Tasks
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details">
-                                    
-Case Details
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes" aria-current="true">
-                                    
-                  <strong class="govuk-service-navigation__active-fallback">Notes</strong>
-
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
-                                    
-Timeline
-                  </a>
-              </li>
-
-            </ul>
-        </nav>
-    </div>
-
-    </div>
-
-  </div>
-
-
-
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
-
-    <a href="notes/new" class="govuk-button govuk-button--primary">
-      Add note
-    </a>
-
-      <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header" aria-sort="ascending">Date</th>
-      <th scope="col" class="govuk-table__header">Type</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
-      <th scope="col" class="govuk-table__header">Added by</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">01 Jan 2025</td>
-      <td class="govuk-table__cell">NOTE_ADDED</td>
-      <td class="govuk-table__cell">This is a test note</td>
-      <td class="govuk-table__cell">John Smith</td>
-    </tr>
-  </tbody>
-</table>
-
-  </div>
-        "
-`;
-
 exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
 "
   
@@ -371,10 +263,11 @@ Timeline
       Add note
     </a>
 
+
       <table class="govuk-table" data-module="moj-sortable-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header" aria-sort="ascending">Date</th>
+      <th scope="col" class="govuk-table__header" aria-sort="descending">Date</th>
       <th scope="col" class="govuk-table__header" aria-sort="ascending">Type</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
       <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
@@ -382,117 +275,13 @@ Timeline
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="2025-01-01"><a id="note-ref-undefined"></a>01 Jan 2025</td>
+      <td class="govuk-table__cell" data-sort-value="2025-01-01"><a id="note-undefined"></a>01 Jan 2025</td>
       <td class="govuk-table__cell">NOTE_ADDED</td>
-      <td class="govuk-table__cell">This is a test note</td>
-      <td class="govuk-table__cell">John Smith</td>
-    </tr>
-  </tbody>
-</table>
-
-  </div>
-        "
-`;
-
-exports[`viewNotesRoute > renders pages/notes/view-notes template and returns 200 1`] = `
-"
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
-  <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
-
-    <div>
-      <div class="app-case-row">
-      </div>
-    </div>
-  </div>
+      <td class="govuk-table__cell">
+<div data-module="expandable-text" data-truncate-length="100">
+    <span class="expandable-text__content">This is a test note</span>
 </div>
-
-
-  <div class="govuk-body">
-    
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
-      <div class="govuk-width-container">
-
-    <div class="govuk-service-navigation__container">
-      
-
-      
-        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
-            Menu
-          </button>
-
-          <ul class="govuk-service-navigation__list" id="navigation">
-
-            
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
-                                    
-Tasks
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details">
-                                    
-Case Details
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes" aria-current="true">
-                                    
-                  <strong class="govuk-service-navigation__active-fallback">Notes</strong>
-
-                  </a>
-              </li>
-
-              
-              <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
-                                    
-Timeline
-                  </a>
-              </li>
-
-            </ul>
-        </nav>
-    </div>
-
-    </div>
-
-  </div>
-
-
-
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
-
-    <a href="notes/new" class="govuk-button govuk-button--primary">
-      Add note
-    </a>
-
-      <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header" aria-sort="ascending">Date</th>
-      <th scope="col" class="govuk-table__header">Type</th>
-      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
-      <th scope="col" class="govuk-table__header">Added by</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">01 Jan 2025</td>
-      <td class="govuk-table__cell">NOTE_ADDED</td>
-      <td class="govuk-table__cell">This is a test note</td>
+</td>
       <td class="govuk-table__cell">John Smith</td>
     </tr>
   </tbody>

@@ -36,6 +36,7 @@ describe("createViewNotesViewModel", () => {
     const mockCaseItem = createMockCaseItem({
       comments: [
         {
+          ref: "note-123",
           createdAt: "2025-01-01T10:00:00.000Z",
           createdBy: "John Smith",
           title: "NOTE_ADDED",
@@ -44,13 +45,13 @@ describe("createViewNotesViewModel", () => {
       ],
     });
 
-    const result = createViewNotesViewModel(mockCaseItem);
+    const result = createViewNotesViewModel(mockCaseItem, "note-123");
 
     expect(result.data.notes.head).toEqual([
       {
         text: "Date",
         attributes: {
-          "aria-sort": "ascending",
+          "aria-sort": "descending",
         },
       },
       {
@@ -71,12 +72,24 @@ describe("createViewNotesViewModel", () => {
       },
     ]);
 
-    expect(result.data.notes.rows[0]).toHaveLength(4);
-    expect(result.data.notes.rows[0][1]).toEqual({ text: "NOTE_ADDED" });
-    expect(result.data.notes.rows[0][2]).toEqual({
-      text: "This is a test note",
+    expect(result.data.notes.rows[0]).toEqual({
+      createdAt: {
+        ref: "note-123",
+        sortValue: "2025-01-01",
+        text: "01 Jan 2025",
+      },
+      type: {
+        text: "NOTE_ADDED",
+      },
+      note: {
+        href: "?selectedNoteRef=note-123#note-note-123",
+        isSelected: true,
+        text: "This is a test note",
+      },
+      addedBy: {
+        text: "John Smith",
+      },
     });
-    expect(result.data.notes.rows[0][3]).toEqual({ text: "John Smith" });
   });
 });
 

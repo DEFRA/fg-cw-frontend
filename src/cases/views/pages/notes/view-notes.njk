@@ -1,9 +1,10 @@
 {% extends '../layouts/case-layout.njk' %}
-{% from "../components/case-summary/macro.njk" import caseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
+{% from "../components/expandable-text/macro.njk" import expandableText %}
 
 {% block content %}
   {{ caseSummary(data) }}
@@ -18,15 +19,37 @@
     </a>
 
     {% if data.notes.rows.length > 0 %}
+      {% set rows = [] %}
+      {% for row in data.notes.rows %}
+        {%
+          set row = [
+            {
+              html: '<a id="note-' + row.createdAt.ref + '"></a>' + row.createdAt.text,
+              attributes: {
+                "data-sort-value": row.createdAt.sortValue
+              }
+            },
+            row.type,
+            {
+              html: expandableText({
+                href: row.note.href,
+                text: row.note.text,
+                isSelected: row.note.isSelected
+              })
+            },
+            row.addedBy
+          ]
+        %}
+        {% set rows = (rows.push(row), rows) %}
+      {% endfor %}
+
       {{
         govukTable({
-          attributes: {
-            "data-module": "moj-sortable-table"
-          },
+          attributes: { "data-module": "moj-sortable-table" },
           captionClasses: "govuk-table__caption--m",
           firstCellIsHeader: false,
           head: data.notes.head,
-          rows: data.notes.rows
+          rows: rows
         })
       }}
     {% endif %}

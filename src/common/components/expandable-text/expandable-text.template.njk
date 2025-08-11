@@ -1,0 +1,19 @@
+{% set href = params.href %}
+{% set text = params.text %}
+{% set isSelected = params.isSelected %}
+{% set linkText = params.linkText or "read full text" %}
+{% set truncateLength = params.truncateLength or 100 %}
+{% set shouldTruncate = text | length > truncateLength %}
+
+<div data-module="expandable-text" data-truncate-length="{{ truncateLength }}">
+  {% if shouldTruncate and not isSelected %}
+    {% set truncatedText = text | truncate(truncateLength, true, "...") %}
+    <span class="expandable-text__content">{{ truncatedText }}</span>
+    <span class="expandable-text__full-content" hidden>{{ text }}</span>
+    {% if href %}
+      <a href="{{ href }}" class="expandable-text__toggle">{{ linkText }}</a>
+    {% endif %}
+  {% else %}
+    <span class="expandable-text__content">{{ text }}</span>
+  {% endif %}
+</div>
