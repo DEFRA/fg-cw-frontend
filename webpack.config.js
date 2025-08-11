@@ -198,8 +198,8 @@ export default async () => {
             to: "assets",
           },
           {
-            from: "../common/components/defra-heading/defra-crest.png",
-            to: "assets/images/defra-crest.png",
+            from: "../common/components/defra-heading/defra-logo.svg",
+            to: "assets/images/defra-logo.svg",
           },
         ],
       }),
