@@ -82,6 +82,7 @@ describe("createViewNotesViewModel", () => {
         text: "NOTE_ADDED",
       },
       note: {
+        ref: "note-123",
         href: "?selectedNoteRef=note-123#note-note-123",
         isSelected: true,
         text: "This is a test note",

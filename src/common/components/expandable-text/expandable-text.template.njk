@@ -4,14 +4,37 @@
 {% set linkText = params.linkText or "read full text" %}
 {% set truncateLength = params.truncateLength or 100 %}
 {% set shouldTruncate = text | length > truncateLength %}
+{% set uniqueId = params.ref %}
 
-<div data-module="expandable-text" data-truncate-length="{{ truncateLength }}">
+<div
+  data-module="expandable-text"
+  data-truncate-length="{{ truncateLength }}"
+  data-expand-text="{{ linkText }}"
+>
   {% if shouldTruncate and not isSelected %}
     {% set truncatedText = text | truncate(truncateLength, true, "...") %}
-    <span class="expandable-text__content">{{ truncatedText }}</span>
-    <span class="expandable-text__full-content" hidden>{{ text }}</span>
+    <span
+      class="expandable-text__content"
+      id="expandable-text-content-{{ uniqueId }}"
+      >{{ truncatedText }}</span
+    >
+    <span
+      class="expandable-text__full-content"
+      id="expandable-text-full-{{ uniqueId }}"
+      hidden
+      >{{ text }}</span
+    >
     {% if href %}
-      <a href="{{ href }}" class="expandable-text__toggle">{{ linkText }}</a>
+      <a
+        href="{{ href }}"
+        class="expandable-text__toggle"
+        role="button"
+        aria-expanded="false"
+        aria-controls="expandable-text-content-{{ uniqueId }}"
+        aria-describedby="expandable-text-full-{{ uniqueId }}"
+      >
+        {{ linkText }}
+      </a>
     {% endif %}
   {% else %}
     <span class="expandable-text__content">{{ text }}</span>

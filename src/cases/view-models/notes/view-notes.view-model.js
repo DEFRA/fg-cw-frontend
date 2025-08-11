@@ -57,6 +57,7 @@ const mapNotes = (notes, selectedNoteRef) => {
       },
       type: { text: title },
       note: {
+        ref,
         href: `?selectedNoteRef=${ref}#note-${ref}`,
         isSelected: ref === selectedNoteRef,
         text,

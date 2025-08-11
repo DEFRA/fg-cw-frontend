@@ -278,7 +278,7 @@ Timeline
       <td class="govuk-table__cell" data-sort-value="2025-01-01"><a id="note-undefined"></a>01 Jan 2025</td>
       <td class="govuk-table__cell">NOTE_ADDED</td>
       <td class="govuk-table__cell">
-<div data-module="expandable-text" data-truncate-length="100">
+<div data-module="expandable-text" data-truncate-length="100" data-expand-text="read full text">
     <span class="expandable-text__content">This is a test note</span>
 </div>
 </td>
