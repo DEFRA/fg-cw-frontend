@@ -1,0 +1,11 @@
+{#
+    href: <string>,
+    text: <string>,
+    isSelected: <boolean>,
+    linkText: <string> (optional) - defaults to "read full text",
+    truncateLength: <number> (optional) - defaults to 100
+#}
+
+{% macro expandableText(params) %}
+  {%- include "./expandable-text.template.njk" -%}
+{% endmacro %}

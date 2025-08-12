@@ -1,10 +1,11 @@
 import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
+  DATE_FORMAT_SORTABLE_DATE,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
-export const createViewNotesViewModel = (caseItem) => {
+export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
   return {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
@@ -12,12 +13,12 @@ export const createViewNotesViewModel = (caseItem) => {
     data: {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),
-      notes: mapNotes(caseItem.comments),
+      notes: mapNotes(caseItem.comments, selectedNoteRef),
     },
   };
 };
 
-const mapNotes = (notes) => {
+const mapNotes = (notes, selectedNoteRef) => {
   if (!notes) {
     return undefined;
   }
@@ -28,11 +29,14 @@ const mapNotes = (notes) => {
       {
         text: "Date",
         attributes: {
-          "aria-sort": "ascending",
+          "aria-sort": "descending",
         },
       },
       {
         text: "Type",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
       {
         text: "Note",
@@ -40,15 +44,25 @@ const mapNotes = (notes) => {
       },
       {
         text: "Added by",
+        attributes: {
+          "aria-sort": "ascending",
+        },
       },
     ],
-    rows: notes.map(({ createdAt, createdBy, title, text }) => [
-      { text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH) },
-      { text: title },
-      {
+    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => ({
+      createdAt: {
+        ref,
+        text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
+        sortValue: formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
+      },
+      type: { text: title },
+      note: {
+        ref,
+        href: `?selectedNoteRef=${ref}#note-${ref}`,
+        isSelected: ref === selectedNoteRef,
         text,
       },
-      { text: createdBy },
-    ]),
+      addedBy: { text: createdBy },
+    })),
   };
 };
