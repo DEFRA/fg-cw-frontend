@@ -107,6 +107,10 @@ describe("timelineRoute", () => {
           description: "Task completed",
           createdAt: "2025-06-16T09:01:14.072Z",
           createdBy: { name: "Nicholai Hel" },
+          data: {
+            taskGroupId: "tg-01",
+            taskId: "task-01",
+          },
         },
       ],
     });
