@@ -91,15 +91,21 @@ const mapStatus = (status) => {
 };
 
 const capitalise = (str = "") => {
-  if (!str || typeof str !== "string") return "";
+  if (!str || typeof str !== "string") {
+    return "";
+  }
   return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 };
 
 export const createAssignedUserSuccessMessage = (assignedCaseId, cases) => {
-  if (!assignedCaseId) return null;
+  if (!assignedCaseId) {
+    return null;
+  }
 
   const assignedCase = findAssignedCase(assignedCaseId, cases);
-  if (!hasAssignedUser(assignedCase)) return null;
+  if (!hasAssignedUser(assignedCase)) {
+    return null;
+  }
 
   return buildSuccessMessage(assignedCase);
 };
