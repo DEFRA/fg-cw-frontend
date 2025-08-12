@@ -1,43 +1,14 @@
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
-
-export const transformCasesForList = (cases) => {
-  return cases.map((caseItem) => ({
-    _id: caseItem._id,
-    clientRef: caseItem.payload.clientRef,
-    code: caseItem.payload.code,
-    submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
-    status: caseItem.status,
-    assignedUser: caseItem.assignedUser?.name,
-    link: `/cases/${caseItem._id}`,
-  }));
-};
-
-const createAssignedUserSuccessMessage = (cases, assignedCaseId) => {
-  let successMessage = null;
-
-  if (assignedCaseId) {
-    const assignedCase = cases.find(
-      (caseItem) => caseItem._id === assignedCaseId,
-    );
-
-    if (assignedCase?.assignedUser) {
-      successMessage = {
-        heading: "Case assigned successfully",
-        ref: assignedCase.clientRef,
-        link: assignedCase.link,
-        assignedUserName: assignedCase.assignedUser,
-      };
-    }
-  }
-
-  return successMessage;
-};
+import {
+  DATE_FORMAT_SHORT_MONTH,
+  formatDate,
+} from "../../common/nunjucks/filters/format-date.js";
 
 export const createCaseListViewModel = (cases, assignedCaseId) => {
-  const allCases = transformCasesForList(cases);
+  const casesTable = mapCasesToTable(cases);
+
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
-    allCases,
     assignedCaseId,
+    casesTable.rows,
   );
 
   return {
@@ -45,8 +16,103 @@ export const createCaseListViewModel = (cases, assignedCaseId) => {
     pageHeading: "Cases",
     breadcrumbs: [],
     data: {
-      allCases,
+      tabItems: [
+        {
+          label: `SFI applications (${casesTable.rows.length})`,
+          id: "all-cases",
+          data: casesTable,
+        },
+      ],
       assignedUserSuccessMessage,
     },
   };
 };
+
+const mapCasesToTable = (cases) => {
+  return {
+    head: [
+      { text: "Select" },
+      { text: "ID" },
+      { text: "Business" },
+      { text: "SBI" },
+      { text: "Submitted" },
+      { text: "Status" },
+      { text: "Assignee" },
+    ],
+    rows: cases.map(({ _id, payload, status, assignedUser }) => ({
+      _id,
+      select: {
+        value: _id,
+      },
+      id: {
+        href: `/cases/${_id}`,
+        text: mapText(payload.clientRef),
+      },
+      business: {
+        text: "[business name]",
+      },
+      sbi: {
+        text: mapText(payload?.identifiers?.sbi),
+      },
+      submitted: {
+        text: mapSubmittedAt(payload.submittedAt),
+      },
+      status: mapStatus(status),
+      assignee: {
+        text: mapText(assignedUser?.name, "Not assigned"),
+      },
+    })),
+  };
+};
+
+export const mapText = (text, defaultText = "") => {
+  return text || defaultText;
+};
+
+const mapSubmittedAt = (submittedAt) => {
+  return submittedAt ? formatDate(submittedAt, DATE_FORMAT_SHORT_MONTH) : "";
+};
+
+const STATUS_TO_CLASS = {
+  DEFAULT: "govuk-tag--grey",
+  NEW: "govuk-tag--blue",
+  "IN PROGRESS": "govuk-tag--yellow",
+  APPROVED: "govuk-tag--green",
+  COMPLETED: "govuk-tag--green",
+};
+
+const mapStatus = (status) => {
+  const statusClass = STATUS_TO_CLASS[status] || STATUS_TO_CLASS.DEFAULT;
+
+  return {
+    text: capitalise(status),
+    classes: statusClass,
+  };
+};
+
+const capitalise = (str = "") => {
+  if (!str || typeof str !== "string") return "";
+  return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+};
+
+export const createAssignedUserSuccessMessage = (assignedCaseId, cases) => {
+  if (!assignedCaseId) return null;
+
+  const assignedCase = findAssignedCase(assignedCaseId, cases);
+  if (!hasAssignedUser(assignedCase)) return null;
+
+  return buildSuccessMessage(assignedCase);
+};
+
+const hasAssignedUser = (caseItem) =>
+  Boolean(caseItem?.assignee && caseItem.assignee.text !== "");
+
+const findAssignedCase = (assignedCaseId, cases) =>
+  cases.find(({ _id }) => _id === assignedCaseId);
+
+const buildSuccessMessage = ({ id, assignee }) => ({
+  heading: "Case assigned successfully",
+  ref: id.text,
+  link: id.href,
+  assignedUserName: assignee.text,
+});
