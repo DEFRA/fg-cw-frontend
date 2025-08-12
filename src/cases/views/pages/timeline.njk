@@ -30,7 +30,14 @@
                     >{{ item.createdAt | formatDate("d MMM yyyy hh:mm aaa") if item.createdAt }}</time
                   >
                 </p>
-                {{ timelineItemDescription({ data: item.data, eventType: item.eventType }) }}
+                {{
+                  timelineItemDescription({
+                    caseId: data.case._id,
+                    data: item.data,
+                    eventType: item.eventType,
+                    commentRef: item.commentRef
+                  })
+                }}
               </div>
             {% endfor %}
           </div>
