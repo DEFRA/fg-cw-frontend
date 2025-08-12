@@ -6,10 +6,11 @@ export const viewNotesRoute = {
   path: "/cases/{caseId}/notes",
   async handler(request, h) {
     const { caseId } = request.params;
+    const { selectedNoteRef } = request.query;
 
     const caseData = await findCaseByIdUseCase(caseId);
 
-    const viewModel = createViewNotesViewModel(caseData);
+    const viewModel = createViewNotesViewModel(caseData, selectedNoteRef);
 
     return h.view(`pages/notes/view-notes`, viewModel);
   },

@@ -1,0 +1,143 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`expandable-text template > renders full text when isSelected is true regardless of length 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="100"
+  data-expand-text="read full text"
+>
+    <span class="expandable-text__content">This is a very long piece of text that should definitely be truncated because it exceeds the default truncate length of 100 characters but won&#39;t because isSelected is true.</span>
+</div>
+"
+`;
+
+exports[`expandable-text template > renders full text without toggle when text is short 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="100"
+  data-expand-text="read full text"
+>
+    <span class="expandable-text__content">This is short text.</span>
+</div>
+"
+`;
+
+exports[`expandable-text template > renders truncated text with toggle when text is long 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="100"
+  data-expand-text="read full text"
+>
+    <span
+      class="expandable-text__content"
+      id="expandable-text-content-test-ref-123"
+      >This is a very long piece of text that should definitely be truncated because it exceeds the default...</span
+    >
+    <span
+      class="expandable-text__full-content"
+      id="expandable-text-full-test-ref-123"
+      hidden
+      >This is a very long piece of text that should definitely be truncated because it exceeds the default truncate length of 100 characters and should show a toggle button.</span
+    >
+      <a
+        href="/some-link"
+        class="expandable-text__toggle"
+        role="button"
+        aria-expanded="false"
+        aria-controls="expandable-text-content-test-ref-123"
+        aria-describedby="expandable-text-full-test-ref-123"
+      >
+        read full text
+      </a>
+</div>
+"
+`;
+
+exports[`expandable-text template > renders with correct data attributes 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="75"
+  data-expand-text="read more"
+>
+    <span
+      class="expandable-text__content"
+      id="expandable-text-content-test-ref-data"
+      >This text tests that the correct data attributes are set on the container d...</span
+    >
+    <span
+      class="expandable-text__full-content"
+      id="expandable-text-full-test-ref-data"
+      hidden
+      >This text tests that the correct data attributes are set on the container div element.</span
+    >
+      <a
+        href="/data-test"
+        class="expandable-text__toggle"
+        role="button"
+        aria-expanded="false"
+        aria-controls="expandable-text-content-test-ref-data"
+        aria-describedby="expandable-text-full-test-ref-data"
+      >
+        read more
+      </a>
+</div>
+"
+`;
+
+exports[`expandable-text template > renders with custom linkText and truncateLength 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="50"
+  data-expand-text="show more details"
+>
+    <span
+      class="expandable-text__content"
+      id="expandable-text-content-test-ref-custom"
+      >This text will be truncated at 50 characters becau...</span
+    >
+    <span
+      class="expandable-text__full-content"
+      id="expandable-text-full-test-ref-custom"
+      hidden
+      >This text will be truncated at 50 characters because we set a custom truncate length parameter.</span
+    >
+      <a
+        href="/custom-link"
+        class="expandable-text__toggle"
+        role="button"
+        aria-expanded="false"
+        aria-controls="expandable-text-content-test-ref-custom"
+        aria-describedby="expandable-text-full-test-ref-custom"
+      >
+        show more details
+      </a>
+</div>
+"
+`;
+
+exports[`expandable-text template > renders without toggle when href is missing 1`] = `
+"
+<div
+  data-module="expandable-text"
+  data-truncate-length="100"
+  data-expand-text="read full text"
+>
+    <span
+      class="expandable-text__content"
+      id="expandable-text-content-test-ref-no-href"
+      >This is a very long piece of text that should be truncated but won&#39;t have a toggle button because hr...</span
+    >
+    <span
+      class="expandable-text__full-content"
+      id="expandable-text-full-test-ref-no-href"
+      hidden
+      >This is a very long piece of text that should be truncated but won&#39;t have a toggle button because href is missing from the parameters.</span
+    >
+</div>
+"
+`;

@@ -9,6 +9,7 @@ import {
   Tabs,
 } from "govuk-frontend";
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { ExpandableText } from "../../common/components/expandable-text/expandable-text.js";
 
 vi.mock("govuk-frontend");
 
@@ -20,7 +21,7 @@ describe("application.js", () => {
   it("should import all required GOV.UK Frontend components", async () => {
     await import("./application.js");
 
-    expect(createAll).toHaveBeenCalledTimes(7);
+    expect(createAll).toHaveBeenCalledTimes(8);
     expect(createAll).toHaveBeenCalledWith(Button);
     expect(createAll).toHaveBeenCalledWith(Checkboxes);
     expect(createAll).toHaveBeenCalledWith(ErrorSummary);
@@ -28,6 +29,7 @@ describe("application.js", () => {
     expect(createAll).toHaveBeenCalledWith(Radios);
     expect(createAll).toHaveBeenCalledWith(SkipLink);
     expect(createAll).toHaveBeenCalledWith(Tabs);
+    expect(createAll).toHaveBeenCalledWith(ExpandableText);
   });
 
   it("should initialize components in the correct order", async () => {
