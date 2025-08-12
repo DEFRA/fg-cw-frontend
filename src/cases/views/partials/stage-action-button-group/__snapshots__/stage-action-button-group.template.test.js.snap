@@ -1,5 +1,35 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`stage-action-button-group > disables buttons if allTasksComplete is false 1`] = `
+"<div class="govuk-button-group">
+    <form method="POST">
+      <button
+        type="submit"
+        data-prevent-double-click="true"
+        class="govuk-button"
+        data-module="govuk-button"
+        data-govuk-button-init=""
+        formaction="/cases/123"
+disabled      >
+        Approve
+      </button>
+    </form>
+    <form method="POST">
+      <button
+        type="submit"
+        data-prevent-double-click="true"
+        class="govuk-button"
+        data-module="govuk-button"
+        data-govuk-button-init=""
+        formaction="/cases/123"
+disabled      >
+        Reject
+      </button>
+    </form>
+</div>
+"
+`;
+
 exports[`stage-action-button-group > does not render when no buttons provided 1`] = `
 "<div class="govuk-button-group">
 </div>

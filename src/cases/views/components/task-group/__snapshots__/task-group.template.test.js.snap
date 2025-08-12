@@ -60,7 +60,7 @@ exports[`task-group > renders 1`] = `
         data-module="govuk-button"
         data-govuk-button-init=""
         formaction="/cases/123"
-      >
+disabled      >
         Complete Stage
       </button>
     </form>
