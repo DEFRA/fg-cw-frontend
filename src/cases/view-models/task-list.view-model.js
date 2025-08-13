@@ -6,6 +6,25 @@ export const createTaskListViewModel = (caseData) => {
     (stageInfo) => stageInfo.id === caseData.currentStage,
   );
 
+  const allTasks = [];
+  const currentStage = {
+    ...stage,
+    taskGroups: stage.taskGroups.map((taskGroup) => ({
+      ...taskGroup,
+      tasks: taskGroup.tasks.map((task) => {
+        allTasks.push(task);
+        return {
+          ...task,
+          link: `/cases/${caseData._id}/tasks/${taskGroup.id}/${task.id}`,
+          status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
+          isComplete: task.status === "complete",
+        };
+      }),
+    })),
+  };
+
+  const allTasksComplete = allTasks.every((task) => task.status === "complete");
+
   return {
     pageTitle: "Case tasks - " + stage.title,
     pageHeading: "Case",
@@ -29,18 +48,8 @@ export const createTaskListViewModel = (caseData) => {
         currentStage: caseData.currentStage,
         banner: resolveBannerPaths(caseData.banner, caseData),
       },
-      stage: {
-        ...stage,
-        taskGroups: stage.taskGroups.map((taskGroup) => ({
-          ...taskGroup,
-          tasks: taskGroup.tasks.map((task) => ({
-            ...task,
-            link: `/cases/${caseData._id}/tasks/${taskGroup.id}/${task.id}`,
-            status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
-            isComplete: task.status === "complete",
-          })),
-        })),
-      },
+      stage: currentStage,
+      allTasksComplete,
     },
   };
 };
