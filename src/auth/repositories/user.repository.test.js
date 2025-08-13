@@ -135,17 +135,29 @@ describe("create", () => {
 
 describe("update", () => {
   it("updates user's details", async () => {
-    const userData = {
-      firstName: "Jane",
-      lastName: "Doe",
+    const updatedUserData = {
+      id: "123",
+      name: "Bob Bill",
       idpRoles: ["ROLE_ADMIN"],
       appRoles: ["ROLE_USER"],
     };
 
-    await update("123", userData);
+    wreck.patch.mockResolvedValue({
+      payload: updatedUserData,
+    });
+
+    const userData = {
+      name: "Bob Bill",
+      idpRoles: ["ROLE_ADMIN"],
+      appRoles: ["ROLE_USER"],
+    };
+
+    const user = await update("123", userData);
 
     expect(wreck.patch).toHaveBeenCalledWith("/users/123", {
       payload: userData,
     });
+
+    expect(user).toEqual(updatedUserData);
   });
 });
