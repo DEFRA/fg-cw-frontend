@@ -1,16 +1,5 @@
 import Boom from "@hapi/boom";
-import { jwtDecode } from "jwt-decode";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
-
-const decode = (idToken) => {
-  try {
-    return jwtDecode(idToken);
-  } catch (error) {
-    throw Boom.badRequest(
-      `User's ID token cannot be decoded: ${error.message}`,
-    );
-  }
-};
 
 export const loginCallbackRoute = {
   method: "GET",
@@ -18,7 +7,7 @@ export const loginCallbackRoute = {
   options: {
     auth: {
       mode: "try",
-      strategy: "msEntraId",
+      strategy: "entra",
     },
   },
   async handler(request, h) {
@@ -28,22 +17,19 @@ export const loginCallbackRoute = {
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
 
-    const idToken = auth.artifacts.id_token;
+    const user = await createOrUpdateUserUseCase(auth.credentials.profile);
 
-    if (!idToken) {
-      throw Boom.badRequest("User has no ID token. Cannot verify roles.");
-    }
-
-    await createOrUpdateUserUseCase({
-      email: auth.credentials.profile.email,
-      idToken: decode(idToken),
-    });
-
-    // TODO: change to use session auth
-    request.cookieAuth.set({
+    request.yar.set("credentials", {
       token: auth.credentials.token,
-      authenticated: auth.isAuthenticated,
-      authorised: true,
+      refreshToken: auth.credentials.refreshToken,
+      expiresAt: Date.now() + auth.credentials.expiresIn * 1000,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        idpRoles: user.idpRoles,
+        appRoles: user.appRoles,
+      },
     });
 
     return h.redirect(auth.credentials.query.next ?? "/");

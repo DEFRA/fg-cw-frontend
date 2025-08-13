@@ -9,14 +9,10 @@ describe("createOrUpdateUserUseCase", () => {
     findAll.mockResolvedValue([]);
 
     await createOrUpdateUserUseCase({
+      oid: "12345678-1234-1234-1234-123456789012",
       email: "casey.test@example.test",
-      idToken: {
-        sub: "1234567890",
-        iat: 1516239022,
-        oid: "12345678-1234-1234-1234-123456789012",
-        name: "Casey Test",
-        roles: ["FCP.Casework.Read"],
-      },
+      name: "Casey Test",
+      roles: ["FCP.Casework.Read"],
     });
 
     expect(findAll).toHaveBeenCalledWith({
@@ -44,14 +40,10 @@ describe("createOrUpdateUserUseCase", () => {
     findAll.mockResolvedValue([existingUser]);
 
     await createOrUpdateUserUseCase({
+      oid: "12345678-1234-1234-1234-123456789012",
       email: "casey.test@example.test",
-      idToken: {
-        sub: "1234567890",
-        iat: 1516239022,
-        oid: "12345678-1234-1234-1234-123456789012",
-        name: "Casey Test",
-        roles: ["FCP.Casework.Read"],
-      },
+      name: "Casey Test",
+      roles: ["FCP.Casework.Read"],
     });
 
     expect(findAll).toHaveBeenCalledWith({
@@ -66,39 +58,18 @@ describe("createOrUpdateUserUseCase", () => {
     expect(create).not.toHaveBeenCalled();
   });
 
-  it("throws Boom.badRequest when roles not in ID token", async () => {
+  it("throws Boom.badRequest when roles not supplied", async () => {
     await expect(() =>
       createOrUpdateUserUseCase({
+        oid: "12345678-1234-1234-1234-123456789012",
         email: "casey.test@example.test",
-        idToken: {
-          sub: "1234567890",
-          iat: 1516239022,
-          oid: "12345678-1234-1234-1234-123456789012",
-          name: "Casey Test",
-        },
+        name: "Casey Test",
       }),
     ).rejects.toThrow(
-      "User with IDP id '12345678-1234-1234-1234-123456789012' has no 'roles' claim in ID token",
+      "User with IDP id '12345678-1234-1234-1234-123456789012' has no 'roles'",
     );
 
     expect(create).not.toHaveBeenCalled();
     expect(update).not.toHaveBeenCalled();
-  });
-
-  it("throws Boom.unauthorized when roles in token but no valid roles found", async () => {
-    await expect(() =>
-      createOrUpdateUserUseCase({
-        email: "casey.test@example.test",
-        idToken: {
-          sub: "1234567890",
-          iat: 1516239022,
-          oid: "12345678-1234-1234-1234-123456789012",
-          name: "Casey Test",
-          roles: ["Invalid.Role"],
-        },
-      }),
-    ).rejects.toThrow(
-      "User with IDP id '12345678-1234-1234-1234-123456789012' has not been assigned a valid role. Expected one of [FCP.Casework.Read, FCP.Casework.ReadWrite, FCP.Casework.Admin], got [Invalid.Role]",
-    );
   });
 });
