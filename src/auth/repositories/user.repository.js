@@ -37,7 +37,9 @@ export const create = async (userData) => {
 };
 
 export const update = async (id, userData) => {
-  await wreck.patch(`/users/${id}`, {
+  const { payload } = await wreck.patch(`/users/${id}`, {
     payload: userData,
   });
+
+  return payload;
 };
