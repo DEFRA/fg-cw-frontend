@@ -14,7 +14,7 @@ if (config.get("redis.username")) {
 }
 
 if (config.get("redis.useTLS")) {
-  redisOptions.tls = { tls: {} };
+  redisOptions.tls = {};
 }
 
 export const redisClient = config.get("redis.useSingleInstanceCache")
@@ -41,10 +41,10 @@ export const redisClient = config.get("redis.useSingleInstanceCache")
       },
     );
 
-redisClient.on("connect", () => {
-  logger.info("Connected to Redis");
-});
-
 redisClient.on("error", (error) => {
   logger.error(`Failed to connect to Redis: ${error}`);
+});
+
+redisClient.on("connect", () => {
+  logger.info("Connected to Redis");
 });
