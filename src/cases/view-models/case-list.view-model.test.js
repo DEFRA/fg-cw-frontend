@@ -1,198 +1,133 @@
-import { describe, expect, it, vi } from "vitest";
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { describe, expect, it } from "vitest";
 import {
+  createAssignedUserSuccessMessage,
   createCaseListViewModel,
-  transformCasesForList,
+  mapText,
 } from "./case-list.view-model.js";
 
-vi.mock("../../common/helpers/date-helpers.js");
-
 describe("case-list.model", () => {
-  describe("transformCasesForList", () => {
-    it("transforms multiple cases correctly", () => {
-      const mockCases = [
-        {
-          _id: "case-1",
-          payload: {
-            clientRef: "CLIENT-001",
-            code: "CODE-001",
-            submittedAt: "2021-01-15T00:00:00.000Z",
-          },
-          status: "In Progress",
-          assignedUser: {
-            id: "user-1",
-            name: "john doe",
-          },
-        },
-        {
-          _id: "case-2",
-          payload: {
-            clientRef: "CLIENT-002",
-            code: "CODE-002",
-            submittedAt: "2021-02-20T00:00:00.000Z",
-          },
-          status: "Completed",
-          assignedUser: {
-            id: "user-2",
-            name: "jane smith",
-          },
-        },
-      ];
-
-      getFormattedGBDate
-        .mockReturnValueOnce("15/01/2021")
-        .mockReturnValueOnce("20/02/2021");
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result).toEqual([
-        {
-          _id: "case-1",
-          clientRef: "CLIENT-001",
-          code: "CODE-001",
-          submittedAt: "15/01/2021",
-          status: "In Progress",
-          assignedUser: "john doe",
-          link: "/cases/case-1",
-        },
-        {
-          _id: "case-2",
-          clientRef: "CLIENT-002",
-          code: "CODE-002",
-          submittedAt: "20/02/2021",
-          status: "Completed",
-          assignedUser: "jane smith",
-          link: "/cases/case-2",
-        },
-      ]);
-
-      expect(getFormattedGBDate).toHaveBeenCalledWith(
-        "2021-01-15T00:00:00.000Z",
-      );
-      expect(getFormattedGBDate).toHaveBeenCalledWith(
-        "2021-02-20T00:00:00.000Z",
-      );
-      expect(getFormattedGBDate).toHaveBeenCalledTimes(2);
+  describe("mapText", () => {
+    it("returns text when provided", () => {
+      expect(mapText("hello world")).toBe("hello world");
     });
 
-    it("transforms empty cases array", () => {
-      const mockCases = [];
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result).toEqual([]);
-
-      expect(getFormattedGBDate).not.toHaveBeenCalled();
+    it("returns empty string when text is null", () => {
+      expect(mapText(null)).toBe("");
     });
 
-    it("transforms single case correctly", () => {
-      const mockCases = [
-        {
-          _id: "case-single",
-          payload: {
-            clientRef: "SINGLE-001",
-            code: "SINGLE-CODE",
-            submittedAt: null,
-          },
-          status: "Draft",
-          assignedUser: null,
-        },
-      ];
+    it("returns empty string when text is undefined", () => {
+      expect(mapText(undefined)).toBe("");
+    });
 
-      getFormattedGBDate.mockReturnValue("Not submitted");
+    it("returns empty string when text is empty string", () => {
+      expect(mapText("")).toBe("");
+    });
 
-      const result = transformCasesForList(mockCases);
+    it("returns default text when provided and text is falsy", () => {
+      expect(mapText(null, "default")).toBe("default");
+      expect(mapText(undefined, "default")).toBe("default");
+      expect(mapText("", "default")).toBe("default");
+    });
 
-      expect(result).toHaveLength(1);
-      expect(result[0]).toEqual({
-        _id: "case-single",
-        clientRef: "SINGLE-001",
-        code: "SINGLE-CODE",
-        submittedAt: "Not submitted",
-        status: "Draft",
-        assignedUser: undefined,
-        link: "/cases/case-single",
+    it("returns original text when provided, ignoring default", () => {
+      expect(mapText("actual", "default")).toBe("actual");
+    });
+  });
+
+  describe("createAssignedUserSuccessMessage", () => {
+    const mockTableRows = [
+      {
+        _id: "case-1",
+        id: { text: "CLIENT-001", href: "/cases/case-1" },
+        assignee: { text: "John Doe" },
+      },
+      {
+        _id: "case-2",
+        id: { text: "CLIENT-002", href: "/cases/case-2" },
+        assignee: { text: "" },
+      },
+      {
+        _id: "case-3",
+        id: { text: "CLIENT-003", href: "/cases/case-3" },
+        assignee: { text: "Jane Smith" },
+      },
+    ];
+
+    it("returns null when assignedCaseId is not provided", () => {
+      expect(createAssignedUserSuccessMessage(null, mockTableRows)).toBeNull();
+      expect(
+        createAssignedUserSuccessMessage(undefined, mockTableRows),
+      ).toBeNull();
+      expect(createAssignedUserSuccessMessage("", mockTableRows)).toBeNull();
+    });
+
+    it("returns null when case is not found", () => {
+      expect(
+        createAssignedUserSuccessMessage("non-existent", mockTableRows),
+      ).toBeNull();
+    });
+
+    it("returns null when case has no assigned user", () => {
+      expect(
+        createAssignedUserSuccessMessage("case-2", mockTableRows),
+      ).toBeNull();
+    });
+
+    it("returns success message when case has assigned user", () => {
+      const result = createAssignedUserSuccessMessage("case-1", mockTableRows);
+
+      expect(result).toEqual({
+        heading: "Case assigned successfully",
+        ref: "CLIENT-001",
+        link: "/cases/case-1",
+        assignedUserName: "John Doe",
       });
-
-      expect(getFormattedGBDate).toHaveBeenCalledWith(null);
     });
 
-    it("generates correct case links", () => {
-      const mockCases = [
-        {
-          _id: "case-link-1",
-          payload: {
-            clientRef: "LINK-001",
-            code: "LINK-CODE-1",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          status: "Active",
-          assignedUser: {
-            id: "user-1",
-            name: "user1",
-          },
-        },
-        {
-          _id: "case-link-2",
-          payload: {
-            clientRef: "LINK-002",
-            code: "LINK-CODE-2",
-            submittedAt: "2021-01-02T00:00:00.000Z",
-          },
-          status: "Active",
-          assignedUser: {
-            id: "user-2",
-            name: "user2",
-          },
-        },
-      ];
+    it("returns success message for different assigned case", () => {
+      const result = createAssignedUserSuccessMessage("case-3", mockTableRows);
 
-      getFormattedGBDate
-        .mockReturnValueOnce("01/01/2021")
-        .mockReturnValueOnce("02/01/2021");
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result[0].link).toBe("/cases/case-link-1");
-      expect(result[1].link).toBe("/cases/case-link-2");
+      expect(result).toEqual({
+        heading: "Case assigned successfully",
+        ref: "CLIENT-003",
+        link: "/cases/case-3",
+        assignedUserName: "Jane Smith",
+      });
     });
   });
 
   describe("createCaseListViewModel", () => {
-    it("creates complete view model with cases", () => {
-      const mockCases = [
-        {
-          _id: "case-vm-1",
-          payload: {
-            clientRef: "VM-001",
-            code: "VM-CODE-1",
-            submittedAt: "2021-03-10T00:00:00.000Z",
-          },
-          status: "Review",
-          assignedUser: {
-            id: "user-reviewer1",
-            name: "reviewer1",
+    const mockCases = [
+      {
+        _id: "case-1",
+        payload: {
+          clientRef: "CLIENT-001",
+          submittedAt: "2021-03-10T00:00:00.000Z",
+          identifiers: {
+            sbi: "123456789",
           },
         },
-        {
-          _id: "case-vm-2",
-          payload: {
-            clientRef: "VM-002",
-            code: "VM-CODE-2",
-            submittedAt: "2021-03-15T00:00:00.000Z",
-          },
-          status: "Approved",
-          assignedUser: {
-            id: "user-approver1",
-            name: "approver1",
+        status: "NEW",
+        assignedUser: {
+          id: "user-1",
+          name: "John Doe",
+        },
+      },
+      {
+        _id: "case-2",
+        payload: {
+          clientRef: "CLIENT-002",
+          submittedAt: "2021-03-15T00:00:00.000Z",
+          identifiers: {
+            sbi: "987654321",
           },
         },
-      ];
+        status: "IN PROGRESS",
+        assignedUser: null,
+      },
+    ];
 
-      getFormattedGBDate
-        .mockReturnValueOnce("10/03/2021")
-        .mockReturnValueOnce("15/03/2021");
-
+    it("creates complete view model with tabItems structure", () => {
       const result = createCaseListViewModel(mockCases);
 
       expect(result).toEqual({
@@ -200,24 +135,46 @@ describe("case-list.model", () => {
         pageHeading: "Cases",
         breadcrumbs: [],
         data: {
-          allCases: [
+          tabItems: [
             {
-              _id: "case-vm-1",
-              clientRef: "VM-001",
-              code: "VM-CODE-1",
-              submittedAt: "10/03/2021",
-              status: "Review",
-              assignedUser: "reviewer1",
-              link: "/cases/case-vm-1",
-            },
-            {
-              _id: "case-vm-2",
-              clientRef: "VM-002",
-              code: "VM-CODE-2",
-              submittedAt: "15/03/2021",
-              status: "Approved",
-              assignedUser: "approver1",
-              link: "/cases/case-vm-2",
+              label: "SFI applications (2)",
+              id: "all-cases",
+              data: {
+                head: [
+                  { text: "Select" },
+                  { text: "ID" },
+                  { text: "Business" },
+                  { text: "SBI" },
+                  { text: "Submitted" },
+                  { text: "Status" },
+                  { text: "Assignee" },
+                ],
+                rows: [
+                  {
+                    _id: "case-1",
+                    select: { value: "case-1" },
+                    id: { href: "/cases/case-1", text: "CLIENT-001" },
+                    business: { text: "[business name]" },
+                    sbi: { text: "123456789" },
+                    submitted: { text: "10 Mar 2021" },
+                    status: { text: "New", classes: "govuk-tag--blue" },
+                    assignee: { text: "John Doe" },
+                  },
+                  {
+                    _id: "case-2",
+                    select: { value: "case-2" },
+                    id: { href: "/cases/case-2", text: "CLIENT-002" },
+                    business: { text: "[business name]" },
+                    sbi: { text: "987654321" },
+                    submitted: { text: "15 Mar 2021" },
+                    status: {
+                      text: "In progress",
+                      classes: "govuk-tag--yellow",
+                    },
+                    assignee: { text: "Not assigned" },
+                  },
+                ],
+              },
             },
           ],
           assignedUserSuccessMessage: null,
@@ -226,244 +183,211 @@ describe("case-list.model", () => {
     });
 
     it("creates view model with empty cases", () => {
-      const mockCases = [];
+      const result = createCaseListViewModel([]);
 
-      const result = createCaseListViewModel(mockCases);
-
-      expect(result).toEqual({
-        pageTitle: "Cases",
-        pageHeading: "Cases",
-        breadcrumbs: [],
-        data: {
-          allCases: [],
-          assignedUserSuccessMessage: null,
-        },
-      });
-
-      expect(getFormattedGBDate).not.toHaveBeenCalled();
-    });
-
-    it("creates view model with single case", () => {
-      const mockCases = [
-        {
-          _id: "case-single-vm",
-          payload: {
-            clientRef: "SINGLE-VM-001",
-            code: "SINGLE-VM-CODE",
-            submittedAt: "2021-04-25T00:00:00.000Z",
-          },
-          status: "Pending",
-          assignedUser: {
-            id: "user-pending",
-            name: "pending user",
-          },
-        },
-      ];
-
-      getFormattedGBDate.mockReturnValue("25/04/2021");
-
-      const result = createCaseListViewModel(mockCases);
-
-      expect(result.data.allCases).toHaveLength(1);
-      expect(result.data.allCases[0].clientRef).toBe("SINGLE-VM-001");
-      expect(result.pageTitle).toBe("Cases");
-      expect(result.pageHeading).toBe("Cases");
+      expect(result.data.tabItems[0].data.rows).toEqual([]);
+      expect(result.data.tabItems[0].label).toBe("SFI applications (0)");
     });
 
     it("has consistent page title and page heading", () => {
-      const mockCases = [];
-
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel([]);
 
       expect(result.pageTitle).toBe("Cases");
       expect(result.pageHeading).toBe("Cases");
-      expect(result.pageTitle).toBe(result.pageHeading);
     });
 
     it("has empty breadcrumbs array", () => {
-      const mockCases = [];
-
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel([]);
 
       expect(result.breadcrumbs).toEqual([]);
-      expect(Array.isArray(result.breadcrumbs)).toBe(true);
     });
 
-    it("calls transformCasesForList internally", () => {
-      const mockCases = [
-        {
-          _id: "case-transform",
-          payload: {
-            clientRef: "TRANSFORM-001",
-            code: "TRANSFORM-CODE",
-            submittedAt: "2021-05-01T00:00:00.000Z",
-          },
-          status: "Processing",
-          assignedUser: {
-            id: "user-processor",
-            name: "processor",
-          },
-        },
-      ];
-
-      getFormattedGBDate.mockReturnValue("01/05/2021");
-
-      const result = createCaseListViewModel(mockCases);
-
-      // Verify the transformation happened by checking the structure
-      expect(result.data).toHaveProperty("allCases");
-      expect(result.data.allCases[0]).toHaveProperty("link");
-      expect(result.data.allCases[0].link).toBe("/cases/case-transform");
-    });
-  });
-
-  describe("transformCasesForList - assignedUser handling", () => {
-    it("extracts assignedUser name from user object", () => {
-      const mockCases = [
-        {
-          _id: "case-user-object",
-          payload: {
-            clientRef: "USER-OBJECT-001",
-            code: "USER-OBJECT-CODE",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          status: "Active",
-          assignedUser: {
-            id: "user-123",
-            name: "John Doe",
-          },
-        },
-      ];
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result[0].assignedUser).toBe("John Doe");
-      expect(result[0]._id).toBe("case-user-object");
-    });
-
-    it("handles null assignedUser", () => {
-      const mockCases = [
-        {
-          _id: "case-null-user",
-          payload: {
-            clientRef: "NULL-USER-001",
-            code: "NULL-USER-CODE",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          status: "Unassigned",
-          assignedUser: null,
-        },
-      ];
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result[0].assignedUser).toBeUndefined();
-      expect(result[0]._id).toBe("case-null-user");
-    });
-
-    it("handles undefined assignedUser", () => {
-      const mockCases = [
-        {
-          _id: "case-undefined-user",
-          payload: {
-            clientRef: "UNDEFINED-USER-001",
-            code: "UNDEFINED-USER-CODE",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          status: "Unassigned",
-          assignedUser: undefined,
-        },
-      ];
-
-      const result = transformCasesForList(mockCases);
-
-      expect(result[0].assignedUser).toBeUndefined();
-      expect(result[0]._id).toBe("case-undefined-user");
-    });
-  });
-
-  describe("createCaseListViewModel - assignedUserSuccessMessage", () => {
-    it("returns null success message when assignedCaseId is undefined", () => {
-      const result = createCaseListViewModel(mockCasesWithUsers, undefined);
-
-      expect(result.data.assignedUserSuccessMessage).toBeNull();
-    });
-
-    it("returns null success message when assignedCaseId is empty string", () => {
-      const result = createCaseListViewModel(mockCasesWithUsers, "");
-
-      expect(result.data.assignedUserSuccessMessage).toBeNull();
-    });
-
-    it("returns null success message when case not found", () => {
-      const result = createCaseListViewModel(
-        mockCasesWithUsers,
-        "non-existent-case",
-      );
-
-      expect(result.data.assignedUserSuccessMessage).toBeNull();
-    });
-
-    it("returns null success message when case found but no assigned user", () => {
-      const result = createCaseListViewModel(
-        mockCasesWithUsers,
-        "case-without-user",
-      );
-
-      expect(result.data.assignedUserSuccessMessage).toBeNull();
-    });
-
-    it("returns success message when case found with assigned user", () => {
-      const result = createCaseListViewModel(
-        mockCasesWithUsers,
-        "case-with-user-1",
-      );
+    it("includes assignedUserSuccessMessage when provided", () => {
+      const result = createCaseListViewModel(mockCases, "case-1");
 
       expect(result.data.assignedUserSuccessMessage).toEqual({
         heading: "Case assigned successfully",
         ref: "CLIENT-001",
-        link: "/cases/case-with-user-1",
+        link: "/cases/case-1",
         assignedUserName: "John Doe",
       });
     });
   });
-});
 
-const mockCasesWithUsers = [
-  {
-    _id: "case-with-user-1",
-    payload: {
-      clientRef: "CLIENT-001",
-      code: "CODE-001",
-      submittedAt: "2021-01-15T00:00:00.000Z",
-    },
-    status: "In Progress",
-    assignedUser: {
-      id: "user-1",
-      name: "John Doe",
-    },
-  },
-  {
-    _id: "case-with-user-2",
-    payload: {
-      clientRef: "CLIENT-002",
-      code: "CODE-002",
-      submittedAt: "2021-02-20T00:00:00.000Z",
-    },
-    status: "New",
-    assignedUser: {
-      id: "user-2",
-      name: "Jane Smith",
-    },
-  },
-  {
-    _id: "case-without-user",
-    payload: {
-      clientRef: "CLIENT-003",
-      code: "CODE-003",
-      submittedAt: "2021-03-10T00:00:00.000Z",
-    },
-    status: "Draft",
-    assignedUser: null,
-  },
-];
+  describe("status mapping", () => {
+    it("maps NEW status to blue tag", () => {
+      const mockCases = [
+        {
+          _id: "case-1",
+          payload: {
+            clientRef: "REF-1",
+            submittedAt: "2021-01-01T00:00:00.000Z",
+          },
+          status: "NEW",
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+      expect(statusCell).toEqual({
+        text: "New",
+        classes: "govuk-tag--blue",
+      });
+    });
+
+    it("maps IN_PROGRESS status to yellow tag", () => {
+      const mockCases = [
+        {
+          _id: "case-1",
+          payload: {
+            clientRef: "REF-1",
+            submittedAt: "2021-01-01T00:00:00.000Z",
+          },
+          status: "IN PROGRESS",
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+      expect(statusCell).toEqual({
+        text: "In progress",
+        classes: "govuk-tag--yellow",
+      });
+    });
+
+    it("maps APPROVED status to green tag", () => {
+      const mockCases = [
+        {
+          _id: "case-1",
+          payload: {
+            clientRef: "REF-1",
+            submittedAt: "2021-01-01T00:00:00.000Z",
+          },
+          status: "APPROVED",
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+      expect(statusCell).toEqual({
+        text: "Approved",
+        classes: "govuk-tag--green",
+      });
+    });
+
+    it("maps unknown status to grey tag", () => {
+      const mockCases = [
+        {
+          _id: "case-1",
+          payload: {
+            clientRef: "REF-1",
+            submittedAt: "2021-01-01T00:00:00.000Z",
+          },
+          status: "UNKNOWN_STATUS",
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+      expect(statusCell).toEqual({
+        text: "Unknown_status",
+        classes: "govuk-tag--grey",
+      });
+    });
+
+    it("handles null status gracefully", () => {
+      const mockCases = [
+        {
+          _id: "case-1",
+          payload: {
+            clientRef: "REF-1",
+            submittedAt: "2021-01-01T00:00:00.000Z",
+          },
+          status: null,
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+      expect(statusCell).toEqual({
+        text: "",
+        classes: "govuk-tag--grey",
+      });
+    });
+  });
+
+  describe("table structure mapping", () => {
+    it("maps case data to correct table structure", () => {
+      const mockCases = [
+        {
+          _id: "test-case-id",
+          payload: {
+            clientRef: "TEST-REF-123",
+            submittedAt: "2021-06-15T14:30:00.000Z",
+            identifiers: { sbi: "555666777" },
+          },
+          status: "NEW",
+          assignedUser: { name: "Test User" },
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const tableData = result.data.tabItems[0].data;
+
+      expect(tableData.head).toEqual([
+        { text: "Select" },
+        { text: "ID" },
+        { text: "Business" },
+        { text: "SBI" },
+        { text: "Submitted" },
+        { text: "Status" },
+        { text: "Assignee" },
+      ]);
+
+      expect(tableData.rows[0]).toEqual({
+        _id: "test-case-id",
+        select: { value: "test-case-id" },
+        id: { href: "/cases/test-case-id", text: "TEST-REF-123" },
+        business: { text: "[business name]" },
+        sbi: { text: "555666777" },
+        submitted: { text: "15 Jun 2021" },
+        status: { text: "New", classes: "govuk-tag--blue" },
+        assignee: { text: "Test User" },
+      });
+    });
+
+    it("handles missing optional fields gracefully", () => {
+      const mockCases = [
+        {
+          _id: "minimal-case",
+          payload: {
+            clientRef: null,
+            submittedAt: null,
+            identifiers: null,
+          },
+          status: "UNKNOWN",
+          assignedUser: null,
+        },
+      ];
+
+      const result = createCaseListViewModel(mockCases);
+      const row = result.data.tabItems[0].data.rows[0];
+
+      expect(row.id.text).toBe("");
+      expect(row.sbi.text).toBe("");
+      expect(row.submitted.text).toBe("");
+      expect(row.status.text).toBe("Unknown");
+      expect(row.assignee.text).toBe("Not assigned");
+    });
+  });
+});
