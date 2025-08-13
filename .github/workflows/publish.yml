@@ -33,11 +33,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: npm
-        run: |
+      - run: |
           node -v
           npm ci
           npm run build
-          npm test
+          npm test -- --coverage
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
