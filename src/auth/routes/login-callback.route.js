@@ -1,4 +1,6 @@
 import Boom from "@hapi/boom";
+// eslint-disable-next-line
+import { logger } from "../../common/logger.js";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
 
 export const loginCallbackRoute = {
@@ -16,6 +18,8 @@ export const loginCallbackRoute = {
     if (!auth.isAuthenticated) {
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
+
+    logger.info(auth.credentials.token);
 
     const user = await createOrUpdateUserUseCase(auth.credentials.profile);
 
