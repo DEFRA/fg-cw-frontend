@@ -75,10 +75,8 @@ describe("redis-client", () => {
         redisOptions: {
           db: 0,
           tls: {},
-          credentials: {
-            username: "testuser",
-            password: "testpassword",
-          },
+          username: "testuser",
+          password: "testpassword",
         },
       },
     );
