@@ -2,27 +2,14 @@ import { Cluster, Redis } from "ioredis";
 import { config } from "./config.js";
 import { logger } from "./logger.js";
 
-const redisOptions = {
-  db: 0,
-};
-
-if (config.get("redis.username")) {
-  redisOptions.credentials = {
-    username: config.get("redis.username"),
-    password: config.get("redis.password"),
-  };
-}
-
-if (config.get("redis.useTLS")) {
-  redisOptions.tls = {};
-}
+const db = 0;
 
 export const redisClient = config.get("redis.useSingleInstanceCache")
   ? new Redis({
       port: config.get("redis.port"),
       host: config.get("redis.host"),
       keyPrefix: config.get("redis.keyPrefix"),
-      ...redisOptions,
+      db,
     })
   : new Cluster(
       [
@@ -37,7 +24,12 @@ export const redisClient = config.get("redis.useSingleInstanceCache")
         dnsLookup(address, callback) {
           callback(null, address);
         },
-        redisOptions,
+        redisOptions: {
+          db,
+          tls: {},
+          username: config.get("redis.username"),
+          password: config.get("redis.password"),
+        },
       },
     );
 
