@@ -61,6 +61,7 @@ const mapNotes = (notes, selectedNoteRef) => {
         href: `?selectedNoteRef=${ref}#note-${ref}`,
         isSelected: ref === selectedNoteRef,
         text,
+        classes: "wrap-all-text",
       },
       addedBy: { text: createdBy },
     })),
