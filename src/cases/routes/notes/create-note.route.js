@@ -15,7 +15,7 @@ export const createNoteRoute = {
     }
 
     try {
-      await addNoteToCaseUseCase({ caseId, ...request.payload });
+      await addNoteToCaseUseCase({ caseId, text });
       return h.redirect(`/cases/${caseId}/notes`);
     } catch (error) {
       request.log("error", {

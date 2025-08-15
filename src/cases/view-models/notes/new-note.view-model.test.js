@@ -22,7 +22,6 @@ describe("new-note.view-model", () => {
       const mockCaseItem = createMockCaseItem();
       const mockFormData = {
         text: "User's input text",
-        type: "NOTE_ADDED",
       };
 
       const result = createNewNoteViewModel(mockCaseItem, null, mockFormData);
@@ -37,7 +36,6 @@ describe("new-note.view-model", () => {
       };
       const mockFormData = {
         text: "User typed this long note and doesn't want to lose it",
-        type: "NOTE_ADDED",
       };
 
       const result = createNewNoteViewModel(
