@@ -86,6 +86,7 @@ describe("createViewNotesViewModel", () => {
         href: "?selectedNoteRef=note-123#note-note-123",
         isSelected: true,
         text: "This is a test note",
+        classes: "wrap-all-text",
       },
       addedBy: {
         text: "John Smith",
