@@ -37,11 +37,16 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
     <form method="GET" action="/cases/assign-user">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">
+          <h1>Cases</h1>
+        </legend>
+    
+        <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
     
-      <table class="govuk-table">
+        <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
@@ -56,7 +61,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="Select case ID 68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47">
+          <span class="govuk-visually-hidden">
+            Select case ID 68495db5afe2d27b09b2ee47
+          </span>
+        </label>
       </div>
     </td>
           <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
@@ -72,7 +81,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99"></label>
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="Select case ID 68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99">
+          <span class="govuk-visually-hidden">
+            Select case ID 68495db5afe2d27b09b2ee99
+          </span>
+        </label>
       </div>
     </td>
           <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
@@ -89,6 +102,7 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       </tbody>
     </table>
     
+      </fieldset>
     </form>
   </div>
 </div>
