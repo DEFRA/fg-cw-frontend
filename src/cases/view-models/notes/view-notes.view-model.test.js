@@ -75,8 +75,11 @@ describe("createViewNotesViewModel", () => {
     expect(result.data.notes.rows[0]).toEqual({
       createdAt: {
         ref: "note-123",
-        sortValue: "2025-01-01",
         text: "01 Jan 2025",
+        attributes: {
+          "data-sort-value": "2025-01-01",
+        },
+        classes: "govuk-table__cell--selected",
       },
       type: {
         text: "NOTE_ADDED",

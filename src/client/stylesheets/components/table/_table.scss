@@ -1,5 +1,16 @@
+@use "govuk-frontend" as *;
+
 .govuk-table__cell.wrap-all-text {
   white-space: normal;
   word-break: break-all;
   overflow-wrap: anywhere;
+}
+
+.govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected) {
+  border-left: 4px solid #00a33b;
+  background-color: govuk-colour("light-grey");
+}
+
+.govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected) td:first-child {
+  padding-left: 2px;
 }
