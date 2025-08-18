@@ -13,8 +13,12 @@
       name="{{ params.name }}"
       type="radio"
       value="{{ params.value }}"
-      aria-label="{{ params.value }}"
-    /><label class="govuk-label govuk-radios__label" for="{{ id }}"></label>
+      aria-label="Select case ID {{ params.value }}"
+    /><label class="govuk-label govuk-radios__label" for="{{ id }}">
+      <span class="govuk-visually-hidden">
+        Select case ID {{ params.value }}
+      </span>
+    </label>
   </div>
 {% endmacro %}
 
@@ -40,17 +44,23 @@
   {% set tableRows = (tableRows.push(processedRow), tableRows) %}
 {% endfor %}
 
-<form method="GET" action="/cases/assign-user">
-  {{
-    govukButton({
-      text: "Assign"
-    })
-  }}
+<fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-visually-hidden">
+    Applications
+  </legend>
 
-  {{
-    govukTable({
-      head: params.data.head,
-      rows: tableRows
-    })
-  }}
-</form>
+  <form method="GET" action="/cases/assign-user">
+    {{
+      govukButton({
+        text: "Assign"
+      })
+    }}
+
+    {{
+      govukTable({
+        head: params.data.head,
+        rows: tableRows
+      })
+    }}
+  </form>
+</fieldset>
