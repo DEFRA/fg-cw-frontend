@@ -25,9 +25,8 @@
           set row = [
             {
               html: '<a id="note-' + row.createdAt.ref + '"></a>' + row.createdAt.text,
-              attributes: {
-                "data-sort-value": row.createdAt.sortValue
-              }
+              attributes: row.createdAt.attributes,
+              classes: row.createdAt.classes
             },
             row.type,
             {
