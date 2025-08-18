@@ -42,6 +42,7 @@ exports[`expandable-text template > renders truncated text with toggle when text
       hidden
       >This is a very long piece of text that should definitely be truncated because it exceeds the default truncate length of 100 characters and should show a toggle button.</span
     >
+      <br />
       <a
         href="/some-link"
         class="expandable-text__toggle"
@@ -74,6 +75,7 @@ exports[`expandable-text template > renders with correct data attributes 1`] = `
       hidden
       >This text tests that the correct data attributes are set on the container div element.</span
     >
+      <br />
       <a
         href="/data-test"
         class="expandable-text__toggle"
@@ -106,6 +108,7 @@ exports[`expandable-text template > renders with custom linkText and truncateLen
       hidden
       >This text will be truncated at 50 characters because we set a custom truncate length parameter.</span
     >
+      <br />
       <a
         href="/custom-link"
         class="expandable-text__toggle"
