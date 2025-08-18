@@ -49,21 +49,28 @@ const mapNotes = (notes, selectedNoteRef) => {
         },
       },
     ],
-    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => ({
-      createdAt: {
-        ref,
-        text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
-        sortValue: formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
-      },
-      type: { text: title },
-      note: {
-        ref,
-        href: `?selectedNoteRef=${ref}#note-${ref}`,
-        isSelected: ref === selectedNoteRef,
-        text,
-        classes: "wrap-all-text",
-      },
-      addedBy: { text: createdBy },
-    })),
+    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => {
+      const isSelected = ref === selectedNoteRef;
+
+      return {
+        createdAt: {
+          ref,
+          text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
+          classes: isSelected ? "govuk-table__cell--selected" : "",
+          attributes: {
+            "data-sort-value": formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
+          },
+        },
+        type: { text: title },
+        note: {
+          ref,
+          href: `?selectedNoteRef=${ref}#note-${ref}`,
+          isSelected,
+          text,
+          classes: "wrap-all-text",
+        },
+        addedBy: { text: createdBy },
+      };
+    }),
   };
 };
