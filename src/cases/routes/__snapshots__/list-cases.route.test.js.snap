@@ -36,12 +36,12 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
-    <fieldset class="govuk-fieldset">
-      <legend class="govuk-fieldset__legend govuk-visually-hidden">
-        <h1>Cases</h1>
-      </legend>
+    <form method="GET" action="/cases/assign-user">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">
+          <h1>Cases</h1>
+        </legend>
     
-      <form method="GET" action="/cases/assign-user">
         <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
@@ -102,8 +102,8 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       </tbody>
     </table>
     
-      </form>
-    </fieldset>
+      </fieldset>
+    </form>
   </div>
 </div>
 
