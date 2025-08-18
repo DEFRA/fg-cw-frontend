@@ -38,7 +38,7 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   <div class="govuk-tabs__panel" id="all-cases">
     <fieldset class="govuk-fieldset">
       <legend class="govuk-fieldset__legend govuk-visually-hidden">
-        Applications
+        <h1>Applications</h1>
       </legend>
     
       <form method="GET" action="/cases/assign-user">
