@@ -16,7 +16,9 @@ describe("timeline-item-description", () => {
 
   it("renders other view", () => {
     const component = render("timeline-item-description", {
+      caseId: "9999-00000",
       eventType: "NOTE_ADDED",
+      commentRef: "comment-12345",
     });
 
     expect(component).toMatchSnapshot();

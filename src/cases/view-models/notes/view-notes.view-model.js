@@ -14,6 +14,7 @@ export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),
       notes: mapNotes(caseItem.comments, selectedNoteRef),
+      addNoteUrl: `/cases/${caseItem._id}/notes/new`,
     },
   };
 };
