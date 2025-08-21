@@ -31,14 +31,12 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "This is a valid note",
       },
     });
 
     expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
       caseId: "68495db5afe2d27b09b2ee47",
-      type: "NOTE_ADDED",
       text: "This is a valid note",
     });
 
@@ -54,7 +52,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "",
       },
     });
@@ -79,7 +76,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "   \n\t  ",
       },
     });
@@ -104,7 +100,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         // text is missing
       },
     });
@@ -130,14 +125,12 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "This will fail to save",
       },
     });
 
     expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
       caseId: "68495db5afe2d27b09b2ee47",
-      type: "NOTE_ADDED",
       text: "This will fail to save",
     });
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(

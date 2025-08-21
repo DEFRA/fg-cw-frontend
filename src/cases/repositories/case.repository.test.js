@@ -275,14 +275,13 @@ describe("Case Repository", () => {
       await addNoteToCase(mockData);
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/notes", {
-        payload: { type: "NOTE_ADDED", text: "This is a test note" },
+        payload: { text: "This is a test note" },
       });
     });
 
     it("propagates API errors", async () => {
       const mockData = {
         caseId: "case-error",
-        type: "NOTE_ADDED",
         text: "This will fail",
       };
 
@@ -292,7 +291,7 @@ describe("Case Repository", () => {
       await expect(addNoteToCase(mockData)).rejects.toThrow("API Error");
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-error/notes", {
-        payload: { type: "NOTE_ADDED", text: "This will fail" },
+        payload: { text: "This will fail" },
       });
     });
   });

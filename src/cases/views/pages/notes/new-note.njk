@@ -21,8 +21,6 @@
     {{ caseDetailsTabNavigation({active: 'notes', caseId: data.caseId }) }}
 
     <form action="/cases/{{ data.caseId }}/notes" method="post">
-      <input type="hidden" name="type" value="NOTE_ADDED" />
-
       {{
         govukTextarea({
           name: "text",
