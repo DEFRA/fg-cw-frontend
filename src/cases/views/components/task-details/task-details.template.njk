@@ -42,7 +42,7 @@
     </h2>
 
     {% if params.currentTask.status === "COMPLETE" %}
-      <p>
+      <p class="govuk-inset-text">
         This task was completed by {{ params.currentTask.updatedBy }} on
         {{ params.currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
         {{ params.currentTask.updatedAt | formatDate("hh:mm a") }}
