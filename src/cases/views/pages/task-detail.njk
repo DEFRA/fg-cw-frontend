@@ -2,6 +2,7 @@
 {% from "../components/case-summary/macro.njk" import caseSummary %}
 {% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "../components/task-details/macro.njk" import taskDetails %}
+
 {% block content %}
   {{ caseSummary({ case: data.case }) }}
   <div class="govuk-body">
@@ -11,12 +12,15 @@
         caseId: data.case.id
       })
     }}
+
     {{
       taskDetails({
+        error: data.error,
         caseId: data.case.id,
         stageId: data.case.currentStage,
         taskGroupId: data.taskGroupId,
-        currentTask: data.currentTask
+        currentTask: data.currentTask,
+        comment: data.comment
       })
     }}
   </div>

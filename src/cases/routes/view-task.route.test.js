@@ -72,6 +72,7 @@ describe("viewTaskRoute", () => {
                   id: "simple-review",
                   title: "Simple Review",
                   status: "pending",
+                  type: "OPTIONAL",
                 },
               ],
             },
@@ -83,6 +84,7 @@ describe("viewTaskRoute", () => {
           taskGroups: [],
         },
       ],
+      comments: [],
     });
 
     const { statusCode, result } = await server.inject({

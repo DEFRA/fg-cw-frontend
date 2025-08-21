@@ -156,7 +156,7 @@ describe("Case Repository", () => {
       await updateTaskStatus({ ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
-        { payload: { status: "complete" } },
+        { payload: { status: "complete", comment: null } },
       );
     });
   });
