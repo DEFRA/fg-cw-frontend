@@ -9,7 +9,9 @@ const findTask = (kase, stageId, taskGroupId, taskId) => {
 };
 
 const validateComment = (taskComment, comment) => {
-  if (taskComment?.type === "REQUIRED" && !comment) return false;
+  if (taskComment?.type === "REQUIRED" && !comment) {
+    return false;
+  }
 
   return true;
 };
@@ -17,7 +19,6 @@ const validateComment = (taskComment, comment) => {
 export const updateTaskStatusRoute = {
   method: "POST",
   path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",
-
   handler: async (request, h) => {
     const { caseId, taskGroupId, taskId, stageId } = request.params;
     const { isComplete = false, comment = null } = request.payload;

@@ -21,6 +21,39 @@ describe("updateTaskStatusRoute", () => {
     await server.stop();
   });
 
+  it("throws if comment is required", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      stages: [
+        {
+          id: "001",
+          taskGroups: [
+            {
+              id: "tg01",
+              tasks: [
+                {
+                  id: "t01",
+                  comment: {
+                    type: "REQUIRED",
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        isComplete: true,
+      },
+    });
+
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+    expect(statusCode).toEqual(302);
+  });
+
   it("updates the task status with no comment", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stages: [
@@ -32,7 +65,9 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   id: "t01",
-                  type: "OPTIONAL",
+                  comment: {
+                    type: "OPTIONAL",
+                  },
                 },
               ],
             },
@@ -71,7 +106,9 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   id: "t01",
-                  type: "REQUIRED",
+                  comment: {
+                    type: "REQUIRED",
+                  },
                 },
               ],
             },
