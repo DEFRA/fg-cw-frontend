@@ -144,7 +144,7 @@ describe("server", () => {
 
     const { host, searchParams } = new URL(response.headers.location);
 
-    expect(host).toEqual("login.microsoftonline.com");
+    expect(host).toEqual("localhost:3010");
 
     expect(searchParams.get("response_type")).toEqual("code");
     expect(searchParams.get("redirect_uri")).toEqual(
@@ -152,9 +152,9 @@ describe("server", () => {
     );
     expect(searchParams.get("state")).toEqual(expect.any(String));
     expect(searchParams.get("scope")).toEqual(
-      `openid profile email offline_access api://${config.get("entra.clientId")}/cw.backend`,
+      `openid profile email offline_access api://${config.get("oidc.clientId")}/cw.backend`,
     );
-    expect(searchParams.get("client_id")).toEqual(config.get("entra.clientId"));
+    expect(searchParams.get("client_id")).toEqual(config.get("oidc.clientId"));
   });
 
   it("redirects to login without a valid session", async () => {

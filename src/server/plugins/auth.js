@@ -8,7 +8,6 @@ export const auth = {
     async register(server) {
       await server.register(Bell);
 
-      const entra = config.get("entra");
       const session = config.get("session");
 
       server.auth.strategy("entra", "bell", {
@@ -16,14 +15,14 @@ export const auth = {
           name: "entra",
           protocol: "oauth2",
           useParamsAuth: true,
-          auth: `https://login.microsoftonline.com/${entra.tenantId}/oauth2/v2.0/authorize`,
-          token: `https://login.microsoftonline.com/${entra.tenantId}/oauth2/v2.0/token`,
+          auth: config.get("oidc.authEndpoint"),
+          token: config.get("oidc.tokenEndpoint"),
           scope: [
             "openid",
             "profile",
             "email",
             "offline_access",
-            `api://${entra.clientId}/cw.backend`,
+            `api://${config.get("oidc.clientId")}/cw.backend`,
           ],
           async profile(credentials) {
             const { payload } = Jwt.token.decode(credentials.token).decoded;
@@ -37,11 +36,8 @@ export const auth = {
           },
         },
         password: session.cookie.password,
-        clientId: entra.clientId,
-        clientSecret: entra.clientSecret,
-        config: {
-          tenant: entra.tenantId,
-        },
+        clientId: config.get("oidc.clientId"),
+        clientSecret: config.get("oidc.clientSecret"),
         isSecure: config.get("isProduction"),
         forceHttps: config.get("isProduction"),
         location(request) {
