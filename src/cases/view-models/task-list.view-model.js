@@ -31,6 +31,9 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
         const item = {
           value: action.id,
           text: action.label,
+          checked:
+            stage.outcome?.actionId === action.id ||
+            values.actionId === action.id,
         };
 
         if (action.comment) {
@@ -38,6 +41,10 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
           const textareaConfig = {
             id: textareaFieldName,
             name: textareaFieldName,
+            value:
+              action.id === stage.outcome.actionId
+                ? stage.outcome?.comment || ""
+                : "",
             label: { text: action.comment.label },
             hint: action.comment.helpText
               ? { text: action.comment.helpText }

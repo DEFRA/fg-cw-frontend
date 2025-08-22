@@ -1,11 +1,11 @@
-import { submitStageAction } from "../repositories/case.repository.js";
+import { updateStageOutcome } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
-export const submitStageActionUseCase = async (caseId, payload) => {
+export const updateStageOutcomeUseCase = async (caseId, payload) => {
   const result = await validateStageAction(caseId, payload);
 
   if (result.success) {
-    await submitStageAction({ caseId, ...result.actionData });
+    await updateStageOutcome({ caseId, ...result.actionData });
   }
 
   return result;

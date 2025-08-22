@@ -19,7 +19,7 @@
     {% endfor %}
 
     {% if params.stage.actions.items.length > 0 %}
-      <form method="POST" action="/cases/{{ params.caseId }}/stage/action">
+      <form method="POST" action="/cases/{{ params.caseId }}/stage/outcome">
         {% set radiosItems = [] %}
         {% for item in params.stage.actions.items %}
           {% if item.conditional %}
@@ -32,7 +32,7 @@
               set radioItem = {
                 value: item.value,
                 text: item.text,
-                checked: (params.values and params.values.actionId == item.value),
+                checked: item.checked,
                 conditional: { html: conditionalTextarea }
               }
             %}
@@ -43,7 +43,7 @@
               set radioItem = {
                 value: item.value,
                 text: item.text,
-                checked: (params.values and params.values.actionId == item.value)
+                checked: item.checked
               }
             %}
             {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}

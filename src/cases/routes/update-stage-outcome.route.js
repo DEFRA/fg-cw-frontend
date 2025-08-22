@@ -1,16 +1,16 @@
-import { submitStageActionUseCase } from "../use-cases/submit-stage-action.use-case.js";
+import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
 import { createTaskListViewModel } from "../view-models/task-list.view-model.js";
 
-export const submitStageActionRoute = {
+export const updateStageOutcomeRoute = {
   method: "POST",
-  path: "/cases/{caseId}/stage/action",
+  path: "/cases/{caseId}/stage/outcome",
   handler: async (request, h) => {
     const {
       params: { caseId },
       payload,
     } = request;
 
-    const result = await submitStageActionUseCase(caseId, payload);
+    const result = await updateStageOutcomeUseCase(caseId, payload);
 
     if (!result.success) {
       return h.view(
