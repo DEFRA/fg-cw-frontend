@@ -1,22 +1,18 @@
 import hapi from "@hapi/hapi";
-import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { nunjucks } from "../../common/nunjucks/nunjucks.js";
-import { completeStageUseCase } from "../use-cases/complete-stage.use-case.js";
-import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
+import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
 import { updateStageOutcomeRoute } from "./update-stage-outcome.route.js";
 
-vi.mock("../use-cases/find-case-by-id.use-case.js");
-vi.mock("../use-cases/complete-stage.use-case.js");
+vi.mock("../use-cases/update-stage-outcome-use.case.js");
+vi.mock("../../common/helpers/flash-helpers.js");
 
-describe("submitStageOutcomeRoute", () => {
+describe("updateStageOutcomeRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
     server.route(updateStageOutcomeRoute);
-    await server.register([nunjucks]);
-
     await server.initialize();
   });
 
@@ -24,82 +20,142 @@ describe("submitStageOutcomeRoute", () => {
     await server.stop();
   });
 
-  it("completes a stage", async () => {
-    findCaseByIdUseCase.mockResolvedValue({
-      _id: "68495db5afe2d27b09b2ee47",
-      caseRef: "banana-123",
-      workflowCode: "frps-private-beta",
-      status: "NEW",
-      dateReceived: "2025-06-11T10:43:01.603Z",
-      currentStage: "application-receipt",
-      payload: {
-        clientRef: "banana-123",
-        code: "frps-private-beta",
-        createdAt: "2025-06-11T10:43:01.417Z",
-        submittedAt: "2023-10-01T12:00:00.000Z",
-        identifiers: {
-          sbi: "SBI001",
-          frn: "FIRM0001",
-          crn: "CUST0001",
-          defraId: "DEFRA0001",
+  describe("POST /cases/{caseId}/stage/outcome", () => {
+    it("should successfully update stage outcome and redirect", async () => {
+      updateStageOutcomeUseCase.mockResolvedValue({ success: true });
+
+      const payload = {
+        actionId: "approve",
+        "approve-comment": "This looks good to me",
+      };
+
+      const { statusCode, headers } = await server.inject({
+        method: "POST",
+        url: "/cases/test-case-id/stage/outcome",
+        payload,
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe("/cases/test-case-id");
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+        caseId: "test-case-id",
+        actionData: {
+          actionId: "approve",
+          commentFieldName: "approve-comment",
+          comment: "This looks good to me",
         },
-        answers: {
-          agreementName: "Test application name 1",
-          scheme: "SFI",
-          year: 2025,
-          hasCheckedLandIsUpToDate: true,
-          actionApplications: [
-            {
-              parcelId: "9238",
-              sheetId: "SX0679",
-              code: "CSAM1",
-              appliedFor: {
-                unit: "ha",
-                quantity: 20.23,
-              },
-            },
-          ],
-        },
-      },
-      stages: [
-        {
-          id: "application-receipt",
-          title: "Application Receipt",
-          taskGroups: [
-            {
-              id: "application-receipt-tasks",
-              title: "Application Receipt Tasks",
-              tasks: [
-                {
-                  id: "simple-review",
-                  title: "Simple Review",
-                  status: "pending",
-                },
-              ],
-            },
-          ],
-        },
-        {
-          id: "contract",
-          title: "Contract",
-          taskGroups: [],
-        },
-      ],
+      });
     });
 
-    completeStageUseCase.mockResolvedValue({});
+    it("should handle validation errors and redirect with flash data", async () => {
+      const mockErrors = {
+        "reject-comment": {
+          text: "Rejection reason is required",
+          href: "#reject-comment",
+        },
+      };
 
-    const { statusCode, result } = await server.inject({
-      method: "POST",
-      url: "/cases/1234",
+      updateStageOutcomeUseCase.mockResolvedValue({
+        success: false,
+        errors: mockErrors,
+      });
+
+      const payload = {
+        actionId: "reject",
+        "reject-comment": "",
+      };
+
+      const { statusCode, headers } = await server.inject({
+        method: "POST",
+        url: "/cases/case-123/stage/outcome",
+        payload,
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe("/cases/case-123");
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+        caseId: "case-123",
+        actionData: {
+          actionId: "reject",
+          commentFieldName: "reject-comment",
+          comment: "",
+        },
+      });
+
+      // Verify flash data was set
+      expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
+        errors: mockErrors,
+        formData: payload,
+      });
     });
 
-    expect(statusCode).toEqual(200);
-    expect(findCaseByIdUseCase).toHaveBeenCalledWith("1234");
+    it("should extract action data correctly for different action types", async () => {
+      updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
-    const $ = load(result);
-    const view = $("#main-content").html();
+      const payload = {
+        actionId: "conditional-approval",
+        "conditional-approval-comment": "Approval with conditions",
+        otherField: "should be ignored",
+      };
 
-    expect(view).toMatchSnapshot();
+      await server.inject({
+        method: "POST",
+        url: "/cases/test-case-id/stage/outcome",
+        payload,
+      });
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+        caseId: "test-case-id",
+        actionData: {
+          actionId: "conditional-approval",
+          commentFieldName: "conditional-approval-comment",
+          comment: "Approval with conditions",
+        },
+      });
+    });
+
+    it("should handle missing comment field", async () => {
+      updateStageOutcomeUseCase.mockResolvedValue({ success: true });
+
+      const payload = {
+        actionId: "approve",
+      };
+
+      await server.inject({
+        method: "POST",
+        url: "/cases/test-case-id/stage/outcome",
+        payload,
+      });
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+        caseId: "test-case-id",
+        actionData: {
+          actionId: "approve",
+          commentFieldName: "approve-comment",
+          comment: undefined,
+        },
+      });
+    });
+
+    it("should handle empty payload", async () => {
+      updateStageOutcomeUseCase.mockResolvedValue({ success: true });
+
+      const payload = {};
+
+      await server.inject({
+        method: "POST",
+        url: "/cases/test-case-id/stage/outcome",
+        payload,
+      });
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+        caseId: "test-case-id",
+        actionData: {
+          actionId: undefined,
+          commentFieldName: "undefined-comment",
+          comment: undefined,
+        },
+      });
+    });
   });
 });

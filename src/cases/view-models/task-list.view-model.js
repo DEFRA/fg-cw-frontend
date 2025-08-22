@@ -78,7 +78,7 @@ const mapActions = ({ stage, errors, values }) => {
 };
 
 const mapActionItems = ({ actions, stage, errors, values }) =>
-  actions.map((action) => {
+  actions?.map((action) => {
     const conditional = createConditionalTextarea({
       action,
       stage,
