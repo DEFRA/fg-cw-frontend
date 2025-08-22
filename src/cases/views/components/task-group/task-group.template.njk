@@ -23,22 +23,16 @@
         {% set radiosItems = [] %}
         {% for item in params.stage.actions.items %}
           {% if item.conditional %}
-            {# Capture the textarea HTML #}
-            {% set conditionalTextarea %}
-              {{ govukTextarea(item.conditional) }}
-            {% endset %}
-            {# Create item with conditional textarea #}
             {%
               set radioItem = {
                 value: item.value,
                 text: item.text,
                 checked: item.checked,
-                conditional: { html: conditionalTextarea }
+                conditional: { html: govukTextarea(item.conditional) }
               }
             %}
             {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
           {% else %}
-            {# Create simple item #}
             {%
               set radioItem = {
                 value: item.value,
@@ -65,7 +59,7 @@
           })
         }}
 
-        {{ govukButton({ text: "Save" }) }}
+        {{ govukButton({ text: "Save", disabled: params.stage.saveDisabled }) }}
       </form>
     {% endif %}
   </div>

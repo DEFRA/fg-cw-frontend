@@ -19,6 +19,6 @@
   <div class="govuk-body">
     {{ caseDetailsTabNavigation({active: 'tasks', caseId: data.case.id }) }}
 
-    {{ taskGroup({caseId: data.case.id, stage: data.stage, allTasksComplete: data.allTasksComplete, errors: errors, values: values }) }}
+    {{ taskGroup({caseId: data.case.id, stage: data.stage, errors: errors, values: values }) }}
   </div>
 {% endblock %}

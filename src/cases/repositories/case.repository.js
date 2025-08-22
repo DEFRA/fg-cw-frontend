@@ -34,7 +34,7 @@ export const completeStage = async (caseId) => {
 };
 
 export const updateStageOutcome = async ({ caseId, ...payload }) => {
-  await wreck.put(`/cases/${caseId}/stage/outcome`, { payload });
+  await wreck.patch(`/cases/${caseId}/stage/outcome`, { payload });
 };
 
 export const assignUserToCase = async ({ caseId, assignedUserId, notes }) => {
