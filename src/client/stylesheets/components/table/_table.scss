@@ -11,6 +11,7 @@
   background-color: govuk-colour("light-grey");
 }
 
-.govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected) td:first-child {
+.govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected)
+  td:first-child {
   padding-left: 2px;
 }
