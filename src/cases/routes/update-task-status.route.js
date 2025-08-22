@@ -28,9 +28,11 @@ export const updateTaskStatusRoute = {
 
     // ensure comment has a value if it is required...
     if (!validateComment(task.comment, comment)) {
-      return h.redirect(
-        `/cases/${caseId}/tasks/${taskGroupId}/${taskId}?error=Note%20is%20required`,
-      );
+      request.yar.flash("errors", {
+        text: "Note is required",
+        href: "#comment",
+      });
+      return h.redirect(`/cases/${caseId}/tasks/${taskGroupId}/${taskId}`);
     }
 
     await updateTaskStatusUseCase({

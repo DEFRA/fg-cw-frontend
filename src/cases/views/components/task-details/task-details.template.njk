@@ -20,16 +20,11 @@
       })
     }}
 
-    {% if params.error %}
+    {% if params.errorList.length %}
       {{
         govukErrorSummary({
-          titleText: params.error,
-          errorList: [
-            {
-              text: "Please provide a value",
-              href: "#comment"
-            }
-          ]
+          titleText: "There is a problem",
+          errorList: params.errorList
         })
       }}
     {% endif %}
@@ -57,7 +52,7 @@
     {% elif params.currentTask.type === "boolean" %}
       {{
         appTaskBoolean({
-          error: params.error,
+          error: params.errorList.length,
           caseId: params.caseId,
           stageId: params.stageId,
           taskGroupId: params.taskGroupId,

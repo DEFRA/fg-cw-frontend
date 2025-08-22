@@ -1,6 +1,6 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 
-export const createTaskDetailViewModel = (caseData, query, error) => {
+export const createTaskDetailViewModel = (caseData, query, errors) => {
   const stage = caseData.stages.find(
     (stage) => stage.id === caseData.currentStage,
   );
@@ -16,6 +16,8 @@ export const createTaskDetailViewModel = (caseData, query, error) => {
   );
 
   return {
+    errors,
+    errorList: errors,
     pageTitle: "Case task",
     pageHeading: "Case",
     breadcrumbs: [
@@ -23,7 +25,6 @@ export const createTaskDetailViewModel = (caseData, query, error) => {
       { text: caseData.caseRef, href: "/cases/" + caseData._id },
     ],
     data: {
-      error,
       case: {
         id: caseData._id,
         caseRef: caseData.caseRef,

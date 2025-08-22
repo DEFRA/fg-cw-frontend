@@ -1,17 +1,30 @@
 import hapi from "@hapi/hapi";
+import Yar from "@hapi/yar";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
 import { updateTaskStatusRoute } from "./update-task-status.route.js";
 
-vi.mock("../use-cases/update-task-status.use-case.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
+vi.mock("../use-cases/update-task-status.use-case.js");
 
 describe("updateTaskStatusRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
+    await server.register({
+      plugin: Yar,
+      options: {
+        name: "session",
+        cookieOptions: {
+          password: "abcdefghijklmnopqrstuvwxyz012345",
+          isSecure: false,
+          isSameSite: "Strict",
+        },
+      },
+    });
+
     server.route([updateTaskStatusRoute]);
 
     await server.initialize();
@@ -42,6 +55,7 @@ describe("updateTaskStatusRoute", () => {
         },
       ],
     });
+
     const { statusCode } = await server.inject({
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/stages/001/task-groups/tg01/tasks/t01/status",
