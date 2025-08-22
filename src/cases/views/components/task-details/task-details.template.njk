@@ -2,6 +2,8 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
 
 {% set caseLink = "/cases/" + params.caseId %}
@@ -17,6 +19,16 @@
         }
       })
     }}
+
+    {% if params.errorList.length %}
+      {{
+        govukErrorSummary({
+          titleText: "There is a problem",
+          errorList: params.errorList
+        })
+      }}
+    {% endif %}
+
     <h2
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
@@ -24,15 +36,31 @@
       {{ params.currentTask.title }}
     </h2>
 
-    {% if params.currentTask.type === "boolean" %}
+    {% if params.currentTask.status === "COMPLETE" %}
+      <p class="govuk-inset-text">
+        This task was completed by {{ params.currentTask.updatedBy }} on
+        {{ params.currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
+        {{ params.currentTask.updatedAt | formatDate("hh:mm a") }}
+      </p>
+
+      {% if params.comment.text %}
+        <div class="form-group">
+          <h2 class="govuk-heading-m">Outcome review note</h2>
+          <p>{{ params.comment.text }}</p>
+        </div>
+      {% endif %}
+    {% elif params.currentTask.type === "boolean" %}
       {{
         appTaskBoolean({
-        caseId: params.caseId,
-        stageId: params.stageId,
-        taskGroupId: params.taskGroupId,
-        taskId: params.currentTask.id,
-        isComplete: params.currentTask.isComplete,
-        title: params.currentTask.title
+          error: params.errorList.length,
+          caseId: params.caseId,
+          stageId: params.stageId,
+          taskGroupId: params.taskGroupId,
+          taskId: params.currentTask.id,
+          isComplete: params.currentTask.isComplete,
+          comment: params.currentTask.comment,
+          commentText: params.comment.text,
+          title: params.currentTask.title
         })
       }}
     {% endif %}

@@ -1,4 +1,5 @@
 import hapi from "@hapi/hapi";
+import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
@@ -12,6 +13,18 @@ describe("viewTaskRoute", () => {
 
   beforeAll(async () => {
     server = hapi.server();
+    await server.register({
+      plugin: Yar,
+      options: {
+        name: "session",
+        cookieOptions: {
+          password: "abcdefghijklmnopqrstuvwxyz012345",
+          isSecure: false,
+          isSameSite: "Strict",
+        },
+      },
+    });
+
     server.route(viewTaskRoute);
     await server.register([nunjucks]);
 
@@ -72,6 +85,7 @@ describe("viewTaskRoute", () => {
                   id: "simple-review",
                   title: "Simple Review",
                   status: "pending",
+                  type: "OPTIONAL",
                 },
               ],
             },
@@ -83,6 +97,7 @@ describe("viewTaskRoute", () => {
           taskGroups: [],
         },
       ],
+      comments: [],
     });
 
     const { statusCode, result } = await server.inject({

@@ -7,6 +7,8 @@ exports[`task-details > renders 1`] = `
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
 
+
+
     <h2
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
@@ -33,6 +35,8 @@ exports[`task-details > renders 1`] = `
 </div>
 
   </div>
+
+
   <div class="govuk-button-group">
     <button
       type="submit"

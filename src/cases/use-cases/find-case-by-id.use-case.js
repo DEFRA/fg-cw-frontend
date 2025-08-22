@@ -12,6 +12,7 @@ const processTask = (task, wfTaskGroup) => {
     ...task,
     title: workflowTask.title,
     type: workflowTask.type,
+    comment: workflowTask.comment,
   };
 };
 
