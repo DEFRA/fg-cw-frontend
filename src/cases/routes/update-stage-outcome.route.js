@@ -10,15 +10,26 @@ export const updateStageOutcomeRoute = {
       payload,
     } = request;
 
-    const result = await updateStageOutcomeUseCase(caseId, payload);
+    const actionData = extractActionData(payload);
 
-    if (!result.success) {
-      setFlashData(request, {
-        errors: result.errors,
-        formData: payload,
-      });
+    const { errors } = await updateStageOutcomeUseCase({ caseId, actionData });
+
+    if (errors) {
+      setFlashData(request, { errors, formData: payload });
     }
 
     return h.redirect(`/cases/${caseId}`);
   },
+};
+
+const extractActionData = (payload) => {
+  const { actionId } = payload;
+  const commentFieldName = `${actionId}-comment`;
+  const comment = payload[commentFieldName];
+
+  return {
+    actionId,
+    commentFieldName,
+    comment,
+  };
 };
