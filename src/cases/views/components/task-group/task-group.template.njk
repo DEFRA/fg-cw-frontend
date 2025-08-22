@@ -1,4 +1,7 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../task-list/macro.njk" import taskList %}
 {% from "../../partials/stage-action-button-group/macro.njk" import stageActionButtonGroup %}
 
@@ -15,14 +18,55 @@
       {{ taskList({tasks: taskGrout.tasks}) }}
     {% endfor %}
 
-    {% if params.stage.actions.length > 0 %}
-      {{
-        stageActionButtonGroup({
-            buttons: params.stage.actions,
-            caseId: params.caseId,
-            allTasksComplete: params.allTasksComplete
-        })
-      }}
+    {% if params.stage.actions.items.length > 0 %}
+      <form method="POST" action="/cases/{{ params.caseId }}/stage/action">
+        {% set radiosItems = [] %}
+        {% for item in params.stage.actions.items %}
+          {% if item.conditional %}
+            {# Capture the textarea HTML #}
+            {% set conditionalTextarea %}
+              {{ govukTextarea(item.conditional) }}
+            {% endset %}
+            {# Create item with conditional textarea #}
+            {%
+              set radioItem = {
+                value: item.value,
+                text: item.text,
+                checked: (params.values and params.values.actionId == item.value),
+                conditional: { html: conditionalTextarea }
+              }
+            %}
+            {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
+          {% else %}
+            {# Create simple item #}
+            {%
+              set radioItem = {
+                value: item.value,
+                text: item.text,
+                checked: (params.values and params.values.actionId == item.value)
+              }
+            %}
+            {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
+          {% endif %}
+        {% endfor %}
+
+        {{
+          govukRadios({
+            idPrefix: params.stage.actions.idPrefix,
+            name: params.stage.actions.name,
+            errorMessage: params.stage.actions.errorMessage,
+            fieldset: {
+              legend: {
+                text: params.stage.actions.legend,
+                classes: "govuk-fieldset__legend--m"
+              }
+            },
+            items: radiosItems
+          })
+        }}
+
+        {{ govukButton({ text: "Save" }) }}
+      </form>
     {% endif %}
   </div>
 </div>

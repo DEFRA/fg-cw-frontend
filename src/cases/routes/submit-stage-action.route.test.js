@@ -4,17 +4,17 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { completeStageUseCase } from "../use-cases/complete-stage.use-case.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { completeStageRoute } from "./complete-stage.route.js";
+import { submitStageActionRoute } from "./submit-stage-action.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../use-cases/complete-stage.use-case.js");
 
-describe("completeStageRoute", () => {
+describe("submitStageOutcomeRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
-    server.route(completeStageRoute);
+    server.route(submitStageActionRoute);
     await server.register([nunjucks]);
 
     await server.initialize();

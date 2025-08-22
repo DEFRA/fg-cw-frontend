@@ -1,12 +1,13 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
-export const createTaskListViewModel = (caseData) => {
+export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
   const stage = caseData.stages.find(
     (stageInfo) => stageInfo.id === caseData.currentStage,
   );
 
   const allTasks = [];
+  const actionTitle = stage.actionTitle || "Decision";
   const currentStage = {
     ...stage,
     taskGroups: stage.taskGroups.map((taskGroup) => ({
@@ -21,6 +22,46 @@ export const createTaskListViewModel = (caseData) => {
         };
       }),
     })),
+    actions: {
+      idPrefix: "actionId",
+      name: "actionId",
+      legend: actionTitle,
+      errorMessage: errors && errors.outcome ? errors.outcome : undefined,
+      items: stage.actions.map((action) => {
+        const item = {
+          value: action.id,
+          text: action.label,
+        };
+
+        if (action.comment) {
+          const textareaFieldName = `${action.id}-comment`;
+          const textareaConfig = {
+            id: textareaFieldName,
+            name: textareaFieldName,
+            label: { text: action.comment.label },
+            hint: action.comment.hint
+              ? { text: action.comment.hint }
+              : undefined,
+            rows: 3,
+            required: action.comment.type === "REQUIRED",
+          };
+
+          // Add error state if present
+          if (errors && errors[textareaFieldName]) {
+            textareaConfig.errorMessage = errors[textareaFieldName];
+          }
+
+          // Add preserved value if present
+          if (values && values[textareaFieldName]) {
+            textareaConfig.value = values[textareaFieldName];
+          }
+
+          item.conditional = textareaConfig;
+        }
+
+        return item;
+      }),
+    },
   };
 
   const allTasksComplete = allTasks.every((task) => task.status === "complete");
@@ -51,5 +92,7 @@ export const createTaskListViewModel = (caseData) => {
       stage: currentStage,
       allTasksComplete,
     },
+    errors,
+    values,
   };
 };
