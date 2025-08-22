@@ -39,8 +39,8 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
             id: textareaFieldName,
             name: textareaFieldName,
             label: { text: action.comment.label },
-            hint: action.comment.hint
-              ? { text: action.comment.hint }
+            hint: action.comment.helpText
+              ? { text: action.comment.helpText }
               : undefined,
             rows: 3,
             required: action.comment.type === "REQUIRED",
