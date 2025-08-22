@@ -16,11 +16,15 @@ export const updateTaskStatus = async ({
   taskGroupId,
   taskId,
   isComplete,
+  comment = null,
 }) => {
   await wreck.patch(
     `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
     {
-      payload: { status: isComplete ? "complete" : "pending" },
+      payload: {
+        status: isComplete ? "complete" : "pending",
+        comment: comment === "" ? null : comment,
+      },
     },
   );
 };
