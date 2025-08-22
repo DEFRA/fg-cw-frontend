@@ -26,14 +26,14 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
       idPrefix: "actionId",
       name: "actionId",
       legend: actionTitle,
-      errorMessage: errors && errors.outcome ? errors.outcome : undefined,
+      errorMessage: errors && errors.actionId ? errors.actionId : undefined,
       items: stage.actions.map((action) => {
         const item = {
           value: action.id,
           text: action.label,
-          checked:
-            stage.outcome?.actionId === action.id ||
-            values.actionId === action.id,
+          checked: values.actionId
+            ? values.actionId === action.id
+            : stage.outcome?.actionId === action.id,
         };
 
         if (action.comment) {
@@ -59,7 +59,7 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
           }
 
           // Add preserved value if present
-          if (values && values[textareaFieldName]) {
+          if (values && textareaFieldName in values) {
             textareaConfig.value = values[textareaFieldName];
           }
 
@@ -100,6 +100,7 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
       allTasksComplete,
     },
     errors,
+    errorList: Object.values(errors),
     values,
   };
 };

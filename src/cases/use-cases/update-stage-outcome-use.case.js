@@ -37,7 +37,6 @@ const validateStageAction = async (caseId, payload) => {
           href: "#decision",
         },
       },
-      caseData,
     };
   }
 
