@@ -1,8 +1,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
-{% from "govuk/components/radios/macro.njk" import govukRadios %}
-{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
-{% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "../task-list/macro.njk" import taskList %}
+{% from "../stage-actions/macro.njk" import stageActions %}
 {% from "../../partials/stage-action-button-group/macro.njk" import stageActionButtonGroup %}
 
 <div class="govuk-grid-row">
@@ -19,48 +17,7 @@
     {% endfor %}
 
     {% if params.stage.actions.items.length > 0 %}
-      <form method="POST" action="/cases/{{ params.caseId }}/stage/outcome">
-        {% set radiosItems = [] %}
-        {% for item in params.stage.actions.items %}
-          {% if item.conditional %}
-            {%
-              set radioItem = {
-                value: item.value,
-                text: item.text,
-                checked: item.checked,
-                conditional: { html: govukTextarea(item.conditional) }
-              }
-            %}
-            {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
-          {% else %}
-            {%
-              set radioItem = {
-                value: item.value,
-                text: item.text,
-                checked: item.checked
-              }
-            %}
-            {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
-          {% endif %}
-        {% endfor %}
-
-        {{
-          govukRadios({
-            idPrefix: params.stage.actions.idPrefix,
-            name: params.stage.actions.name,
-            errorMessage: params.stage.actions.errorMessage,
-            fieldset: {
-              legend: {
-                text: params.stage.actions.legend,
-                classes: "govuk-fieldset__legend--m"
-              }
-            },
-            items: radiosItems
-          })
-        }}
-
-        {{ govukButton({ text: "Save", disabled: params.stage.saveDisabled }) }}
-      </form>
+      {{ stageActions({ caseId: params.caseId, stage: params.stage }) }}
     {% endif %}
   </div>
 </div>
