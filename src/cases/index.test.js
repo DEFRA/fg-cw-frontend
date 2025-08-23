@@ -26,8 +26,8 @@ describe("cases", () => {
         { method: "get", path: "/cases/{caseId}/notes" },
         { method: "get", path: "/cases/{caseId}/notes/new" },
         { method: "post", path: "/cases/{caseId}/notes" },
+        { method: "post", path: "/cases/{caseId}/stage/outcome" },
         { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
-        { method: "post", path: "/cases/{caseId}" },
         {
           method: "post",
           path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",

@@ -6,6 +6,9 @@ import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { listTasksRoute } from "./list-tasks.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
+vi.mock("../../common/helpers/flash-helpers.js", () => ({
+  getFlashData: vi.fn(() => ({ errors: {}, formData: {} })),
+}));
 
 describe("listTasksRoute", () => {
   let server;

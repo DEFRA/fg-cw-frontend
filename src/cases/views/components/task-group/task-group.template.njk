@@ -1,5 +1,6 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "../task-list/macro.njk" import taskList %}
+{% from "../stage-actions/macro.njk" import stageActions %}
 {% from "../../partials/stage-action-button-group/macro.njk" import stageActionButtonGroup %}
 
 <div class="govuk-grid-row">
@@ -15,14 +16,8 @@
       {{ taskList({tasks: taskGrout.tasks}) }}
     {% endfor %}
 
-    {% if params.stage.actions.length > 0 %}
-      {{
-        stageActionButtonGroup({
-            buttons: params.stage.actions,
-            caseId: params.caseId,
-            allTasksComplete: params.allTasksComplete
-        })
-      }}
+    {% if params.stage.actions.items.length > 0 %}
+      {{ stageActions({ caseId: params.caseId, stage: params.stage }) }}
     {% endif %}
   </div>
 </div>
