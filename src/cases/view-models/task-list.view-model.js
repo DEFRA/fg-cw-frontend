@@ -94,7 +94,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
       checked,
       conditional,
     };
-  });
+  }) || [];
 
 const mapChecked = ({ action, stage, values }) => {
   return values.actionId
