@@ -41,7 +41,9 @@ const findSelectedAction = (caseData, actionId) => {
 };
 
 const validComment = (action, comment) => {
-  if (!isRequired(action.comment)) return true;
+  if (!isRequired(action.comment)) {
+    return true;
+  }
   return typeof comment === "string" && comment.trim() !== "";
 };
 
