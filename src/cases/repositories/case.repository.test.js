@@ -6,6 +6,7 @@ import {
   completeStage,
   findAll,
   findById,
+  updateStageOutcome,
   updateTaskStatus,
 } from "./case.repository.js";
 
@@ -257,6 +258,89 @@ describe("Case Repository", () => {
         "/cases/case-error/assigned-user",
         {
           payload: { assignedUserId: "user-error" },
+        },
+      );
+    });
+  });
+
+  describe("updateStageOutcome", () => {
+    it("calls API with correct endpoint and payload", async () => {
+      const mockData = {
+        caseId: "case-123",
+        actionId: "approve",
+        comment: "This looks good to me",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-123/stage/outcome",
+        {
+          payload: { actionId: "approve", comment: "This looks good to me" },
+        },
+      );
+    });
+
+    it("handles payload with multiple properties", async () => {
+      const mockData = {
+        caseId: "case-456",
+        actionId: "reject",
+        comment: "Missing required documents",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-456/stage/outcome",
+        {
+          payload: {
+            actionId: "reject",
+            comment: "Missing required documents",
+          },
+        },
+      );
+    });
+
+    it("handles payload without comment", async () => {
+      const mockData = {
+        caseId: "case-789",
+        actionId: "approve",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-789/stage/outcome",
+        {
+          payload: { actionId: "approve" },
+        },
+      );
+    });
+
+    it("propagates API errors", async () => {
+      const mockData = {
+        caseId: "case-error",
+        actionId: "approve",
+        comment: "This will fail",
+      };
+
+      const apiError = new Error("Stage outcome update failed");
+      wreck.patch.mockRejectedValueOnce(apiError);
+
+      await expect(updateStageOutcome(mockData)).rejects.toThrow(
+        "Stage outcome update failed",
+      );
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-error/stage/outcome",
+        {
+          payload: { actionId: "approve", comment: "This will fail" },
         },
       );
     });
