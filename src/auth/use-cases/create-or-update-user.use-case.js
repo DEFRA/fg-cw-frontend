@@ -22,6 +22,6 @@ export const createOrUpdateUserUseCase = async (profile) => {
     name: profile.name,
     email: profile.email,
     idpRoles: profile.roles,
-    appRoles: [],
+    appRoles: {},
   });
 };
