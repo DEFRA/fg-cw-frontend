@@ -1,5 +1,6 @@
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
+import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
 import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
@@ -28,6 +29,7 @@ export const cases = {
         updateTaskStatusRoute,
         updateStageOutcomeRoute,
         getSecretRoute,
+        getSecretWorkflowRoute,
         viewAssignUserToCaseRoute,
         assignUserToCaseRoute,
       ]);
