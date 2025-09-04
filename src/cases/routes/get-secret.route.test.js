@@ -1,3 +1,4 @@
+import Bell from "@hapi/bell";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../server/index.js";
@@ -10,6 +11,7 @@ describe("getSecret", () => {
   let server;
 
   beforeAll(async () => {
+    Bell.simulate(() => ({}));
     server = await createServer();
     server.route(getSecretRoute);
 
@@ -18,6 +20,7 @@ describe("getSecret", () => {
 
   afterAll(async () => {
     await server.stop();
+    Bell.simulate(false);
   });
 
   it("returns 200", async () => {
