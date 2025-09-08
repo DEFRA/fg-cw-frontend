@@ -1,3 +1,4 @@
+import { viewAgreementsRoute } from "./routes/agreements/view-agreements.route.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
@@ -32,6 +33,7 @@ export const cases = {
         getSecretWorkflowRoute,
         viewAssignUserToCaseRoute,
         assignUserToCaseRoute,
+        viewAgreementsRoute,
       ]);
     },
   },

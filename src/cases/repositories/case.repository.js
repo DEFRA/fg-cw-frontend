@@ -10,6 +10,11 @@ export const findById = async (caseId) => {
   return payload;
 };
 
+export const findAgreementsById = async (caseId) => {
+  const { payload } = await wreck.get(`/cases/${caseId}/agreements`);
+  return payload;
+};
+
 export const updateTaskStatus = async ({
   caseId,
   stageId,
