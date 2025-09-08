@@ -1,0 +1,58 @@
+.copy-to-clipboard-button {
+  background: #ffffff;
+  border: 1px solid #b1b4b6;
+  color: #0b0c0c;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.1875;
+  margin: 0;
+  padding: 8px 15px;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: top;
+
+  &:hover {
+    background-color: #f3f2f1;
+    border-color: #505a5f;
+  }
+
+  &:focus {
+    background-color: #ffdd00;
+    border-color: #0b0c0c;
+    box-shadow:
+      0 -2px #ffdd00,
+      0 4px #0b0c0c;
+    outline: 4px solid transparent;
+  }
+
+  &:active {
+    background-color: #f3f2f1;
+    border-color: #0b0c0c;
+    top: 2px;
+  }
+
+  &:disabled {
+    background-color: #ffffff;
+    border-color: #b1b4b6;
+    color: #b1b4b6;
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+}
+
+.copy-to-clipboard-container {
+  position: relative;
+  display: inline-block;
+}
+
+.copy-to-clipboard-feedback {
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  white-space: nowrap;
+}

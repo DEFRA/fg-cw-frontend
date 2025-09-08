@@ -1,0 +1,10 @@
+{#
+    text: <string> - The text to copy to clipboard
+    buttonText: <string> (optional) - Button text, defaults to "Copy"
+    feedbackText: <string> (optional) - Feedback text, defaults to "Copied to clipboard"
+    classes: <string> (optional) - Additional CSS classes
+#}
+
+{% macro copyToClipboard(params) %}
+  {%- include "./copy-to-clipboard.template.njk" -%}
+{% endmacro %}

@@ -1,0 +1,22 @@
+{% set text = params.text or "Copy" %}
+{% set buttonText = params.buttonText or "Copy" %}
+{% set feedbackText = params.feedbackText or "Copied to clipboard" %}
+{% set classes = params.classes or "" %}
+
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button {{ classes }}"
+    data-module="copy-to-clipboard"
+    data-text="{{ text }}"
+    aria-label="Copy {{ text }} to clipboard"
+  >
+    {{ buttonText }}
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    {{ feedbackText }}
+  </span>
+</div>
