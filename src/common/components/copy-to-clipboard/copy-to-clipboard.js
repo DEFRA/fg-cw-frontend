@@ -4,6 +4,10 @@
  * @preserve
  */
 export class CopyToClipboard {
+  // Constants
+  static FEEDBACK_DISPLAY_DURATION = 2000; // 2 seconds
+  static SCREEN_READER_ANNOUNCEMENT_DELAY = 200; // 200ms
+
   /**
    * @param {Element | null} $root - HTML element to use for copy to clipboard
    */
@@ -72,7 +76,7 @@ export class CopyToClipboard {
         this.$feedbackTag.style.display = "none";
       }
       this.$button.disabled = false;
-    }, 2000);
+    }, CopyToClipboard.FEEDBACK_DISPLAY_DURATION);
   }
 
   /**
@@ -102,7 +106,7 @@ export class CopyToClipboard {
         this.$feedbackTag.textContent = originalText;
       }
       this.$button.disabled = false;
-    }, 2000);
+    }, CopyToClipboard.FEEDBACK_DISPLAY_DURATION);
   }
 
   /**
@@ -127,7 +131,7 @@ export class CopyToClipboard {
     liveRegion.textContent = "";
     setTimeout(() => {
       liveRegion.textContent = message;
-    }, 200);
+    }, CopyToClipboard.SCREEN_READER_ANNOUNCEMENT_DELAY);
   }
 
   /**

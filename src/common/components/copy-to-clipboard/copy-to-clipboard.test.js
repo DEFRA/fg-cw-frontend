@@ -103,7 +103,7 @@ describe("CopyToClipboard", () => {
     it("should re-enable button and hide feedback after timeout", () => {
       component.showSuccess();
 
-      vi.advanceTimersByTime(2000);
+      vi.advanceTimersByTime(CopyToClipboard.FEEDBACK_DISPLAY_DURATION);
 
       expect(button.disabled).toBe(false);
       expect(feedbackTag.style.display).toBe("none");
@@ -145,14 +145,14 @@ describe("CopyToClipboard", () => {
       expect(announceToScreenReaderSpy).toHaveBeenCalledWith("Failed to copy");
 
       // After timeout, should restore original text
-      vi.advanceTimersByTime(2000);
+      vi.advanceTimersByTime(CopyToClipboard.FEEDBACK_DISPLAY_DURATION);
       expect(feedbackTag.textContent).toBe(originalText);
     });
 
     it("should re-enable button and hide feedback after timeout", () => {
       component.showError();
 
-      vi.advanceTimersByTime(2000);
+      vi.advanceTimersByTime(CopyToClipboard.FEEDBACK_DISPLAY_DURATION);
 
       expect(button.disabled).toBe(false);
       expect(feedbackTag.style.display).toBe("none");
