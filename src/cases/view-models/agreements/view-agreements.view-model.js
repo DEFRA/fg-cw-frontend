@@ -1,3 +1,4 @@
+import { capitalise } from "../../../common/helpers/text-helpers.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
   formatDate,
@@ -28,11 +29,10 @@ export const createViewAgreementsViewModel = (agreementData) => {
           },
           {
             text: "View",
-            classes: "govuk-!-width-one-quarter",
+            classes: "govuk-!-width-one-half",
           },
           {
             text: "Status",
-            classes: "govuk-!-width-one-quarter",
           },
         ],
         rows: agreementData.agreements.map((agreement) => ({
@@ -48,15 +48,23 @@ export const createViewAgreementsViewModel = (agreementData) => {
             href: `${agreementData.externalUrl}${agreement.agreementRef}`,
             text: "Copy external",
           },
-          status: {
-            text: agreement.agreementStatus,
-            classes:
-              agreement.agreementStatus === "Agreed"
-                ? "govuk-tag--blue"
-                : "govuk-tag--grey",
-          },
+          status: formatAgreementStatus(agreement.agreementStatus),
         })),
       },
     },
+  };
+};
+
+export const formatAgreementStatus = (status) => {
+  if (!status) {
+    return {
+      text: "",
+    };
+  }
+
+  const text = capitalise(status);
+  return {
+    text,
+    classes: text === "Agreed" ? "govuk-tag--blue" : "govuk-tag--grey",
   };
 };
