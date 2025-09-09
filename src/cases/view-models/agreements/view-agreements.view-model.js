@@ -36,20 +36,22 @@ export const createViewAgreementsViewModel = (agreementData) => {
           },
         ],
         rows: agreementData.agreements.map((agreement) => ({
-          ref: { text: agreement.ref },
-          date: { text: formatDate(agreement.date, DATE_FORMAT_SHORT_MONTH) },
+          ref: { text: agreement.agreementRef },
+          date: {
+            text: formatDate(agreement.createdAt, DATE_FORMAT_SHORT_MONTH),
+          },
           internalUrl: {
-            href: `${agreementData.internalUrl}${agreement.ref}`,
+            href: `${agreementData.internalUrl}${agreement.agreementRef}`,
             text: "Internal",
           },
           externalUrl: {
-            href: `${agreementData.externalUrl}${agreement.ref}`,
+            href: `${agreementData.externalUrl}${agreement.agreementRef}`,
             text: "Copy external",
           },
           status: {
-            text: agreement.status,
+            text: agreement.agreementStatus,
             classes:
-              agreement.status === "Agreed"
+              agreement.agreementStatus === "Agreed"
                 ? "govuk-tag--blue"
                 : "govuk-tag--grey",
           },
