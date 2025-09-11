@@ -7,7 +7,12 @@ export const formatDate = (
   value,
   formattedDateStr = DATE_FORMAT_SHORT_MONTH,
 ) => {
-  const date = isDate(value) ? value : parseISO(value);
+  try {
+    const date = isDate(value) ? value : parseISO(value);
 
-  return format(date, formattedDateStr);
+    return format(date, formattedDateStr);
+  } catch (error) {
+    // Return original value if formatting fails
+    return value;
+  }
 };

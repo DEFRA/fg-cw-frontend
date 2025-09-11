@@ -3,7 +3,7 @@ import { createViewTabViewModel } from "../../view-models/view-tab.view-model.js
 
 export const viewCaseTabRoute = {
   method: "GET",
-  path: "/cases/{caseId}/tabs/{tabId}",
+  path: "/cases/{caseId}/{tabId}",
   async handler(request, h) {
     const { caseId, tabId } = request.params;
 
