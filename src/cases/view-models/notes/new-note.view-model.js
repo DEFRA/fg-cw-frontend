@@ -5,6 +5,11 @@ export const createNewNoteViewModel = (caseItem, errors, formData) => {
     pageTitle: `New Note ${caseItem.caseRef}`,
     pageHeading: `Add a note`,
     breadcrumbs: [],
+    links: caseItem.links.map((link) => ({
+      text: link.text,
+      href: link.href,
+      active: link.id === "notes",
+    })),
     data: {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),

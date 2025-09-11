@@ -10,6 +10,11 @@ export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
     breadcrumbs: [],
+    links: caseItem.links.map((link) => ({
+      text: link.text,
+      href: link.href,
+      active: link.id === "notes",
+    })),
     data: {
       caseId: caseItem._id,
       banner: resolveBannerPaths(caseItem.banner, caseItem),

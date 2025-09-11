@@ -9,6 +9,11 @@ export const createTimelineViewModel = (caseItem) => {
     pageTitle: `Timeline ${caseRef}`,
     pageHeading: `Timeline`,
     breadcrumbs: [],
+    links: caseItem.links.map((link) => ({
+      text: link.text,
+      href: link.href,
+      active: link.id === "timeline",
+    })),
     data: {
       case: {
         _id: caseItem._id,

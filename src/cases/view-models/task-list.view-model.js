@@ -24,6 +24,11 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
       { text: "Cases", href: "/cases" },
       { text: caseData.caseRef },
     ],
+    links: caseData.links.map((link) => ({
+      text: link.text,
+      href: link.href,
+      active: link.id === "tasks",
+    })),
     data: {
       case: mapCaseData(caseData),
       stage: currentStage,
