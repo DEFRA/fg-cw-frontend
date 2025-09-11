@@ -3,6 +3,7 @@ import Nunjucks from "nunjucks";
 
 import { glob } from "node:fs/promises";
 import { config } from "../config.js";
+import { filters } from "../format/format-filters.js";
 import { context } from "./context/context.js";
 import { formatDate } from "./filters/format-date.js";
 
@@ -34,6 +35,7 @@ export const environment = Nunjucks.configure(njkPaths, {
 });
 
 environment.addFilter("formatDate", formatDate);
+environment.addFilter("fixed", filters.fixed);
 
 export const nunjucks = {
   plugin: Vision,

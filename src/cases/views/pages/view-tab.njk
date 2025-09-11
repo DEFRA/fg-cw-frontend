@@ -1,0 +1,17 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "../components/dynamic-content/macro.njk" import renderContent %}
+
+{% block content %}
+  {{ caseSummary(data) }}
+
+  {{ govukServiceNavigation({ navigation: data.links }) }}
+
+  {{ renderContent(data.content) }}
+
+  <pre>
+    {{ data | dump(2) }}
+  </pre
+  >
+{% endblock %}

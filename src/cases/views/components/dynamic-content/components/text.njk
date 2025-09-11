@@ -1,0 +1,41 @@
+{% macro defraText(params) %}
+  {%- set value = params.text or '' %}
+  {%- set classes = params.classes or '' %}
+  {%- set type = params.type or 'string' %}
+  {%- set filters = params.filters or [] %}
+
+  {%- set displayValue = formatByType(value, type) %}
+
+  {%- set filteredValue = displayValue %}
+  {%- for filter in filters %}
+    {%- set filteredValue = applyFilter(filteredValue, filter) %}
+  {%- endfor %}
+
+  <span{% if classes %} class="{{ classes }}"{% endif %}>{{ filteredValue | safe }}</span>
+{% endmacro %}
+
+{% macro formatByType(value, type) %}
+  {%- if type == 'boolean' -%}
+    {%- if value == true or value == 'true' -%}Yes{%- else -%}No{%- endif -%}
+  {%- elif type == 'date' -%}
+    {{ value | formatDate }}
+  {%- else -%}
+    {{ value }}
+  {%- endif -%}
+{% endmacro %}
+
+{% macro applyFilter(value, filter) %}
+  {%- if filter.name == 'fixed' -%}
+    {{ value | fixed(filter.decimals or 0) }}
+  {%- elif filter.name == 'formatDate' -%}
+    {{ value | formatDate }}
+  {%- elif filter.name == 'capitalize' -%}
+    {{ value | capitalize }}
+  {%- elif filter.name == 'upper' -%}
+    {{ value | upper }}
+  {%- elif filter.name == 'lower' -%}
+    {{ value | lower }}
+  {%- else -%}
+    {{ value }}
+  {%- endif -%}
+{% endmacro %}

@@ -1,0 +1,11 @@
+{% from "./render-component.njk" import renderDefraComponent %}
+
+{% macro renderContent(contentArray) %}
+  {% if contentArray and contentArray.length > 0 %}
+    {% for el in contentArray %}
+      {{ renderDefraComponent(el) }}
+    {% endfor %}
+  {% else %}
+    <p class="govuk-body">No content available.</p>
+  {% endif %}
+{% endmacro %}
