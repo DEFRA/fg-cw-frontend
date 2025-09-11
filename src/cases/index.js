@@ -10,7 +10,6 @@ import { viewNotesRoute } from "./routes/notes/view-notes.route.js";
 import { viewCaseTabRoute } from "./routes/tabs/view-case-tab.route.js";
 import { updateStageOutcomeRoute } from "./routes/update-stage-outcome.route.js";
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
-import { viewCaseRoute } from "./routes/view-case.route.js";
 import { viewTaskRoute } from "./routes/view-task.route.js";
 import { timelineRoute } from "./routes/view-timeline.route.js";
 
@@ -20,7 +19,6 @@ export const cases = {
     register(server) {
       server.route([
         listCasesRoute,
-        viewCaseRoute,
         viewNotesRoute,
         newNoteRoute,
         createNoteRoute,

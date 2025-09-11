@@ -1,7 +1,6 @@
 import jsonpath from "jsonpath";
 import { format } from "../../common/format/format.js";
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
-import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
 
 const findCaseDetailsTab = (overrideTabs) => {
   return (overrideTabs || []).find((tab) => tab.id === "caseDetails");
@@ -66,7 +65,7 @@ const addCaseDetailsIfPresent = (data, caseItem) => {
   return data;
 };
 
-const buildCaseData = (caseItem, caseRef, code, banner) => {
+const buildCaseData = (caseItem, caseRef, code) => {
   const data = {
     _id: caseItem._id,
     clientRef: caseRef,
@@ -79,7 +78,7 @@ const buildCaseData = (caseItem, caseRef, code, banner) => {
     status: caseItem.status,
     assignedUser: caseItem.assignedUser,
     payload: caseItem.payload,
-    banner: resolveBannerPaths(banner, caseItem),
+    banner: caseItem.banner,
     title: getCaseTitle(caseItem),
   };
 

@@ -1,4 +1,3 @@
-import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
   DATE_FORMAT_SORTABLE_DATE,
@@ -17,7 +16,7 @@ export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
     })),
     data: {
       caseId: caseItem._id,
-      banner: resolveBannerPaths(caseItem.banner, caseItem),
+      banner: caseItem.banner,
       notes: mapNotes(caseItem.comments, selectedNoteRef),
       addNoteUrl: `/cases/${caseItem._id}/notes/new`,
     },
