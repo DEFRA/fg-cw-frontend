@@ -17,16 +17,7 @@
                 <strong class="govuk-!-margin-right-1"
                   >{{ field.label }}:</strong
                 >
-                {% if field.type == 'date' and field.value and field.value != '' %}
-                  {% set dateValue = field.value | formatDate %}
-                  {% if dateValue and dateValue != 'Invalid Date' %}
-                    {{ dateValue }}
-                  {% else %}
-                    {{ field.value }}
-                  {% endif %}
-                {% else %}
-                  {{ field.value }}
-                {% endif %}
+                {{ field.text }}
               </p>
             </div>
           {% endfor %}
