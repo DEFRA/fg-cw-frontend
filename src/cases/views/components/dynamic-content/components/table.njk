@@ -8,8 +8,8 @@
   {# Extract column headers from first row #}
   {% set tableHead = [] %}
   {% if rows.length > 0 %}
-    {% for columnName, columnData in rows[0] %}
-      {% set headerCell = { text: columnData.label or columnName } %}
+    {% for columnData in rows[0] %}
+      {% set headerCell = { text: columnData.label } %}
       {% set tableHead = (tableHead.push(headerCell), tableHead) %}
     {% endfor %}
   {% endif %}
@@ -18,25 +18,10 @@
   {% set tableRows = [] %}
   {% for row in rows %}
     {% set tableRow = [] %}
-    {% set isFirstCell = true %}
-    {% for columnName, columnData in row %}
+    {% for columnData in row %}
       {% set cellContent = renderDefraComponent(columnData) %}
-      {%
-        set tableCell = {
-          html: cellContent
-        }
-      %}
-
-      {# Add header styling for first cell if firstCellIsHeader is enabled #}
-      {% if firstCellIsHeader and isFirstCell %}
-        {% set tableCell = {
-          html: cellContent,
-          classes: 'govuk-table__header'
-        } %}
-      {% endif %}
-
+      {% set tableCell = { html: cellContent } %}
       {% set tableRow = (tableRow.push(tableCell), tableRow) %}
-      {% set isFirstCell = false %}
     {% endfor %}
     {% set tableRows = (tableRows.push(tableRow), tableRows) %}
   {% endfor %}
@@ -48,7 +33,8 @@
   {{
     govukTable({
       head: tableHead,
-      rows: tableRows
+      rows: tableRows,
+      firstCellIsHeader: firstCellIsHeader
     })
   }}
 {% endmacro %}
