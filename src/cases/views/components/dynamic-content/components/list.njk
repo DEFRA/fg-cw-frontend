@@ -2,17 +2,17 @@
 {% from "./heading.njk" import defraHeading %}
 
 {% macro defraList(params, renderDefraComponent) %}
-  {%- set fields = params.fields or [] %}
+  {%- set rows = params.rows or [] %}
 
   {% set summaryRows = [] %}
-  {% for field in fields %}
+  {% for row in rows %}
     {%
-      set row = {
-        key: { text: field.label },
-        value: { html: renderDefraComponent(field) }
+      set summaryRow = {
+        key: { text: row.label },
+        value: { html: renderDefraComponent(row) }
       }
     %}
-    {% set summaryRows = (summaryRows.push(row), summaryRows) %}
+    {% set summaryRows = (summaryRows.push(summaryRow), summaryRows) %}
   {% endfor %}
 
    {% if params.title %}
