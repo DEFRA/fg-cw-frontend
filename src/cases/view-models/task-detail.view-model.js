@@ -24,7 +24,13 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
       { text: "Cases", href: "/cases" },
       { text: caseData.caseRef, href: "/cases/" + caseData._id },
     ],
+    links: caseData.links.map((link) => ({
+      text: link.text,
+      href: link.href,
+      active: link.id === "tasks",
+    })),
     data: {
+      banner: caseData.banner,
       case: {
         id: caseData._id,
         caseRef: caseData.caseRef,
