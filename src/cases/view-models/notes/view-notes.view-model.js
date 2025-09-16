@@ -1,3 +1,4 @@
+import { setActiveLink } from "../../../common/helpers/navigation-helpers.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
   DATE_FORMAT_SORTABLE_DATE,
@@ -9,11 +10,7 @@ export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
     breadcrumbs: [],
-    links: caseItem.links.map((link) => ({
-      text: link.text,
-      href: link.href,
-      active: link.id === "notes",
-    })),
+    links: setActiveLink(caseItem.links, "notes"),
     data: {
       caseId: caseItem._id,
       banner: caseItem.banner,

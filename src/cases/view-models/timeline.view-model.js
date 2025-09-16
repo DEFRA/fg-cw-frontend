@@ -1,4 +1,5 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const createTimelineViewModel = (caseItem) => {
   const caseRef = caseItem.caseRef;
@@ -8,11 +9,7 @@ export const createTimelineViewModel = (caseItem) => {
     pageTitle: `Timeline ${caseRef}`,
     pageHeading: `Timeline`,
     breadcrumbs: [],
-    links: caseItem.links.map((link) => ({
-      text: link.text,
-      href: link.href,
-      active: link.id === "timeline",
-    })),
+    links: setActiveLink(caseItem.links, "timeline"),
     data: {
       case: {
         _id: caseItem._id,

@@ -13,6 +13,20 @@ describe("Timeline view model", () => {
       },
       assignedUser: "Dumbledore",
       timeline: [],
+      links: [
+        { id: "tasks", text: "Tasks", href: "/cases/0999091983" },
+        {
+          id: "caseDetails",
+          text: "Case Details",
+          href: "/cases/0999091983/case-details",
+        },
+        { id: "notes", text: "Notes", href: "/cases/0999091983/notes" },
+        {
+          id: "timeline",
+          text: "Timeline",
+          href: "/cases/0999091983/timeline",
+        },
+      ],
       payload: {
         identifiers: {
           sbi: "HHG-1",
@@ -30,6 +44,16 @@ describe("Timeline view model", () => {
       pageTitle: "Timeline ABC-123",
       pageHeading: "Timeline",
       breadcrumbs: [],
+      links: [
+        { text: "Tasks", href: "/cases/0999091983", active: false },
+        {
+          text: "Case Details",
+          href: "/cases/0999091983/case-details",
+          active: false,
+        },
+        { text: "Notes", href: "/cases/0999091983/notes", active: false },
+        { text: "Timeline", href: "/cases/0999091983/timeline", active: true },
+      ],
       data: {
         case: {
           _id: "0999091983",
@@ -53,6 +77,7 @@ describe("Timeline view model", () => {
             },
           },
           timeline: [],
+          banner: undefined,
         },
       },
     };

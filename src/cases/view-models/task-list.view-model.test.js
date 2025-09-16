@@ -11,6 +11,16 @@ describe("createTaskListViewModel", () => {
     assignedUser: "john doe",
     banner: { type: "info", message: "Test banner" },
     currentStage: "application-review",
+    links: [
+      { id: "tasks", text: "Tasks", href: "/cases/case-123" },
+      {
+        id: "caseDetails",
+        text: "Case Details",
+        href: "/cases/case-123/case-details",
+      },
+      { id: "notes", text: "Notes", href: "/cases/case-123/notes" },
+      { id: "timeline", text: "Timeline", href: "/cases/case-123/timeline" },
+    ],
     payload: {
       submittedAt: "2021-01-15T00:00:00.000Z",
       identifiers: {

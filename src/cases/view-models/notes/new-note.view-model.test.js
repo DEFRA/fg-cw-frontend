@@ -95,5 +95,23 @@ const createMockCaseItem = (overrides = {}) => ({
   _id: "68495db5afe2d27b09b2ee47",
   caseRef: "banana-123",
   banner: { mockBanner: "data" },
+  links: [
+    { id: "tasks", text: "Tasks", href: "/cases/68495db5afe2d27b09b2ee47" },
+    {
+      id: "caseDetails",
+      text: "Case Details",
+      href: "/cases/68495db5afe2d27b09b2ee47/case-details",
+    },
+    {
+      id: "notes",
+      text: "Notes",
+      href: "/cases/68495db5afe2d27b09b2ee47/notes",
+    },
+    {
+      id: "timeline",
+      text: "Timeline",
+      href: "/cases/68495db5afe2d27b09b2ee47/timeline",
+    },
+  ],
   ...overrides,
 });

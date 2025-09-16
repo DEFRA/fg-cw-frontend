@@ -1,13 +1,11 @@
+import { setActiveLink } from "../../../common/helpers/navigation-helpers.js";
+
 export const createNewNoteViewModel = (caseItem, errors, formData) => {
   return {
     pageTitle: `New Note ${caseItem.caseRef}`,
     pageHeading: `Add a note`,
     breadcrumbs: [],
-    links: caseItem.links.map((link) => ({
-      text: link.text,
-      href: link.href,
-      active: link.id === "notes",
-    })),
+    links: setActiveLink(caseItem.links, "notes"),
     data: {
       caseId: caseItem._id,
       banner: caseItem.banner,
