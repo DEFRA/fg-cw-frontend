@@ -37,11 +37,11 @@ describe("viewCaseTabRoute", () => {
     const mockTabData = {
       _id: "case-123",
       caseRef: "AGR-2024-001",
-      tabId: "caseDetails",
+      tabId: "case-details",
       links: [
         { id: "tasks", text: "Tasks", href: "/cases/case-123" },
         {
-          id: "caseDetails",
+          id: "case-details",
           text: "Case Details",
           href: "/cases/case-123/case-details",
         },
@@ -65,29 +65,35 @@ describe("viewCaseTabRoute", () => {
 
     const response = await server.inject({
       method: "GET",
-      url: "/cases/case-123/caseDetails",
+      url: "/cases/case-123/case-details",
     });
 
     expect(response.statusCode).toBe(200);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-123", "caseDetails");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-123", "case-details");
 
     // Verify the view model was created correctly using the real function
     const expectedViewModel = createViewTabViewModel(
       mockTabData,
-      "caseDetails",
+      "case-details",
     );
     expect(expectedViewModel.pageTitle).toBe("Agreement AGR-2024-001");
     expect(expectedViewModel.breadcrumbs).toEqual([]);
     expect(expectedViewModel.data._id).toBe("case-123");
     expect(expectedViewModel.data.caseRef).toBe("AGR-2024-001");
     expect(expectedViewModel.data.links).toEqual([
-      { text: "Tasks", href: "/cases/case-123", active: false },
+      { id: "tasks", text: "Tasks", href: "/cases/case-123", active: false },
       {
+        id: "case-details",
         text: "Case Details",
         href: "/cases/case-123/case-details",
         active: true,
       },
-      { text: "Notes", href: "/cases/case-123/notes", active: false },
+      {
+        id: "notes",
+        text: "Notes",
+        href: "/cases/case-123/notes",
+        active: false,
+      },
     ]);
   });
 
@@ -130,8 +136,13 @@ describe("viewCaseTabRoute", () => {
     expect(expectedViewModel.data.caseRef).toBe("TIM-2024-002");
     expect(expectedViewModel.data.events).toEqual(mockTimelineData.events);
     expect(expectedViewModel.data.links).toEqual([
-      { text: "Tasks", href: "/cases/case-456", active: false },
-      { text: "Timeline", href: "/cases/case-456/timeline", active: true },
+      { id: "tasks", text: "Tasks", href: "/cases/case-456", active: false },
+      {
+        id: "timeline",
+        text: "Timeline",
+        href: "/cases/case-456/timeline",
+        active: true,
+      },
     ]);
   });
 

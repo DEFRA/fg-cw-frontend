@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { createTimelineViewModel } from "./timeline.view-model.js";
 
 describe("Timeline view model", () => {
@@ -13,20 +14,7 @@ describe("Timeline view model", () => {
       },
       assignedUser: "Dumbledore",
       timeline: [],
-      links: [
-        { id: "tasks", text: "Tasks", href: "/cases/0999091983" },
-        {
-          id: "caseDetails",
-          text: "Case Details",
-          href: "/cases/0999091983/case-details",
-        },
-        { id: "notes", text: "Notes", href: "/cases/0999091983/notes" },
-        {
-          id: "timeline",
-          text: "Timeline",
-          href: "/cases/0999091983/timeline",
-        },
-      ],
+      links: createMockLinks("0999091983"),
       payload: {
         identifiers: {
           sbi: "HHG-1",
@@ -45,14 +33,30 @@ describe("Timeline view model", () => {
       pageHeading: "Timeline",
       breadcrumbs: [],
       links: [
-        { text: "Tasks", href: "/cases/0999091983", active: false },
         {
+          id: "tasks",
+          text: "Tasks",
+          href: "/cases/0999091983",
+          active: false,
+        },
+        {
+          id: "case-details",
           text: "Case Details",
           href: "/cases/0999091983/case-details",
           active: false,
         },
-        { text: "Notes", href: "/cases/0999091983/notes", active: false },
-        { text: "Timeline", href: "/cases/0999091983/timeline", active: true },
+        {
+          id: "notes",
+          text: "Notes",
+          href: "/cases/0999091983/notes",
+          active: false,
+        },
+        {
+          id: "timeline",
+          text: "Timeline",
+          href: "/cases/0999091983/timeline",
+          active: true,
+        },
       ],
       data: {
         case: {

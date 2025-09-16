@@ -20,7 +20,7 @@ export const createMockLinks = (caseId) => {
   return [
     { id: "tasks", text: "Tasks", href: `/cases/${caseId}` },
     {
-      id: "caseDetails",
+      id: "case-details",
       text: "Case Details",
       href: `/cases/${caseId}/case-details`,
     },

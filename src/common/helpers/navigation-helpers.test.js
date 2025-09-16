@@ -12,9 +12,14 @@ describe("setActiveLink", () => {
     const result = setActiveLink(links, "notes");
 
     expect(result).toEqual([
-      { text: "Tasks", href: "/cases/123", active: false },
-      { text: "Notes", href: "/cases/123/notes", active: true },
-      { text: "Timeline", href: "/cases/123/timeline", active: false },
+      { id: "tasks", text: "Tasks", href: "/cases/123", active: false },
+      { id: "notes", text: "Notes", href: "/cases/123/notes", active: true },
+      {
+        id: "timeline",
+        text: "Timeline",
+        href: "/cases/123/timeline",
+        active: false,
+      },
     ]);
   });
 
@@ -39,8 +44,8 @@ describe("setActiveLink", () => {
     const result = setActiveLink(links, "");
 
     expect(result).toEqual([
-      { text: "Tasks", href: "/cases/123", active: false },
-      { text: "Notes", href: "/cases/123/notes", active: false },
+      { id: "tasks", text: "Tasks", href: "/cases/123", active: false },
+      { id: "notes", text: "Notes", href: "/cases/123/notes", active: false },
     ]);
   });
 
@@ -53,8 +58,8 @@ describe("setActiveLink", () => {
     const result = setActiveLink(links, "nonexistent");
 
     expect(result).toEqual([
-      { text: "Tasks", href: "/cases/123", active: false },
-      { text: "Notes", href: "/cases/123/notes", active: false },
+      { id: "tasks", text: "Tasks", href: "/cases/123", active: false },
+      { id: "notes", text: "Notes", href: "/cases/123/notes", active: false },
     ]);
   });
 });
