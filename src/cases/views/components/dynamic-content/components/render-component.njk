@@ -1,11 +1,11 @@
 {% from "copy-to-clipboard/macro.njk" import copyToClipboard %}
-{% from "./components/text.njk" import defraText %}
-{% from "./components/url.njk" import defraUrl %}
-{% from "./components/status.njk" import defraStatus %}
-{% from "./components/heading.njk" import defraHeading %}
-{% from "./components/list.njk" import defraList %}
-{% from "./components/table.njk" import defraTable %}
-{% from "./components/container.njk" import defraContainer %}
+{% from "./text.njk" import defraText %}
+{% from "./url.njk" import defraUrl %}
+{% from "./status.njk" import defraStatus %}
+{% from "./heading.njk" import defraHeading %}
+{% from "./list.njk" import defraList %}
+{% from "./table.njk" import defraTable %}
+{% from "./container.njk" import defraContainer %}
 
 {% macro renderDefraComponent(params) %}
   {%- set component = params.component or 'text' %}
