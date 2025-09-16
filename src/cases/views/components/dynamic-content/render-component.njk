@@ -1,6 +1,5 @@
 {% from "copy-to-clipboard/macro.njk" import copyToClipboard %}
 {% from "./components/text.njk" import defraText %}
-{% from "./components/date.njk" import defraDate %}
 {% from "./components/url.njk" import defraUrl %}
 {% from "./components/status.njk" import defraStatus %}
 {% from "./components/heading.njk" import defraHeading %}
@@ -13,8 +12,6 @@
 
   {% if component == "text" %}
     {{ defraText(params) }}
-  {% elif component == "date" %}
-    {{ defraDate(params) }}
   {% elif component == "url" %}
     {{ defraUrl(params) }}
   {% elif component == "copyToClipboard" %}
