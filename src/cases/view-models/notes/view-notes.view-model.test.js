@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { createViewNotesViewModel } from "./view-notes.view-model.js";
 
 describe("createViewNotesViewModel", () => {
   it("creates complete view model with notes", () => {
-    const mockCaseItem = createMockCaseItem({
+    const mockCaseItem = createMockCaseData({
       comments: [
         {
           createdAt: "2025-01-01T10:00:00.000Z",
@@ -33,7 +34,7 @@ describe("createViewNotesViewModel", () => {
   });
 
   it("creates correct table structure for notes", () => {
-    const mockCaseItem = createMockCaseItem({
+    const mockCaseItem = createMockCaseData({
       comments: [
         {
           ref: "note-123",
@@ -96,37 +97,4 @@ describe("createViewNotesViewModel", () => {
       },
     });
   });
-});
-
-const createMockCaseItem = (overrides = {}) => ({
-  _id: "68495db5afe2d27b09b2ee47",
-  caseRef: "banana-123",
-  banner: { mockBanner: "data" },
-  links: [
-    { id: "tasks", text: "Tasks", href: "/cases/68495db5afe2d27b09b2ee47" },
-    {
-      id: "caseDetails",
-      text: "Case Details",
-      href: "/cases/68495db5afe2d27b09b2ee47/case-details",
-    },
-    {
-      id: "notes",
-      text: "Notes",
-      href: "/cases/68495db5afe2d27b09b2ee47/notes",
-    },
-    {
-      id: "timeline",
-      text: "Timeline",
-      href: "/cases/68495db5afe2d27b09b2ee47/timeline",
-    },
-  ],
-  comments: [
-    {
-      createdAt: "2025-01-01T10:00:00.000Z",
-      createdBy: "John Smith",
-      title: "NOTE_ADDED",
-      text: "This is a test note",
-    },
-  ],
-  ...overrides,
 });
