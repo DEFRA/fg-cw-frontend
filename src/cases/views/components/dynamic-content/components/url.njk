@@ -5,7 +5,12 @@
   {%- set target = urlParams.target or '_blank' %}
   {%- set rel = urlParams.rel or 'noopener noreferrer' %}
   {%- set classes = urlParams.classes or '' %}
-  <a href="{{ href | escape }}" target="{{ target }}" rel="{{ rel }}"{% if classes %} class="{{ classes }}"{% endif %}>
+  <a
+    href="{{ href | escape }}"
+    target="{{ target }}"
+    rel="{{ rel }}"
+    {% if classes %}class="{{ classes }}"{% endif %}
+  >
     {{ text | escape }}
   </a>
 {% endmacro %}
