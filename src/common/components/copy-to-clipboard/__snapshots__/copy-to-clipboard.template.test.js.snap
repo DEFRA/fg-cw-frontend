@@ -1,27 +1,5 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`copy-to-clipboard template > handles empty or undefined parameters gracefully 1`] = `
-"
-<div
-  class="copy-to-clipboard-container"
-  style="position: relative; display: inline-block;"
->
-  <button
-    type="button"
-    class="copy-to-clipboard-button "
-    data-module="copy-to-clipboard"
-    data-text="Copy"
-    aria-label="Copy Copy to clipboard"
-  >
-    Copy
-  </button>
-  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
-    Copied to clipboard
-  </span>
-</div>
-"
-`;
-
 exports[`copy-to-clipboard template > renders with all custom parameters 1`] = `
 "
 <div
