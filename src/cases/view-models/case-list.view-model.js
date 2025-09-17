@@ -39,14 +39,14 @@ const mapCasesToTable = (cases) => {
       { text: "Status" },
       { text: "Assignee" },
     ],
-    rows: cases.map(({ _id, payload, status, assignedUser }) => ({
+    rows: cases.map(({ _id, caseRef, payload, status, assignedUser }) => ({
       _id,
       select: {
         value: _id,
       },
       id: {
         href: `/cases/${_id}`,
-        text: mapText(payload.clientRef),
+        text: mapText(caseRef),
       },
       business: {
         text: "[business name]",
