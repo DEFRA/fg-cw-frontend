@@ -1,7 +1,7 @@
+import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
 import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
-import { createViewTabViewModel } from "../../view-models/view-tab.view-model.js";
 import { viewCaseTabRoute } from "./view-case-tab.route.js";
 
 vi.mock("../../use-cases/find-case-tab.use-case.js");
@@ -20,66 +20,137 @@ describe("viewCaseTabRoute", () => {
 
   it("renders tab view with correct data", async () => {
     const mockTabData = {
-      _id: "case-123",
-      caseRef: "AGR-2024-001",
+      caseId: "68c2ced6713f9a0233a1a1ea",
+      caseRef: "10f-f72-e22",
       tabId: "case-details",
+      banner: {
+        title: {
+          text: "",
+          type: "string",
+        },
+        summary: {
+          sbi: {
+            label: "SBI",
+            text: "106284736",
+            type: "string",
+          },
+          reference: {
+            label: "Reference",
+            text: "10f-f72-e22",
+            type: "string",
+          },
+          scheme: {
+            label: "Scheme",
+            text: "SFI",
+            type: "string",
+          },
+          createdAt: {
+            label: "Created At",
+            text: "11 Sept 2025",
+            type: "date",
+          },
+        },
+      },
       links: [
-        { id: "tasks", text: "Tasks", href: "/cases/case-123" },
+        {
+          id: "tasks",
+          text: "Tasks",
+          href: "/cases/68c2ced6713f9a0233a1a1ea",
+          active: false,
+        },
         {
           id: "case-details",
           text: "Case Details",
-          href: "/cases/case-123/case-details",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/case-details",
+          active: true,
         },
-        { id: "notes", text: "Notes", href: "/cases/case-123/notes" },
+        {
+          id: "notes",
+          text: "Notes",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/notes",
+          active: false,
+        },
+        {
+          id: "timeline",
+          text: "Timeline",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/timeline",
+          active: false,
+        },
+        {
+          id: "agreements",
+          text: "Agreements",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/agreements",
+          active: false,
+        },
       ],
-      tabData: {
-        title: "Case Details",
-        sections: [
-          {
-            title: "Basic Information",
-            fields: [
-              { label: "Case Reference", value: "AGR-2024-001" },
-              { label: "Status", value: "Active" },
-            ],
-          },
-        ],
-      },
+      content: [
+        {
+          id: "title",
+          component: "heading",
+          text: "Application",
+          level: 2,
+          classes: "govuk-!-margin-top-6 govuk-!-margin-bottom-1",
+        },
+        {
+          id: "submittedDate",
+          component: "container",
+          classes: "govuk-body",
+          items: [
+            {
+              text: "submitted:",
+              classes: "govuk-!-font-weight-regular",
+            },
+            {
+              text: "11 Sept 2025",
+              classes: "govuk-!-font-weight-bold",
+            },
+          ],
+        },
+        {
+          id: "answers",
+          component: "list",
+          title: "Answers",
+          type: "object",
+          rows: [
+            {
+              text: "SFI",
+              type: "string",
+              label: "Scheme",
+            },
+            {
+              text: 2025,
+              type: "number",
+              label: "Year",
+            },
+            {
+              text: "Yes",
+              type: "boolean",
+              label: "Has checked land is up to date?",
+            },
+            {
+              text: "NO_LONGER_REQUIRED",
+              type: "string",
+              label: "Agreement Name",
+            },
+          ],
+        },
+      ],
     };
 
     findCaseTabUseCase.mockResolvedValue(mockTabData);
 
-    const response = await server.inject({
+    const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-123/case-details",
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(statusCode).toBe(200);
     expect(findCaseTabUseCase).toHaveBeenCalledWith("case-123", "case-details");
 
-    // Verify the view model was created correctly using the real function
-    const expectedViewModel = createViewTabViewModel(
-      mockTabData,
-      "case-details",
-    );
-    expect(expectedViewModel.pageTitle).toBe("Case Details AGR-2024-001");
-    expect(expectedViewModel.breadcrumbs).toEqual([]);
-    expect(expectedViewModel.data._id).toBe("case-123");
-    expect(expectedViewModel.data.caseRef).toBe("AGR-2024-001");
-    expect(expectedViewModel.data.links).toEqual([
-      { id: "tasks", text: "Tasks", href: "/cases/case-123", active: false },
-      {
-        id: "case-details",
-        text: "Case Details",
-        href: "/cases/case-123/case-details",
-        active: true,
-      },
-      {
-        id: "notes",
-        text: "Notes",
-        href: "/cases/case-123/notes",
-        active: false,
-      },
-    ]);
+    const $ = load(result);
+    const view = $("#main-content").html();
+
+    expect(view).toMatchSnapshot();
   });
 
   it("handles different tab types", async () => {
@@ -87,48 +158,106 @@ describe("viewCaseTabRoute", () => {
       _id: "case-456",
       caseRef: "TIM-2024-002",
       tabId: "timeline",
+      banner: {
+        title: {
+          text: "",
+          type: "string",
+        },
+        summary: {
+          sbi: {
+            label: "SBI",
+            text: "106284736",
+            type: "string",
+          },
+          reference: {
+            label: "Reference",
+            text: "10f-f72-e22",
+            type: "string",
+          },
+          scheme: {
+            label: "Scheme",
+            text: "SFI",
+            type: "string",
+          },
+          createdAt: {
+            label: "Created At",
+            text: "11 Sept 2025",
+            type: "date",
+          },
+        },
+      },
       links: [
-        { id: "tasks", text: "Tasks", href: "/cases/case-456" },
-        { id: "timeline", text: "Timeline", href: "/cases/case-456/timeline" },
-      ],
-      events: [
         {
-          timestamp: "2023-01-15T10:30:00Z",
-          event: "Case created",
-          user: "system",
+          id: "tasks",
+          text: "Tasks",
+          href: "/cases/68c2ced6713f9a0233a1a1ea",
+          active: false,
+        },
+        {
+          id: "case-details",
+          text: "Case Details",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/case-details",
+          active: true,
+        },
+        {
+          id: "notes",
+          text: "Notes",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/notes",
+          active: false,
+        },
+        {
+          id: "timeline",
+          text: "Timeline",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/timeline",
+          active: false,
+        },
+        {
+          id: "agreements",
+          text: "Agreements",
+          href: "/cases/68c2ced6713f9a0233a1a1ea/agreements",
+          active: false,
+        },
+      ],
+      content: [
+        {
+          id: "title",
+          component: "heading",
+          text: "Timeline",
+          level: 2,
+          classes: "govuk-!-margin-top-6 govuk-!-margin-bottom-1",
+        },
+        {
+          id: "submittedDate",
+          component: "container",
+          classes: "govuk-body",
+          items: [
+            {
+              text: "submitted:",
+              classes: "govuk-!-font-weight-regular",
+            },
+            {
+              text: "11 Sept 2025",
+              classes: "govuk-!-font-weight-bold",
+            },
+          ],
         },
       ],
     };
 
     findCaseTabUseCase.mockResolvedValue(mockTimelineData);
 
-    const response = await server.inject({
+    const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-456/timeline",
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(statusCode).toBe(200);
     expect(findCaseTabUseCase).toHaveBeenCalledWith("case-456", "timeline");
 
-    // Verify the view model was created correctly using the real function
-    const expectedViewModel = createViewTabViewModel(
-      mockTimelineData,
-      "timeline",
-    );
-    expect(expectedViewModel.pageTitle).toBe("Timeline TIM-2024-002");
-    expect(expectedViewModel.breadcrumbs).toEqual([]);
-    expect(expectedViewModel.data._id).toBe("case-456");
-    expect(expectedViewModel.data.caseRef).toBe("TIM-2024-002");
-    expect(expectedViewModel.data.events).toEqual(mockTimelineData.events);
-    expect(expectedViewModel.data.links).toEqual([
-      { id: "tasks", text: "Tasks", href: "/cases/case-456", active: false },
-      {
-        id: "timeline",
-        text: "Timeline",
-        href: "/cases/case-456/timeline",
-        active: true,
-      },
-    ]);
+    const $ = load(result);
+    const view = $("#main-content").html();
+
+    expect(view).toMatchSnapshot();
   });
 
   it("handles use case returning null", async () => {
@@ -172,20 +301,20 @@ describe("viewCaseTabRoute", () => {
 
     findCaseTabUseCase.mockResolvedValue(mockTabData);
 
-    const response = await server.inject({
+    const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/param-test-case/agreements",
     });
 
-    expect(response.statusCode).toBe(200);
+    expect(statusCode).toBe(200);
     expect(findCaseTabUseCase).toHaveBeenCalledWith(
       "param-test-case",
       "agreements",
     );
 
-    // Verify the view model was created correctly using the real function
-    const expectedViewModel = createViewTabViewModel(mockTabData, "agreements");
-    expect(expectedViewModel.pageTitle).toBe("Agreements PARAM-2024-001");
-    expect(expectedViewModel.data._id).toBe("param-test-case");
+    const $ = load(result);
+    const view = $("#main-content").html();
+
+    expect(view).toMatchSnapshot();
   });
 });
