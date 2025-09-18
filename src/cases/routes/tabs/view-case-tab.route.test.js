@@ -1,32 +1,17 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
-import { findCaseTabUseCase } from "../../use-cases/find-case-tab-use.case.js";
+import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { createViewTabViewModel } from "../../view-models/view-tab.view-model.js";
+import { viewCaseTabRoute } from "./view-case-tab.route.js";
 
-vi.mock("../../use-cases/find-case-tab-use.case.js");
+vi.mock("../../use-cases/find-case-tab.use-case.js");
 
 describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
     server = await createServer();
-    await server.register({
-      plugin: {
-        name: "test-routes",
-        register(server) {
-          server.route({
-            method: "GET",
-            path: "/cases/{caseId}/{tabId}",
-            async handler(request, h) {
-              const { caseId, tabId } = request.params;
-              const agreementsData = await findCaseTabUseCase(caseId, tabId);
-              const viewModel = createViewTabViewModel(agreementsData, tabId);
-              return h.view("pages/view-tab", viewModel);
-            },
-          });
-        },
-      },
-    });
+    server.route(viewCaseTabRoute);
   });
 
   afterEach(async () => {
@@ -76,7 +61,7 @@ describe("viewCaseTabRoute", () => {
       mockTabData,
       "case-details",
     );
-    expect(expectedViewModel.pageTitle).toBe("Agreement AGR-2024-001");
+    expect(expectedViewModel.pageTitle).toBe("Case Details AGR-2024-001");
     expect(expectedViewModel.breadcrumbs).toEqual([]);
     expect(expectedViewModel.data._id).toBe("case-123");
     expect(expectedViewModel.data.caseRef).toBe("AGR-2024-001");
@@ -130,7 +115,7 @@ describe("viewCaseTabRoute", () => {
       mockTimelineData,
       "timeline",
     );
-    expect(expectedViewModel.pageTitle).toBe("Agreement TIM-2024-002");
+    expect(expectedViewModel.pageTitle).toBe("Timeline TIM-2024-002");
     expect(expectedViewModel.breadcrumbs).toEqual([]);
     expect(expectedViewModel.data._id).toBe("case-456");
     expect(expectedViewModel.data.caseRef).toBe("TIM-2024-002");
@@ -175,7 +160,14 @@ describe("viewCaseTabRoute", () => {
     const mockTabData = {
       _id: "param-test-case",
       caseRef: "PARAM-2024-001",
-      links: [],
+      links: [
+        { id: "tasks", text: "Tasks", href: "/cases/case-456" },
+        {
+          id: "agreements",
+          text: "Agreements",
+          href: "/cases/case-456/timeline",
+        },
+      ],
     };
 
     findCaseTabUseCase.mockResolvedValue(mockTabData);
@@ -193,7 +185,7 @@ describe("viewCaseTabRoute", () => {
 
     // Verify the view model was created correctly using the real function
     const expectedViewModel = createViewTabViewModel(mockTabData, "agreements");
-    expect(expectedViewModel.pageTitle).toBe("Agreement PARAM-2024-001");
+    expect(expectedViewModel.pageTitle).toBe("Agreements PARAM-2024-001");
     expect(expectedViewModel.data._id).toBe("param-test-case");
   });
 });

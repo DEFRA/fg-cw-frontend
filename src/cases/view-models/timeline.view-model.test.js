@@ -14,6 +14,7 @@ describe("Timeline view model", () => {
       },
       assignedUser: "Dumbledore",
       timeline: [],
+      banner: {},
       links: createMockLinks("0999091983"),
       payload: {
         identifiers: {
@@ -81,7 +82,7 @@ describe("Timeline view model", () => {
             },
           },
           timeline: [],
-          banner: undefined,
+          banner: {},
         },
       },
     };

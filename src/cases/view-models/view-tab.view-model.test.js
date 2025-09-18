@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createViewTabViewModel } from "./view-tab.view-model.js";
 
 describe("createViewTabViewModel", () => {
-  const mockAgreementData = {
+  const mockTabData = {
     _id: "agreement-123",
     caseRef: "AGR-2024-001",
     status: "Active",
@@ -36,15 +36,15 @@ describe("createViewTabViewModel", () => {
   };
 
   it("creates view model with correct page title", () => {
-    const result = createViewTabViewModel(mockAgreementData, "caseDetails");
+    const result = createViewTabViewModel(mockTabData, "caseDetails");
 
-    expect(result.pageTitle).toBe("Agreement AGR-2024-001");
+    expect(result.pageTitle).toBe("Case Details AGR-2024-001");
     expect(result.data.links.length).toBeGreaterThan(0);
     expect(result.data._id).toBe("agreement-123");
     expect(result.data.caseRef).toBe("AGR-2024-001");
     expect(result.data.status).toBe("Active");
     expect(result.data.scheme).toBe("Environmental Land Management");
     expect(result.data.businessName).toBe("Test Farm Ltd");
-    expect(result.data.payload).toEqual(mockAgreementData.payload);
+    expect(result.data.payload).toEqual(mockTabData.payload);
   });
 });

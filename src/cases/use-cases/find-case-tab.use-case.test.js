@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { findTabById } from "../repositories/case.repository.js";
-import { findCaseTabUseCase } from "./find-case-tab-use.case.js";
+import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 
 vi.mock("../repositories/case.repository.js");
 

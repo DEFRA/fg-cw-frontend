@@ -1,12 +1,15 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createViewTabViewModel = (agreementData, tabId) => {
+export const createViewTabViewModel = (tabData, tabId) => {
+  const links = setActiveLink(tabData.links, tabId);
+  const title = links.find((link) => link.active)?.text ?? tabId;
+
   return {
-    pageTitle: `Agreement ${agreementData.caseRef}`,
+    pageTitle: `${title} ${tabData.caseRef}`,
     breadcrumbs: [],
     data: {
-      ...agreementData,
-      links: setActiveLink(agreementData.links, tabId),
+      ...tabData,
+      links,
     },
   };
 };

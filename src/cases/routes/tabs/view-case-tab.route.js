@@ -1,4 +1,4 @@
-import { findCaseTabUseCase } from "../../use-cases/find-case-tab-use.case.js";
+import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { createViewTabViewModel } from "../../view-models/view-tab.view-model.js";
 
 export const viewCaseTabRoute = {
@@ -7,9 +7,8 @@ export const viewCaseTabRoute = {
   async handler(request, h) {
     const { caseId, tabId } = request.params;
 
-    const agreementsData = await findCaseTabUseCase(caseId, tabId);
-
-    const viewModel = createViewTabViewModel(agreementsData, tabId);
+    const tabData = await findCaseTabUseCase(caseId, tabId);
+    const viewModel = createViewTabViewModel(tabData, tabId);
 
     return h.view(`pages/view-tab`, viewModel);
   },
