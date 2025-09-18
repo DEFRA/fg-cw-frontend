@@ -100,8 +100,8 @@ describe("case-list.model", () => {
     const mockCases = [
       {
         _id: "case-1",
+        caseRef: "CASE-REF-001",
         payload: {
-          clientRef: "CLIENT-001",
           submittedAt: "2021-03-10T00:00:00.000Z",
           identifiers: {
             sbi: "123456789",
@@ -115,8 +115,8 @@ describe("case-list.model", () => {
       },
       {
         _id: "case-2",
+        caseRef: "CASE-REF-002",
         payload: {
-          clientRef: "CLIENT-002",
           submittedAt: "2021-03-15T00:00:00.000Z",
           identifiers: {
             sbi: "987654321",
@@ -153,7 +153,7 @@ describe("case-list.model", () => {
                   {
                     _id: "case-1",
                     select: { value: "case-1" },
-                    id: { href: "/cases/case-1", text: "CLIENT-001" },
+                    id: { href: "/cases/case-1", text: "CASE-REF-001" },
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
                     submitted: { text: "10 Mar 2021" },
@@ -163,7 +163,7 @@ describe("case-list.model", () => {
                   {
                     _id: "case-2",
                     select: { value: "case-2" },
-                    id: { href: "/cases/case-2", text: "CLIENT-002" },
+                    id: { href: "/cases/case-2", text: "CASE-REF-002" },
                     business: { text: "[business name]" },
                     sbi: { text: "987654321" },
                     submitted: { text: "15 Mar 2021" },
@@ -207,7 +207,7 @@ describe("case-list.model", () => {
 
       expect(result.data.assignedUserSuccessMessage).toEqual({
         heading: "Case assigned successfully",
-        ref: "CLIENT-001",
+        ref: "CASE-REF-001",
         link: "/cases/case-1",
         assignedUserName: "John Doe",
       });
@@ -219,8 +219,8 @@ describe("case-list.model", () => {
       const mockCases = [
         {
           _id: "case-1",
+          clientRef: "REF-1",
           payload: {
-            clientRef: "REF-1",
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
           status: "NEW",
@@ -331,8 +331,8 @@ describe("case-list.model", () => {
       const mockCases = [
         {
           _id: "test-case-id",
+          caseRef: "CASE-REF-123",
           payload: {
-            clientRef: "TEST-REF-123",
             submittedAt: "2021-06-15T14:30:00.000Z",
             identifiers: { sbi: "555666777" },
           },
@@ -357,7 +357,7 @@ describe("case-list.model", () => {
       expect(tableData.rows[0]).toEqual({
         _id: "test-case-id",
         select: { value: "test-case-id" },
-        id: { href: "/cases/test-case-id", text: "TEST-REF-123" },
+        id: { href: "/cases/test-case-id", text: "CASE-REF-123" },
         business: { text: "[business name]" },
         sbi: { text: "555666777" },
         submitted: { text: "15 Jun 2021" },
