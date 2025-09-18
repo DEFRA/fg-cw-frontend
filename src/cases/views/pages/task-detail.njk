@@ -1,17 +1,12 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "../components/case-summary/macro.njk" import caseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "../components/task-details/macro.njk" import taskDetails %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% block content %}
-  {{ caseSummary({ case: data.case }) }}
+  {{ caseSummary(data) }}
   <div class="govuk-body">
-    {{
-      caseDetailsTabNavigation({
-        active: 'tasks',
-        caseId: data.case.id
-      })
-    }}
+    {{ govukServiceNavigation({ navigation: links }) }}
 
     {{
       taskDetails({

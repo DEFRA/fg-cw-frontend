@@ -1,0 +1,12 @@
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% macro defraStatus(params) %}
+  {%- set value = params.text or '' %}
+  {%- set classesMap = params.classesMap or {} %}
+  {{
+    govukTag({
+      text: value | capitalize,
+      classes: classesMap[value] or "govuk-tag--grey"
+    })
+  }}
+{% endmacro %}

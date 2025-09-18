@@ -94,7 +94,6 @@ Timeline
   </div>
 
 
-
     <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
       <div class="govuk-form-group">
   <label class="govuk-label govuk-label govuk-label--l govuk-!-margin-top-6" for="text">
@@ -207,7 +206,6 @@ Timeline
     </div>
 
   </div>
-
 
 
     <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
@@ -327,7 +325,6 @@ Timeline
   </div>
 
 
-
     <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
       <div class="govuk-form-group govuk-form-group--error">
   <label class="govuk-label govuk-label govuk-label--l govuk-!-margin-top-6" for="text">
@@ -443,7 +440,6 @@ Timeline
     </div>
 
   </div>
-
 
 
     <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">

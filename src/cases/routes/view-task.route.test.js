@@ -2,6 +2,7 @@ import hapi from "@hapi/hapi";
 import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { viewTaskRoute } from "./view-task.route.js";
@@ -43,6 +44,7 @@ describe("viewTaskRoute", () => {
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
       currentStage: "application-receipt",
+      links: createMockLinks("68495db5afe2d27b09b2ee47"),
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",

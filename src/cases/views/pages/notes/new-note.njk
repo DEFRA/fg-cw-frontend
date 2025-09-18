@@ -1,9 +1,9 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "../components/case-summary/macro.njk" import caseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% block content %}
   {{ caseSummary(data) }}
@@ -18,7 +18,7 @@
   {% endif %}
 
   <div class="govuk-body">
-    {{ caseDetailsTabNavigation({active: 'notes', caseId: data.caseId }) }}
+    {{ govukServiceNavigation({ navigation: links }) }}
 
     <form action="/cases/{{ data.caseId }}/notes" method="post">
       {{

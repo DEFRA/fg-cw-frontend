@@ -58,7 +58,7 @@ export const findCaseByIdUseCase = async (caseId) => {
   const kase = await findById(caseId);
   const workflow = await findByCode(kase.workflowCode);
   const workflowTabs = workflow.pages.cases.details.tabs;
-  const banner = workflow.pages.cases.details.banner;
+  const banner = kase.banner;
 
   const overrideTabs = defaultTabs
     .filter((tabId) => tabId in workflowTabs)

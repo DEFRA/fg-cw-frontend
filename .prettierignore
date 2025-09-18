@@ -4,4 +4,8 @@ package-lock.json
 node_modules
 coverage
 src/server/common/components/checkbox/template.njk
+src/cases/views/components/dynamic-content/components/container.njk
+src/cases/views/components/dynamic-content/components/heading.njk
+src/cases/views/components/dynamic-content/components/list.njk
+src/cases/views/components/dynamic-content/components/text.njk
 **/__snapshots__/

@@ -1,5 +1,5 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
-import { resolveBannerPaths } from "../../common/helpers/resolvePaths.js";
+import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const createTimelineViewModel = (caseItem) => {
   const caseRef = caseItem.caseRef;
@@ -9,6 +9,7 @@ export const createTimelineViewModel = (caseItem) => {
     pageTitle: `Timeline ${caseRef}`,
     pageHeading: `Timeline`,
     breadcrumbs: [],
+    links: setActiveLink(caseItem.links, "timeline"),
     data: {
       case: {
         _id: caseItem._id,
@@ -23,7 +24,7 @@ export const createTimelineViewModel = (caseItem) => {
         assignedUser: caseItem.assignedUser,
         payload: caseItem.payload,
         timeline: caseItem.timeline,
-        banner: resolveBannerPaths(caseItem.banner, caseItem),
+        banner: caseItem.banner,
       },
     },
   };
