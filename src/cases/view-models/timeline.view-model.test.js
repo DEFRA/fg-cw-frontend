@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { createTimelineViewModel } from "./timeline.view-model.js";
 
 describe("Timeline view model", () => {
@@ -13,6 +14,8 @@ describe("Timeline view model", () => {
       },
       assignedUser: "Dumbledore",
       timeline: [],
+      banner: {},
+      links: createMockLinks("0999091983"),
       payload: {
         identifiers: {
           sbi: "HHG-1",
@@ -30,6 +33,32 @@ describe("Timeline view model", () => {
       pageTitle: "Timeline ABC-123",
       pageHeading: "Timeline",
       breadcrumbs: [],
+      links: [
+        {
+          id: "tasks",
+          text: "Tasks",
+          href: "/cases/0999091983",
+          active: false,
+        },
+        {
+          id: "case-details",
+          text: "Case Details",
+          href: "/cases/0999091983/case-details",
+          active: false,
+        },
+        {
+          id: "notes",
+          text: "Notes",
+          href: "/cases/0999091983/notes",
+          active: false,
+        },
+        {
+          id: "timeline",
+          text: "Timeline",
+          href: "/cases/0999091983/timeline",
+          active: true,
+        },
+      ],
       data: {
         case: {
           _id: "0999091983",
@@ -53,6 +82,7 @@ describe("Timeline view model", () => {
             },
           },
           timeline: [],
+          banner: {},
         },
       },
     };

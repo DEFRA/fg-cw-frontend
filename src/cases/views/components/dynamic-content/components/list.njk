@@ -1,0 +1,22 @@
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "./heading.njk" import defraHeading %}
+
+{% macro defraList(params, renderDefraComponent) %}
+  {%- set rows = params.rows or [] %}
+
+  {% set summaryRows = [] %}
+  {% for row in rows %}
+    {%
+      set summaryRow = {
+        key: { text: row.label },
+        value: { html: renderDefraComponent(row) }
+      }
+    %}
+    {% set summaryRows = (summaryRows.push(summaryRow), summaryRows) %}
+  {% endfor %}
+
+   {% if params.title %}
+     {{ defraHeading({ text: params.title, level: 3 }) }}
+   {% endif %}
+   {{ govukSummaryList({ rows: summaryRows }) }}
+{% endmacro %}
