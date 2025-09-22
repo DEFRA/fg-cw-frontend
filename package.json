@@ -50,7 +50,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.26.0",
+    "@babel/runtime": "^7.28.4",
     "@defra/hapi-tracing": "^1.0.0",
     "@elastic/ecs-pino-format": "^1.5.0",
     "@hapi/bell": "^13.1.0",
@@ -82,13 +82,13 @@
     "pino-pretty": "^13.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.9",
-    "@babel/core": "^7.26.0",
-    "@babel/preset-env": "^7.26.0",
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
     "@vitest/coverage-v8": "^3.1.4",
     "autoprefixer": "^10.4.20",
-    "babel-loader": "^9.2.1",
-    "babel-plugin-transform-import-meta": "^2.2.1",
+    "babel-loader": "^10.0.0",
+    "babel-plugin-transform-import-meta": "^2.3.3",
     "cheerio": "^1.0.0",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^12.0.2",
@@ -111,8 +111,8 @@
     "stylelint-config-gds": "^2.0.0",
     "terser-webpack-plugin": "^5.3.10",
     "vitest": "^3.1.4",
-    "webpack": "^5.96.1",
-    "webpack-assets-manifest": "^5.2.1",
-    "webpack-cli": "^5.1.4"
+    "webpack": "^5.101.3",
+    "webpack-assets-manifest": "^6.2.2",
+    "webpack-cli": "^6.0.1"
   }
 }
