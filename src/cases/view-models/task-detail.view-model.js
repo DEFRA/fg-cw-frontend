@@ -1,4 +1,5 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const createTaskDetailViewModel = (caseData, query, errors) => {
   const stage = caseData.stages.find(
@@ -24,7 +25,9 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
       { text: "Cases", href: "/cases" },
       { text: caseData.caseRef, href: "/cases/" + caseData._id },
     ],
+    links: setActiveLink(caseData.links, "tasks"),
     data: {
+      banner: caseData.banner,
       case: {
         id: caseData._id,
         caseRef: caseData.caseRef,
