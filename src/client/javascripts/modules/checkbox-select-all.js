@@ -5,7 +5,9 @@ export const initSelectAllCheckboxes = () => {
 
   selectAllCheckboxes.forEach((selectAllCheckbox) => {
     const table = selectAllCheckbox.closest("table");
-    if (!table) return;
+    if (!table) {
+      return;
+    }
 
     const rowCheckboxes = table.querySelectorAll(
       'tbody input[name="selected_cases"]',

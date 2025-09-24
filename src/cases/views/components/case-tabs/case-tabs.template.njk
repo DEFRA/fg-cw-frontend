@@ -1,60 +1,66 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "checkbox/macro.njk" import checkbox %}
 
+{% macro radio(params) %}
+  {% set id = "caseId-" + params.value %}
+  <div class="govuk-radios__item">
+    <input
+      class="govuk-radios__input"
+      id="{{ id }}"
+      name="{{ params.name }}"
+      type="radio"
+      value="{{ params.value }}"
+      aria-label="Select case ID {{ params.value }}"
+    /><label class="govuk-label govuk-radios__label" for="{{ id }}">
+      <span class="govuk-visually-hidden">
+        Select case ID {{ params.value }}
+      </span>
+    </label>
+  </div>
+{% endmacro %}
+
+{% macro idLink(href, text) %}
+  <a href="{{ href }}" class="govuk-link govuk-!-font-weight-bold"
+    >{{ text }}</a
+  >
+{% endmacro %}
+
 {% set tableRows = [] %}
-{% for case in params.data.allCases %}
-  {% set priorityClass = 'govuk-tag--grey' %}
-
-  {%- if case.status == "NEW" %}
-    {% set priorityClass = 'govuk-tag--blue' %}
-  {%- elif case.status == "IN PROGRESS" -%}
-    {% set priorityClass = 'govuk-tag--yellow' %}
-  {%- elif case.status == "APPROVED" -%}
-    {% set priorityClass = 'govuk-tag--green' %}
-  {%- endif -%}
-
-  {%- set status = case.status | capitalize %}
+{% for row in params.data.rows %}
   {%
-    set row = [
-        {
-          html: checkbox({
-            id: case.clientRef,
-            label: case.clientRef,
-            name: "selected_cases",
-            value: case.clientRef
-          }),
-          classes: "govuk-!-padding-top-0"
-        },
-        {
-          html: '<a href="' + case.link + '" class="govuk-link govuk-!-font-weight-bold">' + case.clientRef + '</a>'
-        },
-        {
-          text: case.code
-        },
-        {
-          text: case.submittedAt
-        },
-        {
-          html: govukTag({
-            text: status,
-            classes: priorityClass
-          })
-        },
-        {
-          text: case.assignedUser
-        }
+    set processedRow = [
+      { html: radio({ name: "caseId", value: row.select.value }) },
+      { html: idLink(row.id.href, row.id.text) },
+      row.business,
+      row.sbi,
+      row.submitted,
+      { html: govukTag(row.status) },
+      row.assignee
     ]
   %}
-  {% set tableRows = (tableRows.push(row), tableRows) %}
+  {% set tableRows = (tableRows.push(processedRow), tableRows) %}
 {% endfor %}
 
-<h2 class="govuk-heading-l" data-testid="{{ params.tabTestId }}">
-  {{ params.tabLabel }}
-</h2>
-{{
-  govukTable({
-    head: params.tableHeaders,
-    rows: tableRows
-  })
-}}
+<form method="GET" action="/cases/assign-user">
+  <fieldset class="govuk-fieldset">
+    <legend class="govuk-fieldset__legend govuk-visually-hidden">
+      <h1>Cases</h1>
+    </legend>
+
+    {{
+      govukButton({
+        text: "Assign"
+      })
+    }}
+
+    {{
+      govukTable({
+        head: params.data.head,
+        rows: tableRows
+      })
+    }}
+  </fieldset>
+</form>

@@ -1,6 +1,7 @@
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { timelineRoute } from "./view-timeline.route.js";
@@ -30,6 +31,7 @@ describe("timelineRoute", () => {
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
       currentStage: "application-receipt",
+      links: createMockLinks("68495db5afe2d27b09b2ee47"),
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",
@@ -88,7 +90,7 @@ describe("timelineRoute", () => {
           eventType: "CASE_CREATED",
           createdAt: "2025-06-16T09:01:14.072Z",
           description: "Case received",
-          createdBy: "Julian Kimmings",
+          createdBy: { name: "Julian Kimmings" },
           data: {
             caseRef: "APPLICATION-REF-3",
           },
@@ -97,17 +99,20 @@ describe("timelineRoute", () => {
           eventType: "CASE_ASSIGNED",
           description: "Case assigned",
           createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: "Julian Kimmings",
+          createdBy: { name: "Julian Kimmings" },
           data: {
-            assignedBy: "nickUserId",
-            assignedTo: "martinUserId",
+            assignedTo: { name: "martin smith" },
           },
         },
         {
           eventType: "TASK_COMPLETED",
           description: "Task completed",
           createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: "Nicholai Hel",
+          createdBy: { name: "Nicholai Hel" },
+          data: {
+            taskGroupId: "tg-01",
+            taskId: "task-01",
+          },
         },
       ],
     });

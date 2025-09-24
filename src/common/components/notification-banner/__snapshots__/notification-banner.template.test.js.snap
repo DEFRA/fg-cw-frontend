@@ -1,0 +1,107 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`notification-banner > HTML takes precedence over text when both provided 1`] = `
+"
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <h3 class="govuk-notification-banner__heading">Test</h3>
+          <p class="govuk-body"><strong>This HTML should be used</strong></p>
+  </div>
+</div>
+
+"
+`;
+
+exports[`notification-banner > renders with HTML only (no heading) 1`] = `
+"
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-body"><a href="/link">Click here</a> for more information</p>
+  </div>
+</div>
+
+"
+`;
+
+exports[`notification-banner > renders with different banner type 1`] = `
+"
+
+  <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Important
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <h3 class="govuk-notification-banner__heading">Warning</h3>
+          <p class="govuk-body">This is a warning message</p>
+  </div>
+</div>
+
+"
+`;
+
+exports[`notification-banner > renders with heading and complex HTML 1`] = `
+"
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <h3 class="govuk-notification-banner__heading">Success</h3>
+          <p class="govuk-body"><a class="govuk-notification-banner__link" href="/cases/123">Case ID 123</a> has been assigned to John Doe</p>
+  </div>
+</div>
+
+"
+`;
+
+exports[`notification-banner > renders with heading and simple text 1`] = `
+"
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <h3 class="govuk-notification-banner__heading">Success</h3>
+          <p class="govuk-body">Operation completed successfully</p>
+  </div>
+</div>
+
+"
+`;
+
+exports[`notification-banner > renders with text only (no heading) 1`] = `
+"
+
+  <div class="govuk-notification-banner govuk-notification-banner--success" role="alert" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
+  <div class="govuk-notification-banner__header">
+    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
+      Success
+    </h2>
+  </div>
+  <div class="govuk-notification-banner__content">
+    <p class="govuk-body">Simple notification message</p>
+  </div>
+</div>
+
+"
+`;

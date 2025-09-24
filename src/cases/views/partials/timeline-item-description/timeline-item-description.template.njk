@@ -1,17 +1,10 @@
 <div class="timeline__description">
-  {% if params.eventType == "NOTE_ADDED" %}
-    <!-- TODO  note link? -->
-    <a class="govuk-link" href="/notes">View note</a>
-  {% elif params.eventType == "TASK_COMPLETED" %}
-    <!-- TODO  task link? -->
-    <a
-      class="govuk-link"
-      href="/cases/{{ params.data.caseId }}/tasks/{{ params.data.taskGroupId }}/{{ params.data.taskId }}"
-      >View task</a
-    >
-  {% elif params.eventType == "CASE_ASSIGNED" %}
+  {% if params.commentRef %}
     <p>
-      Assigned to {{ params.data.assignedTo }} by {{ params.data.assignedBy }}
+      <a
+        href="/cases/{{ params.caseId }}/notes/?selectedNoteRef={{ params.commentRef }}#note-{{ params.commentRef }}"
+        >View note</a
+      >
     </p>
   {% endif %}
 </div>

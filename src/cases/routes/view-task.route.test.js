@@ -1,6 +1,8 @@
 import hapi from "@hapi/hapi";
+import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { viewTaskRoute } from "./view-task.route.js";
@@ -12,6 +14,18 @@ describe("viewTaskRoute", () => {
 
   beforeAll(async () => {
     server = hapi.server();
+    await server.register({
+      plugin: Yar,
+      options: {
+        name: "session",
+        cookieOptions: {
+          password: "abcdefghijklmnopqrstuvwxyz012345",
+          isSecure: false,
+          isSameSite: "Strict",
+        },
+      },
+    });
+
     server.route(viewTaskRoute);
     await server.register([nunjucks]);
 
@@ -30,6 +44,7 @@ describe("viewTaskRoute", () => {
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
       currentStage: "application-receipt",
+      links: createMockLinks("68495db5afe2d27b09b2ee47"),
       payload: {
         clientRef: "banana-123",
         code: "frps-private-beta",
@@ -72,6 +87,7 @@ describe("viewTaskRoute", () => {
                   id: "simple-review",
                   title: "Simple Review",
                   status: "pending",
+                  type: "OPTIONAL",
                 },
               ],
             },
@@ -83,6 +99,7 @@ describe("viewTaskRoute", () => {
           taskGroups: [],
         },
       ],
+      comments: [],
     });
 
     const { statusCode, result } = await server.inject({

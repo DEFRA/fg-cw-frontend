@@ -175,6 +175,12 @@ export const config = convict({
       default: "127.0.0.1",
       env: "REDIS_HOST",
     },
+    port: {
+      doc: "Redis cache port",
+      format: "port",
+      default: 6379,
+      env: "REDIS_PORT",
+    },
     username: {
       doc: "Redis cache username",
       format: String,
@@ -227,27 +233,31 @@ export const config = convict({
       env: "TRACING_HEADER",
     },
   },
-  auth: {
-    msEntraId: {
-      tenantId: {
-        doc: "The tenant ID for Microsoft Entra ID",
-        format: String,
-        default: null,
-        env: "AZURE_TENANT_ID",
-      },
-      clientId: {
-        doc: "The client ID for Microsoft Entra ID",
-        format: String,
-        default: null,
-        env: "AZURE_CLIENT_ID",
-      },
-      clientSecret: {
-        doc: "The client secret for Microsoft Entra ID",
-        format: String,
-        default: null,
-        sensitive: true,
-        env: "AZURE_CLIENT_SECRET",
-      },
+  oidc: {
+    authEndpoint: {
+      doc: "The authorization endpoint for OIDC",
+      format: String,
+      default: null,
+      env: "OIDC_AUTH_ENDPOINT",
+    },
+    tokenEndpoint: {
+      doc: "The token endpoint for OIDC",
+      format: String,
+      default: null,
+      env: "OIDC_TOKEN_ENDPOINT",
+    },
+    clientId: {
+      doc: "The client ID for OIDC",
+      format: String,
+      default: null,
+      env: "OIDC_CLIENT_ID",
+    },
+    clientSecret: {
+      doc: "The client secret for OIDC",
+      format: String,
+      default: null,
+      sensitive: true,
+      env: "OIDC_CLIENT_SECRET",
     },
   },
 });

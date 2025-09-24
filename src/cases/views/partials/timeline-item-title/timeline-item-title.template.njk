@@ -1,7 +1,7 @@
 <h2>
   {%- if params.eventType == "CASE_ASSIGNED" %}
     {{ params.description }}
-    to {{ params.data.assignedTo }}
+    to {{ params.data.assignedTo.name }}
   {%- else %}
     {{ params.description }}
   {%- endif -%}

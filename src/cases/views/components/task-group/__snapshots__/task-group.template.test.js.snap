@@ -51,21 +51,6 @@ exports[`task-group > renders 1`] = `
   </ul>
 
 
-      <div class="govuk-button-group">
-    <form method="POST">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-        formaction="/cases/123"
-      >
-        Complete Stage
-      </button>
-    </form>
-</div>
-
   </div>
 </div>
 "
