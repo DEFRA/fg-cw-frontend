@@ -19,7 +19,7 @@ jobs:
       AZURE_CLIENT_ID: test
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Use Node version
         uses: actions/setup-node@v5
