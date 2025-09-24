@@ -24,7 +24,7 @@ describe("createOrUpdateUserUseCase", () => {
       name: "Bob Bill",
       idpId: "12345678-1234-1234-1234-123456789012",
       idpRoles: ["FCP.Casework.Read"],
-      appRoles: [],
+      appRoles: {},
     });
     expect(update).not.toHaveBeenCalled();
   });

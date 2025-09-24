@@ -21,13 +21,40 @@ describe("cases", () => {
       expect.arrayContaining([
         { method: "get", path: "/cases" },
         { method: "get", path: "/secret" },
+        {
+          method: "get",
+          path: "/",
+        },
+        {
+          method: "get",
+          path: "/cases/assign-user",
+        },
         { method: "get", path: "/cases/{caseId}" },
-        { method: "get", path: "/cases/{caseId}/case-details" },
+        {
+          method: "get",
+          path: "/public/{param*}",
+        },
+        {
+          method: "get",
+          path: "/cases/{caseId}/{tabId}",
+        },
+        {
+          method: "get",
+          path: "/cases/{caseId}/timeline",
+        },
         { method: "get", path: "/cases/{caseId}/notes" },
+        {
+          method: "get",
+          path: "/secret/workflow/{workflowCode}",
+        },
         { method: "get", path: "/cases/{caseId}/notes/new" },
+        { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
+        {
+          method: "post",
+          path: "/cases/assign-user",
+        },
         { method: "post", path: "/cases/{caseId}/notes" },
         { method: "post", path: "/cases/{caseId}/stage/outcome" },
-        { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
         {
           method: "post",
           path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",
