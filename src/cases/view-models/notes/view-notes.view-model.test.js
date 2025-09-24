@@ -1,9 +1,10 @@
 import { describe, expect, it } from "vitest";
+import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { createViewNotesViewModel } from "./view-notes.view-model.js";
 
 describe("createViewNotesViewModel", () => {
   it("creates complete view model with notes", () => {
-    const mockCaseItem = createMockCaseItem({
+    const mockCaseItem = createMockCaseData({
       comments: [
         {
           createdAt: "2025-01-01T10:00:00.000Z",
@@ -33,7 +34,7 @@ describe("createViewNotesViewModel", () => {
   });
 
   it("creates correct table structure for notes", () => {
-    const mockCaseItem = createMockCaseItem({
+    const mockCaseItem = createMockCaseData({
       comments: [
         {
           ref: "note-123",
@@ -75,8 +76,11 @@ describe("createViewNotesViewModel", () => {
     expect(result.data.notes.rows[0]).toEqual({
       createdAt: {
         ref: "note-123",
-        sortValue: "2025-01-01",
         text: "01 Jan 2025",
+        attributes: {
+          "data-sort-value": "2025-01-01",
+        },
+        classes: "govuk-table__cell--selected",
       },
       type: {
         text: "NOTE_ADDED",
@@ -93,19 +97,4 @@ describe("createViewNotesViewModel", () => {
       },
     });
   });
-});
-
-const createMockCaseItem = (overrides = {}) => ({
-  _id: "68495db5afe2d27b09b2ee47",
-  caseRef: "banana-123",
-  banner: { mockBanner: "data" },
-  comments: [
-    {
-      createdAt: "2025-01-01T10:00:00.000Z",
-      createdBy: "John Smith",
-      title: "NOTE_ADDED",
-      text: "This is a test note",
-    },
-  ],
-  ...overrides,
 });

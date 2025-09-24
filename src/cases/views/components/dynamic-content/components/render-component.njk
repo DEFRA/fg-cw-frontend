@@ -1,0 +1,30 @@
+{% from "copy-to-clipboard/macro.njk" import copyToClipboard %}
+{% from "./text.njk" import defraText %}
+{% from "./url.njk" import defraUrl %}
+{% from "./status.njk" import defraStatus %}
+{% from "./heading.njk" import defraHeading %}
+{% from "./list.njk" import defraList %}
+{% from "./table.njk" import defraTable %}
+{% from "./container.njk" import defraContainer %}
+
+{% macro renderDefraComponent(params) %}
+  {%- set component = params.component or 'text' %}
+
+  {% if component == "text" %}
+    {{ defraText(params) }}
+  {% elif component == "url" %}
+    {{ defraUrl(params) }}
+  {% elif component == "copyToClipboard" %}
+    {{ copyToClipboard(params) }}
+  {% elif component == "status" %}
+    {{ defraStatus(params) }}
+  {% elif component == "heading" %}
+    {{ defraHeading(params) }}
+  {% elif component == "list" %}
+    {{ defraList(params, renderDefraComponent) }}
+  {% elif component == "table" %}
+    {{ defraTable(params, renderDefraComponent) }}
+  {% elif component == "container" %}
+    {{ defraContainer(params, renderDefraComponent) }}
+  {% endif %}
+{% endmacro %}

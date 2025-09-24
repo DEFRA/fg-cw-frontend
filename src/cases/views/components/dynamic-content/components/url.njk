@@ -1,0 +1,16 @@
+{% macro defraUrl(params) %}
+  {%- set urlParams = params.params or params %}
+  {%- set href = urlParams.href or '#' %}
+  {%- set text = urlParams.text or '' %}
+  {%- set target = urlParams.target or '_blank' %}
+  {%- set rel = urlParams.rel or 'noopener noreferrer' %}
+  {%- set classes = urlParams.classes or '' %}
+  <a
+    href="{{ href | escape }}"
+    target="{{ target }}"
+    rel="{{ rel }}"
+    {% if classes %}class="{{ classes }}"{% endif %}
+  >
+    {{ text | escape }}
+  </a>
+{% endmacro %}

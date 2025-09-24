@@ -1,6 +1,7 @@
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { addNoteToCaseUseCase } from "../../use-cases/add-note-to-case.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
@@ -31,14 +32,12 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "This is a valid note",
       },
     });
 
     expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
       caseId: "68495db5afe2d27b09b2ee47",
-      type: "NOTE_ADDED",
       text: "This is a valid note",
     });
 
@@ -54,7 +53,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "",
       },
     });
@@ -79,7 +77,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "   \n\t  ",
       },
     });
@@ -104,7 +101,6 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         // text is missing
       },
     });
@@ -130,14 +126,12 @@ describe("createNoteRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/notes",
       payload: {
-        type: "NOTE_ADDED",
         text: "This will fail to save",
       },
     });
 
     expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
       caseId: "68495db5afe2d27b09b2ee47",
-      type: "NOTE_ADDED",
       text: "This will fail to save",
     });
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
@@ -150,19 +144,4 @@ describe("createNoteRoute", () => {
 
     expect(view).toMatchSnapshot();
   });
-});
-
-const createMockCaseData = (overrides = {}) => ({
-  _id: "68495db5afe2d27b09b2ee47",
-  caseRef: "banana-123",
-  banner: {},
-  comments: [
-    {
-      createdAt: "2025-01-01T10:00:00.000Z",
-      createdBy: "John Smith",
-      title: "NOTE_ADDED",
-      text: "This is a test note",
-    },
-  ],
-  ...overrides,
 });

@@ -78,10 +78,9 @@ Timeline
   </div>
 
 
-
     <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="notes/new" class="govuk-button govuk-button--primary">
+    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
       Add note
     </a>
 
@@ -167,10 +166,9 @@ Timeline
   </div>
 
 
-
     <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="notes/new" class="govuk-button govuk-button--primary">
+    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
       Add note
     </a>
 
@@ -256,10 +254,9 @@ Timeline
   </div>
 
 
-
     <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="notes/new" class="govuk-button govuk-button--primary">
+    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
       Add note
     </a>
 
@@ -275,7 +272,7 @@ Timeline
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <td class="govuk-table__cell" data-sort-value="2025-01-01"><a id="note-undefined"></a>01 Jan 2025</td>
+      <td class="govuk-table__cell govuk-table__cell--selected" data-sort-value="2025-01-01"><a id="note-undefined"></a>01 Jan 2025</td>
       <td class="govuk-table__cell">NOTE_ADDED</td>
       <td class="govuk-table__cell wrap-all-text">
 <div data-module="expandable-text" data-truncate-length="100" data-expand-text="read full text">

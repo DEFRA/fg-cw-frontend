@@ -1,13 +1,14 @@
-import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
+import { setActiveLink } from "../../../common/helpers/navigation-helpers.js";
 
 export const createNewNoteViewModel = (caseItem, errors, formData) => {
   return {
     pageTitle: `New Note ${caseItem.caseRef}`,
     pageHeading: `Add a note`,
     breadcrumbs: [],
+    links: setActiveLink(caseItem.links, "notes"),
     data: {
       caseId: caseItem._id,
-      banner: resolveBannerPaths(caseItem.banner, caseItem),
+      banner: caseItem.banner,
       formData: formData || {},
     },
     errors,

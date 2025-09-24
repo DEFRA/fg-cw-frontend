@@ -3,6 +3,7 @@
     <a
       href="/"
       class="defra-header__logo-link"
+      title="Go to the homepage"
       data-testid="defra-heading-logo"
     >
       <img
@@ -10,14 +11,11 @@
         src="/public/assets/images/defra-logo.svg"
         alt="Department for Environment Food & Rural Affairs"
       />
-    </a>
-    <a
-      href="/"
-      title="Go to the homepage"
-      class="defra-header__service-link"
-      data-testid="defra-heading-service-name"
-    >
-      {{ params.serviceName }}
+      <span
+        class="defra-header__service-name"
+        data-testid="defra-heading-service-name"
+        >{{ params.serviceName }}</span
+      >
     </a>
   </div>
 </header>

@@ -79,10 +79,7 @@ Timeline
   </div>
 
 
-
     <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
-      <input type="hidden" name="type" value="NOTE_ADDED">
-
       <div class="govuk-form-group">
   <label class="govuk-label govuk-label govuk-label--l govuk-!-margin-top-6" for="text">
     Add a note

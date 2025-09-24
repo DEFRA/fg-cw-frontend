@@ -1,0 +1,8 @@
+{#
+    caseId: <string>,
+    stage: <stage object with actions and saveDisabled>
+#}
+
+{% macro stageActions(params) %}
+  {%- include "./stage-actions.template.njk" -%}
+{% endmacro %}

@@ -2,19 +2,19 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 {% from "../components/case-summary/macro.njk" import caseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "../components/expandable-text/macro.njk" import expandableText %}
 
 {% block content %}
   {{ caseSummary(data) }}
 
   <div class="govuk-body">
-    {{ caseDetailsTabNavigation({active: 'notes', caseId: data.caseId }) }}
+    {{ govukServiceNavigation({ navigation: links }) }}
 
     <h2 class="govuk-heading-l govuk-!-margin-top-6">{{ pageHeading }}</h2>
 
-    <a href="notes/new" class="govuk-button govuk-button--primary">
+    <a href="{{ data.addNoteUrl }}" class="govuk-button govuk-button--primary">
       Add note
     </a>
 
@@ -25,9 +25,8 @@
           set row = [
             {
               html: '<a id="note-' + row.createdAt.ref + '"></a>' + row.createdAt.text,
-              attributes: {
-                "data-sort-value": row.createdAt.sortValue
-              }
+              attributes: row.createdAt.attributes,
+              classes: row.createdAt.classes
             },
             row.type,
             {
