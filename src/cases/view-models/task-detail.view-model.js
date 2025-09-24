@@ -1,6 +1,7 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
+import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createTaskDetailViewModel = (caseData, query) => {
+export const createTaskDetailViewModel = (caseData, query, errors) => {
   const stage = caseData.stages.find(
     (stage) => stage.id === caseData.currentStage,
   );
@@ -10,14 +11,23 @@ export const createTaskDetailViewModel = (caseData, query) => {
   const currentGroupTasks = currentGroup.tasks;
   const currentTask = currentGroupTasks.find((t) => t.id === taskId);
 
+  // get the comment / note if it exists.
+  const noteComment = caseData.comments.find(
+    (c) => c.ref === currentTask.commentRef,
+  );
+
   return {
+    errors,
+    errorList: errors,
     pageTitle: "Case task",
     pageHeading: "Case",
     breadcrumbs: [
       { text: "Cases", href: "/cases" },
       { text: caseData.caseRef, href: "/cases/" + caseData._id },
     ],
+    links: setActiveLink(caseData.links, "tasks"),
     data: {
+      banner: caseData.banner,
       case: {
         id: caseData._id,
         caseRef: caseData.caseRef,
@@ -34,6 +44,7 @@ export const createTaskDetailViewModel = (caseData, query) => {
       },
       stage,
       taskGroupId,
+      comment: noteComment,
       currentTask: {
         ...currentTask,
         link: `/cases/${caseData._id}/tasks/${taskGroupId}/${currentTask.id}`,

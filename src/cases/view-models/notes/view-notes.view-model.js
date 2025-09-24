@@ -1,4 +1,4 @@
-import { resolveBannerPaths } from "../../../common/helpers/resolvePaths.js";
+import { setActiveLink } from "../../../common/helpers/navigation-helpers.js";
 import {
   DATE_FORMAT_SHORT_MONTH,
   DATE_FORMAT_SORTABLE_DATE,
@@ -10,10 +10,12 @@ export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
     breadcrumbs: [],
+    links: setActiveLink(caseItem.links, "notes"),
     data: {
       caseId: caseItem._id,
-      banner: resolveBannerPaths(caseItem.banner, caseItem),
+      banner: caseItem.banner,
       notes: mapNotes(caseItem.comments, selectedNoteRef),
+      addNoteUrl: `/cases/${caseItem._id}/notes/new`,
     },
   };
 };
@@ -49,20 +51,28 @@ const mapNotes = (notes, selectedNoteRef) => {
         },
       },
     ],
-    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => ({
-      createdAt: {
-        ref,
-        text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
-        sortValue: formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
-      },
-      type: { text: title },
-      note: {
-        ref,
-        href: `?selectedNoteRef=${ref}#note-${ref}`,
-        isSelected: ref === selectedNoteRef,
-        text,
-      },
-      addedBy: { text: createdBy },
-    })),
+    rows: notes.map(({ ref, createdAt, createdBy, title, text }) => {
+      const isSelected = ref === selectedNoteRef;
+
+      return {
+        createdAt: {
+          ref,
+          text: formatDate(createdAt, DATE_FORMAT_SHORT_MONTH),
+          classes: isSelected ? "govuk-table__cell--selected" : "",
+          attributes: {
+            "data-sort-value": formatDate(createdAt, DATE_FORMAT_SORTABLE_DATE),
+          },
+        },
+        type: { text: title },
+        note: {
+          ref,
+          href: `?selectedNoteRef=${ref}#note-${ref}`,
+          isSelected,
+          text,
+          classes: "wrap-all-text",
+        },
+        addedBy: { text: createdBy },
+      };
+    }),
   };
 };

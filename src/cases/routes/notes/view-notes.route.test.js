@@ -1,6 +1,7 @@
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { viewNotesRoute } from "./view-notes.route.js";
@@ -94,19 +95,4 @@ describe("viewNotesRoute", () => {
 
     expect(view).toMatchSnapshot();
   });
-});
-
-const createMockCaseData = (overrides = {}) => ({
-  _id: "68495db5afe2d27b09b2ee47",
-  caseRef: "banana-123",
-  banner: {},
-  comments: [
-    {
-      createdAt: "2025-01-01T10:00:00.000Z",
-      createdBy: "John Smith",
-      title: "NOTE_ADDED",
-      text: "This is a test note",
-    },
-  ],
-  ...overrides,
 });

@@ -1,0 +1,133 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`copy-to-clipboard template > renders with all custom parameters 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button govuk-button govuk-button--secondary"
+    data-module="copy-to-clipboard"
+    data-text="full-example@test.com"
+    aria-label="Copy full-example@test.com to clipboard"
+  >
+    Copy Email
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Email copied successfully!
+  </span>
+</div>
+"
+`;
+
+exports[`copy-to-clipboard template > renders with custom CSS classes 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button custom-class another-class"
+    data-module="copy-to-clipboard"
+    data-text="test-value"
+    aria-label="Copy test-value to clipboard"
+  >
+    Copy
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Copied to clipboard
+  </span>
+</div>
+"
+`;
+
+exports[`copy-to-clipboard template > renders with custom button text 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button "
+    data-module="copy-to-clipboard"
+    data-text="secret-key-123"
+    aria-label="Copy secret-key-123 to clipboard"
+  >
+    Copy Key
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Copied to clipboard
+  </span>
+</div>
+"
+`;
+
+exports[`copy-to-clipboard template > renders with custom feedback text 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button "
+    data-module="copy-to-clipboard"
+    data-text="some-value"
+    aria-label="Copy some-value to clipboard"
+  >
+    Copy
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Value copied!
+  </span>
+</div>
+"
+`;
+
+exports[`copy-to-clipboard template > renders with custom text to copy 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button "
+    data-module="copy-to-clipboard"
+    data-text="user@example.com"
+    aria-label="Copy user@example.com to clipboard"
+  >
+    Copy
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Copied to clipboard
+  </span>
+</div>
+"
+`;
+
+exports[`copy-to-clipboard template > renders with default parameters 1`] = `
+"
+<div
+  class="copy-to-clipboard-container"
+  style="position: relative; display: inline-block;"
+>
+  <button
+    type="button"
+    class="copy-to-clipboard-button "
+    data-module="copy-to-clipboard"
+    data-text="Copy"
+    aria-label="Copy Copy to clipboard"
+  >
+    Copy
+  </button>
+  <span class="govuk-tag copy-to-clipboard-feedback" style="display: none;">
+    Copied to clipboard
+  </span>
+</div>
+"
+`;

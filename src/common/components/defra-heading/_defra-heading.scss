@@ -11,23 +11,25 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 160px;
 }
 
 .defra-header__logo-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 160px;
   border-left: 2px solid #00a33b;
-  width: 146px;
+  width: auto;
   height: 75px;
+  text-decoration: none;
 }
 
-.defra-header__service-link {
-  text-decoration: none;
+.defra-header__logo-link img {
+  width: 146px;
+  height: auto;
+}
+
+.defra-header__service-name {
   font-size: 24px;
   font-weight: 400;
-}
-
-.defra-header__service-link:link,
-.defra-header__service-link:visited {
   color: #0b0c0c;
 }

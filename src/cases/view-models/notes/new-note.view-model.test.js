@@ -1,10 +1,11 @@
 import { describe, expect, it } from "vitest";
+import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { createNewNoteViewModel } from "./new-note.view-model.js";
 
 describe("new-note.view-model", () => {
   describe("createNewNoteViewModel", () => {
     it("creates complete view model", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
 
       const result = createNewNoteViewModel(mockCaseItem);
 
@@ -19,10 +20,9 @@ describe("new-note.view-model", () => {
     });
 
     it("includes form data when provided", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
       const mockFormData = {
         text: "User's input text",
-        type: "NOTE_ADDED",
       };
 
       const result = createNewNoteViewModel(mockCaseItem, null, mockFormData);
@@ -31,13 +31,12 @@ describe("new-note.view-model", () => {
     });
 
     it("preserves user input on save error", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
       const mockErrors = {
         save: "There was a problem saving the note. Please try again.",
       };
       const mockFormData = {
         text: "User typed this long note and doesn't want to lose it",
-        type: "NOTE_ADDED",
       };
 
       const result = createNewNoteViewModel(
@@ -55,7 +54,7 @@ describe("new-note.view-model", () => {
     });
 
     it("builds error list with text error", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
       const mockErrors = { text: "You must enter a note" };
 
       const result = createNewNoteViewModel(mockCaseItem, mockErrors);
@@ -69,7 +68,7 @@ describe("new-note.view-model", () => {
     });
 
     it("builds error list with save error", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
       const mockErrors = {
         save: "There was a problem saving the note. Please try again.",
       };
@@ -84,18 +83,11 @@ describe("new-note.view-model", () => {
     });
 
     it("builds empty error list when no errors", () => {
-      const mockCaseItem = createMockCaseItem();
+      const mockCaseItem = createMockCaseData();
 
       const result = createNewNoteViewModel(mockCaseItem);
 
       expect(result.errorList).toEqual([]);
     });
   });
-});
-
-const createMockCaseItem = (overrides = {}) => ({
-  _id: "68495db5afe2d27b09b2ee47",
-  caseRef: "banana-123",
-  banner: { mockBanner: "data" },
-  ...overrides,
 });

@@ -23,6 +23,7 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">
+
         <div class="govuk-tabs" data-module="govuk-tabs">
   <h2 class="govuk-tabs__title">
     Contents
@@ -30,46 +31,48 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
   <ul class="govuk-tabs__list">
     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="#all-cases">
-        All Cases
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#my-cases">
-        My cases
-      </a>
-    </li>
-    <li class="govuk-tabs__list-item">
-      <a class="govuk-tabs__tab" href="#team-cases">
-        Team cases
+        SFI applications (2)
       </a>
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
     <form method="GET" action="/cases/assign-user">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">
+          <h1>Cases</h1>
+        </legend>
+    
+        <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
     
-      <table class="govuk-table">
+        <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header">Client ref</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Assigned</th>
+          <th scope="col" class="govuk-table__header">ID</th>
+          <th scope="col" class="govuk-table__header">Business</th>
+          <th scope="col" class="govuk-table__header">SBI</th>
+          <th scope="col" class="govuk-table__header">Submitted</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header">Assignee</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47"></label>
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="Select case ID 68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47">
+          <span class="govuk-visually-hidden">
+            Select case ID 68495db5afe2d27b09b2ee47
+          </span>
+        </label>
       </div>
     </td>
-          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
-          <td class="govuk-table__cell">frps-private-beta</td>
-          <td class="govuk-table__cell">01/10/2023</td>
+          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
+    </td>
+          <td class="govuk-table__cell">[business name]</td>
+          <td class="govuk-table__cell">SBI001</td>
+          <td class="govuk-table__cell">01 Oct 2023</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">
       New
     </strong>
@@ -78,79 +81,28 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99"></label>
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="Select case ID 68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99">
+          <span class="govuk-visually-hidden">
+            Select case ID 68495db5afe2d27b09b2ee99
+          </span>
+        </label>
       </div>
     </td>
-          <td class="govuk-table__cell"><a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">banana-123</a></td>
-          <td class="govuk-table__cell">frps-private-beta</td>
-          <td class="govuk-table__cell">01/10/2023</td>
+          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">case-ref-2</a>
+    </td>
+          <td class="govuk-table__cell">[business name]</td>
+          <td class="govuk-table__cell">SBI001</td>
+          <td class="govuk-table__cell">01 Oct 2023</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">
       Old
     </strong>
     </td>
-          <td class="govuk-table__cell"></td>
+          <td class="govuk-table__cell">Not assigned</td>
         </tr>
       </tbody>
     </table>
     
-    </form>
-  </div>
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="my-cases">
-    <form method="GET" action="/cases/assign-user">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
-      Assign
-    </button>
-    
-      <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-      <input type="checkbox" class="govuk-checkboxes__input" id="select_all_mycases" name="select_all" value="all">
-      <label class="govuk-label govuk-checkboxes__label" for="select_all_mycases">
-        <span class="govuk-visually-hidden">Select Select all</span>
-      </label>
-    </div>
-    </th>
-          <th scope="col" class="govuk-table__header">Client ref</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Assigned</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      </tbody>
-    </table>
-    
-    </form>
-  </div>
-  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="team-cases">
-    <form method="GET" action="/cases/assign-user">
-      <button type="submit" class="govuk-button" data-module="govuk-button">
-      Assign
-    </button>
-    
-      <table class="govuk-table">
-      <thead class="govuk-table__head">
-        <tr class="govuk-table__row">
-          <th scope="col" class="govuk-table__header govuk-!-padding-top-0"><div class="govuk-checkboxes__item govuk-checkboxes--small moj-multi-select__checkbox">
-      <input type="checkbox" class="govuk-checkboxes__input" id="select_all_teamcases" name="select_all" value="all">
-      <label class="govuk-label govuk-checkboxes__label" for="select_all_teamcases">
-        <span class="govuk-visually-hidden">Select Select all</span>
-      </label>
-    </div>
-    </th>
-          <th scope="col" class="govuk-table__header">Client ref</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Code</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Date submitted</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Status</th>
-          <th scope="col" class="govuk-table__header govuk-!-width-one-quarter">Assigned</th>
-        </tr>
-      </thead>
-      <tbody class="govuk-table__body">
-      </tbody>
-    </table>
-    
+      </fieldset>
     </form>
   </div>
 </div>
