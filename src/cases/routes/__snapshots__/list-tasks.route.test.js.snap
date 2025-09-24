@@ -13,45 +13,11 @@ exports[`listTasksRoute > returns a case with tasks 1`] = `
 
     <div>
       <div class="app-case-row">
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">SBI:</strong>
-            SBI001
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Reference:</strong>
-            frps-private-beta
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Scheme:</strong>
-            SFI
-            2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Date received:</strong>
-            11 Jun 2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Status:</strong>
-            NEW
-          </p>
-        </div>
       </div>
     </div>
   </div>
 </div>
+
 
 
   <div class="govuk-body">
@@ -90,7 +56,7 @@ Case Details
 
               
               <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes">
                                     
 Notes
                   </a>
@@ -111,7 +77,6 @@ Timeline
     </div>
 
   </div>
-
 
 
     

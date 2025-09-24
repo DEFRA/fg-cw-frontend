@@ -9,6 +9,7 @@
         data-module="govuk-button"
         data-govuk-button-init=""
         formaction="{{ "/cases/" + params.caseId }}"
+        {% if params.allTasksComplete !== true %}disabled{% endif %}
       >
         {{ action.label }}
       </button>

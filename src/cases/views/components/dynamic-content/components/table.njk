@@ -1,0 +1,40 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "./heading.njk" import defraHeading %}
+
+{% macro defraTable(params, renderDefraComponent) %}
+  {%- set rows = params.rows or [] %}
+  {%- set firstCellIsHeader = params.firstCellIsHeader or false %}
+
+  {# Extract column headers from first row #}
+  {% set tableHead = [] %}
+  {% if rows.length > 0 %}
+    {% for columnData in rows[0] %}
+      {% set headerCell = { text: columnData.label } %}
+      {% set tableHead = (tableHead.push(headerCell), tableHead) %}
+    {% endfor %}
+  {% endif %}
+
+  {# Transform rows data using DEFRA component renderer #}
+  {% set tableRows = [] %}
+  {% for row in rows %}
+    {% set tableRow = [] %}
+    {% for columnData in row %}
+      {% set cellContent = renderDefraComponent(columnData) %}
+      {% set tableCell = { html: cellContent } %}
+      {% set tableRow = (tableRow.push(tableCell), tableRow) %}
+    {% endfor %}
+    {% set tableRows = (tableRows.push(tableRow), tableRows) %}
+  {% endfor %}
+
+  {% if params.title %}
+    {{ defraHeading({ text: params.title, level: 3 }) }}
+  {% endif %}
+
+  {{
+    govukTable({
+      head: tableHead,
+      rows: tableRows,
+      firstCellIsHeader: firstCellIsHeader
+    })
+  }}
+{% endmacro %}

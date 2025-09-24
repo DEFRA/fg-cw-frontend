@@ -10,17 +10,26 @@ export const findById = async (caseId) => {
   return payload;
 };
 
+export const findTabById = async (caseId, tabId) => {
+  const { payload } = await wreck.get(`/cases/${caseId}/tabs/${tabId}`);
+  return payload;
+};
+
 export const updateTaskStatus = async ({
   caseId,
   stageId,
   taskGroupId,
   taskId,
   isComplete,
+  comment = null,
 }) => {
   await wreck.patch(
     `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
     {
-      payload: { status: isComplete ? "complete" : "pending" },
+      payload: {
+        status: isComplete ? "complete" : "pending",
+        comment: comment === "" ? null : comment,
+      },
     },
   );
 };
@@ -29,8 +38,18 @@ export const completeStage = async (caseId) => {
   await wreck.post(`/cases/${caseId}/stage`);
 };
 
-export const assignUserToCase = async ({ caseId, assignedUserId }) => {
+export const updateStageOutcome = async ({ caseId, ...payload }) => {
+  await wreck.patch(`/cases/${caseId}/stage/outcome`, { payload });
+};
+
+export const assignUserToCase = async ({ caseId, assignedUserId, notes }) => {
   await wreck.patch(`/cases/${caseId}/assigned-user`, {
-    payload: { assignedUserId },
+    payload: { assignedUserId, notes },
+  });
+};
+
+export const addNoteToCase = async ({ caseId, text }) => {
+  await wreck.post(`/cases/${caseId}/notes`, {
+    payload: { text },
   });
 };

@@ -5,46 +5,23 @@
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
     <h1 class="govuk-heading-m">
-      {{ params.case.businessName or "Valley Farm" }}
+      {{ params.banner.title.value or "Valley Farm" }}
     </h1>
 
     <div>
       <div class="app-case-row">
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">SBI:</strong>
-            {{ params.case.sbi }}
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Reference:</strong>
-            {{ params.case.code }}
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Scheme:</strong>
-            {{ params.case.scheme }}
-            {{ params.case.dateReceived | formatDate("yyyy") if params.case.dateReceived }}
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Date received:</strong>
-            {{ params.case.dateReceived | formatDate("d MMM yyyy") if params.case.dateReceived }}
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Status:</strong>
-            {{ params.case.status }}
-          </p>
-        </div>
+        {% if params.banner.summary %}
+          {% for key, field in params.banner.summary %}
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >{{ field.label }}:</strong
+                >
+                {{ field.text }}
+              </p>
+            </div>
+          {% endfor %}
+        {% endif %}
       </div>
     </div>
   </div>

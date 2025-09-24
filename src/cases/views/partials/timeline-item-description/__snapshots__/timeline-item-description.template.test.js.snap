@@ -2,15 +2,24 @@
 
 exports[`timeline-item-description > renders case assigned view 1`] = `
 "<div class="timeline__description">
-    <p>Assigned to Mickey Mouse</p>
+    <p>
+      <a
+        href="/cases/9999-00000/notes/?selectedNoteRef=12334-POPOP#note-12334-POPOP"
+        >View note</a
+      >
+    </p>
 </div>
 "
 `;
 
 exports[`timeline-item-description > renders other view 1`] = `
 "<div class="timeline__description">
-    <!-- TODO  note link? -->
-    <a class="govuk-link" href="/notes">View note</a>
+    <p>
+      <a
+        href="/cases/9999-00000/notes/?selectedNoteRef=comment-12345#note-comment-12345"
+        >View note</a
+      >
+    </p>
 </div>
 "
 `;

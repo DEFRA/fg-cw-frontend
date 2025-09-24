@@ -1,15 +1,15 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "../components/case-summary/macro.njk" import caseSummary %}
-{% from "../components/case-details-tab-navigation/macro.njk" import caseDetailsTabNavigation %}
 {% from "../partials/timeline-item-title/macro.njk" import timelineItemTitle %}
 {% from "../partials/timeline-item-description/macro.njk" import timelineItemDescription %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
 {% block content %}
-  {{ caseSummary(data) }}
+  {{ caseSummary(data.case) }}
 
   <div class="govuk-body">
-    {{ caseDetailsTabNavigation({active: 'timeline', caseId: data.case._id }) }}
+    {{ govukServiceNavigation({ navigation: links }) }}
 
     <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
       {{ pageHeading }}
@@ -30,7 +30,14 @@
                     >{{ item.createdAt | formatDate("d MMM yyyy hh:mm aaa") if item.createdAt }}</time
                   >
                 </p>
-                {{ timelineItemDescription({ data: item.data, eventType: item.eventType }) }}
+                {{
+                  timelineItemDescription({
+                    caseId: data.case._id,
+                    data: item.data,
+                    eventType: item.eventType,
+                    commentRef: item.commentRef
+                  })
+                }}
               </div>
             {% endfor %}
           </div>

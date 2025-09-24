@@ -1,6 +1,6 @@
 import Bell from "@hapi/bell";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createServer } from "../../server.js";
+import { createServer } from "../../server/index.js";
 import { logoutRoute } from "./logout.route.js";
 
 describe("logoutRoute", () => {
@@ -18,24 +18,38 @@ describe("logoutRoute", () => {
     Bell.simulate(false);
   });
 
-  it("clears the session cookie", async () => {
-    const { headers, statusCode } = await server.inject({
+  it("clears the session", async () => {
+    server.route({
+      method: "GET",
+      path: "/add-to-session",
+      handler: (request, h) => {
+        request.yar.set("foo", {
+          value: true,
+        });
+
+        return h.response().code(204);
+      },
+    });
+
+    await server.inject({
+      method: "GET",
+      url: "/add-to-session",
+      auth: {
+        strategy: "msEntraId",
+        credentials: {},
+      },
+    });
+
+    const logoutResponse = await server.inject({
       method: "GET",
       url: "/logout",
       auth: {
         strategy: "msEntraId",
-        credentials: {
-          query: {
-            next: "/cases",
-          },
-        },
+        credentials: {},
       },
     });
 
-    expect(statusCode).toEqual(302);
-    expect(headers["set-cookie"]).toEqual([
-      "session=; Max-Age=0; Expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict; Path=/",
-    ]);
+    expect(logoutResponse.request.yar.get("foo")).toBeNull();
   });
 
   it("redirects to the home page", async () => {

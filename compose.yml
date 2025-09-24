@@ -1,4 +1,12 @@
 services:
+  redis:
+    image: redis:7.2.3-alpine3.18
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - cdp-tenant
+
   fg-cw-frontend:
     build: ./
     ports:

@@ -8,46 +8,11 @@ exports[`timelineRoute > displays a timeline 1`] = `
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
     <h1 class="govuk-heading-m">
-      Test application name 1
+      Valley Farm
     </h1>
 
     <div>
       <div class="app-case-row">
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">SBI:</strong>
-            SBI001
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Reference:</strong>
-            frps-private-beta
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Scheme:</strong>
-            SFI
-            2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Date received:</strong>
-            11 Jun 2025
-          </p>
-        </div>
-
-        <div class="app-case-cell">
-          <p>
-            <strong class="govuk-!-margin-right-1">Status:</strong>
-            NEW
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -89,7 +54,7 @@ Case Details
 
               
               <li class="govuk-service-navigation__item">
-                  <a class="govuk-service-navigation__link" href="#">
+                  <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes">
                                     
 Notes
                   </a>
@@ -111,7 +76,6 @@ Notes
     </div>
 
   </div>
-
 
 
     <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
@@ -146,7 +110,6 @@ Notes
                   <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
-    <p>Assigned to martin smith</p>
 </div>
 
               </div>
@@ -160,8 +123,6 @@ Notes
                   <time datetime="2025-06-16T09:01:14.072Z">16 Jun 2025 10:01 am</time>
                 </p>
                 <div class="timeline__description">
-    <!-- TODO  task link? -->
-    <a class="govuk-link" href="/cases//tasks//">View task</a>
 </div>
 
               </div>

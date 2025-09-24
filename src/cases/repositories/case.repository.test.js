@@ -1,10 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
 import {
+  addNoteToCase,
   assignUserToCase,
   completeStage,
   findAll,
   findById,
+  findTabById,
+  updateStageOutcome,
   updateTaskStatus,
 } from "./case.repository.js";
 
@@ -143,6 +146,71 @@ describe("Case Repository", () => {
     });
   });
 
+  describe("findTabById", () => {
+    it("returns tab data when API call succeeds", async () => {
+      const caseId = "case-123";
+      const tabId = "caseDetails";
+      const mockApiResponse = {
+        payload: {
+          _id: "case-123",
+          caseRef: "client-ref-123",
+          tabId: "caseDetails",
+          tabData: {
+            title: "Case Details",
+            sections: [
+              {
+                title: "Basic Information",
+                fields: [
+                  { label: "Case Reference", value: "client-ref-123" },
+                  { label: "Status", value: "Active" },
+                ],
+              },
+            ],
+          },
+        },
+      };
+
+      wreck.get.mockResolvedValueOnce(mockApiResponse);
+
+      const result = await findTabById(caseId, tabId);
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/cases/case-123/tabs/caseDetails",
+      );
+      expect(result).toEqual({
+        _id: "case-123",
+        caseRef: "client-ref-123",
+        tabId: "caseDetails",
+        tabData: {
+          title: "Case Details",
+          sections: [
+            {
+              title: "Basic Information",
+              fields: [
+                { label: "Case Reference", value: "client-ref-123" },
+                { label: "Status", value: "Active" },
+              ],
+            },
+          ],
+        },
+      });
+    });
+
+    it("bubbles up API errors", async () => {
+      const caseId = "case-error";
+      const tabId = "error-tab";
+      const apiError = new Error("Tab not found");
+
+      wreck.get.mockRejectedValueOnce(apiError);
+
+      await expect(findTabById(caseId, tabId)).rejects.toThrow("Tab not found");
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/cases/case-error/tabs/error-tab",
+      );
+    });
+  });
+
   describe("updateTaskStatus", () => {
     it("calls api with payload data", async () => {
       wreck.patch.mockResolvedValueOnce({});
@@ -155,7 +223,7 @@ describe("Case Repository", () => {
       await updateTaskStatus({ ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
-        { payload: { status: "complete" } },
+        { payload: { status: "complete", comment: null } },
       );
     });
   });
@@ -258,6 +326,123 @@ describe("Case Repository", () => {
           payload: { assignedUserId: "user-error" },
         },
       );
+    });
+  });
+
+  describe("updateStageOutcome", () => {
+    it("calls API with correct endpoint and payload", async () => {
+      const mockData = {
+        caseId: "case-123",
+        actionId: "approve",
+        comment: "This looks good to me",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-123/stage/outcome",
+        {
+          payload: { actionId: "approve", comment: "This looks good to me" },
+        },
+      );
+    });
+
+    it("handles payload with multiple properties", async () => {
+      const mockData = {
+        caseId: "case-456",
+        actionId: "reject",
+        comment: "Missing required documents",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-456/stage/outcome",
+        {
+          payload: {
+            actionId: "reject",
+            comment: "Missing required documents",
+          },
+        },
+      );
+    });
+
+    it("handles payload without comment", async () => {
+      const mockData = {
+        caseId: "case-789",
+        actionId: "approve",
+      };
+
+      wreck.patch.mockResolvedValueOnce({});
+
+      await updateStageOutcome(mockData);
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-789/stage/outcome",
+        {
+          payload: { actionId: "approve" },
+        },
+      );
+    });
+
+    it("propagates API errors", async () => {
+      const mockData = {
+        caseId: "case-error",
+        actionId: "approve",
+        comment: "This will fail",
+      };
+
+      const apiError = new Error("Stage outcome update failed");
+      wreck.patch.mockRejectedValueOnce(apiError);
+
+      await expect(updateStageOutcome(mockData)).rejects.toThrow(
+        "Stage outcome update failed",
+      );
+
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/case-error/stage/outcome",
+        {
+          payload: { actionId: "approve", comment: "This will fail" },
+        },
+      );
+    });
+  });
+
+  describe("addNoteToCase", () => {
+    it("calls API with correct endpoint and payload", async () => {
+      const mockData = {
+        caseId: "case-123",
+        type: "NOTE_ADDED",
+        text: "This is a test note",
+      };
+
+      wreck.post.mockResolvedValueOnce({});
+
+      await addNoteToCase(mockData);
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/notes", {
+        payload: { text: "This is a test note" },
+      });
+    });
+
+    it("propagates API errors", async () => {
+      const mockData = {
+        caseId: "case-error",
+        text: "This will fail",
+      };
+
+      const apiError = new Error("API Error");
+      wreck.post.mockRejectedValueOnce(apiError);
+
+      await expect(addNoteToCase(mockData)).rejects.toThrow("API Error");
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-error/notes", {
+        payload: { text: "This will fail" },
+      });
     });
   });
 });

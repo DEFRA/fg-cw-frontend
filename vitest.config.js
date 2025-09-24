@@ -8,12 +8,14 @@ export default defineConfig({
     env: {
       NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
       FG_CW_BACKEND: "http://localhost:3001",
+      SESSION_CACHE_ENGINE: "memory",
       REDIS_PASSWORD: "",
       SESSION_COOKIE_PASSWORD:
         "the-password-must-be-at-least-32-characters-long",
-      AZURE_CLIENT_ID: "client-id",
-      AZURE_TENANT_ID: "tenant-id",
-      AZURE_CLIENT_SECRET: "secret-id",
+      OIDC_AUTH_ENDPOINT: "http://localhost:3010/auth",
+      OIDC_TOKEN_ENDPOINT: "http://localhost:3010/token",
+      OIDC_CLIENT_ID: "client1",
+      OIDC_CLIENT_SECRET: "secret1",
       TZ: "Europe/London",
     },
     coverage: {

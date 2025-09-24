@@ -4,7 +4,7 @@ import { cases } from "./cases/index.js";
 import { logger } from "./common/logger.js";
 import "./common/proxy.js";
 import { health } from "./health/index.js";
-import { createServer } from "./server.js";
+import { createServer } from "./server/index.js";
 
 process.on("unhandledRejection", (error) => {
   logger.error(error, "Unhandled rejection");

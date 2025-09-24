@@ -5,7 +5,7 @@ export const logoutRoute = {
     auth: false,
   },
   handler: (request, h) => {
-    request.cookieAuth.clear();
+    request.yar.reset();
 
     return h.redirect("/");
   },

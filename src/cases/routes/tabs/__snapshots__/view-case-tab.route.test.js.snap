@@ -1,0 +1,386 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`viewCaseTabRoute > extracts parameters correctly from URL 1`] = `
+"
+  
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Valley Farm
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation">
+
+            
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/case-456">
+                                    
+Tasks
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/case-456/timeline" aria-current="true">
+                                    
+                  <strong class="govuk-service-navigation__active-fallback">Agreements</strong>
+
+                  </a>
+              </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    </div>
+
+  </div>
+
+
+  
+  <p class="govuk-body">No content available.</p>
+
+        "
+`;
+
+exports[`viewCaseTabRoute > handles different tab types 1`] = `
+"
+  
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Valley Farm
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">SBI:</strong>
+                106284736
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Reference:</strong>
+                10f-f72-e22
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Scheme:</strong>
+                SFI
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Created At:</strong>
+                11 Sept 2025
+              </p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation">
+
+            
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea">
+                                    
+Tasks
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/case-details">
+                                    
+Case Details
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/notes">
+                                    
+Notes
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/timeline" aria-current="true">
+                                    
+                  <strong class="govuk-service-navigation__active-fallback">Timeline</strong>
+
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/agreements">
+                                    
+Agreements
+                  </a>
+              </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    </div>
+
+  </div>
+
+
+  
+    
+    
+  <h2 class="govuk-heading-l  govuk-!-margin-top-6 govuk-!-margin-bottom-1">
+    Timeline
+  </h2>
+
+
+    
+    
+  <div id="submittedDate" class="defra-container govuk-body">
+      
+    
+  <span class="govuk-!-font-weight-regular">submitted:</span>
+
+
+      
+    
+  <span class="govuk-!-font-weight-bold">11 Sept 2025</span>
+
+
+  </div>
+
+
+
+        "
+`;
+
+exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
+"
+  
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <h1 class="govuk-heading-m">
+      Valley Farm
+    </h1>
+
+    <div>
+      <div class="app-case-row">
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">SBI:</strong>
+                106284736
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Reference:</strong>
+                10f-f72-e22
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Scheme:</strong>
+                SFI
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1">Created At:</strong>
+                11 Sept 2025
+              </p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+  
+  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+        <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+            Menu
+          </button>
+
+          <ul class="govuk-service-navigation__list" id="navigation">
+
+            
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea">
+                                    
+Tasks
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/case-details" aria-current="true">
+                                    
+                  <strong class="govuk-service-navigation__active-fallback">Case Details</strong>
+
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/notes">
+                                    
+Notes
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/timeline">
+                                    
+Timeline
+                  </a>
+              </li>
+
+              
+              <li class="govuk-service-navigation__item">
+                  <a class="govuk-service-navigation__link" href="/cases/68c2ced6713f9a0233a1a1ea/agreements">
+                                    
+Agreements
+                  </a>
+              </li>
+
+            </ul>
+        </nav>
+    </div>
+
+    </div>
+
+  </div>
+
+
+  
+    
+    
+  <h2 class="govuk-heading-l  govuk-!-margin-top-6 govuk-!-margin-bottom-1">
+    Application
+  </h2>
+
+
+    
+    
+  <div id="submittedDate" class="defra-container govuk-body">
+      
+    
+  <span class="govuk-!-font-weight-regular">submitted:</span>
+
+
+      
+    
+  <span class="govuk-!-font-weight-bold">11 Sept 2025</span>
+
+
+  </div>
+
+
+    
+    
+
+     
+  <h3 class="govuk-heading-m ">
+    Answers
+  </h3>
+
+   <dl class="govuk-summary-list">
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Scheme
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <span>SFI</span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Year
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <span>2025</span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Has checked land is up to date?
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <span>Yes</span>
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Agreement Name
+    </dt>
+    <dd class="govuk-summary-list__value">
+      <span>NO_LONGER_REQUIRED</span>
+    </dd>
+  </div>
+</dl>
+
+
+
+        "
+`;

@@ -12,6 +12,7 @@ const processTask = (task, wfTaskGroup) => {
     ...task,
     title: workflowTask.title,
     type: workflowTask.type,
+    comment: workflowTask.comment,
   };
 };
 
@@ -40,9 +41,10 @@ const processStage = (stage, workflow) => {
   };
 };
 
-const addTitles = (kase, workflow, overrideTabs, customTabs) => ({
+const addTitles = (kase, workflow, overrideTabs, customTabs, banner) => ({
   ...kase,
   stages: kase.stages.map((stage) => processStage(stage, workflow)),
+  banner,
   overrideTabs,
   customTabs,
 });
@@ -56,6 +58,7 @@ export const findCaseByIdUseCase = async (caseId) => {
   const kase = await findById(caseId);
   const workflow = await findByCode(kase.workflowCode);
   const workflowTabs = workflow.pages.cases.details.tabs;
+  const banner = kase.banner;
 
   const overrideTabs = defaultTabs
     .filter((tabId) => tabId in workflowTabs)
@@ -65,7 +68,13 @@ export const findCaseByIdUseCase = async (caseId) => {
     .filter(([tabId]) => !defaultTabs.includes(tabId))
     .map(([tabId, config]) => createTabObject(tabId, config));
 
-  const caseWithTitles = addTitles(kase, workflow, overrideTabs, customTabs);
+  const caseWithTitles = addTitles(
+    kase,
+    workflow,
+    overrideTabs,
+    customTabs,
+    banner,
+  );
 
   return caseWithTitles;
 };
