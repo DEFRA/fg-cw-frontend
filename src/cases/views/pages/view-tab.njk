@@ -6,7 +6,7 @@
 {% block content %}
   {{ caseSummary(data) }}
 
-  {{ govukServiceNavigation({ navigation: data.links }) }}
+  {{ govukServiceNavigation({ navigation: data.links, classes: "govuk-!-margin-bottom-6" }) }}
 
   {{ dynamicContent(data.content) }}
 {% endblock %}

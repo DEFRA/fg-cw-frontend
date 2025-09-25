@@ -1,17 +1,23 @@
 {% from "copy-to-clipboard/macro.njk" import copyToClipboard %}
 {% from "./text.njk" import defraText %}
+{% from "./paragraph.njk" import defraParagraph %}
 {% from "./url.njk" import defraUrl %}
 {% from "./status.njk" import defraStatus %}
 {% from "./heading.njk" import defraHeading %}
-{% from "./list.njk" import defraList %}
+{% from "./summary-list.njk" import defraSummaryList %}
+{% from "./unordered-list.njk" import defraUnorderedList %}
+{% from "./ordered-list.njk" import defraOrderedList %}
 {% from "./table.njk" import defraTable %}
 {% from "./container.njk" import defraContainer %}
+{% from "./details.njk" import defraDetails %}
 
 {% macro renderDefraComponent(params) %}
   {%- set component = params.component or 'text' %}
 
   {% if component == "text" %}
     {{ defraText(params) }}
+  {% elif component == "paragraph" %}
+    {{ defraParagraph(params) }}
   {% elif component == "url" %}
     {{ defraUrl(params) }}
   {% elif component == "copyToClipboard" %}
@@ -20,11 +26,17 @@
     {{ defraStatus(params) }}
   {% elif component == "heading" %}
     {{ defraHeading(params) }}
-  {% elif component == "list" %}
-    {{ defraList(params, renderDefraComponent) }}
+  {% elif component == "summary-list" %}
+    {{ defraSummaryList(params, renderDefraComponent) }}
+  {% elif component == "unordered-list" %}
+    {{ defraUnorderedList(params, renderDefraComponent) }}
+  {% elif component == "ordered-list" %}
+    {{ defraOrderedList(params, renderDefraComponent) }}
   {% elif component == "table" %}
     {{ defraTable(params, renderDefraComponent) }}
   {% elif component == "container" %}
     {{ defraContainer(params, renderDefraComponent) }}
+  {% elif component == "details" %}
+    {{ defraDetails(params, renderDefraComponent) }}
   {% endif %}
 {% endmacro %}

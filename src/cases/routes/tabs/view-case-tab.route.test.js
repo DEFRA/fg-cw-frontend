@@ -108,7 +108,7 @@ describe("viewCaseTabRoute", () => {
         },
         {
           id: "answers",
-          component: "list",
+          component: "summary-list",
           title: "Answers",
           type: "object",
           rows: [

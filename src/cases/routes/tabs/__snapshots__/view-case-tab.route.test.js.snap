@@ -20,7 +20,7 @@ exports[`viewCaseTabRoute > extracts parameters correctly from URL 1`] = `
 
 
   
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -111,7 +111,7 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
 
 
   
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -248,7 +248,7 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
 
 
   
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
