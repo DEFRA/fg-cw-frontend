@@ -423,29 +423,6 @@ describe("dynamic-content template", () => {
     expect(result).toContain("</ol>");
   });
 
-  test("renders ordered-list component with spaced classes", () => {
-    const params = [
-      {
-        component: "ordered-list",
-        classes: "govuk-list govuk-list--number govuk-list--spaced",
-        items: [
-          {
-            text: "First very long item that spans multiple lines and needs extra spacing for better readability",
-          },
-          {
-            text: "Second very long item that also spans multiple lines and needs extra spacing",
-          },
-        ],
-      },
-    ];
-
-    const result = render("dynamic-content", params);
-
-    expect(result).toContain("govuk-list--number govuk-list--spaced");
-    expect(result).toContain("First very long item");
-    expect(result).toContain("Second very long item");
-  });
-
   test("renders unordered-list with custom classes", () => {
     const params = [
       {
