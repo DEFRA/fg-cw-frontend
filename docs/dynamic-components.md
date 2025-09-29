@@ -119,6 +119,8 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
   "component": "url",
   "href": "https://example.com/document.pdf",
   "text": "View detailed check data (PDF)",
+  "target": "_blank",
+  "rel": "noopener",
   "classes": "custom-link-class"
 }
 ```
@@ -127,9 +129,11 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 - `href` (required): Link URL
 - `text` (required): Link text
+- `target` (optional): Link target (e.g., `"_blank"`)
+- `rel` (optional): Link relationship (e.g., `"noopener"`)
 - `classes` (optional): Additional CSS classes
 
-**Output**: `<a href="https://example.com/document.pdf" class="govuk-link custom-link-class">View detailed check data (PDF)</a>`
+**Output**: `<a href="https://example.com/document.pdf" target="_blank" rel="noopener" class="govuk-link custom-link-class">View detailed check data (PDF)</a>`
 
 ---
 
@@ -302,6 +306,44 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 - `id` (optional): HTML ID attribute
 
 **Output**: `<div class="govuk-body" id="grouped-content">...</div>`
+
+---
+
+### 11. Table Component
+
+**Purpose**: Tabular data in GOV.UK table format
+
+```
+{
+  "component": "table",
+  "title": "Check Results",
+  "rows": [
+    [
+      { "label": "Check", "component": "text", "text": "Area validation" },
+      { "label": "Result", "component": "status", "text": "PASSED", "colour": "green" }
+    ],
+    [
+      { "label": "Check", "component": "text", "text": "Boundary check" },
+      { "label": "Result", "component": "status", "text": "FAILED", "colour": "red" }
+    ]
+  ],
+  "firstCellIsHeader": false
+}
+```
+
+**Parameters**:
+
+- `rows` (required): 2D array where each row contains column objects
+- `title` (optional): Heading above the table (renders as h3)
+- `firstCellIsHeader` (optional): Whether first cell in each row should be a header
+
+**Row Structure**:
+
+- First row defines column headers via `label` field
+- Each cell can contain any dynamic component (text, status, url, etc.)
+- Cells support the full component system with nesting
+
+**Output**: GOV.UK Table component with optional heading
 
 ---
 
