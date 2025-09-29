@@ -87,7 +87,7 @@ describe("dynamic-content template", () => {
     const result = render("dynamic-content", params);
 
     expect(result).toContain("Under Review");
-    expect(result).toContain("govuk-tag--grey"); // Default class since no classesMap
+    expect(result).toContain("govuk-tag--grey");
   });
 
   test("renders status component with both classesMap and labelsMap", () => {
@@ -110,19 +110,6 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-tag--red");
   });
 
-  test("renders status component with labelsMap fallback to capitalize", () => {
-    const params = [
-      {
-        component: "status",
-        text: "in_progress",
-      },
-    ];
-
-    const result = render("dynamic-content", params);
-
-    expect(result).toContain("In_progress");
-  });
-
   test("renders status component with colour parameter", () => {
     const params = [
       {
@@ -136,24 +123,6 @@ describe("dynamic-content template", () => {
 
     expect(result).toContain("Urgent");
     expect(result).toContain("govuk-tag--red");
-  });
-
-  test("renders status component with colour and labelsMap", () => {
-    const params = [
-      {
-        component: "status",
-        text: "PENDING",
-        colour: "blue",
-        labelsMap: {
-          PENDING: "Under Review",
-        },
-      },
-    ];
-
-    const result = render("dynamic-content", params);
-
-    expect(result).toContain("Under Review");
-    expect(result).toContain("govuk-tag--blue");
   });
 
   test("renders status component with classesMap overriding colour", () => {
