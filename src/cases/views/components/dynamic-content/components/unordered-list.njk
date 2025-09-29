@@ -1,10 +1,9 @@
 {% macro defraUnorderedList(params, renderDefraComponent) %}
   {%- set items = params.items or [] %}
   {%- set classes = params.classes or 'govuk-list govuk-list--bullet' %}
-  {%- set spaced = params.spaced or false %}
   {%- set id = params.id or '' %}
 
-  <ul{% if id %} id="{{ id }}"{% endif %} class="{{ classes }}{% if spaced %} govuk-list--spaced{% endif %}">
+  <ul{% if id %} id="{{ id }}"{% endif %} class="{{ classes }}">
     {% for item in items %}
       <li>
         {% if item.component %}

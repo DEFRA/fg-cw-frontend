@@ -123,6 +123,58 @@ describe("dynamic-content template", () => {
     expect(result).toContain("In_progress");
   });
 
+  test("renders status component with colour parameter", () => {
+    const params = [
+      {
+        component: "status",
+        text: "urgent",
+        colour: "red",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Urgent");
+    expect(result).toContain("govuk-tag--red");
+  });
+
+  test("renders status component with colour and labelsMap", () => {
+    const params = [
+      {
+        component: "status",
+        text: "PENDING",
+        colour: "blue",
+        labelsMap: {
+          PENDING: "Under Review",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Under Review");
+    expect(result).toContain("govuk-tag--blue");
+  });
+
+  test("renders status component with classesMap overriding colour", () => {
+    const params = [
+      {
+        component: "status",
+        text: "critical",
+        colour: "blue",
+        classesMap: {
+          critical: "govuk-tag--red",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Critical");
+    expect(result).toContain("govuk-tag--red");
+    expect(result).not.toContain("govuk-tag--blue");
+  });
+
   test("renders url component", () => {
     const params = [
       {
@@ -422,11 +474,11 @@ describe("dynamic-content template", () => {
     expect(result).toContain("</ol>");
   });
 
-  test("renders ordered-list component with spaced option", () => {
+  test("renders ordered-list component with spaced classes", () => {
     const params = [
       {
         component: "ordered-list",
-        spaced: true,
+        classes: "govuk-list govuk-list--number govuk-list--spaced",
         items: [
           {
             text: "First very long item that spans multiple lines and needs extra spacing for better readability",
