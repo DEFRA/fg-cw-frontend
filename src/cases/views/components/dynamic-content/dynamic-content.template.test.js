@@ -243,7 +243,7 @@ describe("dynamic-content template", () => {
         items: [
           {
             component: "text",
-            text: "We need to know your nationality so we can work out which elections you're entitled to vote in.",
+            text: "We need to know your nationality",
           },
         ],
       },
@@ -335,19 +335,17 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-details__summary-text");
   });
 
-  test("renders paragraph component with default govuk-body styling", () => {
+  test("renders paragraph component with default styling", () => {
     const params = [
       {
         component: "paragraph",
-        text: "This is a paragraph with proper semantic markup.",
+        text: "This is a paragraph.",
       },
     ];
 
     const result = render("dynamic-content", params);
 
-    expect(result).toContain(
-      "This is a paragraph with proper semantic markup.",
-    );
+    expect(result).toContain("This is a paragraph.");
     expect(result).toContain('<p class="govuk-body">');
     expect(result).toContain("</p>");
   });
