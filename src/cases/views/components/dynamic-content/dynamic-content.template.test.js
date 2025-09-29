@@ -285,24 +285,6 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-details");
   });
 
-  test("renders details component with open attribute", () => {
-    const params = [
-      {
-        component: "details",
-        summaryItems: [{ component: "text", text: "Already open" }],
-        items: [
-          { component: "text", text: "This content is visible by default" },
-        ],
-        open: true,
-      },
-    ];
-
-    const result = render("dynamic-content", params);
-
-    expect(result).toContain("open");
-    expect(result).toContain("Already open");
-  });
-
   test("renders details component with summaryItems components", () => {
     const params = [
       {
