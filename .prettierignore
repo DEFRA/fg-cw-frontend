@@ -6,6 +6,10 @@ coverage
 src/server/common/components/checkbox/template.njk
 src/cases/views/components/dynamic-content/components/container.njk
 src/cases/views/components/dynamic-content/components/heading.njk
-src/cases/views/components/dynamic-content/components/list.njk
 src/cases/views/components/dynamic-content/components/text.njk
+src/cases/views/components/dynamic-content/components/details.njk
+src/cases/views/components/dynamic-content/components/summary-list.njk
+src/cases/views/components/dynamic-content/components/ordered-list.njk
+src/cases/views/components/dynamic-content/components/unordered-list.njk
+src/cases/views/components/dynamic-content/components/paragraph.njk
 **/__snapshots__/

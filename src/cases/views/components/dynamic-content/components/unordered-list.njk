@@ -1,0 +1,17 @@
+{% macro defraUnorderedList(params, renderDefraComponent) %}
+  {%- set items = params.items or [] %}
+  {%- set classes = params.classes or 'govuk-list govuk-list--bullet' %}
+  {%- set id = params.id or '' %}
+
+  <ul{% if id %} id="{{ id }}"{% endif %} class="{{ classes }}">
+    {% for item in items %}
+      <li>
+        {% if item.component %}
+          {{ renderDefraComponent(item) }}
+        {% else %}
+          {{ item.text | safe }}
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endmacro %}

@@ -3,10 +3,25 @@
 {% macro defraStatus(params) %}
   {%- set value = params.text or '' %}
   {%- set classesMap = params.classesMap or {} %}
+  {%- set labelsMap = params.labelsMap or {} %}
+  {%- set colour = params.colour or '' %}
+  {%- set additionalClasses = params.classes or '' %}
+
+  {%- if classesMap[value] %}
+    {%- set baseClasses = classesMap[value] %}
+  {%- elif colour %}
+    {%- set baseClasses = "govuk-tag--" + colour %}
+  {%- else %}
+    {%- set baseClasses = "govuk-tag--grey" %}
+  {%- endif %}
+
+  {%- set allClasses = baseClasses + (" " + additionalClasses if additionalClasses else "") %}
+  {%- set displayText = labelsMap[value] or (value | capitalize) %}
+
   {{
     govukTag({
-      text: value | capitalize,
-      classes: classesMap[value] or "govuk-tag--grey"
+      text: displayText,
+      classes: allClasses
     })
   }}
 {% endmacro %}
