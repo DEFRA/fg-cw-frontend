@@ -1,7 +1,7 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
 {% from "./heading.njk" import defraHeading %}
 
-{% macro defraList(params, renderDefraComponent) %}
+{% macro defraSummaryList(params, renderDefraComponent) %}
   {%- set rows = params.rows or [] %}
 
   {% set summaryRows = [] %}
