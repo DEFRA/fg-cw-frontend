@@ -18,7 +18,11 @@ vi.mock("../../config.js", () => ({
   },
 }));
 
-vi.mock("../../logger.js");
+vi.mock("../../logger.js", () => ({
+  logger: {
+    error: vi.fn(),
+  },
+}));
 vi.mock("./build-navigation.js");
 
 describe("context", () => {
