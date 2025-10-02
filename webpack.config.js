@@ -4,7 +4,7 @@ import { createRequire } from "node:module";
 import { fileURLToPath } from "node:url";
 import path from "path";
 import TerserPlugin from "terser-webpack-plugin";
-import WebpackAssetsManifest from "webpack-assets-manifest";
+import { WebpackAssetsManifest } from "webpack-assets-manifest";
 
 const { NODE_ENV = "development" } = process.env;
 
