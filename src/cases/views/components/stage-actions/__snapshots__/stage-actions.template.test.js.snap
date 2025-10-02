@@ -6,24 +6,24 @@ exports[`stage-actions > renders basic stage actions 1`] = `
 
   <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      Decision
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
-        <label class="govuk-label govuk-radios__label" for="actionId-2">
-          Reject
-        </label>
-      </div>
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Decision
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-  </fieldset>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionId-2">
+        Reject
+      </label>
+    </div>
+  </div>
+</fieldset>
 </div>
 
 
@@ -40,49 +40,49 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 
   <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      What do you want to do?
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" data-aria-controls="conditional-actionId">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
-      <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-actionId">
-        <div class="govuk-form-group">
-    <label class="govuk-label" for="approve-comment">
-      Approval notes
-    </label>
-    <textarea class="govuk-textarea" id="approve-comment" name="approve-comment" rows="3"></textarea>
-  </div>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="on-hold" checked data-aria-controls="conditional-actionId-2">
-        <label class="govuk-label govuk-radios__label" for="actionId-2">
-          Put on hold
-        </label>
-      </div>
-      <div class="govuk-radios__conditional" id="conditional-actionId-2">
-        <div class="govuk-form-group">
-    <label class="govuk-label" for="on-hold-comment">
-      Reason for hold
-    </label>
-    <div id="on-hold-comment-hint" class="govuk-hint">
-      Optional notes
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    What do you want to do?
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" data-aria-controls="conditional-actionId">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-    <textarea class="govuk-textarea" id="on-hold-comment" name="on-hold-comment" rows="2" aria-describedby="on-hold-comment-hint">Waiting for more information</textarea>
-  </div>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId-3" name="actionId" type="radio" value="reject">
-        <label class="govuk-label govuk-radios__label" for="actionId-3">
-          Reject
-        </label>
-      </div>
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-actionId">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="approve-comment">
+    Approval notes
+  </label>
+  <textarea class="govuk-textarea" id="approve-comment" name="approve-comment" rows="3"></textarea>
+</div>
     </div>
-  </fieldset>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="on-hold" checked data-aria-controls="conditional-actionId-2">
+      <label class="govuk-label govuk-radios__label" for="actionId-2">
+        Put on hold
+      </label>
+    </div>
+    <div class="govuk-radios__conditional" id="conditional-actionId-2">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="on-hold-comment">
+    Reason for hold
+  </label>
+  <div id="on-hold-comment-hint" class="govuk-hint">
+    Optional notes
+  </div>
+  <textarea class="govuk-textarea" id="on-hold-comment" name="on-hold-comment" rows="2" aria-describedby="on-hold-comment-hint">Waiting for more information</textarea>
+</div>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId-3" name="actionId" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionId-3">
+        Reject
+      </label>
+    </div>
+  </div>
+</fieldset>
 </div>
 
 
@@ -99,35 +99,35 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 
   <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      Decision
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
-      <div class="govuk-radios__conditional" id="conditional-actionId">
-        <div class="govuk-form-group">
-    <label class="govuk-label" for="approve-comment">
-      Approval reason
-    </label>
-    <div id="approve-comment-hint" class="govuk-hint">
-      Please provide a reason
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Decision
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-    <textarea class="govuk-textarea" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-hint">This looks good</textarea>
+    <div class="govuk-radios__conditional" id="conditional-actionId">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="approve-comment">
+    Approval reason
+  </label>
+  <div id="approve-comment-hint" class="govuk-hint">
+    Please provide a reason
   </div>
-      </div>
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
-        <label class="govuk-label govuk-radios__label" for="actionId-2">
-          Reject
-        </label>
-      </div>
+  <textarea class="govuk-textarea" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-hint">This looks good</textarea>
+</div>
     </div>
-  </fieldset>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionId-2">
+        Reject
+      </label>
+    </div>
+  </div>
+</fieldset>
 </div>
 
 
@@ -144,21 +144,21 @@ exports[`stage-actions > renders with error message 1`] = `
 
   <div class="govuk-form-group govuk-form-group--error">
   <fieldset class="govuk-fieldset" aria-describedby="actionId-error">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      Decision
-    </legend>
-    <p id="actionId-error" class="govuk-error-message">
-      <span class="govuk-visually-hidden">Error:</span> Please select an action
-    </p>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Decision
+  </legend>
+  <p id="actionId-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Please select an action
+  </p>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-  </fieldset>
+  </div>
+</fieldset>
 </div>
 
 
@@ -175,18 +175,18 @@ exports[`stage-actions > renders with save button disabled 1`] = `
 
   <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      Decision
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Decision
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-  </fieldset>
+  </div>
+</fieldset>
 </div>
 
 
@@ -203,29 +203,29 @@ exports[`stage-actions > renders with textarea error 1`] = `
 
   <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-      Decision
-    </legend>
-    <div class="govuk-radios" data-module="govuk-radios">
-      <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
-        <label class="govuk-label govuk-radios__label" for="actionId">
-          Approve
-        </label>
-      </div>
-      <div class="govuk-radios__conditional" id="conditional-actionId">
-        <div class="govuk-form-group govuk-form-group--error">
-    <label class="govuk-label" for="approve-comment">
-      Approval reason
-    </label>
-    <p id="approve-comment-error" class="govuk-error-message">
-      <span class="govuk-visually-hidden">Error:</span> Approval reason is required
-    </p>
-    <textarea class="govuk-textarea govuk-textarea--error" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-error"></textarea>
-  </div>
-      </div>
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Decision
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
+      <label class="govuk-label govuk-radios__label" for="actionId">
+        Approve
+      </label>
     </div>
-  </fieldset>
+    <div class="govuk-radios__conditional" id="conditional-actionId">
+      <div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="approve-comment">
+    Approval reason
+  </label>
+  <p id="approve-comment-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Approval reason is required
+  </p>
+  <textarea class="govuk-textarea govuk-textarea--error" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-error"></textarea>
+</div>
+    </div>
+  </div>
+</fieldset>
 </div>
 
 
