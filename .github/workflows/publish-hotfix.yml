@@ -22,17 +22,26 @@ jobs:
         with:
           fetch-depth: 0 # Depth 0 is required for branch-based versioning
 
-      - name: Test code and Create Test Coverage Reports
+      - name: Use Node version
         uses: actions/setup-node@v5
         with:
           node-version-file: .nvmrc
           cache: npm
-      - run: |
-          npm ci
-          npm run build
-          npm run format:check
-          npm run lint
-          npm test -- --coverage
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Check formatting
+        run: npm run format:check
+
+      - name: Run unit tests
+        run: npm run test -- --coverage
+
+      - name: Build frontend assets
+        run: npm run build
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v6.0.0
