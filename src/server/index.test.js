@@ -18,6 +18,11 @@ describe("server", () => {
     const response = await server.inject({
       method: "GET",
       url: "/path/",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(response.statusCode).toBe(200);
@@ -31,6 +36,11 @@ describe("server", () => {
     const response = await server.inject({
       method: "GET",
       url: "/",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(response.statusCode).toBe(302);
@@ -72,6 +82,11 @@ describe("server", () => {
     const { result, statusCode } = await server.inject({
       method: "GET",
       url: "/broken",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(statusCode).toBe(500);
@@ -223,6 +238,11 @@ describe("server", () => {
     const setupSessionResponse = await server.inject({
       method: "POST",
       url: "/setup-session",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     const response = await server.inject({
@@ -275,6 +295,11 @@ describe("server", () => {
     const setupSessionResponse = await server.inject({
       method: "POST",
       url: "/setup-session",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     const response = await server.inject({

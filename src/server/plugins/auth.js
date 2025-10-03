@@ -63,6 +63,8 @@ export const auth = {
       }));
 
       server.auth.strategy("session", "yar");
+
+      server.auth.default("session");
     },
   },
 };
