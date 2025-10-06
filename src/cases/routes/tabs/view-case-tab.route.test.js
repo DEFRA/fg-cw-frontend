@@ -1,3 +1,4 @@
+import Bell from "@hapi/bell";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
@@ -10,12 +11,14 @@ describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
+    Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
   });
 
   afterEach(async () => {
     await server.stop();
+    Bell.simulate(false);
   });
 
   it("renders tab view with correct data", async () => {
@@ -142,6 +145,11 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-123/case-details",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(statusCode).toBe(200);
@@ -249,6 +257,11 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-456/timeline",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(statusCode).toBe(200);
@@ -266,6 +279,11 @@ describe("viewCaseTabRoute", () => {
     const response = await server.inject({
       method: "GET",
       url: "/cases/nonexistent/tab",
+      auth: {
+        credentials: {},
+        strategy: "session",
+        mode: "required",
+      },
     });
 
     expect(response.statusCode).toBe(500);
@@ -279,6 +297,10 @@ describe("viewCaseTabRoute", () => {
     const response = await server.inject({
       method: "GET",
       url: "/cases/case-error/tab-error",
+      auth: {
+        credentials: {},
+        strategy: "session",
+      },
     });
 
     expect(response.statusCode).toBe(500);
@@ -304,6 +326,10 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/param-test-case/agreements",
+      auth: {
+        credentials: {},
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toBe(200);
