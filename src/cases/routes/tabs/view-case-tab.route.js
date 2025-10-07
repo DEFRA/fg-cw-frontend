@@ -7,7 +7,12 @@ export const viewCaseTabRoute = {
   async handler(request, h) {
     const { caseId, tabId } = request.params;
 
-    const tabData = await findCaseTabUseCase(caseId, tabId);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const tabData = await findCaseTabUseCase(authContext, caseId, tabId);
     const viewModel = createViewTabViewModel(tabData, tabId);
 
     return h.view(`pages/view-tab`, viewModel);

@@ -24,6 +24,18 @@ describe("getSecret", () => {
   });
 
   it("returns 200", async () => {
+    const credentials = {
+      token: "access-token",
+      refreshToken: "refresh-token",
+      expiresAt: new Date("2050-01-01T00:00:00Z").getTime(),
+      user: {
+        id: "43e8508b6cbd4ac1b29ee73792ab0f4b",
+        name: "Joe Bloggs",
+        email: "joe@bloggs.com",
+        idpRoles: ["FCP.Casework.Read"],
+        appRoles: ["ROLE_SING_AND_DANCE"],
+      },
+    };
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/secret",
@@ -31,18 +43,7 @@ describe("getSecret", () => {
         isAuthenticated: true,
         isAuthorized: false,
         isInjected: true,
-        credentials: {
-          token: "access-token",
-          refreshToken: "refresh-token",
-          expiresAt: new Date("2050-01-01T00:00:00Z").getTime(),
-          user: {
-            id: "43e8508b6cbd4ac1b29ee73792ab0f4b",
-            name: "Joe Bloggs",
-            email: "joe@bloggs.com",
-            idpRoles: ["FCP.Casework.Read"],
-            appRoles: ["ROLE_SING_AND_DANCE"],
-          },
-        },
+        credentials,
         strategy: "session",
         mode: "required",
         error: null,
@@ -54,7 +55,10 @@ describe("getSecret", () => {
     const $ = load(result);
     const view = $("#main-content").html();
 
-    expect(findSecretUseCase).toHaveBeenCalledWith("access-token");
+    expect(findSecretUseCase).toHaveBeenCalledWith({
+      token: credentials.token,
+      user: credentials.user,
+    });
 
     expect(view).toMatchSnapshot();
   });

@@ -1,31 +1,43 @@
 import { wreck } from "../../common/wreck.js";
 
-export const findAll = async () => {
-  const { payload } = await wreck.get("/cases");
+export const findAll = async (authContext) => {
+  const { payload } = await wreck.get("/cases", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+
   return payload;
 };
 
-export const findById = async (caseId) => {
-  const { payload } = await wreck.get(`/cases/${caseId}`);
+export const findById = async (authContext, caseId) => {
+  const { payload } = await wreck.get(`/cases/${caseId}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
   return payload;
 };
 
-export const findTabById = async (caseId, tabId) => {
-  const { payload } = await wreck.get(`/cases/${caseId}/tabs/${tabId}`);
+export const findTabById = async (authContext, caseId, tabId) => {
+  const { payload } = await wreck.get(`/cases/${caseId}/tabs/${tabId}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
   return payload;
 };
 
-export const updateTaskStatus = async ({
-  caseId,
-  stageId,
-  taskGroupId,
-  taskId,
-  isComplete,
-  comment = null,
-}) => {
+export const updateTaskStatus = async (
+  authContext,
+  { caseId, stageId, taskGroupId, taskId, isComplete, comment = null },
+) => {
   await wreck.patch(
     `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
     {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
       payload: {
         status: isComplete ? "complete" : "pending",
         comment: comment === "" ? null : comment,
@@ -34,22 +46,43 @@ export const updateTaskStatus = async ({
   );
 };
 
-export const completeStage = async (caseId) => {
-  await wreck.post(`/cases/${caseId}/stage`);
+export const completeStage = async (authContext, caseId) => {
+  await wreck.post(`/cases/${caseId}/stage`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
 };
 
-export const updateStageOutcome = async ({ caseId, ...payload }) => {
-  await wreck.patch(`/cases/${caseId}/stage/outcome`, { payload });
+export const updateStageOutcome = async (
+  authContext,
+  { caseId, ...payload },
+) => {
+  await wreck.patch(`/cases/${caseId}/stage/outcome`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload,
+  });
 };
 
-export const assignUserToCase = async ({ caseId, assignedUserId, notes }) => {
+export const assignUserToCase = async (
+  authContext,
+  { caseId, assignedUserId, notes },
+) => {
   await wreck.patch(`/cases/${caseId}/assigned-user`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
     payload: { assignedUserId, notes },
   });
 };
 
-export const addNoteToCase = async ({ caseId, text }) => {
+export const addNoteToCase = async (authContext, { caseId, text }) => {
   await wreck.post(`/cases/${caseId}/notes`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
     payload: { text },
   });
 };

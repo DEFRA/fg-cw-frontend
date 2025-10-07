@@ -12,13 +12,15 @@ describe("findSecretUseCase", () => {
       },
     });
 
-    const accessToken = "mockAccessToken";
+    const authContext = {
+      token: "mockAccessToken",
+    };
 
-    const result = await findSecretUseCase(accessToken);
+    const result = await findSecretUseCase(authContext);
 
     expect(wreck.get).toHaveBeenCalledWith(`/secret`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${authContext.token}`,
       },
     });
 

@@ -33,11 +33,24 @@ describe("updateStageOutcomeRoute", () => {
         method: "POST",
         url: "/cases/test-case-id/stage/outcome",
         payload,
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: {},
+          },
+          strategy: "session",
+        },
       });
 
       expect(statusCode).toBe(302);
       expect(headers.location).toBe("/cases/test-case-id");
-      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+
+      const authContext = {
+        token: "mock-token",
+        user: {},
+      };
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
           actionId: "approve",
@@ -69,11 +82,24 @@ describe("updateStageOutcomeRoute", () => {
         method: "POST",
         url: "/cases/case-123/stage/outcome",
         payload,
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: {},
+          },
+          strategy: "session",
+        },
       });
 
       expect(statusCode).toBe(302);
       expect(headers.location).toBe("/cases/case-123");
-      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+
+      const authContext = {
+        token: "mock-token",
+        user: {},
+      };
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "case-123",
         actionData: {
           actionId: "reject",
@@ -102,9 +128,21 @@ describe("updateStageOutcomeRoute", () => {
         method: "POST",
         url: "/cases/test-case-id/stage/outcome",
         payload,
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: {},
+          },
+          strategy: "session",
+        },
       });
 
-      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+      const authContext = {
+        token: "mock-token",
+        user: {},
+      };
+
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
           actionId: "conditional-approval",
@@ -120,14 +158,19 @@ describe("updateStageOutcomeRoute", () => {
       const payload = {
         actionId: "approve",
       };
+      const authContext = { token: "mock-token", user: undefined };
 
       await server.inject({
         method: "POST",
         url: "/cases/test-case-id/stage/outcome",
         payload,
+        auth: {
+          credentials: authContext,
+          strategy: "session",
+        },
       });
 
-      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
           actionId: "approve",
@@ -141,14 +184,19 @@ describe("updateStageOutcomeRoute", () => {
       updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
       const payload = {};
+      const authContext = { token: "mock-token", user: undefined };
 
       await server.inject({
         method: "POST",
         url: "/cases/test-case-id/stage/outcome",
         payload,
+        auth: {
+          credentials: authContext,
+          strategy: "session",
+        },
       });
 
-      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith({
+      expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
           actionId: undefined,

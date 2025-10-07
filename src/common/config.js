@@ -12,7 +12,7 @@ const isTest = process.env.NODE_ENV === "test";
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export const config = convict({
-  fg_cw_backend_url: {
+  backendUrl: {
     doc: "The backend URL for the case worker service",
     format: String,
     default: null,

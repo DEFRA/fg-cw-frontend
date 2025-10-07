@@ -28,6 +28,10 @@ describe("listCasesRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(200);
@@ -44,6 +48,10 @@ describe("listCasesRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: `/cases?assignedCaseId=${mockCases[0]._id}`,
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(200);

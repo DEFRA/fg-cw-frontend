@@ -19,14 +19,16 @@ describe("findSecretWorkflowUseCase", () => {
       payload: mockWorkflowData,
     });
 
-    const accessToken = "mockAccessToken";
+    const authContext = {
+      token: "mockAccessToken",
+    };
     const workflowCode = "TEST_WORKFLOW";
 
-    const result = await findSecretWorkflowUseCase(accessToken, workflowCode);
+    const result = await findSecretWorkflowUseCase(authContext, workflowCode);
 
     expect(wreck.get).toHaveBeenCalledWith(`/secret/workflow/${workflowCode}`, {
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${authContext.token}`,
       },
     });
 

@@ -31,9 +31,22 @@ describe("newNoteRoute", () => {
     await server.inject({
       method: "GET",
       url: "/cases/68495db5afe2d27b09b2ee47/notes/new",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      authContext,
       "68495db5afe2d27b09b2ee47",
     );
   });
@@ -46,6 +59,13 @@ describe("newNoteRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/68495db5afe2d27b09b2ee47/notes/new",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(200);
