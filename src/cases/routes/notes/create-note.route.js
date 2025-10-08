@@ -8,14 +8,24 @@ export const createNoteRoute = {
   handler: async (request, h) => {
     const { caseId } = request.params;
     const { text } = request.payload;
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
 
     const validationErrors = validateNote(text);
     if (validationErrors) {
-      return renderFormWithError(h, caseId, validationErrors, request.payload);
+      return renderFormWithError(
+        h,
+        authContext,
+        caseId,
+        validationErrors,
+        request.payload,
+      );
     }
 
     try {
-      await addNoteToCaseUseCase({ caseId, text });
+      await addNoteToCaseUseCase(authContext, { caseId, text });
       return h.redirect(`/cases/${caseId}/notes`);
     } catch (error) {
       request.log("error", {
@@ -29,7 +39,13 @@ export const createNoteRoute = {
         save: "There was a problem saving the note. Please try again.",
       };
 
-      return renderFormWithError(h, caseId, serverErrors, request.payload);
+      return renderFormWithError(
+        h,
+        authContext,
+        caseId,
+        serverErrors,
+        request.payload,
+      );
     }
   },
 };
@@ -41,8 +57,14 @@ const validateNote = (text) => {
   return null;
 };
 
-const renderFormWithError = async (h, caseId, errors, formData) => {
-  const caseData = await findCaseByIdUseCase(caseId);
+const renderFormWithError = async (
+  h,
+  authContext,
+  caseId,
+  errors,
+  formData,
+) => {
+  const caseData = await findCaseByIdUseCase(authContext, caseId);
   const viewModel = createNewNoteViewModel(caseData, errors, formData);
   return h.view(`pages/notes/new-note`, viewModel);
 };

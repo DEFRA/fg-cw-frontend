@@ -17,7 +17,12 @@ export const loginCallbackRoute = {
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
 
-    const user = await createOrUpdateUserUseCase(auth.credentials.profile);
+    const authContext = {
+      token: auth.credentials.token,
+      profile: auth.credentials.profile,
+    };
+
+    const user = await createOrUpdateUserUseCase(authContext);
 
     request.yar.set("credentials", {
       token: auth.credentials.token,

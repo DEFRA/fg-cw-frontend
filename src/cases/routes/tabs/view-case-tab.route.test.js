@@ -146,14 +146,26 @@ describe("viewCaseTabRoute", () => {
       method: "GET",
       url: "/cases/case-123/case-details",
       auth: {
-        credentials: {},
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
         strategy: "session",
         mode: "required",
       },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toBe(200);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-123", "case-details");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-123",
+      "case-details",
+    );
 
     const $ = load(result);
     const view = $("#main-content").html();
@@ -258,14 +270,26 @@ describe("viewCaseTabRoute", () => {
       method: "GET",
       url: "/cases/case-456/timeline",
       auth: {
-        credentials: {},
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
         strategy: "session",
         mode: "required",
       },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toBe(200);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-456", "timeline");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-456",
+      "timeline",
+    );
 
     const $ = load(result);
     const view = $("#main-content").html();
@@ -280,14 +304,26 @@ describe("viewCaseTabRoute", () => {
       method: "GET",
       url: "/cases/nonexistent/tab",
       auth: {
-        credentials: {},
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
         strategy: "session",
         mode: "required",
       },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(response.statusCode).toBe(500);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("nonexistent", "tab");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "nonexistent",
+      "tab",
+    );
   });
 
   it("handles use case errors", async () => {
@@ -298,13 +334,25 @@ describe("viewCaseTabRoute", () => {
       method: "GET",
       url: "/cases/case-error/tab-error",
       auth: {
-        credentials: {},
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
         strategy: "session",
       },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(response.statusCode).toBe(500);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-error", "tab-error");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-error",
+      "tab-error",
+    );
   });
 
   it("extracts parameters correctly from URL", async () => {
@@ -327,13 +375,22 @@ describe("viewCaseTabRoute", () => {
       method: "GET",
       url: "/cases/param-test-case/agreements",
       auth: {
-        credentials: {},
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
         strategy: "session",
       },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toBe(200);
     expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
       "param-test-case",
       "agreements",
     );

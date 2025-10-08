@@ -54,9 +54,9 @@ const createTabObject = (tabId, tabConfig) => ({
   ...tabConfig,
 });
 
-export const findCaseByIdUseCase = async (caseId) => {
-  const kase = await findById(caseId);
-  const workflow = await findByCode(kase.workflowCode);
+export const findCaseByIdUseCase = async (authContext, caseId) => {
+  const kase = await findById(authContext, caseId);
+  const workflow = await findByCode(authContext, kase.workflowCode);
   const workflowTabs = workflow.pages.cases.details.tabs;
   const banner = kase.banner;
 

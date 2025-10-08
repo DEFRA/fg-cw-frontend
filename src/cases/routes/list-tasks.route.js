@@ -6,7 +6,15 @@ export const listTasksRoute = {
   method: "GET",
   path: "/cases/{caseId}",
   async handler(request, h) {
-    const caseData = await findCaseByIdUseCase(request.params.caseId);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const caseData = await findCaseByIdUseCase(
+      authContext,
+      request.params.caseId,
+    );
 
     const { errors, formData } = getFlashData(request);
     const viewModel = createTaskListViewModel(caseData, errors, formData);

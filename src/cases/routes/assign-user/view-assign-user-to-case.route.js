@@ -12,9 +12,14 @@ export const viewAssignUserToCaseRoute = {
       return h.redirect(`/cases`);
     }
 
-    const kase = await findCaseByIdUseCase(caseId);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
 
-    const users = await findAllUsersUseCase({
+    const kase = await findCaseByIdUseCase(authContext, caseId);
+
+    const users = await findAllUsersUseCase(authContext, {
       allAppRoles: kase.requiredRoles.allOf,
       anyAppRoles: kase.requiredRoles.anyOf,
     });

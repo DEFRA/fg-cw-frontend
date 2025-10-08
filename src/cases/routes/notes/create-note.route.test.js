@@ -34,9 +34,21 @@ describe("createNoteRoute", () => {
       payload: {
         text: "This is a valid note",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
-    expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(addNoteToCaseUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       text: "This is a valid note",
     });
@@ -55,9 +67,22 @@ describe("createNoteRoute", () => {
       payload: {
         text: "",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      authContext,
       "68495db5afe2d27b09b2ee47",
     );
     expect(addNoteToCaseUseCase).not.toHaveBeenCalled();
@@ -79,9 +104,22 @@ describe("createNoteRoute", () => {
       payload: {
         text: "   \n\t  ",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      authContext,
       "68495db5afe2d27b09b2ee47",
     );
     expect(addNoteToCaseUseCase).not.toHaveBeenCalled();
@@ -103,9 +141,22 @@ describe("createNoteRoute", () => {
       payload: {
         // text is missing
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      authContext,
       "68495db5afe2d27b09b2ee47",
     );
     expect(addNoteToCaseUseCase).not.toHaveBeenCalled();
@@ -128,13 +179,27 @@ describe("createNoteRoute", () => {
       payload: {
         text: "This will fail to save",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
-    expect(addNoteToCaseUseCase).toHaveBeenCalledWith({
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(addNoteToCaseUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       text: "This will fail to save",
     });
+
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      authContext,
       "68495db5afe2d27b09b2ee47",
     );
     expect(statusCode).toEqual(200);

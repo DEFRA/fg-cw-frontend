@@ -29,9 +29,21 @@ describe("assignUserToCaseRoute", () => {
         caseId: "case-id-1",
         assignedUserId: "user-id-1",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
-    expect(assignUserToCaseUseCase).toHaveBeenCalledWith({
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(assignUserToCaseUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "case-id-1",
       assignedUserId: "user-id-1",
     });

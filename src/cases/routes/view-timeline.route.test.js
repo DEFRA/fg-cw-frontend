@@ -120,6 +120,10 @@ describe("timelineRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/68495db5afe2d27b09b2ee47/timeline",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(200);

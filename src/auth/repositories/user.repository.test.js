@@ -5,6 +5,8 @@ import { create, findAll, update } from "./user.repository.js";
 vi.mock("../../common/wreck.js");
 
 describe("findAll", () => {
+  const authContext = { token: "mock-token" };
+
   it("finds users by criteria", async () => {
     const idpId = "testIdpId";
 
@@ -17,9 +19,13 @@ describe("findAll", () => {
       },
     });
 
-    const user = await findAll({ idpId });
+    const user = await findAll(authContext, { idpId });
 
-    expect(wreck.get).toHaveBeenCalledWith(`/users?idpId=${idpId}`);
+    expect(wreck.get).toHaveBeenCalledWith(`/users?idpId=${idpId}`, {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+    });
     expect(user).toEqual({
       id: "123",
       firstName: "John",
@@ -41,10 +47,15 @@ describe("findAll", () => {
       ],
     });
 
-    const users = await findAll({ idpId, allAppRoles });
+    const users = await findAll(authContext, { idpId, allAppRoles });
 
     expect(wreck.get).toHaveBeenCalledWith(
       `/users?idpId=${idpId}&allAppRoles=ROLE_ADMIN&allAppRoles=ROLE_MANAGER`,
+      {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      },
     );
     expect(users).toEqual([
       {
@@ -67,10 +78,15 @@ describe("findAll", () => {
       ],
     });
 
-    const users = await findAll({ idpId, anyAppRoles });
+    const users = await findAll(authContext, { idpId, anyAppRoles });
 
     expect(wreck.get).toHaveBeenCalledWith(
       `/users?idpId=${idpId}&anyAppRoles=ROLE_REVIEWER&anyAppRoles=ROLE_APPROVER`,
+      {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      },
     );
     expect(users).toEqual([
       {
@@ -94,10 +110,19 @@ describe("findAll", () => {
       ],
     });
 
-    const users = await findAll({ idpId, allAppRoles, anyAppRoles });
+    const users = await findAll(authContext, {
+      idpId,
+      allAppRoles,
+      anyAppRoles,
+    });
 
     expect(wreck.get).toHaveBeenCalledWith(
       `/users?idpId=${idpId}&allAppRoles=ROLE_ADMIN&allAppRoles=ROLE_APPROVER&anyAppRoles=ROLE_REVIEWER`,
+      {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      },
     );
     expect(users).toEqual([
       {
@@ -109,6 +134,8 @@ describe("findAll", () => {
 });
 
 describe("create", () => {
+  const authContext = { token: "mock-token" };
+
   it("creates a new user", async () => {
     const userData = {
       firstName: "John",
@@ -121,9 +148,12 @@ describe("create", () => {
       },
     });
 
-    const result = await create(userData);
+    const result = await create(authContext, userData);
 
     expect(wreck.post).toHaveBeenCalledWith("/users", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
       payload: userData,
     });
 
@@ -134,6 +164,8 @@ describe("create", () => {
 });
 
 describe("update", () => {
+  const authContext = { token: "mock-token" };
+
   it("updates user's details", async () => {
     const updatedUserData = {
       id: "123",
@@ -152,9 +184,12 @@ describe("update", () => {
       appRoles: ["ROLE_USER"],
     };
 
-    const user = await update("123", userData);
+    const user = await update(authContext, "123", userData);
 
     expect(wreck.patch).toHaveBeenCalledWith("/users/123", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
       payload: userData,
     });
 

@@ -62,6 +62,13 @@ describe("updateTaskStatusRoute", () => {
       payload: {
         isComplete: true,
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
     expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
@@ -95,9 +102,21 @@ describe("updateTaskStatusRoute", () => {
       payload: {
         isComplete: true,
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
-    expect(updateTaskStatusUseCase).toHaveBeenCalledWith({
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       stageId: "001",
       taskGroupId: "tg01",
@@ -137,9 +156,21 @@ describe("updateTaskStatusRoute", () => {
         isComplete: true,
         comment: "This is a comment",
       },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
-    expect(updateTaskStatusUseCase).toHaveBeenCalledWith({
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       stageId: "001",
       taskGroupId: "tg01",

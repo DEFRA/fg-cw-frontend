@@ -12,7 +12,12 @@ export const getSecretRoute = {
   async handler(request, h) {
     const { credentials } = request.auth;
 
-    const responseFromApi = await findSecretUseCase(credentials.token);
+    const authContext = {
+      token: credentials.token,
+      user: credentials.user,
+    };
+
+    const responseFromApi = await findSecretUseCase(authContext);
 
     return h.view("pages/secret", {
       data: {

@@ -7,7 +7,12 @@ export const newNoteRoute = {
   handler: async (request, h) => {
     const { caseId } = request.params;
 
-    const caseData = await findCaseByIdUseCase(caseId);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const caseData = await findCaseByIdUseCase(authContext, caseId);
     const viewModel = createNewNoteViewModel(caseData);
 
     return h.view(`pages/notes/new-note`, viewModel);

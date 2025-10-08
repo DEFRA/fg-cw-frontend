@@ -31,6 +31,10 @@ describe("viewAssignUserToCaseRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/assign-user?caseId=6870ee690cdf25de1301a300",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(200);
@@ -45,6 +49,10 @@ describe("viewAssignUserToCaseRoute", () => {
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/cases/assign-user",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
     });
 
     expect(statusCode).toEqual(302);

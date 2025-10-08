@@ -1,9 +1,9 @@
 import { wreck } from "../../common/wreck.js";
 
-export const findSecretWorkflowUseCase = async (token, workflowCode) => {
+export const findSecretWorkflowUseCase = async (authContext, workflowCode) => {
   const res = await wreck.get(`/secret/workflow/${workflowCode}`, {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Authorization: `Bearer ${authContext.token}`,
     },
   });
 

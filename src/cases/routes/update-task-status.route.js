@@ -23,7 +23,12 @@ export const updateTaskStatusRoute = {
     const { caseId, taskGroupId, taskId, stageId } = request.params;
     const { isComplete = false, comment = null } = request.payload;
 
-    const kase = await findCaseByIdUseCase(caseId);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const kase = await findCaseByIdUseCase(authContext, caseId);
     const task = findTask(kase, stageId, taskGroupId, taskId);
 
     // ensure comment has a value if it is required...
@@ -35,7 +40,7 @@ export const updateTaskStatusRoute = {
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupId}/${taskId}`);
     }
 
-    await updateTaskStatusUseCase({
+    await updateTaskStatusUseCase(authContext, {
       caseId,
       stageId,
       taskGroupId,

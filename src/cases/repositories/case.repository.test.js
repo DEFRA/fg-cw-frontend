@@ -14,6 +14,8 @@ import {
 vi.mock("../../common/wreck.js");
 
 describe("Case Repository", () => {
+  const authContext = { token: "mock-token" };
+
   describe("findAll", () => {
     it("returns array of case objects when API call succeeds", async () => {
       wreck.get.mockResolvedValueOnce({
@@ -45,9 +47,13 @@ describe("Case Repository", () => {
         ],
       });
 
-      const result = await findAll();
+      const result = await findAll(authContext);
 
-      expect(wreck.get).toHaveBeenCalledWith("/cases");
+      expect(wreck.get).toHaveBeenCalledWith("/cases", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
 
       expect(result).toEqual([
         {
@@ -100,9 +106,13 @@ describe("Case Repository", () => {
 
       wreck.get.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await findById(caseId);
+      const result = await findById(authContext, caseId);
 
-      expect(wreck.get).toHaveBeenCalledWith("/cases/case-123");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/case-123", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
       expect(result).toEqual({
         _id: "case-123",
         caseRef: "client-ref-123",
@@ -127,9 +137,13 @@ describe("Case Repository", () => {
 
       wreck.get.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await findById(caseId);
+      const result = await findById(authContext, caseId);
 
-      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
       expect(result).toBeNull();
     });
 
@@ -139,9 +153,13 @@ describe("Case Repository", () => {
 
       wreck.get.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await findById(caseId);
+      const result = await findById(authContext, caseId);
 
-      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case");
+      expect(wreck.get).toHaveBeenCalledWith("/cases/nonexistent-case", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
       expect(result).toBeUndefined();
     });
   });
@@ -172,10 +190,15 @@ describe("Case Repository", () => {
 
       wreck.get.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await findTabById(caseId, tabId);
+      const result = await findTabById(authContext, caseId, tabId);
 
       expect(wreck.get).toHaveBeenCalledWith(
         "/cases/case-123/tabs/caseDetails",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
       );
       expect(result).toEqual({
         _id: "case-123",
@@ -203,10 +226,17 @@ describe("Case Repository", () => {
 
       wreck.get.mockRejectedValueOnce(apiError);
 
-      await expect(findTabById(caseId, tabId)).rejects.toThrow("Tab not found");
+      await expect(findTabById(authContext, caseId, tabId)).rejects.toThrow(
+        "Tab not found",
+      );
 
       expect(wreck.get).toHaveBeenCalledWith(
         "/cases/case-error/tabs/error-tab",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
       );
     });
   });
@@ -220,10 +250,15 @@ describe("Case Repository", () => {
         taskGroupId: "tg-01",
         taskId: "t-01",
       };
-      await updateTaskStatus({ ...params, isComplete: true });
+      await updateTaskStatus(authContext, { ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
-        { payload: { status: "complete", comment: null } },
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+          payload: { status: "complete", comment: null },
+        },
       );
     });
   });
@@ -250,9 +285,13 @@ describe("Case Repository", () => {
 
       wreck.post.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await completeStage(caseId);
+      const result = await completeStage(authContext, caseId);
 
-      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage");
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/stage", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
       expect(result).toBeUndefined();
     });
   });
@@ -264,11 +303,17 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      const result = await assignUserToCase({ caseId, assignedUserId });
+      const result = await assignUserToCase(authContext, {
+        caseId,
+        assignedUserId,
+      });
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-123/assigned-user",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { assignedUserId: "user-456" },
         },
       );
@@ -281,11 +326,17 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      const result = await assignUserToCase({ caseId, assignedUserId });
+      const result = await assignUserToCase(authContext, {
+        caseId,
+        assignedUserId,
+      });
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-789/assigned-user",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { assignedUserId: null },
         },
       );
@@ -298,11 +349,17 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      const result = await assignUserToCase({ caseId, assignedUserId });
+      const result = await assignUserToCase(authContext, {
+        caseId,
+        assignedUserId,
+      });
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-999/assigned-user",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { assignedUserId: "" },
         },
       );
@@ -317,12 +374,15 @@ describe("Case Repository", () => {
       wreck.patch.mockRejectedValueOnce(apiError);
 
       await expect(
-        assignUserToCase({ caseId, assignedUserId }),
+        assignUserToCase(authContext, { caseId, assignedUserId }),
       ).rejects.toThrow("API Error");
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-error/assigned-user",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { assignedUserId: "user-error" },
         },
       );
@@ -339,11 +399,14 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      await updateStageOutcome(mockData);
+      await updateStageOutcome(authContext, mockData);
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-123/stage/outcome",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { actionId: "approve", comment: "This looks good to me" },
         },
       );
@@ -358,11 +421,14 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      await updateStageOutcome(mockData);
+      await updateStageOutcome(authContext, mockData);
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-456/stage/outcome",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: {
             actionId: "reject",
             comment: "Missing required documents",
@@ -379,11 +445,14 @@ describe("Case Repository", () => {
 
       wreck.patch.mockResolvedValueOnce({});
 
-      await updateStageOutcome(mockData);
+      await updateStageOutcome(authContext, mockData);
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-789/stage/outcome",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { actionId: "approve" },
         },
       );
@@ -399,13 +468,16 @@ describe("Case Repository", () => {
       const apiError = new Error("Stage outcome update failed");
       wreck.patch.mockRejectedValueOnce(apiError);
 
-      await expect(updateStageOutcome(mockData)).rejects.toThrow(
+      await expect(updateStageOutcome(authContext, mockData)).rejects.toThrow(
         "Stage outcome update failed",
       );
 
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/case-error/stage/outcome",
         {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
           payload: { actionId: "approve", comment: "This will fail" },
         },
       );
@@ -422,9 +494,12 @@ describe("Case Repository", () => {
 
       wreck.post.mockResolvedValueOnce({});
 
-      await addNoteToCase(mockData);
+      await addNoteToCase(authContext, mockData);
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/notes", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
         payload: { text: "This is a test note" },
       });
     });
@@ -438,9 +513,14 @@ describe("Case Repository", () => {
       const apiError = new Error("API Error");
       wreck.post.mockRejectedValueOnce(apiError);
 
-      await expect(addNoteToCase(mockData)).rejects.toThrow("API Error");
+      await expect(addNoteToCase(authContext, mockData)).rejects.toThrow(
+        "API Error",
+      );
 
       expect(wreck.post).toHaveBeenCalledWith("/cases/case-error/notes", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
         payload: { text: "This will fail" },
       });
     });
