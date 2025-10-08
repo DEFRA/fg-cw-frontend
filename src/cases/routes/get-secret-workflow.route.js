@@ -13,8 +13,13 @@ export const getSecretWorkflowRoute = {
     const { credentials } = request.auth;
     const { workflowCode } = request.params;
 
+    const authContext = {
+      token: credentials.token,
+      user: credentials.user,
+    };
+
     const responseFromApi = await findSecretWorkflowUseCase(
-      credentials.token,
+      authContext,
       workflowCode,
     );
 

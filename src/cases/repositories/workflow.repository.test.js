@@ -5,6 +5,8 @@ import { findByCode } from "./workflow.repository.js";
 vi.mock("../../common/wreck.js");
 
 describe("workflow repository", () => {
+  const authContext = { token: "mock-token" };
+
   describe("findByCode", () => {
     test("returns workflow data when wreck request succeeds", async () => {
       const workflowCode = "test-workflow-123";
@@ -35,10 +37,14 @@ describe("workflow repository", () => {
 
       wreck.get.mockResolvedValueOnce({ payload: mockPayload });
 
-      const result = await findByCode(workflowCode);
+      const result = await findByCode(authContext, workflowCode);
 
       expect(wreck.get).toHaveBeenCalledOnce();
-      expect(wreck.get).toHaveBeenCalledWith(`/workflows/${workflowCode}`);
+      expect(wreck.get).toHaveBeenCalledWith(`/workflows/${workflowCode}`, {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
       expect(result).toEqual(mockPayload);
     });
 
@@ -52,7 +58,7 @@ describe("workflow repository", () => {
 
       wreck.get.mockResolvedValueOnce({ payload: mockPayload });
 
-      const result = await findByCode(workflowCode);
+      const result = await findByCode(authContext, workflowCode);
 
       expect(result).toEqual(mockPayload);
       expect(result.stages).toEqual([]);
@@ -64,7 +70,7 @@ describe("workflow repository", () => {
 
       wreck.get.mockResolvedValueOnce({ payload: mockPayload });
 
-      const result = await findByCode(workflowCode);
+      const result = await findByCode(authContext, workflowCode);
 
       expect(result).toBeNull();
     });
@@ -76,7 +82,9 @@ describe("workflow repository", () => {
 
       wreck.get.mockRejectedValueOnce(error);
 
-      await expect(findByCode(workflowCode)).rejects.toThrow("Not Found");
+      await expect(findByCode(authContext, workflowCode)).rejects.toThrow(
+        "Not Found",
+      );
     });
 
     test("handles HTTP 500 server error", async () => {
@@ -86,7 +94,7 @@ describe("workflow repository", () => {
 
       wreck.get.mockRejectedValueOnce(error);
 
-      await expect(findByCode(workflowCode)).rejects.toThrow(
+      await expect(findByCode(authContext, workflowCode)).rejects.toThrow(
         "Internal Server Error",
       );
     });
@@ -97,10 +105,18 @@ describe("workflow repository", () => {
 
       wreck.get.mockResolvedValueOnce({ payload: mockPayload });
 
-      await findByCode(workflowCode);
+      await findByCode(authContext, workflowCode);
 
-      expect(wreck.get).toHaveBeenCalledWith(`/workflows/${workflowCode}`);
-      expect(wreck.get).toHaveBeenCalledWith("/workflows/url-test-workflow");
+      expect(wreck.get).toHaveBeenCalledWith(`/workflows/${workflowCode}`, {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
+      expect(wreck.get).toHaveBeenCalledWith("/workflows/url-test-workflow", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
     });
 
     test("handles undefined payload in response", async () => {
@@ -108,7 +124,7 @@ describe("workflow repository", () => {
 
       wreck.get.mockResolvedValueOnce({ payload: undefined });
 
-      const result = await findByCode(workflowCode);
+      const result = await findByCode(authContext, workflowCode);
 
       expect(result).toBeUndefined();
     });

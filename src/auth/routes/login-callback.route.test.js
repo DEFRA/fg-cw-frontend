@@ -45,30 +45,31 @@ describe("loginCallbackRoute", () => {
   it("creates or updates the user's account when authenticated and has IDP roles", async () => {
     await server.initialize();
 
+    const credentials = {
+      token: "mock-token",
+      query: {
+        next: "/cases",
+      },
+      profile: {
+        oid: "12345678-1234-1234-1234-123456789012",
+        name: "Bob Bill",
+        email: "bob.bill.defra.gov.uk",
+        roles: ["FCP.Casework.Read"],
+      },
+    };
+
     await server.inject({
       method: "GET",
       url: "/login/callback",
       auth: {
         strategy: "entra",
-        credentials: {
-          query: {
-            next: "/cases",
-          },
-          profile: {
-            oid: "12345678-1234-1234-1234-123456789012",
-            name: "Bob Bill",
-            email: "bob.bill.defra.gov.uk",
-            roles: ["FCP.Casework.Read"],
-          },
-        },
+        credentials,
       },
     });
 
     expect(createOrUpdateUserUseCase).toHaveBeenCalledWith({
-      oid: "12345678-1234-1234-1234-123456789012",
-      name: "Bob Bill",
-      email: "bob.bill.defra.gov.uk",
-      roles: ["FCP.Casework.Read"],
+      token: credentials.token,
+      profile: credentials.profile,
     });
   });
 

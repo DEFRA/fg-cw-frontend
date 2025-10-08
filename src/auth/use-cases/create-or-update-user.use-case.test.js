@@ -6,20 +6,23 @@ vi.mock("../repositories/user.repository.js");
 
 describe("createOrUpdateUserUseCase", () => {
   it("creates a user when one does not exist", async () => {
+    const authContext = {
+      profile: {
+        oid: "12345678-1234-1234-1234-123456789012",
+        email: "bob.bill@defra.gov.uk",
+        name: "Bob Bill",
+        roles: ["FCP.Casework.Read"],
+      },
+    };
     findAll.mockResolvedValue([]);
 
-    await createOrUpdateUserUseCase({
-      oid: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
-      roles: ["FCP.Casework.Read"],
-    });
+    await createOrUpdateUserUseCase(authContext);
 
-    expect(findAll).toHaveBeenCalledWith({
+    expect(findAll).toHaveBeenCalledWith(authContext, {
       idpId: "12345678-1234-1234-1234-123456789012",
     });
 
-    expect(create).toHaveBeenCalledWith({
+    expect(create).toHaveBeenCalledWith(authContext, {
       email: "bob.bill@defra.gov.uk",
       name: "Bob Bill",
       idpId: "12345678-1234-1234-1234-123456789012",
@@ -30,6 +33,15 @@ describe("createOrUpdateUserUseCase", () => {
   });
 
   it("updates a user when one exists", async () => {
+    const authContext = {
+      profile: {
+        oid: "12345678-1234-1234-1234-123456789012",
+        email: "bob.bill@defra.gov.uk",
+        name: "Bob Bill",
+        roles: ["FCP.Casework.Read"],
+      },
+    };
+
     const existingUser = {
       id: "123",
       idpId: "12345678-1234-1234-1234-123456789012",
@@ -39,18 +51,13 @@ describe("createOrUpdateUserUseCase", () => {
 
     findAll.mockResolvedValue([existingUser]);
 
-    await createOrUpdateUserUseCase({
-      oid: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
-      roles: ["FCP.Casework.Read"],
-    });
+    await createOrUpdateUserUseCase(authContext);
 
-    expect(findAll).toHaveBeenCalledWith({
+    expect(findAll).toHaveBeenCalledWith(authContext, {
       idpId: "12345678-1234-1234-1234-123456789012",
     });
 
-    expect(update).toHaveBeenCalledWith(existingUser.id, {
+    expect(update).toHaveBeenCalledWith(authContext, existingUser.id, {
       name: "Bob Bill",
       idpRoles: ["FCP.Casework.Read"],
     });
@@ -59,13 +66,14 @@ describe("createOrUpdateUserUseCase", () => {
   });
 
   it("throws Boom.badRequest when roles not supplied", async () => {
-    await expect(() =>
-      createOrUpdateUserUseCase({
+    const authContext = {
+      profile: {
         oid: "12345678-1234-1234-1234-123456789012",
         email: "bob.bill@defra.gov.uk",
         name: "Bob Bill",
-      }),
-    ).rejects.toThrow(
+      },
+    };
+    await expect(() => createOrUpdateUserUseCase(authContext)).rejects.toThrow(
       "User with IDP id '12345678-1234-1234-1234-123456789012' has no 'roles'",
     );
 

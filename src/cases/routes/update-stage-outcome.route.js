@@ -10,12 +10,21 @@ export const updateStageOutcomeRoute = {
       payload,
     } = request;
 
-    const actionData = extractActionData(payload);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
 
-    const { errors } = await updateStageOutcomeUseCase({ caseId, actionData });
+    const { errors } = await updateStageOutcomeUseCase(authContext, {
+      caseId,
+      actionData: extractActionData(payload),
+    });
 
     if (errors) {
-      setFlashData(request, { errors, formData: payload });
+      setFlashData(request, {
+        errors,
+        formData: payload,
+      });
     }
 
     return h.redirect(`/cases/${caseId}`);

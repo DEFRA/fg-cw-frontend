@@ -6,11 +6,19 @@ vi.mock("../repositories/user.repository.js");
 
 describe("findAllUsersUseCase", () => {
   it("returns users from repository with query parameters", async () => {
+    const authContext = {
+      profile: {
+        oid: "12345678-1234-1234-1234-123456789012",
+        email: "bob.bill@defra.gov.uk",
+        name: "Bob Bill",
+        roles: ["FCP.Casework.Read"],
+      },
+    };
     findAll.mockResolvedValue(mockUsers);
 
-    const result = await findAllUsersUseCase(query);
+    const result = await findAllUsersUseCase(authContext, query);
 
-    expect(findAll).toHaveBeenCalledWith(query);
+    expect(findAll).toHaveBeenCalledWith(authContext, query);
     expect(result).toEqual(mockUsers);
   });
 });

@@ -7,6 +7,14 @@ vi.mock("../repositories/case.repository.js");
 vi.mock("../repositories/workflow.repository.js");
 
 describe("findCaseByIdUseCase", () => {
+  const authContext = {
+    profile: {
+      oid: "12345678-1234-1234-1234-123456789012",
+      email: "bob.bill@defra.gov.uk",
+      name: "Bob Bill",
+      roles: ["FCP.Casework.Read"],
+    },
+  };
   test("returns case with titles when both repositories succeed", async () => {
     const caseId = "case-123";
     const mockCase = {
@@ -113,12 +121,12 @@ describe("findCaseByIdUseCase", () => {
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockResolvedValueOnce(mockWorkflow);
 
-    const result = await findCaseByIdUseCase(caseId);
+    const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(findById).toHaveBeenCalledOnce();
-    expect(findById).toHaveBeenCalledWith(caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId);
     expect(findByCode).toHaveBeenCalledOnce();
-    expect(findByCode).toHaveBeenCalledWith("workflow-123");
+    expect(findByCode).toHaveBeenCalledWith(authContext, "workflow-123");
     expect(result).toEqual(expectedResult);
   });
 
@@ -201,7 +209,7 @@ describe("findCaseByIdUseCase", () => {
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockResolvedValueOnce(mockWorkflow);
 
-    const result = await findCaseByIdUseCase(caseId);
+    const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(result.stages).toHaveLength(2);
     expect(result.stages[0].title).toBe("Stage One");
@@ -221,11 +229,11 @@ describe("findCaseByIdUseCase", () => {
 
     findById.mockRejectedValueOnce(error);
 
-    await expect(findCaseByIdUseCase(caseId)).rejects.toThrow(
+    await expect(findCaseByIdUseCase(authContext, caseId)).rejects.toThrow(
       "Case repository failed",
     );
     expect(findById).toHaveBeenCalledOnce();
-    expect(findById).toHaveBeenCalledWith(caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId);
     expect(findByCode).not.toHaveBeenCalled();
   });
 
@@ -241,12 +249,12 @@ describe("findCaseByIdUseCase", () => {
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockRejectedValueOnce(error);
 
-    await expect(findCaseByIdUseCase(caseId)).rejects.toThrow(
+    await expect(findCaseByIdUseCase(authContext, caseId)).rejects.toThrow(
       "Workflow repository failed",
     );
     expect(findById).toHaveBeenCalledOnce();
     expect(findByCode).toHaveBeenCalledOnce();
-    expect(findByCode).toHaveBeenCalledWith("workflow-123");
+    expect(findByCode).toHaveBeenCalledWith(authContext, "workflow-123");
   });
 
   test("handles case with empty stages", async () => {
@@ -272,13 +280,13 @@ describe("findCaseByIdUseCase", () => {
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockResolvedValueOnce(mockWorkflow);
 
-    const result = await findCaseByIdUseCase(caseId);
+    const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(result.stages).toEqual([]);
     expect(result.overrideTabs).toEqual([]);
     expect(result.customTabs).toEqual([]);
-    expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).toHaveBeenCalledWith("workflow-empty");
+    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findByCode).toHaveBeenCalledWith(authContext, "workflow-empty");
   });
 
   test("calls repositories with correct parameters", async () => {
@@ -305,10 +313,13 @@ describe("findCaseByIdUseCase", () => {
     findById.mockResolvedValueOnce(mockCase);
     findByCode.mockResolvedValueOnce(mockWorkflow);
 
-    const result = await findCaseByIdUseCase(caseId);
+    const result = await findCaseByIdUseCase(authContext, caseId);
 
-    expect(findById).toHaveBeenCalledWith(caseId);
-    expect(findByCode).toHaveBeenCalledWith("specific-workflow-code");
+    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findByCode).toHaveBeenCalledWith(
+      authContext,
+      "specific-workflow-code",
+    );
     expect(result.overrideTabs).toEqual([{ id: "tasks", title: "Tasks" }]);
     expect(result.customTabs).toEqual([]);
   });

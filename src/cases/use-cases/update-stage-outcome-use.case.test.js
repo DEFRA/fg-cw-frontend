@@ -8,6 +8,14 @@ vi.mock("../repositories/case.repository.js");
 vi.mock("./find-case-by-id.use-case.js");
 
 describe("updateStageOutcomeUseCase", () => {
+  const authContext = {
+    profile: {
+      oid: "12345678-1234-1234-1234-123456789012",
+      email: "bob.bill@defra.gov.uk",
+      name: "Bob Bill",
+      roles: ["FCP.Casework.Read"],
+    },
+  };
   const mockCaseData = {
     _id: "case-123",
     currentStage: "application-review",
@@ -61,13 +69,13 @@ describe("updateStageOutcomeUseCase", () => {
         comment: "This application looks good",
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-123",
         actionData,
       });
 
-      expect(findCaseByIdUseCase).toHaveBeenCalledWith("case-123");
-      expect(updateStageOutcome).toHaveBeenCalledWith({
+      expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "case-123");
+      expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-123",
         actionId: "approve",
         comment: "This application looks good",
@@ -82,12 +90,12 @@ describe("updateStageOutcomeUseCase", () => {
         comment: "Waiting for additional documents",
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-456",
         actionData,
       });
 
-      expect(updateStageOutcome).toHaveBeenCalledWith({
+      expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-456",
         actionId: "on-hold",
         comment: "Waiting for additional documents",
@@ -102,12 +110,12 @@ describe("updateStageOutcomeUseCase", () => {
         comment: "",
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-789",
         actionData,
       });
 
-      expect(updateStageOutcome).toHaveBeenCalledWith({
+      expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-789",
         actionId: "on-hold",
         comment: "",
@@ -122,12 +130,12 @@ describe("updateStageOutcomeUseCase", () => {
         comment: undefined,
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-no-comment",
         actionData,
       });
 
-      expect(updateStageOutcome).toHaveBeenCalledWith({
+      expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-no-comment",
         actionId: "no-comment",
         comment: undefined,
@@ -144,12 +152,12 @@ describe("updateStageOutcomeUseCase", () => {
         comment: "",
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-123",
         actionData,
       });
 
-      expect(findCaseByIdUseCase).toHaveBeenCalledWith("case-123");
+      expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "case-123");
       expect(updateStageOutcome).not.toHaveBeenCalled();
       expect(result).toEqual({
         success: false,
@@ -169,7 +177,7 @@ describe("updateStageOutcomeUseCase", () => {
         comment: "   \t\n  ",
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-whitespace",
         actionData,
       });
@@ -193,7 +201,7 @@ describe("updateStageOutcomeUseCase", () => {
         comment: null,
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-null",
         actionData,
       });
@@ -216,7 +224,7 @@ describe("updateStageOutcomeUseCase", () => {
         comment: undefined,
       };
 
-      const result = await updateStageOutcomeUseCase({
+      const result = await updateStageOutcomeUseCase(authContext, {
         caseId: "case-undefined",
         actionData,
       });
@@ -242,7 +250,7 @@ describe("updateStageOutcomeUseCase", () => {
       };
 
       await expect(
-        updateStageOutcomeUseCase({
+        updateStageOutcomeUseCase(authContext, {
           caseId: "case-123",
           actionData,
         }),
@@ -250,7 +258,7 @@ describe("updateStageOutcomeUseCase", () => {
         Boom.badRequest("Invalid action selected: non-existent-action"),
       );
 
-      expect(findCaseByIdUseCase).toHaveBeenCalledWith("case-123");
+      expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "case-123");
       expect(updateStageOutcome).not.toHaveBeenCalled();
     });
 
@@ -268,7 +276,7 @@ describe("updateStageOutcomeUseCase", () => {
       };
 
       await expect(
-        updateStageOutcomeUseCase({
+        updateStageOutcomeUseCase(authContext, {
           caseId: "case-invalid-stage",
           actionData,
         }),
@@ -286,13 +294,13 @@ describe("updateStageOutcomeUseCase", () => {
       updateStageOutcome.mockRejectedValue(repositoryError);
 
       await expect(
-        updateStageOutcomeUseCase({
+        updateStageOutcomeUseCase(authContext, {
           caseId: "case-repo-error",
           actionData,
         }),
       ).rejects.toThrow("Database connection failed");
 
-      expect(updateStageOutcome).toHaveBeenCalledWith({
+      expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-repo-error",
         actionId: "approve",
         comment: "Valid comment",
@@ -310,13 +318,16 @@ describe("updateStageOutcomeUseCase", () => {
       };
 
       await expect(
-        updateStageOutcomeUseCase({
+        updateStageOutcomeUseCase(authContext, {
           caseId: "non-existent-case",
           actionData,
         }),
       ).rejects.toThrow("Case not found");
 
-      expect(findCaseByIdUseCase).toHaveBeenCalledWith("non-existent-case");
+      expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+        authContext,
+        "non-existent-case",
+      );
       expect(updateStageOutcome).not.toHaveBeenCalled();
     });
   });
