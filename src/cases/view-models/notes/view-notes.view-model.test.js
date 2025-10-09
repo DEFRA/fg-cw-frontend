@@ -76,7 +76,7 @@ describe("createViewNotesViewModel", () => {
     expect(result.data.notes.rows[0]).toEqual({
       createdAt: {
         ref: "note-123",
-        text: "01 Jan 2025",
+        text: "1 Jan 2025",
         attributes: {
           "data-sort-value": "2025-01-01",
         },
