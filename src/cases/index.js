@@ -1,3 +1,4 @@
+import { config } from "../common/config.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
@@ -12,27 +13,34 @@ import { updateStageOutcomeRoute } from "./routes/update-stage-outcome.route.js"
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
 import { viewTaskRoute } from "./routes/view-task.route.js";
 import { timelineRoute } from "./routes/view-timeline.route.js";
+import { whoAmIRoute } from "./routes/who-am-i.route.js";
+
+const routes = [
+  listCasesRoute,
+  viewNotesRoute,
+  newNoteRoute,
+  createNoteRoute,
+  timelineRoute,
+  listTasksRoute,
+  viewTaskRoute,
+  updateTaskStatusRoute,
+  updateStageOutcomeRoute,
+  getSecretRoute,
+  getSecretWorkflowRoute,
+  viewAssignUserToCaseRoute,
+  assignUserToCaseRoute,
+  viewCaseTabRoute,
+];
+
+if (config.get("env") !== "production") {
+  routes.push(whoAmIRoute);
+}
 
 export const cases = {
   plugin: {
     name: "cases",
     register(server) {
-      server.route([
-        listCasesRoute,
-        viewNotesRoute,
-        newNoteRoute,
-        createNoteRoute,
-        timelineRoute,
-        listTasksRoute,
-        viewTaskRoute,
-        updateTaskStatusRoute,
-        updateStageOutcomeRoute,
-        getSecretRoute,
-        getSecretWorkflowRoute,
-        viewAssignUserToCaseRoute,
-        assignUserToCaseRoute,
-        viewCaseTabRoute,
-      ]);
+      server.route(routes);
     },
   },
 };
