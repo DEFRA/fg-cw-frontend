@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatDate } from "./format-date.js";
+import { DATE_FORMAT_SHORT_MONTH, formatDate } from "./format-date.js";
 
 describe("formatDate", () => {
   it("should correctly format a Date object with the default format", () => {
@@ -36,5 +36,17 @@ describe("formatDate", () => {
   it("should throw an error if the input is not a date or ISO string", () => {
     const invalidInput = "12345";
     expect(() => formatDate(invalidInput)).toThrow("Invalid time value");
+  });
+
+  it("should format single-digit days without leading zero using DATE_FORMAT_SHORT_MONTH", () => {
+    const date = new Date(2025, 8, 2); // 2 September 2025
+    const result = formatDate(date, DATE_FORMAT_SHORT_MONTH);
+    expect(result).toBe("2 Sep 2025");
+  });
+
+  it("should format double-digit days correctly using DATE_FORMAT_SHORT_MONTH", () => {
+    const date = new Date(2025, 8, 12); // 12 September 2025
+    const result = formatDate(date, DATE_FORMAT_SHORT_MONTH);
+    expect(result).toBe("12 Sep 2025");
   });
 });

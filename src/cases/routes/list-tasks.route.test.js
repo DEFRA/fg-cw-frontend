@@ -93,10 +93,22 @@ describe("listTasksRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/xxxxxxxx",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toEqual(200);
-    expect(findCaseByIdUseCase).toHaveBeenCalledWith("xxxxxxxx");
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "xxxxxxxx");
 
     const $ = load(result);
     const view = $("#main-content").html();

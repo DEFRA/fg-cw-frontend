@@ -5,6 +5,15 @@ import { findAllCasesUseCase } from "./find-all-cases.use-case.js";
 vi.mock("../repositories/case.repository.js");
 
 describe("findAllCasesUseCase", () => {
+  const authContext = {
+    profile: {
+      oid: "12345678-1234-1234-1234-123456789012",
+      email: "bob.bill@defra.gov.uk",
+      name: "Bob Bill",
+      roles: ["FCP.Casework.Read"],
+    },
+  };
+
   test("returns all cases when repository succeeds", async () => {
     const mockCases = [
       {
@@ -35,10 +44,10 @@ describe("findAllCasesUseCase", () => {
 
     findAll.mockResolvedValueOnce(mockCases);
 
-    const result = await findAllCasesUseCase();
+    const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith();
+    expect(findAll).toHaveBeenCalledWith(authContext);
     expect(result).toEqual(mockCases);
   });
 
@@ -47,10 +56,10 @@ describe("findAllCasesUseCase", () => {
 
     findAll.mockResolvedValueOnce(mockCases);
 
-    const result = await findAllCasesUseCase();
+    const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith();
+    expect(findAll).toHaveBeenCalledWith(authContext);
     expect(result).toEqual([]);
   });
 
@@ -72,7 +81,7 @@ describe("findAllCasesUseCase", () => {
 
     findAll.mockResolvedValueOnce(mockCases);
 
-    const result = await findAllCasesUseCase();
+    const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
     expect(result).toEqual(mockCases);
@@ -83,7 +92,9 @@ describe("findAllCasesUseCase", () => {
     const error = new Error("Repository failed");
     findAll.mockRejectedValueOnce(error);
 
-    await expect(findAllCasesUseCase()).rejects.toThrow("Repository failed");
+    await expect(findAllCasesUseCase(authContext)).rejects.toThrow(
+      "Repository failed",
+    );
     expect(findAll).toHaveBeenCalledOnce();
   });
 
@@ -91,8 +102,8 @@ describe("findAllCasesUseCase", () => {
     const mockCases = [];
     findAll.mockResolvedValueOnce(mockCases);
 
-    await findAllCasesUseCase();
+    await findAllCasesUseCase(authContext);
 
-    expect(findAll).toHaveBeenCalledWith();
+    expect(findAll).toHaveBeenCalledWith(authContext);
   });
 });

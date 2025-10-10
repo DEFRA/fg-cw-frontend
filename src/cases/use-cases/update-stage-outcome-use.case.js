@@ -2,15 +2,15 @@ import Boom from "@hapi/boom";
 import { updateStageOutcome } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
-export const updateStageOutcomeUseCase = async ({
-  caseId,
-  actionData: { actionId, commentFieldName, comment },
-}) => {
-  const caseData = await findCaseByIdUseCase(caseId);
+export const updateStageOutcomeUseCase = async (
+  authContext,
+  { caseId, actionData: { actionId, commentFieldName, comment } },
+) => {
+  const caseData = await findCaseByIdUseCase(authContext, caseId);
   const action = findSelectedAction(caseData, actionId);
 
   if (validComment(action, comment)) {
-    await updateStageOutcome({
+    await updateStageOutcome(authContext, {
       caseId,
       actionId,
       comment,

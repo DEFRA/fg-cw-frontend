@@ -7,7 +7,12 @@ export const listCasesRoute = {
   async handler(request, h) {
     const { assignedCaseId } = request.query;
 
-    const cases = await findAllCasesUseCase();
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const cases = await findAllCasesUseCase(authContext);
 
     const viewModel = createCaseListViewModel(cases, assignedCaseId);
 

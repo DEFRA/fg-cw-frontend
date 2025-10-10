@@ -5,7 +5,7 @@ import { config } from "./config.js";
 export const wreck = Wreck.defaults({
   events: true,
   timeout: 3000,
-  baseUrl: config.get("fg_cw_backend_url"),
+  baseUrl: config.get("backendUrl"),
   json: true,
 });
 

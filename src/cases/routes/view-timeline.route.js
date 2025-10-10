@@ -6,8 +6,12 @@ export const timelineRoute = {
   path: "/cases/{caseId}/timeline",
   async handler(request, h) {
     const { caseId } = request.params;
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
 
-    const caseData = await findCaseByIdUseCase(caseId);
+    const caseData = await findCaseByIdUseCase(authContext, caseId);
 
     const viewModel = createTimelineViewModel(caseData);
 

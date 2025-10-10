@@ -1,3 +1,4 @@
+import Bell from "@hapi/bell";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
@@ -10,12 +11,14 @@ describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
+    Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
   });
 
   afterEach(async () => {
     await server.stop();
+    Bell.simulate(false);
   });
 
   it("renders tab view with correct data", async () => {
@@ -142,10 +145,27 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-123/case-details",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toBe(200);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-123", "case-details");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-123",
+      "case-details",
+    );
 
     const $ = load(result);
     const view = $("#main-content").html();
@@ -249,10 +269,27 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/case-456/timeline",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(statusCode).toBe(200);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-456", "timeline");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-456",
+      "timeline",
+    );
 
     const $ = load(result);
     const view = $("#main-content").html();
@@ -266,10 +303,27 @@ describe("viewCaseTabRoute", () => {
     const response = await server.inject({
       method: "GET",
       url: "/cases/nonexistent/tab",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(response.statusCode).toBe(500);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("nonexistent", "tab");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "nonexistent",
+      "tab",
+    );
   });
 
   it("handles use case errors", async () => {
@@ -279,10 +333,26 @@ describe("viewCaseTabRoute", () => {
     const response = await server.inject({
       method: "GET",
       url: "/cases/case-error/tab-error",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
 
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
     expect(response.statusCode).toBe(500);
-    expect(findCaseTabUseCase).toHaveBeenCalledWith("case-error", "tab-error");
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-error",
+      "tab-error",
+    );
   });
 
   it("extracts parameters correctly from URL", async () => {
@@ -304,10 +374,23 @@ describe("viewCaseTabRoute", () => {
     const { statusCode, result } = await server.inject({
       method: "GET",
       url: "/cases/param-test-case/agreements",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
     });
+
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
 
     expect(statusCode).toBe(200);
     expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
       "param-test-case",
       "agreements",
     );

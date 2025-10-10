@@ -5,6 +5,14 @@ import { updateTaskStatusUseCase } from "./update-task-status.use-case.js";
 vi.mock("../repositories/case.repository.js");
 
 describe("updateTaskStatusUseCase", () => {
+  const authContext = {
+    profile: {
+      oid: "12345678-1234-1234-1234-123456789012",
+      email: "bob.bill@defra.gov.uk",
+      name: "Bob Bill",
+      roles: ["FCP.Casework.Read"],
+    },
+  };
   test("returns updated task when repository succeeds", async () => {
     const mockData = {
       caseId: "case-123",
@@ -43,10 +51,10 @@ describe("updateTaskStatusUseCase", () => {
 
     updateTaskStatus.mockResolvedValueOnce(mockResult);
 
-    const result = await updateTaskStatusUseCase(mockData);
+    const result = await updateTaskStatusUseCase(authContext, mockData);
 
     expect(updateTaskStatus).toHaveBeenCalledOnce();
-    expect(updateTaskStatus).toHaveBeenCalledWith(mockData);
+    expect(updateTaskStatus).toHaveBeenCalledWith(authContext, mockData);
     expect(result).toEqual(mockResult);
   });
 
@@ -77,9 +85,9 @@ describe("updateTaskStatusUseCase", () => {
 
     updateTaskStatus.mockResolvedValueOnce(mockResult);
 
-    const result = await updateTaskStatusUseCase(mockData);
+    const result = await updateTaskStatusUseCase(authContext, mockData);
 
-    expect(updateTaskStatus).toHaveBeenCalledWith(mockData);
+    expect(updateTaskStatus).toHaveBeenCalledWith(authContext, mockData);
     expect(result).toEqual(mockResult);
   });
 
@@ -89,9 +97,9 @@ describe("updateTaskStatusUseCase", () => {
 
     updateTaskStatus.mockResolvedValueOnce(mockResult);
 
-    const result = await updateTaskStatusUseCase(mockData);
+    const result = await updateTaskStatusUseCase(authContext, mockData);
 
-    expect(updateTaskStatus).toHaveBeenCalledWith(mockData);
+    expect(updateTaskStatus).toHaveBeenCalledWith(authContext, mockData);
     expect(result).toBeNull();
   });
 
@@ -101,9 +109,9 @@ describe("updateTaskStatusUseCase", () => {
 
     updateTaskStatus.mockResolvedValueOnce(mockResult);
 
-    const result = await updateTaskStatusUseCase(mockData);
+    const result = await updateTaskStatusUseCase(authContext, mockData);
 
-    expect(updateTaskStatus).toHaveBeenCalledWith(null);
+    expect(updateTaskStatus).toHaveBeenCalledWith(authContext, null);
     expect(result).toBeNull();
   });
 
@@ -118,8 +126,8 @@ describe("updateTaskStatusUseCase", () => {
 
     updateTaskStatus.mockResolvedValueOnce(mockResult);
 
-    await updateTaskStatusUseCase(mockData);
+    await updateTaskStatusUseCase(authContext, mockData);
 
-    expect(updateTaskStatus).toHaveBeenCalledWith(mockData);
+    expect(updateTaskStatus).toHaveBeenCalledWith(authContext, mockData);
   });
 });

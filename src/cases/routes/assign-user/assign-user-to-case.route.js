@@ -4,7 +4,12 @@ export const assignUserToCaseRoute = {
   method: "POST",
   path: "/cases/assign-user",
   handler: async (request, h) => {
-    await assignUserToCaseUseCase(request.payload);
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    await assignUserToCaseUseCase(authContext, request.payload);
 
     return h.redirect(`/cases?assignedCaseId=${request.payload.caseId}`);
   },

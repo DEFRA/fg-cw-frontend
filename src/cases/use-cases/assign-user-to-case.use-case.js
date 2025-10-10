@@ -1,9 +1,9 @@
 import { assignUserToCase } from "../repositories/case.repository.js";
 
-export const assignUserToCaseUseCase = async (data) => {
+export const assignUserToCaseUseCase = async (authContext, data) => {
   if (data.assignedUserId === "") {
     data.assignedUserId = null;
   }
 
-  return assignUserToCase(data);
+  return assignUserToCase(authContext, data);
 };
