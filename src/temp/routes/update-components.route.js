@@ -7,7 +7,13 @@ export const updateComponentsRoute = {
   path: "/cases/{caseId}/components/edit",
   handler: async (request, h) => {
     const { caseId } = request.params;
-    const caseItem = await findCaseByIdUseCase(caseId);
+
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const caseItem = await findCaseByIdUseCase(authContext, caseId);
     const jsonPayload = request.payload?.jsonPayload;
     const formData = { jsonPayload };
     const result = updateComponentsPreviewUseCase({

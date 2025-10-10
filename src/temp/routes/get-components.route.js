@@ -7,7 +7,13 @@ export const viewComponentsRoute = {
   path: "/cases/{caseId}/components",
   handler: async (request, h) => {
     const { caseId } = request.params;
-    const caseItem = await findCaseByIdUseCase(caseId);
+
+    const authContext = {
+      token: request.auth.credentials.token,
+      user: request.auth.credentials.user,
+    };
+
+    const caseItem = await findCaseByIdUseCase(authContext, caseId);
     const content = getComponentsContentUseCase(request.yar);
     const viewModel = createComponentsViewModel(caseItem, content);
 
