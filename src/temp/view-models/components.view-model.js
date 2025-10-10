@@ -1,5 +1,36 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
+export const createComponentsEditViewModel = (
+  caseItem,
+  { formData, errors, content } = {},
+) => {
+  const base = buildBaseViewModel(caseItem);
+
+  return {
+    ...base,
+    errors,
+    errorList: buildErrorList(errors),
+    data: {
+      ...base.data,
+      formData: {
+        jsonPayload: createJsonPayload({ formData, content }),
+      },
+      content,
+    },
+  };
+};
+
+export const createComponentsViewModel = (caseItem, content) => {
+  const base = buildBaseViewModel(caseItem);
+  return {
+    ...base,
+    data: {
+      ...base.data,
+      content: content ?? null,
+    },
+  };
+};
+
 const getNavigationLinks = (caseItem) => {
   const existingLinks = caseItem.links ?? [];
   const componentsLink = {
@@ -31,40 +62,6 @@ const buildBaseViewModel = (caseItem) => ({
   },
 });
 
-export const createComponentsUploadViewModel = (
-  caseItem,
-  { formData, errors, content } = {},
-) => {
-  const base = buildBaseViewModel(caseItem);
-  const jsonPayload =
-    formData?.jsonPayload ??
-    (Array.isArray(content) ? JSON.stringify(content, null, 2) : "");
-
-  return {
-    ...base,
-    errors,
-    errorList: buildErrorList(errors),
-    data: {
-      ...base.data,
-      formData: {
-        jsonPayload,
-      },
-      content,
-    },
-  };
-};
-
-export const createComponentsPageViewModel = (caseItem, content) => {
-  const base = buildBaseViewModel(caseItem);
-  return {
-    ...base,
-    data: {
-      ...base.data,
-      content: content ?? null,
-    },
-  };
-};
-
 const buildErrorList = (errors) => {
   if (!errors) {
     return [];
@@ -80,4 +77,16 @@ const buildErrorList = (errors) => {
   }
 
   return errorList;
+};
+
+const createJsonPayload = ({ formData, content }) => {
+  if (formData?.jsonPayload) {
+    return formData.jsonPayload;
+  }
+
+  if (Array.isArray(content)) {
+    return JSON.stringify(content, null, 2);
+  }
+
+  return "";
 };

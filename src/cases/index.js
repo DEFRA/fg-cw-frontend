@@ -1,16 +1,13 @@
+import { config } from "../common/config.js";
+import { editComponentsRoute } from "../temp/routes/edit-components.route.js";
+import { viewComponentsRoute } from "../temp/routes/get-components.route.js";
+import { updateComponentsRoute } from "../temp/routes/update-components.route.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
 import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
-import {
-  apiComponentsUploadRoute,
-  submitComponentsUploadRoute,
-  viewComponentsRoute,
-  viewComponentsUploadRoute,
-} from "../temp/routes/components.route.js";
-import { config } from "../common/config.js";
 import { createNoteRoute } from "./routes/notes/create-note.route.js";
 import { newNoteRoute } from "./routes/notes/new-note.route.js";
 import { viewNotesRoute } from "./routes/notes/view-notes.route.js";
@@ -44,9 +41,8 @@ export const cases = {
       if (!config.get("isProduction")) {
         routes.push(
           viewComponentsRoute,
-          viewComponentsUploadRoute,
-          submitComponentsUploadRoute,
-          apiComponentsUploadRoute,
+          editComponentsRoute,
+          updateComponentsRoute,
         );
       }
 

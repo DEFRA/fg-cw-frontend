@@ -62,7 +62,6 @@ describe("cases", () => {
         { method: "get", path: "/cases/{caseId}/components" },
         { method: "get", path: "/cases/{caseId}/components/edit" },
         { method: "post", path: "/cases/{caseId}/components/edit" },
-        { method: "post", path: "/cases/{caseId}/components/api" },
       ]),
     );
   });
