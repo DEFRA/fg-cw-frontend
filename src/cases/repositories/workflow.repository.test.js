@@ -15,7 +15,7 @@ describe("workflow repository", () => {
         name: "Test Workflow",
         stages: [
           {
-            id: "stage-1",
+            code: "stage-1",
             title: "Initial Stage",
             actions: ["submit", "cancel"],
             taskGroups: [

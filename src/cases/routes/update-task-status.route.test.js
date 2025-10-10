@@ -38,7 +38,7 @@ describe("updateTaskStatusRoute", () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stages: [
         {
-          id: "001",
+          code: "001",
           taskGroups: [
             {
               id: "tg01",
@@ -79,7 +79,7 @@ describe("updateTaskStatusRoute", () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stages: [
         {
-          id: "001",
+          code: "001",
           taskGroups: [
             {
               id: "tg01",
@@ -118,7 +118,7 @@ describe("updateTaskStatusRoute", () => {
 
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
-      stageId: "001",
+      stageCode: "001",
       taskGroupId: "tg01",
       taskId: "t01",
       isComplete: true,
@@ -132,7 +132,7 @@ describe("updateTaskStatusRoute", () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stages: [
         {
-          id: "001",
+          code: "001",
           taskGroups: [
             {
               id: "tg01",
@@ -172,7 +172,7 @@ describe("updateTaskStatusRoute", () => {
 
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
-      stageId: "001",
+      stageCode: "001",
       taskGroupId: "tg01",
       taskId: "t01",
       isComplete: true,
