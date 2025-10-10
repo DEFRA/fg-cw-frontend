@@ -15,23 +15,14 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      {% if data.content %}
-        {{ dynamicContent(data.content) }}
+      {{ dynamicContent(data.content) }}
 
-        <hr />
-        <p class="govuk-body">
-          <a class="govuk-link" href="/cases/{{ data.caseId }}/components/edit">
-            Edit Components
-          </a>
-        </p>
-      {% else %}
-        <p class="govuk-body">
-          You have not defined any dynamic components.
-          <a class="govuk-link" href="/cases/{{ data.caseId }}/components/edit">
-            Edit Components
-          </a>
-        </p>
-      {% endif %}
+      <hr />
+      <p class="govuk-body">
+        <a class="govuk-link" href="/cases/{{ data.caseId }}/components/edit">
+          Edit Components
+        </a>
+      </p>
     </div>
   </div>
 {% endblock %}
