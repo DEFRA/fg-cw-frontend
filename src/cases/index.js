@@ -4,6 +4,13 @@ import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
 import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
+import {
+  apiComponentsUploadRoute,
+  submitComponentsUploadRoute,
+  viewComponentsRoute,
+  viewComponentsUploadRoute,
+} from "../temp/routes/components.route.js";
+import { config } from "../common/config.js";
 import { createNoteRoute } from "./routes/notes/create-note.route.js";
 import { newNoteRoute } from "./routes/notes/new-note.route.js";
 import { viewNotesRoute } from "./routes/notes/view-notes.route.js";
@@ -17,7 +24,7 @@ export const cases = {
   plugin: {
     name: "cases",
     register(server) {
-      server.route([
+      const routes = [
         listCasesRoute,
         viewNotesRoute,
         newNoteRoute,
@@ -32,7 +39,18 @@ export const cases = {
         viewAssignUserToCaseRoute,
         assignUserToCaseRoute,
         viewCaseTabRoute,
-      ]);
+      ];
+
+      if (!config.get("isProduction")) {
+        routes.push(
+          viewComponentsRoute,
+          viewComponentsUploadRoute,
+          submitComponentsUploadRoute,
+          apiComponentsUploadRoute,
+        );
+      }
+
+      server.route(routes);
     },
   },
 };
