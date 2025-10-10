@@ -63,7 +63,7 @@ describe("timelineRoute", () => {
       },
       stages: [
         {
-          id: "application-receipt",
+          code: "application-receipt",
           title: "Application Receipt",
           taskGroups: [
             {
@@ -80,7 +80,7 @@ describe("timelineRoute", () => {
           ],
         },
         {
-          id: "contract",
+          code: "contract",
           title: "Contract",
           taskGroups: [],
         },

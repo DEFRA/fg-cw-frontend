@@ -31,7 +31,7 @@ export const updateStageOutcomeUseCase = async (
 };
 
 const findSelectedAction = (caseData, actionId) => {
-  const stage = caseData.stages.find((s) => s.id === caseData.currentStage);
+  const stage = caseData.stages.find((s) => s.code === caseData.currentStage);
   const action = stage?.actions.find((a) => a.id === actionId);
   if (!action) {
     throw Boom.badRequest(`Invalid action selected: ${actionId}`);

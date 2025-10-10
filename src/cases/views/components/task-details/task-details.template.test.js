@@ -5,7 +5,7 @@ describe("task-details", () => {
   test("renders", () => {
     const component = render("task-details", {
       caseId: "case-id",
-      stageId: "strage-id",
+      stageCode: "strage-id",
       taskGroupId: "task-group-id",
       taskId: "task-id",
       currentTask: {

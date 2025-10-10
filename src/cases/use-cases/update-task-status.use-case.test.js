@@ -28,7 +28,7 @@ describe("updateTaskStatusUseCase", () => {
       currentStage: "stage-1",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           taskGroups: [
             {
               id: "taskgroup-1",

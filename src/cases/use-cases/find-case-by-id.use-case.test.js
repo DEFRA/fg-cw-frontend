@@ -25,7 +25,7 @@ describe("findCaseByIdUseCase", () => {
       currentStage: "stage-1",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           taskGroups: [
             {
               id: "taskgroup-1",
@@ -49,7 +49,7 @@ describe("findCaseByIdUseCase", () => {
       code: "workflow-123",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           title: "Initial Stage",
           actions: ["submit", "cancel"],
           taskGroups: [
@@ -88,7 +88,7 @@ describe("findCaseByIdUseCase", () => {
       currentStage: "stage-1",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           title: "Initial Stage",
           actions: ["submit", "cancel"],
           taskGroups: [
@@ -137,7 +137,7 @@ describe("findCaseByIdUseCase", () => {
       workflowCode: "workflow-456",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           taskGroups: [
             {
               id: "taskgroup-1",
@@ -150,7 +150,7 @@ describe("findCaseByIdUseCase", () => {
           ],
         },
         {
-          id: "stage-2",
+          code: "stage-2",
           taskGroups: [
             {
               id: "taskgroup-3",
@@ -165,7 +165,7 @@ describe("findCaseByIdUseCase", () => {
       code: "workflow-456",
       stages: [
         {
-          id: "stage-1",
+          code: "stage-1",
           title: "Stage One",
           actions: ["next"],
           taskGroups: [
@@ -182,7 +182,7 @@ describe("findCaseByIdUseCase", () => {
           ],
         },
         {
-          id: "stage-2",
+          code: "stage-2",
           title: "Stage Two",
           actions: ["complete"],
           taskGroups: [
