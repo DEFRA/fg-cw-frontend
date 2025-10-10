@@ -59,6 +59,9 @@ describe("cases", () => {
           method: "post",
           path: "/cases/{caseId}/stages/{stageId}/task-groups/{taskGroupId}/tasks/{taskId}/status",
         },
+        { method: "get", path: "/cases/{caseId}/components" },
+        { method: "get", path: "/cases/{caseId}/components/edit" },
+        { method: "post", path: "/cases/{caseId}/components/edit" },
       ]),
     );
   });
