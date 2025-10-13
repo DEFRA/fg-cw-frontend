@@ -21,7 +21,7 @@ describe("updateStageOutcomeUseCase", () => {
     currentStage: "application-review",
     stages: [
       {
-        id: "application-review",
+        code: "application-review",
         actions: [
           {
             id: "approve",
