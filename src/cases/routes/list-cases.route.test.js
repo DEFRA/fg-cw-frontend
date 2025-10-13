@@ -102,7 +102,7 @@ const mockCases = [
     },
     stages: [
       {
-        id: "application-receipt",
+        code: "application-receipt",
         taskGroups: [
           {
             id: "application-receipt-tasks",
@@ -116,7 +116,7 @@ const mockCases = [
         ],
       },
       {
-        id: "contract",
+        code: "contract",
         taskGroups: [],
       },
     ],
@@ -163,7 +163,7 @@ const mockCases = [
     },
     stages: [
       {
-        id: "application-receipt",
+        code: "application-receipt",
         taskGroups: [
           {
             id: "application-receipt-tasks",
@@ -177,7 +177,7 @@ const mockCases = [
         ],
       },
       {
-        id: "contract",
+        code: "contract",
         taskGroups: [],
       },
     ],
