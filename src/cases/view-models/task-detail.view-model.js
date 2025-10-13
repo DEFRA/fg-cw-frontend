@@ -3,7 +3,7 @@ import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const createTaskDetailViewModel = (caseData, query, errors) => {
   const stage = caseData.stages.find(
-    (stage) => stage.id === caseData.currentStage,
+    (stage) => stage.code === caseData.currentStage,
   );
 
   const { taskGroupId, taskId } = query;

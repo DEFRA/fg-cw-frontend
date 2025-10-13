@@ -245,7 +245,7 @@ describe("Case Repository", () => {
     it("calls api with payload data", async () => {
       wreck.patch.mockResolvedValueOnce({});
       const params = {
-        stageId: "stage-1",
+        stageCode: "stage-1",
         caseId: "1234-0909",
         taskGroupId: "tg-01",
         taskId: "t-01",
