@@ -25,7 +25,7 @@ describe("createTaskListViewModel", () => {
     stages: [
       {
         code: "application-review",
-        title: "Application Review",
+        name: "Application Review",
         actionTitle: "Review Decision",
         taskGroups: [
           {
@@ -107,7 +107,7 @@ describe("createTaskListViewModel", () => {
       const result = createTaskListViewModel(mockCaseData);
 
       expect(result.data.stage.code).toBe("application-review");
-      expect(result.data.stage.title).toBe("Application Review");
+      expect(result.data.stage.name).toBe("Application Review");
       expect(result.data.stage.saveDisabled).toBe(true); // Because task-2 is not complete
     });
   });
