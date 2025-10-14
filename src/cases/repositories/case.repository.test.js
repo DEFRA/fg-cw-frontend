@@ -247,8 +247,8 @@ describe("Case Repository", () => {
       const params = {
         stageCode: "stage-1",
         caseId: "1234-0909",
-        taskGroupId: "tg-01",
-        taskId: "t-01",
+        taskGroupCode: "tg-01",
+        taskCode: "t-01",
       };
       await updateTaskStatus(authContext, { ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
