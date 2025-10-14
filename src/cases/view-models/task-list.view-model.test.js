@@ -29,7 +29,7 @@ describe("createTaskListViewModel", () => {
         actionTitle: "Review Decision",
         taskGroups: [
           {
-            id: "review-tasks",
+            code: "review-tasks",
             title: "Review Tasks",
             tasks: [
               {
@@ -119,7 +119,7 @@ describe("createTaskListViewModel", () => {
 
       expect(mappedTaskGroups).toHaveLength(1);
       expect(mappedTaskGroups[0]).toEqual({
-        id: "review-tasks",
+        code: "review-tasks",
         title: "Review Tasks",
         tasks: [
           {
@@ -167,7 +167,7 @@ describe("createTaskListViewModel", () => {
             ...mockCaseData.stages[0],
             taskGroups: [
               {
-                id: "review-tasks",
+                code: "review-tasks",
                 tasks: [
                   { id: "task-1", status: "complete" },
                   { id: "task-2", status: "complete" },
