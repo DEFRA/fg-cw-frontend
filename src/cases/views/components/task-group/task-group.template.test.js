@@ -6,7 +6,7 @@ describe("task-group", () => {
     const component = render("task-group", {
       caseId: "123",
       stage: {
-        title: "Test Stage",
+        name: "Test Stage",
         taskGroups: [
           {
             title: "Group 1",
