@@ -50,7 +50,7 @@ describe("findCaseByIdUseCase", () => {
       stages: [
         {
           code: "stage-1",
-          title: "Initial Stage",
+          name: "Initial Stage",
           actions: ["submit", "cancel"],
           taskGroups: [
             {
@@ -89,7 +89,7 @@ describe("findCaseByIdUseCase", () => {
       stages: [
         {
           code: "stage-1",
-          title: "Initial Stage",
+          name: "Initial Stage",
           actions: ["submit", "cancel"],
           taskGroups: [
             {
@@ -166,7 +166,7 @@ describe("findCaseByIdUseCase", () => {
       stages: [
         {
           code: "stage-1",
-          title: "Stage One",
+          name: "Stage One",
           actions: ["next"],
           taskGroups: [
             {
@@ -183,7 +183,7 @@ describe("findCaseByIdUseCase", () => {
         },
         {
           code: "stage-2",
-          title: "Stage Two",
+          name: "Stage Two",
           actions: ["complete"],
           taskGroups: [
             {
@@ -212,9 +212,9 @@ describe("findCaseByIdUseCase", () => {
     const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(result.stages).toHaveLength(2);
-    expect(result.stages[0].title).toBe("Stage One");
+    expect(result.stages[0].name).toBe("Stage One");
     expect(result.stages[0].taskGroups).toHaveLength(2);
-    expect(result.stages[1].title).toBe("Stage Two");
+    expect(result.stages[1].name).toBe("Stage Two");
     expect(result.stages[1].taskGroups[0].tasks[0].title).toBe("Task Three");
     expect(result.overrideTabs).toEqual([
       { id: "tasks", title: "Tasks List" },

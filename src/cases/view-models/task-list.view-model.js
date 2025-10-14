@@ -18,7 +18,7 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
   };
 
   return {
-    pageTitle: `Case tasks - ${stage.title}`,
+    pageTitle: `Case tasks - ${stage.name}`,
     pageHeading: "Case",
     breadcrumbs: [
       { text: "Cases", href: "/cases" },

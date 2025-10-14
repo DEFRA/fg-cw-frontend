@@ -33,7 +33,7 @@ const processStage = (stage, workflow) => {
 
   return {
     ...stage,
-    title: workflowStage.title,
+    name: workflowStage.name,
     actions: workflowStage.actions,
     taskGroups: stage.taskGroups.map((taskGroup) =>
       processTaskGroup(taskGroup, workflowStage),
