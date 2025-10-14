@@ -41,7 +41,7 @@ const mapTaskGroups = (taskGroups, caseId) => {
     tasks: taskGroup.tasks.map((task) => {
       return {
         ...task,
-        link: `/cases/${caseId}/tasks/${taskGroup.id}/${task.id}`,
+        link: `/cases/${caseId}/tasks/${taskGroup.code}/${task.id}`,
         status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: task.status === "complete",
       };
