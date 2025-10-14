@@ -16,7 +16,7 @@ describe("workflow repository", () => {
         stages: [
           {
             code: "stage-1",
-            title: "Initial Stage",
+            name: "Initial Stage",
             actions: ["submit", "cancel"],
             taskGroups: [
               {

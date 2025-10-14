@@ -67,7 +67,7 @@ describe("listTasksRoute", () => {
       stages: [
         {
           code: "application-receipt",
-          title: "Application Receipt",
+          name: "Application Receipt",
           taskGroups: [
             {
               id: "application-receipt-tasks",
@@ -84,7 +84,7 @@ describe("listTasksRoute", () => {
         },
         {
           code: "contract",
-          title: "Contract",
+          name: "Contract",
           taskGroups: [],
         },
       ],
