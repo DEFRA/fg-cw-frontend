@@ -18,7 +18,7 @@ const processTask = (task, wfTaskGroup) => {
 
 const processTaskGroup = (taskGroup, workflowStage) => {
   const wfTaskGroup = workflowStage.taskGroups.find(
-    (wtg) => wtg.id === taskGroup.id,
+    (wtg) => wtg.code === taskGroup.code,
   );
 
   return {
