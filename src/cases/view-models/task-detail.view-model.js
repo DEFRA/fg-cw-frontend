@@ -7,7 +7,7 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
   );
 
   const { taskGroupId, taskId } = query;
-  const currentGroup = stage.taskGroups.find((g) => g.id === taskGroupId);
+  const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupId);
   const currentGroupTasks = currentGroup.tasks;
   const currentTask = currentGroupTasks.find((t) => t.id === taskId);
 

@@ -20,7 +20,7 @@ describe("workflow repository", () => {
             actions: ["submit", "cancel"],
             taskGroups: [
               {
-                id: "taskgroup-1",
+                code: "taskgroup-1",
                 title: "First Task Group",
                 tasks: [
                   {

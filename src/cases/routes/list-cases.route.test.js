@@ -105,7 +105,7 @@ const mockCases = [
         code: "application-receipt",
         taskGroups: [
           {
-            id: "application-receipt-tasks",
+            code: "application-receipt-tasks",
             tasks: [
               {
                 id: "simple-review",
@@ -166,7 +166,7 @@ const mockCases = [
         code: "application-receipt",
         taskGroups: [
           {
-            id: "application-receipt-tasks",
+            code: "application-receipt-tasks",
             tasks: [
               {
                 id: "simple-review",

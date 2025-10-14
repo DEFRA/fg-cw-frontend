@@ -3,7 +3,7 @@ import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-cas
 
 const findTask = (kase, stageCode, taskGroupId, taskId) => {
   const stage = kase.stages.find((s) => s.code === stageCode);
-  const taskGroup = stage.taskGroups.find((tg) => tg.id === taskGroupId);
+  const taskGroup = stage.taskGroups.find((tg) => tg.code === taskGroupId);
   const task = taskGroup?.tasks.find((t) => t.id === taskId);
   return task;
 };

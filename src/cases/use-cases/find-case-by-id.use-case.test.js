@@ -28,7 +28,7 @@ describe("findCaseByIdUseCase", () => {
           code: "stage-1",
           taskGroups: [
             {
-              id: "taskgroup-1",
+              code: "taskgroup-1",
               tasks: [
                 {
                   id: "task-1",
@@ -54,7 +54,7 @@ describe("findCaseByIdUseCase", () => {
           actions: ["submit", "cancel"],
           taskGroups: [
             {
-              id: "taskgroup-1",
+              code: "taskgroup-1",
               title: "First Task Group",
               tasks: [
                 {
@@ -93,7 +93,7 @@ describe("findCaseByIdUseCase", () => {
           actions: ["submit", "cancel"],
           taskGroups: [
             {
-              id: "taskgroup-1",
+              code: "taskgroup-1",
               title: "First Task Group",
               tasks: [
                 {
@@ -140,11 +140,11 @@ describe("findCaseByIdUseCase", () => {
           code: "stage-1",
           taskGroups: [
             {
-              id: "taskgroup-1",
+              code: "taskgroup-1",
               tasks: [{ id: "task-1", status: "completed" }],
             },
             {
-              id: "taskgroup-2",
+              code: "taskgroup-2",
               tasks: [{ id: "task-2", status: "pending" }],
             },
           ],
@@ -153,7 +153,7 @@ describe("findCaseByIdUseCase", () => {
           code: "stage-2",
           taskGroups: [
             {
-              id: "taskgroup-3",
+              code: "taskgroup-3",
               tasks: [{ id: "task-3", status: "not-started" }],
             },
           ],
@@ -170,12 +170,12 @@ describe("findCaseByIdUseCase", () => {
           actions: ["next"],
           taskGroups: [
             {
-              id: "taskgroup-1",
+              code: "taskgroup-1",
               title: "Task Group One",
               tasks: [{ id: "task-1", title: "Task One", type: "boolean" }],
             },
             {
-              id: "taskgroup-2",
+              code: "taskgroup-2",
               title: "Task Group Two",
               tasks: [{ id: "task-2", title: "Task Two", type: "text" }],
             },
@@ -187,7 +187,7 @@ describe("findCaseByIdUseCase", () => {
           actions: ["complete"],
           taskGroups: [
             {
-              id: "taskgroup-3",
+              code: "taskgroup-3",
               title: "Task Group Three",
               tasks: [{ id: "task-3", title: "Task Three", type: "file" }],
             },

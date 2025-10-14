@@ -41,7 +41,7 @@ describe("updateTaskStatusRoute", () => {
           code: "001",
           taskGroups: [
             {
-              id: "tg01",
+              code: "tg01",
               tasks: [
                 {
                   id: "t01",
@@ -82,7 +82,7 @@ describe("updateTaskStatusRoute", () => {
           code: "001",
           taskGroups: [
             {
-              id: "tg01",
+              code: "tg01",
               tasks: [
                 {
                   id: "t01",
@@ -135,7 +135,7 @@ describe("updateTaskStatusRoute", () => {
           code: "001",
           taskGroups: [
             {
-              id: "tg01",
+              code: "tg01",
               tasks: [
                 {
                   id: "t01",
