@@ -48,7 +48,10 @@ describe("cases", () => {
           path: "/secret/workflow/{workflowCode}",
         },
         { method: "get", path: "/cases/{caseId}/notes/new" },
-        { method: "get", path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}" },
+        {
+          method: "get",
+          path: "/cases/{caseId}/tasks/{taskGroupCode}/{taskCode}",
+        },
         {
           method: "post",
           path: "/cases/assign-user",
@@ -57,7 +60,7 @@ describe("cases", () => {
         { method: "post", path: "/cases/{caseId}/stage/outcome" },
         {
           method: "post",
-          path: "/cases/{caseId}/stages/{stageCode}/task-groups/{taskGroupId}/tasks/{taskId}/status",
+          path: "/cases/{caseId}/stages/{stageCode}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
         },
         { method: "get", path: "/cases/{caseId}/components" },
         { method: "get", path: "/cases/{caseId}/components/edit" },

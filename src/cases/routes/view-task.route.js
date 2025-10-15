@@ -3,7 +3,7 @@ import { createTaskDetailViewModel } from "../view-models/task-detail.view-model
 
 export const viewTaskRoute = {
   method: "GET",
-  path: "/cases/{caseId}/tasks/{taskGroupId}/{taskId}",
+  path: "/cases/{caseId}/tasks/{taskGroupCode}/{taskCode}",
   async handler(request, h) {
     const authContext = {
       token: request.auth.credentials.token,
