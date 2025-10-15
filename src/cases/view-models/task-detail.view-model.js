@@ -6,10 +6,10 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
     (stage) => stage.code === caseData.currentStage,
   );
 
-  const { taskGroupId, taskId } = query;
-  const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupId);
+  const { taskGroupCode, taskCode } = query;
+  const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupCode);
   const currentGroupTasks = currentGroup.tasks;
-  const currentTask = currentGroupTasks.find((t) => t.id === taskId);
+  const currentTask = currentGroupTasks.find((t) => t.code === taskCode);
 
   // get the comment / note if it exists.
   const noteComment = caseData.comments.find(
@@ -43,11 +43,11 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
         currentStage: caseData.currentStage,
       },
       stage,
-      taskGroupId,
+      taskGroupCode,
       comment: noteComment,
       currentTask: {
         ...currentTask,
-        link: `/cases/${caseData._id}/tasks/${taskGroupId}/${currentTask.id}`,
+        link: `/cases/${caseData._id}/tasks/${taskGroupCode}/${currentTask.code}`,
         status: currentTask.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: currentTask.status === "complete",
       },

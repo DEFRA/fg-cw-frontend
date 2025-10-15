@@ -44,7 +44,7 @@ describe("updateTaskStatusRoute", () => {
               code: "tg01",
               tasks: [
                 {
-                  id: "t01",
+                  code: "t01",
                   comment: {
                     type: "REQUIRED",
                   },
@@ -85,7 +85,7 @@ describe("updateTaskStatusRoute", () => {
               code: "tg01",
               tasks: [
                 {
-                  id: "t01",
+                  code: "t01",
                   comment: {
                     type: "OPTIONAL",
                   },
@@ -119,8 +119,8 @@ describe("updateTaskStatusRoute", () => {
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       stageCode: "001",
-      taskGroupId: "tg01",
-      taskId: "t01",
+      taskGroupCode: "tg01",
+      taskCode: "t01",
       isComplete: true,
       comment: null,
     });
@@ -138,7 +138,7 @@ describe("updateTaskStatusRoute", () => {
               code: "tg01",
               tasks: [
                 {
-                  id: "t01",
+                  code: "t01",
                   comment: {
                     type: "REQUIRED",
                   },
@@ -173,8 +173,8 @@ describe("updateTaskStatusRoute", () => {
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
       stageCode: "001",
-      taskGroupId: "tg01",
-      taskId: "t01",
+      taskGroupCode: "tg01",
+      taskCode: "t01",
       isComplete: true,
       comment: "This is a comment",
     });
