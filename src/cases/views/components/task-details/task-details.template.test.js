@@ -6,10 +6,10 @@ describe("task-details", () => {
     const component = render("task-details", {
       caseId: "case-id",
       stageCode: "strage-id",
-      taskGroupId: "task-group-id",
-      taskId: "task-id",
+      taskGroupCode: "task-group-code",
+      taskCode: "task-id",
       currentTask: {
-        id: "task1",
+        code: "task1",
         title: "Test Task",
         type: "boolean",
       },

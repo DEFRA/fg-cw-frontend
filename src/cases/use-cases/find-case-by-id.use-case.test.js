@@ -31,7 +31,7 @@ describe("findCaseByIdUseCase", () => {
               code: "taskgroup-1",
               tasks: [
                 {
-                  id: "task-1",
+                  code: "task-1",
                   status: "pending",
                 },
               ],
@@ -58,7 +58,7 @@ describe("findCaseByIdUseCase", () => {
               title: "First Task Group",
               tasks: [
                 {
-                  id: "task-1",
+                  code: "task-1",
                   title: "First Task",
                   type: "text",
                 },
@@ -97,7 +97,7 @@ describe("findCaseByIdUseCase", () => {
               title: "First Task Group",
               tasks: [
                 {
-                  id: "task-1",
+                  code: "task-1",
                   title: "First Task",
                   type: "text",
                   status: "pending",
@@ -141,11 +141,11 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-1",
-              tasks: [{ id: "task-1", status: "completed" }],
+              tasks: [{ code: "task-1", status: "completed" }],
             },
             {
               code: "taskgroup-2",
-              tasks: [{ id: "task-2", status: "pending" }],
+              tasks: [{ code: "task-2", status: "pending" }],
             },
           ],
         },
@@ -154,7 +154,7 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-3",
-              tasks: [{ id: "task-3", status: "not-started" }],
+              tasks: [{ code: "task-3", status: "not-started" }],
             },
           ],
         },
@@ -172,12 +172,12 @@ describe("findCaseByIdUseCase", () => {
             {
               code: "taskgroup-1",
               title: "Task Group One",
-              tasks: [{ id: "task-1", title: "Task One", type: "boolean" }],
+              tasks: [{ code: "task-1", title: "Task One", type: "boolean" }],
             },
             {
               code: "taskgroup-2",
               title: "Task Group Two",
-              tasks: [{ id: "task-2", title: "Task Two", type: "text" }],
+              tasks: [{ code: "task-2", title: "Task Two", type: "text" }],
             },
           ],
         },
@@ -189,7 +189,7 @@ describe("findCaseByIdUseCase", () => {
             {
               code: "taskgroup-3",
               title: "Task Group Three",
-              tasks: [{ id: "task-3", title: "Task Three", type: "file" }],
+              tasks: [{ code: "task-3", title: "Task Three", type: "file" }],
             },
           ],
         },

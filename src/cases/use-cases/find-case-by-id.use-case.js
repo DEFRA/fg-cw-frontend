@@ -6,7 +6,7 @@ const defaultTabs = ["tasks", "caseDetails", "notes", "timeline"];
 // TODO: move to the backend: https://eaflood.atlassian.net/jira/software/projects/FUT/boards/1668?selectedIssue=FUT-563
 
 const processTask = (task, wfTaskGroup) => {
-  const workflowTask = wfTaskGroup.tasks.find((wt) => wt.id === task.id);
+  const workflowTask = wfTaskGroup.tasks.find((wt) => wt.code === task.code);
 
   return {
     ...task,

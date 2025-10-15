@@ -24,7 +24,7 @@ describe("workflow repository", () => {
                 title: "First Task Group",
                 tasks: [
                   {
-                    id: "task-1",
+                    code: "task-1",
                     title: "First Task",
                     type: "text",
                   },

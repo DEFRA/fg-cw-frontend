@@ -74,7 +74,7 @@ describe("listTasksRoute", () => {
               title: "Application Receipt Tasks",
               tasks: [
                 {
-                  id: "simple-review",
+                  code: "simple-review",
                   title: "Simple Review",
                   status: "pending",
                 },

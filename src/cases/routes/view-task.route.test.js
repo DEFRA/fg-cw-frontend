@@ -84,7 +84,7 @@ describe("viewTaskRoute", () => {
               title: "Application Receipt Tasks",
               tasks: [
                 {
-                  id: "simple-review",
+                  code: "simple-review",
                   title: "Simple Review",
                   status: "pending",
                   type: "OPTIONAL",
