@@ -16,7 +16,7 @@ describe("updateTaskStatusUseCase", () => {
   test("returns updated task when repository succeeds", async () => {
     const mockData = {
       caseId: "case-123",
-      taskId: "task-456",
+      taskCode: "task-456",
       status: "completed",
     };
 
@@ -34,7 +34,7 @@ describe("updateTaskStatusUseCase", () => {
               code: "taskgroup-1",
               tasks: [
                 {
-                  id: "task-456",
+                  code: "task-456",
                   status: "completed",
                   updatedAt: "2021-01-15T10:30:00.000Z",
                 },
@@ -61,7 +61,7 @@ describe("updateTaskStatusUseCase", () => {
   test("handles different task status values", async () => {
     const mockData = {
       caseId: "case-789",
-      taskId: "task-101",
+      taskCode: "task-101",
       status: "in-progress",
     };
 
@@ -73,7 +73,7 @@ describe("updateTaskStatusUseCase", () => {
             {
               tasks: [
                 {
-                  id: "task-101",
+                  code: "task-101",
                   status: "in-progress",
                 },
               ],
@@ -118,7 +118,7 @@ describe("updateTaskStatusUseCase", () => {
   test("calls repository with exact data parameter", async () => {
     const mockData = {
       caseId: "specific-case",
-      taskId: "specific-task",
+      taskCode: "specific-task",
       status: "pending",
       customField: "custom-value",
     };

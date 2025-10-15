@@ -33,12 +33,12 @@ describe("createTaskListViewModel", () => {
             title: "Review Tasks",
             tasks: [
               {
-                id: "task-1",
+                code: "task-1",
                 title: "Initial Review",
                 status: "complete",
               },
               {
-                id: "task-2",
+                code: "task-2",
                 title: "Secondary Review",
                 status: "pending",
               },
@@ -123,14 +123,14 @@ describe("createTaskListViewModel", () => {
         title: "Review Tasks",
         tasks: [
           {
-            id: "task-1",
+            code: "task-1",
             title: "Initial Review",
             status: "COMPLETE",
             link: "/cases/case-123/tasks/review-tasks/task-1",
             isComplete: true,
           },
           {
-            id: "task-2",
+            code: "task-2",
             title: "Secondary Review",
             status: "INCOMPLETE",
             link: "/cases/case-123/tasks/review-tasks/task-2",
@@ -169,8 +169,8 @@ describe("createTaskListViewModel", () => {
               {
                 code: "review-tasks",
                 tasks: [
-                  { id: "task-1", status: "complete" },
-                  { id: "task-2", status: "complete" },
+                  { code: "task-1", status: "complete" },
+                  { code: "task-2", status: "complete" },
                 ],
               },
             ],
@@ -198,13 +198,13 @@ describe("createTaskListViewModel", () => {
             taskGroups: [
               {
                 id: "group-1",
-                tasks: [{ id: "task-1", status: "complete" }],
+                tasks: [{ code: "task-1", status: "complete" }],
               },
               {
                 id: "group-2",
                 tasks: [
-                  { id: "task-2", status: "complete" },
-                  { id: "task-3", status: "pending" },
+                  { code: "task-2", status: "complete" },
+                  { code: "task-3", status: "pending" },
                 ],
               },
             ],

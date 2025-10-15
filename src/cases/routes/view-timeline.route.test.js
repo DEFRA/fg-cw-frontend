@@ -71,7 +71,7 @@ describe("timelineRoute", () => {
               title: "Application Receipt Tasks",
               tasks: [
                 {
-                  id: "simple-review",
+                  code: "simple-review",
                   title: "Simple Review",
                   status: "pending",
                 },
@@ -110,8 +110,8 @@ describe("timelineRoute", () => {
           createdAt: "2025-06-16T09:01:14.072Z",
           createdBy: { name: "Nicholai Hel" },
           data: {
-            taskGroupId: "tg-01",
-            taskId: "task-01",
+            taskGroupCode: "tg-01",
+            taskCode: "task-01",
           },
         },
       ],

@@ -20,7 +20,7 @@ exports[`task-details > renders 1`] = `
 <form
   method="post"
   id="completeTaskForm"
-  action="/cases/case-id/stages/strage-id/task-groups/task-group-id/tasks/task1/status"
+  action="/cases/case-id/stages/strage-id/task-groups/task-group-code/tasks/task1/status"
 >
   <div class="govuk-form-group">
     <div class="govuk-form-group">

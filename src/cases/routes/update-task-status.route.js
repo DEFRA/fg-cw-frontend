@@ -1,10 +1,10 @@
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
 
-const findTask = (kase, stageCode, taskGroupId, taskId) => {
+const findTask = (kase, stageCode, taskGroupCode, taskCode) => {
   const stage = kase.stages.find((s) => s.code === stageCode);
-  const taskGroup = stage.taskGroups.find((tg) => tg.code === taskGroupId);
-  const task = taskGroup?.tasks.find((t) => t.id === taskId);
+  const taskGroup = stage.taskGroups.find((tg) => tg.code === taskGroupCode);
+  const task = taskGroup?.tasks.find((t) => t.code === taskCode);
   return task;
 };
 
@@ -18,9 +18,9 @@ const validateComment = (taskComment, comment) => {
 
 export const updateTaskStatusRoute = {
   method: "POST",
-  path: "/cases/{caseId}/stages/{stageCode}/task-groups/{taskGroupId}/tasks/{taskId}/status",
+  path: "/cases/{caseId}/stages/{stageCode}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
   handler: async (request, h) => {
-    const { caseId, taskGroupId, taskId, stageCode } = request.params;
+    const { caseId, taskGroupCode, taskCode, stageCode } = request.params;
     const { isComplete = false, comment = null } = request.payload;
 
     const authContext = {
@@ -29,7 +29,7 @@ export const updateTaskStatusRoute = {
     };
 
     const kase = await findCaseByIdUseCase(authContext, caseId);
-    const task = findTask(kase, stageCode, taskGroupId, taskId);
+    const task = findTask(kase, stageCode, taskGroupCode, taskCode);
 
     // ensure comment has a value if it is required...
     if (!validateComment(task.comment, comment)) {
@@ -37,14 +37,14 @@ export const updateTaskStatusRoute = {
         text: "Note is required",
         href: "#comment",
       });
-      return h.redirect(`/cases/${caseId}/tasks/${taskGroupId}/${taskId}`);
+      return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
     }
 
     await updateTaskStatusUseCase(authContext, {
       caseId,
       stageCode,
-      taskGroupId,
-      taskId,
+      taskGroupCode,
+      taskCode,
       isComplete: !!isComplete,
       comment,
     });
