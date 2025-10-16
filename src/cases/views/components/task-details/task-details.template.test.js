@@ -10,7 +10,7 @@ describe("task-details", () => {
       taskCode: "task-id",
       currentTask: {
         code: "task1",
-        title: "Test Task",
+        name: "Test Task",
         type: "boolean",
       },
     });
