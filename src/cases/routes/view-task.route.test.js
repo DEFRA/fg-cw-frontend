@@ -81,7 +81,7 @@ describe("viewTaskRoute", () => {
           taskGroups: [
             {
               code: "application-receipt-tasks",
-              title: "Application Receipt Tasks",
+              name: "Application Receipt Tasks",
               tasks: [
                 {
                   code: "simple-review",
