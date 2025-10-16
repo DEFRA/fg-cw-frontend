@@ -21,7 +21,7 @@ describe("workflow repository", () => {
             taskGroups: [
               {
                 code: "taskgroup-1",
-                title: "First Task Group",
+                name: "First Task Group",
                 tasks: [
                   {
                     code: "task-1",

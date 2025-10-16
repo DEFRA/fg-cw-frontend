@@ -23,7 +23,7 @@ const processTaskGroup = (taskGroup, workflowStage) => {
 
   return {
     ...taskGroup,
-    title: wfTaskGroup.title,
+    name: wfTaskGroup.name,
     tasks: taskGroup.tasks.map((task) => processTask(task, wfTaskGroup)),
   };
 };
