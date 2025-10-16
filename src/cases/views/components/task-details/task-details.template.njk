@@ -33,7 +33,7 @@
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="task-details-heading"
     >
-      {{ params.currentTask.title }}
+      {{ params.currentTask.name }}
     </h2>
 
     {% if params.currentTask.status === "COMPLETE" %}
@@ -60,7 +60,7 @@
           isComplete: params.currentTask.isComplete,
           comment: params.currentTask.comment,
           commentText: params.comment.text,
-          title: params.currentTask.title
+          name: params.currentTask.name
         })
       }}
     {% endif %}

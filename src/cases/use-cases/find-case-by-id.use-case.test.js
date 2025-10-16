@@ -59,7 +59,7 @@ describe("findCaseByIdUseCase", () => {
               tasks: [
                 {
                   code: "task-1",
-                  title: "First Task",
+                  name: "First Task",
                   type: "text",
                 },
               ],
@@ -98,7 +98,7 @@ describe("findCaseByIdUseCase", () => {
               tasks: [
                 {
                   code: "task-1",
-                  title: "First Task",
+                  name: "First Task",
                   type: "text",
                   status: "pending",
                 },
@@ -172,12 +172,12 @@ describe("findCaseByIdUseCase", () => {
             {
               code: "taskgroup-1",
               name: "Task Group One",
-              tasks: [{ code: "task-1", title: "Task One", type: "boolean" }],
+              tasks: [{ code: "task-1", name: "Task One", type: "boolean" }],
             },
             {
               code: "taskgroup-2",
               name: "Task Group Two",
-              tasks: [{ code: "task-2", title: "Task Two", type: "text" }],
+              tasks: [{ code: "task-2", name: "Task Two", type: "text" }],
             },
           ],
         },
@@ -189,7 +189,7 @@ describe("findCaseByIdUseCase", () => {
             {
               code: "taskgroup-3",
               name: "Task Group Three",
-              tasks: [{ code: "task-3", title: "Task Three", type: "file" }],
+              tasks: [{ code: "task-3", name: "Task Three", type: "file" }],
             },
           ],
         },
@@ -215,7 +215,7 @@ describe("findCaseByIdUseCase", () => {
     expect(result.stages[0].name).toBe("Stage One");
     expect(result.stages[0].taskGroups).toHaveLength(2);
     expect(result.stages[1].name).toBe("Stage Two");
-    expect(result.stages[1].taskGroups[0].tasks[0].title).toBe("Task Three");
+    expect(result.stages[1].taskGroups[0].tasks[0].name).toBe("Task Three");
     expect(result.overrideTabs).toEqual([
       { id: "tasks", title: "Tasks List" },
       { id: "timeline", title: "Timeline View" },
