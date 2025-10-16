@@ -68,11 +68,11 @@ describe("timelineRoute", () => {
           taskGroups: [
             {
               code: "application-receipt-tasks",
-              title: "Application Receipt Tasks",
+              name: "Application Receipt Tasks",
               tasks: [
                 {
                   code: "simple-review",
-                  title: "Simple Review",
+                  name: "Simple Review",
                   status: "pending",
                 },
               ],

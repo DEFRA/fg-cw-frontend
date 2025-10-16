@@ -9,7 +9,7 @@ describe("task-group", () => {
         name: "Test Stage",
         taskGroups: [
           {
-            title: "Group 1",
+            name: "Group 1",
             tasks: [
               {
                 title: "Task 1",

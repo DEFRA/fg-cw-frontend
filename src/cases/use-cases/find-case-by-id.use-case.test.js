@@ -55,7 +55,7 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-1",
-              title: "First Task Group",
+              name: "First Task Group",
               tasks: [
                 {
                   code: "task-1",
@@ -94,7 +94,7 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-1",
-              title: "First Task Group",
+              name: "First Task Group",
               tasks: [
                 {
                   code: "task-1",
@@ -171,12 +171,12 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-1",
-              title: "Task Group One",
+              name: "Task Group One",
               tasks: [{ code: "task-1", title: "Task One", type: "boolean" }],
             },
             {
               code: "taskgroup-2",
-              title: "Task Group Two",
+              name: "Task Group Two",
               tasks: [{ code: "task-2", title: "Task Two", type: "text" }],
             },
           ],
@@ -188,7 +188,7 @@ describe("findCaseByIdUseCase", () => {
           taskGroups: [
             {
               code: "taskgroup-3",
-              title: "Task Group Three",
+              name: "Task Group Three",
               tasks: [{ code: "task-3", title: "Task Three", type: "file" }],
             },
           ],

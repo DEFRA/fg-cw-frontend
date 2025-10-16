@@ -30,7 +30,7 @@ describe("createTaskListViewModel", () => {
         taskGroups: [
           {
             code: "review-tasks",
-            title: "Review Tasks",
+            name: "Review Tasks",
             tasks: [
               {
                 code: "task-1",
@@ -120,7 +120,7 @@ describe("createTaskListViewModel", () => {
       expect(mappedTaskGroups).toHaveLength(1);
       expect(mappedTaskGroups[0]).toEqual({
         code: "review-tasks",
-        title: "Review Tasks",
+        name: "Review Tasks",
         tasks: [
           {
             code: "task-1",
