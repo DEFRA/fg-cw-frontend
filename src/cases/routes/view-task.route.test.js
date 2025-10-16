@@ -85,7 +85,7 @@ describe("viewTaskRoute", () => {
               tasks: [
                 {
                   code: "simple-review",
-                  title: "Simple Review",
+                  name: "Simple Review",
                   status: "pending",
                   type: "OPTIONAL",
                 },
