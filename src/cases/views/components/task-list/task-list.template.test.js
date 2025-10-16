@@ -6,17 +6,17 @@ describe("task-list", () => {
     const component = render("task-list", {
       tasks: [
         {
-          title: "Task 1",
+          name: "Task 1",
           status: "not started",
           link: "/cases/123/task/1",
         },
         {
-          title: "Task 2",
+          name: "Task 2",
           status: "in progress",
           link: "/cases/123/task/2",
         },
         {
-          title: "Task 3",
+          name: "Task 3",
           status: "completed",
           link: "/cases/123/task/3",
         },

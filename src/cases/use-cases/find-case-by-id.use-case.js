@@ -10,7 +10,7 @@ const processTask = (task, wfTaskGroup) => {
 
   return {
     ...task,
-    title: workflowTask.title,
+    name: workflowTask.name,
     type: workflowTask.type,
     comment: workflowTask.comment,
   };
