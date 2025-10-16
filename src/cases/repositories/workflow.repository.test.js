@@ -25,7 +25,7 @@ describe("workflow repository", () => {
                 tasks: [
                   {
                     code: "task-1",
-                    title: "First Task",
+                    name: "First Task",
                     type: "text",
                   },
                 ],
