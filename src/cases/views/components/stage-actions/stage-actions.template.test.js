@@ -7,8 +7,8 @@ describe("stage-actions", () => {
       caseId: "123",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "Decision",
           items: [
             {
@@ -35,8 +35,8 @@ describe("stage-actions", () => {
       caseId: "456",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "Decision",
           errorMessage: null,
           items: [
@@ -73,12 +73,12 @@ describe("stage-actions", () => {
       caseId: "789",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "Decision",
           errorMessage: {
             text: "Please select an action",
-            href: "#actionId",
+            href: "#actionCode",
           },
           items: [
             {
@@ -100,8 +100,8 @@ describe("stage-actions", () => {
       caseId: "999",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "Decision",
           items: [
             {
@@ -123,8 +123,8 @@ describe("stage-actions", () => {
       caseId: "mixed-123",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "What do you want to do?",
           items: [
             {
@@ -173,8 +173,8 @@ describe("stage-actions", () => {
       caseId: "error-case",
       stage: {
         actions: {
-          idPrefix: "actionId",
-          name: "actionId",
+          idPrefix: "actionCode",
+          name: "actionCode",
           legend: "Decision",
           items: [
             {
