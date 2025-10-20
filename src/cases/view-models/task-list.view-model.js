@@ -91,7 +91,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
 
     return {
       value: action.code,
-      text: action.label,
+      text: action.name,
       checked,
       conditional,
     };
