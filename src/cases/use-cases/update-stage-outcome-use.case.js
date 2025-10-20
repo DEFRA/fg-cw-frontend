@@ -4,15 +4,15 @@ import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
 export const updateStageOutcomeUseCase = async (
   authContext,
-  { caseId, actionData: { actionId, commentFieldName, comment } },
+  { caseId, actionData: { actionCode, commentFieldName, comment } },
 ) => {
   const caseData = await findCaseByIdUseCase(authContext, caseId);
-  const action = findSelectedAction(caseData, actionId);
+  const action = findSelectedAction(caseData, actionCode);
 
   if (validComment(action, comment)) {
     await updateStageOutcome(authContext, {
       caseId,
-      actionId,
+      actionCode,
       comment,
     });
 
@@ -30,11 +30,11 @@ export const updateStageOutcomeUseCase = async (
   }
 };
 
-const findSelectedAction = (caseData, actionId) => {
+const findSelectedAction = (caseData, actionCode) => {
   const stage = caseData.stages.find((s) => s.code === caseData.currentStage);
-  const action = stage?.actions.find((a) => a.id === actionId);
+  const action = stage?.actions.find((a) => a.code === actionCode);
   if (!action) {
-    throw Boom.badRequest(`Invalid action selected: ${actionId}`);
+    throw Boom.badRequest(`Invalid action selected: ${actionCode}`);
   }
 
   return action;

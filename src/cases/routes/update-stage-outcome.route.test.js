@@ -25,7 +25,7 @@ describe("updateStageOutcomeRoute", () => {
       updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
       const payload = {
-        actionId: "approve",
+        actionCode: "approve",
         "approve-comment": "This looks good to me",
       };
 
@@ -53,7 +53,7 @@ describe("updateStageOutcomeRoute", () => {
       expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
-          actionId: "approve",
+          actionCode: "approve",
           commentFieldName: "approve-comment",
           comment: "This looks good to me",
         },
@@ -74,7 +74,7 @@ describe("updateStageOutcomeRoute", () => {
       });
 
       const payload = {
-        actionId: "reject",
+        actionCode: "reject",
         "reject-comment": "",
       };
 
@@ -102,7 +102,7 @@ describe("updateStageOutcomeRoute", () => {
       expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "case-123",
         actionData: {
-          actionId: "reject",
+          actionCode: "reject",
           commentFieldName: "reject-comment",
           comment: "",
         },
@@ -119,7 +119,7 @@ describe("updateStageOutcomeRoute", () => {
       updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
       const payload = {
-        actionId: "conditional-approval",
+        actionCode: "conditional-approval",
         "conditional-approval-comment": "Approval with conditions",
         otherField: "should be ignored",
       };
@@ -145,7 +145,7 @@ describe("updateStageOutcomeRoute", () => {
       expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
-          actionId: "conditional-approval",
+          actionCode: "conditional-approval",
           commentFieldName: "conditional-approval-comment",
           comment: "Approval with conditions",
         },
@@ -156,7 +156,7 @@ describe("updateStageOutcomeRoute", () => {
       updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
       const payload = {
-        actionId: "approve",
+        actionCode: "approve",
       };
       const authContext = { token: "mock-token", user: undefined };
 
@@ -173,7 +173,7 @@ describe("updateStageOutcomeRoute", () => {
       expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
-          actionId: "approve",
+          actionCode: "approve",
           commentFieldName: "approve-comment",
           comment: undefined,
         },
@@ -199,7 +199,7 @@ describe("updateStageOutcomeRoute", () => {
       expect(updateStageOutcomeUseCase).toHaveBeenCalledWith(authContext, {
         caseId: "test-case-id",
         actionData: {
-          actionId: undefined,
+          actionCode: undefined,
           commentFieldName: "undefined-comment",
           comment: undefined,
         },

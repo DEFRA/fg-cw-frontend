@@ -11,14 +11,14 @@ exports[`stage-actions > renders basic stage actions 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
-      <label class="govuk-label govuk-radios__label" for="actionId-2">
+      <input class="govuk-radios__input" id="actionCode-2" name="actionCode" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionCode-2">
         Reject
       </label>
     </div>
@@ -45,12 +45,12 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" data-aria-controls="conditional-actionId">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve" data-aria-controls="conditional-actionCode">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-actionId">
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-actionCode">
       <div class="govuk-form-group">
   <label class="govuk-label" for="approve-comment">
     Approval notes
@@ -59,12 +59,12 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="on-hold" checked data-aria-controls="conditional-actionId-2">
-      <label class="govuk-label govuk-radios__label" for="actionId-2">
+      <input class="govuk-radios__input" id="actionCode-2" name="actionCode" type="radio" value="on-hold" checked data-aria-controls="conditional-actionCode-2">
+      <label class="govuk-label govuk-radios__label" for="actionCode-2">
         Put on hold
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-actionId-2">
+    <div class="govuk-radios__conditional" id="conditional-actionCode-2">
       <div class="govuk-form-group">
   <label class="govuk-label" for="on-hold-comment">
     Reason for hold
@@ -76,8 +76,8 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId-3" name="actionId" type="radio" value="reject">
-      <label class="govuk-label govuk-radios__label" for="actionId-3">
+      <input class="govuk-radios__input" id="actionCode-3" name="actionCode" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionCode-3">
         Reject
       </label>
     </div>
@@ -104,12 +104,12 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve" checked data-aria-controls="conditional-actionCode">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-actionId">
+    <div class="govuk-radios__conditional" id="conditional-actionCode">
       <div class="govuk-form-group">
   <label class="govuk-label" for="approve-comment">
     Approval reason
@@ -121,8 +121,8 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId-2" name="actionId" type="radio" value="reject">
-      <label class="govuk-label govuk-radios__label" for="actionId-2">
+      <input class="govuk-radios__input" id="actionCode-2" name="actionCode" type="radio" value="reject">
+      <label class="govuk-label govuk-radios__label" for="actionCode-2">
         Reject
       </label>
     </div>
@@ -143,17 +143,17 @@ exports[`stage-actions > renders with error message 1`] = `
 <form method="POST" action="/cases/789/stage/outcome">
 
   <div class="govuk-form-group govuk-form-group--error">
-  <fieldset class="govuk-fieldset" aria-describedby="actionId-error">
+  <fieldset class="govuk-fieldset" aria-describedby="actionCode-error">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Decision
   </legend>
-  <p id="actionId-error" class="govuk-error-message">
+  <p id="actionCode-error" class="govuk-error-message">
     <span class="govuk-visually-hidden">Error:</span> Please select an action
   </p>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
@@ -180,8 +180,8 @@ exports[`stage-actions > renders with save button disabled 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
@@ -208,12 +208,12 @@ exports[`stage-actions > renders with textarea error 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionId" name="actionId" type="radio" value="approve" checked data-aria-controls="conditional-actionId">
-      <label class="govuk-label govuk-radios__label" for="actionId">
+      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve" checked data-aria-controls="conditional-actionCode">
+      <label class="govuk-label govuk-radios__label" for="actionCode">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-actionId">
+    <div class="govuk-radios__conditional" id="conditional-actionCode">
       <div class="govuk-form-group govuk-form-group--error">
   <label class="govuk-label" for="approve-comment">
     Approval reason
