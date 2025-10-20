@@ -393,7 +393,7 @@ describe("Case Repository", () => {
     it("calls API with correct endpoint and payload", async () => {
       const mockData = {
         caseId: "case-123",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "This looks good to me",
       };
 
@@ -407,7 +407,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve", comment: "This looks good to me" },
+          payload: { actionCode: "approve", comment: "This looks good to me" },
         },
       );
     });
@@ -415,7 +415,7 @@ describe("Case Repository", () => {
     it("handles payload with multiple properties", async () => {
       const mockData = {
         caseId: "case-456",
-        actionId: "reject",
+        actionCode: "reject",
         comment: "Missing required documents",
       };
 
@@ -430,7 +430,7 @@ describe("Case Repository", () => {
             authorization: `Bearer ${authContext.token}`,
           },
           payload: {
-            actionId: "reject",
+            actionCode: "reject",
             comment: "Missing required documents",
           },
         },
@@ -440,7 +440,7 @@ describe("Case Repository", () => {
     it("handles payload without comment", async () => {
       const mockData = {
         caseId: "case-789",
-        actionId: "approve",
+        actionCode: "approve",
       };
 
       wreck.patch.mockResolvedValueOnce({});
@@ -453,7 +453,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve" },
+          payload: { actionCode: "approve" },
         },
       );
     });
@@ -461,7 +461,7 @@ describe("Case Repository", () => {
     it("propagates API errors", async () => {
       const mockData = {
         caseId: "case-error",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "This will fail",
       };
 
@@ -478,7 +478,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve", comment: "This will fail" },
+          payload: { actionCode: "approve", comment: "This will fail" },
         },
       );
     });
