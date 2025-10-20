@@ -108,7 +108,7 @@ const mockCases = [
             code: "application-receipt-tasks",
             tasks: [
               {
-                id: "simple-review",
+                code: "simple-review",
                 isComplete: false,
               },
             ],
@@ -169,7 +169,7 @@ const mockCases = [
             code: "application-receipt-tasks",
             tasks: [
               {
-                id: "simple-review",
+                code: "simple-review",
                 isComplete: false,
               },
             ],

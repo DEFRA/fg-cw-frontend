@@ -47,7 +47,7 @@ describe("createTaskListViewModel", () => {
         ],
         actions: [
           {
-            id: "approve",
+            code: "approve",
             label: "Approve",
             comment: {
               label: "Approval reason",
@@ -56,12 +56,12 @@ describe("createTaskListViewModel", () => {
             },
           },
           {
-            id: "reject",
+            code: "reject",
             label: "Reject",
           },
         ],
         outcome: {
-          actionId: "approve",
+          actionCode: "approve",
           comment: "Previous approval comment",
         },
       },
@@ -223,8 +223,8 @@ describe("createTaskListViewModel", () => {
       const result = createTaskListViewModel(mockCaseData);
       const actions = result.data.stage.actions;
 
-      expect(actions.idPrefix).toBe("actionId");
-      expect(actions.name).toBe("actionId");
+      expect(actions.idPrefix).toBe("actionCode");
+      expect(actions.name).toBe("actionCode");
       expect(actions.legend).toBe("Review Decision");
       expect(actions.errorMessage).toBeUndefined();
       expect(actions.items).toHaveLength(2);
@@ -237,7 +237,7 @@ describe("createTaskListViewModel", () => {
       expect(approveItem).toEqual({
         value: "approve",
         text: "Approve",
-        checked: true, // Because stage.outcome.actionId === "approve"
+        checked: true, // Because stage.outcome.actionCode === "approve"
         conditional: expect.objectContaining({
           id: "approve-comment",
           name: "approve-comment",
@@ -288,7 +288,7 @@ describe("createTaskListViewModel", () => {
 
   describe("action checking logic", () => {
     it("checks action based on form values when provided", () => {
-      const values = { actionId: "reject" };
+      const values = { actionCode: "reject" };
       const result = createTaskListViewModel(mockCaseData, {}, values);
 
       const approveItem = result.data.stage.actions.items.find(
@@ -312,7 +312,7 @@ describe("createTaskListViewModel", () => {
         (item) => item.value === "reject",
       );
 
-      expect(approveItem.checked).toBe(true); // stage.outcome.actionId === "approve"
+      expect(approveItem.checked).toBe(true); // stage.outcome.actionCode === "approve"
       expect(rejectItem.checked).toBe(false);
     });
 
@@ -393,7 +393,7 @@ describe("createTaskListViewModel", () => {
             ...mockCaseData.stages[0],
             actions: [
               {
-                id: "approve",
+                code: "approve",
                 label: "Approve",
                 comment: {
                   label: "Approval reason",
@@ -419,7 +419,7 @@ describe("createTaskListViewModel", () => {
             ...mockCaseData.stages[0],
             actions: [
               {
-                id: "hold",
+                code: "hold",
                 label: "Put on Hold",
                 comment: {
                   label: "Hold reason",
@@ -477,14 +477,14 @@ describe("createTaskListViewModel", () => {
       expect(approveItem.conditional.value).toBe("");
     });
 
-    it("uses empty string when stage outcome has different actionId", () => {
+    it("uses empty string when stage outcome has different actionCode", () => {
       const caseWithDifferentOutcome = {
         ...mockCaseData,
         stages: [
           {
             ...mockCaseData.stages[0],
             outcome: {
-              actionId: "reject",
+              actionCode: "reject",
               comment: "Previous rejection comment",
             },
           },
@@ -503,7 +503,7 @@ describe("createTaskListViewModel", () => {
   describe("error handling", () => {
     it("includes errors in view model", () => {
       const errors = {
-        actionId: { text: "Please select an action" },
+        actionCode: { text: "Please select an action" },
         "approve-comment": { text: "Comment is required" },
       };
 

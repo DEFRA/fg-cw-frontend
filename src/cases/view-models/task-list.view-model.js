@@ -70,10 +70,10 @@ const mapCaseData = (caseData) => {
 const mapActions = ({ stage, errors, values }) => {
   const legend = stage.actionTitle || "Decision";
   return {
-    idPrefix: "actionId",
-    name: "actionId",
+    idPrefix: "actionCode",
+    name: "actionCode",
     legend,
-    errorMessage: getFieldValue("actionId", errors),
+    errorMessage: getFieldValue("actionCode", errors),
     items: mapActionItems({ stage, actions: stage.actions, errors, values }),
   };
 };
@@ -90,7 +90,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
     const checked = mapChecked({ action, stage, values });
 
     return {
-      value: action.id,
+      value: action.code,
       text: action.label,
       checked,
       conditional,
@@ -98,9 +98,9 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
   }) || [];
 
 const mapChecked = ({ action, stage, values }) => {
-  return values.actionId
-    ? values.actionId === action.id
-    : stage.outcome?.actionId === action.id;
+  return values.actionCode
+    ? values.actionCode === action.code
+    : stage.outcome?.actionCode === action.code;
 };
 
 const getValue = ({ name, action, stage, values }) => {
@@ -114,7 +114,7 @@ const createConditionalTextarea = ({ action, stage, errors, values }) => {
     return undefined;
   }
 
-  const name = `${action.id}-comment`;
+  const name = `${action.code}-comment`;
   const value = getValue({ name, action, stage, errors, values });
   const errorMessage = getFieldValue(name, errors);
 
@@ -143,4 +143,4 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
 };
 
 const isCurrentAction = (action, stage) =>
-  action.id === stage.outcome?.actionId;
+  action.code === stage.outcome?.actionCode;
