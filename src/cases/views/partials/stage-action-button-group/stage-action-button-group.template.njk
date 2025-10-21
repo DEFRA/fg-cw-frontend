@@ -11,7 +11,7 @@
         formaction="{{ "/cases/" + params.caseId }}"
         {% if params.allTasksComplete !== true %}disabled{% endif %}
       >
-        {{ action.label }}
+        {{ action.name }}
       </button>
     </form>
   {% endfor %}
