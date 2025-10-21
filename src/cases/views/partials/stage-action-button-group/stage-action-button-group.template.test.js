@@ -6,12 +6,12 @@ describe("stage-action-button-group", () => {
     const component = render("stage-action-button-group", {
       buttons: [
         {
-          label: "Approve",
+          name: "Approve",
           testId: "approve-button",
           nextStage: "approved",
         },
         {
-          label: "Reject",
+          name: "Reject",
           testId: "reject-button",
           nextStage: "rejected",
         },
@@ -26,12 +26,12 @@ describe("stage-action-button-group", () => {
     const component = render("stage-action-button-group", {
       buttons: [
         {
-          label: "Approve",
+          name: "Approve",
           testId: "approve-button",
           nextStage: "approved",
         },
         {
-          label: "Reject",
+          name: "Reject",
           testId: "reject-button",
           nextStage: "rejected",
         },
