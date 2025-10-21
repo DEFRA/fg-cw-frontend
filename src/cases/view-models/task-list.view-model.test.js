@@ -48,7 +48,7 @@ describe("createTaskListViewModel", () => {
         actions: [
           {
             code: "approve",
-            label: "Approve",
+            name: "Approve",
             comment: {
               label: "Approval reason",
               helpText: "Please provide a reason",
@@ -57,7 +57,7 @@ describe("createTaskListViewModel", () => {
           },
           {
             code: "reject",
-            label: "Reject",
+            name: "Reject",
           },
         ],
         outcome: {
@@ -394,7 +394,7 @@ describe("createTaskListViewModel", () => {
             actions: [
               {
                 code: "approve",
-                label: "Approve",
+                name: "Approve",
                 comment: {
                   label: "Approval reason",
                   type: "REQUIRED",
@@ -420,7 +420,7 @@ describe("createTaskListViewModel", () => {
             actions: [
               {
                 code: "hold",
-                label: "Put on Hold",
+                name: "Put on Hold",
                 comment: {
                   label: "Hold reason",
                   type: "OPTIONAL",
