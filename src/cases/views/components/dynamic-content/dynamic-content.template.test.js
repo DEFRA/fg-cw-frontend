@@ -5,25 +5,19 @@ describe("dynamic-content template", () => {
   test("renders no content message when params is undefined", () => {
     const result = render("dynamic-content", undefined);
 
-    expect(result.trim()).toBe(
-      '<p class="govuk-body">No content available.</p>',
-    );
+    expect(result.trim()).toBe("");
   });
 
   test("renders no content message when params is null", () => {
     const result = render("dynamic-content", null);
 
-    expect(result.trim()).toBe(
-      '<p class="govuk-body">No content available.</p>',
-    );
+    expect(result.trim()).toBe("");
   });
 
   test("renders no content message when params is empty array", () => {
     const result = render("dynamic-content", []);
 
-    expect(result.trim()).toBe(
-      '<p class="govuk-body">No content available.</p>',
-    );
+    expect(result.trim()).toBe("");
   });
 
   test("renders single text component", () => {

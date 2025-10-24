@@ -10,6 +10,7 @@ describe("task-details", () => {
       taskCode: "task-id",
       currentTask: {
         code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
         name: "Test Task",
         type: "boolean",
       },
