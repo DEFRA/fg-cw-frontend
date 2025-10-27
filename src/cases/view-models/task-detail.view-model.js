@@ -1,7 +1,24 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createTaskDetailViewModel = (caseData, query, errors) => {
+export const hasAllRequiredRoles = (userRoles, allOf) => {
+  return !allOf.length || allOf.every((role) => userRoles.includes(role));
+};
+
+export const hasAnyRequiredRole = (userRoles, anyOf) => {
+  return !anyOf.length || anyOf.some((role) => userRoles.includes(role));
+};
+
+export const checkTaskAccess = (appRoles, taskRequiredRoles) => {
+  const { allOf = [], anyOf = [] } = taskRequiredRoles;
+
+  return (
+    hasAllRequiredRoles(Object.keys(appRoles), allOf) &&
+    hasAnyRequiredRole(Object.keys(appRoles), anyOf)
+  );
+};
+
+export const createTaskDetailViewModel = (caseData, query, roles, errors) => {
   const stage = caseData.stages.find(
     (stage) => stage.code === caseData.currentStage,
   );
@@ -50,6 +67,7 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
         link: `/cases/${caseData._id}/tasks/${taskGroupCode}/${currentTask.code}`,
         status: currentTask.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: currentTask.status === "complete",
+        canCompleteTask: checkTaskAccess(roles, currentTask.requiredRoles),
       },
     },
   };

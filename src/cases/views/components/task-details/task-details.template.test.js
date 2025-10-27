@@ -13,6 +13,7 @@ describe("task-details", () => {
         name: "Test Task",
         type: "boolean",
       },
+      canComplete: true,
     });
 
     expect(component).toMatchSnapshot();
