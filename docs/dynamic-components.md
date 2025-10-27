@@ -347,6 +347,75 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 ---
 
+### 12. Accordion Component
+
+**Purpose**: Collapsible sections to progressively reveal content
+
+```
+{
+  "component": "accordion",
+  "id": "static-accordion",
+  "items": [
+    {
+      "heading": [
+        { "component": "text", "text": "Section 1" }
+      ],
+      "summary": [
+        { "component": "text", "text": "Optional summary text" }
+      ],
+      "expanded": false,
+      "content": [
+        {
+          "component": "paragraph",
+          "text": "Content here"
+        }
+      ]
+    },
+    {
+      "heading": [
+        { "component": "text", "text": "Payment details " },
+        { "component": "status", "text": "OVERDUE", "colour": "red" }
+      ],
+      "summary": [
+        { "component": "text", "text": "Action required" }
+      ],
+      "content": [
+        {
+          "component": "heading",
+          "text": "Outstanding balance",
+          "level": 3
+        },
+        {
+          "component": "unordered-list",
+          "items": [
+            { "text": "Invoice #123: £500" },
+            { "text": "Invoice #124: £300" }
+          ]
+        }
+      ]
+    }
+  ],
+  "classes": "custom-accordion-class"
+}
+```
+
+**Parameters**:
+
+- `items` (required): Array of accordion section objects
+- `id` (optional): HTML ID attribute (defaults to `accordion-default`)
+- `classes` (optional): Additional CSS classes
+
+**Item Structure**:
+
+- `heading` (required): Array of dynamic components for the section heading
+- `content` (required): Array of dynamic components to display in the section
+- `summary` (optional): Array of dynamic components for additional context shown in collapsed state
+- `expanded` (optional): Boolean to control if section is open by default
+
+**Output**: `<div class="govuk-accordion" data-module="govuk-accordion">...</div>`
+
+---
+
 ### GOV.UK Design System Reference
 
 For complete styling options, refer to the [GOV.UK Design System Styles](https://design-system.service.gov.uk/styles/).

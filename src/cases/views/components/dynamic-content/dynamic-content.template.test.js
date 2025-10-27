@@ -482,4 +482,164 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Continue");
     expect(result).toContain("/next-step");
   });
+
+  test("renders accordion component with simple items", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "static-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [
+              {
+                component: "text",
+                text: "Content here",
+              },
+            ],
+          },
+          {
+            heading: [{ component: "text", text: "Section 2" }],
+            content: [
+              {
+                component: "paragraph",
+                text: "Paragraph content in section 2",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion");
+    expect(result).toContain('id="static-accordion"');
+    expect(result).toContain("Section 1");
+    expect(result).toContain("Section 2");
+    expect(result).toContain("Content here");
+    expect(result).toContain("Paragraph content in section 2");
+  });
+
+  test("renders accordion component with nested components in content", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "complex-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Details" }],
+            content: [
+              {
+                component: "heading",
+                text: "Sub-heading",
+                level: 3,
+              },
+              {
+                component: "unordered-list",
+                items: [{ text: "Item 1" }, { text: "Item 2" }],
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion");
+    expect(result).toContain("Details");
+    expect(result).toContain("Sub-heading");
+    expect(result).toContain("Item 1");
+    expect(result).toContain("Item 2");
+  });
+
+  test("renders accordion component with summary components", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "accordion-with-summary",
+        items: [
+          {
+            heading: [{ component: "text", text: "More info" }],
+            summary: [{ component: "text", text: "Additional context" }],
+            content: [
+              {
+                component: "text",
+                text: "Detailed information",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion__section-summary");
+    expect(result).toContain("Additional context");
+    expect(result).toContain("More info");
+    expect(result).toContain("Detailed information");
+  });
+
+  test("renders accordion component with expanded section", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "expanded-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Expanded Section" }],
+            expanded: true,
+            content: [
+              {
+                component: "text",
+                text: "This section is open by default",
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion__section--expanded");
+    expect(result).toContain('aria-expanded="true"');
+    expect(result).toContain("Expanded Section");
+    expect(result).toContain("This section is open by default");
+  });
+
+  test("renders accordion with rich heading and summary components", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "rich-accordion",
+        items: [
+          {
+            heading: [
+              { component: "text", text: "Payment details " },
+              { component: "status", text: "OVERDUE", colour: "red" },
+            ],
+            summary: [
+              { component: "text", text: "Action required - " },
+              { component: "url", href: "/pay-now", text: "Pay now" },
+            ],
+            content: [
+              { component: "paragraph", text: "Your payment is overdue." },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Payment details");
+    expect(result).toContain("Overdue");
+    expect(result).toContain("govuk-tag--red");
+    expect(result).toContain("Action required -");
+    expect(result).toContain("Pay now");
+    expect(result).toContain("/pay-now");
+  });
 });
