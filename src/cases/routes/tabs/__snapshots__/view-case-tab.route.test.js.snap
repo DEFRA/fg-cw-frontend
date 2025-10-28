@@ -339,6 +339,14 @@ Agreements
 
     
     
+    
+    
+    
+    
+    
+    
+    
+    
 
      
   <h3 class="govuk-heading-m ">
@@ -351,7 +359,7 @@ Agreements
       Scheme
     </dt>
     <dd class="govuk-summary-list__value">
-      <span>SFI</span>
+      SFI
     </dd>
   </div>
   <div class="govuk-summary-list__row">
@@ -359,7 +367,7 @@ Agreements
       Year
     </dt>
     <dd class="govuk-summary-list__value">
-      <span>2025</span>
+      2025
     </dd>
   </div>
   <div class="govuk-summary-list__row">
@@ -367,7 +375,7 @@ Agreements
       Has checked land is up to date?
     </dt>
     <dd class="govuk-summary-list__value">
-      <span>Yes</span>
+      Yes
     </dd>
   </div>
   <div class="govuk-summary-list__row">
@@ -375,7 +383,7 @@ Agreements
       Agreement Name
     </dt>
     <dd class="govuk-summary-list__value">
-      <span>NO_LONGER_REQUIRED</span>
+      NO_LONGER_REQUIRED
     </dd>
   </div>
 </dl>

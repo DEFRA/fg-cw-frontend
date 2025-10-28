@@ -208,10 +208,16 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
       "text": "SO3757 3059"
     },
     {
-      "label": "Total size",
-      "component": "status",
-      "text": "100 ha",
-      "colour": "green"
+      "label": [
+        { "component": "text", "text": "Status " },
+        { "component": "status", "text": "URGENT", "colour": "red" }
+      ],
+      "text": [
+        { "component": "text", "text": "100 ha " },
+        { "component": "status", "text": "PASSED", "colour": "green" },
+        { "component": "text", "text": " - " },
+        { "component": "url", "href": "/details", "text": "View details" }
+      ]
     }
   ]
 }
@@ -219,13 +225,41 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 **Parameters**:
 
-- `rows` (required): Array of row objects with `label` and content
-- `title` (optional): Heading above the summary list
+- `rows` (required): Array of row objects with `label` and `text`
+- `title` (optional): Heading above the summary list (renders as h3)
 
-**Row objects can be**:
+**Row Structure**:
 
-- Simple: `{ "label": "Key", "text": "Value" }`
-- Component-based: `{ "label": "Key", "component": "status", ... }`
+- `label` (required): String OR array of dynamic components for the row label
+- `text` (required): String OR array of dynamic components for the row value
+
+**Flexible Syntax**:
+
+Both `label` and `text` support two formats for maximum flexibility:
+
+1. **Simple string** (for convenience):
+
+   ```
+   {
+     "label": "Name",
+     "text": "John Smith"
+   }
+   ```
+
+2. **Array of components** (for rich content):
+   ```
+   {
+     "label": [
+       { "component": "text", "text": "Priority " },
+       { "component": "status", "text": "HIGH", "colour": "red" }
+     ],
+     "text": [
+       { "component": "status", "text": "COMPLETED", "colour": "green" },
+       { "component": "text", "text": " - " },
+       { "component": "url", "href": "/view", "text": "View details" }
+     ]
+   }
+   ```
 
 ---
 
@@ -404,6 +438,7 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 - `items` (required): Array of accordion section objects
 - `id` (optional): HTML ID attribute (defaults to `accordion-default`)
 - `classes` (optional): Additional CSS classes
+- `rememberExpanded` (optional): Whether to remember expanded/collapsed state in browser sessionStorage (defaults to `true` if not specified)
 
 **Item Structure**:
 
@@ -412,7 +447,104 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 - `summary` (optional): Array of dynamic components for additional context shown in collapsed state
 - `expanded` (optional): Boolean to control if section is open by default
 
+**State Persistence**:
+
+By default, GOV.UK Frontend remembers which accordion sections are expanded when users navigate away and return to the page (within the same session). This uses browser sessionStorage.
+
+To disable this behavior and always start with sections collapsed:
+
+```
+{
+  "component": "accordion",
+  "id": "my-accordion",
+  "rememberExpanded": false,
+  "items": [...]
+}
+```
+
 **Output**: `<div class="govuk-accordion" data-module="govuk-accordion">...</div>`
+
+---
+
+### 13. Line Break Component
+
+**Purpose**: Inserts a line break to control text flow and layout
+
+```
+{
+  "component": "line-break"
+}
+```
+
+**Parameters**: None
+
+**Use Cases**:
+
+- Force line breaks within containers for layout control
+- Create vertical spacing between inline elements
+- Control text flow without additional CSS
+- Break up related content visually
+
+**Output**: `<br>`
+
+**Example: Mixed inline content with line breaks**:
+
+```
+{
+  "component": "container",
+  "items": [
+    {
+      "component": "status",
+      "text": "COMPLETE",
+      "colour": "green"
+    },
+    {
+      "component": "text",
+      "text": " - Task finished successfully"
+    },
+    {
+      "component": "line-break"
+    },
+    {
+      "component": "url",
+      "href": "/next",
+      "text": "Continue to next step"
+    }
+  ]
+}
+```
+
+**Example: Creating vertical spacing with multiple line breaks**:
+
+```
+{
+  "component": "container",
+  "items": [
+    {
+      "component": "heading",
+      "text": "Section Title",
+      "level": 3
+    },
+    {
+      "component": "line-break"
+    },
+    {
+      "component": "line-break"
+    },
+    {
+      "component": "paragraph",
+      "text": "Content with extra spacing above"
+    }
+  ]
+}
+```
+
+**Notes**:
+
+- Simple semantic HTML `<br>` element
+- No parameters required - just specify the component type
+- Can be used multiple times consecutively for additional vertical space
+- Particularly useful in containers to control layout without custom CSS
 
 ---
 
@@ -421,18 +553,3 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 For complete styling options, refer to the [GOV.UK Design System Styles](https://design-system.service.gov.uk/styles/).
 
 All `classes` parameters support GOV.UK utility classes and component-specific classes
-
-### Component Nesting
-
-Components can contain other components via `items` arrays:
-
-```
-{
-  "component": "details",
-  "summaryItems": [{ "component": "status", ... }],
-  "items": [
-    { "component": "heading", ... },
-    { "component": "summary-list", ... }
-  ]
-}
-```

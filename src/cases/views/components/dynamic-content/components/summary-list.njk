@@ -6,10 +6,30 @@
 
   {% set summaryRows = [] %}
   {% for row in rows %}
+    {# Handle label - can be string or array of components #}
+    {%- set labelHtml = "" %}
+    {% if row.label is string %}
+      {%- set labelHtml = row.label %}
+    {% else %}
+      {% for labelItem in row.label %}
+        {%- set labelHtml = labelHtml + renderDefraComponent(labelItem) %}
+      {% endfor %}
+    {% endif %}
+
+    {# Handle text - can be string or array of components #}
+    {%- set textHtml = "" %}
+    {% if row.text is string %}
+      {%- set textHtml = row.text %}
+    {% else %}
+      {% for textItem in row.text %}
+        {%- set textHtml = textHtml + renderDefraComponent(textItem) %}
+      {% endfor %}
+    {% endif %}
+
     {%
       set summaryRow = {
-        key: { text: row.label },
-        value: { html: renderDefraComponent(row) }
+        key: { html: labelHtml },
+        value: { html: textHtml }
       }
     %}
     {% set summaryRows = (summaryRows.push(summaryRow), summaryRows) %}

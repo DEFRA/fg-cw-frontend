@@ -159,21 +159,146 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Example Link");
   });
 
-  test("renders summary-list component", () => {
+  test("renders summary-list component with simple string label and text", () => {
     const params = [
       {
         component: "summary-list",
         rows: [
-          { component: "text", text: "Item 1" },
-          { component: "text", text: "Item 2" },
+          {
+            label: "Name",
+            text: "John Smith",
+          },
+          {
+            label: "Date of birth",
+            text: "5 January 1978",
+          },
         ],
       },
     ];
 
     const result = render("dynamic-content", params);
 
-    expect(result).toContain("Item 1");
-    expect(result).toContain("Item 2");
+    expect(result).toContain("govuk-summary-list");
+    expect(result).toContain("Name");
+    expect(result).toContain("John Smith");
+    expect(result).toContain("Date of birth");
+    expect(result).toContain("5 January 1978");
+  });
+
+  test("renders summary-list component with component array label and text", () => {
+    const params = [
+      {
+        component: "summary-list",
+        rows: [
+          {
+            label: [{ component: "text", text: "Parcel ID" }],
+            text: [{ component: "text", text: "SO3757 3059" }],
+          },
+          {
+            label: [
+              { component: "text", text: "Status " },
+              { component: "status", text: "URGENT", colour: "red" },
+            ],
+            text: [
+              { component: "text", text: "100 ha " },
+              { component: "status", text: "PASSED", colour: "green" },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Parcel ID");
+    expect(result).toContain("SO3757 3059");
+    expect(result).toContain("Status");
+    expect(result).toContain("Urgent");
+    expect(result).toContain("govuk-tag--red");
+    expect(result).toContain("100 ha");
+    expect(result).toContain("Passed");
+    expect(result).toContain("govuk-tag--green");
+  });
+
+  test("renders summary-list component with mixed string and array formats", () => {
+    const params = [
+      {
+        component: "summary-list",
+        rows: [
+          {
+            label: "Simple label",
+            text: "Simple text",
+          },
+          {
+            label: [{ component: "text", text: "Complex label" }],
+            text: "Simple text",
+          },
+          {
+            label: "Simple label",
+            text: [
+              { component: "text", text: "Complex " },
+              { component: "status", text: "text", colour: "blue" },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Simple label");
+    expect(result).toContain("Simple text");
+    expect(result).toContain("Complex label");
+    expect(result).toContain("Complex");
+    expect(result).toContain("Text");
+    expect(result).toContain("govuk-tag--blue");
+  });
+
+  test("renders summary-list component with title", () => {
+    const params = [
+      {
+        component: "summary-list",
+        title: "Check details",
+        rows: [
+          {
+            label: "Name",
+            text: "Sarah Philips",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Check details");
+    expect(result).toContain("Name");
+    expect(result).toContain("Sarah Philips");
+  });
+
+  test("renders summary-list component with rich text content", () => {
+    const params = [
+      {
+        component: "summary-list",
+        rows: [
+          {
+            label: "Payment status",
+            text: [
+              { component: "status", text: "OVERDUE", colour: "red" },
+              { component: "text", text: " - " },
+              { component: "url", href: "/pay-now", text: "Pay now" },
+            ],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Payment status");
+    expect(result).toContain("Overdue");
+    expect(result).toContain("govuk-tag--red");
+    expect(result).toContain("Pay now");
+    expect(result).toContain("/pay-now");
   });
 
   test("renders table component", () => {
@@ -604,10 +729,12 @@ describe("dynamic-content template", () => {
 
     const result = render("dynamic-content", params);
 
+    // Check for the expanded class marker (JS will add aria-expanded at runtime)
     expect(result).toContain("govuk-accordion__section--expanded");
-    expect(result).toContain('aria-expanded="true"');
     expect(result).toContain("Expanded Section");
     expect(result).toContain("This section is open by default");
+    // Verify it uses span, not button (JS will convert to button)
+    expect(result).toContain('<span class="govuk-accordion__section-button"');
   });
 
   test("renders accordion with rich heading and summary components", () => {
@@ -641,5 +768,117 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Action required -");
     expect(result).toContain("Pay now");
     expect(result).toContain("/pay-now");
+  });
+
+  test("renders accordion component with rememberExpanded set to false", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "no-remember-accordion",
+        rememberExpanded: false,
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [{ component: "text", text: "Content 1" }],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion");
+    expect(result).toContain('data-remember-expanded="false"');
+    expect(result).toContain("Section 1");
+  });
+
+  test("renders accordion component with rememberExpanded set to true", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "remember-accordion",
+        rememberExpanded: true,
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [{ component: "text", text: "Content 1" }],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion");
+    expect(result).toContain('data-remember-expanded="true"');
+    expect(result).toContain("Section 1");
+  });
+
+  test("renders accordion component without rememberExpanded defaults to undefined", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "default-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [{ component: "text", text: "Content 1" }],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-accordion");
+    expect(result).not.toContain("data-remember-expanded");
+    expect(result).toContain("Section 1");
+  });
+
+  test("renders line-break component", () => {
+    const params = [
+      {
+        component: "line-break",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("<br />");
+  });
+
+  test("renders line-break component within container for layout control", () => {
+    const params = [
+      {
+        component: "container",
+        items: [
+          {
+            component: "status",
+            text: "COMPLETE",
+            colour: "green",
+          },
+          {
+            component: "text",
+            text: " - Task finished successfully",
+          },
+          {
+            component: "line-break",
+          },
+          {
+            component: "url",
+            href: "/next",
+            text: "Continue to next step",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Complete");
+    expect(result).toContain("Task finished successfully");
+    expect(result).toContain("<br />");
+    expect(result).toContain("Continue to next step");
+    expect(result).toContain("/next");
   });
 });
