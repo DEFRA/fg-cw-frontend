@@ -1,10 +1,9 @@
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
-  const stage = caseData.stages.find(
-    (stageInfo) => stageInfo.code === caseData.currentStage,
-  );
+export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
+  const stage = kase.phases
+    .find((p) => p.code === kase.currentPhase)
+    .stages.find((s) => s.code === kase.currentStage);
 
   const allTasksComplete = stage.taskGroups
     .flatMap((taskGroup) => taskGroup.tasks)
@@ -12,7 +11,7 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
 
   const currentStage = {
     ...stage,
-    taskGroups: mapTaskGroups(stage.taskGroups, caseData._id),
+    taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
     actions: mapActions({ stage, errors, values }),
     saveDisabled: !allTasksComplete,
   };
@@ -20,13 +19,10 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
   return {
     pageTitle: `Case tasks - ${stage.name}`,
     pageHeading: "Case",
-    breadcrumbs: [
-      { text: "Cases", href: "/cases" },
-      { text: caseData.caseRef },
-    ],
-    links: setActiveLink(caseData.links, "tasks"),
+    breadcrumbs: [{ text: "Cases", href: "/cases" }, { text: kase.caseRef }],
+    links: setActiveLink(kase.links, "tasks"),
     data: {
-      case: mapCaseData(caseData),
+      case: kase,
       stage: currentStage,
     },
     errors,
@@ -47,24 +43,6 @@ const mapTaskGroups = (taskGroups, caseId) => {
       };
     }),
   }));
-};
-
-const mapCaseData = (caseData) => {
-  return {
-    id: caseData._id,
-    caseRef: caseData.caseRef,
-    code: caseData.workflowCode,
-    submittedAt: getFormattedGBDate(caseData.payload.submittedAt),
-    status: caseData.status,
-    sbi: caseData.payload.identifiers?.sbi,
-    scheme: caseData.payload.answers?.scheme,
-    dateReceived: caseData.dateReceived,
-    assignedUser: caseData.assignedUser,
-    link: `/cases/${caseData._id}`,
-    stages: caseData.stages,
-    currentStage: caseData.currentStage,
-    banner: caseData.banner,
-  };
 };
 
 const mapActions = ({ stage, errors, values }) => {

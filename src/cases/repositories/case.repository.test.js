@@ -99,7 +99,7 @@ describe("Case Repository", () => {
           stages: ["stage-1"],
           createdAt: "2021-01-01T00:00:00.000Z",
           submittedAt: "2021-01-15T10:30:00.000Z",
-          status: "Active",
+          currentStatus: "Active",
           assignedUser: "user-123",
         },
       };
@@ -124,7 +124,7 @@ describe("Case Repository", () => {
         stages: ["stage-1"],
         createdAt: "2021-01-01T00:00:00.000Z",
         submittedAt: "2021-01-15T10:30:00.000Z",
-        status: "Active",
+        currentStatus: "Active",
         assignedUser: "user-123",
       });
     });
@@ -245,6 +245,7 @@ describe("Case Repository", () => {
     it("calls api with payload data", async () => {
       wreck.patch.mockResolvedValueOnce({});
       const params = {
+        phaseCode: "phase-1",
         stageCode: "stage-1",
         caseId: "1234-0909",
         taskGroupCode: "tg-01",
@@ -252,7 +253,7 @@ describe("Case Repository", () => {
       };
       await updateTaskStatus(authContext, { ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
-        "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
+        "/cases/1234-0909/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
@@ -278,7 +279,7 @@ describe("Case Repository", () => {
           stages: ["stage-1", "stage-2"],
           createdAt: "2021-01-01T00:00:00.000Z",
           submittedAt: "2021-01-15T10:30:00.000Z",
-          status: "Updated",
+          currentStatus: "Updated",
           assignedUser: "user-123",
         },
       };

@@ -20,7 +20,7 @@ export const createTimelineViewModel = (caseItem) => {
         scheme: caseItem.payload.answers?.scheme,
         dateReceived: caseItem.dateReceived,
         submittedAt: getFormattedGBDate(caseItem.payload.submittedAt),
-        status: caseItem.status,
+        currentStatus: caseItem.currentStatus,
         assignedUser: caseItem.assignedUser,
         payload: caseItem.payload,
         timeline: caseItem.timeline,
