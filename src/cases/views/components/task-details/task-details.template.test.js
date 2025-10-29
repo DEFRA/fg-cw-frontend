@@ -12,6 +12,7 @@ describe("task-details", () => {
         code: "task1",
         name: "Test Task",
         type: "boolean",
+        canCompleteTask: true,
       },
     });
 
