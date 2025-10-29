@@ -16,6 +16,41 @@ exports[`task-details > renders 1`] = `
       Test Task
     </h2>
 
+        
+<form
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-id/stages/strage-id/task-groups/task-group-code/tasks/task1/status"
+>
+  <div class="govuk-form-group">
+    <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-task1" name="isComplete" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-task1">
+        Test Task
+      </label>
+    </div>
+  </div>
+</div>
+
+  </div>
+
+
+  <div class="govuk-button-group">
+    <button
+      type="submit"
+      data-prevent-double-click="true"
+      data-testid="save-and-continue-button"
+      class="govuk-button"
+      data-module="govuk-button"
+      data-govuk-button-init=""
+    >
+      Save and continue
+    </button>
+  </div>
+</form>
+
   </div>
 </div>
 "
