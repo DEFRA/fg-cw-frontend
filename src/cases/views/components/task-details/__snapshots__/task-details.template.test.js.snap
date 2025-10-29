@@ -16,7 +16,7 @@ exports[`task-details > renders 1`] = `
       Test Task
     </h2>
 
-      
+        
 <form
   method="post"
   id="completeTaskForm"
