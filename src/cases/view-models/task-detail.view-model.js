@@ -9,7 +9,8 @@ export const hasAnyRequiredRole = (userRoles, anyOf) => {
   return !anyOf.length || anyOf.some((role) => userRoles.includes(role));
 };
 
-export const checkTaskAccess = (appRoles, taskRequiredRoles) => {
+// eslint-disable-next-line complexity
+export const checkTaskAccess = (appRoles, taskRequiredRoles = {}) => {
   const { allOf = [], anyOf = [] } = taskRequiredRoles;
 
   return (
