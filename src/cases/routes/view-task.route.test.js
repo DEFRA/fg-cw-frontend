@@ -88,6 +88,10 @@ describe("viewTaskRoute", () => {
                   name: "Simple Review",
                   status: "pending",
                   type: "OPTIONAL",
+                  requiredRoles: {
+                    allOf: ["role1"],
+                    anyOf: ["role2"],
+                  },
                 },
               ],
             },
@@ -106,7 +110,21 @@ describe("viewTaskRoute", () => {
       method: "GET",
       url: "/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review",
       auth: {
-        credentials: { token: "mock-token" },
+        credentials: {
+          token: "mock-token",
+          user: {
+            appRoles: {
+              role1: {
+                startDate: "2025-01-31",
+                endDate: "2025-10-31",
+              },
+              role2: {
+                startDate: "2025-01-31",
+                endDate: "2025-10-31",
+              },
+            },
+          },
+        },
         strategy: "session",
       },
     });
