@@ -41,13 +41,30 @@ const processStage = (stage, workflow) => {
   };
 };
 
-const addTitles = (kase, workflow, overrideTabs, customTabs, banner) => ({
-  ...kase,
-  stages: kase.stages.map((stage) => processStage(stage, workflow)),
-  banner,
+const addTitles = (
+  kase,
+  workflow,
   overrideTabs,
   customTabs,
-});
+  banner,
+  externalActions,
+) => {
+  const updated = {
+    ...kase,
+    stages: kase.stages.map((stage) => processStage(stage, workflow)),
+    banner: {
+      ...banner,
+    },
+    overrideTabs,
+    customTabs,
+  };
+
+  if (externalActions && externalActions.length > 0) {
+    updated.banner.externalActions = externalActions;
+  }
+
+  return updated;
+};
 
 const createTabObject = (tabId, tabConfig) => ({
   id: tabId,
@@ -59,6 +76,7 @@ export const findCaseByIdUseCase = async (authContext, caseId) => {
   const workflow = await findByCode(authContext, kase.workflowCode);
   const workflowTabs = workflow.pages.cases.details.tabs;
   const banner = kase.banner;
+  const externalActions = workflow.externalActions;
 
   const overrideTabs = defaultTabs
     .filter((tabId) => tabId in workflowTabs)
@@ -74,6 +92,7 @@ export const findCaseByIdUseCase = async (authContext, caseId) => {
     overrideTabs,
     customTabs,
     banner,
+    externalActions,
   );
 
   return caseWithTitles;

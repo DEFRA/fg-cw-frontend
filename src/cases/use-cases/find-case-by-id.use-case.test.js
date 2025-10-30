@@ -100,6 +100,7 @@ describe("findCaseByIdUseCase", () => {
                   code: "task-1",
                   name: "First Task",
                   type: "text",
+                  comment: undefined,
                   status: "pending",
                 },
               ],
@@ -111,6 +112,7 @@ describe("findCaseByIdUseCase", () => {
       submittedAt: "2021-01-15T10:30:00.000Z",
       status: "In Progress",
       assignedUser: "john doe",
+      banner: {},
       overrideTabs: [
         { id: "tasks", title: "Custom Tasks" },
         { id: "caseDetails", title: "Case Info" },
@@ -322,5 +324,156 @@ describe("findCaseByIdUseCase", () => {
     );
     expect(result.overrideTabs).toEqual([{ id: "tasks", title: "Tasks" }]);
     expect(result.customTabs).toEqual([]);
+  });
+
+  test("includes externalActions in banner when defined in workflow", async () => {
+    const caseId = "case-with-actions";
+    const mockCase = {
+      _id: caseId,
+      workflowCode: "workflow-with-actions",
+      stages: [],
+      banner: {
+        title: { value: "Test Farm" },
+        summary: {},
+      },
+    };
+
+    const mockExternalActions = [
+      {
+        code: "RERUN_RULES",
+        name: "Rerun Rules",
+        endpoint: "landGrantsRulesRerun",
+        target: {
+          node: "rulesHistory",
+          nodeType: "array",
+          position: "append",
+        },
+      },
+      {
+        code: "CALCULATE_PAYMENT",
+        name: "Calculate Payment",
+        endpoint: "calculatePayment",
+        target: {
+          node: "payments",
+          nodeType: "object",
+          position: "replace",
+        },
+      },
+    ];
+
+    const mockEndpoints = {
+      landGrantsRulesRerun: {
+        url: "/api/rules/rerun",
+        method: "POST",
+      },
+      calculatePayment: {
+        url: "/api/payment/calculate",
+        method: "POST",
+      },
+    };
+
+    const mockWorkflow = {
+      code: "workflow-with-actions",
+      stages: [],
+      externalActions: mockExternalActions,
+      endpoints: mockEndpoints,
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
+    };
+
+    findById.mockResolvedValueOnce(mockCase);
+    findByCode.mockResolvedValueOnce(mockWorkflow);
+
+    const result = await findCaseByIdUseCase(authContext, caseId);
+
+    expect(result.banner.externalActions).toEqual(mockExternalActions);
+  });
+
+  test("includes empty externalActions array when not defined in workflow", async () => {
+    const caseId = "case-without-actions";
+    const mockCase = {
+      _id: caseId,
+      workflowCode: "workflow-without-actions",
+      stages: [],
+      banner: {
+        title: { value: "Test Farm" },
+      },
+    };
+
+    const mockWorkflow = {
+      code: "workflow-without-actions",
+      stages: [],
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
+    };
+
+    findById.mockResolvedValueOnce(mockCase);
+    findByCode.mockResolvedValueOnce(mockWorkflow);
+
+    const result = await findCaseByIdUseCase(authContext, caseId);
+
+    expect(result.banner.externalActions).toBeUndefined();
+  });
+
+  test("preserves existing banner properties when adding externalActions", async () => {
+    const caseId = "case-preserve-banner";
+    const mockCase = {
+      _id: caseId,
+      workflowCode: "workflow-preserve-banner",
+      stages: [],
+      banner: {
+        title: { value: "Test Farm" },
+        summary: {
+          sbi: { label: "SBI", text: "123456789" },
+          status: { label: "Status", text: "Active" },
+        },
+      },
+    };
+
+    const mockExternalActions = [
+      {
+        code: "ACTION_ONE",
+        name: "Action One",
+        endpoint: "actionEndpoint",
+      },
+    ];
+
+    const mockWorkflow = {
+      code: "workflow-preserve-banner",
+      stages: [],
+      externalActions: mockExternalActions,
+      endpoints: {
+        actionEndpoint: { url: "/api/action", method: "POST" },
+      },
+      pages: {
+        cases: {
+          details: {
+            tabs: {},
+          },
+        },
+      },
+    };
+
+    findById.mockResolvedValueOnce(mockCase);
+    findByCode.mockResolvedValueOnce(mockWorkflow);
+
+    const result = await findCaseByIdUseCase(authContext, caseId);
+
+    expect(result.banner.title).toEqual({ value: "Test Farm" });
+    expect(result.banner.summary).toEqual({
+      sbi: { label: "SBI", text: "123456789" },
+      status: { label: "Status", text: "Active" },
+    });
+    expect(result.banner.externalActions).toEqual(mockExternalActions);
   });
 });

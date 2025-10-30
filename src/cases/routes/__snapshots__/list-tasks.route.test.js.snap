@@ -7,9 +7,15 @@ exports[`listTasksRoute > returns a case with tasks 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">

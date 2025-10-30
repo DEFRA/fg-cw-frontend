@@ -1,8 +1,10 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { findTabById } from "../repositories/case.repository.js";
+import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 
 vi.mock("../repositories/case.repository.js");
+vi.mock("./find-case-by-id.use-case.js");
 
 describe("findCaseTabUseCase", () => {
   const authContext = {
@@ -13,6 +15,11 @@ describe("findCaseTabUseCase", () => {
       roles: ["FCP.Casework.Read"],
     },
   };
+
+  beforeEach(() => {
+    // Default: no external actions, so result equals tab data
+    findCaseByIdUseCase.mockResolvedValue({ banner: {} });
+  });
 
   it("returns tab data from repository", async () => {
     const caseId = "case-123";
@@ -83,6 +90,29 @@ describe("findCaseTabUseCase", () => {
 
     expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
     expect(result).toEqual(mockTimelineData);
+  });
+
+  it("merges externalActions from case banner when present", async () => {
+    const caseId = "case-777";
+    const tabId = "caseDetails";
+    const mockTabData = {
+      _id: caseId,
+      caseRef: "AGR-777",
+      tabId: "caseDetails",
+      links: [],
+      tabData: {},
+    };
+
+    const mockExternalActions = [{ code: "RERUN_RULES", name: "Rerun Rules" }];
+
+    findTabById.mockResolvedValue(mockTabData);
+    findCaseByIdUseCase.mockResolvedValue({
+      banner: { externalActions: mockExternalActions },
+    });
+
+    const result = await findCaseTabUseCase(authContext, caseId, tabId);
+
+    expect(result.banner.externalActions).toEqual(mockExternalActions);
   });
 
   it("returns null when tab not found", async () => {

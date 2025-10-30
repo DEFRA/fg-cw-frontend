@@ -7,9 +7,15 @@ exports[`viewCaseTabRoute > extracts parameters correctly from URL 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
@@ -74,9 +80,15 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
@@ -211,9 +223,15 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
