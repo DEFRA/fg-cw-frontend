@@ -10,6 +10,8 @@
 {% from "./table.njk" import defraTable %}
 {% from "./container.njk" import defraContainer %}
 {% from "./details.njk" import defraDetails %}
+{% from "./accordion.njk" import defraAccordion %}
+{% from "./line-break.njk" import defraLineBreak %}
 
 {% macro renderDefraComponent(params) %}
   {%- set component = params.component or 'text' %}
@@ -38,5 +40,9 @@
     {{ defraContainer(params, renderDefraComponent) }}
   {% elif component == "details" %}
     {{ defraDetails(params, renderDefraComponent) }}
+  {% elif component == "accordion" %}
+    {{ defraAccordion(params, renderDefraComponent) }}
+  {% elif component == "line-break" %}
+    {{ defraLineBreak(params) }}
   {% endif %}
 {% endmacro %}

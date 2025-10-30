@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Button,
   Checkboxes,
   createAll,
@@ -12,6 +13,7 @@ import {
 import { CopyToClipboard } from "../../common/components/copy-to-clipboard/copy-to-clipboard.js";
 import { ExpandableText } from "../../common/components/expandable-text/expandable-text.js";
 
+createAll(Accordion);
 createAll(Button);
 createAll(Checkboxes);
 createAll(ErrorSummary);

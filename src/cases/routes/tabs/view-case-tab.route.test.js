@@ -121,7 +121,7 @@ describe("viewCaseTabRoute", () => {
               label: "Scheme",
             },
             {
-              text: 2025,
+              text: "2025",
               type: "number",
               label: "Year",
             },

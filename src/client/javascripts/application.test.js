@@ -1,4 +1,5 @@
 import {
+  Accordion,
   Button,
   Checkboxes,
   createAll,
@@ -22,7 +23,8 @@ describe("application.js", () => {
   it("should import all required GOV.UK Frontend components", async () => {
     await import("./application.js");
 
-    expect(createAll).toHaveBeenCalledTimes(9);
+    expect(createAll).toHaveBeenCalledTimes(10);
+    expect(createAll).toHaveBeenCalledWith(Accordion);
     expect(createAll).toHaveBeenCalledWith(Button);
     expect(createAll).toHaveBeenCalledWith(Checkboxes);
     expect(createAll).toHaveBeenCalledWith(ErrorSummary);
@@ -37,12 +39,13 @@ describe("application.js", () => {
   it("should initialize components in the correct order", async () => {
     await import("./application.js");
 
-    expect(createAll).toHaveBeenNthCalledWith(1, Button);
-    expect(createAll).toHaveBeenNthCalledWith(2, Checkboxes);
-    expect(createAll).toHaveBeenNthCalledWith(3, ErrorSummary);
-    expect(createAll).toHaveBeenNthCalledWith(4, Header);
-    expect(createAll).toHaveBeenNthCalledWith(5, Radios);
-    expect(createAll).toHaveBeenNthCalledWith(6, SkipLink);
-    expect(createAll).toHaveBeenNthCalledWith(7, Tabs);
+    expect(createAll).toHaveBeenNthCalledWith(1, Accordion);
+    expect(createAll).toHaveBeenNthCalledWith(2, Button);
+    expect(createAll).toHaveBeenNthCalledWith(3, Checkboxes);
+    expect(createAll).toHaveBeenNthCalledWith(4, ErrorSummary);
+    expect(createAll).toHaveBeenNthCalledWith(5, Header);
+    expect(createAll).toHaveBeenNthCalledWith(6, Radios);
+    expect(createAll).toHaveBeenNthCalledWith(7, SkipLink);
+    expect(createAll).toHaveBeenNthCalledWith(8, Tabs);
   });
 });
