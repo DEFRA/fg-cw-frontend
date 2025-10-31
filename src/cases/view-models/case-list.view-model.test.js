@@ -107,7 +107,7 @@ describe("case-list.model", () => {
             sbi: "123456789",
           },
         },
-        status: "NEW",
+        currentStatus: "NEW",
         assignedUser: {
           id: "user-1",
           name: "John Doe",
@@ -122,7 +122,7 @@ describe("case-list.model", () => {
             sbi: "987654321",
           },
         },
-        status: "IN PROGRESS",
+        currentStatus: "IN PROGRESS",
         assignedUser: null,
       },
     ];
@@ -223,7 +223,7 @@ describe("case-list.model", () => {
           payload: {
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
-          status: "NEW",
+          currentStatus: "NEW",
           assignedUser: null,
         },
       ];
@@ -245,7 +245,7 @@ describe("case-list.model", () => {
             clientRef: "REF-1",
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
-          status: "IN PROGRESS",
+          currentStatus: "IN PROGRESS",
           assignedUser: null,
         },
       ];
@@ -267,7 +267,7 @@ describe("case-list.model", () => {
             clientRef: "REF-1",
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
-          status: "APPROVED",
+          currentStatus: "APPROVED",
           assignedUser: null,
         },
       ];
@@ -289,7 +289,7 @@ describe("case-list.model", () => {
             clientRef: "REF-1",
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
-          status: "UNKNOWN_STATUS",
+          currentStatus: "UNKNOWN_STATUS",
           assignedUser: null,
         },
       ];
@@ -311,7 +311,7 @@ describe("case-list.model", () => {
             clientRef: "REF-1",
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
-          status: null,
+          currentStatus: null,
           assignedUser: null,
         },
       ];
@@ -336,7 +336,7 @@ describe("case-list.model", () => {
             submittedAt: "2021-06-15T14:30:00.000Z",
             identifiers: { sbi: "555666777" },
           },
-          status: "NEW",
+          currentStatus: "NEW",
           assignedUser: { name: "Test User" },
         },
       ];
@@ -375,7 +375,7 @@ describe("case-list.model", () => {
             submittedAt: null,
             identifiers: null,
           },
-          status: "UNKNOWN",
+          currentStatus: "UNKNOWN",
           assignedUser: null,
         },
       ];

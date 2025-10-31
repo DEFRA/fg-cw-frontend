@@ -18,38 +18,45 @@ describe("updateStageOutcomeUseCase", () => {
   };
   const mockCaseData = {
     _id: "case-123",
+    currentPhase: "default",
     currentStage: "application-review",
-    stages: [
+    currentStatus: "NEW",
+    phases: [
       {
-        code: "application-review",
-        actions: [
+        code: "default",
+        stages: [
           {
-            code: "approve",
-            label: "Approve",
-            comment: {
-              label: "Approval reason",
-              type: "REQUIRED",
-            },
-          },
-          {
-            code: "reject",
-            label: "Reject",
-            comment: {
-              label: "Rejection reason",
-              type: "REQUIRED",
-            },
-          },
-          {
-            code: "on-hold",
-            label: "Put on hold",
-            comment: {
-              label: "Hold reason",
-              type: "OPTIONAL",
-            },
-          },
-          {
-            code: "no-comment",
-            label: "No comment action",
+            code: "application-review",
+            actions: [
+              {
+                code: "approve",
+                label: "Approve",
+                comment: {
+                  label: "Approval reason",
+                  type: "REQUIRED",
+                },
+              },
+              {
+                code: "reject",
+                label: "Reject",
+                comment: {
+                  label: "Rejection reason",
+                  type: "REQUIRED",
+                },
+              },
+              {
+                code: "on-hold",
+                label: "Put on hold",
+                comment: {
+                  label: "Hold reason",
+                  type: "OPTIONAL",
+                },
+              },
+              {
+                code: "no-comment",
+                label: "No comment action",
+              },
+            ],
           },
         ],
       },
