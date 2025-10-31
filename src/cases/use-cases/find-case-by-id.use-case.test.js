@@ -105,18 +105,7 @@ describe("findCaseByIdUseCase", () => {
     const mockCase = {
       _id: "case-456",
       workflowCode: "workflow-456",
-      banner: undefined,
-      customTabs: [],
-      overrideTabs: [
-        {
-          id: "tasks",
-          title: "Tasks List",
-        },
-        {
-          id: "timeline",
-          title: "Timeline View",
-        },
-      ],
+      banner: null,
       phases: [
         {
           code: "phase-1",
@@ -180,18 +169,7 @@ describe("findCaseByIdUseCase", () => {
 
     expect(result).toEqual({
       _id: "case-456",
-      banner: undefined,
-      customTabs: [],
-      overrideTabs: [
-        {
-          id: "tasks",
-          title: "Tasks List",
-        },
-        {
-          id: "timeline",
-          title: "Timeline View",
-        },
-      ],
+      banner: null,
       phases: [
         {
           actions: [],
