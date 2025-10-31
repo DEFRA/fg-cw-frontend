@@ -39,7 +39,6 @@ export const cases = {
         editComponentsRoute,
         updateComponentsRoute,
       ];
-
       server.route(routes);
     },
   },
