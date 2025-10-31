@@ -1,10 +1,28 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createTaskDetailViewModel = (caseData, query, errors) => {
-  const stage = caseData.stages.find(
-    (stage) => stage.code === caseData.currentStage,
+export const hasAllRequiredRoles = (userRoles, allOf) => {
+  return !allOf.length || allOf.every((role) => userRoles.includes(role));
+};
+
+export const hasAnyRequiredRole = (userRoles, anyOf) => {
+  return !anyOf.length || anyOf.some((role) => userRoles.includes(role));
+};
+
+// eslint-disable-next-line complexity
+export const checkTaskAccess = (appRoles, taskRequiredRoles = {}) => {
+  const { allOf = [], anyOf = [] } = taskRequiredRoles;
+
+  return (
+    hasAllRequiredRoles(Object.keys(appRoles), allOf) &&
+    hasAnyRequiredRole(Object.keys(appRoles), anyOf)
   );
+};
+
+export const createTaskDetailViewModel = (kase, query, roles, errors) => {
+  const stage = kase.phases
+    .find((p) => p.code === kase.currentPhase)
+    .stages.find((s) => s.code === kase.currentStage);
 
   const { taskGroupCode, taskCode } = query;
   const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupCode);
@@ -12,7 +30,7 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
   const currentTask = currentGroupTasks.find((t) => t.code === taskCode);
 
   // get the comment / note if it exists.
-  const noteComment = caseData.comments.find(
+  const noteComment = kase.comments.find(
     (c) => c.ref === currentTask.commentRef,
   );
 
@@ -23,33 +41,35 @@ export const createTaskDetailViewModel = (caseData, query, errors) => {
     pageHeading: "Case",
     breadcrumbs: [
       { text: "Cases", href: "/cases" },
-      { text: caseData.caseRef, href: "/cases/" + caseData._id },
+      { text: kase.caseRef, href: "/cases/" + kase._id },
     ],
-    links: setActiveLink(caseData.links, "tasks"),
+    links: setActiveLink(kase.links, "tasks"),
     data: {
-      banner: caseData.banner,
+      banner: kase.banner,
       case: {
-        id: caseData._id,
-        caseRef: caseData.caseRef,
-        code: caseData.workflowCode,
-        submittedAt: getFormattedGBDate(caseData.payload.submittedAt),
-        status: caseData.status,
-        sbi: caseData.payload.identifiers?.sbi,
-        scheme: caseData.payload.answers?.scheme,
-        dateReceived: caseData.dateReceived,
-        assignedUser: caseData.assignedUser,
-        link: `/cases/${caseData._id}`,
-        stages: caseData.stages,
-        currentStage: caseData.currentStage,
+        id: kase._id,
+        caseRef: kase.caseRef,
+        code: kase.workflowCode,
+        submittedAt: getFormattedGBDate(kase.payload.submittedAt),
+        currentStatus: kase.currentStatus,
+        sbi: kase.payload.identifiers?.sbi,
+        scheme: kase.payload.answers?.scheme,
+        dateReceived: kase.dateReceived,
+        assignedUser: kase.assignedUser,
+        link: `/cases/${kase._id}`,
+        stages: kase.stages,
+        currentPhase: kase.currentPhase,
+        currentStage: kase.currentStage,
       },
       stage,
       taskGroupCode,
       comment: noteComment,
       currentTask: {
         ...currentTask,
-        link: `/cases/${caseData._id}/tasks/${taskGroupCode}/${currentTask.code}`,
+        link: `/cases/${kase._id}/tasks/${taskGroupCode}/${currentTask.code}`,
         status: currentTask.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: currentTask.status === "complete",
+        canCompleteTask: checkTaskAccess(roles, currentTask.requiredRoles),
       },
     },
   };

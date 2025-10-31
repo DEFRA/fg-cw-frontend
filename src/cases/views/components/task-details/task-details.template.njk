@@ -5,6 +5,7 @@
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
+{% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 
 {% set caseLink = "/cases/" + params.caseId %}
@@ -46,19 +47,22 @@
         </div>
       {% endif %}
     {% elif params.currentTask.type === "boolean" %}
-      {{
-        appTaskBoolean({
-          error: params.errorList.length,
-          caseId: params.caseId,
-          stageCode: params.stageCode,
-          taskGroupCode: params.taskGroupCode,
-          taskCode: params.currentTask.code,
-          isComplete: params.currentTask.isComplete,
-          comment: params.currentTask.comment,
-          commentText: params.comment.text,
-          name: params.currentTask.name
-        })
-      }}
+      {% if params.currentTask.canCompleteTask %}
+        {{
+          appTaskBoolean({
+            error: params.errorList.length,
+            caseId: params.caseId,
+            phaseCode: params.phaseCode,
+            stageCode: params.stageCode,
+            taskGroupCode: params.taskGroupCode,
+            taskCode: params.currentTask.code,
+            isComplete: params.currentTask.isComplete,
+            comment: params.currentTask.comment,
+            commentText: params.comment.text,
+            name: params.currentTask.name
+          })
+        }}
+      {% endif %}
     {% endif %}
   </div>
 </div>

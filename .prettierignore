@@ -12,4 +12,5 @@ src/cases/views/components/dynamic-content/components/summary-list.njk
 src/cases/views/components/dynamic-content/components/ordered-list.njk
 src/cases/views/components/dynamic-content/components/unordered-list.njk
 src/cases/views/components/dynamic-content/components/paragraph.njk
+src/cases/views/components/dynamic-content/components/accordion.njk
 **/__snapshots__/

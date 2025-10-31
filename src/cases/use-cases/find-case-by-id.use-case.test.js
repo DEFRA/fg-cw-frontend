@@ -21,25 +21,30 @@ describe("findCaseByIdUseCase", () => {
       code: "case-code-123",
       workflowCode: "workflow-123",
       currentStage: "stage-1",
-      stages: [
+      phases: [
         {
-          code: "stage-1",
-          name: "Initial Stage",
-          taskGroups: [
+          code: "phase-1",
+          stages: [
             {
-              code: "taskgroup-1",
-              name: "First Task Group",
-              tasks: [
+              code: "stage-1",
+              name: "Initial Stage",
+              taskGroups: [
                 {
-                  code: "task-1",
-                  name: "First Task",
-                  status: "pending",
-                  type: "text",
+                  code: "taskgroup-1",
+                  name: "First Task Group",
+                  tasks: [
+                    {
+                      code: "task-1",
+                      name: "First Task",
+                      type: "text",
+                      status: "pending",
+                    },
+                  ],
                 },
               ],
+              actions: ["submit", "cancel"],
             },
           ],
-          actions: ["submit", "cancel"],
         },
       ],
       createdAt: "2021-01-01T00:00:00.000Z",
@@ -54,21 +59,26 @@ describe("findCaseByIdUseCase", () => {
       code: "case-code-123",
       workflowCode: "workflow-123",
       currentStage: "stage-1",
-      stages: [
+      phases: [
         {
-          code: "stage-1",
-          name: "Initial Stage",
-          actions: ["submit", "cancel"],
-          taskGroups: [
+          code: "phase-1",
+          stages: [
             {
-              code: "taskgroup-1",
-              name: "First Task Group",
-              tasks: [
+              code: "stage-1",
+              name: "Initial Stage",
+              actions: ["submit", "cancel"],
+              taskGroups: [
                 {
-                  code: "task-1",
-                  name: "First Task",
-                  type: "text",
-                  status: "pending",
+                  code: "taskgroup-1",
+                  name: "First Task Group",
+                  tasks: [
+                    {
+                      code: "task-1",
+                      name: "First Task",
+                      type: "text",
+                      status: "pending",
+                    },
+                  ],
                 },
               ],
             },
@@ -95,29 +105,68 @@ describe("findCaseByIdUseCase", () => {
     const mockCase = {
       _id: "case-456",
       workflowCode: "workflow-456",
-      stages: [
+      banner: undefined,
+      customTabs: [],
+      overrideTabs: [
         {
-          code: "stage-1",
-          name: "Stage One",
-          taskGroups: [
-            {
-              code: "taskgroup-1",
-              tasks: [{ code: "task-1", status: "completed" }],
-            },
-            {
-              code: "taskgroup-2",
-              tasks: [{ code: "task-2", status: "pending" }],
-            },
-          ],
+          id: "tasks",
+          title: "Tasks List",
         },
         {
-          code: "stage-2",
-          name: "Stage Two",
-          taskGroups: [
+          id: "timeline",
+          title: "Timeline View",
+        },
+      ],
+      phases: [
+        {
+          code: "phase-1",
+          name: "Stage One",
+          actions: [],
+          stages: [
             {
-              code: "taskgroup-3",
-              tasks: [
-                { code: "task-3", name: "Task Three", status: "not-started" },
+              code: "stage-1",
+              taskGroups: [
+                {
+                  code: "taskgroup-1",
+                  name: "Task Group One",
+                  tasks: [
+                    {
+                      code: "task-1",
+                      name: "Task One",
+                      type: "boolean",
+                      status: "completed",
+                    },
+                  ],
+                },
+                {
+                  code: "taskgroup-2",
+                  name: "Task Group Two",
+                  tasks: [
+                    {
+                      code: "task-2",
+                      name: "Task Two",
+                      type: "text",
+                      status: "pending",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              code: "stage-2",
+              actions: [],
+              taskGroups: [
+                {
+                  code: "taskgroup-3",
+                  tasks: [
+                    {
+                      code: "task-3",
+                      name: "Task Three",
+                      type: "file",
+                      status: "not-started",
+                    },
+                  ],
+                },
               ],
             },
           ],
@@ -129,11 +178,77 @@ describe("findCaseByIdUseCase", () => {
 
     const result = await findCaseByIdUseCase(authContext, caseId);
 
-    expect(result.stages).toHaveLength(2);
-    expect(result.stages[0].name).toBe("Stage One");
-    expect(result.stages[0].taskGroups).toHaveLength(2);
-    expect(result.stages[1].name).toBe("Stage Two");
-    expect(result.stages[1].taskGroups[0].tasks[0].name).toBe("Task Three");
+    expect(result).toEqual({
+      _id: "case-456",
+      banner: undefined,
+      customTabs: [],
+      overrideTabs: [
+        {
+          id: "tasks",
+          title: "Tasks List",
+        },
+        {
+          id: "timeline",
+          title: "Timeline View",
+        },
+      ],
+      phases: [
+        {
+          actions: [],
+          code: "phase-1",
+          name: "Stage One",
+          stages: [
+            {
+              code: "stage-1",
+              taskGroups: [
+                {
+                  code: "taskgroup-1",
+                  name: "Task Group One",
+                  tasks: [
+                    {
+                      code: "task-1",
+                      name: "Task One",
+                      status: "completed",
+                      type: "boolean",
+                    },
+                  ],
+                },
+                {
+                  code: "taskgroup-2",
+                  name: "Task Group Two",
+                  tasks: [
+                    {
+                      code: "task-2",
+                      name: "Task Two",
+                      status: "pending",
+                      type: "text",
+                    },
+                  ],
+                },
+              ],
+            },
+            {
+              actions: [],
+              code: "stage-2",
+              taskGroups: [
+                {
+                  code: "taskgroup-3",
+                  tasks: [
+                    {
+                      code: "task-3",
+                      name: "Task Three",
+                      status: "not-started",
+                      type: "file",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+      workflowCode: "workflow-456",
+    });
   });
 
   test("propagates error when case repository throws", async () => {
