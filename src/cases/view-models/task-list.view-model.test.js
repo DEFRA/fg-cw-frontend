@@ -7,11 +7,12 @@ describe("createTaskListViewModel", () => {
     _id: "case-123",
     caseRef: "CLIENT-REF-001",
     workflowCode: "CASE-CODE-001",
-    status: "In Progress",
     dateReceived: "2021-01-10T00:00:00.000Z",
     assignedUser: "john doe",
     banner: { type: "info", message: "Test banner" },
+    currentPhase: "phase-1",
     currentStage: "application-review",
+    currentStatus: "In Progress",
     links: createMockLinks("case-123"),
     payload: {
       submittedAt: "2021-01-15T00:00:00.000Z",
@@ -22,48 +23,54 @@ describe("createTaskListViewModel", () => {
         scheme: "Test Scheme",
       },
     },
-    stages: [
+    phases: [
       {
-        code: "application-review",
-        name: "Application Review",
-        actionTitle: "Review Decision",
-        taskGroups: [
+        code: "phase-1",
+        name: "Phase 1",
+        stages: [
           {
-            code: "review-tasks",
-            name: "Review Tasks",
-            tasks: [
+            code: "application-review",
+            name: "Application Review",
+            actionTitle: "Review Decision",
+            taskGroups: [
               {
-                code: "task-1",
-                title: "Initial Review",
-                status: "complete",
-              },
-              {
-                code: "task-2",
-                title: "Secondary Review",
-                status: "pending",
+                code: "review-tasks",
+                name: "Review Tasks",
+                tasks: [
+                  {
+                    code: "task-1",
+                    title: "Initial Review",
+                    status: "complete",
+                  },
+                  {
+                    code: "task-2",
+                    title: "Secondary Review",
+                    status: "pending",
+                  },
+                ],
               },
             ],
-          },
-        ],
-        actions: [
-          {
-            code: "approve",
-            name: "Approve",
-            comment: {
-              label: "Approval reason",
-              helpText: "Please provide a reason",
-              type: "REQUIRED",
+            actions: [
+              {
+                code: "approve",
+                name: "Approve",
+                comment: {
+                  label: "Approval reason",
+                  helpText: "Please provide a reason",
+                  type: "REQUIRED",
+                },
+              },
+              {
+                code: "reject",
+                name: "Reject",
+              },
+            ],
+            outcome: {
+              actionCode: "approve",
+              comment: "Previous approval comment",
             },
           },
-          {
-            code: "reject",
-            name: "Reject",
-          },
         ],
-        outcome: {
-          actionCode: "approve",
-          comment: "Previous approval comment",
-        },
       },
     ],
   };
@@ -86,21 +93,7 @@ describe("createTaskListViewModel", () => {
     it("transforms case data correctly", () => {
       const result = createTaskListViewModel(mockCaseData);
 
-      expect(result.data.case).toEqual({
-        id: "case-123",
-        caseRef: "CLIENT-REF-001",
-        code: "CASE-CODE-001",
-        submittedAt: expect.any(String), // Real formatted date
-        status: "In Progress",
-        sbi: "123456789",
-        scheme: "Test Scheme",
-        dateReceived: "2021-01-10T00:00:00.000Z",
-        assignedUser: "john doe",
-        link: "/cases/case-123",
-        stages: mockCaseData.stages,
-        currentStage: "application-review",
-        banner: expect.any(Object), // Real resolved banner paths
-      });
+      expect(result.data.case).toEqual(mockCaseData);
     });
 
     it("includes stage data", () => {
@@ -141,17 +134,11 @@ describe("createTaskListViewModel", () => {
     });
 
     it("handles empty task groups", () => {
-      const caseWithNoTasks = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            taskGroups: [],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithNoTasks);
+      kase.phases[0].stages[0].taskGroups = [];
+
+      const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.taskGroups).toEqual([]);
       expect(result.data.stage.saveDisabled).toBe(false); // No tasks = all complete
@@ -160,25 +147,19 @@ describe("createTaskListViewModel", () => {
 
   describe("save disabled logic", () => {
     it("sets saveDisabled to false when all tasks are complete", () => {
-      const allCompleteCase = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            taskGroups: [
-              {
-                code: "review-tasks",
-                tasks: [
-                  { code: "task-1", status: "complete" },
-                  { code: "task-2", status: "complete" },
-                ],
-              },
-            ],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(allCompleteCase);
+      kase.phases[0].stages[0].taskGroups = [
+        {
+          code: "review-tasks",
+          tasks: [
+            { code: "task-1", status: "complete" },
+            { code: "task-2", status: "complete" },
+          ],
+        },
+      ];
+
+      const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.saveDisabled).toBe(false);
     });
@@ -190,29 +171,23 @@ describe("createTaskListViewModel", () => {
     });
 
     it("handles multiple task groups correctly", () => {
-      const multipleTaskGroupsCase = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            taskGroups: [
-              {
-                id: "group-1",
-                tasks: [{ code: "task-1", status: "complete" }],
-              },
-              {
-                id: "group-2",
-                tasks: [
-                  { code: "task-2", status: "complete" },
-                  { code: "task-3", status: "pending" },
-                ],
-              },
-            ],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(multipleTaskGroupsCase);
+      kase.phases[0].stages[0].taskGroups = [
+        {
+          id: "group-1",
+          tasks: [{ code: "task-1", status: "complete" }],
+        },
+        {
+          id: "group-2",
+          tasks: [
+            { code: "task-2", status: "complete" },
+            { code: "task-3", status: "pending" },
+          ],
+        },
+      ];
+
+      const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.saveDisabled).toBe(true); // task-3 is pending
     });
@@ -254,33 +229,21 @@ describe("createTaskListViewModel", () => {
     });
 
     it("uses default legend when actionTitle is missing", () => {
-      const caseWithoutActionTitle = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            actionTitle: undefined,
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithoutActionTitle);
+      kase.phases[0].stages[0].actionTitle = undefined;
+
+      const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.actions.legend).toBe("Decision");
     });
 
     it("handles stages with no actions", () => {
-      const caseWithoutActions = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            actions: [],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithoutActions);
+      kase.phases[0].stages[0].actions = [];
+
+      const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.actions.items).toEqual([]);
     });
@@ -317,17 +280,11 @@ describe("createTaskListViewModel", () => {
     });
 
     it("handles no form values and no stage outcome", () => {
-      const caseWithoutOutcome = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            outcome: undefined,
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithoutOutcome);
+      kase.phases[0].stages[0].outcome = undefined;
+
+      const result = createTaskListViewModel(kase);
 
       result.data.stage.actions.items.forEach((item) => {
         expect(item.checked).toBe(false);
@@ -386,52 +343,40 @@ describe("createTaskListViewModel", () => {
     });
 
     it("handles textarea without help text", () => {
-      const caseWithoutHelpText = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            actions: [
-              {
-                code: "approve",
-                name: "Approve",
-                comment: {
-                  label: "Approval reason",
-                  type: "REQUIRED",
-                },
-              },
-            ],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithoutHelpText);
+      kase.phases[0].stages[0].actions = [
+        {
+          code: "approve",
+          name: "Approve",
+          comment: {
+            label: "Approval reason",
+            type: "REQUIRED",
+          },
+        },
+      ];
+
+      const result = createTaskListViewModel(kase);
       const approveItem = result.data.stage.actions.items[0];
 
       expect(approveItem.conditional.hint).toBeUndefined();
     });
 
     it("handles optional comment types", () => {
-      const caseWithOptionalComment = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            actions: [
-              {
-                code: "hold",
-                name: "Put on Hold",
-                comment: {
-                  label: "Hold reason",
-                  type: "OPTIONAL",
-                },
-              },
-            ],
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithOptionalComment);
+      kase.phases[0].stages[0].actions = [
+        {
+          code: "hold",
+          name: "Put on Hold",
+          comment: {
+            label: "Hold reason",
+            type: "OPTIONAL",
+          },
+        },
+      ];
+
+      const result = createTaskListViewModel(kase);
       const holdItem = result.data.stage.actions.items[0];
 
       expect(holdItem.conditional.required).toBe(false);
@@ -459,17 +404,11 @@ describe("createTaskListViewModel", () => {
     });
 
     it("uses empty string when no form value and no stage outcome", () => {
-      const caseWithoutOutcome = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            outcome: undefined,
-          },
-        ],
-      };
+      const kase = structuredClone(mockCaseData);
 
-      const result = createTaskListViewModel(caseWithoutOutcome);
+      kase.phases[0].stages[0].outcome = undefined;
+
+      const result = createTaskListViewModel(kase);
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -478,20 +417,14 @@ describe("createTaskListViewModel", () => {
     });
 
     it("uses empty string when stage outcome has different actionCode", () => {
-      const caseWithDifferentOutcome = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            outcome: {
-              actionCode: "reject",
-              comment: "Previous rejection comment",
-            },
-          },
-        ],
+      const kase = structuredClone(mockCaseData);
+
+      kase.phases[0].stages[0].outcome = {
+        actionCode: "reject",
+        comment: "Previous rejection comment",
       };
 
-      const result = createTaskListViewModel(caseWithDifferentOutcome);
+      const result = createTaskListViewModel(kase);
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -555,22 +488,6 @@ describe("createTaskListViewModel", () => {
       const result = createTaskListViewModel(caseWithoutAnswers);
 
       expect(result.data.case.scheme).toBeUndefined();
-    });
-
-    it("handles actions array being undefined", () => {
-      const caseWithUndefinedActions = {
-        ...mockCaseData,
-        stages: [
-          {
-            ...mockCaseData.stages[0],
-            actions: undefined,
-          },
-        ],
-      };
-
-      const result = createTaskListViewModel(caseWithUndefinedActions);
-
-      expect(result.data.stage.actions.items).toEqual([]);
     });
   });
 });

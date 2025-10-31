@@ -9,9 +9,13 @@ describe("findSecretWorkflowUseCase", () => {
     const mockWorkflowData = {
       workflowCode: "TEST_WORKFLOW",
       name: "Test Workflow",
-      stages: [
-        { code: 1, name: "Stage 1" },
-        { code: 2, name: "Stage 2" },
+      phases: [
+        {
+          stages: [
+            { code: 1, name: "Stage 1" },
+            { code: 2, name: "Stage 2" },
+          ],
+        },
       ],
     };
 

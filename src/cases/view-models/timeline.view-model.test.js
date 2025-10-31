@@ -8,7 +8,7 @@ describe("Timeline view model", () => {
       caseRef: "ABC-123",
       workflowCode: "wf-123",
       _id: "0999091983",
-      status: "great",
+      currentStatus: "great",
       dateReceived: {
         $date: "2025-06-16T09:01:14.072Z",
       },
@@ -69,7 +69,7 @@ describe("Timeline view model", () => {
           scheme: "JKI-009",
           dateReceived: { $date: "2025-06-16T09:01:14.072Z" },
           submittedAt: "Invalid Date",
-          status: "great",
+          currentStatus: "great",
           assignedUser: "Dumbledore",
           payload: {
             identifiers: {

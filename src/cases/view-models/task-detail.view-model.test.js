@@ -158,8 +158,9 @@ describe("createTaskDetailViewModel", () => {
     _id: "case123",
     caseRef: "REF123",
     workflowCode: "workflow1",
-    status: "active",
+    currentPhase: "phase1",
     currentStage: "stage1",
+    currentStatus: "active",
     dateReceived: "2024-01-01",
     assignedUser: "user123",
     banner: { type: "info", message: "Test banner" },
@@ -172,18 +173,23 @@ describe("createTaskDetailViewModel", () => {
       identifiers: { sbi: "SBI123" },
       answers: { scheme: "Test Scheme" },
     },
-    stages: [
+    phases: [
       {
-        code: "stage1",
-        taskGroups: [
+        code: "phase1",
+        stages: [
           {
-            code: "group1",
-            tasks: [
+            code: "stage1",
+            taskGroups: [
               {
-                code: "task1",
-                status: "complete",
-                commentRef: "comment1",
-                requiredRoles: { allOf: ["role1"], anyOf: [] },
+                code: "group1",
+                tasks: [
+                  {
+                    code: "task1",
+                    status: "complete",
+                    commentRef: "comment1",
+                    requiredRoles: { allOf: ["role1"], anyOf: [] },
+                  },
+                ],
               },
             ],
           },
@@ -239,14 +245,15 @@ describe("createTaskDetailViewModel", () => {
       caseRef: "REF123",
       code: "workflow1",
       submittedAt: "formatted-2024-01-01T10:00:00Z",
-      status: "active",
+      currentPhase: "phase1",
+      currentStage: "stage1",
+      currentStatus: "active",
       sbi: "SBI123",
       scheme: "Test Scheme",
       dateReceived: "2024-01-01",
       assignedUser: "user123",
       link: "/cases/case123",
       stages: mockCaseData.stages,
-      currentStage: "stage1",
     });
   });
 
@@ -268,25 +275,10 @@ describe("createTaskDetailViewModel", () => {
   });
 
   it("should format current task correctly for incomplete task", () => {
-    const incompleteCaseData = {
-      ...mockCaseData,
-      stages: [
-        {
-          ...mockCaseData.stages[0],
-          taskGroups: [
-            {
-              ...mockCaseData.stages[0].taskGroups[0],
-              tasks: [
-                {
-                  ...mockCaseData.stages[0].taskGroups[0].tasks[0],
-                  status: "incomplete",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    const incompleteCaseData = structuredClone(mockCaseData);
+
+    incompleteCaseData.phases[0].stages[0].taskGroups[0].tasks[0].status =
+      "incomplete";
 
     const result = createTaskDetailViewModel(
       incompleteCaseData,
@@ -302,26 +294,11 @@ describe("createTaskDetailViewModel", () => {
   });
 
   it("should handle missing comment", () => {
-    const caseDataNoComment = {
-      ...mockCaseData,
-      comments: [],
-      stages: [
-        {
-          ...mockCaseData.stages[0],
-          taskGroups: [
-            {
-              ...mockCaseData.stages[0].taskGroups[0],
-              tasks: [
-                {
-                  ...mockCaseData.stages[0].taskGroups[0].tasks[0],
-                  commentRef: "nonexistent",
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    };
+    const caseDataNoComment = structuredClone(mockCaseData);
+
+    caseDataNoComment.comments = [];
+    caseDataNoComment.phases[0].stages[0].taskGroups[0].tasks[0].commentRef =
+      "nonexistent";
 
     const result = createTaskDetailViewModel(
       caseDataNoComment,

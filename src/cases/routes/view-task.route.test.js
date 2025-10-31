@@ -43,7 +43,9 @@ describe("viewTaskRoute", () => {
       workflowCode: "frps-private-beta",
       status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
+      currentPhase: "phase-1",
       currentStage: "application-receipt",
+      currentStatus: "NEW",
       links: createMockLinks("68495db5afe2d27b09b2ee47"),
       payload: {
         clientRef: "banana-123",
@@ -74,33 +76,39 @@ describe("viewTaskRoute", () => {
           ],
         },
       },
-      stages: [
+      phases: [
         {
-          code: "application-receipt",
-          name: "Application Receipt",
-          taskGroups: [
+          code: "phase-1",
+          name: "Phase 1",
+          stages: [
             {
-              code: "application-receipt-tasks",
-              name: "Application Receipt Tasks",
-              tasks: [
+              code: "application-receipt",
+              name: "Application Receipt",
+              taskGroups: [
                 {
-                  code: "simple-review",
-                  name: "Simple Review",
-                  status: "pending",
-                  type: "OPTIONAL",
-                  requiredRoles: {
-                    allOf: ["role1"],
-                    anyOf: ["role2"],
-                  },
+                  code: "application-receipt-tasks",
+                  name: "Application Receipt Tasks",
+                  tasks: [
+                    {
+                      code: "simple-review",
+                      name: "Simple Review",
+                      status: "pending",
+                      type: "OPTIONAL",
+                      requiredRoles: {
+                        allOf: ["role1"],
+                        anyOf: ["role2"],
+                      },
+                    },
+                  ],
                 },
               ],
             },
+            {
+              code: "contract",
+              name: "Contract",
+              taskGroups: [],
+            },
           ],
-        },
-        {
-          code: "contract",
-          name: "Contract",
-          taskGroups: [],
         },
       ],
       comments: [],

@@ -19,6 +19,6 @@
   <div class="govuk-body">
     {{ govukServiceNavigation({ navigation: links }) }}
 
-    {{ taskGroup({caseId: data.case.id, stage: data.stage, errors: errors, values: values }) }}
+    {{ taskGroup({caseId: data.case._id, stage: data.stage, errors: errors, values: values }) }}
   </div>
 {% endblock %}

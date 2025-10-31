@@ -2,7 +2,7 @@
 
 exports[`viewCaseRoute > returns a list of cases 1`] = `
 "
-  
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -20,14 +20,14 @@ exports[`viewCaseRoute > returns a list of cases 1`] = `
 
 
   <div class="govuk-body">
-    
+
   <div class="govuk-service-navigation" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
-      
 
-      
+
+
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
           <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
             Menu
@@ -35,36 +35,36 @@ exports[`viewCaseRoute > returns a list of cases 1`] = `
 
           <ul class="govuk-service-navigation__list" id="navigation">
 
-            
-              
+
+
               <li class="govuk-service-navigation__item">
                   <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47">
-                                    
+
 Tasks
                   </a>
               </li>
 
-              
+
               <li class="govuk-service-navigation__item govuk-service-navigation__item--active">
                   <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/case-details" aria-current="true">
-                                    
+
                   <strong class="govuk-service-navigation__active-fallback">Case Details</strong>
 
                   </a>
               </li>
 
-              
+
               <li class="govuk-service-navigation__item">
                   <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/notes">
-                                    
+
 Notes
                   </a>
               </li>
 
-              
+
               <li class="govuk-service-navigation__item">
                   <a class="govuk-service-navigation__link" href="/cases/68495db5afe2d27b09b2ee47/timeline">
-                                    
+
 Timeline
                   </a>
               </li>
@@ -90,8 +90,8 @@ Timeline
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <div class="govuk-body" data-testid="app-page-body">
-            
-            
+
+
 
             <table class="govuk-table">
   <tbody class="govuk-table__body">
@@ -139,7 +139,7 @@ Timeline
 </table>
 
 
-            
+
 
             <table class="govuk-table">
   <caption class="govuk-table__caption govuk-table__caption--m">Answers</caption>
@@ -164,7 +164,7 @@ Timeline
 </table>
 
 
-            
+
               <h2 class="govuk-heading-m">Action cases data</h2>
                 <h3 class="govuk-heading-s">
                   Selected land parcel for action 1
