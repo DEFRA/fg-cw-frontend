@@ -9,12 +9,15 @@ exports[`task-details > renders 1`] = `
 
 
 
-    <h2
-      class="govuk-heading-l govuk-!-margin-top-6"
-      data-testid="task-details-heading"
-    >
-      Test Task
-    </h2>
+    
+    
+    
+  <h2 class="govuk-heading-l ">
+    Test Task
+  </h2>
+
+
+
 
         
 <form

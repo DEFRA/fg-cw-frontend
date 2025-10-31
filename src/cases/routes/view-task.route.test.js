@@ -92,6 +92,13 @@ describe("viewTaskRoute", () => {
                     {
                       code: "simple-review",
                       name: "Simple Review",
+                      description: [
+                        {
+                          component: "heading",
+                          text: "Simple Review",
+                          level: 2,
+                        },
+                      ],
                       status: "pending",
                       type: "OPTIONAL",
                       requiredRoles: {

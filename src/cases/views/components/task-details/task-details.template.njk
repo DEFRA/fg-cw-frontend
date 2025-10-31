@@ -6,6 +6,7 @@
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
+{% from "components/dynamic-content/macro.njk" import dynamicContent %}
 
 {% set caseLink = "/cases/" + params.caseId %}
 
@@ -30,12 +31,7 @@
       }}
     {% endif %}
 
-    <h2
-      class="govuk-heading-l govuk-!-margin-top-6"
-      data-testid="task-details-heading"
-    >
-      {{ params.currentTask.name }}
-    </h2>
+    {{ dynamicContent(params.currentTask.description) }}
 
     {% if params.currentTask.status === "COMPLETE" %}
       <p class="govuk-inset-text">
