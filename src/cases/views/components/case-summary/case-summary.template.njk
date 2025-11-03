@@ -1,12 +1,30 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
 
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      {{ params.banner.title.value or "Valley Farm" }}
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          {{ params.banner.title.value or "Valley Farm" }}
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+        {% if params.banner.callToAction and params.banner.callToAction.length > 0 %}
+          {% for action in params.banner.callToAction %}
+            {{
+              govukButton({
+                text: action.name,
+                element: "button",
+                attributes: { "data-action-code": action.code }
+              })
+            }}
+          {% endfor %}
+        {% endif %}
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">

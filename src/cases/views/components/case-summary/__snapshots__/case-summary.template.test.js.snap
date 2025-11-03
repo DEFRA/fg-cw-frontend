@@ -1,17 +1,94 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`case-summary > renders 1`] = `
+exports[`case-summary > renders with callToAction buttons 1`] = `
 "
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+            <button type="submit" class="govuk-button" data-module="govuk-button" data-action-code="RERUN_RULES">
+  Rerun Rules
+</button>
+            <button type="submit" class="govuk-button" data-module="govuk-button" data-action-code="ANOTHER_ACTION">
+  Another Action
+</button>
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >SBI:</strong
+                >
+                SBI001
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >Reference:</strong
+                >
+                b18lb85
+              </p>
+            </div>
+      </div>
+    </div>
+  </div>
+</div>
+"
+`;
+
+exports[`case-summary > renders without callToAction 1`] = `
+"
+<div class="govuk-!-margin-bottom-6 app-case-banner">
+  <div class="govuk-width-container">
+    <a href="/cases" class="govuk-back-link">Back to cases</a>
+
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
+
+    <div>
+      <div class="app-case-row">
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >SBI:</strong
+                >
+                SBI001
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >Reference:</strong
+                >
+                b18lb85
+              </p>
+            </div>
+            <div class="app-case-cell">
+              <p>
+                <strong class="govuk-!-margin-right-1"
+                  >Scheme:</strong
+                >
+                SFI
+              </p>
+            </div>
       </div>
     </div>
   </div>

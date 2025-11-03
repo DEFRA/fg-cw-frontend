@@ -7,9 +7,15 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
@@ -121,9 +127,15 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
@@ -238,9 +250,15 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
@@ -355,9 +373,15 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
-    <h1 class="govuk-heading-m">
-      Valley Farm
-    </h1>
+    <div class="govuk-grid-row govuk-!-margin-bottom-3">
+      <div class="govuk-grid-column-three-quarters">
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          Valley Farm
+        </h1>
+      </div>
+      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      </div>
+    </div>
 
     <div>
       <div class="app-case-row">
