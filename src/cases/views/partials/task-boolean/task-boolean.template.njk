@@ -4,7 +4,7 @@
 <form
   method="post"
   id="completeTaskForm"
-  action="{{ "/cases/" + params.caseId + "/stages/" + params.stageId + "/task-groups/" + params.taskGroupId + "/tasks/" + params.taskId + "/status" }}"
+  action="{{ "/cases/" + params.caseId + "/phases/" + params.phaseCode + "/stages/" + params.stageCode + "/task-groups/" + params.taskGroupCode + "/tasks/" + params.taskCode + "/status" }}"
 >
   <div class="govuk-form-group">
     {{
@@ -13,8 +13,8 @@
         items: [
           {
             value: true,
-            id: "task-" + params.taskId,
-            text: params.title,
+            id: "task-" + params.taskCode,
+            text: params.name,
             checked: params.isComplete
           }
         ]

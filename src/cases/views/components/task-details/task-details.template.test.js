@@ -5,13 +5,16 @@ describe("task-details", () => {
   test("renders", () => {
     const component = render("task-details", {
       caseId: "case-id",
-      stageId: "strage-id",
-      taskGroupId: "task-group-id",
-      taskId: "task-id",
+      phaseCode: "phase-1",
+      stageCode: "strage-id",
+      taskGroupCode: "task-group-code",
+      taskCode: "task-id",
       currentTask: {
-        id: "task1",
-        title: "Test Task",
+        code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
+        name: "Test Task",
         type: "boolean",
+        canCompleteTask: true,
       },
     });
 

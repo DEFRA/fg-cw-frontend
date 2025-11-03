@@ -9,11 +9,11 @@
       class="govuk-heading-l govuk-!-margin-top-6"
       data-testid="stage-heading"
     >
-      {{ params.stage.title }}
+      {{ params.stage.name }}
     </h2>
-    {% for taskGrout in params.stage.taskGroups %}
-      <h3 class="govuk-heading-m">{{ loop.index }}. {{ taskGrout.title }}</h3>
-      {{ taskList({tasks: taskGrout.tasks}) }}
+    {% for taskGroup in params.stage.taskGroups %}
+      <h3 class="govuk-heading-m">{{ loop.index }}. {{ taskGroup.name }}</h3>
+      {{ taskList({tasks: taskGroup.tasks}) }}
     {% endfor %}
 
     {% if params.stage.actions.items.length > 0 %}

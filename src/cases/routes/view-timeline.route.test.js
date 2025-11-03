@@ -28,9 +28,10 @@ describe("timelineRoute", () => {
       _id: "68495db5afe2d27b09b2ee47",
       caseRef: "banana-123",
       workflowCode: "frps-private-beta",
-      status: "NEW",
       dateReceived: "2025-06-11T10:43:01.603Z",
+      currentPhase: "phase-1",
       currentStage: "application-receipt",
+      currentStatus: "NEW",
       links: createMockLinks("68495db5afe2d27b09b2ee47"),
       payload: {
         clientRef: "banana-123",
@@ -63,16 +64,16 @@ describe("timelineRoute", () => {
       },
       stages: [
         {
-          id: "application-receipt",
-          title: "Application Receipt",
+          code: "application-receipt",
+          name: "Application Receipt",
           taskGroups: [
             {
-              id: "application-receipt-tasks",
-              title: "Application Receipt Tasks",
+              code: "application-receipt-tasks",
+              name: "Application Receipt Tasks",
               tasks: [
                 {
-                  id: "simple-review",
-                  title: "Simple Review",
+                  code: "simple-review",
+                  name: "Simple Review",
                   status: "pending",
                 },
               ],
@@ -80,8 +81,8 @@ describe("timelineRoute", () => {
           ],
         },
         {
-          id: "contract",
-          title: "Contract",
+          code: "contract",
+          name: "Contract",
           taskGroups: [],
         },
       ],
@@ -110,8 +111,8 @@ describe("timelineRoute", () => {
           createdAt: "2025-06-16T09:01:14.072Z",
           createdBy: { name: "Nicholai Hel" },
           data: {
-            taskGroupId: "tg-01",
-            taskId: "task-01",
+            taskGroupCode: "tg-01",
+            taskCode: "task-01",
           },
         },
       ],

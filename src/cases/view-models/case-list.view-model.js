@@ -39,29 +39,31 @@ const mapCasesToTable = (cases) => {
       { text: "Status" },
       { text: "Assignee" },
     ],
-    rows: cases.map(({ _id, caseRef, payload, status, assignedUser }) => ({
-      _id,
-      select: {
-        value: _id,
-      },
-      id: {
-        href: `/cases/${_id}`,
-        text: mapText(caseRef),
-      },
-      business: {
-        text: "[business name]",
-      },
-      sbi: {
-        text: mapText(payload?.identifiers?.sbi),
-      },
-      submitted: {
-        text: mapSubmittedAt(payload.submittedAt),
-      },
-      status: mapStatus(status),
-      assignee: {
-        text: mapText(assignedUser?.name, "Not assigned"),
-      },
-    })),
+    rows: cases.map(
+      ({ _id, caseRef, payload, currentStatus, assignedUser }) => ({
+        _id,
+        select: {
+          value: _id,
+        },
+        id: {
+          href: `/cases/${_id}`,
+          text: mapText(caseRef),
+        },
+        business: {
+          text: "[business name]",
+        },
+        sbi: {
+          text: mapText(payload?.identifiers?.sbi),
+        },
+        submitted: {
+          text: mapSubmittedAt(payload.submittedAt),
+        },
+        status: mapStatus(currentStatus),
+        assignee: {
+          text: mapText(assignedUser?.name, "Not assigned"),
+        },
+      }),
+    ),
   };
 };
 

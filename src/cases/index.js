@@ -1,3 +1,6 @@
+import { editComponentsRoute } from "../temp/routes/edit-components.route.js";
+import { viewComponentsRoute } from "../temp/routes/get-components.route.js";
+import { updateComponentsRoute } from "../temp/routes/update-components.route.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
@@ -17,7 +20,7 @@ export const cases = {
   plugin: {
     name: "cases",
     register(server) {
-      server.route([
+      const routes = [
         listCasesRoute,
         viewNotesRoute,
         newNoteRoute,
@@ -32,7 +35,12 @@ export const cases = {
         viewAssignUserToCaseRoute,
         assignUserToCaseRoute,
         viewCaseTabRoute,
-      ]);
+        viewComponentsRoute,
+        editComponentsRoute,
+        updateComponentsRoute,
+      ];
+
+      server.route(routes);
     },
   },
 };

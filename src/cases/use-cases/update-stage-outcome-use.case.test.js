@@ -18,38 +18,45 @@ describe("updateStageOutcomeUseCase", () => {
   };
   const mockCaseData = {
     _id: "case-123",
+    currentPhase: "default",
     currentStage: "application-review",
-    stages: [
+    currentStatus: "NEW",
+    phases: [
       {
-        id: "application-review",
-        actions: [
+        code: "default",
+        stages: [
           {
-            id: "approve",
-            label: "Approve",
-            comment: {
-              label: "Approval reason",
-              type: "REQUIRED",
-            },
-          },
-          {
-            id: "reject",
-            label: "Reject",
-            comment: {
-              label: "Rejection reason",
-              type: "REQUIRED",
-            },
-          },
-          {
-            id: "on-hold",
-            label: "Put on hold",
-            comment: {
-              label: "Hold reason",
-              type: "OPTIONAL",
-            },
-          },
-          {
-            id: "no-comment",
-            label: "No comment action",
+            code: "application-review",
+            actions: [
+              {
+                code: "approve",
+                label: "Approve",
+                comment: {
+                  label: "Approval reason",
+                  type: "REQUIRED",
+                },
+              },
+              {
+                code: "reject",
+                label: "Reject",
+                comment: {
+                  label: "Rejection reason",
+                  type: "REQUIRED",
+                },
+              },
+              {
+                code: "on-hold",
+                label: "Put on hold",
+                comment: {
+                  label: "Hold reason",
+                  type: "OPTIONAL",
+                },
+              },
+              {
+                code: "no-comment",
+                label: "No comment action",
+              },
+            ],
           },
         ],
       },
@@ -64,7 +71,7 @@ describe("updateStageOutcomeUseCase", () => {
   describe("successful stage outcome update", () => {
     it("updates stage outcome with valid required comment", async () => {
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: "This application looks good",
       };
@@ -77,7 +84,7 @@ describe("updateStageOutcomeUseCase", () => {
       expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "case-123");
       expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-123",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "This application looks good",
       });
       expect(result).toEqual({ success: true });
@@ -85,7 +92,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("updates stage outcome with optional comment", async () => {
       const actionData = {
-        actionId: "on-hold",
+        actionCode: "on-hold",
         commentFieldName: "on-hold-comment",
         comment: "Waiting for additional documents",
       };
@@ -97,7 +104,7 @@ describe("updateStageOutcomeUseCase", () => {
 
       expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-456",
-        actionId: "on-hold",
+        actionCode: "on-hold",
         comment: "Waiting for additional documents",
       });
       expect(result).toEqual({ success: true });
@@ -105,7 +112,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("updates stage outcome without comment when not required", async () => {
       const actionData = {
-        actionId: "on-hold",
+        actionCode: "on-hold",
         commentFieldName: "on-hold-comment",
         comment: "",
       };
@@ -117,7 +124,7 @@ describe("updateStageOutcomeUseCase", () => {
 
       expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-789",
-        actionId: "on-hold",
+        actionCode: "on-hold",
         comment: "",
       });
       expect(result).toEqual({ success: true });
@@ -125,7 +132,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("updates stage outcome for action without comment field", async () => {
       const actionData = {
-        actionId: "no-comment",
+        actionCode: "no-comment",
         commentFieldName: "no-comment-comment",
         comment: undefined,
       };
@@ -137,7 +144,7 @@ describe("updateStageOutcomeUseCase", () => {
 
       expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-no-comment",
-        actionId: "no-comment",
+        actionCode: "no-comment",
         comment: undefined,
       });
       expect(result).toEqual({ success: true });
@@ -147,7 +154,7 @@ describe("updateStageOutcomeUseCase", () => {
   describe("validation errors", () => {
     it("returns error when required comment is missing", async () => {
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: "",
       };
@@ -172,7 +179,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("returns error when required comment is only whitespace", async () => {
       const actionData = {
-        actionId: "reject",
+        actionCode: "reject",
         commentFieldName: "reject-comment",
         comment: "   \t\n  ",
       };
@@ -196,7 +203,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("returns error when required comment is null", async () => {
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: null,
       };
@@ -219,7 +226,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("returns error when required comment is undefined", async () => {
       const actionData = {
-        actionId: "reject",
+        actionCode: "reject",
         commentFieldName: "reject-comment",
         comment: undefined,
       };
@@ -244,7 +251,7 @@ describe("updateStageOutcomeUseCase", () => {
   describe("error handling", () => {
     it("throws Boom error when action is not found", async () => {
       const actionData = {
-        actionId: "non-existent-action",
+        actionCode: "non-existent-action",
         commentFieldName: "non-existent-comment",
         comment: "Some comment",
       };
@@ -270,7 +277,7 @@ describe("updateStageOutcomeUseCase", () => {
       findCaseByIdUseCase.mockResolvedValue(mockCaseWithInvalidStage);
 
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: "Some comment",
       };
@@ -285,7 +292,7 @@ describe("updateStageOutcomeUseCase", () => {
 
     it("propagates repository errors", async () => {
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: "Valid comment",
       };
@@ -302,7 +309,7 @@ describe("updateStageOutcomeUseCase", () => {
 
       expect(updateStageOutcome).toHaveBeenCalledWith(authContext, {
         caseId: "case-repo-error",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "Valid comment",
       });
     });
@@ -312,7 +319,7 @@ describe("updateStageOutcomeUseCase", () => {
       findCaseByIdUseCase.mockRejectedValue(findCaseError);
 
       const actionData = {
-        actionId: "approve",
+        actionCode: "approve",
         commentFieldName: "approve-comment",
         comment: "Valid comment",
       };

@@ -36,18 +36,23 @@ describe("updateTaskStatusRoute", () => {
 
   it("throws if comment is required", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stages: [
+      phases: [
         {
-          id: "001",
-          taskGroups: [
+          code: "phase-1",
+          stages: [
             {
-              id: "tg01",
-              tasks: [
+              code: "001",
+              taskGroups: [
                 {
-                  id: "t01",
-                  comment: {
-                    type: "REQUIRED",
-                  },
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      comment: {
+                        type: "REQUIRED",
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -58,7 +63,7 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/stages/001/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
         isComplete: true,
       },
@@ -77,18 +82,23 @@ describe("updateTaskStatusRoute", () => {
 
   it("updates the task status with no comment", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stages: [
+      phases: [
         {
-          id: "001",
-          taskGroups: [
+          code: "phase-1",
+          stages: [
             {
-              id: "tg01",
-              tasks: [
+              code: "001",
+              taskGroups: [
                 {
-                  id: "t01",
-                  comment: {
-                    type: "OPTIONAL",
-                  },
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      comment: {
+                        type: "OPTIONAL",
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -96,9 +106,10 @@ describe("updateTaskStatusRoute", () => {
         },
       ],
     });
+
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/stages/001/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
         isComplete: true,
       },
@@ -118,9 +129,10 @@ describe("updateTaskStatusRoute", () => {
 
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
-      stageId: "001",
-      taskGroupId: "tg01",
-      taskId: "t01",
+      phaseCode: "phase-1",
+      stageCode: "001",
+      taskGroupCode: "tg01",
+      taskCode: "t01",
       isComplete: true,
       comment: null,
     });
@@ -130,18 +142,23 @@ describe("updateTaskStatusRoute", () => {
 
   it("updates the task status with comment if required", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stages: [
+      phases: [
         {
-          id: "001",
-          taskGroups: [
+          code: "phase-1",
+          stages: [
             {
-              id: "tg01",
-              tasks: [
+              code: "001",
+              taskGroups: [
                 {
-                  id: "t01",
-                  comment: {
-                    type: "REQUIRED",
-                  },
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      comment: {
+                        type: "REQUIRED",
+                      },
+                    },
+                  ],
                 },
               ],
             },
@@ -151,7 +168,7 @@ describe("updateTaskStatusRoute", () => {
     });
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/stages/001/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
         isComplete: true,
         comment: "This is a comment",
@@ -172,9 +189,10 @@ describe("updateTaskStatusRoute", () => {
 
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
       caseId: "68495db5afe2d27b09b2ee47",
-      stageId: "001",
-      taskGroupId: "tg01",
-      taskId: "t01",
+      phaseCode: "phase-1",
+      stageCode: "001",
+      taskGroupCode: "tg01",
+      taskCode: "t01",
       isComplete: true,
       comment: "This is a comment",
     });

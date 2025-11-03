@@ -15,17 +15,17 @@ describe("workflow repository", () => {
         name: "Test Workflow",
         stages: [
           {
-            id: "stage-1",
-            title: "Initial Stage",
+            code: "stage-1",
+            name: "Initial Stage",
             actions: ["submit", "cancel"],
             taskGroups: [
               {
-                id: "taskgroup-1",
-                title: "First Task Group",
+                code: "taskgroup-1",
+                name: "First Task Group",
                 tasks: [
                   {
-                    id: "task-1",
-                    title: "First Task",
+                    code: "task-1",
+                    name: "First Task",
                     type: "text",
                   },
                 ],

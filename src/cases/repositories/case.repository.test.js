@@ -99,7 +99,7 @@ describe("Case Repository", () => {
           stages: ["stage-1"],
           createdAt: "2021-01-01T00:00:00.000Z",
           submittedAt: "2021-01-15T10:30:00.000Z",
-          status: "Active",
+          currentStatus: "Active",
           assignedUser: "user-123",
         },
       };
@@ -124,7 +124,7 @@ describe("Case Repository", () => {
         stages: ["stage-1"],
         createdAt: "2021-01-01T00:00:00.000Z",
         submittedAt: "2021-01-15T10:30:00.000Z",
-        status: "Active",
+        currentStatus: "Active",
         assignedUser: "user-123",
       });
     });
@@ -245,14 +245,15 @@ describe("Case Repository", () => {
     it("calls api with payload data", async () => {
       wreck.patch.mockResolvedValueOnce({});
       const params = {
-        stageId: "stage-1",
+        phaseCode: "phase-1",
+        stageCode: "stage-1",
         caseId: "1234-0909",
-        taskGroupId: "tg-01",
-        taskId: "t-01",
+        taskGroupCode: "tg-01",
+        taskCode: "t-01",
       };
       await updateTaskStatus(authContext, { ...params, isComplete: true });
       expect(wreck.patch).toHaveBeenCalledWith(
-        "/cases/1234-0909/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
+        "/cases/1234-0909/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
@@ -278,7 +279,7 @@ describe("Case Repository", () => {
           stages: ["stage-1", "stage-2"],
           createdAt: "2021-01-01T00:00:00.000Z",
           submittedAt: "2021-01-15T10:30:00.000Z",
-          status: "Updated",
+          currentStatus: "Updated",
           assignedUser: "user-123",
         },
       };
@@ -393,7 +394,7 @@ describe("Case Repository", () => {
     it("calls API with correct endpoint and payload", async () => {
       const mockData = {
         caseId: "case-123",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "This looks good to me",
       };
 
@@ -407,7 +408,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve", comment: "This looks good to me" },
+          payload: { actionCode: "approve", comment: "This looks good to me" },
         },
       );
     });
@@ -415,7 +416,7 @@ describe("Case Repository", () => {
     it("handles payload with multiple properties", async () => {
       const mockData = {
         caseId: "case-456",
-        actionId: "reject",
+        actionCode: "reject",
         comment: "Missing required documents",
       };
 
@@ -430,7 +431,7 @@ describe("Case Repository", () => {
             authorization: `Bearer ${authContext.token}`,
           },
           payload: {
-            actionId: "reject",
+            actionCode: "reject",
             comment: "Missing required documents",
           },
         },
@@ -440,7 +441,7 @@ describe("Case Repository", () => {
     it("handles payload without comment", async () => {
       const mockData = {
         caseId: "case-789",
-        actionId: "approve",
+        actionCode: "approve",
       };
 
       wreck.patch.mockResolvedValueOnce({});
@@ -453,7 +454,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve" },
+          payload: { actionCode: "approve" },
         },
       );
     });
@@ -461,7 +462,7 @@ describe("Case Repository", () => {
     it("propagates API errors", async () => {
       const mockData = {
         caseId: "case-error",
-        actionId: "approve",
+        actionCode: "approve",
         comment: "This will fail",
       };
 
@@ -478,7 +479,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { actionId: "approve", comment: "This will fail" },
+          payload: { actionCode: "approve", comment: "This will fail" },
         },
       );
     });

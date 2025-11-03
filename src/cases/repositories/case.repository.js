@@ -30,10 +30,18 @@ export const findTabById = async (authContext, caseId, tabId) => {
 
 export const updateTaskStatus = async (
   authContext,
-  { caseId, stageId, taskGroupId, taskId, isComplete, comment = null },
+  {
+    caseId,
+    phaseCode,
+    stageCode,
+    taskGroupCode,
+    taskCode,
+    isComplete,
+    comment = null,
+  },
 ) => {
   await wreck.patch(
-    `/cases/${caseId}/stages/${stageId}/task-groups/${taskGroupId}/tasks/${taskId}/status`,
+    `/cases/${caseId}/phases/${phaseCode}/stages/${stageCode}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
     {
       headers: {
         authorization: `Bearer ${authContext.token}`,

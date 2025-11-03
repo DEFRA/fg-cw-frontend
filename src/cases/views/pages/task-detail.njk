@@ -12,8 +12,9 @@
       taskDetails({
         errorList: errorList,
         caseId: data.case.id,
-        stageId: data.case.currentStage,
-        taskGroupId: data.taskGroupId,
+        phaseCode: data.case.currentPhase,
+        stageCode: data.case.currentStage,
+        taskGroupCode: data.taskGroupCode,
         currentTask: data.currentTask,
         comment: data.comment
       })

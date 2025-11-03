@@ -6,18 +6,18 @@ describe("task-group", () => {
     const component = render("task-group", {
       caseId: "123",
       stage: {
-        title: "Test Stage",
+        name: "Test Stage",
         taskGroups: [
           {
-            title: "Group 1",
+            name: "Group 1",
             tasks: [
               {
-                title: "Task 1",
+                name: "Task 1",
                 status: "not started",
                 link: "/cases/123/task/1",
               },
               {
-                title: "Task 2",
+                name: "Task 2",
                 status: "in progress",
                 link: "/cases/123/task/2",
               },

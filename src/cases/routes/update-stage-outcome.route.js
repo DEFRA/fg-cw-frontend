@@ -32,12 +32,12 @@ export const updateStageOutcomeRoute = {
 };
 
 const extractActionData = (payload) => {
-  const { actionId } = payload;
-  const commentFieldName = `${actionId}-comment`;
+  const { actionCode } = payload;
+  const commentFieldName = `${actionCode}-comment`;
   const comment = payload[commentFieldName];
 
   return {
-    actionId,
+    actionCode,
     commentFieldName,
     comment,
   };

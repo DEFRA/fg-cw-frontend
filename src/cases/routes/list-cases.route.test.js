@@ -68,9 +68,10 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee47",
     caseRef: "banana-123",
     workflowCode: "frps-private-beta",
-    status: "NEW",
     dateReceived: "2025-06-11T10:43:01.603Z",
+    currentPhase: "phase-1",
     currentStage: "contract",
+    currentStatus: "NEW",
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
@@ -100,24 +101,28 @@ const mockCases = [
         ],
       },
     },
-    stages: [
+    phases: [
       {
-        id: "application-receipt",
-        taskGroups: [
+        stages: [
           {
-            id: "application-receipt-tasks",
-            tasks: [
+            code: "application-receipt",
+            taskGroups: [
               {
-                id: "simple-review",
-                isComplete: false,
+                code: "application-receipt-tasks",
+                tasks: [
+                  {
+                    code: "simple-review",
+                    isComplete: false,
+                  },
+                ],
               },
             ],
           },
+          {
+            code: "contract",
+            taskGroups: [],
+          },
         ],
-      },
-      {
-        id: "contract",
-        taskGroups: [],
       },
     ],
     assignedUser: {
@@ -129,9 +134,10 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee99",
     caseRef: "case-ref-2",
     workflowCode: "frps-private-beta",
-    status: "OLD",
     dateReceived: "2025-06-11T10:43:01.603Z",
+    currentPhase: "phase-1",
     currentStage: "contract",
+    currentStatus: "OLD",
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
@@ -161,24 +167,28 @@ const mockCases = [
         ],
       },
     },
-    stages: [
+    phases: [
       {
-        id: "application-receipt",
-        taskGroups: [
+        stages: [
           {
-            id: "application-receipt-tasks",
-            tasks: [
+            code: "application-receipt",
+            taskGroups: [
               {
-                id: "simple-review",
-                isComplete: false,
+                code: "application-receipt-tasks",
+                tasks: [
+                  {
+                    code: "simple-review",
+                    isComplete: false,
+                  },
+                ],
               },
             ],
           },
+          {
+            code: "contract",
+            taskGroups: [],
+          },
         ],
-      },
-      {
-        id: "contract",
-        taskGroups: [],
       },
     ],
   },

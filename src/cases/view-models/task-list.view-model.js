@@ -1,10 +1,9 @@
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
-  const stage = caseData.stages.find(
-    (stageInfo) => stageInfo.id === caseData.currentStage,
-  );
+export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
+  const stage = kase.phases
+    .find((p) => p.code === kase.currentPhase)
+    .stages.find((s) => s.code === kase.currentStage);
 
   const allTasksComplete = stage.taskGroups
     .flatMap((taskGroup) => taskGroup.tasks)
@@ -12,21 +11,18 @@ export const createTaskListViewModel = (caseData, errors = {}, values = {}) => {
 
   const currentStage = {
     ...stage,
-    taskGroups: mapTaskGroups(stage.taskGroups, caseData._id),
+    taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
     actions: mapActions({ stage, errors, values }),
     saveDisabled: !allTasksComplete,
   };
 
   return {
-    pageTitle: `Case tasks - ${stage.title}`,
+    pageTitle: `Case tasks - ${stage.name}`,
     pageHeading: "Case",
-    breadcrumbs: [
-      { text: "Cases", href: "/cases" },
-      { text: caseData.caseRef },
-    ],
-    links: setActiveLink(caseData.links, "tasks"),
+    breadcrumbs: [{ text: "Cases", href: "/cases" }, { text: kase.caseRef }],
+    links: setActiveLink(kase.links, "tasks"),
     data: {
-      case: mapCaseData(caseData),
+      case: kase,
       stage: currentStage,
     },
     errors,
@@ -41,7 +37,7 @@ const mapTaskGroups = (taskGroups, caseId) => {
     tasks: taskGroup.tasks.map((task) => {
       return {
         ...task,
-        link: `/cases/${caseId}/tasks/${taskGroup.id}/${task.id}`,
+        link: `/cases/${caseId}/tasks/${taskGroup.code}/${task.code}`,
         status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
         isComplete: task.status === "complete",
       };
@@ -49,31 +45,13 @@ const mapTaskGroups = (taskGroups, caseId) => {
   }));
 };
 
-const mapCaseData = (caseData) => {
-  return {
-    id: caseData._id,
-    caseRef: caseData.caseRef,
-    code: caseData.workflowCode,
-    submittedAt: getFormattedGBDate(caseData.payload.submittedAt),
-    status: caseData.status,
-    sbi: caseData.payload.identifiers?.sbi,
-    scheme: caseData.payload.answers?.scheme,
-    dateReceived: caseData.dateReceived,
-    assignedUser: caseData.assignedUser,
-    link: `/cases/${caseData._id}`,
-    stages: caseData.stages,
-    currentStage: caseData.currentStage,
-    banner: caseData.banner,
-  };
-};
-
 const mapActions = ({ stage, errors, values }) => {
   const legend = stage.actionTitle || "Decision";
   return {
-    idPrefix: "actionId",
-    name: "actionId",
+    idPrefix: "actionCode",
+    name: "actionCode",
     legend,
-    errorMessage: getFieldValue("actionId", errors),
+    errorMessage: getFieldValue("actionCode", errors),
     items: mapActionItems({ stage, actions: stage.actions, errors, values }),
   };
 };
@@ -90,17 +68,17 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
     const checked = mapChecked({ action, stage, values });
 
     return {
-      value: action.id,
-      text: action.label,
+      value: action.code,
+      text: action.name,
       checked,
       conditional,
     };
   }) || [];
 
 const mapChecked = ({ action, stage, values }) => {
-  return values.actionId
-    ? values.actionId === action.id
-    : stage.outcome?.actionId === action.id;
+  return values.actionCode
+    ? values.actionCode === action.code
+    : stage.outcome?.actionCode === action.code;
 };
 
 const getValue = ({ name, action, stage, values }) => {
@@ -114,7 +92,7 @@ const createConditionalTextarea = ({ action, stage, errors, values }) => {
     return undefined;
   }
 
-  const name = `${action.id}-comment`;
+  const name = `${action.code}-comment`;
   const value = getValue({ name, action, stage, errors, values });
   const errorMessage = getFieldValue(name, errors);
 
@@ -143,4 +121,4 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
 };
 
 const isCurrentAction = (action, stage) =>
-  action.id === stage.outcome?.actionId;
+  action.code === stage.outcome?.actionCode;
