@@ -6,6 +6,7 @@ import { auth } from "./plugins/auth.js";
 import { errors } from "./plugins/errors.js";
 import { files } from "./plugins/files.js";
 import { logging } from "./plugins/logging.js";
+import { proxy } from "./plugins/proxy.js";
 import { redirects } from "./plugins/redirects.js";
 import { session } from "./plugins/session.js";
 import { shutdown } from "./plugins/shutdown.js";
@@ -47,6 +48,7 @@ export const createServer = async () => {
     files,
     logging,
     nunjucks,
+    proxy,
     redirects,
     shutdown,
     session,
