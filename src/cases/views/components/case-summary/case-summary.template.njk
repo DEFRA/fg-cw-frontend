@@ -4,28 +4,29 @@
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
-
-    <div class="govuk-grid-row govuk-!-margin-bottom-3">
-      <div class="govuk-grid-column-three-quarters">
+    <div class="moj-page-header-actions">
+      <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           {{ params.banner.title.value or "Valley Farm" }}
         </h1>
       </div>
-      <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
-        {% if params.banner.callToAction and params.banner.callToAction.length > 0 %}
-          {% for action in params.banner.callToAction %}
-            {{
-              govukButton({
-                text: action.name,
-                element: "button",
-                attributes: { "data-action-code": action.code }
-              })
-            }}
-          {% endfor %}
-        {% endif %}
-      </div>
+      {% if params.banner.callToAction and params.banner.callToAction.length > 0 %}
+        <div class="moj-page-header-actions__actions">
+          <div class="moj-button-group moj-button-group--inline">
+            {% for action in params.banner.callToAction %}
+              <button
+                type="submit"
+                class="govuk-button govuk-button--primary"
+                data-module="govuk-button"
+                data-action-code="{{ action.code }}"
+              >
+                {{ action.name }}
+              </button>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
     </div>
-
     <div>
       <div class="app-case-row">
         {% if params.banner.summary %}
