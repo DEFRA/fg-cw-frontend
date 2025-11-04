@@ -260,6 +260,40 @@ export const config = convict({
       env: "OIDC_CLIENT_SECRET",
     },
   },
+  agreements: {
+    uiUrl: {
+      doc: "Agreements UI URL",
+      format: String,
+      default: "http://localhost:3000",
+      env: "AGREEMENTS_UI_URL",
+    },
+    uiToken: {
+      doc: "Agreements UI token",
+      format: String,
+      default: "default-agreements-ui-token",
+      sensitive: true,
+      env: "AGREEMENTS_UI_TOKEN",
+    },
+    baseUrl: {
+      doc: "Agreements base URL",
+      format: String,
+      default: "/agreement",
+      env: "AGREEMENTS_BASE_URL",
+    },
+    jwtSecret: {
+      doc: "JWT Secret for agreements authentication",
+      format: String,
+      default: "default-agreements-jwt-secret",
+      sensitive: true,
+      env: "AGREEMENTS_JWT_SECRET",
+    },
+    proxyTimeoutMs: {
+      doc: "Proxy timeout in milliseconds",
+      format: Number,
+      default: 30000,
+      env: "AGREEMENTS_PROXY_TIMEOUT_MS",
+    },
+  },
 });
 
 config.validate({ allowed: "strict" });
