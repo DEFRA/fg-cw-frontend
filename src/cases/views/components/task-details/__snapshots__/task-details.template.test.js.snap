@@ -19,6 +19,8 @@ exports[`task-details > renders 1`] = `
 
 
 
+    
+
         
 <form
   method="post"

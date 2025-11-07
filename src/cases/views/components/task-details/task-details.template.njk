@@ -33,6 +33,42 @@
 
     {{ dynamicContent(params.currentTask.description) }}
 
+    {# Display required roles in a details component #}
+    {% if not params.currentTask.canCompleteTask and params.currentTask.requiredRoles %}
+      <p>You cannot complete this task.</p>
+      {% set rolesHtml %}
+        <p>Someone who is a:</p>
+        {# Display "All of" roles #}
+        {% if params.currentTask.requiredRoles.allOf and params.currentTask.requiredRoles.allOf.length %}
+          <div class="govuk-!-margin-bottom-3">
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+              {% for role in params.currentTask.requiredRoles.allOf %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {# Display "Any of" roles #}
+        {% if params.currentTask.requiredRoles.anyOf and params.currentTask.requiredRoles.anyOf.length %}
+          <div>
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+              {% for role in params.currentTask.requiredRoles.anyOf %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endset %}
+
+      {{
+        govukDetails({
+          summaryText: "Who can complete the task",
+          html: rolesHtml
+        })
+      }}
+    {% endif %}
+
     {% if params.currentTask.status === "COMPLETE" %}
       <p class="govuk-inset-text">
         This task was completed by {{ params.currentTask.updatedBy }} on
@@ -45,6 +81,10 @@
           <h2 class="govuk-heading-m">Outcome review note</h2>
           <p>{{ params.comment.text }}</p>
         </div>
+      {% endif %}
+
+      {% if not params.currentTask.canCompleteTask %}
+        <p>Cannot complete the task</p>
       {% endif %}
     {% elif params.currentTask.type === "boolean" %}
       {% if params.currentTask.canCompleteTask %}
