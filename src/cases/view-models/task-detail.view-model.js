@@ -11,6 +11,10 @@ export const hasAnyRequiredRole = (userRoles, anyOf) => {
 
 // eslint-disable-next-line complexity
 export const checkTaskAccess = (appRoles, taskRequiredRoles = {}) => {
+  if (!taskRequiredRoles) {
+    return true;
+  }
+
   const { allOf = [], anyOf = [] } = taskRequiredRoles;
 
   return (
