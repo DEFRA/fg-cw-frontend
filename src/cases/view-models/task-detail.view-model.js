@@ -1,4 +1,3 @@
-import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const hasAllRequiredRoles = (userRoles, allOf) => {
@@ -30,12 +29,12 @@ export const createTaskDetailViewModel = (kase, query, roles, errors) => {
   const currentTask = currentGroupTasks.find((t) => t.code === taskCode);
 
   // get the comment / note if it exists.
-  const noteComment = kase.comments.find(
-    (c) => c.ref === currentTask.commentRef,
-  );
+  const currentTaskComment =
+    kase.comments.find((c) => c.ref === currentTask.commentRef) ?? null;
+
+  const canCompleteTask = checkTaskAccess(roles, currentTask.requiredRoles);
 
   return {
-    errors,
     errorList: errors,
     pageTitle: "Case task",
     pageHeading: "Case",
@@ -46,30 +45,18 @@ export const createTaskDetailViewModel = (kase, query, roles, errors) => {
     links: setActiveLink(kase.links, "tasks"),
     data: {
       banner: kase.banner,
-      case: {
-        id: kase._id,
-        caseRef: kase.caseRef,
-        code: kase.workflowCode,
-        submittedAt: getFormattedGBDate(kase.payload.submittedAt),
-        currentStatus: kase.currentStatus,
-        sbi: kase.payload.identifiers?.sbi,
-        scheme: kase.payload.answers?.scheme,
-        dateReceived: kase.dateReceived,
-        assignedUser: kase.assignedUser,
-        link: `/cases/${kase._id}`,
-        stages: kase.stages,
-        currentPhase: kase.currentPhase,
-        currentStage: kase.currentStage,
-      },
-      stage,
-      taskGroupCode,
-      comment: noteComment,
+      caseId: kase._id,
       currentTask: {
-        ...currentTask,
-        link: `/cases/${kase._id}/tasks/${taskGroupCode}/${currentTask.code}`,
-        status: currentTask.status === "complete" ? "COMPLETE" : "INCOMPLETE",
-        isComplete: currentTask.status === "complete",
-        canCompleteTask: checkTaskAccess(roles, currentTask.requiredRoles),
+        formAction: `/cases/${kase._id}/phases/${kase.currentPhase}/stages/${kase.currentStage}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
+        description: currentTask.description,
+        status: currentTask.status,
+        statusOptions: currentTask.statusOptions,
+        completed: currentTask.completed,
+        commentInputDef: currentTask.commentInputDef,
+        comment: currentTaskComment,
+        canCompleteTask,
+        updatedBy: currentTask.updatedBy,
+        updatedAt: currentTask.updatedAt,
       },
     },
   };

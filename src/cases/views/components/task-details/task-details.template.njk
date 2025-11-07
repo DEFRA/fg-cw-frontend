@@ -4,11 +4,15 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
+{% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
 
 {% set caseLink = "/cases/" + params.caseId %}
+
+{%- set errorList = params.errorList -%}
+{%- set caseId = params.caseId -%}
+{%- set currentTask = params.currentTask -%}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -22,47 +26,42 @@
       })
     }}
 
-    {% if params.errorList.length %}
+    {% if errorList.length %}
       {{
         govukErrorSummary({
           titleText: "There is a problem",
-          errorList: params.errorList
+          errorList: errorList
         })
       }}
     {% endif %}
 
-    {{ dynamicContent(params.currentTask.description) }}
+    {{ dynamicContent(currentTask.description) }}
 
-    {% if params.currentTask.status === "COMPLETE" %}
+    {% if currentTask.completed %}
       <p class="govuk-inset-text">
-        This task was completed by {{ params.currentTask.updatedBy }} on
-        {{ params.currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
-        {{ params.currentTask.updatedAt | formatDate("hh:mm a") }}
+        This task was completed by {{ currentTask.updatedBy }} on
+        {{ currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
+        {{ currentTask.updatedAt | formatDate("hh:mm a") }}
       </p>
 
-      {% if params.comment.text %}
+      {% if currentTask.comment and currentTask.comment.text %}
         <div class="form-group">
           <h2 class="govuk-heading-m">Outcome review note</h2>
-          <p>{{ params.comment.text }}</p>
+          <p>{{ currentTask.comment.text }}</p>
         </div>
       {% endif %}
-    {% elif params.currentTask.type === "boolean" %}
-      {% if params.currentTask.canCompleteTask %}
-        {{
-          appTaskBoolean({
-            error: params.errorList.length,
-            caseId: params.caseId,
-            phaseCode: params.phaseCode,
-            stageCode: params.stageCode,
-            taskGroupCode: params.taskGroupCode,
-            taskCode: params.currentTask.code,
-            isComplete: params.currentTask.isComplete,
-            comment: params.currentTask.comment,
-            commentText: params.comment.text,
-            name: params.currentTask.name
-          })
-        }}
-      {% endif %}
+    {% elif currentTask.canCompleteTask %}
+      {{
+        taskOutcomeForm({
+          error: errorList.length,
+          formAction: currentTask.formAction,
+          statusOptions: currentTask.statusOptions,
+          status: currentTask.status,
+          completed: currentTask.completed,
+          commentInputDef: currentTask.commentInputDef,
+          commentText: currentTask.comment.text if currentTask.comment else ''
+        })
+      }}
     {% endif %}
   </div>
 </div>

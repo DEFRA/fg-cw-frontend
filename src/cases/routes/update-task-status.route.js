@@ -9,7 +9,7 @@ const findTask = (kase, phaseCode, stageCode, taskGroupCode, taskCode) =>
     .tasks.find((t) => t.code === taskCode);
 
 const validateComment = (taskComment, comment) => {
-  if (taskComment?.type === "REQUIRED" && !comment) {
+  if (taskComment?.mandatory && !comment) {
     return false;
   }
 
@@ -20,9 +20,16 @@ export const updateTaskStatusRoute = {
   method: "POST",
   path: "/cases/{caseId}/phases/{phaseCode}/stages/{stageCode}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
   handler: async (request, h) => {
-    const { caseId, phaseCode, stageCode, taskGroupCode, taskCode } =
-      request.params;
-    const { isComplete = false, comment = null } = request.payload;
+    const {
+      caseId,
+      phaseCode,
+      stageCode,
+      taskGroupCode,
+      taskCode,
+      completed,
+      status,
+      comment,
+    } = mapRequest(request);
 
     const authContext = {
       token: request.auth.credentials.token,
@@ -33,7 +40,7 @@ export const updateTaskStatusRoute = {
     const task = findTask(kase, phaseCode, stageCode, taskGroupCode, taskCode);
 
     // ensure comment has a value if it is required...
-    if (!validateComment(task.comment, comment)) {
+    if (!validateComment(task?.commentInputDef, comment)) {
       request.yar.flash("errors", {
         text: "Note is required",
         href: "#comment",
@@ -47,10 +54,28 @@ export const updateTaskStatusRoute = {
       stageCode,
       taskGroupCode,
       taskCode,
-      isComplete: !!isComplete,
+      status,
+      completed,
       comment,
     });
 
     return h.redirect(`/cases/${caseId}`);
   },
+};
+
+const mapRequest = (request) => {
+  const { caseId, phaseCode, stageCode, taskGroupCode, taskCode } =
+    request.params;
+  const { completed = false, status = null, comment = null } = request.payload;
+
+  return {
+    caseId,
+    phaseCode,
+    stageCode,
+    taskGroupCode,
+    taskCode,
+    completed,
+    status,
+    comment,
+  };
 };
