@@ -126,11 +126,14 @@ exports[`task-outcome-form > renders with error message 1`] = `
 "<form method="post" id="completeTaskForm" action="/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
   <div class="govuk-form-group">
     
-  <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset">
+  <div class="govuk-form-group govuk-form-group--error">
+  <fieldset class="govuk-fieldset" aria-describedby="status-error">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
   </legend>
+  <p id="status-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Comment is required
+  </p>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
       <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>

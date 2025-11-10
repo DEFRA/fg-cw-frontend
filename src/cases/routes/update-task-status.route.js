@@ -16,9 +16,18 @@ const validateComment = (taskComment, comment) => {
   return true;
 };
 
+const validateStatusOptions = (statusOptions, status) => {
+  if (statusOptions?.length > 0 && !status) {
+    return false;
+  }
+
+  return true;
+};
+
 export const updateTaskStatusRoute = {
   method: "POST",
   path: "/cases/{caseId}/phases/{phaseCode}/stages/{stageCode}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+  // eslint-disable-next-line complexity
   handler: async (request, h) => {
     const {
       caseId,
@@ -44,6 +53,15 @@ export const updateTaskStatusRoute = {
       request.yar.flash("errors", {
         text: "Note is required",
         href: "#comment",
+      });
+      return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
+    }
+
+    // ensure status has a value if it is required...
+    if (!validateStatusOptions(task?.statusOptions, status)) {
+      request.yar.flash("errors", {
+        text: "Status is required",
+        href: "#status",
       });
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
     }

@@ -48,6 +48,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       commentInputDef: {
                         mandatory: true,
                       },
@@ -95,6 +96,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       commentInputDef: {
                         mandatory: false,
                       },
@@ -157,6 +159,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       commentInputDef: {
                         mandatory: true,
                       },
@@ -219,6 +222,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "on-hold" }],
                       commentInputDef: null,
                     },
                   ],
@@ -271,6 +275,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       commentInputDef: {
                         mandatory: false,
                       },
@@ -325,6 +330,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       // No commentInputDef
                     },
                   ],
@@ -371,6 +377,7 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
+                      statusOptions: [{ code: "approved" }],
                       commentInputDef: {
                         mandatory: true,
                       },
@@ -403,5 +410,53 @@ describe("updateTaskStatusRoute", () => {
 
     expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
     expect(statusCode).toEqual(302); // Redirects back to form
+  });
+
+  it("rejects when status is required but missing", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [
+                        { code: "approved" },
+                        { code: "rejected" },
+                      ],
+                      commentInputDef: null,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: true,
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+    expect(statusCode).toEqual(302);
   });
 });
