@@ -62,6 +62,40 @@
           commentText: currentTask.comment.text if currentTask.comment else ''
         })
       }}
+    {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
+      {# Display required roles in a details component #}
+      <p>You cannot complete this task.</p>
+      {% set rolesHtml %}
+        <p>Someone who is a:</p>
+        {# Display "All of" roles #}
+        {% if currentTask.requiredRoles.allOf and currentTask.requiredRoles.allOf.length %}
+          <div class="govuk-!-margin-bottom-3">
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+              {% for role in currentTask.requiredRoles.allOf %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        {# Display "Any of" roles #}
+        {% if currentTask.requiredRoles.anyOf and currentTask.requiredRoles.anyOf.length %}
+          <div>
+            <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+              {% for role in currentTask.requiredRoles.anyOf %}
+                <li>{{ role }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+      {% endset %}
+
+      {{
+        govukDetails({
+        summaryText: "Who can complete the task",
+        html: rolesHtml
+        })
+      }}
     {% endif %}
   </div>
 </div>
