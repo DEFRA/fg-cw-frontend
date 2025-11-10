@@ -548,6 +548,231 @@ To disable this behavior and always start with sections collapsed:
 
 ---
 
+### 14. Repeat Component
+
+**Purpose**: Iterate over an array and repeat content for each item without adding a wrapper element. This is a control-flow component that flattens its output into the parent container.
+
+```json
+{
+  "component": "repeat",
+  "itemsRef": "@.actions[*]",
+  "items": [
+    {
+      "label": "Action",
+      "text": "@.description"
+    },
+    {
+      "label": "Action code",
+      "text": "@.code"
+    }
+  ]
+}
+```
+
+**Parameters**:
+
+- `component` (required): Must be `"repeat"`
+- `itemsRef` (required): JSONPath expression pointing to an array. Must use `[*]` wildcard to iterate over items.
+  - Root reference: `"$.parcels[*]"` (from document root)
+  - Row reference: `"@.actions[*]"` (from current row context)
+- `items` (required): Array of component definitions to repeat for each item. Can be a single object or array of objects.
+
+**Behavior**:
+
+- Iterates over each item in the referenced array
+- For each item, resolves the `items` template with that item as the row context (`@.` references)
+- Flattens all resolved items into the parent array (no wrapper element)
+- Works inside any array context: summary list rows, table rows, accordion content, etc.
+
+**Output**: Array of resolved components (flattened into parent)
+
+---
+
+**Example 1: Repeating Summary List Rows**
+
+Input data:
+
+```json
+{
+  "parcelId": "10001",
+  "actions": [
+    {
+      "code": "CMOR1",
+      "description": "Assess moorland",
+      "annualPaymentPence": 35150
+    },
+    {
+      "code": "UPL1",
+      "description": "Upland management",
+      "annualPaymentPence": 42000
+    }
+  ]
+}
+```
+
+Workflow definition:
+
+```json
+{
+  "component": "summary-list",
+  "rows": [
+    {
+      "label": "Land parcel",
+      "text": "@.parcelId"
+    },
+    {
+      "component": "repeat",
+      "itemsRef": "@.actions[*]",
+      "items": [
+        {
+          "label": "Action",
+          "text": "@.description"
+        },
+        {
+          "label": "Action code",
+          "text": "@.code"
+        },
+        {
+          "label": "Annual payment",
+          "text": "@.annualPaymentPence",
+          "format": "penniesToPounds"
+        }
+      ]
+    }
+  ]
+}
+```
+
+Resolved output (what gets rendered):
+
+```json
+{
+  "component": "summary-list",
+  "rows": [
+    {
+      "label": "Land parcel",
+      "text": "10001"
+    },
+    {
+      "label": "Action",
+      "text": "Assess moorland"
+    },
+    {
+      "label": "Action code",
+      "text": "CMOR1"
+    },
+    {
+      "label": "Annual payment",
+      "text": "£351.50"
+    },
+    {
+      "label": "Action",
+      "text": "Upland management"
+    },
+    {
+      "label": "Action code",
+      "text": "UPL1"
+    },
+    {
+      "label": "Annual payment",
+      "text": "£420.00"
+    }
+  ]
+}
+```
+
+---
+
+**Example 2: Nested Repeat in Accordion**
+
+Input data:
+
+```json
+{
+  "parcels": [
+    {
+      "parcelId": "10001",
+      "actions": [
+        { "code": "CMOR1", "description": "Assess moorland" },
+        { "code": "CMOR2", "description": "Restore moorland" }
+      ]
+    },
+    {
+      "parcelId": "10002",
+      "actions": [{ "code": "UPL1", "description": "Upland management" }]
+    }
+  ]
+}
+```
+
+Workflow definition:
+
+```json
+{
+  "component": "accordion",
+  "itemsRef": "$.parcels[*]",
+  "items": {
+    "heading": [
+      {
+        "text": "@.parcelId"
+      }
+    ],
+    "content": [
+      {
+        "component": "summary-list",
+        "rows": [
+          {
+            "component": "repeat",
+            "itemsRef": "@.actions[*]",
+            "items": [
+              {
+                "label": "Action",
+                "text": "@.description"
+              },
+              {
+                "label": "Code",
+                "text": "@.code"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Result: An accordion with 2 sections (one per parcel), each containing a summary list with repeated action rows.
+
+---
+
+**Example 3: Simple List Repeat**
+
+```json
+{
+  "component": "repeat",
+  "itemsRef": "$.tags[*]",
+  "items": {
+    "component": "paragraph",
+    "text": "@."
+  }
+}
+```
+
+When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph components.
+
+---
+
+**Notes**:
+
+- The `repeat` component is transparent - it doesn't render its own HTML element
+- Always use `[*]` in `itemsRef` to iterate over array items
+- Within the `items` template, use `@.` to reference fields on the current item
+- Can be nested inside accordions, tables, or other repeat components
+- The `items` property can be a single component or an array of components
+
+---
+
 ### GOV.UK Design System Reference
 
 For complete styling options, refer to the [GOV.UK Design System Styles](https://design-system.service.gov.uk/styles/).
