@@ -1,0 +1,256 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`task-outcome-selector > renders checkbox in checked state 1`] = `
+"  <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked>
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders checkbox in unchecked state 1`] = `
+"  <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders checkbox when no status options 1`] = `
+"  <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders checkbox when statusOptions is null 1`] = `
+"  <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with first option selected 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="status-2">
+        Reject
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with long option names 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved-with-conditions" checked>
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve with conditions that need to be met before final approval
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected-insufficient-info">
+      <label class="govuk-label govuk-radios__label" for="status-2">
+        Reject due to insufficient information provided in the application
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with middle option selected 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="on-hold" checked>
+      <label class="govuk-label govuk-radios__label" for="status-2">
+        Put on hold
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="status-3">
+        Reject
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with multiple options 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" checked>
+      <label class="govuk-label govuk-radios__label" for="status-2">
+        Reject
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold">
+      <label class="govuk-label govuk-radios__label" for="status-3">
+        Put on hold
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-4" name="status" type="radio" value="more-info">
+      <label class="govuk-label govuk-radios__label" for="status-4">
+        Request more information
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with no option selected 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="status-2">
+        Reject
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold">
+      <label class="govuk-label govuk-radios__label" for="status-3">
+        Put on hold
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders radio buttons with single option 1`] = `
+"
+  <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
+    Select outcome
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
+      <label class="govuk-label govuk-radios__label" for="status">
+        Approve
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > renders with empty statusOptions array 1`] = `
+"  <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+"
+`;

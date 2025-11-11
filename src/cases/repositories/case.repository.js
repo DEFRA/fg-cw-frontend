@@ -36,7 +36,8 @@ export const updateTaskStatus = async (
     stageCode,
     taskGroupCode,
     taskCode,
-    isComplete,
+    status,
+    completed,
     comment = null,
   },
 ) => {
@@ -47,7 +48,8 @@ export const updateTaskStatus = async (
         authorization: `Bearer ${authContext.token}`,
       },
       payload: {
-        status: isComplete ? "complete" : "pending",
+        status,
+        completed,
         comment: comment === "" ? null : comment,
       },
     },

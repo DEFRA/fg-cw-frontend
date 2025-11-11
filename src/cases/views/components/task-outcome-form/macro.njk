@@ -1,0 +1,13 @@
+{#
+    error: <number>,
+    formAction: <string>,
+    status: <string>,
+    statusOptions: <array>,
+    completed: <boolean>,
+    commentInputDef: <object>,
+    commentText: <string>
+#}
+
+{% macro taskOutcomeForm(params) %}
+  {%- include "./task-outcome-form.template.njk" -%}
+{% endmacro %}

@@ -2,7 +2,6 @@
 
 exports[`task-details > renders 1`] = `
 "
-
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
@@ -19,25 +18,19 @@ exports[`task-details > renders 1`] = `
 
 
 
-    
-
-        
-<form
-  method="post"
-  id="completeTaskForm"
-  action="/cases/case-id/phases/phase-1/stages/strage-id/task-groups/task-group-code/tasks/task1/status"
->
+      <form method="post" id="completeTaskForm" action="">
   <div class="govuk-form-group">
-    <div class="govuk-form-group">
+      <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
-      <input class="govuk-checkboxes__input" id="task-task1" name="isComplete" type="checkbox" value="true">
-      <label class="govuk-label govuk-checkboxes__label" for="task-task1">
-        Test Task
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
       </label>
     </div>
   </div>
 </div>
+
 
   </div>
 

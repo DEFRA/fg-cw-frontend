@@ -41,11 +41,13 @@ describe("createTaskListViewModel", () => {
                     code: "task-1",
                     title: "Initial Review",
                     status: "complete",
+                    completed: true,
                   },
                   {
                     code: "task-2",
                     title: "Secondary Review",
                     status: "pending",
+                    completed: false,
                   },
                 ],
               },
@@ -119,6 +121,7 @@ describe("createTaskListViewModel", () => {
             code: "task-1",
             title: "Initial Review",
             status: "COMPLETE",
+            completed: true,
             link: "/cases/case-123/tasks/review-tasks/task-1",
             isComplete: true,
           },
@@ -126,6 +129,7 @@ describe("createTaskListViewModel", () => {
             code: "task-2",
             title: "Secondary Review",
             status: "INCOMPLETE",
+            completed: false,
             link: "/cases/case-123/tasks/review-tasks/task-2",
             isComplete: false,
           },
@@ -153,8 +157,8 @@ describe("createTaskListViewModel", () => {
         {
           code: "review-tasks",
           tasks: [
-            { code: "task-1", status: "complete" },
-            { code: "task-2", status: "complete" },
+            { code: "task-1", status: "complete", completed: true },
+            { code: "task-2", status: "complete", completed: true },
           ],
         },
       ];
@@ -176,13 +180,13 @@ describe("createTaskListViewModel", () => {
       kase.phases[0].stages[0].taskGroups = [
         {
           id: "group-1",
-          tasks: [{ code: "task-1", status: "complete" }],
+          tasks: [{ code: "task-1", status: "complete", completed: true }],
         },
         {
           id: "group-2",
           tasks: [
-            { code: "task-2", status: "complete" },
-            { code: "task-3", status: "pending" },
+            { code: "task-2", status: "complete", completed: true },
+            { code: "task-3", status: "pending", completed: false },
           ],
         },
       ];
