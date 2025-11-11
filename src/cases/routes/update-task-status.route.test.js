@@ -48,8 +48,9 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
-                      comment: {
-                        type: "REQUIRED",
+                      statusOptions: [{ code: "approved" }],
+                      commentInputDef: {
+                        mandatory: true,
                       },
                     },
                   ],
@@ -65,7 +66,8 @@ describe("updateTaskStatusRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
-        isComplete: true,
+        completed: true,
+        status: "approved",
       },
       auth: {
         credentials: {
@@ -94,8 +96,9 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
-                      comment: {
-                        type: "OPTIONAL",
+                      statusOptions: [{ code: "approved" }],
+                      commentInputDef: {
+                        mandatory: false,
                       },
                     },
                   ],
@@ -111,7 +114,8 @@ describe("updateTaskStatusRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
-        isComplete: true,
+        completed: true,
+        status: "approved",
       },
       auth: {
         credentials: {
@@ -133,7 +137,8 @@ describe("updateTaskStatusRoute", () => {
       stageCode: "001",
       taskGroupCode: "tg01",
       taskCode: "t01",
-      isComplete: true,
+      completed: true,
+      status: "approved",
       comment: null,
     });
 
@@ -154,8 +159,9 @@ describe("updateTaskStatusRoute", () => {
                   tasks: [
                     {
                       code: "t01",
-                      comment: {
-                        type: "REQUIRED",
+                      statusOptions: [{ code: "approved" }],
+                      commentInputDef: {
+                        mandatory: true,
                       },
                     },
                   ],
@@ -170,7 +176,8 @@ describe("updateTaskStatusRoute", () => {
       method: "POST",
       url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
       payload: {
-        isComplete: true,
+        completed: true,
+        status: "approved",
         comment: "This is a comment",
       },
       auth: {
@@ -193,10 +200,263 @@ describe("updateTaskStatusRoute", () => {
       stageCode: "001",
       taskGroupCode: "tg01",
       taskCode: "t01",
-      isComplete: true,
+      completed: true,
+      status: "approved",
       comment: "This is a comment",
     });
 
+    expect(statusCode).toEqual(302);
+  });
+
+  it("updates with status value but completed=false", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [{ code: "on-hold" }],
+                      commentInputDef: null,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: false,
+        status: "on-hold",
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.objectContaining({
+        completed: false,
+        status: "on-hold",
+      }),
+    );
+
+    expect(statusCode).toEqual(302);
+  });
+
+  it("handles empty string comment correctly", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [{ code: "approved" }],
+                      commentInputDef: {
+                        mandatory: false,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: true,
+        status: "approved",
+        comment: "",
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.objectContaining({
+        comment: "",
+      }),
+    );
+
+    expect(statusCode).toEqual(302);
+  });
+
+  it("validates when task has no commentInputDef", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [{ code: "approved" }],
+                      // No commentInputDef
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: true,
+        status: "approved",
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    // Should not throw error for missing commentInputDef
+    expect(updateTaskStatusUseCase).toHaveBeenCalled();
+    expect(statusCode).toEqual(302);
+  });
+
+  it("rejects when mandatory comment is undefined (not just empty)", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [{ code: "approved" }],
+                      commentInputDef: {
+                        mandatory: true,
+                      },
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: true,
+        status: "approved",
+        // comment is undefined (not sent)
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+    expect(statusCode).toEqual(302); // Redirects back to form
+  });
+
+  it("rejects when status is required but missing", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      phases: [
+        {
+          code: "phase-1",
+          stages: [
+            {
+              code: "001",
+              taskGroups: [
+                {
+                  code: "tg01",
+                  tasks: [
+                    {
+                      code: "t01",
+                      statusOptions: [
+                        { code: "approved" },
+                        { code: "rejected" },
+                      ],
+                      commentInputDef: null,
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ],
+    });
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/phases/phase-1/stages/001/task-groups/tg01/tasks/t01/status",
+      payload: {
+        completed: true,
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
     expect(statusCode).toEqual(302);
   });
 });

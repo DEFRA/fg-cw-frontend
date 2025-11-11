@@ -7,7 +7,7 @@ export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
 
   const allTasksComplete = stage.taskGroups
     .flatMap((taskGroup) => taskGroup.tasks)
-    .every((task) => task.status === "complete");
+    .every((task) => task.completed === true);
 
   const currentStage = {
     ...stage,
@@ -35,11 +35,13 @@ const mapTaskGroups = (taskGroups, caseId) => {
   return taskGroups.map((taskGroup) => ({
     ...taskGroup,
     tasks: taskGroup.tasks.map((task) => {
+      const isComplete = task.completed === true;
+
       return {
         ...task,
         link: `/cases/${caseId}/tasks/${taskGroup.code}/${task.code}`,
-        status: task.status === "complete" ? "COMPLETE" : "INCOMPLETE",
-        isComplete: task.status === "complete",
+        status: isComplete ? "COMPLETE" : "INCOMPLETE",
+        isComplete,
       };
     }),
   }));

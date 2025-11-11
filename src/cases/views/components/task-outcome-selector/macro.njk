@@ -1,0 +1,9 @@
+{#
+    status: <string>,
+    statusOptions: <array>,
+    completed: <boolean>
+#}
+
+{% macro taskOutcomeSelector(params) %}
+  {%- include "./task-outcome-selector.template.njk" -%}
+{% endmacro %}
