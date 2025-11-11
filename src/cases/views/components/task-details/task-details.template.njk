@@ -4,11 +4,15 @@
 {% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
-{% from "../../partials/task-boolean/macro.njk" import appTaskBoolean %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
+{% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
 
 {% set caseLink = "/cases/" + params.caseId %}
+
+{%- set errorList = params.errorList -%}
+{%- set caseId = params.caseId -%}
+{%- set currentTask = params.currentTask -%}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
@@ -22,27 +26,52 @@
       })
     }}
 
-    {% if params.errorList.length %}
+    {% if errorList.length %}
       {{
         govukErrorSummary({
           titleText: "There is a problem",
-          errorList: params.errorList
+          errorList: errorList
         })
       }}
     {% endif %}
 
-    {{ dynamicContent(params.currentTask.description) }}
+    {{ dynamicContent(currentTask.description) }}
 
-    {# Display required roles in a details component #}
-    {% if not params.currentTask.canCompleteTask and params.currentTask.requiredRoles %}
+    {% if currentTask.completed %}
+      <p class="govuk-inset-text">
+        This task was completed by {{ currentTask.updatedBy }} on
+        {{ currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
+        {{ currentTask.updatedAt | formatDate("hh:mm a") }}
+      </p>
+
+      {% if currentTask.comment and currentTask.comment.text %}
+        <div class="form-group">
+          <h2 class="govuk-heading-m">Outcome review note</h2>
+          <p>{{ currentTask.comment.text }}</p>
+        </div>
+      {% endif %}
+    {% elif currentTask.canCompleteTask %}
+      {{
+        taskOutcomeForm({
+          error: errorList.length,
+          formAction: currentTask.formAction,
+          statusOptions: currentTask.statusOptions,
+          status: currentTask.status,
+          completed: currentTask.completed,
+          commentInputDef: currentTask.commentInputDef,
+          commentText: currentTask.comment.text if currentTask.comment else ''
+        })
+      }}
+    {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
+      {# Display required roles in a details component #}
       <p>You cannot complete this task.</p>
       {% set rolesHtml %}
         <p>Someone who is a:</p>
         {# Display "All of" roles #}
-        {% if params.currentTask.requiredRoles.allOf and params.currentTask.requiredRoles.allOf.length %}
+        {% if currentTask.requiredRoles.allOf and currentTask.requiredRoles.allOf.length %}
           <div class="govuk-!-margin-bottom-3">
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
-              {% for role in params.currentTask.requiredRoles.allOf %}
+              {% for role in currentTask.requiredRoles.allOf %}
                 <li>{{ role }}</li>
               {% endfor %}
             </ul>
@@ -50,10 +79,10 @@
         {% endif %}
 
         {# Display "Any of" roles #}
-        {% if params.currentTask.requiredRoles.anyOf and params.currentTask.requiredRoles.anyOf.length %}
+        {% if currentTask.requiredRoles.anyOf and currentTask.requiredRoles.anyOf.length %}
           <div>
             <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
-              {% for role in params.currentTask.requiredRoles.anyOf %}
+              {% for role in currentTask.requiredRoles.anyOf %}
                 <li>{{ role }}</li>
               {% endfor %}
             </ul>
@@ -63,46 +92,10 @@
 
       {{
         govukDetails({
-          summaryText: "Who can complete the task",
-          html: rolesHtml
+        summaryText: "Who can complete the task",
+        html: rolesHtml
         })
       }}
-    {% endif %}
-
-    {% if params.currentTask.status === "COMPLETE" %}
-      <p class="govuk-inset-text">
-        This task was completed by {{ params.currentTask.updatedBy }} on
-        {{ params.currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
-        {{ params.currentTask.updatedAt | formatDate("hh:mm a") }}
-      </p>
-
-      {% if params.comment.text %}
-        <div class="form-group">
-          <h2 class="govuk-heading-m">Outcome review note</h2>
-          <p>{{ params.comment.text }}</p>
-        </div>
-      {% endif %}
-
-      {% if not params.currentTask.canCompleteTask %}
-        <p>Cannot complete the task</p>
-      {% endif %}
-    {% elif params.currentTask.type === "boolean" %}
-      {% if params.currentTask.canCompleteTask %}
-        {{
-          appTaskBoolean({
-            error: params.errorList.length,
-            caseId: params.caseId,
-            phaseCode: params.phaseCode,
-            stageCode: params.stageCode,
-            taskGroupCode: params.taskGroupCode,
-            taskCode: params.currentTask.code,
-            isComplete: params.currentTask.isComplete,
-            comment: params.currentTask.comment,
-            commentText: params.comment.text,
-            name: params.currentTask.name
-          })
-        }}
-      {% endif %}
     {% endif %}
   </div>
 </div>

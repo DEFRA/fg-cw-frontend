@@ -251,14 +251,18 @@ describe("Case Repository", () => {
         taskGroupCode: "tg-01",
         taskCode: "t-01",
       };
-      await updateTaskStatus(authContext, { ...params, isComplete: true });
+      await updateTaskStatus(authContext, {
+        ...params,
+        status: "approved",
+        completed: true,
+      });
       expect(wreck.patch).toHaveBeenCalledWith(
         "/cases/1234-0909/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { status: "complete", comment: null },
+          payload: { status: "approved", completed: true, comment: null },
         },
       );
     });

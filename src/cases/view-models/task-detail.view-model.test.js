@@ -215,7 +215,6 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result).toHaveProperty("errors", mockErrors);
     expect(result).toHaveProperty("errorList", mockErrors);
     expect(result).toHaveProperty("pageTitle", "Case task");
     expect(result).toHaveProperty("pageHeading", "Case");
@@ -226,9 +225,7 @@ describe("createTaskDetailViewModel", () => {
     ]);
 
     expect(result.data).toHaveProperty("banner", mockCaseData.banner);
-    expect(result.data).toHaveProperty("stage");
-    expect(result.data).toHaveProperty("taskGroupCode", "group1");
-    expect(result.data).toHaveProperty("comment");
+    expect(result.data).toHaveProperty("caseId", "case123");
     expect(result.data).toHaveProperty("currentTask");
   });
 
@@ -240,21 +237,8 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result.data.case).toEqual({
-      id: "case123",
-      caseRef: "REF123",
-      code: "workflow1",
-      submittedAt: "formatted-2024-01-01T10:00:00Z",
-      currentPhase: "phase1",
-      currentStage: "stage1",
-      currentStatus: "active",
-      sbi: "SBI123",
-      scheme: "Test Scheme",
-      dateReceived: "2024-01-01",
-      assignedUser: "user123",
-      link: "/cases/case123",
-      stages: mockCaseData.stages,
-    });
+    expect(result.data.caseId).toEqual("case123");
+    expect(result.data.banner).toEqual(mockCaseData.banner);
   });
 
   it("should format current task correctly for complete task", () => {
@@ -266,11 +250,10 @@ describe("createTaskDetailViewModel", () => {
     );
 
     expect(result.data.currentTask).toMatchObject({
-      code: "task1",
-      status: "COMPLETE",
-      isComplete: true,
+      status: "complete",
       canCompleteTask: true,
-      link: "/cases/case123/tasks/group1/task1",
+      formAction:
+        "/cases/case123/phases/phase1/stages/stage1/task-groups/group1/tasks/task1/status",
     });
   });
 
@@ -288,8 +271,7 @@ describe("createTaskDetailViewModel", () => {
     );
 
     expect(result.data.currentTask).toMatchObject({
-      status: "INCOMPLETE",
-      isComplete: false,
+      status: "incomplete",
     });
   });
 
@@ -307,7 +289,7 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result.data.comment).toBeUndefined();
+    expect(result.data.currentTask.comment).toBeNull();
   });
 
   it("should handle missing payload identifiers", () => {
@@ -326,7 +308,8 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result.data.case.sbi).toBeUndefined();
+    // View model no longer exposes case.sbi directly
+    expect(result.data.caseId).toBe("case123");
   });
 
   it("should handle missing payload answers", () => {
@@ -345,7 +328,8 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result.data.case.scheme).toBeUndefined();
+    // View model no longer exposes case.scheme directly
+    expect(result.data.caseId).toBe("case123");
   });
 
   it("should check task access correctly", () => {
@@ -361,16 +345,13 @@ describe("createTaskDetailViewModel", () => {
   });
 
   it("should call helper functions with correct parameters", async () => {
-    const { getFormattedGBDate } = vi.mocked(
-      await import("../../common/helpers/date-helpers.js"),
-    );
     const { setActiveLink } = vi.mocked(
       await import("../../common/helpers/navigation-helpers.js"),
     );
 
     createTaskDetailViewModel(mockCaseData, mockQuery, mockRoles, mockErrors);
 
-    expect(getFormattedGBDate).toHaveBeenCalledWith("2024-01-01T10:00:00Z");
+    // getFormattedGBDate is no longer called in the simplified view model
     expect(setActiveLink).toHaveBeenCalledWith(mockCaseData.links, "tasks");
   });
 });
