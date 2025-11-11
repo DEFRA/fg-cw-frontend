@@ -173,29 +173,22 @@ describe("createTaskDetailViewModel", () => {
       identifiers: { sbi: "SBI123" },
       answers: { scheme: "Test Scheme" },
     },
-    phases: [
-      {
-        code: "phase1",
-        stages: [
-          {
-            code: "stage1",
-            taskGroups: [
-              {
-                code: "group1",
-                tasks: [
-                  {
-                    code: "task1",
-                    status: "complete",
-                    commentRef: "comment1",
-                    requiredRoles: { allOf: ["role1"], anyOf: [] },
-                  },
-                ],
-              },
-            ],
-          },
-        ],
-      },
-    ],
+    stage: {
+      code: "stage1",
+      taskGroups: [
+        {
+          code: "group1",
+          tasks: [
+            {
+              code: "task1",
+              status: "complete",
+              commentRef: "comment1",
+              requiredRoles: { allOf: ["role1"], anyOf: [] },
+            },
+          ],
+        },
+      ],
+    },
     comments: [{ ref: "comment1", text: "Test comment" }],
   };
 
@@ -252,16 +245,14 @@ describe("createTaskDetailViewModel", () => {
     expect(result.data.currentTask).toMatchObject({
       status: "complete",
       canCompleteTask: true,
-      formAction:
-        "/cases/case123/phases/phase1/stages/stage1/task-groups/group1/tasks/task1/status",
+      formAction: "/cases/case123/task-groups/group1/tasks/task1/status",
     });
   });
 
   it("should format current task correctly for incomplete task", () => {
     const incompleteCaseData = structuredClone(mockCaseData);
 
-    incompleteCaseData.phases[0].stages[0].taskGroups[0].tasks[0].status =
-      "incomplete";
+    incompleteCaseData.stage.taskGroups[0].tasks[0].status = "incomplete";
 
     const result = createTaskDetailViewModel(
       incompleteCaseData,
@@ -279,8 +270,7 @@ describe("createTaskDetailViewModel", () => {
     const caseDataNoComment = structuredClone(mockCaseData);
 
     caseDataNoComment.comments = [];
-    caseDataNoComment.phases[0].stages[0].taskGroups[0].tasks[0].commentRef =
-      "nonexistent";
+    caseDataNoComment.stage.taskGroups[0].tasks[0].commentRef = "nonexistent";
 
     const result = createTaskDetailViewModel(
       caseDataNoComment,

@@ -65,36 +65,23 @@ describe("listTasksRoute", () => {
           ],
         },
       },
-      phases: [
-        {
-          code: "phase-1",
-          name: "Phase 1",
-          stages: [
-            {
-              code: "application-receipt",
-              name: "Application Receipt",
-              taskGroups: [
-                {
-                  code: "application-receipt-tasks",
-                  name: "Application Receipt Tasks",
-                  tasks: [
-                    {
-                      code: "simple-review",
-                      name: "Simple Review",
-                      status: "pending",
-                    },
-                  ],
-                },
-              ],
-            },
-            {
-              code: "contract",
-              name: "Contract",
-              taskGroups: [],
-            },
-          ],
-        },
-      ],
+      stage: {
+        code: "application-receipt",
+        name: "Application Receipt",
+        taskGroups: [
+          {
+            code: "application-receipt-tasks",
+            name: "Application Receipt Tasks",
+            tasks: [
+              {
+                code: "simple-review",
+                name: "Simple Review",
+                status: "pending",
+              },
+            ],
+          },
+        ],
+      },
     });
 
     const { statusCode, result } = await server.inject({
