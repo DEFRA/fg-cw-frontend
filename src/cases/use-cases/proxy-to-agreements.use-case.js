@@ -4,6 +4,10 @@ import { logger } from "../../common/logger.js";
 
 export { statusCodes } from "../../common/status-codes.js";
 
+const SHORT_TOKEN_VISIBLE_CHARS = 1;
+const SHORT_TOKEN_MAX_LENGTH = 8;
+const LONG_TOKEN_VISIBLE_CHARS = 4;
+
 /**
  * Validates required configuration values for agreements proxy
  * @returns {{uiUrl: string, uiToken: string, jwtSecret: string}}
@@ -43,11 +47,13 @@ const maskToken = function (value) {
   }
 
   const token = String(value);
-  if (token.length <= 8) {
-    return `${token.slice(0, 1)}***${token.slice(-1)}`;
+  if (token.length <= SHORT_TOKEN_MAX_LENGTH) {
+    const visibleChars = SHORT_TOKEN_VISIBLE_CHARS;
+    return `${token.slice(0, visibleChars)}***${token.slice(token.length - visibleChars)}`;
   }
 
-  return `${token.slice(0, 4)}...${token.slice(-4)}`;
+  const visibleChars = LONG_TOKEN_VISIBLE_CHARS;
+  return `${token.slice(0, visibleChars)}...${token.slice(token.length - visibleChars)}`;
 };
 
 /**
