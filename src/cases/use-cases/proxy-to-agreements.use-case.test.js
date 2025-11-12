@@ -24,6 +24,8 @@ vi.mock("../../common/helpers/agreements-jwt.js", () => ({
 // Mock logger
 vi.mock("../../common/logger.js", () => ({
   logger: {
+    info: vi.fn(),
+    warn: vi.fn(),
     error: vi.fn(),
   },
 }));
