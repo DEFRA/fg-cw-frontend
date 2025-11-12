@@ -37,6 +37,19 @@ const buildTargetUri = function (baseUrl, path) {
   return cleanPath ? `${cleanBaseUrl}/${cleanPath}` : cleanBaseUrl;
 };
 
+const maskToken = function (value) {
+  if (!value) {
+    return undefined;
+  }
+
+  const token = String(value);
+  if (token.length <= 8) {
+    return `${token.slice(0, 1)}***${token.slice(-1)}`;
+  }
+
+  return `${token.slice(0, 4)}...${token.slice(-4)}`;
+};
+
 /**
  * Builds proxy headers for the request
  * @param {string} uiToken - The UI token
@@ -88,6 +101,26 @@ export const getAgreementsBaseUrl = function () {
 export const proxyToAgreements = function (path, request) {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
+  logger.info(
+    { agreementProxyTarget: uri, agreementProxyPath: path },
+    "Proxying request to agreements UI",
+  );
   const headers = buildProxyHeaders(uiToken, request);
+  const bearerToken = headers.Authorization?.replace(/^Bearer\s+/i, "");
+  const sanitizedHeaders = {
+    hasAuthorization: Boolean(headers.Authorization),
+    authorizationPreview: bearerToken
+      ? `Bearer ${maskToken(bearerToken)}`
+      : undefined,
+    hasEncryptedAuth: Boolean(headers["x-encrypted-auth"]),
+    encryptedAuthPreview: maskToken(headers["x-encrypted-auth"]),
+    hasBaseUrlHeader: Boolean(headers["x-base-url"]),
+    hasNonce: Boolean(headers["x-csp-nonce"]),
+  };
+
+  logger.info(
+    { agreementProxyAuthHeaders: sanitizedHeaders },
+    "Prepared agreements proxy headers",
+  );
   return { uri, headers };
 };
