@@ -4,6 +4,56 @@ import {
   statusCodes,
 } from "../use-cases/proxy-to-agreements.use-case.js";
 
+const noop = function () {};
+
+const defaultLogger = {
+  info: noop,
+  warn: noop,
+  error: noop,
+};
+
+const resolveLogger = function (logger) {
+  return logger ?? defaultLogger;
+};
+
+const getUpstreamHeaders = function (res) {
+  if (!res?.headers) {
+    return undefined;
+  }
+
+  return {
+    "content-type": res.headers["content-type"],
+    "www-authenticate": res.headers["www-authenticate"],
+  };
+};
+
+const createOnProxyResponse = function (requestLogger, uri) {
+  const logger = resolveLogger(requestLogger);
+  return function onProxyResponse(err, res) {
+    if (err) {
+      logger.warn(
+        {
+          agreementProxyTarget: uri,
+          error: err.message,
+        },
+        "Agreements proxy upstream response error",
+      );
+      throw err;
+    }
+
+    logger.info(
+      {
+        agreementProxyTarget: uri,
+        upstreamStatusCode: res?.statusCode,
+        upstreamHeaders: getUpstreamHeaders(res),
+      },
+      "Agreements proxy upstream response",
+    );
+
+    return res;
+  };
+};
+
 const baseUrl = getAgreementsBaseUrl();
 
 const getErrorStatusCode = function (error) {
@@ -38,10 +88,12 @@ const handleProxyError = function (error, h) {
 
 const executeProxy = async function (path, request, h) {
   const { uri, headers } = proxyToAgreements(path, request);
+  const requestLogger = resolveLogger(request?.logger);
   const proxyResponse = await h.proxy({
     mapUri: () => ({ uri, headers }),
     passThrough: true,
     rejectUnauthorized: true,
+    onResponse: createOnProxyResponse(requestLogger, uri),
   });
 
   if (!proxyResponse) {
@@ -64,11 +116,23 @@ const agreementsProxyHandler = async function (request, h) {
       .code(statusCodes.BAD_REQUEST);
   }
 
-  try {
-    return await executeProxy(path, request, h);
-  } catch (error) {
-    return handleProxyError(error, h);
-  }
+  const requestLogger = resolveLogger(request?.logger);
+  return executeProxy(path, request, h).catch((error) =>
+    handleProxyFailure({ error, logger: requestLogger, path, h }),
+  );
+};
+
+const handleProxyFailure = function ({ error, logger, path, h }) {
+  logger.warn(
+    {
+      agreementProxyPath: path,
+      error: error.message,
+      statusCode: getErrorStatusCode(error),
+      isBoom: Boolean(error.isBoom),
+    },
+    "Agreements proxy encountered an error",
+  );
+  return handleProxyError(error, h);
 };
 
 export const agreementsProxyRoutes = [
