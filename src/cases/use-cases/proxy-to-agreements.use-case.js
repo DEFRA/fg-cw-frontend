@@ -48,12 +48,14 @@ const maskToken = function (value) {
 
   const token = String(value);
   if (token.length <= SHORT_TOKEN_MAX_LENGTH) {
-    const visibleChars = SHORT_TOKEN_VISIBLE_CHARS;
-    return `${token.slice(0, visibleChars)}***${token.slice(token.length - visibleChars)}`;
+    return `${token.slice(0, SHORT_TOKEN_VISIBLE_CHARS)}***${token.slice(
+      Math.max(token.length - SHORT_TOKEN_VISIBLE_CHARS, 0),
+    )}`;
   }
 
-  const visibleChars = LONG_TOKEN_VISIBLE_CHARS;
-  return `${token.slice(0, visibleChars)}...${token.slice(token.length - visibleChars)}`;
+  return `${token.slice(0, LONG_TOKEN_VISIBLE_CHARS)}...${token.slice(
+    token.length - LONG_TOKEN_VISIBLE_CHARS,
+  )}`;
 };
 
 /**
