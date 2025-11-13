@@ -40,7 +40,7 @@ describe("generateAgreementsJwt", () => {
     // Decode the payload (second part)
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.sbi).toBe("123456789");
-    expect(payload.source).toBe("caseworking");
+    expect(payload.source).toBe("entra");
   });
 
   test("should include SBI and source in payload", async () => {
@@ -51,7 +51,7 @@ describe("generateAgreementsJwt", () => {
     const parts = token.split(".");
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.sbi).toBe("987654321");
-    expect(payload.source).toBe("caseworking");
+    expect(payload.source).toBe("entra");
   });
 
   test("should handle numeric SBI", async () => {
@@ -62,6 +62,33 @@ describe("generateAgreementsJwt", () => {
     const parts = token.split(".");
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.sbi).toBe("123456789");
+    expect(payload.source).toBe("entra");
+  });
+
+  test("should generate JWT without SBI for 'entra' source", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt(undefined);
+
+    expect(token).toBeDefined();
+    expect(typeof token).toBe("string");
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+    expect(payload.source).toBe("entra");
+    expect(payload.sbi).toBeUndefined();
+  });
+
+  test("should generate JWT with null SBI for 'entra' source", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt(null);
+
+    expect(token).toBeDefined();
+    expect(typeof token).toBe("string");
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+    expect(payload.source).toBe("entra");
+    expect(payload.sbi).toBeUndefined();
   });
 
   test("should throw error when JWT secret is missing", async () => {
