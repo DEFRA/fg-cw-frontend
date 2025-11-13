@@ -67,14 +67,13 @@ const maskToken = function (value) {
 // eslint-disable-next-line complexity
 const addJwtHeader = function (headers, request) {
   const sbi = request?.auth?.credentials?.sbi;
-  if (!sbi) {
-    return headers;
-  }
 
   try {
+    // Always generate JWT for 'entra' source (SBI is optional)
     headers["x-encrypted-auth"] = generateAgreementsJwt(sbi);
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
+    throw new Error(`Failed to generate JWT token: ${error.message}`);
   }
   return headers;
 };
