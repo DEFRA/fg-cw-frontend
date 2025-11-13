@@ -52,7 +52,7 @@ describe("proxyToAgreements", () => {
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
   });
 
-  test("should return uri and headers without JWT when no SBI", () => {
+  test("should return uri and headers with JWT even when no SBI (entra source)", () => {
     const mockRequest = {
       auth: { credentials: {} },
       headers: { "content-type": "application/json" },
@@ -63,7 +63,7 @@ describe("proxyToAgreements", () => {
     const result = proxyUseCase.proxyToAgreements("test-path", mockRequest);
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
-    expect(result.headers["x-encrypted-auth"]).toBeUndefined();
+    expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
   });
 
   test("should handle paths with leading slash", () => {

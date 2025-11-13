@@ -4,10 +4,18 @@ import { logger } from "../logger.js";
 
 /**
  * Generates a JWT token for agreements authentication
- * @param {string} sbi - The SBI (Single Business Identifier)
+ * @param {string|number|undefined} sbi - The SBI (Single Business Identifier), optional for 'entra' source
  * @returns {string} The JWT token
  * @throws {Error} If JWT generation fails
  */
+const buildJwtPayload = function (sbi) {
+  const payload = { source: "entra" };
+  if (sbi != null) {
+    payload.sbi = sbi.toString();
+  }
+  return payload;
+};
+
 export const generateAgreementsJwt = function (sbi) {
   const jwtSecret = config.get("agreements.jwtSecret");
 
@@ -16,11 +24,7 @@ export const generateAgreementsJwt = function (sbi) {
   }
 
   try {
-    const payload = {
-      sbi: sbi.toString(),
-      source: "caseworking",
-    };
-
+    const payload = buildJwtPayload(sbi);
     return Jwt.token.generate(payload, jwtSecret);
   } catch (error) {
     logger.error("Failed to generate agreements JWT", { error: error.message });
