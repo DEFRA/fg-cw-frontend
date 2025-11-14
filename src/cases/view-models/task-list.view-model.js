@@ -1,19 +1,12 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
 export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
-  const stage = kase.phases
-    .find((p) => p.code === kase.currentPhase)
-    .stages.find((s) => s.code === kase.currentStage);
-
-  const allTasksComplete = stage.taskGroups
-    .flatMap((taskGroup) => taskGroup.tasks)
-    .every((task) => task.completed === true);
+  const stage = kase.stage;
 
   const currentStage = {
     ...stage,
     taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
     actions: mapActions({ stage, errors, values }),
-    saveDisabled: !allTasksComplete,
   };
 
   return {

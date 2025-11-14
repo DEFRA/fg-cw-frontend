@@ -9,7 +9,7 @@ export const hasAnyRequiredRole = (userRoles, anyOf) => {
 };
 
 // eslint-disable-next-line complexity
-export const checkTaskAccess = (appRoles, taskRequiredRoles = {}) => {
+export const checkTaskAccess = (appRoles, taskRequiredRoles) => {
   if (!taskRequiredRoles) {
     return true;
   }
@@ -23,9 +23,7 @@ export const checkTaskAccess = (appRoles, taskRequiredRoles = {}) => {
 };
 
 export const createTaskDetailViewModel = (kase, query, roles, errors) => {
-  const stage = kase.phases
-    .find((p) => p.code === kase.currentPhase)
-    .stages.find((s) => s.code === kase.currentStage);
+  const stage = kase.stage;
 
   const { taskGroupCode, taskCode } = query;
   const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupCode);
@@ -51,7 +49,7 @@ export const createTaskDetailViewModel = (kase, query, roles, errors) => {
       banner: kase.banner,
       caseId: kase._id,
       currentTask: {
-        formAction: `/cases/${kase._id}/phases/${kase.currentPhase}/stages/${kase.currentStage}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
+        formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
         description: currentTask.description,
         status: currentTask.status,
         statusOptions: currentTask.statusOptions,

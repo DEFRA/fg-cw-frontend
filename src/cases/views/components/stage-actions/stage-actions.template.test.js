@@ -23,7 +23,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: false,
+        actionsDisabled: false,
       },
     });
 
@@ -61,7 +61,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: false,
+        actionsDisabled: false,
       },
     });
 
@@ -88,7 +88,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: false,
+        actionsDisabled: false,
       },
     });
 
@@ -111,7 +111,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: true,
+        actionsDisabled: true,
       },
     });
 
@@ -161,7 +161,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: false,
+        actionsDisabled: false,
       },
     });
 
@@ -196,7 +196,7 @@ describe("stage-actions", () => {
             },
           ],
         },
-        saveDisabled: false,
+        actionsDisabled: false,
       },
     });
 

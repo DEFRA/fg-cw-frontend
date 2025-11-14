@@ -76,48 +76,35 @@ describe("viewTaskRoute", () => {
           ],
         },
       },
-      phases: [
-        {
-          code: "phase-1",
-          name: "Phase 1",
-          stages: [
-            {
-              code: "application-receipt",
-              name: "Application Receipt",
-              taskGroups: [
-                {
-                  code: "application-receipt-tasks",
-                  name: "Application Receipt Tasks",
-                  tasks: [
-                    {
-                      code: "simple-review",
-                      name: "Simple Review",
-                      description: [
-                        {
-                          component: "heading",
-                          text: "Simple Review",
-                          level: 2,
-                        },
-                      ],
-                      status: "pending",
-                      type: "OPTIONAL",
-                      requiredRoles: {
-                        allOf: ["role1"],
-                        anyOf: ["role2"],
-                      },
-                    },
-                  ],
+      stage: {
+        code: "application-receipt",
+        name: "Application Receipt",
+        taskGroups: [
+          {
+            code: "application-receipt-tasks",
+            name: "Application Receipt Tasks",
+            tasks: [
+              {
+                code: "simple-review",
+                name: "Simple Review",
+                description: [
+                  {
+                    component: "heading",
+                    text: "Simple Review",
+                    level: 2,
+                  },
+                ],
+                status: "pending",
+                type: "OPTIONAL",
+                requiredRoles: {
+                  allOf: ["role1"],
+                  anyOf: ["role2"],
                 },
-              ],
-            },
-            {
-              code: "contract",
-              name: "Contract",
-              taskGroups: [],
-            },
-          ],
-        },
-      ],
+              },
+            ],
+          },
+        ],
+      },
       comments: [],
     });
 

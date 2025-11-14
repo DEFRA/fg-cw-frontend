@@ -31,9 +31,7 @@ export const updateStageOutcomeUseCase = async (
 };
 
 const findSelectedAction = (caseData, actionCode) => {
-  const stage = caseData.phases
-    .find((p) => p.code === caseData.currentPhase)
-    .stages.find((s) => s.code === caseData.currentStage);
+  const stage = caseData.stage;
 
   const action = stage?.actions.find((a) => a.code === actionCode);
   if (!action) {

@@ -18,49 +18,40 @@ describe("updateStageOutcomeUseCase", () => {
   };
   const mockCaseData = {
     _id: "case-123",
-    currentPhase: "default",
-    currentStage: "application-review",
     currentStatus: "NEW",
-    phases: [
-      {
-        code: "default",
-        stages: [
-          {
-            code: "application-review",
-            actions: [
-              {
-                code: "approve",
-                label: "Approve",
-                comment: {
-                  label: "Approval reason",
-                  type: "REQUIRED",
-                },
-              },
-              {
-                code: "reject",
-                label: "Reject",
-                comment: {
-                  label: "Rejection reason",
-                  type: "REQUIRED",
-                },
-              },
-              {
-                code: "on-hold",
-                label: "Put on hold",
-                comment: {
-                  label: "Hold reason",
-                  type: "OPTIONAL",
-                },
-              },
-              {
-                code: "no-comment",
-                label: "No comment action",
-              },
-            ],
+    stage: {
+      code: "application-review",
+      actions: [
+        {
+          code: "approve",
+          label: "Approve",
+          comment: {
+            label: "Approval reason",
+            type: "REQUIRED",
           },
-        ],
-      },
-    ],
+        },
+        {
+          code: "reject",
+          label: "Reject",
+          comment: {
+            label: "Rejection reason",
+            type: "REQUIRED",
+          },
+        },
+        {
+          code: "on-hold",
+          label: "Put on hold",
+          comment: {
+            label: "Hold reason",
+            type: "OPTIONAL",
+          },
+        },
+        {
+          code: "no-comment",
+          label: "No comment action",
+        },
+      ],
+    },
   };
 
   beforeEach(() => {
@@ -267,27 +258,6 @@ describe("updateStageOutcomeUseCase", () => {
 
       expect(findCaseByIdUseCase).toHaveBeenCalledWith(authContext, "case-123");
       expect(updateStageOutcome).not.toHaveBeenCalled();
-    });
-
-    it("throws Boom error when stage is not found", async () => {
-      const mockCaseWithInvalidStage = {
-        ...mockCaseData,
-        currentStage: "non-existent-stage",
-      };
-      findCaseByIdUseCase.mockResolvedValue(mockCaseWithInvalidStage);
-
-      const actionData = {
-        actionCode: "approve",
-        commentFieldName: "approve-comment",
-        comment: "Some comment",
-      };
-
-      await expect(
-        updateStageOutcomeUseCase(authContext, {
-          caseId: "case-invalid-stage",
-          actionData,
-        }),
-      ).rejects.toThrow(Boom.badRequest("Invalid action selected: approve"));
     });
 
     it("propagates repository errors", async () => {
