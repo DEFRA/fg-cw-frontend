@@ -257,7 +257,7 @@ describe("Case Repository", () => {
         completed: true,
       });
       expect(wreck.patch).toHaveBeenCalledWith(
-        "/cases/1234-0909/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/t-01/status",
+        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/status",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,

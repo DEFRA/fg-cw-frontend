@@ -4,7 +4,7 @@ exports[`stage-actions > renders basic stage actions 1`] = `
 "
 <form method="POST" action="/cases/123/stage/outcome">
 
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Decision
@@ -26,8 +26,7 @@ exports[`stage-actions > renders basic stage actions 1`] = `
 </fieldset>
 </div>
 
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
 </form>
@@ -38,7 +37,7 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 "
 <form method="POST" action="/cases/mixed-123/stage/outcome">
 
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     What do you want to do?
@@ -85,8 +84,7 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 </fieldset>
 </div>
 
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
 </form>
@@ -97,7 +95,7 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 "
 <form method="POST" action="/cases/456/stage/outcome">
 
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Decision
@@ -130,8 +128,7 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 </fieldset>
 </div>
 
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
 </form>
@@ -142,28 +139,8 @@ exports[`stage-actions > renders with error message 1`] = `
 "
 <form method="POST" action="/cases/789/stage/outcome">
 
-  <div class="govuk-form-group govuk-form-group--error">
-  <fieldset class="govuk-fieldset" aria-describedby="actionCode-error">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Decision
-  </legend>
-  <p id="actionCode-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Please select an action
-  </p>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve">
-      <label class="govuk-label govuk-radios__label" for="actionCode">
-        Approve
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">
-  Save
+    <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+  Approve
 </button>
 </form>
 "
@@ -173,25 +150,8 @@ exports[`stage-actions > renders with save button disabled 1`] = `
 "
 <form method="POST" action="/cases/999/stage/outcome">
 
-  <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Decision
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve">
-      <label class="govuk-label govuk-radios__label" for="actionCode">
-        Approve
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  <button type="submit" disabled aria-disabled="true" class="govuk-button" data-module="govuk-button">
-  Save
+    <button value="approve" type="submit" name="actionCode" disabled aria-disabled="true" class="govuk-button" data-module="govuk-button">
+  Approve
 </button>
 </form>
 "
@@ -201,36 +161,8 @@ exports[`stage-actions > renders with textarea error 1`] = `
 "
 <form method="POST" action="/cases/error-case/stage/outcome">
 
-  <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Decision
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="actionCode" name="actionCode" type="radio" value="approve" checked data-aria-controls="conditional-actionCode">
-      <label class="govuk-label govuk-radios__label" for="actionCode">
-        Approve
-      </label>
-    </div>
-    <div class="govuk-radios__conditional" id="conditional-actionCode">
-      <div class="govuk-form-group govuk-form-group--error">
-  <label class="govuk-label" for="approve-comment">
-    Approval reason
-  </label>
-  <p id="approve-comment-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Approval reason is required
-  </p>
-  <textarea class="govuk-textarea govuk-textarea--error" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-error"></textarea>
-</div>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  <button type="submit" class="govuk-button" data-module="govuk-button">
-  Save
+    <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+  Approve
 </button>
 </form>
 "

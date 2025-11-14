@@ -27,20 +27,35 @@
     {% endif %}
   {% endfor %}
 
-  {{
-    govukRadios({
-      idPrefix: params.stage.actions.idPrefix,
-      name: params.stage.actions.name,
-      errorMessage: params.stage.actions.errorMessage,
-      fieldset: {
-        legend: {
-          text: params.stage.actions.legend,
-          classes: "govuk-fieldset__legend--m"
-        }
-      },
-      items: radiosItems
-    })
-  }}
-
-  {{ govukButton({ text: "Save", disabled: params.stage.saveDisabled }) }}
+  {% if params.stage.actions.items.length === 1 %}
+    {{
+      govukButton({
+        name: params.stage.actions.name,
+        text: params.stage.actions.items[0].text,
+        value: params.stage.actions.items[0].value,
+        disabled: params.stage.actionsDisabled
+      })
+    }}
+  {% else %}
+    {{
+      govukRadios({
+        idPrefix: params.stage.actions.idPrefix,
+        name: params.stage.actions.name,
+        errorMessage: params.stage.actions.errorMessage,
+        fieldset: {
+          legend: {
+            text: params.stage.actions.legend,
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: radiosItems
+      })
+    }}
+    {{
+      govukButton({
+        text: "Save",
+        disabled: params.stage.actionsDisabled
+      })
+    }}
+  {% endif %}
 </form>

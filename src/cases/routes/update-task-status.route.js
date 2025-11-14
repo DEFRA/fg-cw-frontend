@@ -1,11 +1,9 @@
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
 
-const findTask = (kase, phaseCode, stageCode, taskGroupCode, taskCode) =>
-  kase.phases
-    .find((p) => p.code === phaseCode)
-    .stages.find((s) => s.code === stageCode)
-    .taskGroups.find((tg) => tg.code === taskGroupCode)
+const findTask = (kase, taskGroupCode, taskCode) =>
+  kase.stage.taskGroups
+    .find((tg) => tg.code === taskGroupCode)
     .tasks.find((t) => t.code === taskCode);
 
 const validateComment = (taskComment, comment) => {
@@ -26,19 +24,11 @@ const validateStatusOptions = (statusOptions, status) => {
 
 export const updateTaskStatusRoute = {
   method: "POST",
-  path: "/cases/{caseId}/phases/{phaseCode}/stages/{stageCode}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+  path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
   // eslint-disable-next-line complexity
   handler: async (request, h) => {
-    const {
-      caseId,
-      phaseCode,
-      stageCode,
-      taskGroupCode,
-      taskCode,
-      completed,
-      status,
-      comment,
-    } = mapRequest(request);
+    const { caseId, taskGroupCode, taskCode, completed, status, comment } =
+      mapRequest(request);
 
     const authContext = {
       token: request.auth.credentials.token,
@@ -46,7 +36,7 @@ export const updateTaskStatusRoute = {
     };
 
     const kase = await findCaseByIdUseCase(authContext, caseId);
-    const task = findTask(kase, phaseCode, stageCode, taskGroupCode, taskCode);
+    const task = findTask(kase, taskGroupCode, taskCode);
 
     // ensure comment has a value if it is required...
     if (!validateComment(task?.commentInputDef, comment)) {
@@ -68,8 +58,6 @@ export const updateTaskStatusRoute = {
 
     await updateTaskStatusUseCase(authContext, {
       caseId,
-      phaseCode,
-      stageCode,
       taskGroupCode,
       taskCode,
       status,
@@ -82,14 +70,11 @@ export const updateTaskStatusRoute = {
 };
 
 const mapRequest = (request) => {
-  const { caseId, phaseCode, stageCode, taskGroupCode, taskCode } =
-    request.params;
+  const { caseId, taskGroupCode, taskCode } = request.params;
   const { completed = false, status = null, comment = null } = request.payload;
 
   return {
     caseId,
-    phaseCode,
-    stageCode,
     taskGroupCode,
     taskCode,
     completed,
