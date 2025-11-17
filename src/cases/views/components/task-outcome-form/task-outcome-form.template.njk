@@ -8,6 +8,8 @@
 {%- set completed = params.completed -%}
 {%- set commentInputDef = params.commentInputDef -%}
 {%- set commentText = params.commentText -%}
+{%- set isInteractive = params.isInteractive if params.isInteractive !== undefined else true -%}
+{%- set isDisabled = isInteractive === false -%}
 
 <form method="post" id="completeTaskForm" action="{{ formAction }}">
   <div class="govuk-form-group">
@@ -16,38 +18,64 @@
         status: status,
         statusOptions: statusOptions,
         completed: completed,
-        errorMessage: error
+        errorMessage: error,
+        isDisabled: isDisabled
       })
     }}
   </div>
 
   {% if commentInputDef %}
-    {{
-      govukTextarea({
-        id: "comment",
-        name: "comment",
-        label: {
-          text: commentInputDef.label,
-          classes: "govuk-label--m"
-        },
-        hint: {
-          text: commentInputDef.helpText
-        },
-        errorMessage: error
-      })
-    }}
+    {% if isDisabled %}
+      {{
+        govukTextarea({
+          id: "comment",
+          name: "comment",
+          label: {
+            text: commentInputDef.label,
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: commentInputDef.helpText
+          },
+          errorMessage: error,
+          disabled: true,
+          attributes: {
+            "aria-disabled": "true"
+          },
+          value: commentText
+        })
+      }}
+    {% else %}
+      {{
+        govukTextarea({
+          id: "comment",
+          name: "comment",
+          label: {
+            text: commentInputDef.label,
+            classes: "govuk-label--m"
+          },
+          hint: {
+            text: commentInputDef.helpText
+          },
+          errorMessage: error,
+          value: commentText
+        })
+      }}
+    {% endif %}
   {% endif %}
 
-  <div class="govuk-button-group">
-    <button
-      type="submit"
-      data-prevent-double-click="true"
-      data-testid="save-and-continue-button"
-      class="govuk-button"
-      data-module="govuk-button"
-      data-govuk-button-init=""
-    >
-      Save and continue
-    </button>
-  </div>
+  {% if isInteractive %}
+    <div class="govuk-button-group">
+      <button
+        type="submit"
+        data-prevent-double-click="true"
+        data-testid="save-and-continue-button"
+        class="govuk-button"
+        data-module="govuk-button"
+        data-govuk-button-init=""
+      >
+        Save and continue
+      </button>
+    </div>
+  {% endif %}
 </form>
