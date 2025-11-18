@@ -1,7 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`task-outcome-selector > renders checkbox in checked state 1`] = `
-"  <div class="govuk-form-group">
+"    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked>
@@ -16,7 +16,7 @@ exports[`task-outcome-selector > renders checkbox in checked state 1`] = `
 `;
 
 exports[`task-outcome-selector > renders checkbox in unchecked state 1`] = `
-"  <div class="govuk-form-group">
+"    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -31,7 +31,7 @@ exports[`task-outcome-selector > renders checkbox in unchecked state 1`] = `
 `;
 
 exports[`task-outcome-selector > renders checkbox when no status options 1`] = `
-"  <div class="govuk-form-group">
+"    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -46,7 +46,7 @@ exports[`task-outcome-selector > renders checkbox when no status options 1`] = `
 `;
 
 exports[`task-outcome-selector > renders checkbox when statusOptions is null 1`] = `
-"  <div class="govuk-form-group">
+"    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -62,7 +62,7 @@ exports[`task-outcome-selector > renders checkbox when statusOptions is null 1`]
 
 exports[`task-outcome-selector > renders radio buttons with first option selected 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -89,7 +89,7 @@ exports[`task-outcome-selector > renders radio buttons with first option selecte
 
 exports[`task-outcome-selector > renders radio buttons with long option names 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -116,7 +116,7 @@ exports[`task-outcome-selector > renders radio buttons with long option names 1`
 
 exports[`task-outcome-selector > renders radio buttons with middle option selected 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -149,7 +149,7 @@ exports[`task-outcome-selector > renders radio buttons with middle option select
 
 exports[`task-outcome-selector > renders radio buttons with multiple options 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -188,7 +188,7 @@ exports[`task-outcome-selector > renders radio buttons with multiple options 1`]
 
 exports[`task-outcome-selector > renders radio buttons with no option selected 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -221,7 +221,7 @@ exports[`task-outcome-selector > renders radio buttons with no option selected 1
 
 exports[`task-outcome-selector > renders radio buttons with single option 1`] = `
 "
-  <div class="govuk-form-group">
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Select outcome
@@ -241,7 +241,7 @@ exports[`task-outcome-selector > renders radio buttons with single option 1`] = 
 `;
 
 exports[`task-outcome-selector > renders with empty statusOptions array 1`] = `
-"  <div class="govuk-form-group">
+"    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">

@@ -16,6 +16,7 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -31,6 +32,7 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -53,6 +55,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -72,6 +75,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Some existing notes",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -90,6 +94,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -111,6 +116,7 @@ describe("task-outcome-form", () => {
         text: "Comment is required",
         href: "#comment",
       },
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -129,6 +135,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Task completed successfully",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -152,6 +159,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Waiting for additional documentation from applicant",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -167,8 +175,101 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
+  });
+
+  test("renders interactive form when isInteractive is true", () => {
+    const component = render("task-outcome-form", {
+      formAction:
+        "/cases/case-interactive/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
+      status: "approved",
+      statusOptions: [
+        { code: "approved", name: "Approve" },
+        { code: "rejected", name: "Reject" },
+      ],
+      completed: false,
+      commentInputDef: {
+        label: "Comment",
+        helpText: "Provide details",
+        mandatory: true,
+      },
+      commentText: "",
+      error: null,
+      isInteractive: true,
+    });
+
+    expect(component).toMatchSnapshot();
+    expect(component).toContain("Save and continue");
+  });
+
+  test("renders disabled form when isInteractive is false", () => {
+    const component = render("task-outcome-form", {
+      formAction:
+        "/cases/case-disabled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
+      status: "approved",
+      statusOptions: [
+        { code: "approved", name: "Approve" },
+        { code: "rejected", name: "Reject" },
+      ],
+      completed: false,
+      commentInputDef: {
+        label: "Comment",
+        helpText: "Provide details",
+        mandatory: true,
+      },
+      commentText: "Some comment",
+      error: null,
+      isInteractive: false,
+    });
+
+    expect(component).toMatchSnapshot();
+    expect(component).not.toContain("Save and continue");
+    expect(component).toContain('aria-disabled="true"');
+  });
+
+  test("renders disabled form with radio buttons when isInteractive is false", () => {
+    const component = render("task-outcome-form", {
+      formAction:
+        "/cases/case-disabled-radios/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
+      status: "on-hold",
+      statusOptions: [
+        { code: "approved", name: "Approve" },
+        { code: "rejected", name: "Reject" },
+        { code: "on-hold", name: "Put on hold" },
+      ],
+      completed: false,
+      commentInputDef: null,
+      commentText: "",
+      error: null,
+      isInteractive: false,
+    });
+
+    expect(component).toMatchSnapshot();
+    expect(component).not.toContain("Save and continue");
+    expect(component).toContain("disabled");
+  });
+
+  test("renders disabled form with checkbox when isInteractive is false", () => {
+    const component = render("task-outcome-form", {
+      formAction:
+        "/cases/case-disabled-checkbox/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
+      status: null,
+      statusOptions: [],
+      completed: true,
+      commentInputDef: {
+        label: "Completion notes",
+        mandatory: false,
+      },
+      commentText: "Completed",
+      error: null,
+      isInteractive: false,
+    });
+
+    expect(component).toMatchSnapshot();
+    expect(component).not.toContain("Save and continue");
+    expect(component).toContain("disabled");
   });
 });
