@@ -5,6 +5,7 @@
 {%- set statusOptions = params.statusOptions -%}
 {%- set completed = params.completed -%}
 {%- set errorMessage = params.errorMessage -%}
+{%- set isDisabled = params.isDisabled -%}
 
 {% if statusOptions and statusOptions.length > 0 %}
   {% set radioItems = [] %}
@@ -13,36 +14,78 @@
       set radioItems = (radioItems.push({
         value: option.code,
         text: option.name,
-        checked: option.code === status
+        checked: option.code === status,
+        disabled: isDisabled
       }), radioItems)
     %}
   {% endfor %}
 
-  {{
-    govukRadios({
-      name: "status",
-      fieldset: {
-        legend: {
-          text: "Select outcome",
-          classes: "govuk-fieldset__legend--m"
-        }
-      },
-      items: radioItems,
-      errorMessage: errorMessage
-    })
-  }}
+  {% if isDisabled %}
+    {{
+      govukRadios({
+        name: "status",
+        fieldset: {
+          legend: {
+            text: "Select outcome",
+            classes: "govuk-fieldset__legend--m"
+          },
+          attributes: {
+            "aria-disabled": "true"
+          }
+        },
+        items: radioItems,
+        errorMessage: errorMessage
+      })
+    }}
+  {% else %}
+    {{
+      govukRadios({
+        name: "status",
+        fieldset: {
+          legend: {
+            text: "Select outcome",
+            classes: "govuk-fieldset__legend--m"
+          }
+        },
+        items: radioItems,
+        errorMessage: errorMessage
+      })
+    }}
+  {% endif %}
 {% else %}
-  {{
-    govukCheckboxes({
-      name: "completed",
-      items: [
-        {
-          value: true,
-          id: "task-completed",
-          text: "Completed",
-          checked: completed
-        }
-      ]
-    })
-  }}
+  {% if isDisabled %}
+    {{
+      govukCheckboxes({
+        name: "completed",
+        fieldset: {
+          attributes: {
+            "aria-disabled": "true"
+          }
+        },
+        items: [
+          {
+            value: true,
+            id: "task-completed",
+            text: "Completed",
+            checked: completed,
+            disabled: isDisabled
+          }
+        ]
+      })
+    }}
+  {% else %}
+    {{
+      govukCheckboxes({
+        name: "completed",
+        items: [
+          {
+            value: true,
+            id: "task-completed",
+            text: "Completed",
+            checked: completed
+          }
+        ]
+      })
+    }}
+  {% endif %}
 {% endif %}

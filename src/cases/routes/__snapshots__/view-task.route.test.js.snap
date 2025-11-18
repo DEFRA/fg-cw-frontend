@@ -96,9 +96,10 @@ Timeline
 
 
 
+
       <form method="post" id="completeTaskForm" action="/cases/68495db5afe2d27b09b2ee47/task-groups/application-receipt-tasks/tasks/simple-review/status">
   <div class="govuk-form-group">
-      <div class="govuk-form-group">
+        <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -113,11 +114,11 @@ Timeline
   </div>
 
 
-  <div class="govuk-button-group">
-    <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
-      Save and continue
-    </button>
-  </div>
+    <div class="govuk-button-group">
+      <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
+        Save and continue
+      </button>
+    </div>
 </form>
 
   </div>

@@ -344,4 +344,72 @@ describe("createTaskDetailViewModel", () => {
     // getFormattedGBDate is no longer called in the simplified view model
     expect(setActiveLink).toHaveBeenCalledWith(mockCaseData.links, "tasks");
   });
+
+  it("should set isInteractive to true when stage.interactive is true", () => {
+    const interactiveCaseData = {
+      ...mockCaseData,
+      stage: {
+        ...mockCaseData.stage,
+        interactive: true,
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      interactiveCaseData,
+      mockQuery,
+      mockRoles,
+      mockErrors,
+    );
+
+    expect(result.data.isInteractive).toBe(true);
+  });
+
+  it("should set isInteractive to false when stage.interactive is false", () => {
+    const nonInteractiveCaseData = {
+      ...mockCaseData,
+      stage: {
+        ...mockCaseData.stage,
+        interactive: false,
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      nonInteractiveCaseData,
+      mockQuery,
+      mockRoles,
+      mockErrors,
+    );
+
+    expect(result.data.isInteractive).toBe(false);
+  });
+
+  it("should default isInteractive to true when stage.interactive is not provided", () => {
+    const result = createTaskDetailViewModel(
+      mockCaseData,
+      mockQuery,
+      mockRoles,
+      mockErrors,
+    );
+
+    expect(result.data.isInteractive).toBe(true);
+  });
+
+  it("should default isInteractive to true when stage.interactive is undefined", () => {
+    const caseDataWithUndefinedInteractive = {
+      ...mockCaseData,
+      stage: {
+        ...mockCaseData.stage,
+        interactive: undefined,
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseDataWithUndefinedInteractive,
+      mockQuery,
+      mockRoles,
+      mockErrors,
+    );
+
+    expect(result.data.isInteractive).toBe(true);
+  });
 });
