@@ -16,6 +16,7 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -31,6 +32,7 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -53,6 +55,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -72,6 +75,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Some existing notes",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -90,6 +94,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -111,6 +116,7 @@ describe("task-outcome-form", () => {
         text: "Comment is required",
         href: "#comment",
       },
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -129,6 +135,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Task completed successfully",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -152,6 +159,7 @@ describe("task-outcome-form", () => {
       },
       commentText: "Waiting for additional documentation from applicant",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
@@ -167,6 +175,7 @@ describe("task-outcome-form", () => {
       commentInputDef: null,
       commentText: "",
       error: null,
+      isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();

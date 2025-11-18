@@ -36,8 +36,8 @@ export const createTaskDetailViewModel = (kase, query, roles, errors) => {
 
   const canCompleteTask = checkTaskAccess(roles, currentTask.requiredRoles);
 
-  // Check if stage is interactive (defaults to true for backwards compatibility)
-  const isInteractive = stage.interactive !== false;
+  // Check if stage is interactive, defaults to true for backwards compatibility
+  const isInteractive = stage.interactive ?? true;
 
   return {
     errorList: errors,

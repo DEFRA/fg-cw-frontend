@@ -8,7 +8,7 @@
 {%- set completed = params.completed -%}
 {%- set commentInputDef = params.commentInputDef -%}
 {%- set commentText = params.commentText -%}
-{%- set isInteractive = params.isInteractive if params.isInteractive !== undefined else true -%}
+{%- set isInteractive = params.isInteractive -%}
 {%- set isDisabled = isInteractive === false -%}
 
 <form method="post" id="completeTaskForm" action="{{ formAction }}">

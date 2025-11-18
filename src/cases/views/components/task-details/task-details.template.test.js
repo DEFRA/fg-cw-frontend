@@ -9,6 +9,7 @@ describe("task-details", () => {
       stageCode: "strage-id",
       taskGroupCode: "task-group-code",
       taskCode: "task-id",
+      isInteractive: true,
       currentTask: {
         code: "task1",
         description: [{ component: "heading", level: 2, text: "Test Task" }],
