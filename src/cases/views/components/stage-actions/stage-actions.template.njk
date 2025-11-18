@@ -3,40 +3,45 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 <form method="POST" action="/cases/{{ params.caseId }}/stage/outcome">
-  {% set radiosItems = [] %}
-  {% for item in params.stage.actions.items %}
-    {% if item.conditional %}
-      {%
-        set radioItem = {
-          value: item.value,
-          text: item.text,
-          checked: item.checked,
-          conditional: { html: govukTextarea(item.conditional) }
-        }
-      %}
-      {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
-    {% else %}
-      {%
-        set radioItem = {
-          value: item.value,
-          text: item.text,
-          checked: item.checked
-        }
-      %}
-      {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
-    {% endif %}
-  {% endfor %}
-
   {% if params.stage.actions.items.length === 1 %}
+    {% set item = params.stage.actions.items[0] %}
+
+    {% if item.conditional %}
+      {{ govukTextarea(item.conditional) }}
+    {% endif %}
+
     {{
       govukButton({
         name: params.stage.actions.name,
-        text: params.stage.actions.items[0].text,
-        value: params.stage.actions.items[0].value,
+        text: item.text,
+        value: item.value,
         disabled: params.stage.actionsDisabled
       })
     }}
   {% else %}
+    {% set radiosItems = [] %}
+    {% for item in params.stage.actions.items %}
+      {% if item.conditional %}
+        {%
+          set radioItem = {
+            value: item.value,
+            text: item.text,
+            checked: item.checked,
+            conditional: { html: govukTextarea(item.conditional) }
+          }
+        %}
+        {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
+      {% else %}
+        {%
+          set radioItem = {
+            value: item.value,
+            text: item.text,
+            checked: item.checked
+          }
+        %}
+        {% set radiosItems = (radiosItems.push(radioItem), radiosItems) %}
+      {% endif %}
+    {% endfor %}
     {{
       govukRadios({
         idPrefix: params.stage.actions.idPrefix,
