@@ -932,4 +932,49 @@ describe("dynamic-content template", () => {
     expect(result).toContain('data-testid="legal-warning"');
     expect(result).toContain("Legal warning message");
   });
+
+  test("escapes HTML in text component", () => {
+    const params = [
+      {
+        component: "text",
+        text: "This contains <script>alert('xss')</script> HTML",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain(
+      "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;",
+    );
+    expect(result).not.toContain("<script>");
+  });
+
+  test("escapes HTML in paragraph component", () => {
+    const params = [
+      {
+        component: "paragraph",
+        text: "Paragraph with <strong>bold</strong> text",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("&lt;strong&gt;bold&lt;/strong&gt;");
+    expect(result).not.toContain("<strong>");
+  });
+
+  test("escapes HTML in heading component", () => {
+    const params = [
+      {
+        component: "heading",
+        text: "Heading with <em>emphasis</em>",
+        level: 2,
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("&lt;em&gt;emphasis&lt;/em&gt;");
+    expect(result).not.toContain("<em>");
+  });
 });
