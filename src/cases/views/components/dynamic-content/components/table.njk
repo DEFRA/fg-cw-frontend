@@ -5,6 +5,9 @@
   {%- set rows = params.rows or [] %}
   {%- set firstCellIsHeader = params.firstCellIsHeader or false %}
   {%- set head = params.head or null %}
+  {%- set title = params.title or null %}
+  {%- set caption = params.caption or null %}
+  {%- set captionClasses = params.captionClasses or null %}
 
   {# Transform head data using DEFRA component renderer if provided, otherwise extract from first row #}
   {% set tableHead = [] %}
@@ -65,12 +68,14 @@
     {% set tableRows = (tableRows.push(tableRow), tableRows) %}
   {% endfor %}
 
-  {% if params.title %}
-    {{ defraHeading({ text: params.title, level: 3 }) }}
+  {% if not caption and title %}
+    {{ defraHeading({ text: title, level: 3 }) }}
   {% endif %}
 
   {{
     govukTable({
+      caption: caption,
+      captionClasses: captionClasses,
       head: tableHead,
       rows: tableRows,
       firstCellIsHeader: firstCellIsHeader

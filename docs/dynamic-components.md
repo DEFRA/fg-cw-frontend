@@ -450,7 +450,8 @@ Both `label` and `text` support two formats for maximum flexibility:
 
 - `rows` (required): 2D array where each row contains column objects
 - `head` (optional): Array of header cell objects with full GDS table support
-- `title` (optional): Heading above the table (renders as h3)
+- `caption` (optional): Caption text for the table (GDS semantic caption inside `<table>`)
+- `captionClasses` (optional): CSS classes for caption size (e.g., "govuk-table**caption--l", "govuk-table**caption--m")
 - `firstCellIsHeader` (optional): Whether first cell in each row should be a header
 
 **Head Cell Options**:
