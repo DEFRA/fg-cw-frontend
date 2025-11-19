@@ -109,7 +109,7 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
     value,
     label: { text: comment.label },
     hint: comment.helpText ? { text: comment.helpText } : undefined,
-    required: comment.type === "REQUIRED",
+    required: comment.mandatory,
     errorMessage,
     rows: 3,
   };

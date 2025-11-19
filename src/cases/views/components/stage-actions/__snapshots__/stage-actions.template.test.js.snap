@@ -3,7 +3,6 @@
 exports[`stage-actions > renders basic stage actions 1`] = `
 "
 <form method="POST" action="/cases/123/stage/outcome">
-
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -36,7 +35,6 @@ exports[`stage-actions > renders basic stage actions 1`] = `
 exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = `
 "
 <form method="POST" action="/cases/mixed-123/stage/outcome">
-
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -94,7 +92,6 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 "
 <form method="POST" action="/cases/456/stage/outcome">
-
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
@@ -139,6 +136,7 @@ exports[`stage-actions > renders with error message 1`] = `
 "
 <form method="POST" action="/cases/789/stage/outcome">
 
+
     <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
@@ -150,6 +148,7 @@ exports[`stage-actions > renders with save button disabled 1`] = `
 "
 <form method="POST" action="/cases/999/stage/outcome">
 
+
     <button value="approve" type="submit" name="actionCode" disabled aria-disabled="true" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
@@ -160,6 +159,17 @@ exports[`stage-actions > renders with save button disabled 1`] = `
 exports[`stage-actions > renders with textarea error 1`] = `
 "
 <form method="POST" action="/cases/error-case/stage/outcome">
+
+      <div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="approve-comment">
+    Approval reason
+  </label>
+  <p id="approve-comment-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Approval reason is required
+  </p>
+  <textarea class="govuk-textarea govuk-textarea--error" id="approve-comment" name="approve-comment" rows="3" aria-describedby="approve-comment-error"></textarea>
+</div>
+
 
     <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve

@@ -27,7 +27,7 @@ describe("updateStageOutcomeUseCase", () => {
           label: "Approve",
           comment: {
             label: "Approval reason",
-            type: "REQUIRED",
+            mandatory: true,
           },
         },
         {
@@ -35,7 +35,7 @@ describe("updateStageOutcomeUseCase", () => {
           label: "Reject",
           comment: {
             label: "Rejection reason",
-            type: "REQUIRED",
+            mandatory: true,
           },
         },
         {
@@ -43,7 +43,7 @@ describe("updateStageOutcomeUseCase", () => {
           label: "Put on hold",
           comment: {
             label: "Hold reason",
-            type: "OPTIONAL",
+            mandatory: false,
           },
         },
         {

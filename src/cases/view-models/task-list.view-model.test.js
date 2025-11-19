@@ -53,7 +53,7 @@ describe("createTaskListViewModel", () => {
           comment: {
             label: "Approval reason",
             helpText: "Please provide a reason",
-            type: "REQUIRED",
+            mandatory: true,
           },
         },
         {
@@ -307,7 +307,7 @@ describe("createTaskListViewModel", () => {
           name: "Approve",
           comment: {
             label: "Approval reason",
-            type: "REQUIRED",
+            mandatory: true,
           },
         },
       ];
@@ -327,7 +327,7 @@ describe("createTaskListViewModel", () => {
           name: "Put on Hold",
           comment: {
             label: "Hold reason",
-            type: "OPTIONAL",
+            mandatory: false,
           },
         },
       ];
