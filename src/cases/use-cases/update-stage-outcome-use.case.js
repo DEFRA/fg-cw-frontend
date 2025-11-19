@@ -48,6 +48,4 @@ const validComment = (action, comment) => {
   return typeof comment === "string" && comment.trim() !== "";
 };
 
-const isRequired = (comment) => {
-  return comment?.type === "REQUIRED";
-};
+const isRequired = (comment) => comment?.mandatory;
