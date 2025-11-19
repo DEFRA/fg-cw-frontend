@@ -106,6 +106,13 @@ describe("case-list.model", () => {
           identifiers: {
             sbi: "123456789",
           },
+          answers: {
+            applicant: {
+              business: {
+                name: "[business name]",
+              },
+            },
+          },
         },
         currentStatus: "NEW",
         assignedUser: {
@@ -120,6 +127,13 @@ describe("case-list.model", () => {
           submittedAt: "2021-03-15T00:00:00.000Z",
           identifiers: {
             sbi: "987654321",
+          },
+          answers: {
+            applicant: {
+              business: {
+                name: "[business name]",
+              },
+            },
           },
         },
         currentStatus: "IN PROGRESS",
@@ -335,6 +349,13 @@ describe("case-list.model", () => {
           payload: {
             submittedAt: "2021-06-15T14:30:00.000Z",
             identifiers: { sbi: "555666777" },
+            answers: {
+              applicant: {
+                business: {
+                  name: "[business name]",
+                },
+              },
+            },
           },
           currentStatus: "NEW",
           assignedUser: { name: "Test User" },

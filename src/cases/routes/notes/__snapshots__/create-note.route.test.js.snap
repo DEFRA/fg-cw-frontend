@@ -9,7 +9,7 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
@@ -125,7 +125,7 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
@@ -244,7 +244,7 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
@@ -363,7 +363,7 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
