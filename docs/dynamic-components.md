@@ -365,19 +365,131 @@ Both `label` and `text` support two formats for maximum flexibility:
 }
 ```
 
+**Example with component-based head configuration**:
+
+```
+{
+  "component": "table",
+  "title": "Assessment Results",
+  "head": [
+    {
+      "component": "text",
+      "text": "Assessment Type",
+      "headerClasses": "govuk-!-width-one-third"
+    },
+    {
+      "component": "status",
+      "text": "Status",
+      "colour": "blue",
+      "classes": "govuk-!-font-weight-bold",
+      "headerClasses": "sortable-header",
+      "attributes": { "data-sortable": "true" }
+    },
+    {
+      "component": "text",
+      "text": "Score",
+      "format": "numeric"
+    },
+    {
+      "component": "text",
+      "text": "Action",
+      "headerClasses": "govuk-visually-hidden"
+    }
+  ],
+  "rows": [
+    [
+      { "component": "text", "text": "Area validation" },
+      { "component": "status", "text": "PASSED", "colour": "green" },
+      { "component": "text", "text": "95%" },
+      { "component": "text", "text": "View details" }
+    ],
+    [
+      { "component": "text", "text": "Boundary check" },
+      { "component": "status", "text": "FAILED", "colour": "red" },
+      { "component": "text", "text": "72%" },
+      { "component": "text", "text": "View details" }
+    ]
+  ]
+}
+```
+
+**Example with mixed head items (components and plain objects)**:
+
+```
+{
+  "component": "table",
+  "title": "Mixed Head Example",
+  "head": [
+    {
+      "component": "text",
+      "text": "Dynamic Header",
+      "classes": "govuk-!-font-weight-bold",
+      "headerClasses": "govuk-!-width-one-half"
+    },
+    {
+      "text": "Plain Header",
+      "format": "numeric"
+    },
+    {
+      "component": "status",
+      "text": "Status",
+      "colour": "green"
+    }
+  ],
+  "rows": [
+    [
+      { "component": "text", "text": "Data 1" },
+      { "component": "text", "text": "100" },
+      { "component": "status", "text": "Active", "colour": "green" }
+    ]
+  ]
+}
+```
+
 **Parameters**:
 
 - `rows` (required): 2D array where each row contains column objects
+- `head` (optional): Array of header cell objects with full GDS table support
 - `title` (optional): Heading above the table (renders as h3)
 - `firstCellIsHeader` (optional): Whether first cell in each row should be a header
 
+**Head Cell Options**:
+
+Head items can be either:
+
+1. **Dynamic components** - Any dynamic component (text, status, etc.) with optional styling properties
+2. **Plain GDS objects** - Standard GDS table head objects with text/html content
+
+**Dynamic Component Head Items**:
+
+- `component` (required): Component type (e.g., "text", "status")
+- Component-specific properties (e.g., `text`, `colour` for status component)
+- `classes` (optional): CSS classes for the component itself
+- `headerClasses` (optional): CSS classes for the table header cell (`<th>`)
+- `format` (optional): Adds `govuk-table__header--{format}` class (e.g., "numeric")
+- `colspan` (optional): Column span attribute
+- `rowspan` (optional): Row span attribute
+- `attributes` (optional): Object of additional HTML attributes
+
+**Plain GDS Head Objects**:
+
+- `text` (optional): Plain text content
+- `html` (optional): HTML content (takes precedence over text)
+- `classes` (optional): Additional CSS classes
+- `format` (optional): Adds `govuk-table__header--{format}` class (e.g., "numeric")
+- `colspan` (optional): Column span attribute
+- `rowspan` (optional): Row span attribute
+- `attributes` (optional): Object of additional HTML attributes
+
 **Row Structure**:
 
-- First row defines column headers via `label` field
+- If `head` is not provided, first row defines column headers via `label` field
 - Each cell can contain any dynamic component (text, status, url, etc.)
 - Cells support the full component system with nesting
 
 **Output**: GOV.UK Table component with optional heading
+
+**Note**: For component-based head items, `classes` applies to the component content while `headerClasses` applies to the `<th>` element. This allows separate styling for the header cell and its content.
 
 ---
 
