@@ -877,11 +877,66 @@ When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph c
 
 **Notes**:
 
-- The `repeat` component is transparent - it doesn't render its own HTML element
+- The `repeat` component doesn't render its own HTML element
 - Always use `[*]` in `itemsRef` to iterate over array items
 - Within the `items` template, use `@.` to reference fields on the current item
 - Can be nested inside accordions, tables, or other repeat components
 - The `items` property can be a single component or an array of components
+
+---
+
+### 15. Warning Text Component
+
+**Purpose**: Important warning messages with icon and accessible text
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Warning",
+  "classes": "custom-warning-class"
+}
+```
+
+**Parameters**:
+
+- `text` (required): Warning message text
+- `iconFallbackText` (optional): Accessible fallback text for icon (defaults to "Warning")
+- `classes` (optional): Additional CSS classes
+- `attributes` (optional): Object of additional HTML attributes
+
+**Output**: `<div class="govuk-warning-text">...</div>`
+
+**Example with custom icon text**:
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Legal warning",
+  "classes": "legal-warning",
+  "attributes": { "data-testid": "legal-warning" }
+}
+```
+
+**Example with nested components for rich formatting**:
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Legal warning"
+}
+```
+
+**Note**: Text content is automatically escaped for security. For rich formatting, use nested components within containers instead of HTML.
+
+**Usage Notes**:
+
+- Use for important warnings about consequences of actions or inaction
+- Icon is automatically included with "!" symbol
+- Screen reader text is automatically added for accessibility
+- Can be used within containers, accordions, and other components
 
 ---
 

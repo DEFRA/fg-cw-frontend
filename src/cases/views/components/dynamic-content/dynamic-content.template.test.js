@@ -875,4 +875,61 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Continue to next step");
     expect(result).toContain("/next");
   });
+
+  test("renders warning-text component with default settings", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "You can be fined up to £5,000 if you do not register.",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-warning-text");
+    expect(result).toContain(
+      "You can be fined up to £5,000 if you do not register.",
+    );
+    expect(result).toContain(
+      'class="govuk-warning-text__icon" aria-hidden="true">!</span>',
+    );
+    expect(result).toContain(
+      '<span class="govuk-visually-hidden">Warning</span>',
+    );
+  });
+
+  test("renders warning-text component with custom icon fallback text", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "This action cannot be undone.",
+        iconFallbackText: "Caution",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-warning-text");
+    expect(result).toContain("This action cannot be undone.");
+    expect(result).toContain(
+      '<span class="govuk-visually-hidden">Caution</span>',
+    );
+  });
+
+  test("renders warning-text component with custom classes and attributes", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "Legal warning message",
+        classes: "legal-warning",
+        attributes: { "data-testid": "legal-warning" },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('class="govuk-warning-text legal-warning"');
+    expect(result).toContain('data-testid="legal-warning"');
+    expect(result).toContain("Legal warning message");
+  });
 });
