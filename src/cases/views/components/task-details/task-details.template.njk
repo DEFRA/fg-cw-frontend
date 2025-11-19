@@ -7,6 +7,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 {% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
+{% from "../../../../common/components/notification-banner/macro.njk" import notificationBanner %}
 
 {% set caseLink = "/cases/" + params.caseId %}
 
@@ -37,7 +38,61 @@
 
     {{ dynamicContent(currentTask.description) }}
 
-    {% if currentTask.completed %}
+    {% if currentTask.completed and params.isInteractive %}
+      <p class="govuk-inset-text">
+        This task was completed by {{ currentTask.updatedBy }} on
+        {{ currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
+        {{ currentTask.updatedAt | formatDate("hh:mm a") }}
+      </p>
+
+      {% if currentTask.canCompleteTask %}
+        {{
+          taskOutcomeForm({
+            error: errorList.length,
+            formAction: currentTask.formAction,
+            statusOptions: currentTask.statusOptions,
+            status: currentTask.status,
+            completed: currentTask.completed,
+            commentInputDef: currentTask.commentInputDef,
+            commentText: currentTask.comment.text if currentTask.comment else '',
+            isInteractive: params.isInteractive
+          })
+        }}
+      {% elif currentTask.requiredRoles %}
+        <p>You cannot edit this task.</p>
+        {% set rolesHtml %}
+          <p>Someone who is a:</p>
+          {# Display "All of" roles #}
+          {% if currentTask.requiredRoles.allOf and currentTask.requiredRoles.allOf.length %}
+            <div class="govuk-!-margin-bottom-3">
+              <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+                {% for role in currentTask.requiredRoles.allOf %}
+                  <li>{{ role }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+
+          {# Display "Any of" roles #}
+          {% if currentTask.requiredRoles.anyOf and currentTask.requiredRoles.anyOf.length %}
+            <div>
+              <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-1">
+                {% for role in currentTask.requiredRoles.anyOf %}
+                  <li>{{ role }}</li>
+                {% endfor %}
+              </ul>
+            </div>
+          {% endif %}
+        {% endset %}
+
+        {{
+          govukDetails({
+          summaryText: "Who can edit the task",
+          html: rolesHtml
+          })
+        }}
+      {% endif %}
+    {% elif currentTask.completed and params.isInteractive === false %}
       <p class="govuk-inset-text">
         This task was completed by {{ currentTask.updatedBy }} on
         {{ currentTask.updatedAt | formatDate("EEE do MMMM yyyy") }} at
@@ -51,6 +106,15 @@
         </div>
       {% endif %}
     {% elif currentTask.canCompleteTask %}
+      {% if params.isInteractive === false %}
+        {{
+          notificationBanner({
+            text: "Tasks cannot be edited in the current status",
+            type: 'information'
+          })
+        }}
+      {% endif %}
+
       {{
         taskOutcomeForm({
           error: errorList.length,
@@ -59,7 +123,8 @@
           status: currentTask.status,
           completed: currentTask.completed,
           commentInputDef: currentTask.commentInputDef,
-          commentText: currentTask.comment.text if currentTask.comment else ''
+          commentText: currentTask.comment.text if currentTask.comment else '',
+          isInteractive: params.isInteractive
         })
       }}
     {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
