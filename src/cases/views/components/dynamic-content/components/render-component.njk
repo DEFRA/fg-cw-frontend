@@ -12,6 +12,7 @@
 {% from "./details.njk" import defraDetails %}
 {% from "./accordion.njk" import defraAccordion %}
 {% from "./line-break.njk" import defraLineBreak %}
+{% from "./warning-text.njk" import defraWarningText %}
 
 {% macro renderDefraComponent(params) %}
   {%- set component = params.component or 'text' %}
@@ -44,5 +45,7 @@
     {{ defraAccordion(params, renderDefraComponent) }}
   {% elif component == "line-break" %}
     {{ defraLineBreak(params) }}
+  {% elif component == "warning-text" %}
+    {{ defraWarningText(params) }}
   {% endif %}
 {% endmacro %}

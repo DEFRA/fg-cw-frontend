@@ -3,5 +3,5 @@
   {%- set classes = params.classes or 'govuk-body' %}
   {%- set id = params.id or '' %}
 
-  <p{% if id %} id="{{ id }}"{% endif %}{% if classes %} class="{{ classes }}"{% endif %}>{{ value | safe }}</p>
+  <p{% if id %} id="{{ id }}"{% endif %}{% if classes %} class="{{ classes }}"{% endif %}>{{ value | escape }}</p>
 {% endmacro %}
