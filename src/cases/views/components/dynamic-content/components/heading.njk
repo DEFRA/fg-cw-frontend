@@ -16,6 +16,6 @@
   ] %}
 
   <h{{ level }} class="{{ defaultClasses[level-1] }} {% if classes %} {{ classes }}{% endif %}">
-    {{ text | safe }}
+    {{ text | escape }}
   </h{{ level }}>
 {% endmacro %}

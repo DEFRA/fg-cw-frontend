@@ -17,6 +17,7 @@ describe("findCaseTabUseCase", () => {
   it("returns tab data from repository", async () => {
     const caseId = "case-123";
     const tabId = "caseDetails";
+    const queryString = "";
     const mockTabData = {
       _id: "case-123",
       caseRef: "AGR-2024-001",
@@ -46,9 +47,47 @@ describe("findCaseTabUseCase", () => {
 
     findTabById.mockResolvedValue(mockTabData);
 
-    const result = await findCaseTabUseCase(authContext, caseId, tabId);
+    const result = await findCaseTabUseCase(
+      authContext,
+      caseId,
+      tabId,
+      queryString,
+    );
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      queryString,
+    );
+    expect(result).toEqual(mockTabData);
+  });
+
+  it("passes querystring to repository when provided", async () => {
+    const caseId = "case-123";
+    const tabId = "caseDetails";
+    const querystring = "runId=2";
+    const mockTabData = {
+      _id: "case-123",
+      caseRef: "AGR-2024-001",
+      tabId: "caseDetails",
+    };
+
+    findTabById.mockResolvedValue(mockTabData);
+
+    const result = await findCaseTabUseCase(
+      authContext,
+      caseId,
+      tabId,
+      querystring,
+    );
+
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      querystring,
+    );
     expect(result).toEqual(mockTabData);
   });
 
@@ -81,7 +120,12 @@ describe("findCaseTabUseCase", () => {
 
     const result = await findCaseTabUseCase(authContext, caseId, tabId);
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      undefined,
+    );
     expect(result).toEqual(mockTimelineData);
   });
 
@@ -93,7 +137,12 @@ describe("findCaseTabUseCase", () => {
 
     const result = await findCaseTabUseCase(authContext, caseId, tabId);
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      undefined,
+    );
     expect(result).toBeNull();
   });
 
@@ -105,7 +154,12 @@ describe("findCaseTabUseCase", () => {
 
     const result = await findCaseTabUseCase(authContext, caseId, tabId);
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      undefined,
+    );
     expect(result).toBeUndefined();
   });
 
@@ -120,7 +174,12 @@ describe("findCaseTabUseCase", () => {
       findCaseTabUseCase(authContext, caseId, tabId),
     ).rejects.toThrow("Database connection failed");
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, tabId);
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      tabId,
+      undefined,
+    );
   });
 
   it("handles empty case ID", async () => {
@@ -132,7 +191,7 @@ describe("findCaseTabUseCase", () => {
 
     const result = await findCaseTabUseCase(authContext, caseId, tabId);
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, "", tabId);
+    expect(findTabById).toHaveBeenCalledWith(authContext, "", tabId, undefined);
     expect(result).toBeNull();
   });
 
@@ -145,7 +204,12 @@ describe("findCaseTabUseCase", () => {
 
     const result = await findCaseTabUseCase(authContext, caseId, tabId);
 
-    expect(findTabById).toHaveBeenCalledWith(authContext, caseId, "");
+    expect(findTabById).toHaveBeenCalledWith(
+      authContext,
+      caseId,
+      "",
+      undefined,
+    );
     expect(result).toBeNull();
   });
 });
