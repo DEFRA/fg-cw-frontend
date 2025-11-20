@@ -40,6 +40,7 @@ const mapCasesToTable = (cases) => {
       { text: "Assignee" },
     ],
     rows: cases.map(
+      // eslint-disable-next-line complexity
       ({ _id, caseRef, payload, currentStatus, assignedUser }) => ({
         _id,
         select: {
@@ -50,7 +51,7 @@ const mapCasesToTable = (cases) => {
           text: mapText(caseRef),
         },
         business: {
-          text: "[business name]",
+          text: mapText(payload?.answers?.applicant?.business?.name),
         },
         sbi: {
           text: mapText(payload?.identifiers?.sbi),
