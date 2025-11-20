@@ -9,7 +9,7 @@ exports[`viewNotesRoute > handles case with no comments 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
@@ -99,7 +99,7 @@ exports[`viewNotesRoute > handles case with null comments 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
@@ -189,7 +189,7 @@ exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          
         </h1>
       </div>
     </div>
