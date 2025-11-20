@@ -316,6 +316,77 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Row 1 Col 2");
   });
 
+  test("renders table component with caption", () => {
+    const params = [
+      {
+        component: "table",
+        caption: "Assessment Results",
+        captionClasses: "govuk-table__caption--l",
+        rows: [
+          [
+            { label: "Name", component: "text", text: "Test Data" },
+            { label: "Score", component: "text", text: "95%" },
+          ],
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Assessment Results");
+    expect(result).toContain("govuk-table__caption--l");
+    expect(result).toContain("<caption");
+    expect(result).toContain("Test Data");
+    expect(result).toContain("95%");
+  });
+
+  test("renders table component with title for backward compatibility", () => {
+    const params = [
+      {
+        component: "table",
+        title: "Legacy Title",
+        rows: [
+          [
+            { label: "Name", component: "text", text: "Test Data" },
+            { label: "Score", component: "text", text: "85%" },
+          ],
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Legacy Title");
+    expect(result).toContain("govuk-heading-m");
+    expect(result).toContain("Test Data");
+    expect(result).toContain("85%");
+  });
+
+  test("renders table component with caption overriding title", () => {
+    const params = [
+      {
+        component: "table",
+        caption: "New Caption",
+        captionClasses: "govuk-table__caption--m",
+        title: "Old Title",
+        rows: [
+          [
+            { label: "Name", component: "text", text: "Test Data" },
+            { label: "Score", component: "text", text: "92%" },
+          ],
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("New Caption");
+    expect(result).toContain("<caption");
+    expect(result).not.toContain("Old Title");
+    expect(result).toContain("Test Data");
+    expect(result).toContain("92%");
+  });
+
   test("renders container component with nested content", () => {
     const params = [
       {
@@ -874,5 +945,107 @@ describe("dynamic-content template", () => {
     expect(result).toContain("<br />");
     expect(result).toContain("Continue to next step");
     expect(result).toContain("/next");
+  });
+
+  test("renders warning-text component with default settings", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "You can be fined up to £5,000 if you do not register.",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-warning-text");
+    expect(result).toContain(
+      "You can be fined up to £5,000 if you do not register.",
+    );
+    expect(result).toContain(
+      'class="govuk-warning-text__icon" aria-hidden="true">!</span>',
+    );
+    expect(result).toContain(
+      '<span class="govuk-visually-hidden">Warning</span>',
+    );
+  });
+
+  test("renders warning-text component with custom icon fallback text", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "This action cannot be undone.",
+        iconFallbackText: "Caution",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("govuk-warning-text");
+    expect(result).toContain("This action cannot be undone.");
+    expect(result).toContain(
+      '<span class="govuk-visually-hidden">Caution</span>',
+    );
+  });
+
+  test("renders warning-text component with custom classes and attributes", () => {
+    const params = [
+      {
+        component: "warning-text",
+        text: "Legal warning message",
+        classes: "legal-warning",
+        attributes: { "data-testid": "legal-warning" },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('class="govuk-warning-text legal-warning"');
+    expect(result).toContain('data-testid="legal-warning"');
+    expect(result).toContain("Legal warning message");
+  });
+
+  test("escapes HTML in text component", () => {
+    const params = [
+      {
+        component: "text",
+        text: "This contains <script>alert('xss')</script> HTML",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain(
+      "&lt;script&gt;alert(&#39;xss&#39;)&lt;/script&gt;",
+    );
+    expect(result).not.toContain("<script>");
+  });
+
+  test("escapes HTML in paragraph component", () => {
+    const params = [
+      {
+        component: "paragraph",
+        text: "Paragraph with <strong>bold</strong> text",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("&lt;strong&gt;bold&lt;/strong&gt;");
+    expect(result).not.toContain("<strong>");
+  });
+
+  test("escapes HTML in heading component", () => {
+    const params = [
+      {
+        component: "heading",
+        text: "Heading with <em>emphasis</em>",
+        level: 2,
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("&lt;em&gt;emphasis&lt;/em&gt;");
+    expect(result).not.toContain("<em>");
   });
 });

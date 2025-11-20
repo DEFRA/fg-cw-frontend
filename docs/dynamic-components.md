@@ -365,19 +365,132 @@ Both `label` and `text` support two formats for maximum flexibility:
 }
 ```
 
+**Example with component-based head configuration**:
+
+```
+{
+  "component": "table",
+  "title": "Assessment Results",
+  "head": [
+    {
+      "component": "text",
+      "text": "Assessment Type",
+      "headerClasses": "govuk-!-width-one-third"
+    },
+    {
+      "component": "status",
+      "text": "Status",
+      "colour": "blue",
+      "classes": "govuk-!-font-weight-bold",
+      "headerClasses": "sortable-header",
+      "attributes": { "data-sortable": "true" }
+    },
+    {
+      "component": "text",
+      "text": "Score",
+      "format": "numeric"
+    },
+    {
+      "component": "text",
+      "text": "Action",
+      "headerClasses": "govuk-visually-hidden"
+    }
+  ],
+  "rows": [
+    [
+      { "component": "text", "text": "Area validation" },
+      { "component": "status", "text": "PASSED", "colour": "green" },
+      { "component": "text", "text": "95%" },
+      { "component": "text", "text": "View details" }
+    ],
+    [
+      { "component": "text", "text": "Boundary check" },
+      { "component": "status", "text": "FAILED", "colour": "red" },
+      { "component": "text", "text": "72%" },
+      { "component": "text", "text": "View details" }
+    ]
+  ]
+}
+```
+
+**Example with mixed head items (components and plain objects)**:
+
+```
+{
+  "component": "table",
+  "title": "Mixed Head Example",
+  "head": [
+    {
+      "component": "text",
+      "text": "Dynamic Header",
+      "classes": "govuk-!-font-weight-bold",
+      "headerClasses": "govuk-!-width-one-half"
+    },
+    {
+      "text": "Plain Header",
+      "format": "numeric"
+    },
+    {
+      "component": "status",
+      "text": "Status",
+      "colour": "green"
+    }
+  ],
+  "rows": [
+    [
+      { "component": "text", "text": "Data 1" },
+      { "component": "text", "text": "100" },
+      { "component": "status", "text": "Active", "colour": "green" }
+    ]
+  ]
+}
+```
+
 **Parameters**:
 
 - `rows` (required): 2D array where each row contains column objects
-- `title` (optional): Heading above the table (renders as h3)
+- `head` (optional): Array of header cell objects with full GDS table support
+- `caption` (optional): Caption text for the table (GDS semantic caption inside `<table>`)
+- `captionClasses` (optional): CSS classes for caption size (e.g., "govuk-table**caption--l", "govuk-table**caption--m")
 - `firstCellIsHeader` (optional): Whether first cell in each row should be a header
+
+**Head Cell Options**:
+
+Head items can be either:
+
+1. **Dynamic components** - Any dynamic component (text, status, etc.) with optional styling properties
+2. **Plain GDS objects** - Standard GDS table head objects with text/html content
+
+**Dynamic Component Head Items**:
+
+- `component` (required): Component type (e.g., "text", "status")
+- Component-specific properties (e.g., `text`, `colour` for status component)
+- `classes` (optional): CSS classes for the component itself
+- `headerClasses` (optional): CSS classes for the table header cell (`<th>`)
+- `format` (optional): Adds `govuk-table__header--{format}` class (e.g., "numeric")
+- `colspan` (optional): Column span attribute
+- `rowspan` (optional): Row span attribute
+- `attributes` (optional): Object of additional HTML attributes
+
+**Plain GDS Head Objects**:
+
+- `text` (optional): Plain text content
+- `html` (optional): HTML content (takes precedence over text)
+- `classes` (optional): Additional CSS classes
+- `format` (optional): Adds `govuk-table__header--{format}` class (e.g., "numeric")
+- `colspan` (optional): Column span attribute
+- `rowspan` (optional): Row span attribute
+- `attributes` (optional): Object of additional HTML attributes
 
 **Row Structure**:
 
-- First row defines column headers via `label` field
+- If `head` is not provided, first row defines column headers via `label` field
 - Each cell can contain any dynamic component (text, status, url, etc.)
 - Cells support the full component system with nesting
 
 **Output**: GOV.UK Table component with optional heading
+
+**Note**: For component-based head items, `classes` applies to the component content while `headerClasses` applies to the `<th>` element. This allows separate styling for the header cell and its content.
 
 ---
 
@@ -765,11 +878,66 @@ When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph c
 
 **Notes**:
 
-- The `repeat` component is transparent - it doesn't render its own HTML element
+- The `repeat` component doesn't render its own HTML element
 - Always use `[*]` in `itemsRef` to iterate over array items
 - Within the `items` template, use `@.` to reference fields on the current item
 - Can be nested inside accordions, tables, or other repeat components
 - The `items` property can be a single component or an array of components
+
+---
+
+### 15. Warning Text Component
+
+**Purpose**: Important warning messages with icon and accessible text
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Warning",
+  "classes": "custom-warning-class"
+}
+```
+
+**Parameters**:
+
+- `text` (required): Warning message text
+- `iconFallbackText` (optional): Accessible fallback text for icon (defaults to "Warning")
+- `classes` (optional): Additional CSS classes
+- `attributes` (optional): Object of additional HTML attributes
+
+**Output**: `<div class="govuk-warning-text">...</div>`
+
+**Example with custom icon text**:
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Legal warning",
+  "classes": "legal-warning",
+  "attributes": { "data-testid": "legal-warning" }
+}
+```
+
+**Example with nested components for rich formatting**:
+
+```
+{
+  "component": "warning-text",
+  "text": "You can be fined up to £5,000 if you do not register.",
+  "iconFallbackText": "Legal warning"
+}
+```
+
+**Note**: Text content is automatically escaped for security. For rich formatting, use nested components within containers instead of HTML.
+
+**Usage Notes**:
+
+- Use for important warnings about consequences of actions or inaction
+- Icon is automatically included with "!" symbol
+- Screen reader text is automatically added for accessibility
+- Can be used within containers, accordions, and other components
 
 ---
 

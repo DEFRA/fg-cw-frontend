@@ -6,13 +6,19 @@ export const viewCaseTabRoute = {
   path: "/cases/{caseId}/{tabId}",
   async handler(request, h) {
     const { caseId, tabId } = request.params;
+    const queryString = new URLSearchParams(request.query).toString();
 
     const authContext = {
       token: request.auth.credentials.token,
       user: request.auth.credentials.user,
     };
 
-    const tabData = await findCaseTabUseCase(authContext, caseId, tabId);
+    const tabData = await findCaseTabUseCase(
+      authContext,
+      caseId,
+      tabId,
+      queryString,
+    );
     const viewModel = createViewTabViewModel(tabData, tabId);
 
     return h.view(`pages/view-tab`, viewModel);

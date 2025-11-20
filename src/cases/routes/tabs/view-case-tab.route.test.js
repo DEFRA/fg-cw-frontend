@@ -165,6 +165,7 @@ describe("viewCaseTabRoute", () => {
       authContext,
       "case-123",
       "case-details",
+      "",
     );
 
     const $ = load(result);
@@ -289,12 +290,57 @@ describe("viewCaseTabRoute", () => {
       authContext,
       "case-456",
       "timeline",
+      "",
     );
 
     const $ = load(result);
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+  });
+
+  it("forwards query string to use case", async () => {
+    const mockTabData = {
+      _id: "case-query",
+      caseRef: "CASE-QUERY",
+      tabId: "agreements",
+      links: [
+        { id: "tasks", text: "Tasks", href: "/cases/case-query" },
+        {
+          id: "agreements",
+          text: "Agreements",
+          href: "/cases/case-query/agreements",
+        },
+      ],
+    };
+
+    findCaseTabUseCase.mockResolvedValue(mockTabData);
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/cases/case-query/agreements?runId=2",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
+    });
+
+    const authContext = {
+      token: "mock-token",
+      user: {},
+    };
+
+    expect(statusCode).toBe(200);
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-query",
+      "agreements",
+      "runId=2",
+    );
   });
 
   it("handles use case returning null", async () => {
@@ -323,6 +369,7 @@ describe("viewCaseTabRoute", () => {
       authContext,
       "nonexistent",
       "tab",
+      "",
     );
   });
 
@@ -352,6 +399,7 @@ describe("viewCaseTabRoute", () => {
       authContext,
       "case-error",
       "tab-error",
+      "",
     );
   });
 
@@ -393,6 +441,7 @@ describe("viewCaseTabRoute", () => {
       authContext,
       "param-test-case",
       "agreements",
+      "",
     );
 
     const $ = load(result);

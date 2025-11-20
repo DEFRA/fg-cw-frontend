@@ -13,4 +13,5 @@ src/cases/views/components/dynamic-content/components/ordered-list.njk
 src/cases/views/components/dynamic-content/components/unordered-list.njk
 src/cases/views/components/dynamic-content/components/paragraph.njk
 src/cases/views/components/dynamic-content/components/accordion.njk
+src/cases/views/components/dynamic-content/components/warning-text.njk
 **/__snapshots__/
