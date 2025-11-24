@@ -143,6 +143,81 @@ describe("updateStageOutcomeUseCase", () => {
   });
 
   describe("validation errors", () => {
+    it("returns error when actionCode is missing", async () => {
+      const actionData = {
+        actionCode: undefined,
+        commentFieldName: "approve-comment",
+        comment: "Some comment",
+      };
+
+      const result = await updateStageOutcomeUseCase(authContext, {
+        caseId: "case-123",
+        actionData,
+      });
+
+      expect(findCaseByIdUseCase).not.toHaveBeenCalled();
+      expect(updateStageOutcome).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        success: false,
+        errors: {
+          actionCode: {
+            text: "Choose an option",
+            href: "#actionCode",
+          },
+        },
+      });
+    });
+
+    it("returns error when actionCode is empty string", async () => {
+      const actionData = {
+        actionCode: "",
+        commentFieldName: "approve-comment",
+        comment: "Some comment",
+      };
+
+      const result = await updateStageOutcomeUseCase(authContext, {
+        caseId: "case-123",
+        actionData,
+      });
+
+      expect(findCaseByIdUseCase).not.toHaveBeenCalled();
+      expect(updateStageOutcome).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        success: false,
+        errors: {
+          actionCode: {
+            text: "Choose an option",
+            href: "#actionCode",
+          },
+        },
+      });
+    });
+
+    it("returns error when actionCode is null", async () => {
+      const actionData = {
+        actionCode: null,
+        commentFieldName: "approve-comment",
+        comment: "Some comment",
+      };
+
+      const result = await updateStageOutcomeUseCase(authContext, {
+        caseId: "case-123",
+        actionData,
+      });
+
+      expect(findCaseByIdUseCase).not.toHaveBeenCalled();
+      expect(updateStageOutcome).not.toHaveBeenCalled();
+      expect(result).toEqual({
+        success: false,
+        errors: {
+          actionCode: {
+            text: "Choose an option",
+            href: "#actionCode",
+          },
+        },
+      });
+    });
+
     it("returns error when required comment is missing", async () => {
       const actionData = {
         actionCode: "approve",
