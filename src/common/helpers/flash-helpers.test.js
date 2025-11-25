@@ -1,5 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
-import { getFlashData, setFlashData } from "./flash-helpers.js";
+import {
+  getFlashData,
+  getFlashNotification,
+  setFlashData,
+} from "./flash-helpers.js";
 
 describe("flash-helpers", () => {
   const createMockRequest = () => ({
@@ -302,6 +306,114 @@ describe("flash-helpers", () => {
         formData: expectedFormData,
         notification: undefined,
       });
+    });
+  });
+
+  describe("getFlashNotification", () => {
+    it("retrieves notification from flash storage", () => {
+      const mockRequest = createMockRequest();
+      const expectedNotification = {
+        variant: "success",
+        title: "Success",
+        text: "Operation completed successfully",
+      };
+
+      mockRequest.yar.flash.mockReturnValueOnce([expectedNotification]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith("notification");
+      expect(result).toEqual(expectedNotification);
+    });
+
+    it("returns undefined when no notification in flash storage", () => {
+      const mockRequest = createMockRequest();
+
+      mockRequest.yar.flash.mockReturnValueOnce([]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith("notification");
+      expect(result).toBeUndefined();
+    });
+
+    it("returns undefined when flash returns undefined", () => {
+      const mockRequest = createMockRequest();
+
+      mockRequest.yar.flash.mockReturnValueOnce(undefined);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith("notification");
+      expect(result).toBeUndefined();
+    });
+
+    it("retrieves only the first notification from flash array", () => {
+      const mockRequest = createMockRequest();
+      const firstNotification = {
+        variant: "success",
+        title: "First",
+        text: "First notification",
+      };
+      const secondNotification = {
+        variant: "error",
+        title: "Second",
+        text: "Second notification",
+      };
+
+      mockRequest.yar.flash.mockReturnValueOnce([
+        firstNotification,
+        secondNotification,
+      ]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(result).toEqual(firstNotification);
+    });
+
+    it("retrieves error notification", () => {
+      const mockRequest = createMockRequest();
+      const errorNotification = {
+        variant: "error",
+        title: "Error",
+        text: "Something went wrong",
+      };
+
+      mockRequest.yar.flash.mockReturnValueOnce([errorNotification]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(result).toEqual(errorNotification);
+    });
+
+    it("retrieves information notification", () => {
+      const mockRequest = createMockRequest();
+      const infoNotification = {
+        variant: "information",
+        title: "Information",
+        text: "Please note this information",
+      };
+
+      mockRequest.yar.flash.mockReturnValueOnce([infoNotification]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(result).toEqual(infoNotification);
+    });
+
+    it("retrieves warning notification", () => {
+      const mockRequest = createMockRequest();
+      const warningNotification = {
+        variant: "warning",
+        title: "Warning",
+        text: "Please be aware of this",
+      };
+
+      mockRequest.yar.flash.mockReturnValueOnce([warningNotification]);
+
+      const result = getFlashNotification(mockRequest);
+
+      expect(result).toEqual(warningNotification);
     });
   });
 });

@@ -13,6 +13,9 @@ export const setFlashData = (request, { errors, formData, notification }) => {
 export const getFlashData = (request) => {
   const errors = request.yar.flash("errors")?.[0];
   const formData = request.yar.flash("formData")?.[0];
-  const notification = request.yar.flash("notification")?.[0];
+  const notification = getFlashNotification(request);
   return { errors, formData, notification };
 };
+
+export const getFlashNotification = (request) =>
+  request.yar.flash("notification")?.[0];
