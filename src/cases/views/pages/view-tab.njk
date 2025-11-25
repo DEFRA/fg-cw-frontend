@@ -1,12 +1,6 @@
-{% extends '../layouts/case-layout.njk' %}
-{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
-{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% extends '../layouts/case-detail-layout.njk' %}
 {% from "../components/dynamic-content/macro.njk" import dynamicContent %}
 
-{% block content %}
-  {{ caseSummary(data) }}
-
-  {{ govukServiceNavigation({ navigation: data.links, classes: "govuk-!-margin-bottom-6" }) }}
-
+{% block pageContent %}
   {{ dynamicContent(data.content) }}
 {% endblock %}

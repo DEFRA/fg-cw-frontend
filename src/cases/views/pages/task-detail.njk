@@ -1,20 +1,13 @@
-{% extends '../layouts/case-layout.njk' %}
-{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% extends '../layouts/case-detail-layout.njk' %}
 {% from "../components/task-details/macro.njk" import taskDetails %}
-{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
-{% block content %}
-  {{ caseSummary(data) }}
-  <div class="govuk-body">
-    {{ govukServiceNavigation({ navigation: links }) }}
-
-    {{
-      taskDetails({
-        errorList: errorList,
-        caseId: data.caseId,
-        currentTask: data.currentTask,
-        isInteractive: data.isInteractive
-      })
-    }}
-  </div>
+{% block pageContent %}
+  {{
+    taskDetails({
+      errorList: errorList,
+      caseId: data.caseId,
+      currentTask: data.currentTask,
+      isInteractive: data.isInteractive
+    })
+  }}
 {% endblock %}

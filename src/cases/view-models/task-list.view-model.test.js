@@ -9,7 +9,11 @@ describe("createTaskListViewModel", () => {
     workflowCode: "CASE-CODE-001",
     dateReceived: "2021-01-10T00:00:00.000Z",
     assignedUser: "john doe",
-    banner: { type: "info", message: "Test banner" },
+    banner: {
+      variant: "information",
+      title: "Test banner",
+      text: "Test banner",
+    },
     currentStatus: "In Progress",
     links: createMockLinks("case-123"),
     payload: {

@@ -163,7 +163,11 @@ describe("createTaskDetailViewModel", () => {
     currentStatus: "active",
     dateReceived: "2024-01-01",
     assignedUser: "user123",
-    banner: { type: "info", message: "Test banner" },
+    banner: {
+      variant: "information",
+      title: "Test banner",
+      text: "Test banner",
+    },
     links: [
       { id: "tasks", text: "Tasks", href: "/tasks" },
       { id: "details", text: "Details", href: "/details" },

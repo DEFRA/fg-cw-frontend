@@ -1,0 +1,27 @@
+{% extends "./case-layout.njk" %}
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "../components/flash-notifications/macro.njk" import flashNotifications %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
+{% set navigation = data.links or links %}
+
+{% block content %}
+  {% block caseSummary %}
+    {% if data.case %}
+      {{ caseSummary(data.case) }}
+    {% elif data %}
+      {{ caseSummary(data) }}
+    {% endif %}
+  {% endblock %}
+
+  {%- block flashNotifications -%}
+    {{ flashNotifications(notification) if notification }}
+  {%- endblock -%}
+
+  {% block pageNavigation %}
+    {{ govukServiceNavigation({ navigation: navigation, classes: "govuk-!-margin-bottom-6" }) }}
+  {% endblock %}
+
+  {% block pageContent %}
+  {% endblock %}
+{% endblock %}

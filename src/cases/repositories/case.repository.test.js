@@ -7,6 +7,7 @@ import {
   findAll,
   findById,
   findTabById,
+  triggerPageAction,
   updateStageOutcome,
   updateTaskStatus,
 } from "./case.repository.js";
@@ -198,6 +199,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
+          timeout: 10000,
         },
       );
       expect(result).toEqual({
@@ -236,6 +238,7 @@ describe("Case Repository", () => {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
+          timeout: 10000,
         },
       );
     });
@@ -527,6 +530,69 @@ describe("Case Repository", () => {
           authorization: `Bearer ${authContext.token}`,
         },
         payload: { text: "This will fail" },
+      });
+    });
+  });
+
+  describe("triggerPageAction", () => {
+    it("calls API with correct endpoint and payload", async () => {
+      const mockData = {
+        caseId: "case-123",
+        actionCode: "RECALCULATE_RULES",
+      };
+
+      const mockResponse = { res: { statusCode: 200 }, payload: {} };
+      wreck.post.mockResolvedValueOnce(mockResponse);
+
+      const result = await triggerPageAction(authContext, mockData);
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-123/page-action", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+        payload: { actionCode: "RECALCULATE_RULES" },
+      });
+      expect(result).toEqual(mockResponse);
+    });
+
+    it("handles different action codes", async () => {
+      const mockData = {
+        caseId: "case-456",
+        actionCode: "FETCH_RULES",
+      };
+
+      const mockResponse = { res: { statusCode: 200 }, payload: {} };
+      wreck.post.mockResolvedValueOnce(mockResponse);
+
+      const result = await triggerPageAction(authContext, mockData);
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-456/page-action", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+        payload: { actionCode: "FETCH_RULES" },
+      });
+      expect(result).toEqual(mockResponse);
+    });
+
+    it("propagates API errors", async () => {
+      const mockData = {
+        caseId: "case-error",
+        actionCode: "INVALID_ACTION",
+      };
+
+      const apiError = new Error("External action not found");
+      wreck.post.mockRejectedValueOnce(apiError);
+
+      await expect(triggerPageAction(authContext, mockData)).rejects.toThrow(
+        "External action not found",
+      );
+
+      expect(wreck.post).toHaveBeenCalledWith("/cases/case-error/page-action", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+        payload: { actionCode: "INVALID_ACTION" },
       });
     });
   });

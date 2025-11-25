@@ -2,14 +2,15 @@
 
 exports[`listTasksRoute > returns a case with tasks 1`] = `
 "
-  
+      
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
     <div class="moj-page-header-actions">
       <div class="moj-page-header-actions__title">
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          
+          Valley Farm
         </h1>
       </div>
     </div>
@@ -20,11 +21,8 @@ exports[`listTasksRoute > returns a case with tasks 1`] = `
   </div>
 </div>
 
-
-
-  <div class="govuk-body">
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -81,7 +79,8 @@ Timeline
   </div>
 
 
-    
+
+  
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l govuk-!-margin-top-6" data-testid="stage-heading">
@@ -107,6 +106,5 @@ Timeline
   </div>
 </div>
 
-  </div>
         "
 `;

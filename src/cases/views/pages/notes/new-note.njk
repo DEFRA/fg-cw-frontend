@@ -1,13 +1,9 @@
-{% extends '../layouts/case-layout.njk' %}
-{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% extends '../layouts/case-detail-layout.njk' %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
-{% block content %}
-  {{ caseSummary(data) }}
-
+{% block pageContent %}
   {% if errorList.length > 0 %}
     {{
       govukErrorSummary({
@@ -17,32 +13,28 @@
     }}
   {% endif %}
 
-  <div class="govuk-body">
-    {{ govukServiceNavigation({ navigation: links }) }}
+  <form action="/cases/{{ data.caseId }}/notes" method="post">
+    {{
+      govukTextarea({
+        name: "text",
+        id: "text",
+        value: data.formData.text,
+        label: {
+          text: "Add a note",
+          classes: "govuk-label govuk-label--l govuk-!-margin-top-6",
+          isPageHeading: yes
+        },
+        hint: {
+          text: "All notes will be saved for auditing purposes"
+        },
+        errorMessage: errors.text and { text: errors.text }
+      })
+    }}
 
-    <form action="/cases/{{ data.caseId }}/notes" method="post">
-      {{
-        govukTextarea({
-          name: "text",
-          id: "text",
-          value: data.formData.text,
-          label: {
-            text: "Add a note",
-            classes: "govuk-label govuk-label--l govuk-!-margin-top-6",
-            isPageHeading: yes
-          },
-          hint: {
-            text: "All notes will be saved for auditing purposes"
-          },
-          errorMessage: errors.text and { text: errors.text }
-        })
-      }}
-
-      {{
-        govukButton({
-          text: 'Save'
-        })
-      }}
-    </form>
-  </div>
+    {{
+      govukButton({
+        text: 'Save'
+      })
+    }}
+  </form>
 {% endblock %}

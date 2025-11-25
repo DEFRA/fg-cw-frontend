@@ -88,6 +88,10 @@ describe("cases", () => {
       },
       {
         method: "post",
+        path: "/cases/{caseId}/page-action",
+      },
+      {
+        method: "post",
         path: "/cases/{caseId}/components/edit",
       },
       {
