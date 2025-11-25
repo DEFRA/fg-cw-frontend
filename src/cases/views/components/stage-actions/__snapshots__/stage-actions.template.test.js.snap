@@ -2,8 +2,8 @@
 
 exports[`stage-actions > renders basic stage actions 1`] = `
 "
-<form method="POST" action="/cases/123/stage/outcome">
-    <div class="govuk-form-group">
+  <form method="POST" action="/cases/123/stage/outcome">
+      <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Decision
@@ -25,17 +25,17 @@ exports[`stage-actions > renders basic stage actions 1`] = `
 </fieldset>
 </div>
 
-    <button type="submit" class="govuk-button" data-module="govuk-button">
-  Save
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+  Confirm
 </button>
-</form>
+  </form>
 "
 `;
 
 exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = `
 "
-<form method="POST" action="/cases/mixed-123/stage/outcome">
-    <div class="govuk-form-group">
+  <form method="POST" action="/cases/mixed-123/stage/outcome">
+      <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     What do you want to do?
@@ -82,17 +82,22 @@ exports[`stage-actions > renders multiple actions with mixed conditionals 1`] = 
 </fieldset>
 </div>
 
-    <button type="submit" class="govuk-button" data-module="govuk-button">
-  Save
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+  Confirm
 </button>
-</form>
+  </form>
+"
+`;
+
+exports[`stage-actions > renders nothing when no actions available 1`] = `
+"
 "
 `;
 
 exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 "
-<form method="POST" action="/cases/456/stage/outcome">
-    <div class="govuk-form-group">
+  <form method="POST" action="/cases/456/stage/outcome">
+      <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Decision
@@ -125,42 +130,30 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 </fieldset>
 </div>
 
-    <button type="submit" class="govuk-button" data-module="govuk-button">
-  Save
+      <button type="submit" class="govuk-button" data-module="govuk-button">
+  Confirm
 </button>
-</form>
+  </form>
 "
 `;
 
 exports[`stage-actions > renders with error message 1`] = `
 "
-<form method="POST" action="/cases/789/stage/outcome">
+  <form method="POST" action="/cases/789/stage/outcome">
 
 
-    <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+      <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
-</form>
-"
-`;
-
-exports[`stage-actions > renders with save button disabled 1`] = `
-"
-<form method="POST" action="/cases/999/stage/outcome">
-
-
-    <button value="approve" type="submit" name="actionCode" disabled aria-disabled="true" class="govuk-button" data-module="govuk-button">
-  Approve
-</button>
-</form>
+  </form>
 "
 `;
 
 exports[`stage-actions > renders with textarea error 1`] = `
 "
-<form method="POST" action="/cases/error-case/stage/outcome">
+  <form method="POST" action="/cases/error-case/stage/outcome">
 
-      <div class="govuk-form-group govuk-form-group--error">
+        <div class="govuk-form-group govuk-form-group--error">
   <label class="govuk-label" for="approve-comment">
     Approval reason
   </label>
@@ -171,9 +164,9 @@ exports[`stage-actions > renders with textarea error 1`] = `
 </div>
 
 
-    <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+      <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
-</form>
+  </form>
 "
 `;

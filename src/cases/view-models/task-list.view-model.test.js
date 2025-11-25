@@ -45,7 +45,6 @@ describe("createTaskListViewModel", () => {
           ],
         },
       ],
-      actionsDisabled: false,
       actions: [
         {
           code: "approve",
@@ -135,17 +134,6 @@ describe("createTaskListViewModel", () => {
       const result = createTaskListViewModel(kase);
 
       expect(result.data.stage.taskGroups).toEqual([]);
-      expect(result.data.stage.actionsDisabled).toBe(false); // No tasks = all complete
-    });
-  });
-
-  describe("actionsDisabled", () => {
-    it("sets actionsDisabled to false when all tasks are complete", () => {
-      const kase = structuredClone(mockCaseData);
-
-      const result = createTaskListViewModel(kase);
-
-      expect(result.data.stage.actionsDisabled).toBe(false);
     });
   });
 

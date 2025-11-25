@@ -6,6 +6,18 @@ export const updateStageOutcomeUseCase = async (
   authContext,
   { caseId, actionData: { actionCode, commentFieldName, comment } },
 ) => {
+  if (!actionCode) {
+    return {
+      success: false,
+      errors: {
+        actionCode: {
+          text: "Choose an option",
+          href: "#actionCode",
+        },
+      },
+    };
+  }
+
   const caseData = await findCaseByIdUseCase(authContext, caseId);
   const action = findSelectedAction(caseData, actionCode);
 

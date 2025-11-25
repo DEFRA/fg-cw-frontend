@@ -3,12 +3,6 @@ import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
   const stage = kase.stage;
 
-  const currentStage = {
-    ...stage,
-    taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
-    actions: mapActions({ stage, errors, values }),
-  };
-
   return {
     pageTitle: `Case tasks - ${stage.name}`,
     pageHeading: "Case",
@@ -16,7 +10,11 @@ export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
     links: setActiveLink(kase.links, "tasks"),
     data: {
       case: kase,
-      stage: currentStage,
+      stage: {
+        ...stage,
+        taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
+        actions: mapActions({ stage, errors, values }),
+      },
     },
     errors,
     errorList: Object.values(errors),

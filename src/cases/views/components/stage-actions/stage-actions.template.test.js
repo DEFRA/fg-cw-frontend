@@ -23,7 +23,6 @@ describe("stage-actions", () => {
             },
           ],
         },
-        actionsDisabled: false,
       },
     });
 
@@ -61,7 +60,6 @@ describe("stage-actions", () => {
             },
           ],
         },
-        actionsDisabled: false,
       },
     });
 
@@ -88,14 +86,13 @@ describe("stage-actions", () => {
             },
           ],
         },
-        actionsDisabled: false,
       },
     });
 
     expect(component).toMatchSnapshot();
   });
 
-  test("renders with save button disabled", () => {
+  test("renders nothing when no actions available", () => {
     const component = render("stage-actions", {
       caseId: "999",
       stage: {
@@ -103,15 +100,8 @@ describe("stage-actions", () => {
           idPrefix: "actionCode",
           name: "actionCode",
           legend: "Decision",
-          items: [
-            {
-              value: "approve",
-              text: "Approve",
-              checked: false,
-            },
-          ],
+          items: [],
         },
-        actionsDisabled: true,
       },
     });
 
@@ -161,7 +151,6 @@ describe("stage-actions", () => {
             },
           ],
         },
-        actionsDisabled: false,
       },
     });
 
@@ -196,7 +185,6 @@ describe("stage-actions", () => {
             },
           ],
         },
-        actionsDisabled: false,
       },
     });
 
