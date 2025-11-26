@@ -55,13 +55,13 @@ describe("new-note.view-model", () => {
 
     it("builds error list with text error", () => {
       const mockCaseItem = createMockCaseData();
-      const mockErrors = { text: "You must enter a note" };
+      const mockErrors = { text: "You must add a note" };
 
       const result = createNewNoteViewModel(mockCaseItem, mockErrors);
 
       expect(result.errorList).toEqual([
         {
-          text: "You must enter a note",
+          text: "You must add a note",
           href: "#text",
         },
       ]);
