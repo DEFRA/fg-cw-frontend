@@ -4,11 +4,11 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
 "
     
 
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to cases</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -41,7 +41,7 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
 
 
   
-  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -121,11 +121,11 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
 "
     
 
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to cases</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -158,7 +158,7 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
 
 
   
-  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -241,11 +241,11 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
 "
     
 
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to cases</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -278,7 +278,7 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
 
 
   
-  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -361,11 +361,11 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
 "
     
 
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to cases</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -398,7 +398,7 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
 
 
   
-  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">

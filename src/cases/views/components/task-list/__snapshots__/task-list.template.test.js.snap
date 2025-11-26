@@ -3,7 +3,7 @@
 exports[`task-list > renders a task list when there are tasks 1`] = `
 "
   <ul
-    class="govuk-task-list govuk-!-margin-bottom-4"
+    class="govuk-task-list govuk-!-margin-bottom-6"
     data-testid="taskList-list"
   >
       <li
