@@ -1,5 +1,6 @@
 import Boom from "@hapi/boom";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
+import { logger } from "../../common/logger.js";
 
 export const loginCallbackRoute = {
   method: "GET",
@@ -11,6 +12,7 @@ export const loginCallbackRoute = {
     },
   },
   async handler(request, h) {
+    logger.info("Login callback route invoked");
     const { auth } = request;
 
     if (!auth.isAuthenticated) {
@@ -36,6 +38,8 @@ export const loginCallbackRoute = {
         appRoles: user.appRoles,
       },
     });
+
+    logger.info("Finished: Login callback route invoked");
 
     return h.redirect(auth.credentials.query.next ?? "/");
   },

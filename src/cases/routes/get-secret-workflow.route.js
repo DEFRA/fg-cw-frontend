@@ -1,4 +1,5 @@
 import { findSecretWorkflowUseCase } from "../use-cases/find-secret-workflow.use-case.js";
+import { logger } from "../../common/logger.js";
 
 export const getSecretWorkflowRoute = {
   method: "GET",
@@ -13,6 +14,8 @@ export const getSecretWorkflowRoute = {
     const { credentials } = request.auth;
     const { workflowCode } = request.params;
 
+    logger.info(`Get secret workflow ${workflowCode}`);
+
     const authContext = {
       token: credentials.token,
       user: credentials.user,
@@ -22,6 +25,8 @@ export const getSecretWorkflowRoute = {
       authContext,
       workflowCode,
     );
+
+    logger.info(`Finished: Get secret workflow ${workflowCode}`);
 
     return h.view("pages/secret", {
       data: responseFromApi,
