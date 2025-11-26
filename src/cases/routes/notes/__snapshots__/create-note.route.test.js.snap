@@ -207,7 +207,7 @@ Timeline
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
-            <a href="#text">You must enter a note</a>
+            <a href="#text">You must add a note</a>
           </li>
         </ul>
     </div>
@@ -224,7 +224,7 @@ Timeline
     All notes will be saved for auditing purposes
   </div>
   <p id="text-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> You must enter a note
+    <span class="govuk-visually-hidden">Error:</span> You must add a note
   </p>
   <textarea class="govuk-textarea govuk-textarea--error" id="text" name="text" rows="5" aria-describedby="text-hint text-error"></textarea>
 </div>
@@ -327,7 +327,7 @@ Timeline
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
-            <a href="#text">You must enter a note</a>
+            <a href="#text">You must add a note</a>
           </li>
         </ul>
     </div>
@@ -344,7 +344,7 @@ Timeline
     All notes will be saved for auditing purposes
   </div>
   <p id="text-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> You must enter a note
+    <span class="govuk-visually-hidden">Error:</span> You must add a note
   </p>
   <textarea class="govuk-textarea govuk-textarea--error" id="text" name="text" rows="5" aria-describedby="text-hint text-error"></textarea>
 </div>
@@ -447,7 +447,7 @@ Timeline
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
-            <a href="#text">You must enter a note</a>
+            <a href="#text">You must add a note</a>
           </li>
         </ul>
     </div>
@@ -464,7 +464,7 @@ Timeline
     All notes will be saved for auditing purposes
   </div>
   <p id="text-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> You must enter a note
+    <span class="govuk-visually-hidden">Error:</span> You must add a note
   </p>
   <textarea class="govuk-textarea govuk-textarea--error" id="text" name="text" rows="5" aria-describedby="text-hint text-error">   
 	  </textarea>
