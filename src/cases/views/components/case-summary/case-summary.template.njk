@@ -3,7 +3,7 @@
 
 {% set caseId = params._id or params.caseId %}
 {% set banner = params.banner %}
-{% set bannerTitle = banner.title.value or banner.title.text or "Valley Farm" %}
+{% set bannerTitle = banner.title.value or banner.title.text %}
 {% set callToAction = banner.callToAction %}
 {% set summary = banner.summary %}
 
