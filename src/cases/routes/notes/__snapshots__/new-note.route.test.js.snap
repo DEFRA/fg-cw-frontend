@@ -22,8 +22,6 @@ exports[`newNoteRoute > renders page and returns 200 ok 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -81,6 +79,8 @@ Timeline
 
   </div>
 
+
+    
 
 
   <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">

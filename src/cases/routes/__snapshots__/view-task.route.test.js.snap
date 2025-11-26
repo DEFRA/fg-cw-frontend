@@ -22,8 +22,6 @@ exports[`viewTaskRoute > returns a task 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -82,11 +80,13 @@ Timeline
   </div>
 
 
+    
+
+
   
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
 
 
     

@@ -22,8 +22,6 @@ exports[`viewNotesRoute > handles case with no comments 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -80,6 +78,9 @@ Timeline
     </div>
 
   </div>
+
+
+    
 
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
@@ -113,8 +114,6 @@ exports[`viewNotesRoute > handles case with null comments 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -171,6 +170,9 @@ Timeline
     </div>
 
   </div>
+
+
+    
 
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
@@ -204,8 +206,6 @@ exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -262,6 +262,9 @@ Timeline
     </div>
 
   </div>
+
+
+    
 
 
   <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>

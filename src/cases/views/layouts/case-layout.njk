@@ -6,6 +6,7 @@
 {% from "heading/macro.njk" import heading %}
 {% from "defra-heading/macro.njk" import defraHeading %}
 {% from "../components/flash-notifications/macro.njk" import flashNotifications %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% set mainClasses = "app-main-wrapper" %}
 
 {% block head %}
@@ -28,11 +29,22 @@
   {% block contentHeader %}
   {% endblock %}
 
+  {% block contentNavigation %}
+  {% endblock %}
+
   {% block contentNotifications %}
     {{ flashNotifications(notification) if notification }}
   {% endblock %}
 
-  {% block contentNavigation %}
+  {% block contentErrors %}
+    {% if errorList and errorList.length > 0 %}
+      {{
+        govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+        })
+      }}
+    {% endif %}
   {% endblock %}
 
   {% block contentMain %}

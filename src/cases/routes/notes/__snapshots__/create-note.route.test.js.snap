@@ -22,8 +22,6 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -82,7 +80,9 @@ Timeline
   </div>
 
 
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
+    
+
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
   <div role="alert">
     <h2 class="govuk-error-summary__title">
       There is a problem
@@ -139,8 +139,6 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -199,7 +197,9 @@ Timeline
   </div>
 
 
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
+    
+
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
   <div role="alert">
     <h2 class="govuk-error-summary__title">
       There is a problem
@@ -259,8 +259,6 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -319,7 +317,9 @@ Timeline
   </div>
 
 
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
+    
+
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
   <div role="alert">
     <h2 class="govuk-error-summary__title">
       There is a problem
@@ -379,8 +379,6 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
 </div>
 
 
-    
-
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -439,7 +437,9 @@ Timeline
   </div>
 
 
-    <div class="govuk-error-summary" data-module="govuk-error-summary">
+    
+
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
   <div role="alert">
     <h2 class="govuk-error-summary__title">
       There is a problem
