@@ -52,7 +52,7 @@ export const createNoteRoute = {
 
 const validateNote = (text) => {
   if (!text || text.trim() === "") {
-    return { text: "You must enter a note" };
+    return { text: "You must add a note" };
   }
   return null;
 };
