@@ -22,6 +22,9 @@ exports[`timelineRoute > displays a timeline 1`] = `
 </div>
 
 
+    
+
+
   
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
@@ -78,9 +81,6 @@ Notes
     </div>
 
   </div>
-
-
-    
 
 
   <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">

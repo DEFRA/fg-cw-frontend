@@ -29,9 +29,6 @@
   {% block contentHeader %}
   {% endblock %}
 
-  {% block contentNavigation %}
-  {% endblock %}
-
   {% block contentNotifications %}
     {{ flashNotifications(notification) if notification }}
   {% endblock %}
@@ -45,6 +42,9 @@
         })
       }}
     {% endif %}
+  {% endblock %}
+
+  {% block contentNavigation %}
   {% endblock %}
 
   {% block contentMain %}
