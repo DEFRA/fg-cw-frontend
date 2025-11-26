@@ -1,6 +1,6 @@
 {% extends '../layouts/case-detail-layout.njk' %}
 {% from "../components/dynamic-content/macro.njk" import dynamicContent %}
 
-{% block pageContent %}
+{% block contentMain %}
   {{ dynamicContent(data.content) }}
 {% endblock %}

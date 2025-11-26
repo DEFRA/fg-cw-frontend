@@ -3,7 +3,7 @@
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% block pageContent %}
+{% block contentMain %}
   {% if errorList.length > 0 %}
     {{
       govukErrorSummary({

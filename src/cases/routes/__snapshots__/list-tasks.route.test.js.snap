@@ -2,7 +2,7 @@
 
 exports[`listTasksRoute > returns a case with tasks 1`] = `
 "
-      
+    
 
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
@@ -21,7 +21,10 @@ exports[`listTasksRoute > returns a case with tasks 1`] = `
   </div>
 </div>
 
+
     
+
+  
   <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 

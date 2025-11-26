@@ -2,7 +2,7 @@
 {% from "../components/task-group/macro.njk" import taskGroup %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
-{% block pageContent %}
+{% block contentMain %}
   {% if errorList and errorList.length > 0 %}
     {{
       govukErrorSummary({
