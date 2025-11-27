@@ -153,6 +153,54 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Example Link");
   });
 
+  test("renders url component with default target _self and no rel", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_self"');
+    expect(result).not.toContain('rel="');
+  });
+
+  test("renders url component with _blank target and automatic rel", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+        target: "_blank",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_blank"');
+    expect(result).toContain('rel="noopener noreferrer"');
+  });
+
+  test("renders url component with explicit rel override", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+        target: "_blank",
+        rel: "noreferrer",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_blank"');
+    expect(result).toContain('rel="noreferrer"');
+  });
+
   test("renders summary-list component with simple string label and text", () => {
     const params = [
       {

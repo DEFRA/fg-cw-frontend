@@ -114,26 +114,40 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 **Purpose**: Links
 
+**Parameters**:
+
+- `href` (required): Link URL
+- `text` (required): Link text
+- `target` (optional): Defaults to `"_self"` (same tab/window). Set to `"_blank"` for a new tab/window.
+- `rel` (optional): Defaults to `"noopener noreferrer"` when `target` is `"_blank"`. Provide your own value (or `""`) to override/omit it; otherwise omitted.
+- `classes` (optional): Additional CSS classes. No default classes are added—include `govuk-link` yourself if you want the GOV.UK link style.
+
+**Examples**:
+
+- Open in the same tab (default):
+
+```
+{
+  "component": "url",
+  "href": "https://example.com/document.pdf",
+  "text": "View detailed check data (PDF)"
+}
+```
+
+Output: `<a href="https://example.com/document.pdf" target="_self">View detailed check data (PDF)</a>`
+
+- Open in a new tab:
+
 ```
 {
   "component": "url",
   "href": "https://example.com/document.pdf",
   "text": "View detailed check data (PDF)",
-  "target": "_blank",
-  "rel": "noopener",
-  "classes": "custom-link-class"
+  "target": "_blank"
 }
 ```
 
-**Parameters**:
-
-- `href` (required): Link URL
-- `text` (required): Link text
-- `target` (optional): Link target (e.g., `"_blank"`)
-- `rel` (optional): Link relationship (e.g., `"noopener"`)
-- `classes` (optional): Additional CSS classes
-
-**Output**: `<a href="https://example.com/document.pdf" target="_blank" rel="noopener" class="govuk-link custom-link-class">View detailed check data (PDF)</a>`
+Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopener noreferrer">View detailed check data (PDF)</a>`
 
 ---
 
