@@ -7,7 +7,6 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 {% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
-{% from "../../../../common/components/notification-banner/macro.njk" import notificationBanner %}
 
 {% set caseLink = "/cases/" + params.caseId %}
 
@@ -97,29 +96,23 @@
         </div>
       {% endif %}
     {% elif currentTask.canCompleteTask %}
-      {% if params.isInteractive === false %}
+      {% if params.isInteractive %}
         {{
-          notificationBanner({
-            text: "Tasks cannot be edited in the current status",
-            type: 'information'
+          taskOutcomeForm({
+            error: errorList.length,
+            formAction: currentTask.formAction,
+            statusOptions: currentTask.statusOptions,
+            status: currentTask.status,
+            completed: currentTask.completed,
+            commentInputDef: currentTask.commentInputDef,
+            commentText: currentTask.comment.text if currentTask.comment else ''
           })
         }}
       {% endif %}
-
-      {{
-        taskOutcomeForm({
-          error: errorList.length,
-          formAction: currentTask.formAction,
-          statusOptions: currentTask.statusOptions,
-          status: currentTask.status,
-          completed: currentTask.completed,
-          commentInputDef: currentTask.commentInputDef,
-          commentText: currentTask.comment.text if currentTask.comment else '',
-          isInteractive: params.isInteractive
-        })
-      }}
     {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
-      {# Display required roles in a details component #}
+      <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">
+        Outcome
+      </h2>
       <p>You cannot complete this task.</p>
       {% set rolesHtml %}
         <p>Someone who is a:</p>

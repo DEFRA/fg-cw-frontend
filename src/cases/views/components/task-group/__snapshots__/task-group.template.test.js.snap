@@ -4,16 +4,13 @@ exports[`task-group > renders 1`] = `
 "
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h2
-      class="govuk-heading-l govuk-!-margin-top-6"
-      data-testid="stage-heading"
-    >
+    <h2 class="govuk-heading-l" data-testid="stage-heading">
       Test Stage
     </h2>
-      <h3 class="govuk-heading-m">1. Group 1</h3>
+      <h3 class="govuk-heading-m">Group 1</h3>
       
   <ul
-    class="govuk-task-list govuk-!-margin-bottom-4"
+    class="govuk-task-list govuk-!-margin-bottom-6"
     data-testid="taskList-list"
   >
       <li

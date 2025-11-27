@@ -40,8 +40,6 @@ describe("task-details", () => {
     });
 
     expect(component).toMatchSnapshot();
-    expect(component).toContain("Tasks cannot be edited in the current status");
-    expect(component).not.toContain("Save and continue");
   });
 
   test("renders with interactive form", () => {
@@ -62,10 +60,6 @@ describe("task-details", () => {
     });
 
     expect(component).toMatchSnapshot();
-    expect(component).not.toContain(
-      "Tasks cannot be edited in the current status",
-    );
-    expect(component).toContain("Save and continue");
   });
 
   test("renders completed task with editable form when case is interactive", () => {
@@ -96,7 +90,7 @@ describe("task-details", () => {
 
     expect(component).toMatchSnapshot();
     expect(component).toContain("This task was completed by John Doe");
-    expect(component).toContain("Save and continue");
+    expect(component).toContain("Confirm");
   });
 
   test("renders completed task as read-only when case is not interactive", () => {
@@ -124,7 +118,7 @@ describe("task-details", () => {
     expect(component).toContain("This task was completed by John Doe");
     expect(component).toContain("Outcome review note");
     expect(component).toContain("Initial review completed");
-    expect(component).not.toContain("Save and continue");
+    expect(component).not.toContain("Confirm");
   });
 
   test("renders completed task without form when user lacks permission", () => {
@@ -155,6 +149,6 @@ describe("task-details", () => {
     expect(component).toContain("This task was completed by John Doe");
     expect(component).toContain("You cannot edit this task");
     expect(component).toContain("Who can edit the task");
-    expect(component).not.toContain("Save and continue");
+    expect(component).not.toContain("Confirm");
   });
 });

@@ -16,11 +16,12 @@
 .defra-header__logo-link {
   display: flex;
   align-items: center;
-  gap: 160px;
+  gap: 167px;
   border-left: 2px solid #00a33b;
   width: auto;
   height: 75px;
   text-decoration: none;
+  padding-left: 2px;
 }
 
 .defra-header__logo-link img {
