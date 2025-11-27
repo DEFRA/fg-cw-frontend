@@ -99,6 +99,7 @@ export const triggerPageAction = async (
       authorization: `Bearer ${authContext.token}`,
     },
     payload: { actionCode },
+    timeout: 10000,
   });
   return { res, payload };
 };

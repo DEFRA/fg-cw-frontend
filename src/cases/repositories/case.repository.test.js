@@ -551,6 +551,7 @@ describe("Case Repository", () => {
           authorization: `Bearer ${authContext.token}`,
         },
         payload: { actionCode: "RECALCULATE_RULES" },
+        timeout: 10000,
       });
       expect(result).toEqual(mockResponse);
     });
@@ -571,6 +572,7 @@ describe("Case Repository", () => {
           authorization: `Bearer ${authContext.token}`,
         },
         payload: { actionCode: "FETCH_RULES" },
+        timeout: 10000,
       });
       expect(result).toEqual(mockResponse);
     });
@@ -593,6 +595,7 @@ describe("Case Repository", () => {
           authorization: `Bearer ${authContext.token}`,
         },
         payload: { actionCode: "INVALID_ACTION" },
+        timeout: 10000,
       });
     });
   });
