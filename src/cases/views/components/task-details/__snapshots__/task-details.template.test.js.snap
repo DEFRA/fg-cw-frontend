@@ -17,10 +17,9 @@ exports[`task-details > renders 1`] = `
 
 
 
-
-      <form method="post" id="completeTaskForm" action="">
+        <form method="post" id="completeTaskForm" action="">
   <div class="govuk-form-group">
-        <div class="govuk-form-group">
+      <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -35,18 +34,18 @@ exports[`task-details > renders 1`] = `
   </div>
 
 
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <div class="govuk-button-group">
+    <button
+      type="submit"
+      data-prevent-double-click="true"
+      data-testid="save-and-continue-button"
+      class="govuk-button"
+      data-module="govuk-button"
+      data-govuk-button-init=""
+    >
+      Confirm
+    </button>
+  </div>
 </form>
 
   </div>
@@ -111,11 +110,10 @@ exports[`task-details > renders completed task with editable form when case is i
 
         <form method="post" id="completeTaskForm" action="">
   <div class="govuk-form-group">
-    
-    <div class="govuk-form-group">
+      <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
+    Outcome
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
@@ -138,18 +136,18 @@ exports[`task-details > renders completed task with editable form when case is i
   </div>
 
 
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <div class="govuk-button-group">
+    <button
+      type="submit"
+      data-prevent-double-click="true"
+      data-testid="save-and-continue-button"
+      class="govuk-button"
+      data-module="govuk-button"
+      data-govuk-button-init=""
+    >
+      Confirm
+    </button>
+  </div>
 </form>
 
   </div>
@@ -224,10 +222,9 @@ exports[`task-details > renders with interactive form 1`] = `
 
 
 
-
-      <form method="post" id="completeTaskForm" action="">
+        <form method="post" id="completeTaskForm" action="">
   <div class="govuk-form-group">
-        <div class="govuk-form-group">
+      <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -242,18 +239,18 @@ exports[`task-details > renders with interactive form 1`] = `
   </div>
 
 
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <div class="govuk-button-group">
+    <button
+      type="submit"
+      data-prevent-double-click="true"
+      data-testid="save-and-continue-button"
+      class="govuk-button"
+      data-module="govuk-button"
+      data-govuk-button-init=""
+    >
+      Confirm
+    </button>
+  </div>
 </form>
 
   </div>
@@ -277,42 +274,6 @@ exports[`task-details > renders with non-interactive form 1`] = `
 
 
 
-
-        
-
-  <div class="govuk-notification-banner" role="region" aria-labelledby="govuk-notification-banner-title" data-module="govuk-notification-banner">
-  <div class="govuk-notification-banner__header">
-    <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
-      Important
-    </h2>
-  </div>
-  <div class="govuk-notification-banner__content">
-    <p class="govuk-body">Tasks cannot be edited in the current status</p>
-  </div>
-</div>
-
-
-
-      <form method="post" id="completeTaskForm" action="">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" aria-disabled="true">
-  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-    <div class="govuk-checkboxes__item">
-      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" disabled>
-      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
-        Completed
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  </div>
-
-
-</form>
 
   </div>
 </div>
