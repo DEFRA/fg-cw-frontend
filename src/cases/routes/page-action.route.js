@@ -24,7 +24,7 @@ export const pageActionRoute = {
           text: `${displayName} completed successfully`,
         },
       });
-    } catch (error) {
+    } catch (_error) {
       setFlashData(request, {
         notification: {
           variant: "error",
