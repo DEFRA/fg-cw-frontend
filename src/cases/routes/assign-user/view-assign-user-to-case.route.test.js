@@ -5,6 +5,8 @@ import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
+import { flashContext } from "../../../server/plugins/flash-context.js";
+import yar from "@hapi/yar";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../../auth/use-cases/find-all-users.use-case.js");
@@ -15,7 +17,7 @@ describe("viewAssignUserToCaseRoute", () => {
   beforeAll(async () => {
     server = hapi.server();
     server.route(viewAssignUserToCaseRoute);
-    await server.register([nunjucks]);
+    await server.register([nunjucks, yar, flashContext]);
 
     await server.initialize();
   });
@@ -46,7 +48,7 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
-    const { statusCode, headers } = await server.inject({
+    const { statusCode, headers, result } = await server.inject({
       method: "GET",
       url: "/cases/assign-user",
       auth: {
@@ -57,6 +59,10 @@ describe("viewAssignUserToCaseRoute", () => {
 
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/cases");
+
+    const $ = load(result);
+    const view = $("#main-content").html();
+    expect(view).toMatchSnapshot();
   });
 });
 
