@@ -1,0 +1,13 @@
+{#
+    variant: <string> - Alert variant: "success", "error", "warning", or "information"
+                        - success/information: uses GOV.UK Notification Banner
+                        - error/warning: uses MOJ Alert
+    title: <string> (required) - Alert/banner title for accessibility
+    showTitleAsHeading: <boolean> (optional) - Display title as visible heading
+    text: <string> (optional) - Plain text content
+    dismissible: <boolean> (optional) - Allow user to dismiss (error/warning only)
+#}
+
+{% macro flashNotifications(params) %}
+  {%- include "./flash-notifications.template.njk" -%}
+{% endmacro %}

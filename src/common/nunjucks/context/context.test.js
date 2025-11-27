@@ -46,7 +46,7 @@ describe("context", () => {
 
     test("should return correct context object", async () => {
       const { context } = await import("./context.js");
-      const result = context({ path: "/" });
+      const result = context({ path: "/", app: {} });
 
       expect(result).toEqual({
         assetPath: "/public/assets",
@@ -54,13 +54,14 @@ describe("context", () => {
         serviceUrl: "/",
         breadcrumbs: [],
         navigation: [{ text: "Home", url: "/", isActive: true }],
+        notification: undefined,
         getAssetPath: expect.any(Function),
       });
     });
 
     test("should return correct asset path for known assets", async () => {
       const { context } = await import("./context.js");
-      const result = context({ path: "/" });
+      const result = context({ path: "/", app: {} });
 
       expect(result.getAssetPath("app.js")).toBe("/public/js/app-123.js");
       expect(result.getAssetPath("style.css")).toBe(
@@ -70,7 +71,7 @@ describe("context", () => {
 
     test("should return fallback path for unknown assets", async () => {
       const { context } = await import("./context.js");
-      const result = context({ path: "/" });
+      const result = context({ path: "/", app: {} });
 
       expect(result.getAssetPath("unknown.png")).toBe("/public/unknown.png");
     });
@@ -78,10 +79,10 @@ describe("context", () => {
     test("should cache manifest after first read", async () => {
       const { context } = await import("./context.js");
 
-      context({ path: "/" });
+      context({ path: "/", app: {} });
       expect(readFileSync).toHaveBeenCalledTimes(1);
 
-      context({ path: "/" });
+      context({ path: "/", app: {} });
       expect(readFileSync).toHaveBeenCalledTimes(1); // Still 1, not 2
     });
   });
@@ -95,7 +96,7 @@ describe("context", () => {
 
     test("should log error and continue", async () => {
       const { context } = await import("./context.js");
-      const result = context({ path: "/" });
+      const result = context({ path: "/", app: {} });
 
       expect(logger.error).toHaveBeenCalledWith(
         "Webpack assets-manifest.json not found",
@@ -105,7 +106,7 @@ describe("context", () => {
 
     test("should provide working context even when manifest is missing", async () => {
       const { context } = await import("./context.js");
-      const result = context({ path: "/" });
+      const result = context({ path: "/", app: {} });
 
       expect(result).toEqual({
         assetPath: "/public/assets",
@@ -113,6 +114,7 @@ describe("context", () => {
         serviceUrl: "/",
         breadcrumbs: [],
         navigation: [{ text: "Home", url: "/", isActive: true }],
+        notification: undefined,
         getAssetPath: expect.any(Function),
       });
     });
@@ -121,7 +123,7 @@ describe("context", () => {
   describe("with null request", () => {
     test("should handle null request gracefully", async () => {
       const { context } = await import("./context.js");
-      const result = context(null);
+      const result = context({ app: {} });
 
       expect(result).toEqual({
         assetPath: "/public/assets",
@@ -129,7 +131,28 @@ describe("context", () => {
         serviceUrl: "/",
         breadcrumbs: [],
         navigation: [{ text: "Home", url: "/", isActive: true }],
+        notification: undefined,
         getAssetPath: expect.any(Function),
+      });
+    });
+  });
+
+  describe("with flash notification", () => {
+    test("should include notification from request.app", async () => {
+      const { context } = await import("./context.js");
+      const result = context({
+        path: "/",
+        app: {
+          notification: {
+            variant: "success",
+            text: "Operation completed successfully",
+          },
+        },
+      });
+
+      expect(result.notification).toEqual({
+        variant: "success",
+        text: "Operation completed successfully",
       });
     });
   });

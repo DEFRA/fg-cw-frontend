@@ -14,6 +14,7 @@ describe("viewCaseTabRoute", () => {
     Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
+    await server.initialize();
   });
 
   afterEach(async () => {

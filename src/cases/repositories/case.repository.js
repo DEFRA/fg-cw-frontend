@@ -25,6 +25,7 @@ export const findTabById = async (authContext, caseId, tabId, queryString) => {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },
+    timeout: 10000,
   });
   return payload;
 };
@@ -87,4 +88,18 @@ export const addNoteToCase = async (authContext, { caseId, text }) => {
     },
     payload: { text },
   });
+};
+
+export const triggerPageAction = async (
+  authContext,
+  { caseId, actionCode },
+) => {
+  const { res, payload } = await wreck.post(`/cases/${caseId}/page-action`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: { actionCode },
+    timeout: 10000,
+  });
+  return { res, payload };
 };

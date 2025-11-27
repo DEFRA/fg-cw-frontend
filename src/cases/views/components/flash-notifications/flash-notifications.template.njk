@@ -1,0 +1,38 @@
+{% from "govuk/components/notification-banner/macro.njk" import govukNotificationBanner %}
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+
+{%- if params -%}
+  {# Use GOV.UK Notification Banner for success and information #}
+  {%- if params.variant === 'success' or params.variant === 'information' -%}
+    {% set notificationHtml %}
+      {% if params.showTitleAsHeading and params.title %}
+        <h3 class="govuk-notification-banner__heading">{{ params.title }}</h3>
+      {% endif %}
+      {% if params.text %}
+        <p class="govuk-body">{{ params.text }}</p>
+      {% elif not params.showTitleAsHeading and params.title %}
+        <p class="govuk-body">{{ params.title }}</p>
+      {% endif %}
+    {% endset %}
+    
+    {{
+      govukNotificationBanner({
+        html: notificationHtml,
+        type: params.variant,
+        titleText: "Success" if params.variant === 'success' else "Information"
+      })
+    }}
+  
+  {# Use MOJ Alert for error and warning #}
+  {%- else -%}
+    {{
+      mojAlert({
+        variant: params.variant,
+        title: params.title,
+        showTitleAsHeading: params.showTitleAsHeading,
+        text: params.text,
+        dismissible: params.dismissible or false
+      })
+    }}
+  {%- endif -%}
+{%- endif -%}

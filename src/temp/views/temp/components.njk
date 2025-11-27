@@ -1,18 +1,9 @@
-{% extends '../../cases/views/layouts/case-layout.njk' %}
+{% extends '../../cases/views/layouts/case-detail-layout.njk' %}
 {% from '../../cases/views/components/case-summary/macro.njk' import caseSummary %}
 {% from 'govuk/components/service-navigation/macro.njk' import govukServiceNavigation %}
 {% from '../../cases/views/components/dynamic-content/macro.njk' import dynamicContent %}
 
-{% block content %}
-  {{ caseSummary(data) }}
-
-  {{
-    govukServiceNavigation({
-      navigation: data.links,
-      classes: "govuk-!-margin-bottom-6"
-    })
-  }}
-
+{% block contentMain %}
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       {{ dynamicContent(data.content) }}

@@ -2,6 +2,7 @@
 
 exports[`case-summary > renders with callToAction buttons 1`] = `
 "
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -13,22 +14,54 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
       </div>
         <div class="moj-page-header-actions__actions">
           <div class="moj-button-group moj-button-group--inline">
-              <button
-                type="submit"
-                class="govuk-button govuk-button--primary"
-                data-module="govuk-button"
-                data-action-code="RERUN_RULES"
+              <form
+                method="POST"
+                action="/cases//page-action"
+                style="display: inline-block; margin: 0;"
               >
-                Rerun Rules
-              </button>
-              <button
-                type="submit"
-                class="govuk-button govuk-button--primary"
-                data-module="govuk-button"
-                data-action-code="ANOTHER_ACTION"
+                <input
+                  type="hidden"
+                  name="actionCode"
+                  value="RERUN_RULES"
+                />
+                <input
+                  type="hidden"
+                  name="actionName"
+                  value="Rerun Rules"
+                />
+                <button
+                  type="submit"
+                  class="govuk-button govuk-button--primary"
+                  data-module="govuk-button"
+                  data-prevent-double-click="true"
+                >
+                  Rerun Rules
+                </button>
+              </form>
+              <form
+                method="POST"
+                action="/cases//page-action"
+                style="display: inline-block; margin: 0;"
               >
-                Another Action
-              </button>
+                <input
+                  type="hidden"
+                  name="actionCode"
+                  value="ANOTHER_ACTION"
+                />
+                <input
+                  type="hidden"
+                  name="actionName"
+                  value="Another Action"
+                />
+                <button
+                  type="submit"
+                  class="govuk-button govuk-button--primary"
+                  data-module="govuk-button"
+                  data-prevent-double-click="true"
+                >
+                  Another Action
+                </button>
+              </form>
           </div>
         </div>
     </div>
@@ -59,6 +92,7 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
 
 exports[`case-summary > renders without callToAction 1`] = `
 "
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>

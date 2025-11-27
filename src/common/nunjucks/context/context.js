@@ -28,6 +28,7 @@ export const context = (request) => {
     serviceUrl: "/",
     breadcrumbs: [],
     navigation: buildNavigation(request),
+    notification: request.app?.notification,
 
     getAssetPath(asset) {
       const webpackAssetPath = webpackManifest?.[asset];

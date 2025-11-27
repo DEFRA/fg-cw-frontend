@@ -27,15 +27,6 @@
       })
     }}
 
-    {% if errorList.length %}
-      {{
-        govukErrorSummary({
-          titleText: "There is a problem",
-          errorList: errorList
-        })
-      }}
-    {% endif %}
-
     {{ dynamicContent(currentTask.description) }}
 
     {% if currentTask.completed and params.isInteractive %}

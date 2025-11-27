@@ -5,6 +5,7 @@ import { nunjucks } from "../common/nunjucks/nunjucks.js";
 import { auth } from "./plugins/auth.js";
 import { errors } from "./plugins/errors.js";
 import { files } from "./plugins/files.js";
+import { flashContext } from "./plugins/flash-context.js";
 import { logging } from "./plugins/logging.js";
 import { proxy } from "./plugins/proxy.js";
 import { redirects } from "./plugins/redirects.js";
@@ -52,6 +53,7 @@ export const createServer = async () => {
     redirects,
     shutdown,
     session,
+    flashContext,
     tracing,
   ]);
 
