@@ -4,7 +4,7 @@ export const triggerPageActionUseCase = async (
   authContext,
   { caseId, actionCode },
 ) => {
-  return await caseRepository.triggerPageAction(authContext, {
+  return caseRepository.triggerPageAction(authContext, {
     caseId,
     actionCode,
   });
