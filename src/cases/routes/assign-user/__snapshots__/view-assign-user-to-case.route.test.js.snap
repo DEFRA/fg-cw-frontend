@@ -1,5 +1,66 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId supplied 1`] = `
+"
+
+    
+
+
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-body" data-testid="app-page-body">
+
+        <div class="govuk-tabs" data-module="govuk-tabs">
+  <h2 class="govuk-tabs__title">
+    Contents
+  </h2>
+  <ul class="govuk-tabs__list">
+    <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+      <a class="govuk-tabs__tab" href="#all-cases">
+        SFI applications (0)
+      </a>
+    </li>
+  </ul>
+  <div class="govuk-tabs__panel" id="all-cases">
+    <form method="GET" action="/cases/assign-user">
+      <fieldset class="govuk-fieldset">
+        <legend class="govuk-fieldset__legend govuk-visually-hidden">
+          <h1>Cases</h1>
+        </legend>
+    
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+      Assign
+    </button>
+    
+        <table class="govuk-table">
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th scope="col" class="govuk-table__header">Select</th>
+          <th scope="col" class="govuk-table__header">ID</th>
+          <th scope="col" class="govuk-table__header">Business</th>
+          <th scope="col" class="govuk-table__header">SBI</th>
+          <th scope="col" class="govuk-table__header">Submitted</th>
+          <th scope="col" class="govuk-table__header">Status</th>
+          <th scope="col" class="govuk-table__header">Assignee</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      </tbody>
+    </table>
+    
+      </fieldset>
+    </form>
+  </div>
+</div>
+
+      </div>
+    </div>
+  </div>
+        "
+`;
+
 exports[`viewAssignUserToCaseRoute > returns a case and list of valid users 1`] = `
 "
   <div class="govuk-grid-row app-heading" data-testid="app-heading">

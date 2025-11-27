@@ -1,15 +1,18 @@
 import hapi from "@hapi/hapi";
+import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
-import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
-import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 import { flashContext } from "../../../server/plugins/flash-context.js";
-import yar from "@hapi/yar";
+import { findAllCasesUseCase } from "../../use-cases/find-all-cases.use-case.js";
+import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
+import { listCasesRoute } from "../list-cases.route.js";
+import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../../auth/use-cases/find-all-users.use-case.js");
+vi.mock("../../use-cases/find-all-cases.use-case.js");
 
 describe("viewAssignUserToCaseRoute", () => {
   let server;
@@ -17,7 +20,22 @@ describe("viewAssignUserToCaseRoute", () => {
   beforeAll(async () => {
     server = hapi.server();
     server.route(viewAssignUserToCaseRoute);
-    await server.register([nunjucks, yar, flashContext]);
+    server.route(listCasesRoute);
+    await server.register([
+      nunjucks,
+      {
+        plugin: Yar,
+        options: {
+          name: "session",
+          cookieOptions: {
+            password: "abcdefghijklmnopqrstuvwxyz012345",
+            isSecure: false,
+            isSameSite: "Strict",
+          },
+        },
+      },
+      flashContext,
+    ]);
 
     await server.initialize();
   });
@@ -48,7 +66,8 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
-    const { statusCode, headers, result } = await server.inject({
+    findAllCasesUseCase.mockResolvedValue([]);
+    const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/cases/assign-user",
       auth: {
@@ -59,6 +78,15 @@ describe("viewAssignUserToCaseRoute", () => {
 
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/cases");
+
+    const { result } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
 
     const $ = load(result);
     const view = $("#main-content").html();

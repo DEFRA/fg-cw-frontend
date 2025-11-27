@@ -1,7 +1,7 @@
 import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
+import { setFlashData } from "../../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createAssignUserViewModel } from "../../view-models/assign-user.view-model.js";
-import { setFlashData } from "../../../common/helpers/flash-helpers.js";
 
 export const viewAssignUserToCaseRoute = {
   method: "GET",
