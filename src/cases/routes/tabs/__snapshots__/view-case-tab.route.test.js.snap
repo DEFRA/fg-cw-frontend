@@ -2,7 +2,8 @@
 
 exports[`viewCaseTabRoute > extracts parameters correctly from URL 1`] = `
 "
-  
+    
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -19,6 +20,9 @@ exports[`viewCaseTabRoute > extracts parameters correctly from URL 1`] = `
     </div>
   </div>
 </div>
+
+
+    
 
 
   
@@ -70,7 +74,8 @@ Tasks
 
 exports[`viewCaseTabRoute > handles different tab types 1`] = `
 "
-  
+    
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -111,6 +116,9 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
     </div>
   </div>
 </div>
+
+
+    
 
 
   
@@ -209,7 +217,8 @@ Agreements
 
 exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
 "
-  
+    
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -250,6 +259,9 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
     </div>
   </div>
 </div>
+
+
+    
 
 
   

@@ -2,7 +2,8 @@
 
 exports[`newNoteRoute > renders page and returns 200 ok 1`] = `
 "
-  
+    
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -21,10 +22,11 @@ exports[`newNoteRoute > renders page and returns 200 ok 1`] = `
 </div>
 
 
-
-  <div class="govuk-body">
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -81,8 +83,8 @@ Timeline
   </div>
 
 
-    <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
-      <div class="govuk-form-group">
+  <form action="/cases/68495db5afe2d27b09b2ee47/notes" method="post">
+    <div class="govuk-form-group">
   <label class="govuk-label govuk-label govuk-label--l govuk-!-margin-top-6" for="text">
     Add a note
   </label>
@@ -93,10 +95,9 @@ Timeline
 </div>
 
 
-      <button type="submit" class="govuk-button" data-module="govuk-button">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-    </form>
-  </div>
+  </form>
         "
 `;

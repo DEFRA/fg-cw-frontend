@@ -7,7 +7,6 @@ exports[`task-details > renders 1`] = `
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
 
 
-
     
     
     
@@ -62,7 +61,6 @@ exports[`task-details > renders completed task as read-only when case is not int
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
 
 
-
     
     
     
@@ -93,7 +91,6 @@ exports[`task-details > renders completed task with editable form when case is i
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
 
 
     
@@ -167,7 +164,6 @@ exports[`task-details > renders completed task without form when user lacks perm
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
 
 
-
     
     
     
@@ -216,7 +212,6 @@ exports[`task-details > renders with interactive form 1`] = `
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
 
 
     
@@ -271,7 +266,6 @@ exports[`task-details > renders with non-interactive form 1`] = `
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
 
 
     

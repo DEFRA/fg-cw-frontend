@@ -2,7 +2,8 @@
 
 exports[`viewTaskRoute > returns a task 1`] = `
 "
-  
+    
+
 <div class="govuk-!-margin-bottom-6 app-case-banner">
   <div class="govuk-width-container">
     <a href="/cases" class="govuk-back-link">Back to cases</a>
@@ -20,9 +21,12 @@ exports[`viewTaskRoute > returns a task 1`] = `
   </div>
 </div>
 
-  <div class="govuk-body">
+
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-bottom-6" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -79,11 +83,10 @@ Timeline
   </div>
 
 
-    
+  
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
 
 
     
@@ -124,6 +127,5 @@ Timeline
   </div>
 </div>
 
-  </div>
         "
 `;
