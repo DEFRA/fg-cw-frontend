@@ -6,10 +6,11 @@ import {
 } from "./flash-helpers.js";
 
 describe("flash-helpers", () => {
-  const createMockRequest = () => ({
+  const createMockRequest = (overrides = {}) => ({
     yar: {
       flash: vi.fn(),
     },
+    ...overrides,
   });
 
   describe("setFlashData", () => {
@@ -161,30 +162,22 @@ describe("flash-helpers", () => {
   });
 
   describe("getFlashData", () => {
-    it("retrieves errors, formData, and notification from flash storage", () => {
-      const mockRequest = createMockRequest();
+    it("retrieves errors and formData from flash", () => {
       const expectedErrors = { field1: "Error message" };
       const expectedFormData = { name: "John" };
-      const expectedNotification = {
-        variant: "success",
-        title: "Action completed",
-        text: "Action completed",
-      };
+      const mockRequest = createMockRequest();
 
       mockRequest.yar.flash
         .mockReturnValueOnce([expectedErrors]) // First call for "errors"
-        .mockReturnValueOnce([expectedFormData]) // Second call for "formData"
-        .mockReturnValueOnce([expectedNotification]); // Third call for "notification"
+        .mockReturnValueOnce([expectedFormData]); // Second call for "formData"
 
       const result = getFlashData(mockRequest);
 
       expect(mockRequest.yar.flash).toHaveBeenCalledWith("errors");
       expect(mockRequest.yar.flash).toHaveBeenCalledWith("formData");
-      expect(mockRequest.yar.flash).toHaveBeenCalledWith("notification");
       expect(result).toEqual({
         errors: expectedErrors,
         formData: expectedFormData,
-        notification: expectedNotification,
       });
     });
 
@@ -194,15 +187,13 @@ describe("flash-helpers", () => {
 
       mockRequest.yar.flash
         .mockReturnValueOnce([]) // Empty array for "errors"
-        .mockReturnValueOnce([expectedFormData]) // FormData exists
-        .mockReturnValueOnce([]); // Empty array for "notification"
+        .mockReturnValueOnce([expectedFormData]); // FormData exists
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: undefined,
         formData: expectedFormData,
-        notification: undefined,
       });
     });
 
@@ -212,15 +203,13 @@ describe("flash-helpers", () => {
 
       mockRequest.yar.flash
         .mockReturnValueOnce([expectedErrors]) // Errors exist
-        .mockReturnValueOnce([]) // Empty array for "formData"
-        .mockReturnValueOnce([]); // Empty array for "notification"
+        .mockReturnValueOnce([]); // Empty array for "formData"
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: expectedErrors,
         formData: undefined,
-        notification: undefined,
       });
     });
 
@@ -229,15 +218,13 @@ describe("flash-helpers", () => {
 
       mockRequest.yar.flash
         .mockReturnValueOnce([]) // Empty array for "errors"
-        .mockReturnValueOnce([]) // Empty array for "formData"
-        .mockReturnValueOnce([]); // Empty array for "notification"
+        .mockReturnValueOnce([]); // Empty array for "formData"
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: undefined,
         formData: undefined,
-        notification: undefined,
       });
     });
 
@@ -246,15 +233,13 @@ describe("flash-helpers", () => {
 
       mockRequest.yar.flash
         .mockReturnValueOnce(undefined) // undefined for "errors"
-        .mockReturnValueOnce(undefined) // undefined for "formData"
-        .mockReturnValueOnce(undefined); // undefined for "notification"
+        .mockReturnValueOnce(undefined); // undefined for "formData"
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: undefined,
         formData: undefined,
-        notification: undefined,
       });
     });
 
@@ -264,47 +249,33 @@ describe("flash-helpers", () => {
       const secondError = { field1: "Second error" };
       const firstFormData = { name: "First" };
       const secondFormData = { name: "Second" };
-      const firstNotification = {
-        variant: "success",
-        title: "First",
-        text: "First",
-      };
-      const secondNotification = {
-        variant: "error",
-        title: "Second",
-        text: "Second",
-      };
 
       mockRequest.yar.flash
         .mockReturnValueOnce([firstError, secondError]) // Multiple errors
-        .mockReturnValueOnce([firstFormData, secondFormData]) // Multiple formData
-        .mockReturnValueOnce([firstNotification, secondNotification]); // Multiple notifications
+        .mockReturnValueOnce([firstFormData, secondFormData]); // Multiple formData
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: firstError,
         formData: firstFormData,
-        notification: firstNotification,
       });
     });
 
-    it("returns undefined for notification when no notification in flash", () => {
+    it("returns errors and formData when both are present in flash", () => {
       const mockRequest = createMockRequest();
       const expectedErrors = { field1: "Error" };
       const expectedFormData = { name: "John" };
 
       mockRequest.yar.flash
         .mockReturnValueOnce([expectedErrors]) // Errors exist
-        .mockReturnValueOnce([expectedFormData]) // FormData exists
-        .mockReturnValueOnce([]); // Empty array for "notification"
+        .mockReturnValueOnce([expectedFormData]); // FormData exists
 
       const result = getFlashData(mockRequest);
 
       expect(result).toEqual({
         errors: expectedErrors,
         formData: expectedFormData,
-        notification: undefined,
       });
     });
   });
