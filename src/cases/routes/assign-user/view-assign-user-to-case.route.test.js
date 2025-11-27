@@ -67,6 +67,8 @@ describe("viewAssignUserToCaseRoute", () => {
 
   it("redirects back to cases list if no caseId supplied", async () => {
     findAllCasesUseCase.mockResolvedValue([]);
+
+    // First request - triggers redirect and sets flash
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/cases/assign-user",
@@ -75,19 +77,24 @@ describe("viewAssignUserToCaseRoute", () => {
         strategy: "session",
       },
     });
-
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/cases");
 
+    // Extract session cookie from redirect response
+    const cookie = headers["set-cookie"][0].split(";")[0];
+
+    // Second request - include the session cookie to see the flash message
     const { result } = await server.inject({
       method: "GET",
       url: "/cases",
+      headers: {
+        cookie, // Pass the session cookie back to the server
+      },
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
       },
     });
-
     const $ = load(result);
     const view = $("#main-content").html();
     expect(view).toMatchSnapshot();
