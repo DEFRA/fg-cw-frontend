@@ -13,8 +13,8 @@ const defaultLogger = {
   error: noop,
 };
 
-const resolveLogger = function (logger) {
-  return logger ?? defaultLogger;
+const resolveLogger = function (loggerInstance) {
+  return loggerInstance ?? defaultLogger;
 };
 
 const getUpstreamHeaders = function (res) {
