@@ -1,0 +1,7 @@
+@use "govuk-frontend" as *;
+
+.task-outcome-form__button {
+  display: block;
+  margin-top: govuk-spacing(-4);
+  margin-bottom: govuk-spacing(3);
+}

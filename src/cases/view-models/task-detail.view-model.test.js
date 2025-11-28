@@ -208,7 +208,7 @@ describe("createTaskDetailViewModel", () => {
       mockErrors,
     );
 
-    expect(result).toHaveProperty("errorList", mockErrors);
+    expect(result).toHaveProperty("errorList", ["Error message"]);
     expect(result).toHaveProperty("pageTitle", "Case task");
     expect(result).toHaveProperty("pageHeading", "Case");
 
@@ -411,5 +411,406 @@ describe("createTaskDetailViewModel", () => {
     );
 
     expect(result.data.isInteractive).toBe(true);
+  });
+
+  it("should handle empty errorList when errors is undefined", () => {
+    const result = createTaskDetailViewModel(
+      mockCaseData,
+      mockQuery,
+      mockRoles,
+      undefined,
+    );
+
+    expect(result.errorList).toEqual([]);
+  });
+
+  it("should map status options with comment fields", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "in_progress",
+                commentRef: "comment1",
+                requiredRoles: { allOf: ["role1"], anyOf: [] },
+                statusOptions: [
+                  { code: "in_progress", name: "In Progress" },
+                  { code: "complete", name: "Complete" },
+                  { code: "rejected", name: "Rejected" },
+                ],
+                commentInputDef: {
+                  label: "Add a comment",
+                  helpText: "Explain your decision",
+                  mandatory: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    expect(result.data.currentTask.statusOptions).toHaveLength(3);
+    expect(result.data.currentTask.statusOptions[0]).toMatchObject({
+      value: "in_progress",
+      text: "In Progress",
+      checked: true,
+    });
+    expect(result.data.currentTask.statusOptions[0].conditional).toMatchObject({
+      id: "in_progress-comment",
+      name: "in_progress-comment",
+      label: { text: "Add a comment" },
+      hint: { text: "Explain your decision" },
+      required: true,
+      rows: 5,
+    });
+  });
+
+  it("should populate comment field from formData on validation error", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: null,
+                statusOptions: [
+                  { code: "complete", name: "Complete" },
+                  { code: "rejected", name: "Rejected" },
+                ],
+                commentInputDef: {
+                  label: "Add a comment",
+                  mandatory: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const formData = {
+      status: "rejected",
+      "rejected-comment": "User entered text before validation error",
+    };
+
+    const errors = {
+      "rejected-comment": "Comment is too short",
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+      errors,
+      formData,
+    );
+
+    const rejectedOption = result.data.currentTask.statusOptions.find(
+      (opt) => opt.value === "rejected",
+    );
+
+    expect(rejectedOption.conditional.value).toBe(
+      "User entered text before validation error",
+    );
+    expect(rejectedOption.conditional.errorMessage).toBe(
+      "Comment is too short",
+    );
+  });
+
+  it("should populate comment field from existing task comment", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: "comment1",
+                statusOptions: [
+                  { code: "complete", name: "Complete" },
+                  { code: "rejected", name: "Rejected" },
+                ],
+                commentInputDef: {
+                  label: "Add a comment",
+                  mandatory: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      comments: [{ ref: "comment1", text: "Existing task comment" }],
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    const completeOption = result.data.currentTask.statusOptions.find(
+      (opt) => opt.value === "complete",
+    );
+
+    expect(completeOption.conditional.value).toBe("Existing task comment");
+  });
+
+  it("should handle existing comment with empty text", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: "comment1",
+                statusOptions: [
+                  { code: "complete", name: "Complete" },
+                  { code: "rejected", name: "Rejected" },
+                ],
+                commentInputDef: {
+                  label: "Add a comment",
+                  mandatory: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      comments: [{ ref: "comment1", text: null }],
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    const completeOption = result.data.currentTask.statusOptions.find(
+      (opt) => opt.value === "complete",
+    );
+
+    expect(completeOption.conditional.value).toBe("");
+  });
+
+  it("should handle status options without comment input definition", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "in_progress",
+                commentRef: null,
+                statusOptions: [
+                  { code: "in_progress", name: "In Progress" },
+                  { code: "complete", name: "Complete" },
+                ],
+                commentInputDef: null,
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    expect(result.data.currentTask.statusOptions).toHaveLength(2);
+    expect(
+      result.data.currentTask.statusOptions[0].conditional,
+    ).toBeUndefined();
+    expect(
+      result.data.currentTask.statusOptions[1].conditional,
+    ).toBeUndefined();
+  });
+
+  it("should handle empty status options array", () => {
+    const caseWithEmptyOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: null,
+                statusOptions: [],
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithEmptyOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    expect(result.data.currentTask.statusOptions).toEqual([]);
+  });
+
+  it("should handle comment input without helpText", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: null,
+                statusOptions: [{ code: "complete", name: "Complete" }],
+                commentInputDef: {
+                  label: "Add a comment",
+                  mandatory: false,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+    );
+
+    const option = result.data.currentTask.statusOptions[0];
+    expect(option.conditional.hint).toBeUndefined();
+    expect(option.conditional.required).toBe(false);
+  });
+
+  it("should override current status from formData", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "in_progress",
+                commentRef: null,
+                statusOptions: [
+                  { code: "in_progress", name: "In Progress" },
+                  { code: "complete", name: "Complete" },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const formData = { status: "complete" };
+
+    const result = createTaskDetailViewModel(
+      caseWithStatusOptions,
+      mockQuery,
+      mockRoles,
+      undefined,
+      formData,
+    );
+
+    expect(result.data.currentTask.status).toBe("complete");
+    const completeOption = result.data.currentTask.statusOptions.find(
+      (opt) => opt.value === "complete",
+    );
+    expect(completeOption.checked).toBe(true);
+
+    const inProgressOption = result.data.currentTask.statusOptions.find(
+      (opt) => opt.value === "in_progress",
+    );
+    expect(inProgressOption.checked).toBe(false);
+  });
+
+  it("should preserve completed field from formData", () => {
+    const formData = { completed: true };
+
+    const result = createTaskDetailViewModel(
+      mockCaseData,
+      mockQuery,
+      mockRoles,
+      undefined,
+      formData,
+    );
+
+    expect(result.data.currentTask.completed).toBe(true);
+  });
+
+  it("should use task completed value when formData is not provided", () => {
+    const caseWithCompletedTask = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                completed: true,
+                commentRef: null,
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel(
+      caseWithCompletedTask,
+      mockQuery,
+      mockRoles,
+    );
+
+    expect(result.data.currentTask.completed).toBe(true);
   });
 });

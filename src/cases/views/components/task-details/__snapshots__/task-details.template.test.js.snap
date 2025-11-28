@@ -1,12 +1,8 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`task-details > renders 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -17,9 +13,13 @@ exports[`task-details > renders 1`] = `
 
 
 
-        <form method="post" id="completeTaskForm" action="">
-  <div class="govuk-form-group">
-      <div class="govuk-form-group">
+        <form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action=""
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -31,21 +31,23 @@ exports[`task-details > renders 1`] = `
 </div>
 
 
-  </div>
-
-
-  <div class="govuk-button-group">
-    <button
-      type="submit"
-      data-prevent-double-click="true"
-      data-testid="save-and-continue-button"
-      class="govuk-button"
-      data-module="govuk-button"
-      data-govuk-button-init=""
-    >
-      Confirm
-    </button>
-  </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-id"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 
   </div>
@@ -54,12 +56,8 @@ exports[`task-details > renders 1`] = `
 `;
 
 exports[`task-details > renders completed task as read-only when case is not interactive 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -86,12 +84,8 @@ exports[`task-details > renders completed task as read-only when case is not int
 `;
 
 exports[`task-details > renders completed task with editable form when case is interactive 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -108,46 +102,48 @@ exports[`task-details > renders completed task with editable form when case is i
         10:30 AM
       </p>
 
-        <form method="post" id="completeTaskForm" action="">
-  <div class="govuk-form-group">
-      <div class="govuk-form-group">
+        <form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action=""
+>
+    <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
     Outcome
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
-        Approve
-      </label>
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="">
+      
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-2">
-        Reject
-      </label>
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="">
+      
     </div>
   </div>
 </fieldset>
 </div>
 
 
-  </div>
-
-
-  <div class="govuk-button-group">
-    <button
-      type="submit"
-      data-prevent-double-click="true"
-      data-testid="save-and-continue-button"
-      class="govuk-button"
-      data-module="govuk-button"
-      data-govuk-button-init=""
-    >
-      Confirm
-    </button>
-  </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-id"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 
   </div>
@@ -156,12 +152,8 @@ exports[`task-details > renders completed task with editable form when case is i
 `;
 
 exports[`task-details > renders completed task without form when user lacks permission 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -206,12 +198,8 @@ exports[`task-details > renders completed task without form when user lacks perm
 `;
 
 exports[`task-details > renders with interactive form 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -222,9 +210,13 @@ exports[`task-details > renders with interactive form 1`] = `
 
 
 
-        <form method="post" id="completeTaskForm" action="">
-  <div class="govuk-form-group">
-      <div class="govuk-form-group">
+        <form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action=""
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -236,21 +228,23 @@ exports[`task-details > renders with interactive form 1`] = `
 </div>
 
 
-  </div>
-
-
-  <div class="govuk-button-group">
-    <button
-      type="submit"
-      data-prevent-double-click="true"
-      data-testid="save-and-continue-button"
-      class="govuk-button"
-      data-module="govuk-button"
-      data-govuk-button-init=""
-    >
-      Confirm
-    </button>
-  </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-id"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 
   </div>
@@ -259,12 +253,8 @@ exports[`task-details > renders with interactive form 1`] = `
 `;
 
 exports[`task-details > renders with non-interactive form 1`] = `
-"
-<div class="govuk-grid-row">
+"<div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/case-id" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     

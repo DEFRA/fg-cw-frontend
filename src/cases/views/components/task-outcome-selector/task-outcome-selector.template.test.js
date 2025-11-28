@@ -5,7 +5,7 @@ describe("task-outcome-selector", () => {
   test("renders radio buttons with single option", () => {
     const component = render("task-outcome-selector", {
       status: "approved",
-      statusOptions: [{ code: "approved", name: "Approve" }],
+      statusOptions: [{ value: "approved", text: "Approve", checked: true }],
       completed: false,
     });
 
@@ -16,10 +16,14 @@ describe("task-outcome-selector", () => {
     const component = render("task-outcome-selector", {
       status: "rejected",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-        { code: "on-hold", name: "Put on hold" },
-        { code: "more-info", name: "Request more information" },
+        { value: "approved", text: "Approve", checked: false },
+        { value: "rejected", text: "Reject", checked: true },
+        { value: "on-hold", text: "Put on hold", checked: false },
+        {
+          value: "more-info",
+          text: "Request more information",
+          checked: false,
+        },
       ],
       completed: false,
     });
@@ -31,8 +35,8 @@ describe("task-outcome-selector", () => {
     const component = render("task-outcome-selector", {
       status: "approved",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
+        { value: "approved", text: "Approve", checked: true },
+        { value: "rejected", text: "Reject", checked: false },
       ],
       completed: false,
     });
@@ -44,9 +48,9 @@ describe("task-outcome-selector", () => {
     const component = render("task-outcome-selector", {
       status: null,
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-        { code: "on-hold", name: "Put on hold" },
+        { value: "approved", text: "Approve", checked: false },
+        { value: "rejected", text: "Reject", checked: false },
+        { value: "on-hold", text: "Put on hold", checked: false },
       ],
       completed: false,
     });
@@ -98,9 +102,9 @@ describe("task-outcome-selector", () => {
     const component = render("task-outcome-selector", {
       status: "on-hold",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "on-hold", name: "Put on hold" },
-        { code: "rejected", name: "Reject" },
+        { value: "approved", text: "Approve", checked: false },
+        { value: "on-hold", text: "Put on hold", checked: true },
+        { value: "rejected", text: "Reject", checked: false },
       ],
       completed: false,
     });
@@ -123,12 +127,14 @@ describe("task-outcome-selector", () => {
       status: "approved-with-conditions",
       statusOptions: [
         {
-          code: "approved-with-conditions",
-          name: "Approve with conditions that need to be met before final approval",
+          value: "approved-with-conditions",
+          text: "Approve with conditions that need to be met before final approval",
+          checked: true,
         },
         {
-          code: "rejected-insufficient-info",
-          name: "Reject due to insufficient information provided in the application",
+          value: "rejected-insufficient-info",
+          text: "Reject due to insufficient information provided in the application",
+          checked: false,
         },
       ],
       completed: false,
