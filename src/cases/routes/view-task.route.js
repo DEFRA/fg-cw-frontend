@@ -1,3 +1,4 @@
+import { getFlashData } from "../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { createTaskDetailViewModel } from "../view-models/task-detail.view-model.js";
 
@@ -10,7 +11,7 @@ export const viewTaskRoute = {
       user: request.auth.credentials.user,
     };
 
-    const errors = request.yar.flash("errors");
+    const { errors, formData } = getFlashData(request);
 
     const caseData = await findCaseByIdUseCase(
       authContext,
@@ -24,6 +25,7 @@ export const viewTaskRoute = {
       request.params,
       roles,
       errors,
+      formData,
     );
 
     return h.view("pages/task-detail", viewModel);
