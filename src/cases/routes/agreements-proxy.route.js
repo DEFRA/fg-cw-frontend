@@ -3,6 +3,7 @@ import {
   proxyToAgreements,
   statusCodes,
 } from "../use-cases/proxy-to-agreements.use-case.js";
+import { logger } from "../../common/logger.js";
 
 const noop = function () {};
 
@@ -110,6 +111,9 @@ const executeProxy = async function (path, request, h) {
 
 const agreementsProxyHandler = async function (request, h) {
   const { path } = request.params;
+
+  logger.info(`Get agreements for case ${request.params.caseId}`);
+
   if (!path) {
     return h
       .response({ error: "Bad Request", message: "Path parameter is required" })
@@ -117,6 +121,9 @@ const agreementsProxyHandler = async function (request, h) {
   }
 
   const requestLogger = resolveLogger(request?.logger);
+
+  logger.info(`Finished: Get agreements for case ${request.params.caseId}`);
+
   return executeProxy(path, request, h).catch((error) =>
     handleProxyFailure({ error, logger: requestLogger, path, h }),
   );

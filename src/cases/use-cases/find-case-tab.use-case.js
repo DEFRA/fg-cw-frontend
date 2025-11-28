@@ -1,5 +1,5 @@
-import { findTabById } from "../repositories/case.repository.js";
 import { logger } from "../../common/logger.js";
+import { findTabById } from "../repositories/case.repository.js";
 
 export const findCaseTabUseCase = async (
   authContext,
@@ -7,6 +7,8 @@ export const findCaseTabUseCase = async (
   tabId,
   querystring,
 ) => {
-  logger.debug(`Finding tab ${tabId} for case ${caseId}`);
-  return await findTabById(authContext, caseId, tabId, querystring);
+  logger.info(`Finding tab ${tabId} for case ${caseId}`);
+  const result = await findTabById(authContext, caseId, tabId, querystring);
+  logger.info(`Finished: Finding tab ${tabId} for case ${caseId}`);
+  return result;
 };

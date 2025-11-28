@@ -7,6 +7,7 @@ export const viewNotesRoute = {
   path: "/cases/{caseId}/notes",
   async handler(request, h) {
     logger.info(`Get notes for case ${request.params.caseId}`);
+
     const { caseId } = request.params;
     const { selectedNoteRef } = request.query;
 

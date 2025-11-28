@@ -7,7 +7,7 @@ export const updateStageOutcomeUseCase = async (
   authContext,
   { caseId, actionData: { actionCode, commentFieldName, comment } },
 ) => {
-  logger.debug(`Updating stage outcome for case ${caseId}`);
+  logger.info(`Updating stage outcome for case ${caseId}`);
 
   if (!actionCode) {
     return {
@@ -31,7 +31,7 @@ export const updateStageOutcomeUseCase = async (
       comment,
     });
 
-    logger.debug(`Finished: Updating stage outcome for case ${caseId}`);
+    logger.info(`Finished: Updating stage outcome for case ${caseId}`);
 
     return { success: true };
   } else {
