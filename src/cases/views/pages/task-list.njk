@@ -2,5 +2,5 @@
 {% from "../components/task-group/macro.njk" import taskGroup %}
 
 {% block contentMain %}
-  {{ taskGroup({caseId: data.case._id, stage: data.stage, errors: errors, values: values }) }}
+  {{ taskGroup({caseId: data.case._id, stage: data.stage, errors: errors, values: values, beforeContent: data.beforeContent }) }}
 {% endblock %}

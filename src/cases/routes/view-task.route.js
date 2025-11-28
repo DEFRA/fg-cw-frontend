@@ -15,6 +15,7 @@ export const viewTaskRoute = {
     const caseData = await findCaseByIdUseCase(
       authContext,
       request.params.caseId,
+      "task",
     );
 
     const roles = authContext.user.appRoles;

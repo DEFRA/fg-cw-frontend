@@ -10,8 +10,9 @@ export const findAll = async (authContext) => {
   return payload;
 };
 
-export const findById = async (authContext, caseId) => {
-  const { payload } = await wreck.get(`/cases/${caseId}`, {
+export const findById = async (authContext, caseId, tabId = null) => {
+  const qs = tabId ? `?tabId=${tabId}` : "";
+  const { payload } = await wreck.get(`/cases/${caseId}${qs}`, {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },

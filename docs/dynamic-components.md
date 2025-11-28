@@ -955,6 +955,94 @@ When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph c
 
 ---
 
+### 16. Alert Component
+
+**Purpose**: Display notifications and alerts using MOJ Design System alert component
+
+```
+{
+  "component": "alert",
+  "title": "Information alert",
+  "text": "This is an information alert.",
+  "variant": "information",
+  "dismissible": false
+}
+```
+
+**Parameters**:
+
+- `text` (required): The alert message text (automatically escaped for security)
+- `title` (required): A short title for the alert, used as a unique accessible label
+- `variant` (optional): Alert type - "information", "success", "warning", or "error" (defaults to "information")
+- `showTitleAsHeading` (optional): Set to `true` to display the title as a heading (defaults to `false`)
+- `headingTag` (optional): HTML tag for heading if `showTitleAsHeading` is true ("h2", "h3", or "h4", defaults to "h2")
+- `role` (optional): Overrides the role attribute (defaults to "region")
+- `disableAutoFocus` (optional): If role is "alert", set to `true` to disable auto-focus behavior
+- `dismissible` (optional): Set to `true` to allow the alert to be dismissed (defaults to `false`)
+- `dismissText` (optional): Text for the dismiss button (defaults to "Dismiss")
+- `focusOnDismissSelector` (optional): CSS selector for element to focus on when dismissed
+- `classes` (optional): Additional CSS classes
+- `attributes` (optional): Object of additional HTML attributes
+
+**Examples**:
+
+**Information alert (default)**:
+
+```
+{
+  "component": "alert",
+  "title": "System update",
+  "text": "The system will be updated tonight at 2 AM."
+}
+```
+
+**Success alert with heading**:
+
+```
+{
+  "component": "alert",
+  "variant": "success",
+  "title": "File uploaded successfully",
+  "text": "Your document has been uploaded and is being processed.",
+  "showTitleAsHeading": true
+}
+```
+
+**Warning alert with dismissal**:
+
+```
+{
+  "component": "alert",
+  "variant": "warning",
+  "title": "Action required",
+  "text": "Please review the changes before proceeding.",
+  "dismissible": true
+}
+```
+
+**Error alert**:
+
+```
+{
+  "component": "alert",
+  "variant": "error",
+  "title": "Upload failed",
+  "text": "The file could not be uploaded. Please try again."
+}
+```
+
+**Output**: MOJ Design System alert component with appropriate styling and accessibility features
+
+**Notes**:
+
+- Uses MOJ Design System alert component for consistent government styling
+- Text content is automatically escaped for security (no HTML allowed)
+- Each alert needs a unique `title` for accessibility
+- Supports all MOJ alert variants: information (blue), success (green), warning (orange), error (red)
+- Dismissible alerts can be closed by users and optionally focus on another element when dismissed
+
+---
+
 ### GOV.UK Design System Reference
 
 For complete styling options, refer to the [GOV.UK Design System Styles](https://design-system.service.gov.uk/styles/).
