@@ -34,9 +34,7 @@ export const logger = pino({
     const id = getTraceId();
 
     if (id) {
-      mixinValues.trace = {
-        id,
-      };
+      mixinValues["trace.id"] = id;
     }
 
     return mixinValues;
