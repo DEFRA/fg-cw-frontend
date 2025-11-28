@@ -46,16 +46,16 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       Assign
     </button>
     
-        <table class="govuk-table">
+        <table class="govuk-table" data-module="moj-sortable-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header">ID</th>
-          <th scope="col" class="govuk-table__header">Business</th>
-          <th scope="col" class="govuk-table__header">SBI</th>
-          <th scope="col" class="govuk-table__header">Submitted</th>
-          <th scope="col" class="govuk-table__header">Status</th>
-          <th scope="col" class="govuk-table__header">Assignee</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">ID</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Business</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">SBI</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Submitted</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Assignee</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
@@ -68,11 +68,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </label>
       </div>
     </td>
-          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
+          <td class="govuk-table__cell" data-sort-value="banana-123">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
     </td>
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
-          <td class="govuk-table__cell">1 Oct 2023</td>
+          <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">
       New
     </strong>
@@ -88,11 +88,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </label>
       </div>
     </td>
-          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">case-ref-2</a>
+          <td class="govuk-table__cell" data-sort-value="case-ref-2">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">case-ref-2</a>
     </td>
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
-          <td class="govuk-table__cell">1 Oct 2023</td>
+          <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
           <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">
       Old
     </strong>

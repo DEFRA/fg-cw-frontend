@@ -5,7 +5,6 @@ import {
 
 export const createCaseListViewModel = (cases, assignedCaseId) => {
   const casesTable = mapCasesToTable(cases);
-
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
     assignedCaseId,
     casesTable.rows,
@@ -28,16 +27,26 @@ export const createCaseListViewModel = (cases, assignedCaseId) => {
   };
 };
 
+const attributes = {
+  "aria-sort": "none",
+};
+
+const headerClasses = "sortable-header";
+
 const mapCasesToTable = (cases) => {
   return {
     head: [
       { text: "Select" },
-      { text: "ID" },
-      { text: "Business" },
-      { text: "SBI" },
-      { text: "Submitted" },
-      { text: "Status" },
-      { text: "Assignee" },
+      {
+        text: "ID",
+        attributes,
+        headerClasses,
+      },
+      { text: "Business", attributes, headerClasses },
+      { text: "SBI", attributes, headerClasses },
+      { text: "Submitted", attributes, headerClasses },
+      { text: "Status", attributes, headerClasses },
+      { text: "Assignee", attributes, headerClasses },
     ],
     rows: cases.map(
       // eslint-disable-next-line complexity
@@ -49,6 +58,7 @@ const mapCasesToTable = (cases) => {
         id: {
           href: `/cases/${_id}`,
           text: mapText(caseRef),
+          attributes: { "data-sort-value": caseRef },
         },
         business: {
           text: mapText(payload?.answers?.applicant?.business?.name),
@@ -58,6 +68,7 @@ const mapCasesToTable = (cases) => {
         },
         submitted: {
           text: mapSubmittedAt(payload.submittedAt),
+          attributes: { "data-sort-value": Date.parse(payload.submittedAt) },
         },
         status: mapStatus(currentStatus),
         assignee: {
