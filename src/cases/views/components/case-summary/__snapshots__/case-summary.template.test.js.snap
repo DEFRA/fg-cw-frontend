@@ -7,7 +7,7 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           Valley Farm
         </h1>
@@ -95,7 +95,7 @@ exports[`case-summary > renders without callToAction 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           Valley Farm
         </h1>
