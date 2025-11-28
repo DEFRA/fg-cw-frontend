@@ -1,0 +1,33 @@
+{% from "moj/components/alert/macro.njk" import mojAlert %}
+
+{% macro defraAlert(params) %}
+  {%- set text = params.text %}
+  {%- set title = params.title %}
+  {%- set showTitleAsHeading = params.showTitleAsHeading %}
+  {%- set headingTag = params.headingTag %}
+  {%- set variant = params.variant or 'information' %}
+  {%- set role = params.role %}
+  {%- set disableAutoFocus = params.disableAutoFocus %}
+  {%- set dismissible = params.dismissible %}
+  {%- set dismissText = params.dismissText %}
+  {%- set focusOnDismissSelector = params.focusOnDismissSelector %}
+  {%- set classes = params.classes %}
+  {%- set attributes = params.attributes %}
+
+  {{
+    mojAlert({
+      text: text,
+      title: title,
+      showTitleAsHeading: showTitleAsHeading,
+      headingTag: headingTag,
+      variant: variant,
+      role: role,
+      disableAutoFocus: disableAutoFocus,
+      dismissible: dismissible,
+      dismissText: dismissText,
+      focusOnDismissSelector: focusOnDismissSelector,
+      classes: classes,
+      attributes: attributes
+    })
+  }}
+{% endmacro %}
