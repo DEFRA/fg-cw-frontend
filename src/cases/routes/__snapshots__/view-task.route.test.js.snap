@@ -8,7 +8,7 @@ exports[`viewTaskRoute > returns a task 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -83,12 +83,8 @@ Timeline
   </div>
 
 
-  
-<div class="govuk-grid-row">
+  <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-back-link" data-testid="back-link">Back to task list</a>
-
-
     
     
     
@@ -99,9 +95,8 @@ Timeline
 
 
 
-        <form method="post" id="completeTaskForm" action="/cases/68495db5afe2d27b09b2ee47/task-groups/application-receipt-tasks/tasks/simple-review/status">
-  <div class="govuk-form-group">
-      <div class="govuk-form-group">
+        <form class="task-outcome-form" method="post" id="completeTaskForm" action="/cases/68495db5afe2d27b09b2ee47/task-groups/application-receipt-tasks/tasks/simple-review/status">
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -113,14 +108,12 @@ Timeline
 </div>
 
 
-  </div>
-
-
-  <div class="govuk-button-group">
-    <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button" data-module="govuk-button" data-govuk-button-init="">
-      Confirm
-    </button>
-  </div>
+  <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button task-outcome-form__button" data-module="govuk-button" data-govuk-button-init="">
+    Confirm
+  </button>
+  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-size-16" data-testid="back-link">
+    Cancel and return
+  </a>
 </form>
 
   </div>

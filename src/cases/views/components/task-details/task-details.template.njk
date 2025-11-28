@@ -1,14 +1,11 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 {% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
-
-{% set caseLink = "/cases/" + params.caseId %}
 
 {%- set errorList = params.errorList -%}
 {%- set caseId = params.caseId -%}
@@ -16,16 +13,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    {{
-      govukBackLink({
-        text: "Back to task list",
-        href: caseLink,
-        attributes: {
-          "data-testid": "back-link"
-        }
-      })
-    }}
-
     {{ dynamicContent(currentTask.description) }}
 
     {% if currentTask.completed and params.isInteractive %}
@@ -38,13 +25,12 @@
       {% if currentTask.canCompleteTask %}
         {{
           taskOutcomeForm({
-            error: errorList.length,
+            caseId: caseId,
             formAction: currentTask.formAction,
             statusOptions: currentTask.statusOptions,
             status: currentTask.status,
             completed: currentTask.completed,
-            commentInputDef: currentTask.commentInputDef,
-            commentText: currentTask.comment.text if currentTask.comment else '',
+            statusError: currentTask.statusError,
             isInteractive: params.isInteractive
           })
         }}
@@ -99,13 +85,12 @@
       {% if params.isInteractive %}
         {{
           taskOutcomeForm({
-            error: errorList.length,
+            caseId: caseId,
             formAction: currentTask.formAction,
             statusOptions: currentTask.statusOptions,
             status: currentTask.status,
             completed: currentTask.completed,
-            commentInputDef: currentTask.commentInputDef,
-            commentText: currentTask.comment.text if currentTask.comment else ''
+            statusError: currentTask.statusError
           })
         }}
       {% endif %}
