@@ -46,16 +46,16 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
       Assign
     </button>
     
-        <table class="govuk-table">
+        <table class="govuk-table" data-module="moj-sortable-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header">ID</th>
-          <th scope="col" class="govuk-table__header">Business</th>
-          <th scope="col" class="govuk-table__header">SBI</th>
-          <th scope="col" class="govuk-table__header">Submitted</th>
-          <th scope="col" class="govuk-table__header">Status</th>
-          <th scope="col" class="govuk-table__header">Assignee</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">ID</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Business</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">SBI</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Submitted</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none">Assignee</th>
         </tr>
       </thead>
       <tbody class="govuk-table__body">
