@@ -156,7 +156,7 @@ describe("updateTaskStatusRoute", () => {
       payload: {
         completed: true,
         status: "approved",
-        comment: "This is a comment",
+        "approved-comment": "This is a comment",
       },
       auth: {
         credentials: {
@@ -257,7 +257,7 @@ describe("updateTaskStatusRoute", () => {
       payload: {
         completed: true,
         status: "approved",
-        comment: "",
+        "approved-comment": "",
       },
       auth: {
         credentials: {
@@ -271,7 +271,7 @@ describe("updateTaskStatusRoute", () => {
     expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
       expect.any(Object),
       expect.objectContaining({
-        comment: "",
+        comment: null,
       }),
     );
 
