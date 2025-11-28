@@ -123,7 +123,7 @@ export const proxyToAgreements = function (path, request) {
   };
 
   logger.info(
-    `Finished: Proxying request to agreements UI: ${uri} and path: ${path} sanitised headers ${sanitizedHeaders}`,
+    `Finished: Proxying request to agreements UI: ${uri} and path: ${path} sanitised headers ${JSON.stringify(sanitizedHeaders, null, 2)}`,
   );
   return { uri, headers };
 };
