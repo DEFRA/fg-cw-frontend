@@ -1,5 +1,6 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {%- set status = params.status -%}
 {%- set statusOptions = params.statusOptions -%}
@@ -9,13 +10,24 @@
 {% if statusOptions and statusOptions.length > 0 %}
   {% set radioItems = [] %}
   {% for option in statusOptions %}
-    {%
-      set radioItems = (radioItems.push({
-        value: option.code,
-        text: option.name,
-        checked: option.code === status
-      }), radioItems)
-    %}
+    {% if option.conditional %}
+      {%
+        set radioItems = (radioItems.push({
+          value: option.value,
+          text: option.text,
+          checked: option.checked,
+          conditional: { html: govukTextarea(option.conditional) }
+        }), radioItems)
+      %}
+    {% else %}
+      {%
+        set radioItems = (radioItems.push({
+          value: option.value,
+          text: option.text,
+          checked: option.checked
+        }), radioItems)
+      %}
+    {% endif %}
   {% endfor %}
   {{
     govukRadios({
