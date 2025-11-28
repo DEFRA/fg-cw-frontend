@@ -2,12 +2,18 @@
 {% from "../task-list/macro.njk" import taskList %}
 {% from "../stage-actions/macro.njk" import stageActions %}
 {% from "../../partials/stage-action-button-group/macro.njk" import stageActionButtonGroup %}
+{% from "../dynamic-content/macro.njk" import dynamicContent %}
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <h2 class="govuk-heading-l" data-testid="stage-heading">
       {{ params.stage.name }}
     </h2>
+
+    {% if params.beforeContent %}
+      {{ dynamicContent(params.beforeContent) }}
+    {% endif %}
+
     {% for taskGroup in params.stage.taskGroups %}
       <h3 class="govuk-heading-m">{{ taskGroup.name }}</h3>
       {{ taskList({tasks: taskGroup.tasks}) }}
