@@ -8,7 +8,7 @@ exports[`createNoteRoute > shows save error when save fails 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -125,7 +125,7 @@ exports[`createNoteRoute > shows validation error when text is empty 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -245,7 +245,7 @@ exports[`createNoteRoute > shows validation error when text is missing 1`] = `
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -365,7 +365,7 @@ exports[`createNoteRoute > shows validation error when text is only whitespace 1
   <div class="govuk-width-container">
     <div class="app-case-banner__top govuk-!-margin-bottom-4">
       <div class="app-case-banner__title">
-        <a href="/cases" class="govuk-back-link">Back to cases</a>
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
