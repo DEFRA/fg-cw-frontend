@@ -7,6 +7,8 @@ exports[`task-group > renders 1`] = `
     <h2 class="govuk-heading-l" data-testid="stage-heading">
       Test Stage
     </h2>
+
+
       <h3 class="govuk-heading-m">Group 1</h3>
       
   <ul

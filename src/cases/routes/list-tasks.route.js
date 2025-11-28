@@ -14,6 +14,7 @@ export const listTasksRoute = {
     const caseData = await findCaseByIdUseCase(
       authContext,
       request.params.caseId,
+      "tasks",
     );
 
     const { errors, formData } = getFlashData(request);

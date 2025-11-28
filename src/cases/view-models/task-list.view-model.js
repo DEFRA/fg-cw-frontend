@@ -15,6 +15,7 @@ export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
         taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
         actions: mapActions({ stage, errors, values }),
       },
+      beforeContent: kase.beforeContent,
     },
     errors,
     errorList: Object.values(errors),

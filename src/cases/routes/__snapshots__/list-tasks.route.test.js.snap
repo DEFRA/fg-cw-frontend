@@ -89,6 +89,8 @@ Timeline
     <h2 class="govuk-heading-l" data-testid="stage-heading">
       Application Receipt
     </h2>
+
+
       <h3 class="govuk-heading-m">Application Receipt Tasks</h3>
       
   <ul class="govuk-task-list govuk-!-margin-bottom-6" data-testid="taskList-list">

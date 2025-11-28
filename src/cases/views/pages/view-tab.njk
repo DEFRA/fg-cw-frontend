@@ -2,5 +2,9 @@
 {% from "../components/dynamic-content/macro.njk" import dynamicContent %}
 
 {% block contentMain %}
+  {% if data.beforeContent %}
+    {{ dynamicContent(data.beforeContent) }}
+  {% endif %}
+
   {{ dynamicContent(data.content) }}
 {% endblock %}

@@ -96,7 +96,7 @@ describe("findCaseByIdUseCase", () => {
     const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(findById).toHaveBeenCalledOnce();
-    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
     expect(result).toEqual(expectedResult);
   });
 
@@ -239,7 +239,7 @@ describe("findCaseByIdUseCase", () => {
       "Case repository failed",
     );
     expect(findById).toHaveBeenCalledOnce();
-    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
   });
 
   test("handles case with empty stages", async () => {
@@ -255,7 +255,7 @@ describe("findCaseByIdUseCase", () => {
     const result = await findCaseByIdUseCase(authContext, caseId);
 
     expect(result.stages).toEqual([]);
-    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
   });
 
   test("calls repositories with correct parameters", async () => {
@@ -270,6 +270,6 @@ describe("findCaseByIdUseCase", () => {
 
     await findCaseByIdUseCase(authContext, caseId);
 
-    expect(findById).toHaveBeenCalledWith(authContext, caseId);
+    expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
   });
 });

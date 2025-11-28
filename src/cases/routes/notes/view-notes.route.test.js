@@ -48,6 +48,7 @@ describe("viewNotesRoute", () => {
     expect(findCaseByIdUseCase).toHaveBeenCalledWith(
       authContext,
       "68495db5afe2d27b09b2ee47",
+      "notes",
     );
   });
 
