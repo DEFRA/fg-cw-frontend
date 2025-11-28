@@ -2,12 +2,13 @@
 
 exports[`viewNotesRoute > handles case with no comments 1`] = `
 "
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+    
+
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -21,9 +22,11 @@ exports[`viewNotesRoute > handles case with no comments 1`] = `
 </div>
 
 
-  <div class="govuk-body">
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -80,24 +83,24 @@ Timeline
   </div>
 
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
+  <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
-      Add note
-    </a>
+  <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
+    Add note
+  </a>
 
-  </div>
         "
 `;
 
 exports[`viewNotesRoute > handles case with null comments 1`] = `
 "
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+    
+
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -111,9 +114,11 @@ exports[`viewNotesRoute > handles case with null comments 1`] = `
 </div>
 
 
-  <div class="govuk-body">
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -170,24 +175,24 @@ Timeline
   </div>
 
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
+  <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
-      Add note
-    </a>
+  <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
+    Add note
+  </a>
 
-  </div>
         "
 `;
 
 exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
 "
-  
-<div class="govuk-!-margin-bottom-6 app-case-banner">
+    
+
+<div class="app-case-banner">
   <div class="govuk-width-container">
-    <a href="/cases" class="govuk-back-link">Back to cases</a>
-    <div class="moj-page-header-actions">
-      <div class="moj-page-header-actions__title">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
           
         </h1>
@@ -201,9 +206,11 @@ exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
 </div>
 
 
-  <div class="govuk-body">
     
-  <div class="govuk-service-navigation" data-module="govuk-service-navigation">
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
       <div class="govuk-width-container">
 
     <div class="govuk-service-navigation__container">
@@ -260,14 +267,14 @@ Timeline
   </div>
 
 
-    <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
+  <h2 class="govuk-heading-l govuk-!-margin-top-6">Notes</h2>
 
-    <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
-      Add note
-    </a>
+  <a href="/cases/68495db5afe2d27b09b2ee47/notes/new" class="govuk-button govuk-button--primary">
+    Add note
+  </a>
 
 
-      <table class="govuk-table" data-module="moj-sortable-table">
+    <table class="govuk-table" data-module="moj-sortable-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
       <th scope="col" class="govuk-table__header" aria-sort="descending">Date</th>
@@ -290,6 +297,5 @@ Timeline
   </tbody>
 </table>
 
-  </div>
         "
 `;

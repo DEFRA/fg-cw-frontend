@@ -1,24 +1,6 @@
-{% extends '../layouts/case-layout.njk' %}
-{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% extends '../layouts/case-detail-layout.njk' %}
 {% from "../components/task-group/macro.njk" import taskGroup %}
-{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
-{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
 
-{% block content %}
-  {{ caseSummary(data.case) }}
-
-  {% if errorList and errorList.length > 0 %}
-    {{
-      govukErrorSummary({
-        titleText: "There is a problem",
-        errorList: errorList
-      })
-    }}
-  {% endif %}
-
-  <div class="govuk-body">
-    {{ govukServiceNavigation({ navigation: links }) }}
-
-    {{ taskGroup({caseId: data.case._id, stage: data.stage, errors: errors, values: values }) }}
-  </div>
+{% block contentMain %}
+  {{ taskGroup({caseId: data.case._id, stage: data.stage, errors: errors, values: values, beforeContent: data.beforeContent }) }}
 {% endblock %}

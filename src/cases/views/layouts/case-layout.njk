@@ -5,7 +5,8 @@
 {# Import custom components globally #}
 {% from "heading/macro.njk" import heading %}
 {% from "defra-heading/macro.njk" import defraHeading %}
-{% set mainClasses = "app-main-wrapper" %}
+{% from "../components/flash-notifications/macro.njk" import flashNotifications %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 
 {% block head %}
   <link
@@ -24,6 +25,29 @@
 {% endblock %}
 
 {% block content %}
+  {% block contentHeader %}
+  {% endblock %}
+
+  {% block contentNotifications %}
+    {{ flashNotifications(notification) if notification }}
+  {% endblock %}
+
+  {% block contentErrors %}
+    {% if errorList and errorList.length > 0 %}
+      {{
+        govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorList
+        })
+      }}
+    {% endif %}
+  {% endblock %}
+
+  {% block contentNavigation %}
+  {% endblock %}
+
+  {% block contentMain %}
+  {% endblock %}
 {% endblock %}
 
 {% block footer %}

@@ -1,6 +1,7 @@
-import { logger } from "../../common/logger.js";
+import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
+import { logger } from "../../common/logger.js";
 
 const findTask = (kase, taskGroupCode, taskCode) =>
   kase.stage.taskGroups
@@ -43,20 +44,30 @@ export const updateTaskStatusRoute = {
     const kase = await findCaseByIdUseCase(authContext, caseId);
     const task = findTask(kase, taskGroupCode, taskCode);
 
-    // ensure comment has a value if it is required...
+    const errors = {};
+
+    const commentFieldName = status ? `${status}-comment` : "comment";
+
     if (!validateComment(task?.commentInputDef, comment)) {
-      request.yar.flash("errors", {
-        text: "Note is required",
-        href: "#comment",
-      });
-      return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
+      errors[commentFieldName] = {
+        text: task?.commentInputDef?.label
+          ? `${task.commentInputDef.label} is required`
+          : "Note is required",
+        href: `#${commentFieldName}`,
+      };
     }
 
-    // ensure status has a value if it is required...
     if (!validateStatusOptions(task?.statusOptions, status)) {
-      request.yar.flash("errors", {
-        text: "Status is required",
+      errors.status = {
+        text: "Choose an option",
         href: "#status",
+      };
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFlashData(request, {
+        errors,
+        formData: { completed, status, [commentFieldName]: comment },
       });
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
     }
@@ -78,9 +89,14 @@ export const updateTaskStatusRoute = {
   },
 };
 
+const extractComment = (payload, status) => {
+  const commentFieldName = status ? `${status}-comment` : "comment";
+  return payload[commentFieldName] || null;
+};
+
 const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
-  const { completed = false, status = null, comment = null } = request.payload;
+  const { completed = false, status = null } = request.payload;
 
   return {
     caseId,
@@ -88,6 +104,6 @@ const mapRequest = (request) => {
     taskCode,
     completed,
     status,
-    comment,
+    comment: extractComment(request.payload, status),
   };
 };

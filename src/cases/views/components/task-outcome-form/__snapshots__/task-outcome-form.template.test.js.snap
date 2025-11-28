@@ -1,9 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`task-outcome-form > renders checkbox with completed state 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked>
@@ -15,213 +19,35 @@ exports[`task-outcome-form > renders checkbox with completed state 1`] = `
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Completion notes
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint">Task completed successfully</textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
-</form>
-"
-`;
-
-exports[`task-outcome-form > renders disabled form when isInteractive is false 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-disabled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
-    <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" aria-disabled="true">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked disabled>
-      <label class="govuk-label govuk-radios__label" for="status">
-        Approve
-      </label>
-    </div>
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" disabled>
-      <label class="govuk-label govuk-radios__label" for="status-2">
-        Reject
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Comment
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    Provide details
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" disabled aria-describedby="comment-hint" aria-disabled="true">Some comment</textarea>
-</div>
-
-
-</form>
-"
-`;
-
-exports[`task-outcome-form > renders disabled form with checkbox when isInteractive is false 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-disabled-checkbox/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" aria-disabled="true">
-  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
-    <div class="govuk-checkboxes__item">
-      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked disabled>
-      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
-        Completed
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Completion notes
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" disabled aria-describedby="comment-hint" aria-disabled="true">Completed</textarea>
-</div>
-
-
-</form>
-"
-`;
-
-exports[`task-outcome-form > renders disabled form with radio buttons when isInteractive is false 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-disabled-radios/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
-    <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset" aria-disabled="true">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" disabled>
-      <label class="govuk-label govuk-radios__label" for="status">
-        Approve
-      </label>
-    </div>
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" disabled>
-      <label class="govuk-label govuk-radios__label" for="status-2">
-        Reject
-      </label>
-    </div>
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold" checked disabled>
-      <label class="govuk-label govuk-radios__label" for="status-3">
-        Put on hold
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  </div>
-
-
-</form>
-"
-`;
-
-exports[`task-outcome-form > renders interactive form when isInteractive is true 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-interactive/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
-    <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
-        Approve
-      </label>
-    </div>
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-2">
-        Reject
-      </label>
-    </div>
-  </div>
-</fieldset>
-</div>
-
-
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Comment
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    Provide details
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint"></textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-completed"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders minimal form (no options, no comment) 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -233,29 +59,35 @@ exports[`task-outcome-form > renders minimal form (no options, no comment) 1`] =
 </div>
 
 
-  </div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-minimal"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with comment input without help text 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -267,95 +99,91 @@ exports[`task-outcome-form > renders with comment input without help text 1`] = 
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Notes
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint"></textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-111"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with error message 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
-    <div class="govuk-form-group govuk-form-group--error">
-  <fieldset class="govuk-fieldset" aria-describedby="status-error">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
+    Outcome
   </legend>
-  <p id="status-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Comment is required
-  </p>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked data-aria-controls="conditional-status">
       <label class="govuk-label govuk-radios__label" for="status">
         Approve
       </label>
+    </div>
+    <div class="govuk-radios__conditional" id="conditional-status">
+      <div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="approved-comment">
+    Approval reason
+  </label>
+  <p id="approved-comment-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Approval reason is required
+  </p>
+  <textarea class="govuk-textarea govuk-textarea--error" id="approved-comment" name="approved-comment" rows="5" aria-describedby="approved-comment-error"></textarea>
+</div>
     </div>
   </div>
 </fieldset>
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group govuk-form-group--error">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Approval reason
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    
-  </div>
-  <p id="comment-error" class="govuk-error-message">
-    <span class="govuk-visually-hidden">Error:</span> Comment is required
-  </p>
-  <textarea class="govuk-textarea govuk-textarea--error" id="comment" name="comment" rows="5" aria-describedby="comment-hint comment-error"></textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-error"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with optional comment input 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
@@ -367,161 +195,201 @@ exports[`task-outcome-form > renders with optional comment input 1`] = `
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Additional notes
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    Optional comments about this task
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint">Some existing notes</textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-999"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with pre-filled comment text 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
+    Outcome
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" data-aria-controls="conditional-status">
       <label class="govuk-label govuk-radios__label" for="status">
         Approve
       </label>
     </div>
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="approved-comment">
+    Reason for hold
+  </label>
+  <div id="approved-comment-hint" class="govuk-hint">
+    Explain why this is on hold
+  </div>
+  <textarea class="govuk-textarea" id="approved-comment" name="approved-comment" rows="5" aria-describedby="approved-comment-hint"></textarea>
+</div>
+    </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" data-aria-controls="conditional-status-2">
       <label class="govuk-label govuk-radios__label" for="status-2">
         Reject
       </label>
     </div>
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-2">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="rejected-comment">
+    Reason for hold
+  </label>
+  <div id="rejected-comment-hint" class="govuk-hint">
+    Explain why this is on hold
+  </div>
+  <textarea class="govuk-textarea" id="rejected-comment" name="rejected-comment" rows="5" aria-describedby="rejected-comment-hint"></textarea>
+</div>
+    </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold" checked>
+      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold" checked data-aria-controls="conditional-status-3">
       <label class="govuk-label govuk-radios__label" for="status-3">
         Put on hold
       </label>
+    </div>
+    <div class="govuk-radios__conditional" id="conditional-status-3">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="on-hold-comment">
+    Reason for hold
+  </label>
+  <div id="on-hold-comment-hint" class="govuk-hint">
+    Explain why this is on hold
+  </div>
+  <textarea class="govuk-textarea" id="on-hold-comment" name="on-hold-comment" rows="5" aria-describedby="on-hold-comment-hint">Waiting for additional documentation from applicant</textarea>
+</div>
     </div>
   </div>
 </fieldset>
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Reason for hold
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    Explain why this is on hold
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint">Waiting for additional documentation from applicant</textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-prefilled"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with required comment input 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
+    Outcome
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
+      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked data-aria-controls="conditional-status">
       <label class="govuk-label govuk-radios__label" for="status">
         Approve
       </label>
     </div>
+    <div class="govuk-radios__conditional" id="conditional-status">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="approved-comment">
+    Approval reason
+  </label>
+  <div id="approved-comment-hint" class="govuk-hint">
+    Please provide a reason for your decision
+  </div>
+  <textarea class="govuk-textarea" id="approved-comment" name="approved-comment" rows="5" aria-describedby="approved-comment-hint"></textarea>
+</div>
+    </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
+      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" data-aria-controls="conditional-status-2">
       <label class="govuk-label govuk-radios__label" for="status-2">
         Reject
       </label>
+    </div>
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-2">
+      <div class="govuk-form-group">
+  <label class="govuk-label" for="rejected-comment">
+    Approval reason
+  </label>
+  <div id="rejected-comment-hint" class="govuk-hint">
+    Please provide a reason for your decision
+  </div>
+  <textarea class="govuk-textarea" id="rejected-comment" name="rejected-comment" rows="5" aria-describedby="rejected-comment-hint"></textarea>
+</div>
     </div>
   </div>
 </fieldset>
 </div>
 
 
-  </div>
-
-      <div class="govuk-form-group">
-  <label class="govuk-label govuk-label--m" for="comment">
-    Approval reason
-  </label>
-  <div id="comment-hint" class="govuk-hint">
-    Please provide a reason for your decision
-  </div>
-  <textarea class="govuk-textarea" id="comment" name="comment" rows="5" aria-describedby="comment-hint"></textarea>
-</div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-789"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders with status options (radio buttons) 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-    
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Select outcome
+    Outcome
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
@@ -547,29 +415,35 @@ exports[`task-outcome-form > renders with status options (radio buttons) 1`] = `
 </div>
 
 
-  </div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-123"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;
 
 exports[`task-outcome-form > renders without status options (checkbox) 1`] = `
-"<form method="post" id="completeTaskForm" action="/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status">
-  <div class="govuk-form-group">
-        <div class="govuk-form-group">
+"<form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action="/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+>
+    <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
       <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked>
@@ -581,21 +455,23 @@ exports[`task-outcome-form > renders without status options (checkbox) 1`] = `
 </div>
 
 
-  </div>
-
-
-    <div class="govuk-button-group">
-      <button
-        type="submit"
-        data-prevent-double-click="true"
-        data-testid="save-and-continue-button"
-        class="govuk-button"
-        data-module="govuk-button"
-        data-govuk-button-init=""
-      >
-        Save and continue
-      </button>
-    </div>
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-456"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
 </form>
 "
 `;

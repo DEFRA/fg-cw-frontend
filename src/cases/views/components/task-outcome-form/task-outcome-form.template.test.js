@@ -4,18 +4,17 @@ import { render } from "../../../../common/nunjucks/render.js";
 describe("task-outcome-form", () => {
   test("renders with status options (radio buttons)", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-123",
       formAction:
         "/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: "approved",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-        { code: "on-hold", name: "Put on hold" },
+        { value: "approved", text: "Approve", checked: true },
+        { value: "rejected", text: "Reject", checked: false },
+        { value: "on-hold", text: "Put on hold", checked: false },
       ],
       completed: false,
-      commentInputDef: null,
-      commentText: "",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -24,14 +23,13 @@ describe("task-outcome-form", () => {
 
   test("renders without status options (checkbox)", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-456",
       formAction:
         "/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: null,
       statusOptions: [],
       completed: true,
-      commentInputDef: null,
-      commentText: "",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -40,21 +38,42 @@ describe("task-outcome-form", () => {
 
   test("renders with required comment input", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-789",
       formAction:
         "/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: "approved",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
+        {
+          value: "approved",
+          text: "Approve",
+          checked: true,
+          conditional: {
+            id: "approved-comment",
+            name: "approved-comment",
+            value: "",
+            label: { text: "Approval reason" },
+            hint: { text: "Please provide a reason for your decision" },
+            required: true,
+            rows: 5,
+          },
+        },
+        {
+          value: "rejected",
+          text: "Reject",
+          checked: false,
+          conditional: {
+            id: "rejected-comment",
+            name: "rejected-comment",
+            value: "",
+            label: { text: "Approval reason" },
+            hint: { text: "Please provide a reason for your decision" },
+            required: true,
+            rows: 5,
+          },
+        },
       ],
       completed: false,
-      commentInputDef: {
-        label: "Approval reason",
-        helpText: "Please provide a reason for your decision",
-        mandatory: true,
-      },
-      commentText: "",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -63,18 +82,13 @@ describe("task-outcome-form", () => {
 
   test("renders with optional comment input", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-999",
       formAction:
         "/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: null,
       statusOptions: [],
       completed: false,
-      commentInputDef: {
-        label: "Additional notes",
-        helpText: "Optional comments about this task",
-        mandatory: false,
-      },
-      commentText: "Some existing notes",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -83,17 +97,13 @@ describe("task-outcome-form", () => {
 
   test("renders with comment input without help text", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-111",
       formAction:
         "/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: null,
       statusOptions: [],
       completed: false,
-      commentInputDef: {
-        label: "Notes",
-        mandatory: true,
-      },
-      commentText: "",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -102,20 +112,31 @@ describe("task-outcome-form", () => {
 
   test("renders with error message", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-error",
       formAction:
         "/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: "approved",
-      statusOptions: [{ code: "approved", name: "Approve" }],
+      statusOptions: [
+        {
+          value: "approved",
+          text: "Approve",
+          checked: true,
+          conditional: {
+            id: "approved-comment",
+            name: "approved-comment",
+            value: "",
+            label: { text: "Approval reason" },
+            required: true,
+            errorMessage: {
+              text: "Approval reason is required",
+              href: "#approved-comment",
+            },
+            rows: 5,
+          },
+        },
+      ],
       completed: false,
-      commentInputDef: {
-        label: "Approval reason",
-        mandatory: true,
-      },
-      commentText: "",
-      error: {
-        text: "Comment is required",
-        href: "#comment",
-      },
+      statusError: null,
       isInteractive: true,
     });
 
@@ -124,17 +145,13 @@ describe("task-outcome-form", () => {
 
   test("renders checkbox with completed state", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-completed",
       formAction:
         "/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: null,
       statusOptions: null,
       completed: true,
-      commentInputDef: {
-        label: "Completion notes",
-        mandatory: false,
-      },
-      commentText: "Task completed successfully",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -143,22 +160,56 @@ describe("task-outcome-form", () => {
 
   test("renders with pre-filled comment text", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-prefilled",
       formAction:
         "/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: "on-hold",
       statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-        { code: "on-hold", name: "Put on hold" },
+        {
+          value: "approved",
+          text: "Approve",
+          checked: false,
+          conditional: {
+            id: "approved-comment",
+            name: "approved-comment",
+            value: "",
+            label: { text: "Reason for hold" },
+            hint: { text: "Explain why this is on hold" },
+            required: true,
+            rows: 5,
+          },
+        },
+        {
+          value: "rejected",
+          text: "Reject",
+          checked: false,
+          conditional: {
+            id: "rejected-comment",
+            name: "rejected-comment",
+            value: "",
+            label: { text: "Reason for hold" },
+            hint: { text: "Explain why this is on hold" },
+            required: true,
+            rows: 5,
+          },
+        },
+        {
+          value: "on-hold",
+          text: "Put on hold",
+          checked: true,
+          conditional: {
+            id: "on-hold-comment",
+            name: "on-hold-comment",
+            value: "Waiting for additional documentation from applicant",
+            label: { text: "Reason for hold" },
+            hint: { text: "Explain why this is on hold" },
+            required: true,
+            rows: 5,
+          },
+        },
       ],
       completed: false,
-      commentInputDef: {
-        label: "Reason for hold",
-        helpText: "Explain why this is on hold",
-        mandatory: true,
-      },
-      commentText: "Waiting for additional documentation from applicant",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
@@ -167,109 +218,16 @@ describe("task-outcome-form", () => {
 
   test("renders minimal form (no options, no comment)", () => {
     const component = render("task-outcome-form", {
+      caseId: "case-minimal",
       formAction:
         "/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
       status: null,
       statusOptions: [],
       completed: false,
-      commentInputDef: null,
-      commentText: "",
-      error: null,
+      statusError: null,
       isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
-  });
-
-  test("renders interactive form when isInteractive is true", () => {
-    const component = render("task-outcome-form", {
-      formAction:
-        "/cases/case-interactive/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "approved",
-      statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-      ],
-      completed: false,
-      commentInputDef: {
-        label: "Comment",
-        helpText: "Provide details",
-        mandatory: true,
-      },
-      commentText: "",
-      error: null,
-      isInteractive: true,
-    });
-
-    expect(component).toMatchSnapshot();
-    expect(component).toContain("Save and continue");
-  });
-
-  test("renders disabled form when isInteractive is false", () => {
-    const component = render("task-outcome-form", {
-      formAction:
-        "/cases/case-disabled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "approved",
-      statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-      ],
-      completed: false,
-      commentInputDef: {
-        label: "Comment",
-        helpText: "Provide details",
-        mandatory: true,
-      },
-      commentText: "Some comment",
-      error: null,
-      isInteractive: false,
-    });
-
-    expect(component).toMatchSnapshot();
-    expect(component).not.toContain("Save and continue");
-    expect(component).toContain('aria-disabled="true"');
-  });
-
-  test("renders disabled form with radio buttons when isInteractive is false", () => {
-    const component = render("task-outcome-form", {
-      formAction:
-        "/cases/case-disabled-radios/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "on-hold",
-      statusOptions: [
-        { code: "approved", name: "Approve" },
-        { code: "rejected", name: "Reject" },
-        { code: "on-hold", name: "Put on hold" },
-      ],
-      completed: false,
-      commentInputDef: null,
-      commentText: "",
-      error: null,
-      isInteractive: false,
-    });
-
-    expect(component).toMatchSnapshot();
-    expect(component).not.toContain("Save and continue");
-    expect(component).toContain("disabled");
-  });
-
-  test("renders disabled form with checkbox when isInteractive is false", () => {
-    const component = render("task-outcome-form", {
-      formAction:
-        "/cases/case-disabled-checkbox/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: [],
-      completed: true,
-      commentInputDef: {
-        label: "Completion notes",
-        mandatory: false,
-      },
-      commentText: "Completed",
-      error: null,
-      isInteractive: false,
-    });
-
-    expect(component).toMatchSnapshot();
-    expect(component).not.toContain("Save and continue");
-    expect(component).toContain("disabled");
   });
 });

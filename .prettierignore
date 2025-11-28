@@ -14,4 +14,6 @@ src/cases/views/components/dynamic-content/components/unordered-list.njk
 src/cases/views/components/dynamic-content/components/paragraph.njk
 src/cases/views/components/dynamic-content/components/accordion.njk
 src/cases/views/components/dynamic-content/components/warning-text.njk
+src/cases/views/components/dynamic-content/components/alert.njk
+src/cases/views/components/flash-notifications/flash-notifications.template.njk
 **/__snapshots__/

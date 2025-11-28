@@ -1,13 +1,18 @@
 import hapi from "@hapi/hapi";
+import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
+import { flashContext } from "../../../server/plugins/flash-context.js";
+import { findAllCasesUseCase } from "../../use-cases/find-all-cases.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
+import { listCasesRoute } from "../list-cases.route.js";
 import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../../auth/use-cases/find-all-users.use-case.js");
+vi.mock("../../use-cases/find-all-cases.use-case.js");
 
 describe("viewAssignUserToCaseRoute", () => {
   let server;
@@ -15,7 +20,22 @@ describe("viewAssignUserToCaseRoute", () => {
   beforeAll(async () => {
     server = hapi.server();
     server.route(viewAssignUserToCaseRoute);
-    await server.register([nunjucks]);
+    server.route(listCasesRoute);
+    await server.register([
+      nunjucks,
+      {
+        plugin: Yar,
+        options: {
+          name: "session",
+          cookieOptions: {
+            password: "abcdefghijklmnopqrstuvwxyz012345",
+            isSecure: false,
+            isSameSite: "Strict",
+          },
+        },
+      },
+      flashContext,
+    ]);
 
     await server.initialize();
   });
@@ -46,6 +66,9 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
+    findAllCasesUseCase.mockResolvedValue([]);
+
+    // First request - triggers redirect and sets flash
     const { statusCode, headers } = await server.inject({
       method: "GET",
       url: "/cases/assign-user",
@@ -54,9 +77,27 @@ describe("viewAssignUserToCaseRoute", () => {
         strategy: "session",
       },
     });
-
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/cases");
+
+    // Extract session cookie from redirect response
+    const cookie = headers["set-cookie"][0].split(";")[0];
+
+    // Second request - include the session cookie to see the flash message
+    const { result } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      headers: {
+        cookie, // Pass the session cookie back to the server
+      },
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+    const $ = load(result);
+    const view = $("#main-content").html();
+    expect(view).toMatchSnapshot();
   });
 });
 

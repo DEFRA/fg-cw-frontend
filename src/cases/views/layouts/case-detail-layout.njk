@@ -1,0 +1,20 @@
+{% extends "./case-layout.njk" %}
+{% from "../components/case-summary/macro.njk" import caseSummary %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+
+{% set navigation = data.links or links %}
+
+{% block contentHeader %}
+  {% if data.case %}
+    {{ caseSummary(data.case) }}
+  {% elif data %}
+    {{ caseSummary(data) }}
+  {% endif %}
+{% endblock %}
+
+{% block contentNavigation %}
+  {{ govukServiceNavigation({ navigation: navigation, classes: "govuk-!-margin-top-5 govuk-!-margin-bottom-8" }) }}
+{% endblock %}
+
+{% block contentMain %}
+{% endblock %}

@@ -15,6 +15,7 @@ export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
         taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
         actions: mapActions({ stage, errors, values }),
       },
+      beforeContent: kase.beforeContent,
     },
     errors,
     errorList: Object.values(errors),
@@ -109,7 +110,7 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
     hint: comment.helpText ? { text: comment.helpText } : undefined,
     required: comment.mandatory,
     errorMessage,
-    rows: 3,
+    rows: 5,
   };
 };
 

@@ -114,26 +114,40 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 **Purpose**: Links
 
+**Parameters**:
+
+- `href` (required): Link URL
+- `text` (required): Link text
+- `target` (optional): Defaults to `"_self"` (same tab/window). Set to `"_blank"` for a new tab/window.
+- `rel` (optional): Defaults to `"noopener noreferrer"` when `target` is `"_blank"`. Provide your own value (or `""`) to override/omit it; otherwise omitted.
+- `classes` (optional): Additional CSS classes. No default classes are added—include `govuk-link` yourself if you want the GOV.UK link style.
+
+**Examples**:
+
+- Open in the same tab (default):
+
+```
+{
+  "component": "url",
+  "href": "https://example.com/document.pdf",
+  "text": "View detailed check data (PDF)"
+}
+```
+
+Output: `<a href="https://example.com/document.pdf" target="_self">View detailed check data (PDF)</a>`
+
+- Open in a new tab:
+
 ```
 {
   "component": "url",
   "href": "https://example.com/document.pdf",
   "text": "View detailed check data (PDF)",
-  "target": "_blank",
-  "rel": "noopener",
-  "classes": "custom-link-class"
+  "target": "_blank"
 }
 ```
 
-**Parameters**:
-
-- `href` (required): Link URL
-- `text` (required): Link text
-- `target` (optional): Link target (e.g., `"_blank"`)
-- `rel` (optional): Link relationship (e.g., `"noopener"`)
-- `classes` (optional): Additional CSS classes
-
-**Output**: `<a href="https://example.com/document.pdf" target="_blank" rel="noopener" class="govuk-link custom-link-class">View detailed check data (PDF)</a>`
+Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopener noreferrer">View detailed check data (PDF)</a>`
 
 ---
 
@@ -938,6 +952,84 @@ When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph c
 - Icon is automatically included with "!" symbol
 - Screen reader text is automatically added for accessibility
 - Can be used within containers, accordions, and other components
+
+---
+
+### 16. Alert Component
+
+**Purpose**: Display notifications and alerts using MOJ Design System alert component
+
+```
+{
+  "component": "alert",
+  "title": "Information alert",
+  "text": "This is an information alert.",
+  "variant": "information",
+  "dismissible": false
+}
+```
+
+**Parameters**:
+
+- `text` (required): The alert message text (automatically escaped for security)
+- `title` (required): A short title for the alert, used as a unique accessible label
+- `variant` (optional): Alert type - "information", "success", "warning", or "error" (defaults to "information")
+- `showTitleAsHeading` (optional): Set to `true` to display the title as a heading (defaults to `false`)
+- `headingTag` (optional): HTML tag for heading if `showTitleAsHeading` is true ("h2", "h3", or "h4", defaults to "h2")
+- `role` (optional): Overrides the role attribute (defaults to "region")
+- `disableAutoFocus` (optional): If role is "alert", set to `true` to disable auto-focus behavior
+- `dismissible` (optional): Set to `true` to allow the alert to be dismissed (defaults to `false`)
+- `dismissText` (optional): Text for the dismiss button (defaults to "Dismiss")
+- `focusOnDismissSelector` (optional): CSS selector for element to focus on when dismissed
+- `classes` (optional): Additional CSS classes
+- `attributes` (optional): Object of additional HTML attributes
+
+**Examples**:
+
+**Information alert (default)**:
+
+```
+{
+  "component": "alert",
+  "title": "System update",
+  "text": "The system will be updated tonight at 2 AM."
+}
+```
+
+**Success alert with heading**:
+
+```
+{
+  "component": "alert",
+  "variant": "success",
+  "title": "File uploaded successfully",
+  "text": "Your document has been uploaded and is being processed.",
+  "showTitleAsHeading": true
+}
+```
+
+**Warning alert with dismissal**:
+
+```
+{
+  "component": "alert",
+  "variant": "warning",
+  "title": "Action required",
+  "text": "Please review the changes before proceeding.",
+  "dismissible": true
+}
+```
+
+**Error alert**:
+
+```
+{
+  "component": "alert",
+  "variant": "error",
+  "title": "Upload failed",
+  "text": "The file could not be uploaded. Please try again."
+}
+```
 
 ---
 

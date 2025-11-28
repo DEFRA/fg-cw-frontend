@@ -153,6 +153,54 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Example Link");
   });
 
+  test("renders url component with default target _self and no rel", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_self"');
+    expect(result).not.toContain('rel="');
+  });
+
+  test("renders url component with _blank target and automatic rel", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+        target: "_blank",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_blank"');
+    expect(result).toContain('rel="noopener noreferrer"');
+  });
+
+  test("renders url component with explicit rel override", () => {
+    const params = [
+      {
+        component: "url",
+        href: "https://example.com",
+        text: "Example Link",
+        target: "_blank",
+        rel: "noreferrer",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('target="_blank"');
+    expect(result).toContain('rel="noreferrer"');
+  });
+
   test("renders summary-list component with simple string label and text", () => {
     const params = [
       {
@@ -1002,6 +1050,58 @@ describe("dynamic-content template", () => {
     expect(result).toContain('class="govuk-warning-text legal-warning"');
     expect(result).toContain('data-testid="legal-warning"');
     expect(result).toContain("Legal warning message");
+  });
+
+  test("renders alert component with default variant", () => {
+    const params = [
+      {
+        component: "alert",
+        title: "Information alert",
+        text: "This is an information alert.",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("moj-alert");
+    expect(result).toContain("moj-alert--information");
+    expect(result).toContain("This is an information alert.");
+  });
+
+  test("renders alert component with success variant", () => {
+    const params = [
+      {
+        component: "alert",
+        variant: "success",
+        title: "Success alert",
+        text: "File uploaded successfully.",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("moj-alert");
+    expect(result).toContain("moj-alert--success");
+    expect(result).toContain("File uploaded successfully.");
+  });
+
+  test("renders alert component with dismissible option", () => {
+    const params = [
+      {
+        component: "alert",
+        variant: "warning",
+        title: "Warning alert",
+        text: "This is a warning.",
+        dismissible: true,
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("moj-alert");
+    expect(result).toContain("moj-alert--warning");
+    expect(result).toContain("This is a warning.");
+    expect(result).toContain('data-module="moj-alert"');
   });
 
   test("escapes HTML in text component", () => {

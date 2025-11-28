@@ -1,15 +1,11 @@
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
-{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
 {% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
 {% from "govuk/components/fieldset/macro.njk" import govukFieldset %}
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 {% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
-{% from "../../../../common/components/notification-banner/macro.njk" import notificationBanner %}
-
-{% set caseLink = "/cases/" + params.caseId %}
 
 {%- set errorList = params.errorList -%}
 {%- set caseId = params.caseId -%}
@@ -17,25 +13,6 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    {{
-      govukBackLink({
-        text: "Back to task list",
-        href: caseLink,
-        attributes: {
-          "data-testid": "back-link"
-        }
-      })
-    }}
-
-    {% if errorList.length %}
-      {{
-        govukErrorSummary({
-          titleText: "There is a problem",
-          errorList: errorList
-        })
-      }}
-    {% endif %}
-
     {{ dynamicContent(currentTask.description) }}
 
     {% if currentTask.completed and params.isInteractive %}
@@ -48,13 +25,12 @@
       {% if currentTask.canCompleteTask %}
         {{
           taskOutcomeForm({
-            error: errorList.length,
+            caseId: caseId,
             formAction: currentTask.formAction,
             statusOptions: currentTask.statusOptions,
             status: currentTask.status,
             completed: currentTask.completed,
-            commentInputDef: currentTask.commentInputDef,
-            commentText: currentTask.comment.text if currentTask.comment else '',
+            statusError: currentTask.statusError,
             isInteractive: params.isInteractive
           })
         }}
@@ -106,29 +82,22 @@
         </div>
       {% endif %}
     {% elif currentTask.canCompleteTask %}
-      {% if params.isInteractive === false %}
+      {% if params.isInteractive %}
         {{
-          notificationBanner({
-            text: "Tasks cannot be edited in the current status",
-            type: 'information'
+          taskOutcomeForm({
+            caseId: caseId,
+            formAction: currentTask.formAction,
+            statusOptions: currentTask.statusOptions,
+            status: currentTask.status,
+            completed: currentTask.completed,
+            statusError: currentTask.statusError
           })
         }}
       {% endif %}
-
-      {{
-        taskOutcomeForm({
-          error: errorList.length,
-          formAction: currentTask.formAction,
-          statusOptions: currentTask.statusOptions,
-          status: currentTask.status,
-          completed: currentTask.completed,
-          commentInputDef: currentTask.commentInputDef,
-          commentText: currentTask.comment.text if currentTask.comment else '',
-          isInteractive: params.isInteractive
-        })
-      }}
     {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
-      {# Display required roles in a details component #}
+      <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">
+        Outcome
+      </h2>
       <p>You cannot complete this task.</p>
       {% set rolesHtml %}
         <p>Someone who is a:</p>

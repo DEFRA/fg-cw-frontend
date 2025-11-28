@@ -20,6 +20,11 @@ exports[`listCasesRoute > extracts assignedCaseId from query parameters and rend
 exports[`listCasesRoute > returns a list of cases 1`] = `
 "
 
+    
+
+
+
+
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body" data-testid="app-page-body">

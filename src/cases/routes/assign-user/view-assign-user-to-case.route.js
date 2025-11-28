@@ -1,5 +1,6 @@
 import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
 import { logger } from "../../../common/logger.js";
+import { setFlashData } from "../../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createAssignUserViewModel } from "../../view-models/assign-user.view-model.js";
 
@@ -12,6 +13,12 @@ export const viewAssignUserToCaseRoute = {
     logger.info(`Assigning user to case ${caseId}`);
 
     if (!caseId) {
+      setFlashData(request, {
+        notification: {
+          variant: "error",
+          text: `Choose an option`,
+        },
+      });
       return h.redirect(`/cases`);
     }
 
