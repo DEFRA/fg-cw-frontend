@@ -1,4 +1,4 @@
-import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { setFlashNotification } from "../../common/helpers/flash-helpers.js";
 import { triggerPageActionUseCase } from "../use-cases/trigger-page-action.use-case.js";
 
 export const pageActionRoute = {
@@ -17,20 +17,17 @@ export const pageActionRoute = {
       await triggerPageActionUseCase(authContext, { caseId, actionCode });
 
       const displayName = actionName || "Action";
-      setFlashData(request, {
-        notification: {
-          variant: "success",
-          title: "Action completed",
-          text: `${displayName} completed successfully`,
-        },
+      setFlashNotification(request, {
+        variant: "success",
+        title: "Action completed",
+        text: `${displayName} completed successfully`,
       });
     } catch (_error) {
-      setFlashData(request, {
-        notification: {
-          variant: "error",
-          title: "Action failed",
-          text: `There was a problem running this action. Please try again later.`,
-        },
+      setFlashNotification(request, {
+        variant: "error",
+        title: "There is a problem right now",
+        text: "Try again later.",
+        showTitleAsHeading: true,
       });
     }
 

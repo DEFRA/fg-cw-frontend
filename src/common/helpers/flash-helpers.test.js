@@ -3,6 +3,7 @@ import {
   getFlashData,
   getFlashNotification,
   setFlashData,
+  setFlashNotification,
 } from "./flash-helpers.js";
 
 describe("flash-helpers", () => {
@@ -11,6 +12,73 @@ describe("flash-helpers", () => {
       flash: vi.fn(),
     },
     ...overrides,
+  });
+
+  describe("setFlashNotification", () => {
+    it("sets notification in flash storage", () => {
+      const mockRequest = createMockRequest();
+      const notification = {
+        variant: "success",
+        title: "Action completed",
+        text: "Action completed successfully",
+      };
+
+      setFlashNotification(mockRequest, notification);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith(
+        "notification",
+        notification,
+      );
+    });
+
+    it("sets error notification in flash storage", () => {
+      const mockRequest = createMockRequest();
+      const notification = {
+        variant: "error",
+        title: "Error occurred",
+        text: "Something went wrong",
+        showTitleAsHeading: true,
+      };
+
+      setFlashNotification(mockRequest, notification);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith(
+        "notification",
+        notification,
+      );
+    });
+
+    it("sets information notification in flash storage", () => {
+      const mockRequest = createMockRequest();
+      const notification = {
+        variant: "information",
+        title: "Information",
+        text: "Please note this information",
+      };
+
+      setFlashNotification(mockRequest, notification);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith(
+        "notification",
+        notification,
+      );
+    });
+
+    it("sets warning notification in flash storage", () => {
+      const mockRequest = createMockRequest();
+      const notification = {
+        variant: "warning",
+        title: "Warning",
+        text: "Please be aware of this",
+      };
+
+      setFlashNotification(mockRequest, notification);
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith(
+        "notification",
+        notification,
+      );
+    });
   });
 
   describe("setFlashData", () => {
