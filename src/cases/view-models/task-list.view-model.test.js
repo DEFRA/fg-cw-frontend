@@ -251,7 +251,7 @@ describe("createTaskListViewModel", () => {
         hint: { text: "Please provide a reason" },
         required: true,
         errorMessage: undefined,
-        rows: 3,
+        rows: 5,
       });
     });
 
