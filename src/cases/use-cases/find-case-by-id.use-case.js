@@ -5,5 +5,5 @@ export const findCaseByIdUseCase = async (
   caseId,
   tabId = null,
 ) => {
-  return await findById(authContext, caseId, tabId);
+  return findById(authContext, caseId, tabId);
 };

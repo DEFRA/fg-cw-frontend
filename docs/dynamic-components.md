@@ -1031,16 +1031,6 @@ When `$.tags` is `["organic", "upland", "woodland"]`, this creates 3 paragraph c
 }
 ```
 
-**Output**: MOJ Design System alert component with appropriate styling and accessibility features
-
-**Notes**:
-
-- Uses MOJ Design System alert component for consistent government styling
-- Text content is automatically escaped for security (no HTML allowed)
-- Each alert needs a unique `title` for accessibility
-- Supports all MOJ alert variants: information (blue), success (green), warning (orange), error (red)
-- Dismissible alerts can be closed by users and optionally focus on another element when dismissed
-
 ---
 
 ### GOV.UK Design System Reference
