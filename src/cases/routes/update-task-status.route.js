@@ -50,7 +50,7 @@ export const updateTaskStatusRoute = {
     // ensure status has a value if it is required...
     if (!validateStatusOptions(task?.statusOptions, status)) {
       request.yar.flash("errors", {
-        text: "Status is required",
+        text: "Choose an option",
         href: "#status",
       });
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
