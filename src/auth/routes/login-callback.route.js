@@ -43,7 +43,7 @@ export const loginCallbackRoute = {
     });
 
     logger.info(
-      `Login callback invoked with with IDP id ${authContext.profile.oid}`,
+      `Finished: Login callback invoked with with IDP id ${authContext.profile.oid}`,
     );
 
     return h.redirect(auth.credentials.query.next ?? "/");
