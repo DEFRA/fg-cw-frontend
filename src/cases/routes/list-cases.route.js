@@ -8,7 +8,7 @@ export const listCasesRoute = {
   async handler(request, h) {
     const { assignedCaseId } = request.query;
 
-    logger.info(`Get cases assigned to user ${assignedCaseId}`);
+    logger.info(`Find users assigned to case ${assignedCaseId}`);
 
     const authContext = {
       token: request.auth.credentials.token,
@@ -19,7 +19,7 @@ export const listCasesRoute = {
 
     const viewModel = createCaseListViewModel(cases, assignedCaseId);
 
-    logger.info(`Finished: Get cases assigned to user ${assignedCaseId}`);
+    logger.info(`Finished: Find users assigned to case ${assignedCaseId}`);
 
     return h.view("pages/case-list", viewModel);
   },

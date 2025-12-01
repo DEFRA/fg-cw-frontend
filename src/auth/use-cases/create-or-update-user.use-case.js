@@ -1,9 +1,11 @@
 import Boom from "@hapi/boom";
-import { create, findAll, update } from "../repositories/user.repository.js";
 import { logger } from "../../common/logger.js";
+import { create, findAll, update } from "../repositories/user.repository.js";
 
 export const createOrUpdateUserUseCase = async (authContext) => {
-  logger.info("createOrUpdateUserUseCase invoked");
+  logger.info(
+    `Create or update user use case invoked for user ${authContext.profile.oid}`,
+  );
   const { profile } = authContext;
 
   if (!profile.roles) {
@@ -21,7 +23,9 @@ export const createOrUpdateUserUseCase = async (authContext) => {
     });
   }
 
-  logger.info("Finished: createOrUpdateUserUseCase invoked");
+  logger.info(
+    `Finished: Create or update user use case invoked for user ${authContext.profile.oid}`,
+  );
 
   return await create(authContext, {
     idpId: profile.oid,
