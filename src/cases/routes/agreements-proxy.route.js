@@ -12,8 +12,8 @@ const defaultLogger = {
   error: noop,
 };
 
-const resolveLogger = function (logger) {
-  return logger ?? defaultLogger;
+const resolveLogger = function (loggerInstance) {
+  return loggerInstance ?? defaultLogger;
 };
 
 const getUpstreamHeaders = function (res) {
@@ -110,6 +110,7 @@ const executeProxy = async function (path, request, h) {
 
 const agreementsProxyHandler = async function (request, h) {
   const { path } = request.params;
+
   if (!path) {
     return h
       .response({ error: "Bad Request", message: "Path parameter is required" })
@@ -117,6 +118,7 @@ const agreementsProxyHandler = async function (request, h) {
   }
 
   const requestLogger = resolveLogger(request?.logger);
+
   return executeProxy(path, request, h).catch((error) =>
     handleProxyFailure({ error, logger: requestLogger, path, h }),
   );

@@ -108,10 +108,7 @@ export const getAgreementsBaseUrl = function () {
 export const proxyToAgreements = function (path, request) {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
-  logger.info(
-    { agreementProxyTarget: uri, agreementProxyPath: path },
-    "Proxying request to agreements UI",
-  );
+  logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
   const headers = buildProxyHeaders(uiToken, request);
   const bearerToken = headers.Authorization?.replace(/^Bearer\s+/i, "");
   const sanitizedHeaders = {
@@ -126,8 +123,7 @@ export const proxyToAgreements = function (path, request) {
   };
 
   logger.info(
-    { agreementProxyAuthHeaders: sanitizedHeaders },
-    "Prepared agreements proxy headers",
+    `Finished: Proxying request to agreements UI: ${uri} and path: ${path} sanitised headers ${JSON.stringify(sanitizedHeaders, null, 2)}`,
   );
   return { uri, headers };
 };
