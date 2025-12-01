@@ -1,6 +1,7 @@
 import { addNoteToCaseUseCase } from "../../use-cases/add-note-to-case.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-model.js";
+import { logger } from "../../../common/logger.js";
 
 export const createNoteRoute = {
   method: "POST",
@@ -8,6 +9,7 @@ export const createNoteRoute = {
   handler: async (request, h) => {
     const { caseId } = request.params;
     const { text } = request.payload;
+
     const authContext = {
       token: request.auth.credentials.token,
       user: request.auth.credentials.user,
@@ -25,7 +27,9 @@ export const createNoteRoute = {
     }
 
     try {
+      logger.info(`Saving note caseId=${caseId}`);
       await addNoteToCaseUseCase(authContext, { caseId, text });
+      logger.info(`Finished: Saving note caseId=${caseId}`);
       return h.redirect(`/cases/${caseId}/notes`);
     } catch (error) {
       request.log("error", {

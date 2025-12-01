@@ -1,4 +1,5 @@
 import Boom from "@hapi/boom";
+import { logger } from "../../common/logger.js";
 import { updateStageOutcome } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
@@ -6,6 +7,8 @@ export const updateStageOutcomeUseCase = async (
   authContext,
   { caseId, actionData: { actionCode, commentFieldName, comment } },
 ) => {
+  logger.info(`Updating stage outcome for case ${caseId}`);
+
   if (!actionCode) {
     return {
       success: false,
@@ -27,6 +30,8 @@ export const updateStageOutcomeUseCase = async (
       actionCode,
       comment,
     });
+
+    logger.info(`Finished: Updating stage outcome for case ${caseId}`);
 
     return { success: true };
   } else {
