@@ -115,6 +115,7 @@ describe("case-list.model", () => {
           },
         },
         currentStatus: "NEW",
+        currentStatusTheme: "INFO",
         assignedUser: {
           id: "user-1",
           name: "John Doe",
@@ -137,6 +138,7 @@ describe("case-list.model", () => {
           },
         },
         currentStatus: "IN PROGRESS",
+        currentStatusTheme: "INFO",
         assignedUser: null,
       },
     ];
@@ -171,7 +173,7 @@ describe("case-list.model", () => {
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
                     submitted: { text: "10 Mar 2021" },
-                    status: { text: "New", classes: "govuk-tag--blue" },
+                    status: { text: "New", theme: "INFO" },
                     assignee: { text: "John Doe" },
                   },
                   {
@@ -183,7 +185,7 @@ describe("case-list.model", () => {
                     submitted: { text: "15 Mar 2021" },
                     status: {
                       text: "In progress",
-                      classes: "govuk-tag--yellow",
+                      theme: "INFO",
                     },
                     assignee: { text: "Not assigned" },
                   },
@@ -229,7 +231,7 @@ describe("case-list.model", () => {
   });
 
   describe("status mapping", () => {
-    it("maps NEW status to blue tag", () => {
+    it("maps NEW status with INFO theme", () => {
       const mockCases = [
         {
           _id: "case-1",
@@ -238,6 +240,7 @@ describe("case-list.model", () => {
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
           currentStatus: "NEW",
+          currentStatusTheme: "INFO",
           assignedUser: null,
         },
       ];
@@ -247,11 +250,11 @@ describe("case-list.model", () => {
 
       expect(statusCell).toEqual({
         text: "New",
-        classes: "govuk-tag--blue",
+        theme: "INFO",
       });
     });
 
-    it("maps IN_PROGRESS status to yellow tag", () => {
+    it("maps IN_PROGRESS status with INFO theme", () => {
       const mockCases = [
         {
           _id: "case-1",
@@ -260,6 +263,7 @@ describe("case-list.model", () => {
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
           currentStatus: "IN PROGRESS",
+          currentStatusTheme: "INFO",
           assignedUser: null,
         },
       ];
@@ -269,11 +273,11 @@ describe("case-list.model", () => {
 
       expect(statusCell).toEqual({
         text: "In progress",
-        classes: "govuk-tag--yellow",
+        theme: "INFO",
       });
     });
 
-    it("maps APPROVED status to green tag", () => {
+    it("maps APPROVED status with SUCCESS theme", () => {
       const mockCases = [
         {
           _id: "case-1",
@@ -282,6 +286,7 @@ describe("case-list.model", () => {
             submittedAt: "2021-01-01T00:00:00.000Z",
           },
           currentStatus: "APPROVED",
+          currentStatusTheme: "SUCCESS",
           assignedUser: null,
         },
       ];
@@ -291,124 +296,105 @@ describe("case-list.model", () => {
 
       expect(statusCell).toEqual({
         text: "Approved",
-        classes: "govuk-tag--green",
-      });
-    });
-
-    it("maps unknown status to grey tag", () => {
-      const mockCases = [
-        {
-          _id: "case-1",
-          payload: {
-            clientRef: "REF-1",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          currentStatus: "UNKNOWN_STATUS",
-          assignedUser: null,
-        },
-      ];
-
-      const result = createCaseListViewModel(mockCases);
-      const statusCell = result.data.tabItems[0].data.rows[0].status;
-
-      expect(statusCell).toEqual({
-        text: "Unknown_status",
-        classes: "govuk-tag--grey",
-      });
-    });
-
-    it("handles null status gracefully", () => {
-      const mockCases = [
-        {
-          _id: "case-1",
-          payload: {
-            clientRef: "REF-1",
-            submittedAt: "2021-01-01T00:00:00.000Z",
-          },
-          currentStatus: null,
-          assignedUser: null,
-        },
-      ];
-
-      const result = createCaseListViewModel(mockCases);
-      const statusCell = result.data.tabItems[0].data.rows[0].status;
-
-      expect(statusCell).toEqual({
-        text: "",
-        classes: "govuk-tag--grey",
+        theme: "SUCCESS",
       });
     });
   });
 
-  describe("table structure mapping", () => {
-    it("maps case data to correct table structure", () => {
-      const mockCases = [
-        {
-          _id: "test-case-id",
-          caseRef: "CASE-REF-123",
-          payload: {
-            submittedAt: "2021-06-15T14:30:00.000Z",
-            identifiers: { sbi: "555666777" },
-            answers: {
-              applicant: {
-                business: {
-                  name: "[business name]",
-                },
+  it("handles null status", () => {
+    const mockCases = [
+      {
+        _id: "case-1",
+        payload: {
+          clientRef: "REF-1",
+          submittedAt: "2021-01-01T00:00:00.000Z",
+        },
+        currentStatus: null,
+        currentStatusTheme: null,
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel(mockCases);
+    const statusCell = result.data.tabItems[0].data.rows[0].status;
+
+    expect(statusCell).toEqual({
+      text: "",
+      theme: "",
+    });
+  });
+});
+
+describe("table structure mapping", () => {
+  it("maps case data to correct table structure", () => {
+    const mockCases = [
+      {
+        _id: "test-case-id",
+        caseRef: "CASE-REF-123",
+        payload: {
+          submittedAt: "2021-06-15T14:30:00.000Z",
+          identifiers: { sbi: "555666777" },
+          answers: {
+            applicant: {
+              business: {
+                name: "[business name]",
               },
             },
           },
-          currentStatus: "NEW",
-          assignedUser: { name: "Test User" },
         },
-      ];
+        currentStatus: "NEW",
+        currentStatusTheme: "INFO",
+        assignedUser: { name: "Test User" },
+      },
+    ];
 
-      const result = createCaseListViewModel(mockCases);
-      const tableData = result.data.tabItems[0].data;
+    const result = createCaseListViewModel(mockCases);
+    const tableData = result.data.tabItems[0].data;
 
-      expect(tableData.head).toEqual([
-        { text: "Select" },
-        { text: "ID" },
-        { text: "Business" },
-        { text: "SBI" },
-        { text: "Submitted" },
-        { text: "Status" },
-        { text: "Assignee" },
-      ]);
+    expect(tableData.head).toEqual([
+      { text: "Select" },
+      { text: "ID" },
+      { text: "Business" },
+      { text: "SBI" },
+      { text: "Submitted" },
+      { text: "Status" },
+      { text: "Assignee" },
+    ]);
 
-      expect(tableData.rows[0]).toEqual({
-        _id: "test-case-id",
-        select: { value: "test-case-id" },
-        id: { href: "/cases/test-case-id", text: "CASE-REF-123" },
-        business: { text: "[business name]" },
-        sbi: { text: "555666777" },
-        submitted: { text: "15 Jun 2021" },
-        status: { text: "New", classes: "govuk-tag--blue" },
-        assignee: { text: "Test User" },
-      });
+    expect(tableData.rows[0]).toEqual({
+      _id: "test-case-id",
+      select: { value: "test-case-id" },
+      id: { href: "/cases/test-case-id", text: "CASE-REF-123" },
+      business: { text: "[business name]" },
+      sbi: { text: "555666777" },
+      submitted: { text: "15 Jun 2021" },
+      status: { text: "New", theme: "INFO" },
+      assignee: { text: "Test User" },
     });
+  });
 
-    it("handles missing optional fields gracefully", () => {
-      const mockCases = [
-        {
-          _id: "minimal-case",
-          payload: {
-            clientRef: null,
-            submittedAt: null,
-            identifiers: null,
-          },
-          currentStatus: "UNKNOWN",
-          assignedUser: null,
+  it("handles missing optional fields gracefully", () => {
+    const mockCases = [
+      {
+        _id: "minimal-case",
+        payload: {
+          clientRef: null,
+          submittedAt: null,
+          identifiers: null,
         },
-      ];
+        currentStatus: "UNKNOWN",
+        currentStatusTheme: null,
+        assignedUser: null,
+      },
+    ];
 
-      const result = createCaseListViewModel(mockCases);
-      const row = result.data.tabItems[0].data.rows[0];
+    const result = createCaseListViewModel(mockCases);
+    const row = result.data.tabItems[0].data.rows[0];
 
-      expect(row.id.text).toBe("");
-      expect(row.sbi.text).toBe("");
-      expect(row.submitted.text).toBe("");
-      expect(row.status.text).toBe("Unknown");
-      expect(row.assignee.text).toBe("Not assigned");
-    });
+    expect(row.id.text).toBe("");
+    expect(row.sbi.text).toBe("");
+    expect(row.submitted.text).toBe("");
+    expect(row.status.text).toBe("Unknown");
+    expect(row.assignee.text).toBe("Not assigned");
   });
 });
