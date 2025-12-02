@@ -52,7 +52,7 @@ describe("viewAssignUserToCaseRoute", () => {
       method: "GET",
       url: "/cases/assign-user?caseId=6870ee690cdf25de1301a300",
       auth: {
-        credentials: { token: "mock-token" },
+        credentials: { token: "mock-token", user: { id: "user-123" } },
         strategy: "session",
       },
     });
@@ -73,7 +73,7 @@ describe("viewAssignUserToCaseRoute", () => {
       method: "GET",
       url: "/cases/assign-user",
       auth: {
-        credentials: { token: "mock-token" },
+        credentials: { token: "mock-token", user: { id: "user-123" } },
         strategy: "session",
       },
     });
