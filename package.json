@@ -10,8 +10,8 @@
   },
   "scripts": {
     "build": "NODE_ENV=production webpack",
-    "dev": "run-p frontend:watch server:watch",
-    "dev:debug": "run-p frontend:watch server:debug",
+    "dev": "node scripts/dev-wrapper.js",
+    "dev:inner": "run-p frontend:watch server:watch",
     "format": "prettier --write \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\"",
     "format:check": "prettier --check \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\" --plugin prettier-plugin-jinja-template",
     "frontend:watch": "NODE_ENV=development webpack --watch",
@@ -112,6 +112,7 @@
     "stylelint": "^16.25.0",
     "stylelint-config-gds": "^2.0.0",
     "terser-webpack-plugin": "^5.3.10",
+    "testcontainers": "^11.9.0",
     "vitest": "^3.1.4",
     "webpack": "^5.102.1",
     "webpack-assets-manifest": "^6.3.0",
