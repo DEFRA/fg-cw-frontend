@@ -1,5 +1,5 @@
-import { findAll } from "../repositories/user.repository.js";
 import { logger } from "../../common/logger.js";
+import { findAll } from "../repositories/user.repository.js";
 
 export const findAllUsersUseCase = async (authContext, query) => {
   logger.info("Finding all users");
