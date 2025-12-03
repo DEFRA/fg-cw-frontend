@@ -1,6 +1,6 @@
+import { logger } from "../../common/logger.js";
 import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
 import { createCaseListViewModel } from "../view-models/case-list.view-model.js";
-import { logger } from "../../common/logger.js";
 
 export const listCasesRoute = {
   method: "GET",
