@@ -1,4 +1,5 @@
 import Boom from "@hapi/boom";
+import { logger } from "../../common/logger.js";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
 
 export const loginCallbackRoute = {
@@ -22,6 +23,10 @@ export const loginCallbackRoute = {
       profile: auth.credentials.profile,
     };
 
+    logger.info(
+      `Login callback invoked with with IDP id ${authContext.profile.oid}`,
+    );
+
     const user = await createOrUpdateUserUseCase(authContext);
 
     request.yar.set("credentials", {
@@ -36,6 +41,10 @@ export const loginCallbackRoute = {
         appRoles: user.appRoles,
       },
     });
+
+    logger.info(
+      `Finished: Login callback invoked with with IDP id ${authContext.profile.oid}`,
+    );
 
     return h.redirect(auth.credentials.query.next ?? "/");
   },

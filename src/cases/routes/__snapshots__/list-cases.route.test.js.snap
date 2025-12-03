@@ -78,9 +78,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
           <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
-          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--blue">
+          <td class="govuk-table__cell">
+      <strong class="govuk-tag govuk-tag--light-blue">
       New
     </strong>
+    
     </td>
           <td class="govuk-table__cell">John Smith</td>
         </tr>
@@ -98,9 +100,11 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
           <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
-          <td class="govuk-table__cell"><strong class="govuk-tag govuk-tag--grey">
+          <td class="govuk-table__cell">
+      <strong class="govuk-tag govuk-tag--grey">
       Old
     </strong>
+    
     </td>
           <td class="govuk-table__cell">Not assigned</td>
         </tr>

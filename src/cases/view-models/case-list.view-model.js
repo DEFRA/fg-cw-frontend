@@ -50,7 +50,14 @@ const mapCasesToTable = (cases) => {
     ],
     rows: cases.map(
       // eslint-disable-next-line complexity
-      ({ _id, caseRef, payload, currentStatus, assignedUser }) => ({
+      ({
+        _id,
+        caseRef,
+        payload,
+        currentStatus,
+        currentStatusTheme,
+        assignedUser,
+      }) => ({
         _id,
         select: {
           value: _id,
@@ -70,7 +77,7 @@ const mapCasesToTable = (cases) => {
           text: mapSubmittedAt(payload.submittedAt),
           attributes: { "data-sort-value": Date.parse(payload.submittedAt) },
         },
-        status: mapStatus(currentStatus),
+        status: mapStatus(currentStatus, currentStatusTheme),
         assignee: {
           text: mapText(assignedUser?.name, "Not assigned"),
         },
@@ -87,20 +94,10 @@ const mapSubmittedAt = (submittedAt) => {
   return submittedAt ? formatDate(submittedAt, DATE_FORMAT_SHORT_MONTH) : "";
 };
 
-const STATUS_TO_CLASS = {
-  DEFAULT: "govuk-tag--grey",
-  NEW: "govuk-tag--blue",
-  "IN PROGRESS": "govuk-tag--yellow",
-  APPROVED: "govuk-tag--green",
-  COMPLETED: "govuk-tag--green",
-};
-
-const mapStatus = (status) => {
-  const statusClass = STATUS_TO_CLASS[status] || STATUS_TO_CLASS.DEFAULT;
-
+const mapStatus = (status, theme) => {
   return {
     text: capitalise(status),
-    classes: statusClass,
+    theme: theme ?? "",
   };
 };
 

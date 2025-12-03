@@ -1,6 +1,7 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
+import { logger } from "../../common/logger.js";
 
 const findTask = (kase, taskGroupCode, taskCode) =>
   kase.stage.taskGroups
@@ -30,6 +31,10 @@ export const updateTaskStatusRoute = {
   handler: async (request, h) => {
     const { caseId, taskGroupCode, taskCode, completed, status, comment } =
       mapRequest(request);
+
+    logger.info(
+      `Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+    );
 
     const authContext = {
       token: request.auth.credentials.token,
@@ -75,6 +80,10 @@ export const updateTaskStatusRoute = {
       completed,
       comment,
     });
+
+    logger.info(
+      `Finished: Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+    );
 
     return h.redirect(`/cases/${caseId}`);
   },
