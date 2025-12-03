@@ -77,34 +77,76 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 ### 4. Status Component
 
-**Purpose**: Status tags/badges
+**Purpose**: Status tags/badges with standard theme support
 
 ```
 {
   "component": "status",
   "text": "PENDING_REVIEW",
-  "colour": "blue",
+  "theme": "NOTICE",
   "labelsMap": {
     "PENDING_REVIEW": "Under Review",
     "APPROVED": "Approved"
-  },
-  "classesMap": {
-    "PENDING_REVIEW": "govuk-tag--yellow",
-    "APPROVED": "govuk-tag--green"
-  },
-  "classes": "custom-class"
+  }
 }
 ```
 
 **Parameters**:
 
 - `text` (required): Status value
+- `theme` (optional): Theme name (see Theme Reference below)
 - `colour` (optional): Colour name (converts to `govuk-tag--{colour}`)
 - `labelsMap` (optional): Maps status values to display text
-- `classesMap` (optional): Maps status values to CSS classes (overrides `colour`)
+- `classesMap` (optional): Maps status values to CSS classes (overrides theme and colour)
 - `classes` (optional): Additional CSS classes
 
-**Priority**: `classesMap` → `colour` → `govuk-tag--grey` (default)
+**Priority**: `theme` → `classesMap` → `colour` → `govuk-tag--grey` (default)
+
+**Theme Reference**:
+
+The component supports standard themes that map to GovUK tag colours:
+
+- `NEUTRAL` → grey (`govuk-tag--grey`)
+- `INFO` → light blue (`govuk-tag--light-blue`)
+- `NOTICE` → yellow (`govuk-tag--yellow`)
+- `ERROR` → red (`govuk-tag--red`)
+- `WARN` → orange (`govuk-tag--orange`)
+- `SUCCESS` → green (`govuk-tag--green`)
+
+**Examples**:
+
+Using theme (recommended):
+
+```
+{
+  "component": "status",
+  "text": "NEW",
+  "theme": "INFO"
+}
+```
+
+Using colour (legacy):
+
+```
+{
+  "component": "status",
+  "text": "PENDING_REVIEW",
+  "colour": "blue"
+}
+```
+
+Using classesMap for custom mappings:
+
+```
+{
+  "component": "status",
+  "text": "PENDING_REVIEW",
+  "classesMap": {
+    "PENDING_REVIEW": "govuk-tag--yellow",
+    "APPROVED": "govuk-tag--green"
+  }
+}
+```
 
 **Output**: `<strong class="govuk-tag govuk-tag--yellow">Under Review</strong>`
 
