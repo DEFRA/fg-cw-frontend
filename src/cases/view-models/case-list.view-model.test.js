@@ -158,31 +158,69 @@ describe("case-list.model", () => {
               data: {
                 head: [
                   { text: "Select" },
-                  { text: "ID" },
-                  { text: "Business" },
-                  { text: "SBI" },
-                  { text: "Submitted" },
-                  { text: "Status" },
-                  { text: "Assignee" },
+                  {
+                    text: "ID",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
+                  {
+                    text: "Business",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
+                  {
+                    text: "SBI",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
+                  {
+                    text: "Submitted",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
+                  {
+                    text: "Status",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
+                  {
+                    text: "Assignee",
+                    attributes: { "aria-sort": "none" },
+                    headerClasses: "sortable-header",
+                  },
                 ],
                 rows: [
                   {
                     _id: "case-1",
                     select: { value: "case-1" },
-                    id: { href: "/cases/case-1", text: "CASE-REF-001" },
+                    id: {
+                      href: "/cases/case-1",
+                      text: "CASE-REF-001",
+                      attributes: { "data-sort-value": "CASE-REF-001" },
+                    },
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
-                    submitted: { text: "10 Mar 2021" },
+                    submitted: {
+                      text: "10 Mar 2021",
+                      attributes: { "data-sort-value": 1615334400000 },
+                    },
                     status: { text: "New", theme: "INFO" },
                     assignee: { text: "John Doe" },
                   },
                   {
                     _id: "case-2",
                     select: { value: "case-2" },
-                    id: { href: "/cases/case-2", text: "CASE-REF-002" },
+                    id: {
+                      href: "/cases/case-2",
+                      text: "CASE-REF-002",
+                      attributes: { "data-sort-value": "CASE-REF-002" },
+                    },
                     business: { text: "[business name]" },
                     sbi: { text: "987654321" },
-                    submitted: { text: "15 Mar 2021" },
+                    submitted: {
+                      text: "15 Mar 2021",
+                      attributes: { "data-sort-value": 1615766400000 },
+                    },
                     status: {
                       text: "In progress",
                       theme: "INFO",
@@ -353,21 +391,68 @@ describe("table structure mapping", () => {
 
     expect(tableData.head).toEqual([
       { text: "Select" },
-      { text: "ID" },
-      { text: "Business" },
-      { text: "SBI" },
-      { text: "Submitted" },
-      { text: "Status" },
-      { text: "Assignee" },
+      {
+        text: "ID",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
+      {
+        text: "Business",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
+      {
+        text: "SBI",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
+      {
+        text: "Submitted",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
+      {
+        text: "Status",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
+      {
+        text: "Assignee",
+        attributes: {
+          "aria-sort": "none",
+        },
+        headerClasses: "sortable-header",
+      },
     ]);
 
     expect(tableData.rows[0]).toEqual({
       _id: "test-case-id",
-      select: { value: "test-case-id" },
-      id: { href: "/cases/test-case-id", text: "CASE-REF-123" },
+      select: {
+        value: "test-case-id",
+      },
+      id: {
+        href: "/cases/test-case-id",
+        text: "CASE-REF-123",
+        attributes: { "data-sort-value": "CASE-REF-123" },
+      },
       business: { text: "[business name]" },
       sbi: { text: "555666777" },
-      submitted: { text: "15 Jun 2021" },
+      submitted: {
+        text: "15 Jun 2021",
+        attributes: {
+          "data-sort-value": Date.parse("2021-06-15T14:30:00.000Z"),
+        },
+      },
       status: { text: "New", theme: "INFO" },
       assignee: { text: "Test User" },
     });
