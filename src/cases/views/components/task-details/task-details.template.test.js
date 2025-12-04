@@ -15,7 +15,7 @@ describe("task-details", () => {
         description: [{ component: "heading", level: 2, text: "Test Task" }],
         name: "Test Task",
         type: "boolean",
-        canCompleteTask: true,
+        canComplete: true,
       },
     });
 
@@ -35,7 +35,7 @@ describe("task-details", () => {
         description: [{ component: "heading", level: 2, text: "Test Task" }],
         name: "Test Task",
         type: "boolean",
-        canCompleteTask: true,
+        canComplete: true,
       },
     });
 
@@ -55,7 +55,7 @@ describe("task-details", () => {
         description: [{ component: "heading", level: 2, text: "Test Task" }],
         name: "Test Task",
         type: "boolean",
-        canCompleteTask: true,
+        canComplete: true,
       },
     });
 
@@ -76,7 +76,7 @@ describe("task-details", () => {
         name: "Test Task",
         type: "boolean",
         completed: true,
-        canCompleteTask: true,
+        canComplete: true,
         updatedBy: "John Doe",
         updatedAt: "2024-01-15T10:30:00Z",
         status: "approved",
@@ -107,7 +107,7 @@ describe("task-details", () => {
         name: "Test Task",
         type: "boolean",
         completed: true,
-        canCompleteTask: true,
+        canComplete: true,
         updatedBy: "John Doe",
         updatedAt: "2024-01-15T10:30:00Z",
         comment: { text: "Initial review completed" },
@@ -135,7 +135,7 @@ describe("task-details", () => {
         name: "Test Task",
         type: "boolean",
         completed: true,
-        canCompleteTask: false,
+        canComplete: false,
         updatedBy: "John Doe",
         updatedAt: "2024-01-15T10:30:00Z",
         requiredRoles: {
