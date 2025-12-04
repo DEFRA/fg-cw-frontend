@@ -134,10 +134,6 @@ describe("loginCallbackRoute", () => {
       expiresAt: expect.any(Number),
       user: {
         id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-        name: "Bob Bill",
-        email: "bob.bill.defra.gov.uk",
-        idpRoles: ["FCP.Casework.Read"],
-        appRoles: ["ROLE_SING_AND_DANCE"],
       },
     });
   });

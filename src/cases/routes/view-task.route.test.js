@@ -100,6 +100,7 @@ describe("viewTaskRoute", () => {
                   allOf: ["role1"],
                   anyOf: ["role2"],
                 },
+                canComplete: true,
               },
             ],
           },
@@ -115,16 +116,7 @@ describe("viewTaskRoute", () => {
         credentials: {
           token: "mock-token",
           user: {
-            appRoles: {
-              role1: {
-                startDate: "2025-01-31",
-                endDate: "2025-10-31",
-              },
-              role2: {
-                startDate: "2025-01-31",
-                endDate: "2025-10-31",
-              },
-            },
+            id: "mock-user-id",
           },
         },
         strategy: "session",
