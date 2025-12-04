@@ -1,4 +1,4 @@
-{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "../dynamic-content/components/status.njk" import defraStatus %}
 
 {% if params.tasks.length > 0 %}
   <ul
@@ -17,9 +17,12 @@
         </div>
         <div class="govuk-task-list__status">
           {{
-            govukTag({
-              text: task.status | capitalize,
-              classes: "govuk-tag govuk-tag--blue"
+            defraStatus({
+              text: task.statusText,
+              theme: task.statusTheme,
+              attributes: {
+                style:"max-width: 220px;"
+              }
             })
           }}
         </div>

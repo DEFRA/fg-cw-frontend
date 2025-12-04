@@ -99,8 +99,8 @@ Timeline
           <a href="/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review" class="govuk-link govuk-task-list__link">Simple Review</a>
         </div>
         <div class="govuk-task-list__status">
-          <strong class="govuk-tag govuk-tag govuk-tag--blue">
-  Incomplete
+              <strong class="govuk-tag govuk-tag--light-blue" style="max-width: 220px;">
+  Pending
 </strong>
 
         </div>

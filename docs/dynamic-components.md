@@ -95,12 +95,13 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 - `text` (required): Status value
 - `theme` (optional): Theme name (see Theme Reference below)
-- `colour` (optional): Colour name (converts to `govuk-tag--{colour}`)
 - `labelsMap` (optional): Maps status values to display text
-- `classesMap` (optional): Maps status values to CSS classes (overrides theme and colour)
+- `classesMap` (optional): Maps status values to CSS classes (overrides theme)
 - `classes` (optional): Additional CSS classes
 
-**Priority**: `theme` → `classesMap` → `colour` → `govuk-tag--grey` (default)
+Use `theme` for standard styling. `classesMap` allows custom class mappings for advanced cases.
+
+**Priority**: `theme` → `classesMap` → `govuk-tag--grey` (default)
 
 **Theme Reference**:
 
@@ -112,6 +113,7 @@ The component supports standard themes that map to GovUK tag colours:
 - `ERROR` → red (`govuk-tag--red`)
 - `WARN` → orange (`govuk-tag--orange`)
 - `SUCCESS` → green (`govuk-tag--green`)
+- `NONE` → plain text (no tag wrapper)
 
 **Examples**:
 
@@ -125,13 +127,13 @@ Using theme (recommended):
 }
 ```
 
-Using colour (legacy):
+Using NONE theme for plain text:
 
 ```
 {
   "component": "status",
-  "text": "PENDING_REVIEW",
-  "colour": "blue"
+  "text": "Plain Status",
+  "theme": "NONE"
 }
 ```
 
@@ -149,6 +151,8 @@ Using classesMap for custom mappings:
 ```
 
 **Output**: `<strong class="govuk-tag govuk-tag--yellow">Under Review</strong>`
+
+For 'NONE' theme, renders plain text without tag wrapper.
 
 ---
 
