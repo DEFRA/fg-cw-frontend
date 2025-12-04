@@ -7,17 +7,20 @@ describe("task-list", () => {
       tasks: [
         {
           name: "Task 1",
-          status: "not started",
+          statusText: "not started",
+          statusTheme: "NEUTRAL",
           link: "/cases/123/task/1",
         },
         {
           name: "Task 2",
-          status: "in progress",
+          statusText: "in progress",
+          statusTheme: "INFO",
           link: "/cases/123/task/2",
         },
         {
           name: "Task 3",
-          status: "completed",
+          statusText: "completed",
+          statusTheme: "SUCCESS",
           link: "/cases/123/task/3",
         },
       ],

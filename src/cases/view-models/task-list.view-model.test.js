@@ -34,12 +34,16 @@ describe("createTaskListViewModel", () => {
               code: "task-1",
               title: "Initial Review",
               status: "complete",
+              statusText: "Complete",
+              statusTheme: "SUCCESS",
               completed: true,
             },
             {
               code: "task-2",
               title: "Secondary Review",
               status: "pending",
+              statusText: "Pending",
+              statusTheme: "INFO",
               completed: false,
             },
           ],
@@ -109,21 +113,76 @@ describe("createTaskListViewModel", () => {
           {
             code: "task-1",
             title: "Initial Review",
-            status: "COMPLETE",
+            status: "complete",
+            statusText: "Complete",
+            statusTheme: "SUCCESS",
             completed: true,
             link: "/cases/case-123/tasks/review-tasks/task-1",
-            isComplete: true,
           },
           {
             code: "task-2",
             title: "Secondary Review",
-            status: "INCOMPLETE",
+            status: "pending",
+            statusText: "Pending",
+            statusTheme: "INFO",
             completed: false,
             link: "/cases/case-123/tasks/review-tasks/task-2",
-            isComplete: false,
           },
         ],
       });
+    });
+
+    it("uses statusText and statusTheme from backend", () => {
+      const caseWithStatusTheme = {
+        ...mockCaseData,
+        stage: {
+          ...mockCaseData.stage,
+          taskGroups: [
+            {
+              code: "review-tasks",
+              name: "Review Tasks",
+              tasks: [
+                {
+                  code: "task-1",
+                  title: "Check Details",
+                  status: "ACCEPTED",
+                  statusText: "Accepted",
+                  statusTheme: "NONE",
+                  completed: true,
+                },
+                {
+                  code: "task-2",
+                  title: "Review Rules",
+                  status: "RFI",
+                  statusText: "Information requested",
+                  statusTheme: "NOTICE",
+                  completed: false,
+                },
+                {
+                  code: "task-3",
+                  title: "Budget Check",
+                  status: null,
+                  statusText: undefined,
+                  statusTheme: undefined,
+                  completed: false,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskListViewModel(caseWithStatusTheme);
+      const tasks = result.data.stage.taskGroups[0].tasks;
+
+      expect(tasks[0].statusText).toBe("Accepted");
+      expect(tasks[0].statusTheme).toBe("NONE");
+
+      expect(tasks[1].statusText).toBe("Information requested");
+      expect(tasks[1].statusTheme).toBe("NOTICE");
+
+      expect(tasks[2].statusText).toBe(undefined);
+      expect(tasks[2].statusTheme).toBe(undefined);
     });
 
     it("handles empty task groups", () => {

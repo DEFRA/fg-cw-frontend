@@ -13,12 +13,14 @@ describe("task-group", () => {
             tasks: [
               {
                 name: "Task 1",
-                status: "not started",
+                statusText: "not started",
+                statusTheme: "NEUTRAL",
                 link: "/cases/123/task/1",
               },
               {
                 name: "Task 2",
-                status: "in progress",
+                statusText: "in progress",
+                statusTheme: "INFO",
                 link: "/cases/123/task/2",
               },
             ],

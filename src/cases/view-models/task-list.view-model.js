@@ -27,13 +27,11 @@ const mapTaskGroups = (taskGroups, caseId) => {
   return taskGroups.map((taskGroup) => ({
     ...taskGroup,
     tasks: taskGroup.tasks.map((task) => {
-      const isComplete = task.completed === true;
-
       return {
         ...task,
         link: `/cases/${caseId}/tasks/${taskGroup.code}/${task.code}`,
-        status: isComplete ? "COMPLETE" : "INCOMPLETE",
-        isComplete,
+        statusText: task.statusText,
+        statusTheme: task.statusTheme,
       };
     }),
   }));

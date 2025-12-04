@@ -138,6 +138,21 @@ describe("dynamic-content template", () => {
     expect(result).not.toContain("govuk-tag--blue");
   });
 
+  test("renders status component with NONE theme", () => {
+    const params = [
+      {
+        component: "status",
+        text: "Plain Text",
+        theme: "NONE",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Plain text");
+    expect(result).not.toContain("govuk-tag");
+  });
+
   test("renders url component", () => {
     const params = [
       {
