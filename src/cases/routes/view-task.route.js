@@ -22,12 +22,9 @@ export const viewTaskRoute = {
       "task",
     );
 
-    const roles = authContext.user.appRoles;
-
     const viewModel = createTaskDetailViewModel(
       caseData,
       request.params,
-      roles,
       errors,
       formData,
     );
