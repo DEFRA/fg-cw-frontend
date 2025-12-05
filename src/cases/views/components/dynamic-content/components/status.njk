@@ -5,9 +5,24 @@
   {%- set classesMap = params.classesMap or {} %}
   {%- set labelsMap = params.labelsMap or {} %}
   {%- set colour = params.colour or '' %}
+  {%- set theme = params.theme or '' %}
   {%- set additionalClasses = params.classes or '' %}
+  {%- set attributes = params.attributes or {} %}
 
-  {%- if classesMap[value] %}
+  {%-
+    set themeClasses = {
+      "NEUTRAL": "govuk-tag--grey",
+      "INFO": "govuk-tag--light-blue",
+      "NOTICE": "govuk-tag--yellow",
+      "ERROR": "govuk-tag--red",
+      "WARN": "govuk-tag--orange",
+      "SUCCESS": "govuk-tag--green"
+    }
+  %}
+
+  {%- if theme and themeClasses[theme] %}
+    {%- set baseClasses = themeClasses[theme] %}
+  {%- elif classesMap[value] %}
     {%- set baseClasses = classesMap[value] %}
   {%- elif colour %}
     {%- set baseClasses = "govuk-tag--" + colour %}
@@ -18,10 +33,15 @@
   {%- set allClasses = baseClasses + (" " + additionalClasses if additionalClasses else "") %}
   {%- set displayText = labelsMap[value] or (value | capitalize) %}
 
-  {{
-    govukTag({
-      text: displayText,
-      classes: allClasses
-    })
-  }}
+  {%- if theme == "NONE" %}
+    {{ displayText }}
+  {%- else %}
+    {{
+      govukTag({
+        text: displayText,
+        classes: allClasses,
+        attributes: attributes
+      })
+    }}
+  {%- endif %}
 {% endmacro %}

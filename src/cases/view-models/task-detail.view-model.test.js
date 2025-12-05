@@ -1,10 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import {
-  checkTaskAccess,
-  createTaskDetailViewModel,
-  hasAllRequiredRoles,
-  hasAnyRequiredRole,
-} from "./task-detail.view-model.js";
+import { createTaskDetailViewModel } from "./task-detail.view-model.js";
 
 vi.mock("../../common/helpers/date-helpers.js", () => ({
   getFormattedGBDate: vi.fn((date) => `formatted-${date}`),
@@ -15,143 +10,6 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
     links.map((link) => ({ ...link, active: link.id === activeId })),
   ),
 }));
-
-describe("hasAllRequiredRoles", () => {
-  it("should return true when allOf is empty", () => {
-    const userRoles = ["role1", "role2"];
-    const allOf = [];
-
-    expect(hasAllRequiredRoles(userRoles, allOf)).toBe(true);
-  });
-
-  it("should return true when user has all required roles", () => {
-    const userRoles = ["role1", "role2", "role3"];
-    const allOf = ["role1", "role2"];
-
-    expect(hasAllRequiredRoles(userRoles, allOf)).toBe(true);
-  });
-
-  it("should return false when user is missing some required roles", () => {
-    const userRoles = ["role1"];
-    const allOf = ["role1", "role2"];
-
-    expect(hasAllRequiredRoles(userRoles, allOf)).toBe(false);
-  });
-
-  it("should return false when user has no roles but roles are required", () => {
-    const userRoles = [];
-    const allOf = ["role1"];
-
-    expect(hasAllRequiredRoles(userRoles, allOf)).toBe(false);
-  });
-});
-
-describe("hasAnyRequiredRole", () => {
-  it("should return true when anyOf is empty", () => {
-    const userRoles = ["role1", "role2"];
-    const anyOf = [];
-
-    expect(hasAnyRequiredRole(userRoles, anyOf)).toBe(true);
-  });
-
-  it("should return true when user has at least one required role", () => {
-    const userRoles = ["role1"];
-    const anyOf = ["role1", "role2"];
-
-    expect(hasAnyRequiredRole(userRoles, anyOf)).toBe(true);
-  });
-
-  it("should return false when user has none of the required roles", () => {
-    const userRoles = ["role3"];
-    const anyOf = ["role1", "role2"];
-
-    expect(hasAnyRequiredRole(userRoles, anyOf)).toBe(false);
-  });
-
-  it("should return false when user has no roles but roles are required", () => {
-    const userRoles = [];
-    const anyOf = ["role1"];
-
-    expect(hasAnyRequiredRole(userRoles, anyOf)).toBe(false);
-  });
-});
-
-describe("checkTaskAccess", () => {
-  it("should return true when both allOf and anyOf conditions are met", () => {
-    const appRoles = {
-      role1: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-      role2: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-      role3: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-    };
-
-    const taskRequiredRoles = { allOf: ["role1", "role2"], anyOf: ["role3"] };
-
-    expect(checkTaskAccess(appRoles, taskRequiredRoles)).toBe(true);
-  });
-
-  it("should return false when allOf condition is not met", () => {
-    const appRoles = {
-      role1: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-    };
-
-    const taskRequiredRoles = { allOf: ["role1", "role2"], anyOf: [] };
-
-    expect(checkTaskAccess(appRoles, taskRequiredRoles)).toBe(false);
-  });
-
-  it("should return false when anyOf condition is not met", () => {
-    const appRoles = {
-      role1: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-      role2: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-    };
-    const taskRequiredRoles = { allOf: ["role1"], anyOf: ["role3"] };
-
-    expect(checkTaskAccess(appRoles, taskRequiredRoles)).toBe(false);
-  });
-
-  it("should handle missing allOf and anyOf properties", () => {
-    const appRoles = {
-      role1: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-    };
-
-    const taskRequiredRoles = {};
-
-    expect(checkTaskAccess(appRoles, taskRequiredRoles)).toBe(true);
-  });
-
-  it("should handle empty arrays", () => {
-    const appRoles = {
-      role1: {
-        startDate: "2025-01-31",
-        endDate: "2025-10-31",
-      },
-    };
-    const taskRequiredRoles = { allOf: [], anyOf: [] };
-
-    expect(checkTaskAccess(appRoles, taskRequiredRoles)).toBe(true);
-  });
-});
 
 describe("createTaskDetailViewModel", () => {
   const mockCaseData = {
@@ -184,6 +42,7 @@ describe("createTaskDetailViewModel", () => {
               status: "complete",
               commentRef: "comment1",
               requiredRoles: { allOf: ["role1"], anyOf: [] },
+              canComplete: true,
             },
           ],
         },
@@ -197,14 +56,12 @@ describe("createTaskDetailViewModel", () => {
     taskCode: "task1",
   };
 
-  const mockRoles = { role1: true, role2: true };
   const mockErrors = { field1: "Error message" };
 
   it("should create a complete view model", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -226,7 +83,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -238,13 +94,12 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
     expect(result.data.currentTask).toMatchObject({
       status: "complete",
-      canCompleteTask: true,
+      canComplete: true,
       formAction: "/cases/case123/task-groups/group1/tasks/task1/status",
     });
   });
@@ -257,7 +112,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       incompleteCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -275,7 +129,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseDataNoComment,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -294,7 +147,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseDataNoIdentifiers,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -314,7 +166,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseDataNoAnswers,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -322,16 +173,17 @@ describe("createTaskDetailViewModel", () => {
     expect(result.data.caseId).toBe("case123");
   });
 
-  it("should check task access correctly", () => {
-    const rolesWithoutAccess = { role2: true };
+  it("should pass through canComplete value from task data", () => {
+    const caseDataWithNoAccess = structuredClone(mockCaseData);
+    caseDataWithNoAccess.stage.taskGroups[0].tasks[0].canComplete = false;
+
     const result = createTaskDetailViewModel(
-      mockCaseData,
+      caseDataWithNoAccess,
       mockQuery,
-      rolesWithoutAccess,
       mockErrors,
     );
 
-    expect(result.data.currentTask.canCompleteTask).toBe(false);
+    expect(result.data.currentTask.canComplete).toBe(false);
   });
 
   it("should call helper functions with correct parameters", async () => {
@@ -339,7 +191,7 @@ describe("createTaskDetailViewModel", () => {
       await import("../../common/helpers/navigation-helpers.js"),
     );
 
-    createTaskDetailViewModel(mockCaseData, mockQuery, mockRoles, mockErrors);
+    createTaskDetailViewModel(mockCaseData, mockQuery, mockErrors);
 
     // getFormattedGBDate is no longer called in the simplified view model
     expect(setActiveLink).toHaveBeenCalledWith(mockCaseData.links, "tasks");
@@ -357,7 +209,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       interactiveCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -376,7 +227,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       nonInteractiveCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -387,7 +237,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -406,7 +255,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseDataWithUndefinedInteractive,
       mockQuery,
-      mockRoles,
       mockErrors,
     );
 
@@ -417,7 +265,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       undefined,
     );
 
@@ -455,11 +302,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
 
     expect(result.data.currentTask.statusOptions).toHaveLength(3);
     expect(result.data.currentTask.statusOptions[0]).toMatchObject({
@@ -517,7 +360,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseWithStatusOptions,
       mockQuery,
-      mockRoles,
       errors,
       formData,
     );
@@ -563,11 +405,7 @@ describe("createTaskDetailViewModel", () => {
       comments: [{ ref: "comment1", text: "Existing task comment" }],
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
 
     const completeOption = result.data.currentTask.statusOptions.find(
       (opt) => opt.value === "complete",
@@ -605,11 +443,7 @@ describe("createTaskDetailViewModel", () => {
       comments: [{ ref: "comment1", text: null }],
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
 
     const completeOption = result.data.currentTask.statusOptions.find(
       (opt) => opt.value === "complete",
@@ -643,11 +477,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
 
     expect(result.data.currentTask.statusOptions).toHaveLength(2);
     expect(
@@ -679,11 +509,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithEmptyOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithEmptyOptions, mockQuery);
 
     expect(result.data.currentTask.statusOptions).toEqual([]);
   });
@@ -713,11 +539,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
 
     const option = result.data.currentTask.statusOptions[0];
     expect(option.conditional.hint).toBeUndefined();
@@ -753,7 +575,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       caseWithStatusOptions,
       mockQuery,
-      mockRoles,
       undefined,
       formData,
     );
@@ -776,7 +597,6 @@ describe("createTaskDetailViewModel", () => {
     const result = createTaskDetailViewModel(
       mockCaseData,
       mockQuery,
-      mockRoles,
       undefined,
       formData,
     );
@@ -805,11 +625,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithCompletedTask,
-      mockQuery,
-      mockRoles,
-    );
+    const result = createTaskDetailViewModel(caseWithCompletedTask, mockQuery);
 
     expect(result.data.currentTask.completed).toBe(true);
   });

@@ -76,7 +76,8 @@ describe("listTasksRoute", () => {
               {
                 code: "simple-review",
                 name: "Simple Review",
-                status: "pending",
+                statusText: "pending",
+                statusTheme: "INFO",
               },
             ],
           },

@@ -22,7 +22,7 @@
         {{ currentTask.updatedAt | formatDate("hh:mm a") }}
       </p>
 
-      {% if currentTask.canCompleteTask %}
+      {% if currentTask.canComplete %}
         {{
           taskOutcomeForm({
             caseId: caseId,
@@ -81,7 +81,7 @@
           <p>{{ currentTask.comment.text }}</p>
         </div>
       {% endif %}
-    {% elif currentTask.canCompleteTask %}
+    {% elif currentTask.canComplete %}
       {% if params.isInteractive %}
         {{
           taskOutcomeForm({
@@ -94,7 +94,7 @@
           })
         }}
       {% endif %}
-    {% elif not currentTask.canCompleteTask and currentTask.requiredRoles %}
+    {% elif not currentTask.canComplete and currentTask.requiredRoles %}
       <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">
         Outcome
       </h2>

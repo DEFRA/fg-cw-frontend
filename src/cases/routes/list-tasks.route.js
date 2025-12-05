@@ -1,7 +1,7 @@
 import { getFlashData } from "../../common/helpers/flash-helpers.js";
+import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { createTaskListViewModel } from "../view-models/task-list.view-model.js";
-import { logger } from "../../common/logger.js";
 
 export const listTasksRoute = {
   method: "GET",

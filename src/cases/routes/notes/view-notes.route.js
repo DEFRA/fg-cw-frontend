@@ -1,6 +1,6 @@
+import { logger } from "../../../common/logger.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createViewNotesViewModel } from "../../view-models/notes/view-notes.view-model.js";
-import { logger } from "../../../common/logger.js";
 
 export const viewNotesRoute = {
   method: "GET",

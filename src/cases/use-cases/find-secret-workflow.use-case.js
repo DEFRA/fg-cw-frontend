@@ -1,5 +1,5 @@
-import { wreck } from "../../common/wreck.js";
 import { logger } from "../../common/logger.js";
+import { wreck } from "../../common/wreck.js";
 
 export const findSecretWorkflowUseCase = async (authContext, workflowCode) => {
   logger.info(`Get secret workflow ${workflowCode}`);
