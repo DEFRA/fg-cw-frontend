@@ -1,5 +1,5 @@
-import { logger } from "../../common/logger.js";
 import { getFlashData } from "../../common/helpers/flash-helpers.js";
+import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { createTaskDetailViewModel } from "../view-models/task-detail.view-model.js";
 
@@ -22,12 +22,9 @@ export const viewTaskRoute = {
       "task",
     );
 
-    const roles = authContext.user.appRoles;
-
     const viewModel = createTaskDetailViewModel(
       caseData,
       request.params,
-      roles,
       errors,
       formData,
     );

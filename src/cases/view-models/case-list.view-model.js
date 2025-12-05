@@ -5,7 +5,6 @@ import {
 
 export const createCaseListViewModel = (cases, assignedCaseId) => {
   const casesTable = mapCasesToTable(cases);
-
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
     assignedCaseId,
     casesTable.rows,
@@ -28,20 +27,37 @@ export const createCaseListViewModel = (cases, assignedCaseId) => {
   };
 };
 
+const attributes = {
+  "aria-sort": "none",
+};
+
+const headerClasses = "sortable-header";
+
 const mapCasesToTable = (cases) => {
   return {
     head: [
       { text: "Select" },
-      { text: "ID" },
-      { text: "Business" },
-      { text: "SBI" },
-      { text: "Submitted" },
-      { text: "Status" },
-      { text: "Assignee" },
+      {
+        text: "ID",
+        attributes,
+        headerClasses,
+      },
+      { text: "Business", attributes, headerClasses },
+      { text: "SBI", attributes, headerClasses },
+      { text: "Submitted", attributes, headerClasses },
+      { text: "Status", attributes, headerClasses },
+      { text: "Assignee", attributes, headerClasses },
     ],
     rows: cases.map(
       // eslint-disable-next-line complexity
-      ({ _id, caseRef, payload, currentStatus, assignedUser }) => ({
+      ({
+        _id,
+        caseRef,
+        payload,
+        currentStatus,
+        currentStatusTheme,
+        assignedUser,
+      }) => ({
         _id,
         select: {
           value: _id,
@@ -49,6 +65,7 @@ const mapCasesToTable = (cases) => {
         id: {
           href: `/cases/${_id}`,
           text: mapText(caseRef),
+          attributes: { "data-sort-value": caseRef },
         },
         business: {
           text: mapText(payload?.answers?.applicant?.business?.name),
@@ -58,8 +75,9 @@ const mapCasesToTable = (cases) => {
         },
         submitted: {
           text: mapSubmittedAt(payload.submittedAt),
+          attributes: { "data-sort-value": Date.parse(payload.submittedAt) },
         },
-        status: mapStatus(currentStatus),
+        status: mapStatus(currentStatus, currentStatusTheme),
         assignee: {
           text: mapText(assignedUser?.name, "Not assigned"),
         },
@@ -76,20 +94,10 @@ const mapSubmittedAt = (submittedAt) => {
   return submittedAt ? formatDate(submittedAt, DATE_FORMAT_SHORT_MONTH) : "";
 };
 
-const STATUS_TO_CLASS = {
-  DEFAULT: "govuk-tag--grey",
-  NEW: "govuk-tag--blue",
-  "IN PROGRESS": "govuk-tag--yellow",
-  APPROVED: "govuk-tag--green",
-  COMPLETED: "govuk-tag--green",
-};
-
-const mapStatus = (status) => {
-  const statusClass = STATUS_TO_CLASS[status] || STATUS_TO_CLASS.DEFAULT;
-
+const mapStatus = (status, theme) => {
   return {
     text: capitalise(status),
-    classes: statusClass,
+    theme: theme ?? "",
   };
 };
 

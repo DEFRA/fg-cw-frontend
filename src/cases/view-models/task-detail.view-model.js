@@ -1,27 +1,5 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 
-export const hasAllRequiredRoles = (userRoles, allOf) => {
-  return !allOf.length || allOf.every((role) => userRoles.includes(role));
-};
-
-export const hasAnyRequiredRole = (userRoles, anyOf) => {
-  return !anyOf.length || anyOf.some((role) => userRoles.includes(role));
-};
-
-// eslint-disable-next-line complexity
-export const checkTaskAccess = (appRoles, taskRequiredRoles) => {
-  if (!taskRequiredRoles) {
-    return true;
-  }
-
-  const { allOf = [], anyOf = [] } = taskRequiredRoles;
-
-  return (
-    hasAllRequiredRoles(Object.keys(appRoles), allOf) &&
-    hasAnyRequiredRole(Object.keys(appRoles), anyOf)
-  );
-};
-
 const getFieldValue = (fieldName, values) => values?.[fieldName];
 
 const createErrorList = (errors) => {
@@ -141,7 +119,7 @@ const buildCurrentTaskData = ({
   taskCode,
   currentStatus,
   currentTaskComment,
-  canCompleteTask,
+  canComplete,
   formData,
   errors,
 }) => {
@@ -160,20 +138,14 @@ const buildCurrentTaskData = ({
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
     statusError: errors?.status,
-    canCompleteTask,
+    canComplete,
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
     updatedAt: currentTask.updatedAt,
   };
 };
 
-export const createTaskDetailViewModel = (
-  kase,
-  query,
-  roles,
-  errors,
-  formData,
-) => {
+export const createTaskDetailViewModel = (kase, query, errors, formData) => {
   const stage = kase.stage;
   const { taskGroupCode, taskCode } = query;
 
@@ -182,7 +154,7 @@ export const createTaskDetailViewModel = (
     kase.comments,
     currentTask.commentRef,
   );
-  const canCompleteTask = checkTaskAccess(roles, currentTask.requiredRoles);
+  const canComplete = currentTask.canComplete;
   const isInteractive = stage.interactive ?? true;
   const currentStatus = getFieldValue("status", formData) ?? currentTask.status;
 
@@ -206,7 +178,7 @@ export const createTaskDetailViewModel = (
         taskCode,
         currentStatus,
         currentTaskComment,
-        canCompleteTask,
+        canComplete,
         formData,
         errors,
       }),

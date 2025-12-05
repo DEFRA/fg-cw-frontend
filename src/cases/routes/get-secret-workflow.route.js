@@ -1,5 +1,5 @@
-import { findSecretWorkflowUseCase } from "../use-cases/find-secret-workflow.use-case.js";
 import { logger } from "../../common/logger.js";
+import { findSecretWorkflowUseCase } from "../use-cases/find-secret-workflow.use-case.js";
 
 export const getSecretWorkflowRoute = {
   method: "GET",

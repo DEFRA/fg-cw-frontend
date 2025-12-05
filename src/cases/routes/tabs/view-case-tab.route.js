@@ -1,6 +1,6 @@
+import { logger } from "../../../common/logger.js";
 import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { createViewTabViewModel } from "../../view-models/view-tab.view-model.js";
-import { logger } from "../../../common/logger.js";
 
 export const viewCaseTabRoute = {
   method: "GET",

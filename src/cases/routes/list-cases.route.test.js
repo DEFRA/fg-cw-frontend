@@ -72,6 +72,7 @@ const mockCases = [
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "NEW",
+    currentStatusTheme: "INFO",
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
@@ -138,6 +139,7 @@ const mockCases = [
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "OLD",
+    currentStatusTheme: "NEUTRAL",
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",

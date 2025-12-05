@@ -1,4 +1,4 @@
-ARG PARENT_VERSION=2.8.14-node22.20.0
+ARG PARENT_VERSION=2.10.1-node24.11.1
 ARG PORT=3000
 ARG PORT_DEBUG=9229
 
@@ -35,8 +35,8 @@ ENV TZ="Europe/London"
 # CDP PLATFORM HEALTHCHECK REQUIREMENT
 USER root
 RUN apk update \
-    && apk add curl \
-    && apk cache clean
+  && apk add curl \
+  && apk cache clean
 
 USER node
 

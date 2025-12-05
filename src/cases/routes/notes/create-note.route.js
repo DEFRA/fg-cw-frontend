@@ -1,7 +1,7 @@
+import { logger } from "../../../common/logger.js";
 import { addNoteToCaseUseCase } from "../../use-cases/add-note-to-case.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-model.js";
-import { logger } from "../../../common/logger.js";
 
 export const createNoteRoute = {
   method: "POST",

@@ -134,10 +134,6 @@ describe("loginCallbackRoute", () => {
       expiresAt: expect.any(Number),
       user: {
         id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-        name: "Casey Test",
-        email: "casey.test@example.test",
-        idpRoles: ["FCP.Casework.Read"],
-        appRoles: ["ROLE_SING_AND_DANCE"],
       },
     });
   });
