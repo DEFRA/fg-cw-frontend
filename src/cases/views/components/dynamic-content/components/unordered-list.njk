@@ -6,11 +6,7 @@
   <ul{% if id %} id="{{ id }}"{% endif %} class="{{ classes }}">
     {% for item in items %}
       <li>
-        {% if item.component %}
-          {{ renderDefraComponent(item) }}
-        {% else %}
-          {{ item.text | safe }}
-        {% endif %}
+        {{ renderDefraComponent(item) }}
       </li>
     {% endfor %}
   </ul>

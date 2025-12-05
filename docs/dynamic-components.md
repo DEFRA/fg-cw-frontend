@@ -31,22 +31,94 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 
 **Purpose**: Block-level paragraph content
 
+**Parameters**:
+
+- `text` (optional): Simple paragraph text content
+- `items` (optional): Array of child components for rich inline content (takes precedence over `text`)
+- `classes` (optional): CSS classes (defaults to `govuk-body`)
+- `id` (optional): HTML ID attribute
+
+**Simple usage**:
+
 ```
 {
   "component": "paragraph",
-  "text": "This is a paragraph with proper semantic markup.",
+  "text": "This is a simple paragraph with proper semantic markup.",
   "classes": "govuk-body govuk-!-font-weight-bold",
   "id": "important-section"
 }
 ```
 
-**Parameters**:
+**Output**: `<p class="govuk-body govuk-!-font-weight-bold" id="important-section">This is a simple paragraph with proper semantic markup.</p>`
 
-- `text` (required): The paragraph content
-- `classes` (optional): CSS classes (defaults to `govuk-body`)
-- `id` (optional): HTML ID attribute
+**Rich content with child components**:
 
-**Output**: `<p class="govuk-body" id="important-section">text</p>`
+```
+{
+  "component": "paragraph",
+  "items": [
+    { "text": "This paragraph contains " },
+    { "text": "bold text", "classes": "govuk-!-font-weight-bold" },
+    { "text": ", " },
+    { "component": "url", "href": "https://example.com", "text": "a link" },
+    { "text": ", and more text." }
+  ]
+}
+```
+
+**Output**: `<p class="govuk-body">This paragraph contains <span class="govuk-!-font-weight-bold">bold text</span>, <a href="https://example.com">a link</a>, and more text.</p>`
+
+**Item Syntax**:
+
+Items in the array can use a simplified syntax:
+
+- **Simple text** (no styling): `{ "text": "plain text" }`
+- **Styled text** (with classes/id): `{ "text": "styled text", "classes": "govuk-!-font-weight-bold" }`
+- **Other components** (explicit type): `{ "component": "url", "href": "/link", "text": "link text" }`
+
+The `component` property defaults to `"text"` when omitted, making the syntax less verbose for text items.
+
+**Examples**:
+
+Paragraph with bold and italic text:
+
+```
+{
+  "component": "paragraph",
+  "items": [
+    { "text": "Important: " },
+    { "text": "Your application must be submitted by ", "classes": "govuk-!-font-weight-bold" },
+    { "text": "31 December 2024" }
+  ]
+}
+```
+
+Paragraph with inline link:
+
+```
+{
+  "component": "paragraph",
+  "items": [
+    { "text": "For more information, visit our " },
+    { "component": "url", "href": "/guidance", "text": "guidance page", "classes": "govuk-link" },
+    { "text": "." }
+  ]
+}
+```
+
+Paragraph with status inline:
+
+```
+{
+  "component": "paragraph",
+  "items": [
+    { "text": "Application status: " },
+    { "component": "status", "text": "APPROVED", "theme": "SUCCESS" }
+  ]
+}
+```
+
+**Note**: If both `items` and `text` are provided, `items` takes precedence. If `items` is an empty array, falls back to `text` if provided.
 
 ---
 
@@ -205,13 +277,9 @@ Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopene
 {
   "component": "ordered-list",
   "items": [
-    {
-      "text": "Applicant has applied for more than the total available area."
-    },
-    {
-      "component": "paragraph",
-      "text": "Complex item with nested component"
-    }
+    { "text": "Applicant has applied for more than the total available area." },
+    { "text": "Bold item", "classes": "govuk-!-font-weight-bold" },
+    { "component": "url", "href": "/details", "text": "Item with a link" }
   ],
   "classes": "govuk-list govuk-list--number",
   "id": "failure-reasons"
@@ -220,9 +288,19 @@ Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopene
 
 **Parameters**:
 
-- `items` (required): Array of list items (can be simple objects with `text` or full components)
+- `items` (required): Array of list items
 - `classes` (optional): CSS classes (defaults to `govuk-list govuk-list--number`)
 - `id` (optional): HTML ID attribute
+
+**Item Syntax**:
+
+Items support the same simplified syntax as paragraphs:
+
+- **Simple text**: `{ "text": "list item text" }`
+- **Styled text**: `{ "text": "styled text", "classes": "govuk-!-font-weight-bold" }`
+- **Other components**: `{ "component": "url", "href": "/link", "text": "link text" }`
+
+The `component` property defaults to `"text"` when omitted.
 
 **Output**: `<ol class="govuk-list govuk-list--number">...</ol>`
 
@@ -237,7 +315,8 @@ Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopene
   "component": "unordered-list",
   "items": [
     { "text": "First item" },
-    { "text": "Second item" }
+    { "text": "Important item", "classes": "govuk-!-font-weight-bold" },
+    { "component": "url", "href": "/more", "text": "Item with link" }
   ],
   "classes": "govuk-list govuk-list--bullet",
   "id": "example-list"
@@ -249,6 +328,16 @@ Output: `<a href="https://example.com/document.pdf" target="_blank" rel="noopene
 - `items` (required): Array of list items
 - `classes` (optional): CSS classes (defaults to `govuk-list govuk-list--bullet`)
 - `id` (optional): HTML ID attribute
+
+**Item Syntax**:
+
+Items support the same simplified syntax as paragraphs:
+
+- **Simple text**: `{ "text": "list item text" }`
+- **Styled text**: `{ "text": "styled text", "classes": "govuk-!-font-weight-bold" }`
+- **Other components**: `{ "component": "url", "href": "/link", "text": "link text" }`
+
+The `component` property defaults to `"text"` when omitted.
 
 **Output**: `<ul class="govuk-list govuk-list--bullet">...</ul>`
 
@@ -591,14 +680,14 @@ Head items can be either:
           "component": "heading",
           "text": "Outstanding balance",
           "level": 3
-        },
-        {
+        },{
           "component": "unordered-list",
           "items": [
             { "text": "Invoice #123: £500" },
             { "text": "Invoice #124: £300" }
           ]
         }
+
       ]
     }
   ],
