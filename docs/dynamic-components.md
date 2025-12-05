@@ -44,12 +44,10 @@ Components to be sent as structured JSON data that gets rendered into GOV.UK-com
 {
   "component": "paragraph",
   "text": "This is a simple paragraph with proper semantic markup.",
-  "classes": "govuk-body govuk-!-font-weight-bold",
-  "id": "important-section"
 }
 ```
 
-**Output**: `<p class="govuk-body govuk-!-font-weight-bold" id="important-section">This is a simple paragraph with proper semantic markup.</p>`
+**Output**: `<p class="govuk-body">This is a simple paragraph with proper semantic markup.</p>`
 
 **Rich content with child components**:
 
