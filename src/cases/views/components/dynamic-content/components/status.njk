@@ -12,7 +12,7 @@
   {%-
     set themeClasses = {
       "NEUTRAL": "govuk-tag--grey",
-      "INFO": "govuk-tag--light-blue",
+      "INFO": "govuk-tag--blue",
       "NOTICE": "govuk-tag--yellow",
       "ERROR": "govuk-tag--red",
       "WARN": "govuk-tag--orange",
@@ -34,7 +34,7 @@
   {%- set displayText = labelsMap[value] or (value | capitalize) %}
 
   {%- if theme == "NONE" %}
-    {{ displayText }}
+    <span class="govuk-tag--none">{{ displayText }}</span>
   {%- else %}
     {{
       govukTag({

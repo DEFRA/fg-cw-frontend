@@ -1,0 +1,7 @@
+@use "govuk-frontend" as *;
+
+// Tag variant with no colour set
+.govuk-tag--none {
+  color: inherit;
+  background-color: transparent;
+}

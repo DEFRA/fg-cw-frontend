@@ -150,7 +150,8 @@ describe("dynamic-content template", () => {
     const result = render("dynamic-content", params);
 
     expect(result).toContain("Plain text");
-    expect(result).not.toContain("govuk-tag");
+    expect(result).toContain("govuk-tag--none");
+    expect(result).not.toContain("govuk-tag--blue");
   });
 
   test("renders url component", () => {
