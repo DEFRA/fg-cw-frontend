@@ -21,7 +21,7 @@
   {% if component == "text" %}
     {{ defraText(params) }}
   {% elif component == "paragraph" %}
-    {{ defraParagraph(params) }}
+    {{ defraParagraph(params, renderDefraComponent) }}
   {% elif component == "url" %}
     {{ defraUrl(params) }}
   {% elif component == "copyToClipboard" %}
