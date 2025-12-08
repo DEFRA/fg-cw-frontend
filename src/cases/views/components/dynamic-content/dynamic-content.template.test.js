@@ -616,6 +616,171 @@ describe("dynamic-content template", () => {
     expect(result).toContain('id="important-section"');
   });
 
+  test("renders paragraph component with child text components", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [
+          { component: "text", text: "This is " },
+          { component: "text", text: "simple text" },
+          { component: "text", text: " in a paragraph." },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("This is ");
+    expect(result).toContain("simple text");
+    expect(result).toContain(" in a paragraph.");
+    expect(result).toContain('<p class="govuk-body">');
+    expect(result).toContain("</p>");
+  });
+
+  test("renders paragraph component with styled child components", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [
+          { component: "text", text: "This text is " },
+          {
+            component: "text",
+            text: "bold",
+            classes: "govuk-!-font-weight-bold",
+          },
+          { component: "text", text: " and styled." },
+        ],
+        classes: "govuk-body",
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("This text is ");
+    expect(result).toContain("bold");
+    expect(result).toContain("govuk-!-font-weight-bold");
+    expect(result).toContain(" and styled.");
+    expect(result).toContain('<p class="govuk-body">');
+  });
+
+  test("renders paragraph component with mixed child components", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [
+          { component: "text", text: "Visit " },
+          { component: "url", href: "/example", text: "this link" },
+          { component: "text", text: " for " },
+          {
+            component: "text",
+            text: "more information",
+            classes: "govuk-!-font-weight-bold",
+          },
+          { component: "text", text: "." },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Visit ");
+    expect(result).toContain("this link");
+    expect(result).toContain('href="/example"');
+    expect(result).toContain(" for ");
+    expect(result).toContain("more information");
+    expect(result).toContain("govuk-!-font-weight-bold");
+    expect(result).toContain('<p class="govuk-body">');
+  });
+
+  test("renders paragraph component prioritising items over text", () => {
+    const params = [
+      {
+        component: "paragraph",
+        text: "This should be ignored",
+        items: [
+          { component: "text", text: "Items take " },
+          { component: "text", text: "precedence" },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Items take ");
+    expect(result).toContain("precedence");
+    expect(result).not.toContain("This should be ignored");
+  });
+
+  test("renders paragraph component with empty items falls back to text", () => {
+    const params = [
+      {
+        component: "paragraph",
+        text: "Fallback text content",
+        items: [],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Fallback text content");
+    expect(result).toContain('<p class="govuk-body">');
+  });
+
+  test("renders paragraph component with empty items and no text renders empty", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('<p class="govuk-body">');
+    expect(result).toContain("</p>");
+    expect(result).not.toContain("undefined");
+  });
+
+  test("renders paragraph component with items containing simple text objects", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [{ text: "Simple " }, { text: "text " }, { text: "objects" }],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Simple ");
+    expect(result).toContain("text ");
+    expect(result).toContain("objects");
+  });
+
+  test("renders paragraph component with text objects without component property but with classes", () => {
+    const params = [
+      {
+        component: "paragraph",
+        items: [
+          { text: "This paragraph contains " },
+          { text: "bold text", classes: "govuk-!-font-weight-bold" },
+          { text: ", " },
+          { component: "url", href: "https://example.com", text: "a link" },
+          { text: ", and more text." },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("This paragraph contains ");
+    expect(result).toContain("bold text");
+    expect(result).toContain("govuk-!-font-weight-bold");
+    expect(result).toContain("a link");
+    expect(result).toContain('href="https://example.com"');
+    expect(result).toContain(", and more text.");
+    expect(result).toContain('<p class="govuk-body">');
+  });
+
   test("renders unordered-list component with simple text items", () => {
     const params = [
       {
