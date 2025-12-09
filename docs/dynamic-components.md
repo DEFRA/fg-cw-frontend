@@ -165,13 +165,16 @@ Paragraph with status inline:
 
 - `text` (required): Status value
 - `theme` (optional): Theme name (see Theme Reference below)
+- `themeMap` (optional): Maps status values to semantic themes
 - `labelsMap` (optional): Maps status values to display text
-- `classesMap` (optional): Maps status values to CSS classes (overrides theme)
+- `classesMap` (optional): Not recommended - Maps status values to CSS classes. Creates direct dependency on GOV.UK CSS classes. Use `themeMap` instead.
 - `classes` (optional): Additional CSS classes
 
-Use `theme` for standard styling. `classesMap` allows custom class mappings for advanced cases.
+Use `theme` for direct theme assignment or `themeMap` to map values to semantic themes. `classesMap` is supported for backward compatibility but not recommended.
 
-**Priority**: `theme` → `classesMap` → `govuk-tag--grey` (default)
+**Priority**: `theme` → `themeMap` → `classesMap` → `colour` → `govuk-tag--grey` (default)
+
+**Note**: Invalid theme names in `themeMap` will render as plain text (NONE theme).
 
 **Theme Reference**:
 
@@ -187,13 +190,28 @@ The component supports standard themes that map to GovUK tag colours:
 
 **Examples**:
 
-Using theme (recommended):
+Using theme (recommended for single status):
 
 ```
 {
   "component": "status",
   "text": "NEW",
   "theme": "INFO"
+}
+```
+
+Using themeMap (recommended for mapping multiple status values):
+
+```
+{
+  "label": "Status",
+  "component": "status",
+  "text": "@.agreementStatus",
+  "themeMap": {
+    "OFFERED": "NOTICE",
+    "ACCEPTED": "INFO",
+    "WITHDRAWN": "NEUTRAL"
+  }
 }
 ```
 
@@ -206,21 +224,6 @@ Using NONE theme for plain text:
   "theme": "NONE"
 }
 ```
-
-Using classesMap for custom mappings:
-
-```
-{
-  "component": "status",
-  "text": "PENDING_REVIEW",
-  "classesMap": {
-    "PENDING_REVIEW": "govuk-tag--yellow",
-    "APPROVED": "govuk-tag--green"
-  }
-}
-```
-
-**Output**: `<strong class="govuk-tag govuk-tag--yellow">Under Review</strong>`
 
 For 'NONE' theme, renders plain text without tag wrapper.
 
