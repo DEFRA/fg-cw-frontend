@@ -154,6 +154,120 @@ describe("dynamic-content template", () => {
     expect(result).not.toContain("govuk-tag--blue");
   });
 
+  test("renders status component with themeMap", () => {
+    const params = [
+      {
+        component: "status",
+        text: "OFFERED",
+        themeMap: {
+          OFFERED: "NOTICE",
+          ACCEPTED: "INFO",
+          WITHDRAWN: "NEUTRAL",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Offered");
+    expect(result).toContain("govuk-tag--yellow");
+  });
+
+  test("renders status component with themeMap and labelsMap", () => {
+    const params = [
+      {
+        component: "status",
+        text: "OFFERED",
+        themeMap: {
+          OFFERED: "NOTICE",
+        },
+        labelsMap: {
+          OFFERED: "Offer Made",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Offer Made");
+    expect(result).toContain("govuk-tag--yellow");
+  });
+
+  test("renders status component with theme taking precedence over themeMap", () => {
+    const params = [
+      {
+        component: "status",
+        text: "OFFERED",
+        theme: "ERROR",
+        themeMap: {
+          OFFERED: "NOTICE",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Offered");
+    expect(result).toContain("govuk-tag--red");
+    expect(result).not.toContain("govuk-tag--yellow");
+  });
+
+  test("renders status component with themeMap taking precedence over classesMap", () => {
+    const params = [
+      {
+        component: "status",
+        text: "OFFERED",
+        themeMap: {
+          OFFERED: "NOTICE",
+        },
+        classesMap: {
+          OFFERED: "govuk-tag--purple",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Offered");
+    expect(result).toContain("govuk-tag--yellow");
+    expect(result).not.toContain("govuk-tag--purple");
+  });
+
+  test("renders status component with invalid themeMap value as plain text", () => {
+    const params = [
+      {
+        component: "status",
+        text: "OFFERED",
+        themeMap: {
+          OFFERED: "INVALID_THEME",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Offered");
+    expect(result).toContain("govuk-tag--none");
+  });
+
+  test("renders status component with themeMap missing value falls back to default", () => {
+    const params = [
+      {
+        component: "status",
+        text: "UNKNOWN_STATUS",
+        themeMap: {
+          OFFERED: "NOTICE",
+          ACCEPTED: "INFO",
+        },
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Unknown_status");
+    expect(result).toContain("govuk-tag--grey");
+  });
+
   test("renders url component", () => {
     const params = [
       {
