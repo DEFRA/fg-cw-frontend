@@ -181,7 +181,7 @@ Use `theme` for direct theme assignment or `themeMap` to map values to semantic 
 The component supports standard themes that map to GovUK tag colours:
 
 - `NEUTRAL` → grey (`govuk-tag--grey`)
-- `INFO` → light blue (`govuk-tag--light-blue`)
+- `INFO` → light blue (`govuk-tag--blue`)
 - `NOTICE` → yellow (`govuk-tag--yellow`)
 - `ERROR` → red (`govuk-tag--red`)
 - `WARN` → orange (`govuk-tag--orange`)
