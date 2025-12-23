@@ -75,7 +75,7 @@ describe("updateTaskStatusRoute", () => {
     expect(statusCode).toEqual(302);
   });
 
-  it("updates the task status with no comment", async () => {
+  it("rejects when comment is missing and commentInputDef exists", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stage: {
         code: "001",
@@ -112,21 +112,8 @@ describe("updateTaskStatusRoute", () => {
       },
     });
 
-    const authContext = {
-      token: "mock-token",
-      user: {},
-    };
-
-    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(authContext, {
-      caseId: "68495db5afe2d27b09b2ee47",
-      taskGroupCode: "tg01",
-      taskCode: "t01",
-      completed: true,
-      status: "approved",
-      comment: null,
-    });
-
-    expect(statusCode).toEqual(302);
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+    expect(statusCode).toEqual(302); // Redirects back to form with error
   });
 
   it("updates the task status with comment if required", async () => {
@@ -230,7 +217,7 @@ describe("updateTaskStatusRoute", () => {
     expect(statusCode).toEqual(302);
   });
 
-  it("handles empty string comment correctly", async () => {
+  it("rejects empty string comment when commentInputDef exists", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       stage: {
         code: "001",
@@ -268,14 +255,8 @@ describe("updateTaskStatusRoute", () => {
       },
     });
 
-    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
-      expect.any(Object),
-      expect.objectContaining({
-        comment: null,
-      }),
-    );
-
-    expect(statusCode).toEqual(302);
+    expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+    expect(statusCode).toEqual(302); // Redirects back to form with error
   });
 
   it("validates when task has no commentInputDef", async () => {

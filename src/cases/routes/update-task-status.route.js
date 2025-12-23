@@ -9,7 +9,7 @@ const findTask = (kase, taskGroupCode, taskCode) =>
     .tasks.find((t) => t.code === taskCode);
 
 const validateComment = (taskComment, comment) => {
-  if (taskComment?.mandatory && !comment) {
+  if (taskComment && !comment) {
     return false;
   }
 
