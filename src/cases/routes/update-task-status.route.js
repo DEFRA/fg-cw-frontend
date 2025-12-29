@@ -48,7 +48,8 @@ export const updateTaskStatusRoute = {
 
     const commentFieldName = status ? `${status}-comment` : "comment";
 
-    if (!validateComment(task?.commentInputDef, comment)) {
+    // Only validate comment if a status option has been selected
+    if (status && !validateComment(task?.commentInputDef, comment)) {
       errors[commentFieldName] = {
         text: task?.commentInputDef?.label
           ? `${task.commentInputDef.label} is required`
