@@ -89,6 +89,7 @@ Timeline
     Add note
   </a>
 
+    <p class="govuk-body">There are no notes yet.</p>
         "
 `;
 
@@ -181,6 +182,7 @@ Timeline
     Add note
   </a>
 
+    <p class="govuk-body">There are no notes yet.</p>
         "
 `;
 
