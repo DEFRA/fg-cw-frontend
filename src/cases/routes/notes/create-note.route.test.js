@@ -1,3 +1,4 @@
+import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
@@ -208,5 +209,26 @@ describe("createNoteRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+  });
+
+  it("returns 403 when backend forbids saving", async () => {
+    addNoteToCaseUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+
+    const { statusCode } = await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/notes",
+      payload: {
+        text: "This will be forbidden",
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(403);
   });
 });

@@ -49,6 +49,7 @@ export default [
                 "**/view-models/**",
                 "**/schemas/**",
                 "**/common/logger.js",
+                "**/common/status-codes.js",
               ],
               message:
                 "Routes should only import use cases, view models and schemas",
