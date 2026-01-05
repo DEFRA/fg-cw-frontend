@@ -130,4 +130,32 @@ describe("viewNotesRoute", () => {
 
     expect(view).toMatchSnapshot();
   });
+
+  it("displays empty state message when there are no notes", async () => {
+    const mockCaseData = createMockCaseData({
+      comments: [],
+    });
+
+    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/68495db5afe2d27b09b2ee47/notes",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    const emptyStateMessage = $("p.govuk-body").text();
+
+    expect(emptyStateMessage).toBe("There are no notes yet.");
+    expect($("table").length).toBe(0);
+  });
 });

@@ -97,4 +97,27 @@ describe("createViewNotesViewModel", () => {
       },
     });
   });
+
+  it("creates view model with empty rows array when comments is empty", () => {
+    const mockCaseItem = createMockCaseData({
+      comments: [],
+    });
+
+    const result = createViewNotesViewModel(mockCaseItem);
+
+    expect(result.data.notes).toBeDefined();
+    expect(result.data.notes.title).toBe("All notes");
+    expect(result.data.notes.rows).toEqual([]);
+    expect(result.data.notes.rows).toHaveLength(0);
+  });
+
+  it("returns undefined for notes when comments is null", () => {
+    const mockCaseItem = createMockCaseData({
+      comments: null,
+    });
+
+    const result = createViewNotesViewModel(mockCaseItem);
+
+    expect(result.data.notes).toBeUndefined();
+  });
 });
