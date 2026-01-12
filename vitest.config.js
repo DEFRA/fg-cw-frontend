@@ -3,7 +3,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     dir: "src",
+    clearMocks: true,
     mockReset: true,
+    restoreMocks: true,
     environment: "jsdom",
     env: {
       NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
