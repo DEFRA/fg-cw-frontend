@@ -86,6 +86,53 @@ describe("Case Repository", () => {
   });
 
   describe("findById", () => {
+    it("returns case object when API with tabIdcall succeeds", async () => {
+      const caseId = "case-123";
+      const mockApiResponse = {
+        payload: {
+          _id: "case-123",
+          caseRef: "client-ref-123",
+          payload: {
+            code: "case-code-123",
+          },
+          workflowCode: "workflow-123",
+          currentStage: "stage-1",
+          stages: ["stage-1"],
+          createdAt: "2021-01-01T00:00:00.000Z",
+          submittedAt: "2021-01-15T10:30:00.000Z",
+          currentStatus: "Active",
+          assignedUser: "user-123",
+        },
+      };
+
+      wreck.get.mockResolvedValueOnce(mockApiResponse);
+
+      const result = await findById(authContext, caseId, "caseDetails");
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/cases/case-123?tabId=caseDetails",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
+      );
+      expect(result).toEqual({
+        _id: "case-123",
+        caseRef: "client-ref-123",
+        payload: {
+          code: "case-code-123",
+        },
+        workflowCode: "workflow-123",
+        currentStage: "stage-1",
+        stages: ["stage-1"],
+        createdAt: "2021-01-01T00:00:00.000Z",
+        submittedAt: "2021-01-15T10:30:00.000Z",
+        currentStatus: "Active",
+        assignedUser: "user-123",
+      });
+    });
+
     it("returns case object when API call succeeds", async () => {
       const caseId = "case-123";
       const mockApiResponse = {
@@ -191,10 +238,10 @@ describe("Case Repository", () => {
 
       wreck.get.mockResolvedValueOnce(mockApiResponse);
 
-      const result = await findTabById(authContext, caseId, tabId);
+      const result = await findTabById(authContext, caseId, tabId, "page=1");
 
       expect(wreck.get).toHaveBeenCalledWith(
-        "/cases/case-123/tabs/caseDetails",
+        "/cases/case-123/tabs/caseDetails?page=1",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
@@ -266,6 +313,36 @@ describe("Case Repository", () => {
             authorization: `Bearer ${authContext.token}`,
           },
           payload: { status: "approved", completed: true, comment: null },
+        },
+      );
+    });
+
+    it("calls api with payload data with comment", async () => {
+      wreck.patch.mockResolvedValueOnce({});
+      const params = {
+        phaseCode: "phase-1",
+        stageCode: "stage-1",
+        caseId: "1234-0909",
+        taskGroupCode: "tg-01",
+        taskCode: "t-01",
+        comment: "This is a comment",
+      };
+      await updateTaskStatus(authContext, {
+        ...params,
+        status: "approved",
+        completed: true,
+      });
+      expect(wreck.patch).toHaveBeenCalledWith(
+        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/status",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+          payload: {
+            status: "approved",
+            completed: true,
+            comment: "This is a comment",
+          },
         },
       );
     });
