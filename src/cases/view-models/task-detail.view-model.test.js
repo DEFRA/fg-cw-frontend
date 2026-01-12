@@ -629,4 +629,108 @@ describe("createTaskDetailViewModel", () => {
 
     expect(result.data.currentTask.completed).toBe(true);
   });
+
+  describe("notesHistory", () => {
+    it("should pass through notesHistory from backend", () => {
+      const caseWithNotesHistory = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  notesHistory: [
+                    {
+                      date: "2025-01-09T10:00:00.000Z",
+                      outcome: "Request information",
+                      note: "Need more info",
+                      addedBy: "User A",
+                    },
+                    {
+                      date: "2025-01-10T14:00:00.000Z",
+                      outcome: "Accepted",
+                      note: "Approved",
+                      addedBy: "User B",
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskDetailViewModel(caseWithNotesHistory, mockQuery);
+
+      expect(result.data.currentTask.notesHistory).toHaveLength(2);
+      expect(result.data.currentTask.notesHistory[0]).toEqual({
+        date: "2025-01-09T10:00:00.000Z",
+        outcome: "Request information",
+        note: "Need more info",
+        addedBy: "User A",
+      });
+    });
+
+    it("should return empty array when notesHistory is undefined", () => {
+      const caseWithNoNotesHistory = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithNoNotesHistory,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory).toEqual([]);
+    });
+
+    it("should return empty array when notesHistory is null", () => {
+      const caseWithNullNotesHistory = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  notesHistory: null,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithNullNotesHistory,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory).toEqual([]);
+    });
+  });
 });

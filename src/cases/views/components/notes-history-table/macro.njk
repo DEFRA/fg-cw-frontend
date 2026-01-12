@@ -1,0 +1,7 @@
+{#
+    notesHistory: <array> - Array of note objects with date, outcome, note, addedBy
+#}
+
+{% macro notesHistoryTable(params) %}
+  {%- include "./notes-history-table.template.njk" -%}
+{% endmacro %}
