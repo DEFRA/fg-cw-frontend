@@ -629,4 +629,204 @@ describe("createTaskDetailViewModel", () => {
 
     expect(result.data.currentTask.completed).toBe(true);
   });
+
+  describe("notesHistory", () => {
+    it("should build notes history from commentRefs", () => {
+      const caseWithCommentRefs = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  commentRefs: [
+                    { status: "RFI", ref: "comment1" },
+                    { status: "ACCEPTED", ref: "comment2" },
+                  ],
+                  statusOptions: [
+                    { code: "RFI", name: "Request information" },
+                    { code: "ACCEPTED", name: "Accepted" },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        comments: [
+          {
+            ref: "comment1",
+            createdAt: "2025-01-09T10:00:00.000Z",
+            createdBy: "User A",
+            text: "Need more info",
+          },
+          {
+            ref: "comment2",
+            createdAt: "2025-01-10T14:00:00.000Z",
+            createdBy: "User B",
+            text: "Approved",
+          },
+        ],
+      };
+
+      const result = createTaskDetailViewModel(caseWithCommentRefs, mockQuery);
+
+      expect(result.data.currentTask.notesHistory).toHaveLength(2);
+      expect(result.data.currentTask.notesHistory[0]).toEqual({
+        date: "2025-01-09T10:00:00.000Z",
+        outcome: "Request information",
+        note: "Need more info",
+        addedBy: "User A",
+      });
+      expect(result.data.currentTask.notesHistory[1]).toEqual({
+        date: "2025-01-10T14:00:00.000Z",
+        outcome: "Accepted",
+        note: "Approved",
+        addedBy: "User B",
+      });
+    });
+
+    it("should return empty array when commentRefs is empty", () => {
+      const caseWithEmptyCommentRefs = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  commentRefs: [],
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithEmptyCommentRefs,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory).toEqual([]);
+    });
+
+    it("should return empty array when commentRefs is undefined", () => {
+      const caseWithNoCommentRefs = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                },
+              ],
+            },
+          ],
+        },
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithNoCommentRefs,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory).toEqual([]);
+    });
+
+    it("should skip commentRefs where comment is not found", () => {
+      const caseWithMissingComment = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  commentRefs: [
+                    { status: "RFI", ref: "existing" },
+                    { status: "ACCEPTED", ref: "nonexistent" },
+                  ],
+                  statusOptions: [{ code: "RFI", name: "Request information" }],
+                },
+              ],
+            },
+          ],
+        },
+        comments: [
+          {
+            ref: "existing",
+            createdAt: "2025-01-09T10:00:00.000Z",
+            createdBy: "User A",
+            text: "Note text",
+          },
+        ],
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithMissingComment,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory).toHaveLength(1);
+      expect(result.data.currentTask.notesHistory[0].note).toBe("Note text");
+    });
+
+    it("should use status code as outcome when statusOption not found", () => {
+      const caseWithUnknownStatus = {
+        ...mockCaseData,
+        stage: {
+          code: "stage1",
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  status: "complete",
+                  commentRef: null,
+                  commentRefs: [{ status: "UNKNOWN_STATUS", ref: "comment1" }],
+                  statusOptions: [],
+                },
+              ],
+            },
+          ],
+        },
+        comments: [
+          {
+            ref: "comment1",
+            createdAt: "2025-01-09T10:00:00.000Z",
+            createdBy: "User A",
+            text: "Note",
+          },
+        ],
+      };
+
+      const result = createTaskDetailViewModel(
+        caseWithUnknownStatus,
+        mockQuery,
+      );
+
+      expect(result.data.currentTask.notesHistory[0].outcome).toBe(
+        "UNKNOWN_STATUS",
+      );
+    });
+  });
 });
