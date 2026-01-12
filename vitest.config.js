@@ -22,7 +22,7 @@ export default defineConfig({
     },
     coverage: {
       include: ["src"],
-      exclude: ["*.scss", "*.test.js", "*.svg"],
+      exclude: ["*.scss", "*.test.js", "*.svg", "*.njk"],
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
       all: true,
