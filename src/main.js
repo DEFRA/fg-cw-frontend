@@ -1,4 +1,5 @@
 import process from "node:process";
+import { admin } from "./admin/index.js";
 import { auth } from "./auth/index.js";
 import { cases } from "./cases/index.js";
 import { logger } from "./common/logger.js";
@@ -12,5 +13,5 @@ process.on("unhandledRejection", (error) => {
 });
 
 const server = await createServer();
-await server.register([health, auth, cases]);
+await server.register([health, auth, cases, admin]);
 await server.start();

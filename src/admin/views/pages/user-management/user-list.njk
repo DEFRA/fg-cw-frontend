@@ -1,0 +1,35 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+
+{% block contentMain %}
+  {{ heading({ text: pageHeading }) }}
+
+  {% if data.users.rows.length > 0 %}
+    {% set rows = [] %}
+    {% for row in data.users.rows %}
+      {% set viewLinkHtml %}
+        <a class="govuk-link" href="{{ row.viewHref }}">View</a>
+      {% endset %}
+
+      {%
+        set tableRow = [
+          { text: row.name },
+          { text: row.email },
+          { text: row.lastLogin },
+          { html: viewLinkHtml }
+        ]
+      %}
+      {% set rows = (rows.push(tableRow), rows) %}
+    {% endfor %}
+
+    {{
+      govukTable({
+        head: data.users.head,
+        rows: rows,
+        firstCellIsHeader: true
+      })
+    }}
+  {% else %}
+    <p class="govuk-body">There are no users.</p>
+  {% endif %}
+{% endblock %}
