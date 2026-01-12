@@ -112,6 +112,39 @@ const findTaskComment = (comments, commentRef) => {
   return comments.find((c) => c.ref === commentRef) ?? null;
 };
 
+const findComment = (comments, ref) => comments?.find((c) => c.ref === ref);
+
+const getOutcomeName = (statusOptions, status) => {
+  const statusOption = statusOptions?.find((opt) => opt.code === status);
+  return statusOption?.name || status;
+};
+
+const mapCommentRefToNote =
+  (comments, statusOptions) =>
+  ({ status, ref }) => {
+    const comment = findComment(comments, ref);
+    if (!comment) {
+      return null;
+    }
+
+    return {
+      date: comment.createdAt,
+      outcome: getOutcomeName(statusOptions, status),
+      note: comment.text,
+      addedBy: comment.createdBy,
+    };
+  };
+
+const buildNotesHistory = (commentRefs, comments, statusOptions) => {
+  if (!commentRefs || commentRefs.length === 0) {
+    return [];
+  }
+
+  return commentRefs
+    .map(mapCommentRefToNote(comments, statusOptions))
+    .filter(Boolean);
+};
+
 const buildCurrentTaskData = ({
   kase,
   currentTask,
@@ -142,6 +175,11 @@ const buildCurrentTaskData = ({
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
     updatedAt: currentTask.updatedAt,
+    notesHistory: buildNotesHistory(
+      currentTask.commentRefs,
+      kase.comments,
+      currentTask.statusOptions,
+    ),
   };
 };
 
