@@ -1,6 +1,10 @@
 import Boom from "@hapi/boom";
 import { logger } from "../../common/logger.js";
-import { create, findAll, update } from "../repositories/user.repository.js";
+import {
+  create,
+  findAll,
+  recordLogin,
+} from "../repositories/user.repository.js";
 
 export const createOrUpdateUserUseCase = async (authContext) => {
   logger.info(
@@ -17,10 +21,12 @@ export const createOrUpdateUserUseCase = async (authContext) => {
   });
 
   if (existingUser) {
-    return await update(authContext, existingUser.id, {
+    await recordLogin(authContext, existingUser.id, {
       name: profile.name,
       idpRoles: profile.roles,
     });
+
+    return existingUser;
   }
 
   logger.info(

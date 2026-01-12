@@ -1,5 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
-import { create, findAll, update } from "../repositories/user.repository.js";
+import {
+  create,
+  findAll,
+  recordLogin,
+  update,
+} from "../repositories/user.repository.js";
 import { createOrUpdateUserUseCase } from "./create-or-update-user.use-case.js";
 
 vi.mock("../repositories/user.repository.js");
@@ -29,6 +34,7 @@ describe("createOrUpdateUserUseCase", () => {
       idpRoles: ["FCP.Casework.Read"],
       appRoles: {},
     });
+    expect(recordLogin).not.toHaveBeenCalled();
     expect(update).not.toHaveBeenCalled();
   });
 
@@ -57,11 +63,12 @@ describe("createOrUpdateUserUseCase", () => {
       idpId: "12345678-1234-1234-1234-123456789012",
     });
 
-    expect(update).toHaveBeenCalledWith(authContext, existingUser.id, {
+    expect(recordLogin).toHaveBeenCalledWith(authContext, existingUser.id, {
       name: "Bob Bill",
       idpRoles: ["FCP.Casework.Read"],
     });
 
+    expect(update).not.toHaveBeenCalled();
     expect(create).not.toHaveBeenCalled();
   });
 

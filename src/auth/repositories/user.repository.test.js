@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { create, findAll, update } from "./user.repository.js";
+import { create, findAll, recordLogin, update } from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -194,5 +194,30 @@ describe("update", () => {
     });
 
     expect(user).toEqual(updatedUserData);
+  });
+});
+
+describe("recordLogin", () => {
+  const authContext = { token: "mock-token" };
+
+  it("records login for a user", async () => {
+    wreck.post.mockResolvedValue({
+      payload: undefined,
+    });
+
+    await recordLogin(authContext, "123", {
+      name: "Bob Bill",
+      idpRoles: [],
+    });
+
+    expect(wreck.post).toHaveBeenCalledWith("/users/123/login", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+      payload: {
+        name: "Bob Bill",
+        idpRoles: [],
+      },
+    });
   });
 });
