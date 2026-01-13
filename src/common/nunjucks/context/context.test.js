@@ -1,10 +1,9 @@
-import { readFileSync } from "node:fs";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { logger } from "../../logger.js";
 import { buildNavigation } from "./build-navigation.js";
+import { readFileSync } from "./helpers/readFile.js";
 
-vi.mock("node:fs");
-
+vi.mock("./helpers/readFile.js");
 vi.mock("../../config.js", () => ({
   config: {
     get: (key) =>
@@ -23,6 +22,7 @@ vi.mock("../../logger.js", () => ({
     error: vi.fn(),
   },
 }));
+
 vi.mock("./build-navigation.js");
 
 describe("context", () => {
@@ -78,7 +78,6 @@ describe("context", () => {
 
     test("should cache manifest after first read", async () => {
       const { context } = await import("./context.js");
-
       context({ path: "/", app: {} });
       expect(readFileSync).toHaveBeenCalledTimes(1);
 
@@ -96,6 +95,7 @@ describe("context", () => {
 
     test("should log error and continue", async () => {
       const { context } = await import("./context.js");
+
       const result = context({ path: "/", app: {} });
 
       expect(logger.error).toHaveBeenCalledWith(
@@ -106,6 +106,7 @@ describe("context", () => {
 
     test("should provide working context even when manifest is missing", async () => {
       const { context } = await import("./context.js");
+
       const result = context({ path: "/", app: {} });
 
       expect(result).toEqual({
@@ -123,6 +124,7 @@ describe("context", () => {
   describe("with null request", () => {
     test("should handle null request gracefully", async () => {
       const { context } = await import("./context.js");
+
       const result = context({ app: {} });
 
       expect(result).toEqual({
@@ -140,6 +142,7 @@ describe("context", () => {
   describe("with flash notification", () => {
     test("should include notification from request.app", async () => {
       const { context } = await import("./context.js");
+
       const result = context({
         path: "/",
         app: {

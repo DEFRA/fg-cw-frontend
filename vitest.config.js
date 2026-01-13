@@ -3,7 +3,9 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
   test: {
     dir: "src",
+    clearMocks: true,
     mockReset: true,
+    restoreMocks: true,
     environment: "jsdom",
     env: {
       NODE_OPTIONS: "--disable-warning=ExperimentalWarning",
@@ -20,6 +22,7 @@ export default defineConfig({
     },
     coverage: {
       include: ["src"],
+      exclude: ["*.scss", "*.test.js", "*.svg", "*.njk"],
       provider: "v8",
       reporter: ["text", "json", "html", "lcov"],
       all: true,
