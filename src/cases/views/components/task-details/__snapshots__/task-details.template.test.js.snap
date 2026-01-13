@@ -52,6 +52,13 @@ exports[`task-details > renders 1`] = `
 
   </div>
 </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
+  </div>
+</div>
 "
 `;
 
@@ -78,6 +85,13 @@ exports[`task-details > renders completed task as read-only when case is not int
           <h2 class="govuk-heading-m">Outcome review note</h2>
           <p>Initial review completed</p>
         </div>
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
   </div>
 </div>
 "
@@ -148,6 +162,13 @@ exports[`task-details > renders completed task with editable form when case is i
 
   </div>
 </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
+  </div>
+</div>
 "
 `;
 
@@ -192,6 +213,13 @@ exports[`task-details > renders completed task without form when user lacks perm
   </div>
 </details>
 
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
   </div>
 </div>
 "
@@ -249,6 +277,13 @@ exports[`task-details > renders with interactive form 1`] = `
 
   </div>
 </div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
+  </div>
+</div>
 "
 `;
 
@@ -264,6 +299,105 @@ exports[`task-details > renders with non-interactive form 1`] = `
 
 
 
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+    
+  </div>
+</div>
+"
+`;
+
+exports[`task-details > renders with notes history table when task has notesHistory 1`] = `
+"<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    
+    
+    
+  <h2 class="govuk-heading-l ">
+    Test Task
+  </h2>
+
+
+
+
+        <form
+  class="task-outcome-form"
+  method="post"
+  id="completeTaskForm"
+  action=""
+>
+    <div class="govuk-form-group">
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
+    </div>
+  </div>
+</div>
+
+
+  <button
+    type="submit"
+    data-prevent-double-click="true"
+    data-testid="save-and-continue-button"
+    class="govuk-button task-outcome-form__button"
+    data-module="govuk-button"
+    data-govuk-button-init=""
+  >
+    Confirm
+  </button>
+  <a
+    href="/cases/case-id"
+    class="govuk-link govuk-!-font-size-16"
+    data-testid="back-link"
+  >
+    Cancel and return
+  </a>
+</form>
+
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    
+      <div class="notes-history-table govuk-!-margin-top-8">
+    <h2 class="govuk-heading-m">Outcome history</h2>
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="descending">Date</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="ascending">Outcome</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-25">25 Sep 2025</td>
+      <td class="govuk-table__cell">Accepted</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Approved after review</td>
+      <td class="govuk-table__cell">A Jones</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-20">20 Sep 2025</td>
+      <td class="govuk-table__cell">Request information from customer</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Waiting for customer to provide updated bank details</td>
+      <td class="govuk-table__cell">B Smith</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
 
   </div>
 </div>
