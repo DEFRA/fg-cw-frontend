@@ -6,6 +6,7 @@
 {% from "govuk/components/details/macro.njk" import govukDetails %}
 {% from "components/dynamic-content/macro.njk" import dynamicContent %}
 {% from "../task-outcome-form/macro.njk" import taskOutcomeForm %}
+{% from "../notes-history-table/macro.njk" import notesHistoryTable %}
 
 {%- set errorList = params.errorList -%}
 {%- set caseId = params.caseId -%}
@@ -131,5 +132,12 @@
         })
       }}
     {% endif %}
+  </div>
+</div>
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    {# Display notes history table if there are notes #}
+    {{ notesHistoryTable({ notesHistory: currentTask.notesHistory }) }}
   </div>
 </div>
