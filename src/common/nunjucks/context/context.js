@@ -1,9 +1,8 @@
-import { readFileSync } from "node:fs";
 import path from "node:path";
-
 import { config } from "../../config.js";
 import { logger } from "../../logger.js";
 import { buildNavigation } from "./build-navigation.js";
+import { readFileSync } from "./helpers/readFile.js";
 
 const assetPath = config.get("assetPath");
 const manifestPath = path.join(
