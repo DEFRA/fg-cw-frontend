@@ -15,6 +15,15 @@ export const findAll = async (
   return payload;
 };
 
+export const findById = async (authContext, id) => {
+  const { payload } = await wreck.get(`/users/${id}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+  return payload;
+};
+
 const createQuery = ({ idpId, allAppRoles, anyAppRoles }) => {
   const query = new URLSearchParams();
 

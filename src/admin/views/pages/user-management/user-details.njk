@@ -1,0 +1,62 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block contentHeader %}
+  {% if breadcrumbs and breadcrumbs.length > 0 %}
+    {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+  {% endif %}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">User details</h1>
+
+      {{ govukSummaryList(data.summary) }}
+
+      <h2 class="govuk-heading-m">IDP Roles</h2>
+      {% if data.idpRoles.length %}
+        <div class="govuk-button-group tag-button-group">
+          {% for role in data.idpRoles %}
+            {{
+              govukTag({
+                text: role,
+                classes: "govuk-tag--grey tag-no-wrap"
+              })
+            }}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="govuk-body">No IDP roles have been allocated to this user</p>
+      {% endif %}
+
+      <h2 class="govuk-heading-m govuk-!-margin-top-8">App Roles</h2>
+      {% if data.appRoles.length %}
+        <div class="govuk-button-group tag-button-group">
+          {% for role in data.appRoles %}
+            {{
+              govukTag({
+                text: role,
+                classes: "govuk-tag--blue tag-no-wrap"
+              })
+            }}
+          {% endfor %}
+        </div>
+      {% else %}
+        <p class="govuk-body">No App Roles have been allocated to this user</p>
+      {% endif %}
+
+      <div class="govuk-button-group govuk-!-margin-top-8">
+        {{
+          govukButton({
+            text: "Edit roles",
+            href: data.editRolesHref
+          })
+        }}
+      </div>
+    </div>
+  </div>
+{% endblock %}

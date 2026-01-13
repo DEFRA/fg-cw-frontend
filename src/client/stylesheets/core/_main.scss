@@ -1,1 +1,15 @@
 @use "govuk-frontend" as *;
+
+.tag-no-wrap {
+  white-space: nowrap;
+  display: inline-block;
+  width: max-content;
+  max-width: none;
+  flex: none;
+}
+
+.tag-button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: govuk-spacing(2);
+}
