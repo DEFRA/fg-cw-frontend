@@ -1,0 +1,137 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`notes-history-table > formats dates correctly with short month format 1`] = `
+"  <div class="notes-history-table govuk-!-margin-top-8">
+    <h2 class="govuk-heading-m">Outcome history</h2>
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="descending">Date</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="ascending">Outcome</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-01">1 Sep 2025</td>
+      <td class="govuk-table__cell">Accepted</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">First day test</td>
+      <td class="govuk-table__cell">Test User</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-02">2 Sep 2025</td>
+      <td class="govuk-table__cell">Rejected</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Second day test</td>
+      <td class="govuk-table__cell">Test User</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-03">3 Sep 2025</td>
+      <td class="govuk-table__cell">Pending</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Third day test</td>
+      <td class="govuk-table__cell">Test User</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-21">21 Sep 2025</td>
+      <td class="govuk-table__cell">Approved</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Twenty-first day test</td>
+      <td class="govuk-table__cell">Test User</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+"
+`;
+
+exports[`notes-history-table > handles null values in note fields 1`] = `
+"  <div class="notes-history-table govuk-!-margin-top-8">
+    <h2 class="govuk-heading-m">Outcome history</h2>
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="descending">Date</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="ascending">Outcome</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-25">25 Sep 2025</td>
+      <td class="govuk-table__cell"></td>
+      <td class="govuk-table__cell govuk-!-width-one-half"></td>
+      <td class="govuk-table__cell"></td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+"
+`;
+
+exports[`notes-history-table > renders single note correctly 1`] = `
+"  <div class="notes-history-table govuk-!-margin-top-8">
+    <h2 class="govuk-heading-m">Outcome history</h2>
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="descending">Date</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="ascending">Outcome</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-25">25 Sep 2025</td>
+      <td class="govuk-table__cell">Accepted</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Approved after review</td>
+      <td class="govuk-table__cell">A Jones</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+"
+`;
+
+exports[`notes-history-table > renders table with notes history 1`] = `
+"  <div class="notes-history-table govuk-!-margin-top-8">
+    <h2 class="govuk-heading-m">Outcome history</h2>
+
+
+    <table class="govuk-table" data-module="moj-sortable-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="descending">Date</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-quarter" aria-sort="ascending">Outcome</th>
+      <th scope="col" class="govuk-table__header govuk-!-width-one-half">Note</th>
+      <th scope="col" class="govuk-table__header" aria-sort="ascending">Added by</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-25">25 Sep 2025</td>
+      <td class="govuk-table__cell">Accepted</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">request</td>
+      <td class="govuk-table__cell">A Jones</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell" data-sort-value="2025-09-20">20 Sep 2025</td>
+      <td class="govuk-table__cell">Request information from customer</td>
+      <td class="govuk-table__cell govuk-!-width-one-half">Waiting for customer to provide updated bank details</td>
+      <td class="govuk-table__cell">B Smith</td>
+    </tr>
+  </tbody>
+</table>
+
+  </div>
+"
+`;

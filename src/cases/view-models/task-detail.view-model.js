@@ -142,6 +142,7 @@ const buildCurrentTaskData = ({
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
     updatedAt: currentTask.updatedAt,
+    notesHistory: currentTask.notesHistory ?? [],
   };
 };
 

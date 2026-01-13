@@ -151,4 +151,64 @@ describe("task-details", () => {
     expect(component).toContain("Who can edit the task");
     expect(component).not.toContain("Confirm");
   });
+
+  test("renders with notes history table when task has notesHistory", () => {
+    const component = render("task-details", {
+      caseId: "case-id",
+      phaseCode: "phase-1",
+      stageCode: "strage-id",
+      taskGroupCode: "task-group-code",
+      taskCode: "task-id",
+      isInteractive: true,
+      currentTask: {
+        code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
+        name: "Test Task",
+        type: "boolean",
+        canComplete: true,
+        notesHistory: [
+          {
+            date: "2025-09-25T14:30:00.000Z",
+            outcome: "Accepted",
+            note: "Approved after review",
+            addedBy: "A Jones",
+          },
+          {
+            date: "2025-09-20T10:15:00.000Z",
+            outcome: "Request information from customer",
+            note: "Waiting for customer to provide updated bank details",
+            addedBy: "B Smith",
+          },
+        ],
+      },
+    });
+
+    expect(component).toMatchSnapshot();
+    expect(component).toContain("Outcome history");
+    expect(component).toContain("25 Sep 2025");
+    expect(component).toContain("Accepted");
+    expect(component).toContain("Approved after review");
+    expect(component).toContain("A Jones");
+  });
+
+  test("does not render notes history table when notesHistory is empty", () => {
+    const component = render("task-details", {
+      caseId: "case-id",
+      phaseCode: "phase-1",
+      stageCode: "strage-id",
+      taskGroupCode: "task-group-code",
+      taskCode: "task-id",
+      isInteractive: true,
+      currentTask: {
+        code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
+        name: "Test Task",
+        type: "boolean",
+        canComplete: true,
+        notesHistory: [],
+      },
+    });
+
+    expect(component).not.toContain("Outcome history");
+  });
 });
