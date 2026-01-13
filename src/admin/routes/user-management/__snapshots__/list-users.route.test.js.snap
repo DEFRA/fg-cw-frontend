@@ -7,15 +7,7 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
 
 
 
-  <div class="govuk-grid-row app-heading" data-testid="app-heading">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
-      Users
-    </h1>
-
-  </div>
-</div>
-
+  <h1 class="govuk-heading-l">Users</h1>
 
 
 
@@ -49,15 +41,7 @@ exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 
 
 
-  <div class="govuk-grid-row app-heading" data-testid="app-heading">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
-      Users
-    </h1>
-
-  </div>
-</div>
-
+  <h1 class="govuk-heading-l">Users</h1>
 
     <p class="govuk-body">There are no users.</p>
         "
@@ -70,15 +54,7 @@ exports[`listUsersRoute > renders users page 1`] = `
 
 
 
-  <div class="govuk-grid-row app-heading" data-testid="app-heading">
-  <div class="govuk-grid-column-two-thirds">
-    <h1 class="govuk-heading-xl govuk-!-margin-bottom-2" data-testid="app-heading-title">
-      Users
-    </h1>
-
-  </div>
-</div>
-
+  <h1 class="govuk-heading-l">Users</h1>
 
 
 
