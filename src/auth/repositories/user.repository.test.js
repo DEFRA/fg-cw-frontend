@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { create, findAll, update } from "./user.repository.js";
+import { create, findAll, findById, update } from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -130,6 +130,32 @@ describe("findAll", () => {
         appRoles: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_REVIEWER"],
       },
     ]);
+  });
+});
+
+describe("findById", () => {
+  const authContext = { token: "mock-token" };
+
+  it("finds user by id", async () => {
+    wreck.get.mockResolvedValue({
+      payload: {
+        id: "user-123",
+        name: "Test User",
+      },
+    });
+
+    const user = await findById(authContext, "user-123");
+
+    expect(wreck.get).toHaveBeenCalledWith("/users/user-123", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+    });
+
+    expect(user).toEqual({
+      id: "user-123",
+      name: "Test User",
+    });
   });
 });
 
