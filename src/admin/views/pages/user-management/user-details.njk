@@ -5,9 +5,7 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block contentHeader %}
-  {% if breadcrumbs and breadcrumbs.length > 0 %}
-    {{ govukBreadcrumbs({ items: breadcrumbs }) }}
-  {% endif %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
 {% endblock %}
 
 {% block contentMain %}
@@ -17,14 +15,14 @@
 
       {{ govukSummaryList(data.summary) }}
 
-      <h2 class="govuk-heading-m">IDP Roles</h2>
+      <h2 class="govuk-heading-m">IDP roles</h2>
       {% if data.idpRoles.length %}
         <div class="govuk-button-group tag-button-group">
           {% for role in data.idpRoles %}
             {{
               govukTag({
                 text: role,
-                classes: "govuk-tag--grey tag-no-wrap"
+                classes: "govuk-tag--green tag-no-wrap"
               })
             }}
           {% endfor %}
@@ -33,14 +31,14 @@
         <p class="govuk-body">No IDP roles have been allocated to this user</p>
       {% endif %}
 
-      <h2 class="govuk-heading-m govuk-!-margin-top-8">App Roles</h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-8">App roles</h2>
       {% if data.appRoles.length %}
         <div class="govuk-button-group tag-button-group">
           {% for role in data.appRoles %}
             {{
               govukTag({
                 text: role,
-                classes: "govuk-tag--blue tag-no-wrap"
+                classes: "govuk-tag--green tag-no-wrap"
               })
             }}
           {% endfor %}
@@ -49,14 +47,16 @@
         <p class="govuk-body">No App Roles have been allocated to this user</p>
       {% endif %}
 
-      <div class="govuk-button-group govuk-!-margin-top-8">
-        {{
-          govukButton({
-            text: "Edit roles",
-            href: data.editRolesHref
-          })
-        }}
-      </div>
+      {% if data.showEditRoles %}
+        <div class="govuk-button-group govuk-!-margin-top-8">
+          {{
+            govukButton({
+              text: "Edit roles",
+              href: data.editRolesHref
+            })
+          }}
+        </div>
+      {% endif %}
     </div>
   </div>
 {% endblock %}

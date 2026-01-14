@@ -2,7 +2,7 @@
 
 exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = `
 "
-    <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
@@ -47,17 +47,17 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
   </div>
 </dl>
 
-      <h2 class="govuk-heading-m">IDP Roles</h2>
+      <h2 class="govuk-heading-m">IDP roles</h2>
         <p class="govuk-body">No IDP roles have been allocated to this user</p>
 
-      <h2 class="govuk-heading-m govuk-!-margin-top-8">App Roles</h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-8">App roles</h2>
         <p class="govuk-body">No App Roles have been allocated to this user</p>
 
-      <div class="govuk-button-group govuk-!-margin-top-8">
-        <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+        <div class="govuk-button-group govuk-!-margin-top-8">
+          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
   Edit roles
 </a>
-      </div>
+        </div>
     </div>
   </div>
         "
@@ -65,7 +65,7 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
 
 exports[`viewUserRoute > renders user details page 1`] = `
 "
-    <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
@@ -105,36 +105,36 @@ exports[`viewUserRoute > renders user details page 1`] = `
       Last login
     </dt>
     <dd class="govuk-summary-list__value">
-      14 Dec 2025 20:03
+      14 December 2025 20:03
     </dd>
   </div>
 </dl>
 
-      <h2 class="govuk-heading-m">IDP Roles</h2>
+      <h2 class="govuk-heading-m">IDP roles</h2>
         <div class="govuk-button-group tag-button-group">
-            <strong class="govuk-tag govuk-tag--grey tag-no-wrap">
-  IDP_ROLE
+            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
+  FCP.Casework.Read
 </strong>
 
         </div>
 
-      <h2 class="govuk-heading-m govuk-!-margin-top-8">App Roles</h2>
+      <h2 class="govuk-heading-m govuk-!-margin-top-8">App roles</h2>
         <div class="govuk-button-group tag-button-group">
-            <strong class="govuk-tag govuk-tag--blue tag-no-wrap">
+            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
   ROLE_RPA_CASES_APPROVE
 </strong>
 
-            <strong class="govuk-tag govuk-tag--blue tag-no-wrap">
+            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
   ROLE_RPA_CASES_CREATE
 </strong>
 
         </div>
 
-      <div class="govuk-button-group govuk-!-margin-top-8">
-        <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+        <div class="govuk-button-group govuk-!-margin-top-8">
+          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
   Edit roles
 </a>
-      </div>
+        </div>
     </div>
   </div>
         "

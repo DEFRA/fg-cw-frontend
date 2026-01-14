@@ -29,7 +29,7 @@ describe("viewUserRoute", () => {
       name: "Martin Smith",
       email: "martin@ee.com",
       updatedAt: "2025-12-14T20:03:00.000Z",
-      idpRoles: ["IDP_ROLE"],
+      idpRoles: ["IDP_ROLE", "FCP.Casework.Read"],
       appRoles: {
         ROLE_RPA_CASES_APPROVE: {
           startDate: "2025-07-01",
@@ -57,6 +57,40 @@ describe("viewUserRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+  });
+
+  it("hides edit roles button when viewing own user", async () => {
+    findUserByIdUseCase.mockResolvedValue({
+      id: "admin-user",
+      name: "Martin Smith",
+      email: "martin@ee.com",
+      updatedAt: "2025-12-14T20:03:00.000Z",
+      idpRoles: ["IDP_ROLE"],
+      appRoles: {
+        ROLE_RPA_CASES_APPROVE: {
+          startDate: "2025-07-01",
+          endDate: "2025-08-02",
+        },
+      },
+    });
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/admin/user-management/admin-user",
+      auth: {
+        credentials: { token: "mock-token", user: { id: "admin-user" } },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+
+    expect($("a[href='/admin/user-management/admin-user/roles']").length).toBe(
+      0,
+    );
+    expect($("a.govuk-button").text()).not.toContain("Edit roles");
   });
 
   it("renders no roles messages when roles are missing", async () => {

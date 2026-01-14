@@ -15,7 +15,7 @@ export const viewUserRoute = {
     };
 
     const user = await findUserByIdUseCase(authContext, id);
-    const viewModel = createUserDetailsViewModel(user);
+    const viewModel = createUserDetailsViewModel(user, authContext.user);
 
     logger.info(`Finished: Viewing User details ${id}`);
 

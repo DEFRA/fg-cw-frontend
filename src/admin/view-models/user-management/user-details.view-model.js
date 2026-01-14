@@ -1,9 +1,12 @@
 import {
-  DATE_FORMAT_SHORT_MONTH_DATETIME,
+  DATE_FORMAT_FULL_DATETIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
-export const createUserDetailsViewModel = (user) => {
+export const createUserDetailsViewModel = (user, currentUser) => {
+  const idpRoles = mapIdpRoles(user.idpRoles);
+  const appRoles = Object.keys(user.appRoles || {});
+
   return {
     pageTitle: "User details",
     breadcrumbs: [
@@ -25,16 +28,38 @@ export const createUserDetailsViewModel = (user) => {
           {
             key: { text: "Last login" },
             value: {
-              text: user.updatedAt
-                ? formatDate(user.updatedAt, DATE_FORMAT_SHORT_MONTH_DATETIME)
-                : "",
+              text: formatLastLogin(user.updatedAt),
             },
           },
         ],
       },
-      idpRoles: user.idpRoles || [],
-      appRoles: Object.keys(user.appRoles || {}),
+      idpRoles,
+      appRoles,
+      showEditRoles: canEditRoles(user.id, currentUser),
       editRolesHref: `/admin/user-management/${user.id}/roles`,
     },
   };
+};
+
+const mapIdpRoles = (idpRoles) =>
+  idpRoles ? idpRoles.filter((role) => role.startsWith("FCP.Casework.")) : [];
+
+const canEditRoles = (userId, currentUser) => {
+  if (!currentUser) {
+    return true;
+  }
+
+  if (!currentUser.id) {
+    return true;
+  }
+
+  return currentUser.id !== userId;
+};
+
+const formatLastLogin = (updatedAt) => {
+  if (!updatedAt) {
+    return "";
+  }
+
+  return formatDate(updatedAt, DATE_FORMAT_FULL_DATETIME);
 };
