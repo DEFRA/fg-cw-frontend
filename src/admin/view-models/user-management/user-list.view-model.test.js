@@ -37,4 +37,28 @@ describe("createUserListViewModel", () => {
 
     expect(viewModel.data.users.rows[0].lastLogin).toEqual("");
   });
+
+  it("uses blank lastLogin when updatedAt is null", () => {
+    const viewModel = createUserListViewModel([
+      { id: "1", name: "Alice Able", updatedAt: null },
+    ]);
+
+    expect(viewModel.data.users.rows[0].lastLogin).toEqual("");
+  });
+
+  it("returns an empty table when users is not an array", () => {
+    const viewModel = createUserListViewModel(null);
+
+    expect(viewModel.data.users.rows).toEqual([]);
+  });
+
+  it("builds view link hrefs from user id", () => {
+    const viewModel = createUserListViewModel([
+      { id: "user-123", name: "Alice Able" },
+    ]);
+
+    expect(viewModel.data.users.rows[0].viewHref).toEqual(
+      "/admin/user-management/user-123",
+    );
+  });
 });

@@ -102,6 +102,27 @@ describe("listUsersRoute", () => {
     expect(view).toMatchSnapshot();
   });
 
+  it("passes auth context to findAllUsersUseCase", async () => {
+    findAllUsersUseCase.mockResolvedValue([]);
+
+    await server.inject({
+      method: "GET",
+      url: "/admin/user-management",
+      auth: {
+        credentials: { token: "mock-token", user: { id: "user-123" } },
+        strategy: "session",
+      },
+    });
+
+    expect(findAllUsersUseCase).toHaveBeenCalledWith(
+      {
+        token: "mock-token",
+        user: { id: "user-123" },
+      },
+      {},
+    );
+  });
+
   it("returns 403 when backend forbids listing users", async () => {
     findAllUsersUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
 
