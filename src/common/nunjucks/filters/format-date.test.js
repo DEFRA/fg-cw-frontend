@@ -2,6 +2,14 @@ import { describe, expect, it } from "vitest";
 import { DATE_FORMAT_SHORT_MONTH, formatDate } from "./format-date.js";
 
 describe("formatDate", () => {
+  it("should return an empty string for null", () => {
+    expect(formatDate(null)).toBe("");
+  });
+
+  it("should return an empty string for undefined", () => {
+    expect(formatDate(undefined)).toBe("");
+  });
+
   it("should correctly format a Date object with the default format", () => {
     const date = new Date(2023, 10, 15); // Month is 0-based, so 10 = November
     const result = formatDate(date);
@@ -9,7 +17,8 @@ describe("formatDate", () => {
   });
 
   it("should correctly format an ISO date string with the default format", () => {
-    const isoDate = "2023-11-15T00:00:00.000Z";
+    // Use date-only ISO string to avoid timezone-dependent results.
+    const isoDate = "2023-11-15";
     const result = formatDate(isoDate);
     expect(result).toBe("Wed 15th November 2023");
   });
@@ -22,7 +31,8 @@ describe("formatDate", () => {
   });
 
   it("should correctly format an ISO string with a custom format", () => {
-    const isoDate = "2023-11-15T00:00:00.000Z";
+    // Use date-only ISO string to avoid timezone-dependent results.
+    const isoDate = "2023-11-15";
     const customFormat = "MMMM do, yyyy";
     const result = formatDate(isoDate, customFormat);
     expect(result).toBe("November 15th, 2023");
