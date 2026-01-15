@@ -28,7 +28,7 @@ export const createUserDetailsViewModel = (user, currentUser) => {
           {
             key: { text: "Last login" },
             value: {
-              text: formatLastLogin(user.updatedAt),
+              text: formatDate(user.updatedAt, DATE_FORMAT_FULL_DATETIME),
             },
           },
         ],
@@ -54,12 +54,4 @@ const canEditRoles = (userId, currentUser) => {
   }
 
   return currentUser.id !== userId;
-};
-
-const formatLastLogin = (updatedAt) => {
-  if (!updatedAt) {
-    return "";
-  }
-
-  return formatDate(updatedAt, DATE_FORMAT_FULL_DATETIME);
 };

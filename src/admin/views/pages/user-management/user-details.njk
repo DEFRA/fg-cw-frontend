@@ -19,12 +19,7 @@
       {% if data.idpRoles.length %}
         <div class="govuk-button-group tag-button-group">
           {% for role in data.idpRoles %}
-            {{
-              govukTag({
-                text: role,
-                classes: "govuk-tag--green tag-no-wrap"
-              })
-            }}
+            {{ govukTag({ text: role, classes: "govuk-tag--green tag-no-wrap" }) }}
           {% endfor %}
         </div>
       {% else %}
@@ -35,12 +30,7 @@
       {% if data.appRoles.length %}
         <div class="govuk-button-group tag-button-group">
           {% for role in data.appRoles %}
-            {{
-              govukTag({
-                text: role,
-                classes: "govuk-tag--green tag-no-wrap"
-              })
-            }}
+            {{ govukTag({ text: role, classes: "govuk-tag--green tag-no-wrap" }) }}
           {% endfor %}
         </div>
       {% else %}
@@ -49,12 +39,7 @@
 
       {% if data.showEditRoles %}
         <div class="govuk-button-group govuk-!-margin-top-8">
-          {{
-            govukButton({
-              text: "Edit roles",
-              href: data.editRolesHref
-            })
-          }}
+          {{ govukButton({ text: "Edit roles", href: data.editRolesHref }) }}
         </div>
       {% endif %}
     </div>
