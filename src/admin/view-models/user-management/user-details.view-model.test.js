@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  DATE_FORMAT_FULL_DATETIME,
+  DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 import { createUserDetailsViewModel } from "./user-details.view-model.js";
@@ -53,7 +53,7 @@ describe("createUserDetailsViewModel", () => {
     );
 
     expect(viewModel.data.summary.rows[2].value.text).toEqual(
-      formatDate(updatedAt, DATE_FORMAT_FULL_DATETIME),
+      formatDate(updatedAt, DATE_FORMAT_FULL_DATE_TIME),
     );
   });
 

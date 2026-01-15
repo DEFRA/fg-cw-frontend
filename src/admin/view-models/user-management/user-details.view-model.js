@@ -1,5 +1,5 @@
 import {
-  DATE_FORMAT_FULL_DATETIME,
+  DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
@@ -28,7 +28,7 @@ export const createUserDetailsViewModel = (user, currentUser) => {
           {
             key: { text: "Last login" },
             value: {
-              text: formatDate(user.updatedAt, DATE_FORMAT_FULL_DATETIME),
+              text: formatDate(user.updatedAt, DATE_FORMAT_FULL_DATE_TIME),
             },
           },
         ],
