@@ -45,12 +45,8 @@ const mapIdpRoles = (idpRoles) =>
   idpRoles ? idpRoles.filter((role) => role.startsWith("FCP.Casework.")) : [];
 
 const canEditRoles = (userId, currentUser) => {
-  if (!currentUser) {
-    return true;
-  }
-
-  if (!currentUser.id) {
-    return true;
+  if (!currentUser || !currentUser.id) {
+    throw new Error("currentUser is required");
   }
 
   return currentUser.id !== userId;

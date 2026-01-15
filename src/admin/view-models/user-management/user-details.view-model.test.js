@@ -37,6 +37,21 @@ describe("createUserDetailsViewModel", () => {
     expect(viewModel.data.idpRoles).toEqual([]);
   });
 
+  it("uses empty app roles when missing", () => {
+    const viewModel = createUserDetailsViewModel(
+      {
+        id: "user-123",
+        name: "Test User",
+        email: "test@example.com",
+        updatedAt: null,
+        idpRoles: [],
+      },
+      { id: "someone-else" },
+    );
+
+    expect(viewModel.data.appRoles).toEqual([]);
+  });
+
   it("formats last login when updatedAt is present", () => {
     const updatedAt = "2026-01-13T16:06:00.000Z";
 
@@ -102,5 +117,59 @@ describe("createUserDetailsViewModel", () => {
     );
 
     expect(viewModel.data.showEditRoles).toEqual(true);
+  });
+
+  it("throws when currentUser is missing", () => {
+    expect(() =>
+      createUserDetailsViewModel(
+        {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {},
+        },
+        undefined,
+      ),
+    ).toThrow("currentUser is required");
+  });
+
+  it("throws when currentUser has no id", () => {
+    expect(() =>
+      createUserDetailsViewModel(
+        {
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {},
+        },
+        {},
+      ),
+    ).toThrow("currentUser is required");
+  });
+
+  it("exposes app role keys and builds the edit roles href", () => {
+    const viewModel = createUserDetailsViewModel(
+      {
+        id: "user-123",
+        name: "Test User",
+        email: "test@example.com",
+        updatedAt: null,
+        idpRoles: [],
+        appRoles: {
+          "Role.A": {},
+          "Role.B": {},
+        },
+      },
+      { id: "admin-user" },
+    );
+
+    expect(viewModel.data.appRoles).toEqual(["Role.A", "Role.B"]);
+    expect(viewModel.data.editRolesHref).toEqual(
+      "/admin/user-management/user-123/roles",
+    );
   });
 });
