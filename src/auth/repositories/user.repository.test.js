@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { create, findAll, update } from "./user.repository.js";
+import { create, findAll, update, updateLastLogin } from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -194,5 +194,39 @@ describe("update", () => {
     });
 
     expect(user).toEqual(updatedUserData);
+  });
+});
+
+describe("updateLastLogin", () => {
+  const authContext = { token: "mock-token" };
+
+  it("updates user last login timestamp", async () => {
+    const userId = "69691417bd385df3ac6aa25f";
+
+    const responseUser = {
+      id: userId,
+      idpId: "12345678-1234-1234-1234-123456789012",
+      email: "john.doe@defra.gov.uk",
+      name: "John Doe",
+      idpRoles: ["FCP.Casework.ReadWrite"],
+      appRoles: {},
+      createdAt: "2026-01-15T16:21:43.468Z",
+      updatedAt: "2026-01-15T16:22:26.942Z",
+      lastLoginAt: "2026-01-15T16:22:26.942Z",
+    };
+
+    wreck.post.mockResolvedValue({
+      payload: responseUser,
+    });
+
+    const user = await updateLastLogin(authContext, userId);
+
+    expect(wreck.post).toHaveBeenCalledWith(`/users/${userId}/login`, {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+    });
+
+    expect(user).toEqual(responseUser);
   });
 });

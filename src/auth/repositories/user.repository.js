@@ -54,3 +54,13 @@ export const update = async (authContext, id, userData) => {
 
   return payload;
 };
+
+export const updateLastLogin = async (authContext, id) => {
+  const { payload } = await wreck.post(`/users/${id}/login`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+
+  return payload;
+};

@@ -2,6 +2,7 @@ import Bell from "@hapi/bell";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../server/index.js";
 import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
+import { updateLoginUseCase } from "../use-cases/update-login.use-case.js";
 import { loginCallbackRoute } from "./login-callback.route.js";
 
 const createToken = (data) => {
@@ -27,6 +28,7 @@ const createToken = (data) => {
 };
 
 vi.mock("../use-cases/create-or-update-user.use-case.js");
+vi.mock("../use-cases/update-login.use-case.js");
 
 describe("loginCallbackRoute", () => {
   let server;
@@ -42,7 +44,7 @@ describe("loginCallbackRoute", () => {
     Bell.simulate(false);
   });
 
-  it("creates or updates the user's account when authenticated and has IDP roles", async () => {
+  it("creates or updates user and updates login timestamp when authenticated and has IDP roles", async () => {
     await server.initialize();
 
     const credentials = {
@@ -58,6 +60,16 @@ describe("loginCallbackRoute", () => {
       },
     };
 
+    const user = {
+      id: "123",
+      idpId: "12345678-1234-1234-1234-123456789012",
+      name: "Bob Bill",
+      email: "bob.bill.defra.gov.uk",
+    };
+
+    createOrUpdateUserUseCase.mockResolvedValue(user);
+    updateLoginUseCase.mockResolvedValue();
+
     await server.inject({
       method: "GET",
       url: "/login/callback",
@@ -68,6 +80,11 @@ describe("loginCallbackRoute", () => {
     });
 
     expect(createOrUpdateUserUseCase).toHaveBeenCalledWith({
+      token: credentials.token,
+      profile: credentials.profile,
+    });
+
+    expect(updateLoginUseCase).toHaveBeenCalledWith({
       token: credentials.token,
       profile: credentials.profile,
     });
@@ -93,6 +110,7 @@ describe("loginCallbackRoute", () => {
     };
 
     createOrUpdateUserUseCase.mockResolvedValue(user);
+    updateLoginUseCase.mockResolvedValue();
 
     const response = await server.inject({
       method: "GET",
@@ -150,6 +168,7 @@ describe("loginCallbackRoute", () => {
     };
 
     createOrUpdateUserUseCase.mockResolvedValue(user);
+    updateLoginUseCase.mockResolvedValue();
 
     const { statusCode, headers } = await server.inject({
       method: "GET",
@@ -188,6 +207,7 @@ describe("loginCallbackRoute", () => {
     };
 
     createOrUpdateUserUseCase.mockResolvedValue(user);
+    updateLoginUseCase.mockResolvedValue();
 
     const { statusCode, headers } = await server.inject({
       method: "GET",
