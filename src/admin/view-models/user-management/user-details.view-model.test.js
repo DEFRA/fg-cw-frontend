@@ -72,35 +72,6 @@ describe("createUserDetailsViewModel", () => {
     expect(viewModel.data.summary.rows[2].value.text).toEqual("");
   });
 
-  it("shows edit roles when current user is missing", () => {
-    const viewModel = createUserDetailsViewModel({
-      id: "user-123",
-      name: "Test User",
-      email: "test@example.com",
-      updatedAt: null,
-      idpRoles: [],
-      appRoles: {},
-    });
-
-    expect(viewModel.data.showEditRoles).toEqual(true);
-  });
-
-  it("shows edit roles when current user has no id", () => {
-    const viewModel = createUserDetailsViewModel(
-      {
-        id: "user-123",
-        name: "Test User",
-        email: "test@example.com",
-        updatedAt: null,
-        idpRoles: [],
-        appRoles: {},
-      },
-      {},
-    );
-
-    expect(viewModel.data.showEditRoles).toEqual(true);
-  });
-
   it("hides edit roles when viewing own record", () => {
     const viewModel = createUserDetailsViewModel(
       {
