@@ -1,5 +1,4 @@
 import { format, isDate, parseISO } from "date-fns";
-import { isNil } from "lodash";
 
 export const DATE_FORMAT_SHORT_MONTH = "d MMM yyyy";
 export const DATE_FORMAT_SHORT_DATE_TIME = `${DATE_FORMAT_SHORT_MONTH} HH:mm`;
@@ -13,3 +12,5 @@ export const formatDate = (value, formattedDateStr = "EEE do MMMM yyyy") => {
   const date = isDate(value) ? value : parseISO(value);
   return format(date, formattedDateStr);
 };
+
+const isNil = (value) => value === null || value === undefined;
