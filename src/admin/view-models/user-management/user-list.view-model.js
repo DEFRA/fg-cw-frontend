@@ -1,5 +1,5 @@
 import {
-  DATE_FORMAT_SHORT_MONTH,
+  DATE_FORMAT_SHORT_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 
@@ -20,21 +20,15 @@ export const createUserListViewModel = (users) => {
         ],
         rows: sortedUsers.map(({ id, name, email, updatedAt }) => ({
           id,
-          name: defaultToEmptyString(name),
-          email: defaultToEmptyString(email),
-          lastLogin: mapLastLogin(updatedAt),
+          name,
+          email,
+          lastLogin: formatDate(updatedAt, DATE_FORMAT_SHORT_DATE_TIME),
           viewHref: `/admin/user-management/${id}`,
         })),
       },
     },
   };
 };
-
-const defaultToEmptyString = (value) =>
-  typeof value === "string" ? value : "";
-
-const mapLastLogin = (updatedAt) =>
-  updatedAt ? formatDate(updatedAt, `${DATE_FORMAT_SHORT_MONTH} HH:mm`) : "";
 
 const byName = ({ name: a }, { name: b }) =>
   a.localeCompare(b, "en", { sensitivity: "base" });

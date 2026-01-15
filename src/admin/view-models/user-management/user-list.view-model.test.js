@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
-  DATE_FORMAT_SHORT_MONTH,
+  DATE_FORMAT_SHORT_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
 import { createUserListViewModel } from "./user-list.view-model.js";
@@ -18,7 +18,7 @@ describe("createUserListViewModel", () => {
     ]);
   });
 
-  it("formats lastLogin as date and time", () => {
+  it("formats lastLogin as short date and time", () => {
     const updatedAt = "2025-01-01T14:05:00.000Z";
 
     const viewModel = createUserListViewModel([
@@ -26,7 +26,7 @@ describe("createUserListViewModel", () => {
     ]);
 
     expect(viewModel.data.users.rows[0].lastLogin).toEqual(
-      formatDate(updatedAt, `${DATE_FORMAT_SHORT_MONTH} HH:mm`),
+      formatDate(updatedAt, DATE_FORMAT_SHORT_DATE_TIME),
     );
   });
 
