@@ -1,7 +1,6 @@
 import Boom from "@hapi/boom";
 import { logger } from "../../common/logger.js";
-import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
-import { updateLoginUseCase } from "../use-cases/update-login.use-case.js";
+import { loginUserUseCase } from "../use-cases/login-user.use-case.js";
 
 export const loginCallbackRoute = {
   method: "GET",
@@ -28,12 +27,8 @@ export const loginCallbackRoute = {
       `Login callback invoked with with IDP id ${authContext.profile.oid}`,
     );
 
-    // First create or update the user (we may receieve a new user role from the IDP, periodically)
-    const user = await createOrUpdateUserUseCase(authContext);
-
-    // Then update the login timestamp once user has been created or updated
-    // note we could do this in the createOrUpdateUserUseCase, but it's more efficient to do it here
-    await updateLoginUseCase(authContext);
+    // Create or update user and record login in a single call
+    const user = await loginUserUseCase(authContext);
 
     request.yar.set("credentials", {
       token: auth.credentials.token,

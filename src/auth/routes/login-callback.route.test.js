@@ -1,8 +1,8 @@
 import Bell from "@hapi/bell";
+import Boom from "@hapi/boom";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../server/index.js";
-import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
-import { updateLoginUseCase } from "../use-cases/update-login.use-case.js";
+import { loginUserUseCase } from "../use-cases/login-user.use-case.js";
 import { loginCallbackRoute } from "./login-callback.route.js";
 
 const createToken = (data) => {
@@ -27,8 +27,7 @@ const createToken = (data) => {
   return `${header}.${payload}.${signature}`;
 };
 
-vi.mock("../use-cases/create-or-update-user.use-case.js");
-vi.mock("../use-cases/update-login.use-case.js");
+vi.mock("../use-cases/login-user.use-case.js");
 
 describe("loginCallbackRoute", () => {
   let server;
@@ -44,7 +43,7 @@ describe("loginCallbackRoute", () => {
     Bell.simulate(false);
   });
 
-  it("creates or updates user and updates login timestamp when authenticated and has IDP roles", async () => {
+  it("creates or updates user and records login when authenticated and has IDP roles", async () => {
     await server.initialize();
 
     const credentials = {
@@ -67,8 +66,7 @@ describe("loginCallbackRoute", () => {
       email: "bob.bill.defra.gov.uk",
     };
 
-    createOrUpdateUserUseCase.mockResolvedValue(user);
-    updateLoginUseCase.mockResolvedValue();
+    loginUserUseCase.mockResolvedValue(user);
 
     await server.inject({
       method: "GET",
@@ -79,12 +77,7 @@ describe("loginCallbackRoute", () => {
       },
     });
 
-    expect(createOrUpdateUserUseCase).toHaveBeenCalledWith({
-      token: credentials.token,
-      profile: credentials.profile,
-    });
-
-    expect(updateLoginUseCase).toHaveBeenCalledWith({
+    expect(loginUserUseCase).toHaveBeenCalledWith({
       token: credentials.token,
       profile: credentials.profile,
     });
@@ -109,8 +102,7 @@ describe("loginCallbackRoute", () => {
       appRoles: ["ROLE_SING_AND_DANCE"],
     };
 
-    createOrUpdateUserUseCase.mockResolvedValue(user);
-    updateLoginUseCase.mockResolvedValue();
+    loginUserUseCase.mockResolvedValue(user);
 
     const response = await server.inject({
       method: "GET",
@@ -167,8 +159,7 @@ describe("loginCallbackRoute", () => {
       appRoles: ["ROLE_SING_AND_DANCE"],
     };
 
-    createOrUpdateUserUseCase.mockResolvedValue(user);
-    updateLoginUseCase.mockResolvedValue();
+    loginUserUseCase.mockResolvedValue(user);
 
     const { statusCode, headers } = await server.inject({
       method: "GET",
@@ -180,7 +171,10 @@ describe("loginCallbackRoute", () => {
             next: "/cases",
           },
           profile: {
+            oid: "12345678-1234-1234-1234-123456789012",
+            name: "Bob Bill",
             email: "bob.bill.defra.gov.uk",
+            roles: ["FCP.Casework.Read"],
           },
         },
         artifacts: {
@@ -206,8 +200,7 @@ describe("loginCallbackRoute", () => {
       appRoles: ["SING_AND_DANCE"],
     };
 
-    createOrUpdateUserUseCase.mockResolvedValue(user);
-    updateLoginUseCase.mockResolvedValue();
+    loginUserUseCase.mockResolvedValue(user);
 
     const { statusCode, headers } = await server.inject({
       method: "GET",
@@ -217,7 +210,10 @@ describe("loginCallbackRoute", () => {
         credentials: {
           query: {},
           profile: {
+            oid: "12345678-1234-1234-1234-123456789012",
+            name: "Bob Bill",
             email: "bob.bill.defra.gov.uk",
+            roles: ["FCP.Casework.Read"],
           },
         },
         artifacts: {
@@ -232,5 +228,33 @@ describe("loginCallbackRoute", () => {
     });
     expect(statusCode).toEqual(302);
     expect(headers.location).toEqual("/");
+  });
+
+  it("throws error when user has no roles", async () => {
+    await server.initialize();
+
+    const error = Boom.badRequest(
+      "User with IDP id '12345678-1234-1234-1234-123456789012' has no 'roles'",
+    );
+    loginUserUseCase.mockRejectedValue(error);
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/login/callback",
+      auth: {
+        strategy: "entra",
+        credentials: {
+          query: {},
+          profile: {
+            oid: "12345678-1234-1234-1234-123456789012",
+            name: "Bob Bill",
+            email: "bob.bill.defra.gov.uk",
+            // no roles
+          },
+        },
+      },
+    });
+
+    expect(statusCode).toEqual(400);
   });
 });
