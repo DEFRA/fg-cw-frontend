@@ -142,7 +142,6 @@ describe("login", () => {
       name: "John Doe",
       email: "john.doe@defra.gov.uk",
       idpRoles: ["FCP.Casework.ReadWrite"],
-      appRoles: {},
     };
 
     const responseUser = {
@@ -173,8 +172,16 @@ describe("login", () => {
     expect(user).toEqual(responseUser);
   });
 
-  it("handles user login with appRoles", async () => {
+  it("receives appRoles from backend even when not sent", async () => {
     const userData = {
+      idpId: "12345678-1234-1234-1234-123456789012",
+      name: "John Doe",
+      email: "john.doe@defra.gov.uk",
+      idpRoles: ["FCP.Casework.ReadWrite"],
+    };
+
+    const responseUser = {
+      id: "69691417bd385df3ac6aa25f",
       idpId: "12345678-1234-1234-1234-123456789012",
       name: "John Doe",
       email: "john.doe@defra.gov.uk",
@@ -186,11 +193,6 @@ describe("login", () => {
           endDate: "2100-01-01",
         },
       },
-    };
-
-    const responseUser = {
-      id: "69691417bd385df3ac6aa25f",
-      ...userData,
       createdAt: "2026-01-15T16:21:43.468Z",
       updatedAt: "2026-01-15T16:22:26.942Z",
       lastLoginAt: "2026-01-15T16:22:26.942Z",
