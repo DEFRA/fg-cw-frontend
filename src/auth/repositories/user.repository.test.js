@@ -1,6 +1,12 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { create, findAll, update } from "./user.repository.js";
+import {
+  create,
+  findAdminUsers,
+  findAll,
+  findAssignees,
+  update,
+} from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -130,6 +136,55 @@ describe("findAll", () => {
         appRoles: ["ROLE_ADMIN", "ROLE_APPROVER", "ROLE_REVIEWER"],
       },
     ]);
+  });
+});
+
+describe("findAdminUsers", () => {
+  const authContext = { token: "mock-token" };
+
+  it("finds admin users by criteria", async () => {
+    const idpId = "testIdpId";
+
+    wreck.get.mockResolvedValue({
+      payload: [{ idpId }],
+    });
+
+    const users = await findAdminUsers(authContext, { idpId });
+
+    expect(wreck.get).toHaveBeenCalledWith(`/admin/users?idpId=${idpId}`, {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+    });
+    expect(users).toEqual([{ idpId }]);
+  });
+});
+
+describe("findAssignees", () => {
+  const authContext = { token: "mock-token" };
+
+  it("finds assignees by role criteria", async () => {
+    const allAppRoles = ["ROLE_ADMIN"];
+    const anyAppRoles = ["ROLE_REVIEWER", "ROLE_APPROVER"];
+
+    wreck.get.mockResolvedValue({
+      payload: [{ id: "user-1", name: "Alice" }],
+    });
+
+    const assignees = await findAssignees(authContext, {
+      allAppRoles,
+      anyAppRoles,
+    });
+
+    expect(wreck.get).toHaveBeenCalledWith(
+      "/users/assignees?allAppRoles=ROLE_ADMIN&anyAppRoles=ROLE_REVIEWER&anyAppRoles=ROLE_APPROVER",
+      {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      },
+    );
+    expect(assignees).toEqual([{ id: "user-1", name: "Alice" }]);
   });
 });
 
