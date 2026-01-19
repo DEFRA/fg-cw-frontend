@@ -24,7 +24,7 @@ export const adminFindById = async (authContext, id) => {
   return payload;
 };
 
-export const findAdminUsers = async (
+export const adminFindUsers = async (
   authContext,
   { idpId, allAppRoles = [], anyAppRoles = [] },
 ) => {

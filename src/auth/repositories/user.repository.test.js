@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
 import {
-  findAdminUsers,
+  adminFindUsers,
   findAll,
   findAssignees,
   login,
@@ -142,7 +142,7 @@ describe("findAll", () => {
   });
 });
 
-describe("findAdminUsers", () => {
+describe("adminFindUsers", () => {
   const authContext = { token: "mock-token" };
 
   it("finds admin users by criteria", async () => {
@@ -158,7 +158,7 @@ describe("findAdminUsers", () => {
       ],
     });
 
-    const users = await findAdminUsers(authContext, { idpId });
+    const users = await adminFindUsers(authContext, { idpId });
 
     expect(wreck.get).toHaveBeenCalledWith(`/admin/users?idpId=${idpId}`, {
       headers: {
@@ -188,7 +188,7 @@ describe("findAdminUsers", () => {
       ],
     });
 
-    const users = await findAdminUsers(authContext, {
+    const users = await adminFindUsers(authContext, {
       idpId,
       allAppRoles,
       anyAppRoles,
