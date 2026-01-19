@@ -91,7 +91,7 @@
     "autoprefixer": "^10.4.20",
     "babel-loader": "^10.0.0",
     "babel-plugin-transform-import-meta": "^2.3.3",
-    "baseline-browser-mapping": "^2.9.14",
+    "baseline-browser-mapping": "^2.9.15",
     "cheerio": "^1.1.2",
     "clean-webpack-plugin": "^4.0.0",
     "copy-webpack-plugin": "^13.0.1",
