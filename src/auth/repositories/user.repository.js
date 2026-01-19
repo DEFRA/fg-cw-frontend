@@ -1,20 +1,5 @@
 import { wreck } from "../../common/wreck.js";
 
-export const findAll = async (
-  authContext,
-  { idpId, allAppRoles = [], anyAppRoles = [] },
-) => {
-  const query = createQuery({ idpId, allAppRoles, anyAppRoles });
-
-  const { payload } = await wreck.get(`/users?${query}`, {
-    headers: {
-      authorization: `Bearer ${authContext.token}`,
-    },
-  });
-
-  return payload;
-};
-
 export const adminFindById = async (authContext, id) => {
   const { payload } = await wreck.get(`/admin/users/${id}`, {
     headers: {
