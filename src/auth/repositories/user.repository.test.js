@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { create, findAll, update } from "./user.repository.js";
+import { findAll, login } from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
@@ -133,66 +133,84 @@ describe("findAll", () => {
   });
 });
 
-describe("create", () => {
+describe("login", () => {
   const authContext = { token: "mock-token" };
 
-  it("creates a new user", async () => {
+  it("creates or updates user and records login", async () => {
     const userData = {
-      firstName: "John",
-      lastName: "Doe",
+      idpId: "12345678-1234-1234-1234-123456789012",
+      name: "John Doe",
+      email: "john.doe@defra.gov.uk",
+      idpRoles: ["FCP.Casework.ReadWrite"],
+    };
+
+    const responseUser = {
+      id: "69691417bd385df3ac6aa25f",
+      idpId: "12345678-1234-1234-1234-123456789012",
+      email: "john.doe@defra.gov.uk",
+      name: "John Doe",
+      idpRoles: ["FCP.Casework.ReadWrite"],
+      appRoles: {},
+      createdAt: "2026-01-15T16:21:43.468Z",
+      updatedAt: "2026-01-15T16:22:26.942Z",
+      lastLoginAt: "2026-01-15T16:22:26.942Z",
     };
 
     wreck.post.mockResolvedValue({
-      payload: {
-        id: "123",
-      },
+      payload: responseUser,
     });
 
-    const result = await create(authContext, userData);
+    const user = await login(authContext, userData);
 
-    expect(wreck.post).toHaveBeenCalledWith("/users", {
+    expect(wreck.post).toHaveBeenCalledWith("/users/login", {
       headers: {
         authorization: `Bearer ${authContext.token}`,
       },
       payload: userData,
     });
 
-    expect(result).toEqual({
-      id: "123",
-    });
+    expect(user).toEqual(responseUser);
   });
-});
 
-describe("update", () => {
-  const authContext = { token: "mock-token" };
-
-  it("updates user's details", async () => {
-    const updatedUserData = {
-      id: "123",
-      name: "Bob Bill",
-      idpRoles: ["ROLE_ADMIN"],
-      appRoles: ["ROLE_USER"],
+  it("receives appRoles from backend even when not sent", async () => {
+    const userData = {
+      idpId: "12345678-1234-1234-1234-123456789012",
+      name: "John Doe",
+      email: "john.doe@defra.gov.uk",
+      idpRoles: ["FCP.Casework.ReadWrite"],
     };
 
-    wreck.patch.mockResolvedValue({
-      payload: updatedUserData,
+    const responseUser = {
+      id: "69691417bd385df3ac6aa25f",
+      idpId: "12345678-1234-1234-1234-123456789012",
+      name: "John Doe",
+      email: "john.doe@defra.gov.uk",
+      idpRoles: ["FCP.Casework.ReadWrite"],
+      appRoles: {
+        ROLE_ADMIN: {
+          name: "ROLE_ADMIN",
+          startDate: "2025-01-01",
+          endDate: "2100-01-01",
+        },
+      },
+      createdAt: "2026-01-15T16:21:43.468Z",
+      updatedAt: "2026-01-15T16:22:26.942Z",
+      lastLoginAt: "2026-01-15T16:22:26.942Z",
+    };
+
+    wreck.post.mockResolvedValue({
+      payload: responseUser,
     });
 
-    const userData = {
-      name: "Bob Bill",
-      idpRoles: ["ROLE_ADMIN"],
-      appRoles: ["ROLE_USER"],
-    };
+    const user = await login(authContext, userData);
 
-    const user = await update(authContext, "123", userData);
-
-    expect(wreck.patch).toHaveBeenCalledWith("/users/123", {
+    expect(wreck.post).toHaveBeenCalledWith("/users/login", {
       headers: {
         authorization: `Bearer ${authContext.token}`,
       },
       payload: userData,
     });
 
-    expect(user).toEqual(updatedUserData);
+    expect(user).toEqual(responseUser);
   });
 });
