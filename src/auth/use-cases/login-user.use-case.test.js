@@ -37,7 +37,6 @@ describe("loginUserUseCase", () => {
       name: authContext.profile.name,
       email: authContext.profile.email,
       idpRoles: authContext.profile.roles,
-      appRoles: {},
     });
 
     expect(result).toEqual(mockUser);

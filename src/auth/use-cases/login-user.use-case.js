@@ -17,7 +17,6 @@ export const loginUserUseCase = async (authContext) => {
     name: profile.name,
     email: profile.email,
     idpRoles: profile.roles,
-    appRoles: {},
   });
 
   logger.info(
