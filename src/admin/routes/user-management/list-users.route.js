@@ -1,4 +1,4 @@
-import { findAdminUsersUseCase } from "../../../auth/use-cases/find-admin-users.use-case.js";
+import { adminFindUsersUseCase } from "../../../auth/use-cases/admin-find-users.use-case.js";
 import { logger } from "../../../common/logger.js";
 import { createUserListViewModel } from "../../view-models/user-management/user-list.view-model.js";
 
@@ -13,7 +13,7 @@ export const listUsersRoute = {
       user: request.auth.credentials.user,
     };
 
-    const users = await findAdminUsersUseCase(authContext, {});
+    const users = await adminFindUsersUseCase(authContext, {});
     const viewModel = createUserListViewModel(users);
 
     logger.info("Finished: Finding all users for user management");
