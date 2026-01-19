@@ -1,6 +1,6 @@
 import Boom from "@hapi/boom";
 import { logger } from "../../common/logger.js";
-import { createOrUpdateUserUseCase } from "../use-cases/create-or-update-user.use-case.js";
+import { loginUserUseCase } from "../use-cases/login-user.use-case.js";
 
 export const loginCallbackRoute = {
   method: "GET",
@@ -27,7 +27,8 @@ export const loginCallbackRoute = {
       `Login callback invoked with with IDP id ${authContext.profile.oid}`,
     );
 
-    const user = await createOrUpdateUserUseCase(authContext);
+    // Create or update user and record login in a single call
+    const user = await loginUserUseCase(authContext);
 
     request.yar.set("credentials", {
       token: auth.credentials.token,
