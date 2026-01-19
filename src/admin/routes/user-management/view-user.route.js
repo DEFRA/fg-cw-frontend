@@ -1,4 +1,4 @@
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { logger } from "../../../common/logger.js";
 import { createUserDetailsViewModel } from "../../view-models/user-management/user-details.view-model.js";
 
@@ -14,7 +14,7 @@ export const viewUserRoute = {
       user: request.auth.credentials.user,
     };
 
-    const user = await findUserByIdUseCase(authContext, id);
+    const user = await adminFindUserByIdUseCase(authContext, id);
     const viewModel = createUserDetailsViewModel(user, authContext.user);
 
     logger.info(`Finished: Viewing User details ${id}`);

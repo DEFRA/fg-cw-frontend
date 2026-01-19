@@ -15,8 +15,8 @@ export const findAll = async (
   return payload;
 };
 
-export const findById = async (authContext, id) => {
-  const { payload } = await wreck.get(`/users/${id}`, {
+export const adminFindById = async (authContext, id) => {
+  const { payload } = await wreck.get(`/admin/users/${id}`, {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },

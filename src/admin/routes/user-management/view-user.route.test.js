@@ -2,11 +2,11 @@ import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { viewUserRoute } from "./view-user.route.js";
 
-vi.mock("../../../auth/use-cases/find-user-by-id.use-case.js");
+vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
 
 describe("viewUserRoute", () => {
   let server;
@@ -24,7 +24,7 @@ describe("viewUserRoute", () => {
   });
 
   it("renders user details page", async () => {
-    findUserByIdUseCase.mockResolvedValue({
+    adminFindUserByIdUseCase.mockResolvedValue({
       id: "user-123",
       name: "Martin Smith",
       email: "martin@ee.com",
@@ -60,7 +60,7 @@ describe("viewUserRoute", () => {
   });
 
   it("hides edit roles button when viewing own user", async () => {
-    findUserByIdUseCase.mockResolvedValue({
+    adminFindUserByIdUseCase.mockResolvedValue({
       id: "admin-user",
       name: "Martin Smith",
       email: "martin@ee.com",
@@ -94,7 +94,7 @@ describe("viewUserRoute", () => {
   });
 
   it("renders no roles messages when roles are missing", async () => {
-    findUserByIdUseCase.mockResolvedValue({
+    adminFindUserByIdUseCase.mockResolvedValue({
       id: "user-123",
       name: "No Roles User",
       email: "noroles@example.com",
@@ -120,7 +120,7 @@ describe("viewUserRoute", () => {
   });
 
   it("returns 403 when backend forbids viewing user", async () => {
-    findUserByIdUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+    adminFindUserByIdUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
 
     const { statusCode } = await server.inject({
       method: "GET",
