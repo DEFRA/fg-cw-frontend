@@ -1,4 +1,4 @@
-import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
+import { findAssigneesUseCase } from "../../../auth/use-cases/find-assignees.use-case.js";
 import { setFlashData } from "../../../common/helpers/flash-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
@@ -31,7 +31,7 @@ export const viewAssignUserToCaseRoute = {
 
     const kase = await findCaseByIdUseCase(authContext, caseId);
 
-    const users = await findAllUsersUseCase(authContext, {
+    const users = await findAssigneesUseCase(authContext, {
       allAppRoles: kase.requiredRoles.allOf,
       anyAppRoles: kase.requiredRoles.anyOf,
     });
