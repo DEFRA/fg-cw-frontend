@@ -28,7 +28,7 @@ export const createUserDetailsViewModel = (user, currentUser) => {
           {
             key: { text: "Last login" },
             value: {
-              text: formatDate(user.updatedAt, DATE_FORMAT_FULL_DATE_TIME),
+              text: formatDate(user.lastLoginAt, DATE_FORMAT_FULL_DATE_TIME),
             },
           },
         ],

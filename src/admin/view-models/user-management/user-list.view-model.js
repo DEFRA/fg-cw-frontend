@@ -18,11 +18,11 @@ export const createUserListViewModel = (users) => {
           { text: "Last login" },
           { html: '<span class="govuk-visually-hidden">Actions</span>' },
         ],
-        rows: sortedUsers.map(({ id, name, email, updatedAt }) => ({
+        rows: sortedUsers.map(({ id, name, email, lastLoginAt }) => ({
           id,
           name,
           email,
-          lastLogin: formatDate(updatedAt, DATE_FORMAT_SHORT_DATE_TIME),
+          lastLogin: formatDate(lastLoginAt, DATE_FORMAT_SHORT_DATE_TIME),
           viewHref: `/admin/user-management/${id}`,
         })),
       },
