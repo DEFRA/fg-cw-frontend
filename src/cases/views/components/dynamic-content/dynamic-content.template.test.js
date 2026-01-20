@@ -473,6 +473,25 @@ describe("dynamic-content template", () => {
     expect(result).toContain("/pay-now");
   });
 
+  test("renders summary-list component with number text", () => {
+    const params = [
+      {
+        component: "summary-list",
+        rows: [
+          {
+            label: "Count",
+            text: 123,
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain("Count");
+    expect(result).toContain("123");
+  });
+
   test("renders table component", () => {
     const params = [
       {
