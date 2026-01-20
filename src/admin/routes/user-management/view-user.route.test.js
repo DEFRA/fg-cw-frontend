@@ -29,6 +29,7 @@ describe("viewUserRoute", () => {
       name: "Martin Smith",
       email: "martin@ee.com",
       updatedAt: "2025-12-14T20:03:00.000Z",
+      lastLoginAt: "2025-12-14T20:03:00.000Z",
       idpRoles: ["IDP_ROLE", "FCP.Casework.Read"],
       appRoles: {
         ROLE_RPA_CASES_APPROVE: {
