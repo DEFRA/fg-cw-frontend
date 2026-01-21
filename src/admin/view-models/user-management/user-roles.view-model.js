@@ -8,18 +8,19 @@ export const createUserRolesViewModel = ({
   formData,
 }) => {
   const safeErrors = normaliseErrors(errors);
-  const allocatedRoles = getAllocatedRoles(user);
+  const allocatedRolesByCode = getAllocatedRoles(user);
 
-  const mergedRoles = mergeRoles({ roles, allocatedRoles });
+  const assignableRoles = filterAssignableRoles(roles);
+  const mergedRoles = mergeRoles({ assignableRoles, allocatedRolesByCode });
   const selectedRoleCodes = resolveSelectedRoleCodes({
-    allocatedRoles,
+    allocatedRolesByCode,
     formData,
   });
 
   const rows = mergedRoles.map((role) =>
     buildRoleRow({
       role,
-      allocatedRoles,
+      allocatedRolesByCode,
       selectedRoleCodes,
       errors: safeErrors,
       formData,
@@ -42,6 +43,11 @@ export const createUserRolesViewModel = ({
     errors: safeErrors,
     errorList: buildErrorList(safeErrors),
   };
+};
+
+const filterAssignableRoles = (roles) => {
+  const roleArray = toArray(roles);
+  return roleArray.filter((role) => role?.assignable === true);
 };
 
 const normaliseErrors = (errors) => {
@@ -76,13 +82,13 @@ const getUserName = (user) => {
   return user.name;
 };
 
-const resolveSelectedRoleCodes = ({ allocatedRoles, formData }) => {
+const resolveSelectedRoleCodes = ({ allocatedRolesByCode, formData }) => {
   const selectedFromForm = getRoleCodesFromFormData(formData);
   if (selectedFromForm !== null) {
     return selectedFromForm;
   }
 
-  return getAllocatedCodes(allocatedRoles);
+  return getAllocatedCodes(allocatedRolesByCode);
 };
 
 const getRoleCodesFromFormData = (formData) => {
@@ -107,7 +113,7 @@ const getAllocatedCodes = (allocatedRoles) => {
 
 const buildRoleRow = ({
   role,
-  allocatedRoles,
+  allocatedRolesByCode,
   selectedRoleCodes,
   errors,
   formData,
@@ -120,14 +126,14 @@ const buildRoleRow = ({
   const startDateRaw = getDateRaw({
     formData,
     key: startKey,
-    allocatedRoles,
+    allocatedRolesByCode,
     code,
     prop: "startDate",
   });
   const endDateRaw = getDateRaw({
     formData,
     key: endKey,
-    allocatedRoles,
+    allocatedRolesByCode,
     code,
     prop: "endDate",
   });
@@ -164,13 +170,13 @@ const getRoleDescription = (role) => {
   return role.description;
 };
 
-const getDateRaw = ({ formData, key, allocatedRoles, code, prop }) => {
+const getDateRaw = ({ formData, key, allocatedRolesByCode, code, prop }) => {
   const formValue = tryReadFormValue(formData, key);
   if (formValue.found) {
     return formValue.value;
   }
 
-  return readAllocatedRoleValue(allocatedRoles, code, prop);
+  return readAllocatedRoleValue(allocatedRolesByCode, code, prop);
 };
 
 const tryReadFormValue = (formData, key) => {
@@ -185,12 +191,12 @@ const tryReadFormValue = (formData, key) => {
   return { found: true, value: formData[key] };
 };
 
-const readAllocatedRoleValue = (allocatedRoles, code, prop) => {
-  if (!allocatedRoles) {
+const readAllocatedRoleValue = (allocatedRolesByCode, code, prop) => {
+  if (!allocatedRolesByCode) {
     return "";
   }
 
-  const allocation = allocatedRoles[code];
+  const allocation = allocatedRolesByCode[code];
   if (!allocation) {
     return "";
   }
@@ -211,9 +217,9 @@ const formatDateForInput = ({ raw, error }) => {
   return normaliseDateForHtmlInput(raw);
 };
 
-const mergeRoles = ({ roles, allocatedRoles }) => {
+const mergeRoles = ({ assignableRoles, allocatedRolesByCode }) => {
   const byCode = new Map();
-  const roleArray = toArray(roles);
+  const roleArray = toArray(assignableRoles);
 
   for (const role of roleArray) {
     const entry = toRoleEntry(role);
@@ -222,7 +228,7 @@ const mergeRoles = ({ roles, allocatedRoles }) => {
     }
   }
 
-  const allocatedCodes = getAllocatedCodes(allocatedRoles);
+  const allocatedCodes = getAllocatedCodes(allocatedRolesByCode);
   for (const code of allocatedCodes) {
     addIfMissing(byCode, code);
   }

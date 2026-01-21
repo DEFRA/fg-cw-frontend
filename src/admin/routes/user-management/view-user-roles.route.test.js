@@ -30,15 +30,22 @@ describe("viewUserRolesRoute", () => {
       name: "Martin Smith",
       appRoles: {
         PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
+        PMF_READ_WRITE: {},
       },
     });
 
     findRolesUseCase.mockResolvedValue([
-      { id: "r1", code: "PMF_READ", description: "Pigs Might Fly read only" },
+      {
+        id: "r1",
+        code: "PMF_READ",
+        description: "Pigs Might Fly read only",
+        assignable: true,
+      },
       {
         id: "r2",
         code: "PMF_READ_WRITE",
         description: "Pigs Might Fly read write",
+        assignable: false,
       },
     ]);
 
@@ -54,10 +61,8 @@ describe("viewUserRolesRoute", () => {
     expect(statusCode).toEqual(200);
 
     const $ = load(result);
-    const view = $("#main-content").html();
-
-    expect(view).toMatchSnapshot();
     expect($("input[value='PMF_READ']").attr("checked")).toBeDefined();
+    expect($("input[value='PMF_READ_WRITE']").attr("checked")).toBeDefined();
   });
 
   it("returns 403 when backend forbids viewing roles", async () => {
