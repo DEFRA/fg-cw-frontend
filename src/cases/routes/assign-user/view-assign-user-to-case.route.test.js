@@ -2,7 +2,7 @@ import hapi from "@hapi/hapi";
 import Yar from "@hapi/yar";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
+import { findAssigneesUseCase } from "../../../auth/use-cases/find-assignees.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { flashContext } from "../../../server/plugins/flash-context.js";
 import { findAllCasesUseCase } from "../../use-cases/find-all-cases.use-case.js";
@@ -11,7 +11,7 @@ import { listCasesRoute } from "../list-cases.route.js";
 import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
-vi.mock("../../../auth/use-cases/find-all-users.use-case.js");
+vi.mock("../../../auth/use-cases/find-assignees.use-case.js");
 vi.mock("../../use-cases/find-all-cases.use-case.js");
 
 describe("viewAssignUserToCaseRoute", () => {
@@ -46,7 +46,7 @@ describe("viewAssignUserToCaseRoute", () => {
 
   it("returns a case and list of valid users", async () => {
     findCaseByIdUseCase.mockResolvedValue(mockCase);
-    findAllUsersUseCase.mockResolvedValue(mockUsers);
+    findAssigneesUseCase.mockResolvedValue(mockUsers);
 
     const { statusCode, result } = await server.inject({
       method: "GET",

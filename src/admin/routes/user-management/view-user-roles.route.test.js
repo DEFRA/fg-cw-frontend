@@ -2,12 +2,12 @@ import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
 import { viewUserRolesRoute } from "./view-user-roles.route.js";
 
-vi.mock("../../../auth/use-cases/find-user-by-id.use-case.js");
+vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
 vi.mock("../../use-cases/find-roles.use-case.js");
 
 describe("viewUserRolesRoute", () => {
@@ -25,7 +25,7 @@ describe("viewUserRolesRoute", () => {
   });
 
   it("renders user roles page and checks currently allocated roles", async () => {
-    findUserByIdUseCase.mockResolvedValue({
+    adminFindUserByIdUseCase.mockResolvedValue({
       id: "user-123",
       name: "Martin Smith",
       appRoles: {
@@ -61,7 +61,7 @@ describe("viewUserRolesRoute", () => {
   });
 
   it("returns 403 when backend forbids viewing roles", async () => {
-    findUserByIdUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+    adminFindUserByIdUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
 
     const { statusCode } = await server.inject({
       method: "GET",

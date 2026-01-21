@@ -2,11 +2,11 @@ import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { findAllUsersUseCase } from "../../../auth/use-cases/find-all-users.use-case.js";
+import { adminFindUsersUseCase } from "../../../auth/use-cases/admin-find-users.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { listUsersRoute } from "./list-users.route.js";
 
-vi.mock("../../../auth/use-cases/find-all-users.use-case.js");
+vi.mock("../../../auth/use-cases/admin-find-users.use-case.js");
 
 describe("listUsersRoute", () => {
   let server;
@@ -24,7 +24,7 @@ describe("listUsersRoute", () => {
   });
 
   it("renders users page", async () => {
-    findAllUsersUseCase.mockResolvedValue([
+    adminFindUsersUseCase.mockResolvedValue([
       {
         id: "user-2",
         name: "Zara Zee",
@@ -57,7 +57,7 @@ describe("listUsersRoute", () => {
   });
 
   it("renders empty state when there are no users", async () => {
-    findAllUsersUseCase.mockResolvedValue([]);
+    adminFindUsersUseCase.mockResolvedValue([]);
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -77,7 +77,7 @@ describe("listUsersRoute", () => {
   });
 
   it("renders blank last login when updatedAt missing", async () => {
-    findAllUsersUseCase.mockResolvedValue([
+    adminFindUsersUseCase.mockResolvedValue([
       {
         id: "user-1",
         name: "Alice Able",
@@ -102,8 +102,8 @@ describe("listUsersRoute", () => {
     expect(view).toMatchSnapshot();
   });
 
-  it("passes auth context to findAllUsersUseCase", async () => {
-    findAllUsersUseCase.mockResolvedValue([]);
+  it("passes auth context to adminFindUsersUseCase", async () => {
+    adminFindUsersUseCase.mockResolvedValue([]);
 
     await server.inject({
       method: "GET",
@@ -114,7 +114,7 @@ describe("listUsersRoute", () => {
       },
     });
 
-    expect(findAllUsersUseCase).toHaveBeenCalledWith(
+    expect(adminFindUsersUseCase).toHaveBeenCalledWith(
       {
         token: "mock-token",
         user: { id: "user-123" },
@@ -124,7 +124,7 @@ describe("listUsersRoute", () => {
   });
 
   it("returns 403 when backend forbids listing users", async () => {
-    findAllUsersUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+    adminFindUsersUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
 
     const { statusCode } = await server.inject({
       method: "GET",

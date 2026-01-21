@@ -1,13 +1,14 @@
 import { format, isBefore, isValid, parse, parseISO } from "date-fns";
 
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
 import { updateUserRolesUseCase } from "../../use-cases/update-user-roles.use-case.js";
 import { createUserRolesViewModel } from "../../view-models/user-management/user-roles.view-model.js";
 
-const SAVE_ERROR_MESSAGE = "There was a problem saving roles. Please try again.";
+const SAVE_ERROR_MESSAGE =
+  "There was a problem saving roles. Please try again.";
 
 export const saveUserRolesRoute = {
   method: "POST",
@@ -25,7 +26,10 @@ export const saveUserRolesRoute = {
     const { user, roles } = await loadPageData(authContext, userId);
     const selectedRoleCodes = normaliseRoleCodes(formData.roles);
 
-    const { appRoles, errors } = buildAppRolesFromForm(selectedRoleCodes, formData);
+    const { appRoles, errors } = buildAppRolesFromForm(
+      selectedRoleCodes,
+      formData,
+    );
     if (hasValidationErrors(errors)) {
       return renderRolesPage(h, { user, roles, userId, errors, formData });
     }
@@ -43,7 +47,7 @@ export const saveUserRolesRoute = {
 
 const loadPageData = async (authContext, userId) => {
   const [user, roles] = await Promise.all([
-    findUserByIdUseCase(authContext, userId),
+    adminFindUserByIdUseCase(authContext, userId),
     findRolesUseCase(authContext),
   ]);
 
@@ -121,7 +125,14 @@ const buildRoleAllocationResult = (code, formData) => {
   const start = parseDateIfPresent(startDate);
   const end = parseDateIfPresent(endDate);
 
-  const errors = collectRoleErrors({ startKey, endKey, startDate, endDate, start, end });
+  const errors = collectRoleErrors({
+    startKey,
+    endKey,
+    startDate,
+    endDate,
+    start,
+    end,
+  });
   const allocation = buildAllocation({ startDate, endDate, start, end });
 
   return { allocation, errors };
@@ -135,12 +146,22 @@ const parseDateIfPresent = (value) => {
   return parseFlexibleDate(value);
 };
 
-const collectRoleErrors = ({ startKey, endKey, startDate, endDate, start, end }) => {
+const collectRoleErrors = ({
+  startKey,
+  endKey,
+  startDate,
+  endDate,
+  start,
+  end,
+}) => {
   const errors = {};
 
   Object.assign(errors, validateStartDate(startKey, startDate, start));
   Object.assign(errors, validateEndDate(endKey, endDate, end));
-  Object.assign(errors, validateDateOrder(endKey, startDate, endDate, start, end));
+  Object.assign(
+    errors,
+    validateDateOrder(endKey, startDate, endDate, start, end),
+  );
 
   return errors;
 };
@@ -188,7 +209,9 @@ const validateDateOrder = (endKey, startDate, endDate, start, end) => {
 };
 
 const shouldValidateDateOrder = (startDate, endDate, start, end) => {
-  return Boolean(startDate && endDate && isValidDate(start) && isValidDate(end));
+  return Boolean(
+    startDate && endDate && isValidDate(start) && isValidDate(end),
+  );
 };
 
 const buildAllocation = ({ startDate, endDate, start, end }) => {
@@ -278,4 +301,5 @@ const toStringOrEmpty = (value) => {
   return String(value);
 };
 
-const isForbidden = (error) => error?.output?.statusCode === statusCodes.FORBIDDEN;
+const isForbidden = (error) =>
+  error?.output?.statusCode === statusCodes.FORBIDDEN;

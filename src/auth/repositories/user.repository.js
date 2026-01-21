@@ -1,12 +1,36 @@
 import { wreck } from "../../common/wreck.js";
 
-export const findAll = async (
+export const adminFindById = async (authContext, id) => {
+  const { payload } = await wreck.get(`/admin/users/${id}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+  return payload;
+};
+
+export const adminFindUsers = async (
   authContext,
   { idpId, allAppRoles = [], anyAppRoles = [] },
 ) => {
   const query = createQuery({ idpId, allAppRoles, anyAppRoles });
 
-  const { payload } = await wreck.get(`/users?${query}`, {
+  const { payload } = await wreck.get(`/admin/users?${query}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+
+  return payload;
+};
+
+export const findAssignees = async (
+  authContext,
+  { allAppRoles = [], anyAppRoles = [] },
+) => {
+  const query = createQuery({ allAppRoles, anyAppRoles });
+
+  const { payload } = await wreck.get(`/users/assignees?${query}`, {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },
@@ -33,8 +57,8 @@ const createQuery = ({ idpId, allAppRoles, anyAppRoles }) => {
   return query;
 };
 
-export const create = async (authContext, userData) => {
-  const { payload } = await wreck.post("/users", {
+export const login = async (authContext, userData) => {
+  const { payload } = await wreck.post("/users/login", {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },

@@ -2,13 +2,13 @@ import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
 import { updateUserRolesUseCase } from "../../use-cases/update-user-roles.use-case.js";
 import { saveUserRolesRoute } from "./save-user-roles.route.js";
 
-vi.mock("../../../auth/use-cases/find-user-by-id.use-case.js");
+vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
 vi.mock("../../use-cases/find-roles.use-case.js");
 vi.mock("../../use-cases/update-user-roles.use-case.js");
 
@@ -27,7 +27,7 @@ describe("saveUserRolesRoute", () => {
   });
 
   const baseSetup = () => {
-    findUserByIdUseCase.mockResolvedValue({
+    adminFindUserByIdUseCase.mockResolvedValue({
       id: "user-123",
       name: "Martin Smith",
       appRoles: {

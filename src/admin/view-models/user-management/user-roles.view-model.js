@@ -1,14 +1,29 @@
 import { format, isValid, parse, parseISO } from "date-fns";
 
-export const createUserRolesViewModel = ({ user, roles, userId, errors, formData }) => {
+export const createUserRolesViewModel = ({
+  user,
+  roles,
+  userId,
+  errors,
+  formData,
+}) => {
   const safeErrors = normaliseErrors(errors);
   const allocatedRoles = getAllocatedRoles(user);
 
   const mergedRoles = mergeRoles({ roles, allocatedRoles });
-  const selectedRoleCodes = resolveSelectedRoleCodes({ allocatedRoles, formData });
+  const selectedRoleCodes = resolveSelectedRoleCodes({
+    allocatedRoles,
+    formData,
+  });
 
   const rows = mergedRoles.map((role) =>
-    buildRoleRow({ role, allocatedRoles, selectedRoleCodes, errors: safeErrors, formData }),
+    buildRoleRow({
+      role,
+      allocatedRoles,
+      selectedRoleCodes,
+      errors: safeErrors,
+      formData,
+    }),
   );
 
   return {
@@ -90,17 +105,41 @@ const getAllocatedCodes = (allocatedRoles) => {
   return Object.keys(allocatedRoles);
 };
 
-const buildRoleRow = ({ role, allocatedRoles, selectedRoleCodes, errors, formData }) => {
+const buildRoleRow = ({
+  role,
+  allocatedRoles,
+  selectedRoleCodes,
+  errors,
+  formData,
+}) => {
   const code = role.code;
   const { startKey, endKey } = buildRoleDateKeys(code);
 
   const checked = selectedRoleCodes.includes(code);
 
-  const startDateRaw = getDateRaw({ formData, key: startKey, allocatedRoles, code, prop: "startDate" });
-  const endDateRaw = getDateRaw({ formData, key: endKey, allocatedRoles, code, prop: "endDate" });
+  const startDateRaw = getDateRaw({
+    formData,
+    key: startKey,
+    allocatedRoles,
+    code,
+    prop: "startDate",
+  });
+  const endDateRaw = getDateRaw({
+    formData,
+    key: endKey,
+    allocatedRoles,
+    code,
+    prop: "endDate",
+  });
 
-  const startDate = formatDateForInput({ raw: startDateRaw, error: errors[startKey] });
-  const endDate = formatDateForInput({ raw: endDateRaw, error: errors[endKey] });
+  const startDate = formatDateForInput({
+    raw: startDateRaw,
+    error: errors[startKey],
+  });
+  const endDate = formatDateForInput({
+    raw: endDateRaw,
+    error: errors[endKey],
+  });
 
   return {
     code,

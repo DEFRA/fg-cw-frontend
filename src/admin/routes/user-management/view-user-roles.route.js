@@ -1,4 +1,4 @@
-import { findUserByIdUseCase } from "../../../auth/use-cases/find-user-by-id.use-case.js";
+import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { logger } from "../../../common/logger.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
 import { createUserRolesViewModel } from "../../view-models/user-management/user-roles.view-model.js";
@@ -16,7 +16,7 @@ export const viewUserRolesRoute = {
     };
 
     const [user, roles] = await Promise.all([
-      findUserByIdUseCase(authContext, id),
+      adminFindUserByIdUseCase(authContext, id),
       findRolesUseCase(authContext),
     ]);
 
