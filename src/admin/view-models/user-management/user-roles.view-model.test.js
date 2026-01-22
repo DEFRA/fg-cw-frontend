@@ -28,4 +28,58 @@ describe("createUserRolesViewModel", () => {
       }),
     ]);
   });
+
+  it("defaults errors and errorList when errors undefined", () => {
+    const viewModel = createUserRolesViewModel({
+      user: {
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {},
+      },
+      userId: "user-123",
+      roles: [],
+      errors: undefined,
+    });
+
+    expect(viewModel.errors).toEqual({});
+    expect(viewModel.errorList).toEqual([]);
+  });
+
+  it("builds an error summary item without href for save errors", () => {
+    const viewModel = createUserRolesViewModel({
+      user: {
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {},
+      },
+      userId: "user-123",
+      roles: [],
+      errors: {
+        save: "There was a problem saving",
+      },
+    });
+
+    expect(viewModel.errorList).toEqual([
+      {
+        text: "There was a problem saving",
+      },
+    ]);
+  });
+
+  it("filters out empty validation messages from errorList", () => {
+    const viewModel = createUserRolesViewModel({
+      user: {
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {},
+      },
+      userId: "user-123",
+      roles: [],
+      errors: {
+        startDate__PMF_READ: "",
+      },
+    });
+
+    expect(viewModel.errorList).toEqual([]);
+  });
 });
