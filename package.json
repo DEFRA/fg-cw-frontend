@@ -50,7 +50,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.28.4",
+    "@babel/runtime": "^7.28.6",
     "@defra/hapi-tracing": "^1.28.0",
     "@elastic/ecs-pino-format": "^1.5.0",
     "@hapi/bell": "^13.1.0",
@@ -84,11 +84,11 @@
     "pino-pretty": "^13.1.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.3",
-    "@babel/core": "^7.28.5",
-    "@babel/preset-env": "^7.28.5",
+    "@babel/cli": "^7.28.6",
+    "@babel/core": "^7.28.6",
+    "@babel/preset-env": "^7.28.6",
     "@vitest/coverage-v8": "^4.0.3",
-    "autoprefixer": "^10.4.20",
+    "autoprefixer": "^10.4.23",
     "babel-loader": "^10.0.0",
     "babel-plugin-transform-import-meta": "^2.3.3",
     "baseline-browser-mapping": "^2.9.14",
@@ -114,8 +114,8 @@
     "stylelint-config-gds": "^2.0.0",
     "terser-webpack-plugin": "^5.3.10",
     "vitest": "^4.0.3",
-    "webpack": "^5.102.1",
-    "webpack-assets-manifest": "^6.3.0",
+    "webpack": "^5.104.1",
+    "webpack-assets-manifest": "^6.5.0",
     "webpack-cli": "^6.0.1"
   }
 }
