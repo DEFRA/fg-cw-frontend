@@ -93,6 +93,8 @@ describe("saveUserRolesRoute", () => {
 
     expect(statusCode).toEqual(200);
 
+    expect(result).toMatchSnapshot();
+
     const $ = load(result);
     expect($(".govuk-error-summary").text()).toContain("Invalid Start Date");
   });
@@ -114,6 +116,8 @@ describe("saveUserRolesRoute", () => {
     });
 
     expect(statusCode).toEqual(200);
+
+    expect(result).toMatchSnapshot();
 
     const $ = load(result);
     expect($(".govuk-error-summary").text()).toContain("Invalid End Date");
@@ -137,6 +141,8 @@ describe("saveUserRolesRoute", () => {
     });
 
     expect(statusCode).toEqual(200);
+
+    expect(result).toMatchSnapshot();
 
     const $ = load(result);
     expect($(".govuk-error-summary").text()).toContain(

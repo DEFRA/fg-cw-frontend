@@ -1,4 +1,4 @@
-import { format, isValid, parse, parseISO } from "date-fns";
+import { createUserRolesTableViewModel } from "./user-roles-table.view-model.js";
 
 export const createUserRolesViewModel = ({
   user,
@@ -8,24 +8,12 @@ export const createUserRolesViewModel = ({
   formData,
 }) => {
   const safeErrors = normaliseErrors(errors);
-  const allocatedRolesByCode = getAllocatedRoles(user);
-
-  const assignableRoles = filterAssignableRoles(roles);
-  const mergedRoles = mergeRoles({ assignableRoles, allocatedRolesByCode });
-  const selectedRoleCodes = resolveSelectedRoleCodes({
-    allocatedRolesByCode,
+  const rolesTableViewModel = createUserRolesTableViewModel({
+    user,
+    roles,
+    errors: safeErrors,
     formData,
   });
-
-  const rows = mergedRoles.map((role) =>
-    buildRoleRow({
-      role,
-      allocatedRolesByCode,
-      selectedRoleCodes,
-      errors: safeErrors,
-      formData,
-    }),
-  );
 
   return {
     pageTitle: "User roles",
@@ -37,17 +25,12 @@ export const createUserRolesViewModel = ({
     backLink: `/admin/user-management/${userId}`,
     data: {
       userId,
-      userName: getUserName(user),
-      roles: rows,
+      userName: user?.name ?? "",
+      roles: rolesTableViewModel,
     },
     errors: safeErrors,
     errorList: buildErrorList(safeErrors),
   };
-};
-
-const filterAssignableRoles = (roles) => {
-  const roleArray = toArray(roles);
-  return roleArray.filter((role) => role?.assignable === true);
 };
 
 const normaliseErrors = (errors) => {
@@ -57,212 +40,6 @@ const normaliseErrors = (errors) => {
 
   return {};
 };
-
-const getAllocatedRoles = (user) => {
-  if (!user) {
-    return {};
-  }
-
-  if (!user.appRoles) {
-    return {};
-  }
-
-  return user.appRoles;
-};
-
-const getUserName = (user) => {
-  if (!user) {
-    return "";
-  }
-
-  if (!user.name) {
-    return "";
-  }
-
-  return user.name;
-};
-
-const resolveSelectedRoleCodes = ({ allocatedRolesByCode, formData }) => {
-  const selectedFromForm = getRoleCodesFromFormData(formData);
-  if (selectedFromForm !== null) {
-    return selectedFromForm;
-  }
-
-  return getAllocatedCodes(allocatedRolesByCode);
-};
-
-const getRoleCodesFromFormData = (formData) => {
-  if (!formData) {
-    return null;
-  }
-
-  if (!Object.prototype.hasOwnProperty.call(formData, "roles")) {
-    return null;
-  }
-
-  return normaliseRoleCodes(formData.roles);
-};
-
-const getAllocatedCodes = (allocatedRoles) => {
-  if (!allocatedRoles) {
-    return [];
-  }
-
-  return Object.keys(allocatedRoles);
-};
-
-const buildRoleRow = ({
-  role,
-  allocatedRolesByCode,
-  selectedRoleCodes,
-  errors,
-  formData,
-}) => {
-  const code = role.code;
-  const { startKey, endKey } = buildRoleDateKeys(code);
-
-  const checked = selectedRoleCodes.includes(code);
-
-  const startDateRaw = getDateRaw({
-    formData,
-    key: startKey,
-    allocatedRolesByCode,
-    code,
-    prop: "startDate",
-  });
-  const endDateRaw = getDateRaw({
-    formData,
-    key: endKey,
-    allocatedRolesByCode,
-    code,
-    prop: "endDate",
-  });
-
-  const startDate = formatDateForInput({
-    raw: startDateRaw,
-    error: errors[startKey],
-  });
-  const endDate = formatDateForInput({
-    raw: endDateRaw,
-    error: errors[endKey],
-  });
-
-  return {
-    code,
-    description: getRoleDescription(role),
-    checked,
-    startKey,
-    endKey,
-    startDate,
-    endDate,
-  };
-};
-
-const getRoleDescription = (role) => {
-  if (!role) {
-    return "";
-  }
-
-  if (!role.description) {
-    return "";
-  }
-
-  return role.description;
-};
-
-const getDateRaw = ({ formData, key, allocatedRolesByCode, code, prop }) => {
-  const formValue = tryReadFormValue(formData, key);
-  if (formValue.found) {
-    return formValue.value;
-  }
-
-  return readAllocatedRoleValue(allocatedRolesByCode, code, prop);
-};
-
-const tryReadFormValue = (formData, key) => {
-  if (!formData) {
-    return { found: false, value: "" };
-  }
-
-  if (!Object.prototype.hasOwnProperty.call(formData, key)) {
-    return { found: false, value: "" };
-  }
-
-  return { found: true, value: formData[key] };
-};
-
-const readAllocatedRoleValue = (allocatedRolesByCode, code, prop) => {
-  if (!allocatedRolesByCode) {
-    return "";
-  }
-
-  const allocation = allocatedRolesByCode[code];
-  if (!allocation) {
-    return "";
-  }
-
-  const value = allocation[prop];
-  if (!value) {
-    return "";
-  }
-
-  return value;
-};
-
-const formatDateForInput = ({ raw, error }) => {
-  if (error) {
-    return toStringOrEmpty(raw);
-  }
-
-  return normaliseDateForHtmlInput(raw);
-};
-
-const mergeRoles = ({ assignableRoles, allocatedRolesByCode }) => {
-  const byCode = new Map();
-  const roleArray = toArray(assignableRoles);
-
-  for (const role of roleArray) {
-    const entry = toRoleEntry(role);
-    if (entry) {
-      byCode.set(entry.code, entry);
-    }
-  }
-
-  const allocatedCodes = getAllocatedCodes(allocatedRolesByCode);
-  for (const code of allocatedCodes) {
-    addIfMissing(byCode, code);
-  }
-
-  return [...byCode.values()].sort(compareRoleCodes);
-};
-
-const toArray = (value) => {
-  if (Array.isArray(value)) {
-    return value;
-  }
-
-  return [];
-};
-
-const toRoleEntry = (role) => {
-  if (!role) {
-    return null;
-  }
-
-  if (!role.code) {
-    return null;
-  }
-
-  return { code: role.code, description: role.description };
-};
-
-const addIfMissing = (map, code) => {
-  if (!map.has(code)) {
-    map.set(code, { code, description: "" });
-  }
-};
-
-const compareRoleCodes = (a, b) => a.code.localeCompare(b.code);
 
 const buildErrorList = (errors) =>
   Object.entries(errors)
@@ -279,62 +56,4 @@ const toErrorSummaryItem = (key, message) => {
   }
 
   return { text: message, href: `#${key}` };
-};
-
-const normaliseRoleCodes = (roles) => {
-  if (!roles) {
-    return [];
-  }
-
-  if (Array.isArray(roles)) {
-    return roles;
-  }
-
-  return [roles];
-};
-
-const normaliseDateForHtmlInput = (value) => {
-  const raw = toStringOrEmpty(value).trim();
-  if (!raw) {
-    return "";
-  }
-
-  const parsed = parseFlexibleDate(raw);
-  if (!parsed) {
-    return "";
-  }
-
-  return format(parsed, "yyyy-MM-dd");
-};
-
-const parseFlexibleDate = (raw) => {
-  const iso = parseISO(raw);
-  if (isValid(iso)) {
-    return iso;
-  }
-
-  const dmy = parse(raw, "dd MMM yyyy", new Date());
-  if (isValid(dmy)) {
-    return dmy;
-  }
-
-  const dmySingle = parse(raw, "d MMM yyyy", new Date());
-  if (isValid(dmySingle)) {
-    return dmySingle;
-  }
-
-  return null;
-};
-
-const buildRoleDateKeys = (code) => ({
-  startKey: `startDate__${code}`,
-  endKey: `endDate__${code}`,
-});
-
-const toStringOrEmpty = (value) => {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  return String(value);
 };

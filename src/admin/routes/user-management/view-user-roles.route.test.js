@@ -36,16 +36,16 @@ describe("viewUserRolesRoute", () => {
 
     findRolesUseCase.mockResolvedValue([
       {
-        id: "r1",
-        code: "PMF_READ",
-        description: "Pigs Might Fly read only",
-        assignable: true,
-      },
-      {
         id: "r2",
         code: "PMF_READ_WRITE",
         description: "Pigs Might Fly read write",
         assignable: false,
+      },
+      {
+        id: "r1",
+        code: "PMF_READ",
+        description: "Pigs Might Fly read only",
+        assignable: true,
       },
     ]);
 
@@ -59,6 +59,8 @@ describe("viewUserRolesRoute", () => {
     });
 
     expect(statusCode).toEqual(200);
+
+    expect(result).toMatchSnapshot();
 
     const $ = load(result);
     expect($("input[value='PMF_READ']").attr("checked")).toBeDefined();
