@@ -34,7 +34,7 @@ exports[`viewNotesRoute > handles case with no comments 1`] = `
 
       
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="" aria-hidden="true">
             Menu
           </button>
 
@@ -127,7 +127,7 @@ exports[`viewNotesRoute > handles case with null comments 1`] = `
 
       
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="" aria-hidden="true">
             Menu
           </button>
 
@@ -220,7 +220,7 @@ exports[`viewNotesRoute > renders page and returns 200 ok 1`] = `
 
       
         <nav aria-label="Menu" class="govuk-service-navigation__wrapper">
-          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="">
+          <button type="button" class="govuk-service-navigation__toggle govuk-js-service-navigation-toggle" aria-controls="navigation" hidden="" aria-hidden="true">
             Menu
           </button>
 
