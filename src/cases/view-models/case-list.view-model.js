@@ -49,7 +49,6 @@ const mapCasesToTable = (cases) => {
       { text: "Assignee", attributes, headerClasses },
     ],
     rows: cases.map(
-      // eslint-disable-next-line complexity
       ({
         _id,
         caseRef,
@@ -57,6 +56,7 @@ const mapCasesToTable = (cases) => {
         currentStatus,
         currentStatusTheme,
         assignedUser,
+        // eslint-disable-next-line complexity
       }) => ({
         _id,
         select: {
