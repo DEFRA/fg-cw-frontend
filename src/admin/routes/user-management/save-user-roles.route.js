@@ -1,6 +1,12 @@
-import { format, isBefore, isValid, parse, parseISO } from "date-fns";
+import { format, isBefore, isValid } from "date-fns";
 
 import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
+import { parseDate } from "../../../common/helpers/date-helpers.js";
+import {
+  buildRoleDateKeys,
+  normaliseRoleCodes,
+} from "../../../common/helpers/role-helpers.js";
+import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
@@ -122,8 +128,8 @@ const buildRoleAllocationResult = (code, formData) => {
   const startDate = startDateRaw.trim();
   const endDate = endDateRaw.trim();
 
-  const start = parseDateIfPresent(startDate);
-  const end = parseDateIfPresent(endDate);
+  const start = parseDate(startDate);
+  const end = parseDate(endDate);
 
   const errors = collectRoleErrors({
     startKey,
@@ -136,14 +142,6 @@ const buildRoleAllocationResult = (code, formData) => {
   const allocation = buildAllocation({ startDate, endDate, start, end });
 
   return { allocation, errors };
-};
-
-const parseDateIfPresent = (value) => {
-  if (!value) {
-    return null;
-  }
-
-  return parseFlexibleDate(value);
 };
 
 const collectRoleErrors = ({
@@ -255,50 +253,6 @@ const isValidDate = (value) => {
   }
 
   return isValid(value);
-};
-
-const buildRoleDateKeys = (code) => ({
-  startKey: `startDate__${code}`,
-  endKey: `endDate__${code}`,
-});
-
-const normaliseRoleCodes = (roles) => {
-  if (!roles) {
-    return [];
-  }
-
-  if (Array.isArray(roles)) {
-    return roles;
-  }
-
-  return [roles];
-};
-
-const parseFlexibleDate = (raw) => {
-  const iso = parseISO(raw);
-  if (isValid(iso)) {
-    return iso;
-  }
-
-  const dmy = parse(raw, "dd MMM yyyy", new Date());
-  if (isValid(dmy)) {
-    return dmy;
-  }
-
-  const dmySingle = parse(raw, "d MMM yyyy", new Date());
-  if (isValid(dmySingle)) {
-    return dmySingle;
-  }
-
-  return null;
-};
-
-const toStringOrEmpty = (value) => {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  return String(value);
 };
 
 const isForbidden = (error) =>

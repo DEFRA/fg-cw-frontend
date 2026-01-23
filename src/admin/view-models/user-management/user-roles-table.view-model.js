@@ -1,4 +1,11 @@
-import { format, isValid, parse, parseISO } from "date-fns";
+import { format } from "date-fns";
+
+import { parseDate } from "../../../common/helpers/date-helpers.js";
+import {
+  buildRoleDateKeys,
+  normaliseRoleCodes,
+} from "../../../common/helpers/role-helpers.js";
+import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 
 export const createUserRolesTableViewModel = ({
   user,
@@ -166,60 +173,16 @@ const createRolesMap = (roles) => {
   return rolesByCode;
 };
 
-const normaliseRoleCodes = (roles) => {
-  if (!roles) {
-    return [];
-  }
-
-  if (Array.isArray(roles)) {
-    return roles;
-  }
-
-  return [roles];
-};
-
 const normaliseDateForHtmlInput = (value) => {
   const raw = toStringOrEmpty(value).trim();
   if (!raw) {
     return "";
   }
 
-  const parsed = parseFlexibleDate(raw);
+  const parsed = parseDate(raw);
   if (!parsed) {
     return "";
   }
 
   return format(parsed, "yyyy-MM-dd");
-};
-
-const parseFlexibleDate = (raw) => {
-  const iso = parseISO(raw);
-  if (isValid(iso)) {
-    return iso;
-  }
-
-  const dmy = parse(raw, "dd MMM yyyy", new Date());
-  if (isValid(dmy)) {
-    return dmy;
-  }
-
-  const dmySingle = parse(raw, "d MMM yyyy", new Date());
-  if (isValid(dmySingle)) {
-    return dmySingle;
-  }
-
-  return null;
-};
-
-const buildRoleDateKeys = (code) => ({
-  startKey: `startDate__${code}`,
-  endKey: `endDate__${code}`,
-});
-
-const toStringOrEmpty = (value) => {
-  if (value === null || value === undefined) {
-    return "";
-  }
-
-  return String(value);
 };
