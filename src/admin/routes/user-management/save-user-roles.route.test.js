@@ -1,7 +1,15 @@
 import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
@@ -26,7 +34,7 @@ describe("saveUserRolesRoute", () => {
     await server.stop();
   });
 
-  const baseSetup = () => {
+  beforeEach(() => {
     adminFindUserByIdUseCase.mockResolvedValue({
       id: "user-123",
       name: "Martin Smith",
@@ -43,10 +51,9 @@ describe("saveUserRolesRoute", () => {
         description: "Pigs Might Fly read write",
       },
     ]);
-  };
+  });
 
   it("persists selected roles and redirects back to user details", async () => {
-    baseSetup();
     updateUserRolesUseCase.mockResolvedValue();
 
     const { statusCode, headers } = await server.inject({
@@ -76,8 +83,6 @@ describe("saveUserRolesRoute", () => {
   });
 
   it("shows validation error when start date is invalid", async () => {
-    baseSetup();
-
     const { statusCode, result } = await server.inject({
       method: "POST",
       url: "/admin/user-management/user-123/roles",
@@ -100,8 +105,6 @@ describe("saveUserRolesRoute", () => {
   });
 
   it("shows validation error when end date is invalid", async () => {
-    baseSetup();
-
     const { statusCode, result } = await server.inject({
       method: "POST",
       url: "/admin/user-management/user-123/roles",
@@ -124,8 +127,6 @@ describe("saveUserRolesRoute", () => {
   });
 
   it("shows validation error when end date is before start date", async () => {
-    baseSetup();
-
     const { statusCode, result } = await server.inject({
       method: "POST",
       url: "/admin/user-management/user-123/roles",
@@ -151,7 +152,6 @@ describe("saveUserRolesRoute", () => {
   });
 
   it("returns 403 when backend forbids saving", async () => {
-    baseSetup();
     updateUserRolesUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
 
     const { statusCode } = await server.inject({
