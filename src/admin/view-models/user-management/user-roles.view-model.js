@@ -7,7 +7,7 @@ export const createUserRolesViewModel = ({
   errors,
   formData,
 }) => {
-  const safeErrors = normaliseErrors(errors);
+  const safeErrors = errors || {};
   const rolesTableViewModel = createUserRolesTableViewModel({
     user,
     roles,
@@ -33,27 +33,10 @@ export const createUserRolesViewModel = ({
   };
 };
 
-const normaliseErrors = (errors) => {
-  if (errors) {
-    return errors;
-  }
-
-  return {};
-};
-
 const buildErrorList = (errors) =>
   Object.entries(errors)
-    .map(([key, message]) => toErrorSummaryItem(key, message))
-    .filter(Boolean);
-
-const toErrorSummaryItem = (key, message) => {
-  if (!message) {
-    return null;
-  }
-
-  if (key === "save") {
-    return { text: message };
-  }
-
-  return { text: message, href: `#${key}` };
-};
+    .filter(([, message]) => Boolean(message))
+    .map(([key, message]) => ({
+      text: message,
+      ...(key !== "save" && { href: `#${key}` }),
+    }));
