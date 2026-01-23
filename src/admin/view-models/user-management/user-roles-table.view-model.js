@@ -44,15 +44,10 @@ const getAssignableRoleCodes = (roles) =>
     .map((role) => role.code);
 
 const getRoleCodesFromFormData = (formData) => {
-  if (!formData) {
-    return null;
+  if (formData && Object.hasOwn(formData, "roles")) {
+    return normaliseRoleCodes(formData.roles);
   }
-
-  if (!Object.prototype.hasOwnProperty.call(formData, "roles")) {
-    return null;
-  }
-
-  return normaliseRoleCodes(formData.roles);
+  return null;
 };
 
 const mergeRoleCodes = ({ assignableCodes, assignedCodes }) => {
@@ -117,43 +112,15 @@ const buildRoleRow = ({
 };
 
 const getDateRaw = ({ formData, key, assignedRoles, code, prop }) => {
-  const formValue = tryReadFormValue(formData, key);
-  if (formValue.found) {
-    return formValue.value;
+  if (formData && Object.hasOwn(formData, key)) {
+    return formData[key];
   }
 
   return readAssignedRoleValue(assignedRoles, code, prop);
 };
 
-const tryReadFormValue = (formData, key) => {
-  if (!formData) {
-    return { found: false, value: "" };
-  }
-
-  if (!Object.prototype.hasOwnProperty.call(formData, key)) {
-    return { found: false, value: "" };
-  }
-
-  return { found: true, value: formData[key] };
-};
-
-const readAssignedRoleValue = (assignedRoles, code, prop) => {
-  if (!assignedRoles) {
-    return "";
-  }
-
-  const allocation = assignedRoles[code];
-  if (!allocation) {
-    return "";
-  }
-
-  const value = allocation[prop];
-  if (!value) {
-    return "";
-  }
-
-  return value;
-};
+const readAssignedRoleValue = (assignedRoles, code, prop) =>
+  assignedRoles?.[code]?.[prop] || "";
 
 const formatDateForInput = ({ raw, error }) => {
   if (error) {
@@ -163,15 +130,8 @@ const formatDateForInput = ({ raw, error }) => {
   return normaliseDateForHtmlInput(raw);
 };
 
-const createRolesMap = (roles) => {
-  const rolesByCode = new Map();
-
-  roles.forEach((role) => {
-    rolesByCode.set(role.code, role);
-  });
-
-  return rolesByCode;
-};
+const createRolesMap = (roles) =>
+  new Map(roles.map((role) => [role.code, role]));
 
 const normaliseDateForHtmlInput = (value) => {
   const raw = toStringOrEmpty(value).trim();
