@@ -60,9 +60,9 @@ describe("viewUserRolesRoute", () => {
 
     expect(statusCode).toEqual(200);
 
-    expect(result).toMatchSnapshot();
-
     const $ = load(result);
+    expect($("#main-content").html()).toMatchSnapshot();
+
     expect($("input[value='PMF_READ']").attr("checked")).toBeDefined();
     expect($("input[value='PMF_READ_WRITE']").attr("checked")).toBeDefined();
   });

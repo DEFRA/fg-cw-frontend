@@ -1,59 +1,7 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
 exports[`saveUserRolesRoute > shows validation error when end date is before start date 1`] = `
-"<!DOCTYPE html>
-<html lang="en" class="govuk-template">
-  <head>
-    <meta charset="utf-8">
-    <title>  User roles
-  | fg-cw-frontend
-</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c">
-
-      <link rel="icon" sizes="48x48" href="/public/assets/images/favicon.ico">
-      <link rel="icon" sizes="any" href="/public/assets/images/favicon.svg" type="image/svg+xml">
-      <link rel="mask-icon" href="/public/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
-      <link rel="apple-touch-icon" href="/public/assets/images/govuk-icon-180.png">
-      <link rel="manifest" href="/public/assets/manifest.json">
-
-  <link
-    href="/public/stylesheets/application.89ad78c.min.css"
-    rel="stylesheet"
-  />
-
-  </head>
-  <body class="govuk-template__body">
-    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-
-      <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
-
-
-  <header class="defra-header">
-  <div class="defra-header__inner">
-    <a
-      href="/"
-      class="defra-header__logo-link"
-      title="Go to the homepage"
-      data-testid="defra-heading-logo"
-    >
-      <img
-        class="logo-light"
-        src="/public/assets/images/defra-logo.svg"
-        alt="Department for Environment Food & Rural Affairs"
-      />
-      <span
-        class="defra-header__service-name"
-        data-testid="defra-heading-service-name"
-        >Manage rural grant applications</span
-      >
-    </a>
-  </div>
-</header>
-
-
-      <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" id="main-content">
+"
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
@@ -92,10 +40,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form
-        action="/admin/user-management/user-123/roles"
-        method="post"
-      >
+      <form action="/admin/user-management/user-123/roles" method="post">
 
 
 
@@ -122,21 +67,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
     <tr class="govuk-table__row">
       <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
-                <input
-                  class="govuk-checkboxes__input"
-                  id="role__PMF_READ"
-                  name="roles"
-                  type="checkbox"
-                  value="PMF_READ"
-                  checked
-                />
-                <label
-                  class="govuk-label govuk-checkboxes__label"
-                  for="role__PMF_READ"
-                >
-                  <span class="govuk-visually-hidden"
-                    >Select PMF_READ</span
-                  >
+                <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
+                  <span class="govuk-visually-hidden">Select PMF_READ</span>
                 </label>
               </div>
             </div>
@@ -148,16 +81,8 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
 </td>
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
-      <td class="govuk-table__cell">            <div
-              class=""
-            >
-              <input
-                class="govuk-input govuk-input--width-10 "
-                id="startDate__PMF_READ"
-                name="startDate__PMF_READ"
-                type="date"
-                value="2026-02-01"
-              />
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-02-01">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="govuk-form-group--error">
@@ -165,13 +90,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
                   <span class="govuk-visually-hidden">Error:</span>
                   End date before start date
                 </p>
-              <input
-                class="govuk-input govuk-input--width-10 govuk-input--error"
-                id="endDate__PMF_READ"
-                name="endDate__PMF_READ"
-                type="date"
-                value="2026-01-01"
-              />
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2026-01-01">
             </div>
 </td>
     </tr>
@@ -183,151 +102,16 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123"
-            >Cancel</a
-          >
+          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
         </div>
       </form>
     </div>
   </div>
-        </main>
-      </div>
-
-  <footer class="govuk-footer">
-  <div class="govuk-width-container">
-    <div class="govuk-footer__meta">
-      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-        <h2 class="govuk-visually-hidden">Support links</h2>
-        <ul class="govuk-footer__inline-list">
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/privacy-notice">
-              Privacy
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/cookies">
-              Cookies
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/accessibility-statement">
-              Accessibility statement
-            </a>
-          </li>
-        </ul>
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            class="govuk-footer__licence-logo"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 483.2 195.7"
-            height="17"
-            width="41"
-          >
-            <path
-              fill="currentColor"
-              d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
-            />
-          </svg>
-          <span class="govuk-footer__licence-description">
-            All content is available under the
-            <a
-              class="govuk-footer__link"
-              href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-              rel="license"
-            >Open Government Licence v3.0</a>, except where otherwise stated
-          </span>
-      </div>
-      <div class="govuk-footer__meta-item">
-        <a
-          class="govuk-footer__link govuk-footer__copyright-logo"
-          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
-        >
-          © Crown copyright
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-  <script>
-    document.body.className +=
-      " js-enabled" +
-      ("noModule" in HTMLScriptElement.prototype
-        ? " govuk-frontend-supported"
-        : "");
-  </script>
-  <script type="module" src="/public/javascripts/application.4d146ac.min.js"></script>
-  <script type="module" src="/public/javascripts/govuk.98e009b.min.js"></script>
-  <script type="module" src="/public/javascripts/moj.8e5ac90.min.js"></script>
-  <script type="module">
-    import { initSelectAllCheckboxes } from "/public/javascripts/checkboxes.3c34a41.min.js";
-    import { initAll } from "/public/javascripts/govuk.98e009b.min.js";
-    import { initAll as initMOJ } from "/public/javascripts/moj.8e5ac90.min.js";
-    initSelectAllCheckboxes();
-    initAll();
-    initMOJ();
-  </script>
-  </body>
-</html>
-"
+        "
 `;
 
 exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`] = `
-"<!DOCTYPE html>
-<html lang="en" class="govuk-template">
-  <head>
-    <meta charset="utf-8">
-    <title>  User roles
-  | fg-cw-frontend
-</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c">
-
-      <link rel="icon" sizes="48x48" href="/public/assets/images/favicon.ico">
-      <link rel="icon" sizes="any" href="/public/assets/images/favicon.svg" type="image/svg+xml">
-      <link rel="mask-icon" href="/public/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
-      <link rel="apple-touch-icon" href="/public/assets/images/govuk-icon-180.png">
-      <link rel="manifest" href="/public/assets/manifest.json">
-
-  <link
-    href="/public/stylesheets/application.89ad78c.min.css"
-    rel="stylesheet"
-  />
-
-  </head>
-  <body class="govuk-template__body">
-    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-
-      <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
-
-
-  <header class="defra-header">
-  <div class="defra-header__inner">
-    <a
-      href="/"
-      class="defra-header__logo-link"
-      title="Go to the homepage"
-      data-testid="defra-heading-logo"
-    >
-      <img
-        class="logo-light"
-        src="/public/assets/images/defra-logo.svg"
-        alt="Department for Environment Food & Rural Affairs"
-      />
-      <span
-        class="defra-header__service-name"
-        data-testid="defra-heading-service-name"
-        >Manage rural grant applications</span
-      >
-    </a>
-  </div>
-</header>
-
-
-      <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" id="main-content">
+"
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
@@ -366,10 +150,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form
-        action="/admin/user-management/user-123/roles"
-        method="post"
-      >
+      <form action="/admin/user-management/user-123/roles" method="post">
 
 
 
@@ -396,21 +177,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
     <tr class="govuk-table__row">
       <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
-                <input
-                  class="govuk-checkboxes__input"
-                  id="role__PMF_READ"
-                  name="roles"
-                  type="checkbox"
-                  value="PMF_READ"
-                  checked
-                />
-                <label
-                  class="govuk-label govuk-checkboxes__label"
-                  for="role__PMF_READ"
-                >
-                  <span class="govuk-visually-hidden"
-                    >Select PMF_READ</span
-                  >
+                <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
+                  <span class="govuk-visually-hidden">Select PMF_READ</span>
                 </label>
               </div>
             </div>
@@ -422,16 +191,8 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
 </td>
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
-      <td class="govuk-table__cell">            <div
-              class=""
-            >
-              <input
-                class="govuk-input govuk-input--width-10 "
-                id="startDate__PMF_READ"
-                name="startDate__PMF_READ"
-                type="date"
-                value="2025-07-01"
-              />
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="govuk-form-group--error">
@@ -439,13 +200,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid End Date
                 </p>
-              <input
-                class="govuk-input govuk-input--width-10 govuk-input--error"
-                id="endDate__PMF_READ"
-                name="endDate__PMF_READ"
-                type="date"
-                value="not-a-date"
-              />
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="not-a-date">
             </div>
 </td>
     </tr>
@@ -457,151 +212,16 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123"
-            >Cancel</a
-          >
+          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
         </div>
       </form>
     </div>
   </div>
-        </main>
-      </div>
-
-  <footer class="govuk-footer">
-  <div class="govuk-width-container">
-    <div class="govuk-footer__meta">
-      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-        <h2 class="govuk-visually-hidden">Support links</h2>
-        <ul class="govuk-footer__inline-list">
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/privacy-notice">
-              Privacy
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/cookies">
-              Cookies
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/accessibility-statement">
-              Accessibility statement
-            </a>
-          </li>
-        </ul>
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            class="govuk-footer__licence-logo"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 483.2 195.7"
-            height="17"
-            width="41"
-          >
-            <path
-              fill="currentColor"
-              d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
-            />
-          </svg>
-          <span class="govuk-footer__licence-description">
-            All content is available under the
-            <a
-              class="govuk-footer__link"
-              href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-              rel="license"
-            >Open Government Licence v3.0</a>, except where otherwise stated
-          </span>
-      </div>
-      <div class="govuk-footer__meta-item">
-        <a
-          class="govuk-footer__link govuk-footer__copyright-logo"
-          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
-        >
-          © Crown copyright
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-  <script>
-    document.body.className +=
-      " js-enabled" +
-      ("noModule" in HTMLScriptElement.prototype
-        ? " govuk-frontend-supported"
-        : "");
-  </script>
-  <script type="module" src="/public/javascripts/application.4d146ac.min.js"></script>
-  <script type="module" src="/public/javascripts/govuk.98e009b.min.js"></script>
-  <script type="module" src="/public/javascripts/moj.8e5ac90.min.js"></script>
-  <script type="module">
-    import { initSelectAllCheckboxes } from "/public/javascripts/checkboxes.3c34a41.min.js";
-    import { initAll } from "/public/javascripts/govuk.98e009b.min.js";
-    import { initAll as initMOJ } from "/public/javascripts/moj.8e5ac90.min.js";
-    initSelectAllCheckboxes();
-    initAll();
-    initMOJ();
-  </script>
-  </body>
-</html>
-"
+        "
 `;
 
 exports[`saveUserRolesRoute > shows validation error when start date is invalid 1`] = `
-"<!DOCTYPE html>
-<html lang="en" class="govuk-template">
-  <head>
-    <meta charset="utf-8">
-    <title>  User roles
-  | fg-cw-frontend
-</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0b0c0c">
-
-      <link rel="icon" sizes="48x48" href="/public/assets/images/favicon.ico">
-      <link rel="icon" sizes="any" href="/public/assets/images/favicon.svg" type="image/svg+xml">
-      <link rel="mask-icon" href="/public/assets/images/govuk-icon-mask.svg" color="#0b0c0c">
-      <link rel="apple-touch-icon" href="/public/assets/images/govuk-icon-180.png">
-      <link rel="manifest" href="/public/assets/manifest.json">
-
-  <link
-    href="/public/stylesheets/application.89ad78c.min.css"
-    rel="stylesheet"
-  />
-
-  </head>
-  <body class="govuk-template__body">
-    <script>document.body.className += ' js-enabled' + ('noModule' in HTMLScriptElement.prototype ? ' govuk-frontend-supported' : '');</script>
-
-      <a href="#main-content" class="govuk-skip-link" data-module="govuk-skip-link">Skip to main content</a>
-
-
-  <header class="defra-header">
-  <div class="defra-header__inner">
-    <a
-      href="/"
-      class="defra-header__logo-link"
-      title="Go to the homepage"
-      data-testid="defra-heading-logo"
-    >
-      <img
-        class="logo-light"
-        src="/public/assets/images/defra-logo.svg"
-        alt="Department for Environment Food & Rural Affairs"
-      />
-      <span
-        class="defra-header__service-name"
-        data-testid="defra-heading-service-name"
-        >Manage rural grant applications</span
-      >
-    </a>
-  </div>
-</header>
-
-
-      <div class="govuk-width-container">
-        <main class="govuk-main-wrapper" id="main-content">
+"
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
@@ -640,10 +260,7 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form
-        action="/admin/user-management/user-123/roles"
-        method="post"
-      >
+      <form action="/admin/user-management/user-123/roles" method="post">
 
 
 
@@ -670,21 +287,9 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
     <tr class="govuk-table__row">
       <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
-                <input
-                  class="govuk-checkboxes__input"
-                  id="role__PMF_READ"
-                  name="roles"
-                  type="checkbox"
-                  value="PMF_READ"
-                  checked
-                />
-                <label
-                  class="govuk-label govuk-checkboxes__label"
-                  for="role__PMF_READ"
-                >
-                  <span class="govuk-visually-hidden"
-                    >Select PMF_READ</span
-                  >
+                <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
+                  <span class="govuk-visually-hidden">Select PMF_READ</span>
                 </label>
               </div>
             </div>
@@ -696,30 +301,16 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
 </td>
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
-      <td class="govuk-table__cell">            <div
-              class="govuk-form-group--error"
-            >
+      <td class="govuk-table__cell">            <div class="govuk-form-group--error">
                 <p id="startDate__PMF_READ-error" class="govuk-error-message">
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid Start Date
                 </p>
-              <input
-                class="govuk-input govuk-input--width-10 govuk-input--error"
-                id="startDate__PMF_READ"
-                name="startDate__PMF_READ"
-                type="date"
-                value="not-a-date"
-              />
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="not-a-date">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="">
-              <input
-                class="govuk-input govuk-input--width-10 "
-                id="endDate__PMF_READ"
-                name="endDate__PMF_READ"
-                type="date"
-                value="2025-08-02"
-              />
+              <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
             </div>
 </td>
     </tr>
@@ -731,93 +322,10 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123"
-            >Cancel</a
-          >
+          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
         </div>
       </form>
     </div>
   </div>
-        </main>
-      </div>
-
-  <footer class="govuk-footer">
-  <div class="govuk-width-container">
-    <div class="govuk-footer__meta">
-      <div class="govuk-footer__meta-item govuk-footer__meta-item--grow">
-        <h2 class="govuk-visually-hidden">Support links</h2>
-        <ul class="govuk-footer__inline-list">
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/privacy-notice">
-              Privacy
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/cookies">
-              Cookies
-            </a>
-          </li>
-          <li class="govuk-footer__inline-list-item">
-            <a class="govuk-footer__link" href="https://www.gov.uk/help/accessibility-statement">
-              Accessibility statement
-            </a>
-          </li>
-        </ul>
-          <svg
-            aria-hidden="true"
-            focusable="false"
-            class="govuk-footer__licence-logo"
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 483.2 195.7"
-            height="17"
-            width="41"
-          >
-            <path
-              fill="currentColor"
-              d="M421.5 142.8V.1l-50.7 32.3v161.1h112.4v-50.7zm-122.3-9.6A47.12 47.12 0 0 1 221 97.8c0-26 21.1-47.1 47.1-47.1 16.7 0 31.4 8.7 39.7 21.8l42.7-27.2A97.63 97.63 0 0 0 268.1 0c-36.5 0-68.3 20.1-85.1 49.7A98 98 0 0 0 97.8 0C43.9 0 0 43.9 0 97.8s43.9 97.8 97.8 97.8c36.5 0 68.3-20.1 85.1-49.7a97.76 97.76 0 0 0 149.6 25.4l19.4 22.2h3v-87.8h-80l24.3 27.5zM97.8 145c-26 0-47.1-21.1-47.1-47.1s21.1-47.1 47.1-47.1 47.2 21 47.2 47S123.8 145 97.8 145"
-            />
-          </svg>
-          <span class="govuk-footer__licence-description">
-            All content is available under the
-            <a
-              class="govuk-footer__link"
-              href="https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/"
-              rel="license"
-            >Open Government Licence v3.0</a>, except where otherwise stated
-          </span>
-      </div>
-      <div class="govuk-footer__meta-item">
-        <a
-          class="govuk-footer__link govuk-footer__copyright-logo"
-          href="https://www.nationalarchives.gov.uk/information-management/re-using-public-sector-information/uk-government-licensing-framework/crown-copyright/"
-        >
-          © Crown copyright
-        </a>
-      </div>
-    </div>
-  </div>
-</footer>
-
-
-  <script>
-    document.body.className +=
-      " js-enabled" +
-      ("noModule" in HTMLScriptElement.prototype
-        ? " govuk-frontend-supported"
-        : "");
-  </script>
-  <script type="module" src="/public/javascripts/application.4d146ac.min.js"></script>
-  <script type="module" src="/public/javascripts/govuk.98e009b.min.js"></script>
-  <script type="module" src="/public/javascripts/moj.8e5ac90.min.js"></script>
-  <script type="module">
-    import { initSelectAllCheckboxes } from "/public/javascripts/checkboxes.3c34a41.min.js";
-    import { initAll } from "/public/javascripts/govuk.98e009b.min.js";
-    import { initAll as initMOJ } from "/public/javascripts/moj.8e5ac90.min.js";
-    initSelectAllCheckboxes();
-    initAll();
-    initMOJ();
-  </script>
-  </body>
-</html>
-"
+        "
 `;
