@@ -1,0 +1,23 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`adminLandingRoute > renders admin landing page 1`] = `
+"
+
+    
+
+
+
+  <h1 class="govuk-heading-l">Users and roles</h1>
+
+    <h2 class="govuk-heading-m">Users</h2>
+    <p class="govuk-body">Check and update what users can do.</p>
+    <p class="govuk-body">
+      <a class="govuk-link" href="/admin/user-management">Manage users</a>
+    </p>
+    <h2 class="govuk-heading-m">Roles</h2>
+    <p class="govuk-body">Check and edit roles, or create new ones.</p>
+    <p class="govuk-body">
+      <a class="govuk-link" href="/admin/user-management/roles-list">Manage roles</a>
+    </p>
+        "
+`;

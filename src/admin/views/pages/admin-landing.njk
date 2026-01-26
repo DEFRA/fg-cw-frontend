@@ -1,0 +1,15 @@
+{% extends "layouts/case-layout.njk" %}
+
+{% block contentMain %}
+  <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+
+  {% for section in sections %}
+    <h2 class="govuk-heading-m">{{ section.title }}</h2>
+    <p class="govuk-body">{{ section.description }}</p>
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ section.linkHref }}"
+        >{{ section.linkText }}</a
+      >
+    </p>
+  {% endfor %}
+{% endblock %}
