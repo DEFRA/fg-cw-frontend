@@ -1,5 +1,14 @@
 import { wreck } from "../../common/wreck.js";
 
+export const adminAccessCheck = async (authContext) => {
+  const { payload } = await wreck.get("/admin/access-check", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+  return payload;
+};
+
 export const adminFindById = async (authContext, id) => {
   const { payload } = await wreck.get(`/admin/users/${id}`, {
     headers: {

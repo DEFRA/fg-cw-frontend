@@ -1,11 +1,35 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
-import { adminFindUsers, findAssignees, login } from "./user.repository.js";
+import {
+  adminAccessCheck,
+  adminFindUsers,
+  findAssignees,
+  login,
+} from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
 
 beforeEach(() => {
   vi.clearAllMocks();
+});
+
+describe("adminAccessCheck", () => {
+  const authContext = { token: "mock-token" };
+
+  it("checks admin access", async () => {
+    wreck.get.mockResolvedValue({
+      payload: { ok: true },
+    });
+
+    const result = await adminAccessCheck(authContext);
+
+    expect(wreck.get).toHaveBeenCalledWith("/admin/access-check", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+    });
+    expect(result).toEqual({ ok: true });
+  });
 });
 
 describe("adminFindUsers", () => {
