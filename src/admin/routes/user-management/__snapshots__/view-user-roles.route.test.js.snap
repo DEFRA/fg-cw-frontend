@@ -18,7 +18,7 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
       <link rel="manifest" href="/public/assets/manifest.json">
 
   <link
-    href="/public/stylesheets/application.css"
+    href="/public/stylesheets/application.89ad78c.min.css"
     rel="stylesheet"
   />
 
@@ -301,13 +301,13 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
         ? " govuk-frontend-supported"
         : "");
   </script>
-  <script type="module" src="/public/javascripts/application.js"></script>
-  <script type="module" src="/public/javascripts/govuk.js"></script>
-  <script type="module" src="/public/javascripts/moj.js"></script>
+  <script type="module" src="/public/javascripts/application.4d146ac.min.js"></script>
+  <script type="module" src="/public/javascripts/govuk.98e009b.min.js"></script>
+  <script type="module" src="/public/javascripts/moj.8e5ac90.min.js"></script>
   <script type="module">
-    import { initSelectAllCheckboxes } from "/public/javascripts/checkboxes.js";
-    import { initAll } from "/public/javascripts/govuk.js";
-    import { initAll as initMOJ } from "/public/javascripts/moj.js";
+    import { initSelectAllCheckboxes } from "/public/javascripts/checkboxes.3c34a41.min.js";
+    import { initAll } from "/public/javascripts/govuk.98e009b.min.js";
+    import { initAll as initMOJ } from "/public/javascripts/moj.8e5ac90.min.js";
     initSelectAllCheckboxes();
     initAll();
     initMOJ();
