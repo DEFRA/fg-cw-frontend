@@ -1,0 +1,134 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/tag/macro.njk" import govukTag %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">User roles</h1>
+
+      <p class="govuk-body">User: {{ data.userName }}</p>
+
+      <form
+        action="/admin/user-management/{{ data.userId }}/roles"
+        method="post"
+      >
+        {% set rows = [] %}
+
+        {% for role in data.roles %}
+          {% set checkboxHtml %}
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input
+                  class="govuk-checkboxes__input"
+                  id="role__{{ role.code }}"
+                  name="roles"
+                  type="checkbox"
+                  value="{{ role.code }}"
+                  {{ 'checked' if role.checked }}
+                />
+                <label
+                  class="govuk-label govuk-checkboxes__label"
+                  for="role__{{ role.code }}"
+                >
+                  <span class="govuk-visually-hidden"
+                    >Select {{ role.code }}</span
+                  >
+                </label>
+              </div>
+            </div>
+          {% endset %}
+
+
+          {% set startHtml %}
+            <div
+              class="{{ 'govuk-form-group--error' if errors[role.startKey] }}"
+            >
+              {% if errors[role.startKey] %}
+                <p id="{{ role.startKey }}-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  {{ errors[role.startKey] }}
+                </p>
+              {% endif %}
+              <input
+                class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.startKey] }}"
+                id="{{ role.startKey }}"
+                name="{{ role.startKey }}"
+                type="date"
+                value="{{ role.startDate }}"
+              />
+            </div>
+          {% endset %}
+
+
+          {% set endHtml %}
+            <div class="{{ 'govuk-form-group--error' if errors[role.endKey] }}">
+              {% if errors[role.endKey] %}
+                <p id="{{ role.endKey }}-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  {{ errors[role.endKey] }}
+                </p>
+              {% endif %}
+              <input
+                class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.endKey] }}"
+                id="{{ role.endKey }}"
+                name="{{ role.endKey }}"
+                type="date"
+                value="{{ role.endDate }}"
+              />
+            </div>
+          {% endset %}
+
+
+          {% set codeHtml %}
+            {{ govukTag({ text: role.code, classes: "govuk-tag--green tag-no-wrap govuk-!-margin-top-1" }) }}
+          {% endset %}
+
+
+          {% set descriptionHtml %}
+            <div class="govuk-!-margin-top-1">{{ role.description }}</div>
+          {% endset %}
+
+          {%
+            set row = [
+              { html: checkboxHtml },
+              { html: codeHtml },
+              { html: descriptionHtml },
+              { html: startHtml },
+              { html: endHtml }
+            ]
+          %}
+
+          {% set rows = (rows.push(row), rows) %}
+        {% endfor %}
+
+        {{
+          govukTable({
+            head: [
+              { text: "" },
+              { text: "Code" },
+              { text: "Description" },
+              { text: "Start" },
+              { text: "End" }
+            ],
+            rows: rows,
+            firstCellIsHeader: false
+          })
+        }}
+
+        <div class="govuk-button-group govuk-!-margin-top-6">
+          {{ govukButton({ text: "Save" }) }}
+          <a class="govuk-link" href="/admin/user-management/{{ data.userId }}"
+            >Cancel</a
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock %}

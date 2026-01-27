@@ -76,3 +76,14 @@ export const login = async (authContext, userData) => {
 
   return payload;
 };
+
+export const update = async (authContext, id, userData) => {
+  const { payload } = await wreck.patch(`/admin/users/${id}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: userData,
+  });
+
+  return payload;
+};
