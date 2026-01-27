@@ -3,14 +3,20 @@
 {% from "govuk/components/button/macro.njk" import govukButton %}
 
 {% block contentMain %}
-  <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
-
-  {{
-    govukButton({
-      text: "Create new role",
-      href: data.createRoleHref
-    })
-  }}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+    </div>
+    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+      {{
+        govukButton({
+          text: "Create role",
+          href: data.createRoleHref,
+          classes: "govuk-button--secondary"
+        })
+      }}
+    </div>
+  </div>
 
   {% if data.roles.rows.length > 0 %}
     {% set rows = [] %}
