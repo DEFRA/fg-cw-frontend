@@ -1,0 +1,128 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`viewUserRolesRoute > renders user roles page and checks currently allocated roles 1`] = `
+"
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/user-123">User details</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
+  </ol>
+</nav>
+
+
+    
+
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <h1 class="govuk-heading-l">User roles</h1>
+
+      <p class="govuk-body">User: Martin Smith</p>
+
+      <form action="/admin/user-management/user-123/roles" method="post">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header">Code</th>
+      <th scope="col" class="govuk-table__header">Description</th>
+      <th scope="col" class="govuk-table__header">Start</th>
+      <th scope="col" class="govuk-table__header">End</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
+                  <span class="govuk-visually-hidden">Select PMF_READ</span>
+                </label>
+              </div>
+            </div>
+</td>
+      <td class="govuk-table__cell">            <strong class="govuk-tag govuk-tag--green tag-no-wrap govuk-!-margin-top-1">
+  PMF_READ
+</strong>
+
+</td>
+      <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
+</td>
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
+            </div>
+</td>
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
+            </div>
+</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="role__PMF_READ_WRITE" name="roles" type="checkbox" value="PMF_READ_WRITE" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ_WRITE">
+                  <span class="govuk-visually-hidden">Select PMF_READ_WRITE</span>
+                </label>
+              </div>
+            </div>
+</td>
+      <td class="govuk-table__cell">            <strong class="govuk-tag govuk-tag--green tag-no-wrap govuk-!-margin-top-1">
+  PMF_READ_WRITE
+</strong>
+
+</td>
+      <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read write</div>
+</td>
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ_WRITE" name="startDate__PMF_READ_WRITE" type="date" value="">
+            </div>
+</td>
+      <td class="govuk-table__cell">            <div class="">
+              <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ_WRITE" name="endDate__PMF_READ_WRITE" type="date" value="">
+            </div>
+</td>
+    </tr>
+  </tbody>
+</table>
+
+
+        <div class="govuk-button-group govuk-!-margin-top-6">
+          <button type="submit" class="govuk-button" data-module="govuk-button">
+  Save
+</button>
+          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+        "
+`;
