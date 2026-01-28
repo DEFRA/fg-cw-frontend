@@ -12,8 +12,12 @@ describe("createRoleListViewModel", () => {
 
     expect(viewModel.pageTitle).toEqual("Roles");
     expect(viewModel.pageHeading).toEqual("Roles");
+    expect(viewModel.breadcrumbs).toEqual([
+      { text: "User management", href: "/admin" },
+      { text: "Roles" },
+    ]);
     expect(viewModel.data.createRoleHref).toEqual(
-      "/admin/user-management/roles/create",
+      "/admin/user-management/roles/new",
     );
 
     expect(viewModel.data.roles.rows).toEqual([

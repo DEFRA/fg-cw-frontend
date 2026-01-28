@@ -4,6 +4,10 @@ export const createRoleListViewModel = (roles) => {
   return {
     pageTitle: "Roles",
     pageHeading: "Roles",
+    breadcrumbs: [
+      { text: "User management", href: "/admin" },
+      { text: "Roles" },
+    ],
     data: {
       roles: {
         head: [
@@ -20,7 +24,7 @@ export const createRoleListViewModel = (roles) => {
           assignable: role.assignable ? "Yes" : "No",
         })),
       },
-      createRoleHref: "/admin/user-management/roles/create",
+      createRoleHref: "/admin/user-management/roles/new",
     },
   };
 };
