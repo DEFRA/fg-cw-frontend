@@ -13,9 +13,9 @@ export const editComponentsRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseItem = await findCaseByIdUseCase(authContext, caseId);
+    const page = await findCaseByIdUseCase(authContext, caseId);
     const content = getComponentsContentUseCase(request.yar);
-    const viewModel = createComponentsEditViewModel(caseItem, { content });
+    const viewModel = createComponentsEditViewModel({ page, request, content });
 
     return h.view("temp/components-edit", viewModel);
   },

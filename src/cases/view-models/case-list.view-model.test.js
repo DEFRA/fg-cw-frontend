@@ -1,9 +1,18 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   createAssignedUserSuccessMessage,
   createCaseListViewModel,
   mapText,
 } from "./case-list.view-model.js";
+
+vi.mock("../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases" };
+
+const createMockPage = (cases) => ({
+  data: cases,
+  header: { navItems: [] },
+});
 
 describe("case-list.model", () => {
   describe("mapText", () => {
@@ -144,7 +153,10 @@ describe("case-list.model", () => {
     ];
 
     it("creates complete view model with tabItems structure", () => {
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel({
+        page: createMockPage(mockCases),
+        request: mockRequest,
+      });
 
       expect(result).toEqual({
         pageTitle: "Cases",
@@ -237,27 +249,40 @@ describe("case-list.model", () => {
     });
 
     it("creates view model with empty cases", () => {
-      const result = createCaseListViewModel([]);
+      const result = createCaseListViewModel({
+        page: createMockPage([]),
+        request: mockRequest,
+      });
 
       expect(result.data.tabItems[0].data.rows).toEqual([]);
       expect(result.data.tabItems[0].label).toBe("SFI applications (0)");
     });
 
     it("has consistent page title and page heading", () => {
-      const result = createCaseListViewModel([]);
+      const result = createCaseListViewModel({
+        page: createMockPage([]),
+        request: mockRequest,
+      });
 
       expect(result.pageTitle).toBe("Cases");
       expect(result.pageHeading).toBe("Cases");
     });
 
     it("has empty breadcrumbs array", () => {
-      const result = createCaseListViewModel([]);
+      const result = createCaseListViewModel({
+        page: createMockPage([]),
+        request: mockRequest,
+      });
 
       expect(result.breadcrumbs).toEqual([]);
     });
 
     it("includes assignedUserSuccessMessage when provided", () => {
-      const result = createCaseListViewModel(mockCases, "case-1");
+      const result = createCaseListViewModel({
+        page: createMockPage(mockCases),
+        request: mockRequest,
+        assignedCaseId: "case-1",
+      });
 
       expect(result.data.assignedUserSuccessMessage).toEqual({
         heading: "Case assigned successfully",
@@ -283,7 +308,10 @@ describe("case-list.model", () => {
         },
       ];
 
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel({
+        page: createMockPage(mockCases),
+        request: mockRequest,
+      });
       const statusCell = result.data.tabItems[0].data.rows[0].status;
 
       expect(statusCell).toEqual({
@@ -306,7 +334,10 @@ describe("case-list.model", () => {
         },
       ];
 
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel({
+        page: createMockPage(mockCases),
+        request: mockRequest,
+      });
       const statusCell = result.data.tabItems[0].data.rows[0].status;
 
       expect(statusCell).toEqual({
@@ -329,7 +360,10 @@ describe("case-list.model", () => {
         },
       ];
 
-      const result = createCaseListViewModel(mockCases);
+      const result = createCaseListViewModel({
+        page: createMockPage(mockCases),
+        request: mockRequest,
+      });
       const statusCell = result.data.tabItems[0].data.rows[0].status;
 
       expect(statusCell).toEqual({
@@ -353,7 +387,10 @@ describe("case-list.model", () => {
       },
     ];
 
-    const result = createCaseListViewModel(mockCases);
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
     const statusCell = result.data.tabItems[0].data.rows[0].status;
 
     expect(statusCell).toEqual({
@@ -386,7 +423,10 @@ describe("table structure mapping", () => {
       },
     ];
 
-    const result = createCaseListViewModel(mockCases);
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
     const tableData = result.data.tabItems[0].data;
 
     expect(tableData.head).toEqual([
@@ -473,7 +513,10 @@ describe("table structure mapping", () => {
       },
     ];
 
-    const result = createCaseListViewModel(mockCases);
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
     const row = result.data.tabItems[0].data.rows[0];
 
     expect(row.id.text).toBe("");

@@ -56,7 +56,10 @@ describe("updateStageOutcomeUseCase", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue({
+      data: mockCaseData,
+      header: { navItems: [] },
+    });
   });
 
   describe("successful stage outcome update", () => {

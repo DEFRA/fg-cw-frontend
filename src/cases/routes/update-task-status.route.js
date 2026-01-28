@@ -41,8 +41,8 @@ export const updateTaskStatusRoute = {
       user: request.auth.credentials.user,
     };
 
-    const kase = await findCaseByIdUseCase(authContext, caseId);
-    const task = findTask(kase, taskGroupCode, taskCode);
+    const page = await findCaseByIdUseCase(authContext, caseId);
+    const task = findTask(page.data, taskGroupCode, taskCode);
 
     const errors = {};
 

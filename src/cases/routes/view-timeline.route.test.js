@@ -7,6 +7,12 @@ import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { timelineRoute } from "./view-timeline.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
+vi.mock("../../common/view-models/header.view-model.js");
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("timelineRoute", () => {
   let server;
@@ -24,99 +30,101 @@ describe("timelineRoute", () => {
   });
 
   it("displays a timeline", async () => {
-    findCaseByIdUseCase.mockResolvedValue({
-      _id: "68495db5afe2d27b09b2ee47",
-      caseRef: "banana-123",
-      workflowCode: "frps-private-beta",
-      dateReceived: "2025-06-11T10:43:01.603Z",
-      currentPhase: "phase-1",
-      currentStage: "application-receipt",
-      currentStatus: "NEW",
-      links: createMockLinks("68495db5afe2d27b09b2ee47"),
-      payload: {
-        clientRef: "banana-123",
-        code: "frps-private-beta",
-        createdAt: "2025-06-11T10:43:01.417Z",
-        submittedAt: "2023-10-01T12:00:00.000Z",
-        identifiers: {
-          sbi: "SBI001",
-          frn: "FIRM0001",
-          crn: "CUST0001",
-          defraId: "DEFRA0001",
-        },
-        answers: {
-          agreementName: "Test application name 1",
-          scheme: "SFI",
-          year: 2025,
-          hasCheckedLandIsUpToDate: true,
-          actionApplications: [
-            {
-              parcelId: "9238",
-              sheetId: "SX0679",
-              code: "CSAM1",
-              appliedFor: {
-                unit: "ha",
-                quantity: 20.23,
-              },
-            },
-          ],
-        },
-      },
-      stages: [
-        {
-          code: "application-receipt",
-          name: "Application Receipt",
-          taskGroups: [
-            {
-              code: "application-receipt-tasks",
-              name: "Application Receipt Tasks",
-              tasks: [
-                {
-                  code: "simple-review",
-                  name: "Simple Review",
-                  status: "pending",
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({
+        _id: "68495db5afe2d27b09b2ee47",
+        caseRef: "banana-123",
+        workflowCode: "frps-private-beta",
+        dateReceived: "2025-06-11T10:43:01.603Z",
+        currentPhase: "phase-1",
+        currentStage: "application-receipt",
+        currentStatus: "NEW",
+        links: createMockLinks("68495db5afe2d27b09b2ee47"),
+        payload: {
+          clientRef: "banana-123",
+          code: "frps-private-beta",
+          createdAt: "2025-06-11T10:43:01.417Z",
+          submittedAt: "2023-10-01T12:00:00.000Z",
+          identifiers: {
+            sbi: "SBI001",
+            frn: "FIRM0001",
+            crn: "CUST0001",
+            defraId: "DEFRA0001",
+          },
+          answers: {
+            agreementName: "Test application name 1",
+            scheme: "SFI",
+            year: 2025,
+            hasCheckedLandIsUpToDate: true,
+            actionApplications: [
+              {
+                parcelId: "9238",
+                sheetId: "SX0679",
+                code: "CSAM1",
+                appliedFor: {
+                  unit: "ha",
+                  quantity: 20.23,
                 },
-              ],
+              },
+            ],
+          },
+        },
+        stages: [
+          {
+            code: "application-receipt",
+            name: "Application Receipt",
+            taskGroups: [
+              {
+                code: "application-receipt-tasks",
+                name: "Application Receipt Tasks",
+                tasks: [
+                  {
+                    code: "simple-review",
+                    name: "Simple Review",
+                    status: "pending",
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            code: "contract",
+            name: "Contract",
+            taskGroups: [],
+          },
+        ],
+        timeline: [
+          {
+            eventType: "CASE_CREATED",
+            createdAt: "2025-06-16T09:01:14.072Z",
+            description: "Case received",
+            createdBy: { name: "Julian Kimmings" },
+            data: {
+              caseRef: "APPLICATION-REF-3",
             },
-          ],
-        },
-        {
-          code: "contract",
-          name: "Contract",
-          taskGroups: [],
-        },
-      ],
-      timeline: [
-        {
-          eventType: "CASE_CREATED",
-          createdAt: "2025-06-16T09:01:14.072Z",
-          description: "Case received",
-          createdBy: { name: "Julian Kimmings" },
-          data: {
-            caseRef: "APPLICATION-REF-3",
           },
-        },
-        {
-          eventType: "CASE_ASSIGNED",
-          description: "Case assigned",
-          createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: { name: "Julian Kimmings" },
-          data: {
-            assignedTo: { name: "martin smith" },
+          {
+            eventType: "CASE_ASSIGNED",
+            description: "Case assigned",
+            createdAt: "2025-06-16T09:01:14.072Z",
+            createdBy: { name: "Julian Kimmings" },
+            data: {
+              assignedTo: { name: "martin smith" },
+            },
           },
-        },
-        {
-          eventType: "TASK_COMPLETED",
-          description: "Task completed",
-          createdAt: "2025-06-16T09:01:14.072Z",
-          createdBy: { name: "Nicholai Hel" },
-          data: {
-            taskGroupCode: "tg-01",
-            taskCode: "task-01",
+          {
+            eventType: "TASK_COMPLETED",
+            description: "Task completed",
+            createdAt: "2025-06-16T09:01:14.072Z",
+            createdBy: { name: "Nicholai Hel" },
+            data: {
+              taskGroupCode: "tg-01",
+              taskCode: "task-01",
+            },
           },
-        },
-      ],
-    });
+        ],
+      }),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",

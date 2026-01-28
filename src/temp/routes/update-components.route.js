@@ -13,7 +13,7 @@ export const updateComponentsRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseItem = await findCaseByIdUseCase(authContext, caseId);
+    const page = await findCaseByIdUseCase(authContext, caseId);
     const jsonPayload = request.payload?.jsonPayload;
     const formData = { jsonPayload };
     const result = updateComponentsPreviewUseCase({
@@ -22,7 +22,9 @@ export const updateComponentsRoute = {
     });
 
     if (result.errors) {
-      const viewModel = createComponentsEditViewModel(caseItem, {
+      const viewModel = createComponentsEditViewModel({
+        page,
+        request,
         formData,
         errors: result.errors,
       });

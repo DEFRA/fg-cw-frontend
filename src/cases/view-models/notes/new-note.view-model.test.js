@@ -1,13 +1,25 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { createNewNoteViewModel } from "./new-note.view-model.js";
+
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/68495db5afe2d27b09b2ee47/notes/new" };
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("new-note.view-model", () => {
   describe("createNewNoteViewModel", () => {
     it("creates complete view model", () => {
       const mockCaseItem = createMockCaseData();
 
-      const result = createNewNoteViewModel(mockCaseItem);
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+      });
 
       expect(result.pageTitle).toBe("New Note banana-123");
       expect(result.pageHeading).toBe("Add a note");
@@ -25,7 +37,12 @@ describe("new-note.view-model", () => {
         text: "User's input text",
       };
 
-      const result = createNewNoteViewModel(mockCaseItem, null, mockFormData);
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+        errors: null,
+        formData: mockFormData,
+      });
 
       expect(result.data.formData).toEqual(mockFormData);
     });
@@ -39,11 +56,12 @@ describe("new-note.view-model", () => {
         text: "User typed this long note and doesn't want to lose it",
       };
 
-      const result = createNewNoteViewModel(
-        mockCaseItem,
-        mockErrors,
-        mockFormData,
-      );
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+        errors: mockErrors,
+        formData: mockFormData,
+      });
 
       expect(result.data.formData.text).toBe(
         "User typed this long note and doesn't want to lose it",
@@ -57,7 +75,11 @@ describe("new-note.view-model", () => {
       const mockCaseItem = createMockCaseData();
       const mockErrors = { text: "You must add a note" };
 
-      const result = createNewNoteViewModel(mockCaseItem, mockErrors);
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+        errors: mockErrors,
+      });
 
       expect(result.errorList).toEqual([
         {
@@ -73,7 +95,11 @@ describe("new-note.view-model", () => {
         save: "There was a problem saving the note. Please try again.",
       };
 
-      const result = createNewNoteViewModel(mockCaseItem, mockErrors);
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+        errors: mockErrors,
+      });
 
       expect(result.errorList).toEqual([
         {
@@ -85,7 +111,10 @@ describe("new-note.view-model", () => {
     it("builds empty error list when no errors", () => {
       const mockCaseItem = createMockCaseData();
 
-      const result = createNewNoteViewModel(mockCaseItem);
+      const result = createNewNoteViewModel({
+        page: createMockPage(mockCaseItem),
+        request: mockRequest,
+      });
 
       expect(result.errorList).toEqual([]);
     });

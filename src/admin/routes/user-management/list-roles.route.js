@@ -13,8 +13,8 @@ export const listRolesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const roles = await getRolesUseCase(authContext);
-    const viewModel = createRoleListViewModel(roles);
+    const page = await getRolesUseCase(authContext);
+    const viewModel = createRoleListViewModel({ page, request });
 
     logger.info("Finished: Finding all roles for role management");
 

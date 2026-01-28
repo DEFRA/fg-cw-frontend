@@ -13,8 +13,8 @@ export const listUsersRoute = {
       user: request.auth.credentials.user,
     };
 
-    const users = await adminFindUsersUseCase(authContext, {});
-    const viewModel = createUserListViewModel(users);
+    const page = await adminFindUsersUseCase(authContext, {});
+    const viewModel = createUserListViewModel({ page, request });
 
     logger.info("Finished: Finding all users for user management");
 

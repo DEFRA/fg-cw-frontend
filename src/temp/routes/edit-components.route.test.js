@@ -7,6 +7,12 @@ import { editComponentsRoute } from "./edit-components.route.js";
 vi.mock("../../cases/use-cases/find-case-by-id.use-case.js");
 vi.mock("../use-cases/components.use-case.js");
 vi.mock("../view-models/components.view-model.js");
+vi.mock("../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("editComponentsRoute", () => {
   it("renders the edit form with the case and session content", async () => {
@@ -21,7 +27,9 @@ describe("editComponentsRoute", () => {
       yar: { mock: "session" },
     };
 
-    findCaseByIdUseCase.mockResolvedValue({ caseId: "case-123" });
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({ caseId: "case-123" }),
+    );
     getComponentsContentUseCase.mockReturnValue([{ id: "component-1" }]);
     createComponentsEditViewModel.mockReturnValue({
       pageTitle: "Edit components",
@@ -43,10 +51,11 @@ describe("editComponentsRoute", () => {
     expect(getComponentsContentUseCase).toHaveBeenCalledWith({
       mock: "session",
     });
-    expect(createComponentsEditViewModel).toHaveBeenCalledWith(
-      { caseId: "case-123" },
-      { content: [{ id: "component-1" }] },
-    );
+    expect(createComponentsEditViewModel).toHaveBeenCalledWith({
+      page: createMockPage({ caseId: "case-123" }),
+      request,
+      content: [{ id: "component-1" }],
+    });
     expect(h.view).toHaveBeenCalledWith("temp/components-edit", {
       pageTitle: "Edit components",
     });

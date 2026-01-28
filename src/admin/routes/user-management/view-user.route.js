@@ -14,8 +14,12 @@ export const viewUserRoute = {
       user: request.auth.credentials.user,
     };
 
-    const user = await adminFindUserByIdUseCase(authContext, id);
-    const viewModel = createUserDetailsViewModel(user, authContext.user);
+    const page = await adminFindUserByIdUseCase(authContext, id);
+    const viewModel = createUserDetailsViewModel({
+      page,
+      request,
+      currentUser: authContext.user,
+    });
 
     logger.info(`Finished: Viewing User details ${id}`);
 

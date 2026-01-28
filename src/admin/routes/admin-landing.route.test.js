@@ -7,6 +7,12 @@ import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { adminLandingRoute } from "./admin-landing.route.js";
 
 vi.mock("../../auth/use-cases/verify-admin-access.use-case.js");
+vi.mock("../../common/view-models/header.view-model.js");
+
+const createMockPage = () => ({
+  data: {},
+  header: { navItems: [] },
+});
 
 describe("adminLandingRoute", () => {
   let server;
@@ -24,7 +30,7 @@ describe("adminLandingRoute", () => {
   });
 
   it("renders admin landing page", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -44,7 +50,7 @@ describe("adminLandingRoute", () => {
   });
 
   it("renders page heading", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { result } = await server.inject({
       method: "GET",
@@ -60,7 +66,7 @@ describe("adminLandingRoute", () => {
   });
 
   it("renders Manage users link", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { result } = await server.inject({
       method: "GET",
@@ -78,7 +84,7 @@ describe("adminLandingRoute", () => {
   });
 
   it("renders Manage roles link", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { result } = await server.inject({
       method: "GET",
@@ -96,7 +102,7 @@ describe("adminLandingRoute", () => {
   });
 
   it("passes auth context to verifyAdminAccessUseCase", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     await server.inject({
       method: "GET",

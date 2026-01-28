@@ -36,23 +36,26 @@ describe("updateTaskStatusRoute", () => {
 
   it("throws if comment is required", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                commentInputDef: {
-                  mandatory: true,
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  commentInputDef: {
+                    mandatory: true,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -77,23 +80,26 @@ describe("updateTaskStatusRoute", () => {
 
   it("updates the task status with no comment", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                commentInputDef: {
-                  mandatory: false,
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  commentInputDef: {
+                    mandatory: false,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -131,23 +137,26 @@ describe("updateTaskStatusRoute", () => {
 
   it("updates the task status with comment if required", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                commentInputDef: {
-                  mandatory: true,
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  commentInputDef: {
+                    mandatory: true,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -186,21 +195,24 @@ describe("updateTaskStatusRoute", () => {
 
   it("updates with status value but completed=false", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "on-hold" }],
-                commentInputDef: null,
-              },
-            ],
-          },
-        ],
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "on-hold" }],
+                  commentInputDef: null,
+                },
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -232,23 +244,26 @@ describe("updateTaskStatusRoute", () => {
 
   it("handles empty string comment correctly", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                commentInputDef: {
-                  mandatory: false,
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  commentInputDef: {
+                    mandatory: false,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -280,21 +295,24 @@ describe("updateTaskStatusRoute", () => {
 
   it("validates when task has no commentInputDef", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                // No commentInputDef
-              },
-            ],
-          },
-        ],
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  // No commentInputDef
+                },
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -320,23 +338,26 @@ describe("updateTaskStatusRoute", () => {
 
   it("rejects when mandatory comment is undefined (not just empty)", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }],
-                commentInputDef: {
-                  mandatory: true,
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }],
+                  commentInputDef: {
+                    mandatory: true,
+                  },
                 },
-              },
-            ],
-          },
-        ],
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
@@ -362,21 +383,24 @@ describe("updateTaskStatusRoute", () => {
 
   it("rejects when status is required but missing", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
-      stage: {
-        code: "001",
-        taskGroups: [
-          {
-            code: "tg01",
-            tasks: [
-              {
-                code: "t01",
-                statusOptions: [{ code: "approved" }, { code: "rejected" }],
-                commentInputDef: null,
-              },
-            ],
-          },
-        ],
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  statusOptions: [{ code: "approved" }, { code: "rejected" }],
+                  commentInputDef: null,
+                },
+              ],
+            },
+          ],
+        },
       },
+      header: { navItems: [] },
     });
 
     const { statusCode } = await server.inject({
