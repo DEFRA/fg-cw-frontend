@@ -16,7 +16,12 @@
 {% endblock %}
 
 {% block header %}
-  {{ defraHeading({serviceName: "Manage rural grant applications"}) }}
+  {{
+    defraHeading({
+      serviceName: "Manage rural grant applications",
+      navItems: header.navItems
+    })
+  }}
 {% endblock %}
 
 {% block pageTitle %}

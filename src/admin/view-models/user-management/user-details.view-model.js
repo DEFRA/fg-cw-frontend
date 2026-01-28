@@ -2,13 +2,16 @@ import {
   DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
-export const createUserDetailsViewModel = (user, currentUser) => {
+export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
+  const user = page.data;
   const idpRoles = mapIdpRoles(user.idpRoles);
   const appRoles = Object.keys(user.appRoles || {});
 
   return {
     pageTitle: "User details",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "Users", href: "/admin/user-management" },
       { text: "User details" },

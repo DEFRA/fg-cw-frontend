@@ -21,8 +21,8 @@ export const updateStageOutcomeUseCase = async (
     };
   }
 
-  const caseData = await findCaseByIdUseCase(authContext, caseId);
-  const action = findSelectedAction(caseData, actionCode);
+  const page = await findCaseByIdUseCase(authContext, caseId);
+  const action = findSelectedAction(page.data, actionCode);
 
   if (validComment(action, comment)) {
     await updateStageOutcome(authContext, {

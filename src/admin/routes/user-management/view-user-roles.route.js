@@ -15,12 +15,17 @@ export const viewUserRolesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const [user, roles] = await Promise.all([
+    const [page, roles] = await Promise.all([
       adminFindUserByIdUseCase(authContext, id),
       findRolesUseCase(authContext),
     ]);
 
-    const viewModel = createUserRolesViewModel({ user, roles, userId: id });
+    const viewModel = createUserRolesViewModel({
+      page,
+      request,
+      roles,
+      userId: id,
+    });
 
     logger.info(`Finished: Viewing user roles ${id}`);
 

@@ -16,18 +16,19 @@ export const viewTaskRoute = {
 
     const { errors, formData } = getFlashData(request);
 
-    const caseData = await findCaseByIdUseCase(
+    const page = await findCaseByIdUseCase(
       authContext,
       request.params.caseId,
       "task",
     );
 
-    const viewModel = createTaskDetailViewModel(
-      caseData,
-      request.params,
+    const viewModel = createTaskDetailViewModel({
+      page,
+      request,
+      query: request.params,
       errors,
       formData,
-    );
+    });
 
     logger.info(`Finished: Get task details for case ${request.params.caseId}`);
 

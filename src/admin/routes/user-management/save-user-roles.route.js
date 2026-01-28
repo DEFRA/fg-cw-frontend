@@ -29,7 +29,7 @@ export const saveUserRolesRoute = {
 
     const formData = request.payload || {};
 
-    const { user, roles } = await loadPageData(authContext, userId);
+    const { page, roles } = await loadPageData(authContext, userId);
     const selectedRoleCodes = normaliseRoleCodes(formData.roles);
 
     const { appRoles, errors } = buildAppRolesFromForm(
@@ -37,12 +37,19 @@ export const saveUserRolesRoute = {
       formData,
     );
     if (hasValidationErrors(errors)) {
-      return renderRolesPage(h, { user, roles, userId, errors, formData });
+      return renderRolesPage(h, {
+        page,
+        request,
+        roles,
+        userId,
+        errors,
+        formData,
+      });
     }
 
     return await persistRolesOrRenderError(request, h, {
       authContext,
-      user,
+      page,
       roles,
       userId,
       appRoles,
@@ -52,18 +59,18 @@ export const saveUserRolesRoute = {
 };
 
 const loadPageData = async (authContext, userId) => {
-  const [user, roles] = await Promise.all([
+  const [page, roles] = await Promise.all([
     adminFindUserByIdUseCase(authContext, userId),
     findRolesUseCase(authContext),
   ]);
 
-  return { user, roles };
+  return { page, roles };
 };
 
 const persistRolesOrRenderError = async (
   request,
   h,
-  { authContext, user, roles, userId, appRoles, formData },
+  { authContext, page, roles, userId, appRoles, formData },
 ) => {
   try {
     logger.info(`Saving user roles ${userId}`);
@@ -83,7 +90,8 @@ const persistRolesOrRenderError = async (
     }
 
     return renderRolesPage(h, {
-      user,
+      page,
+      request,
       roles,
       userId,
       errors: { save: SAVE_ERROR_MESSAGE },
@@ -92,9 +100,13 @@ const persistRolesOrRenderError = async (
   }
 };
 
-const renderRolesPage = (h, { user, roles, userId, errors, formData }) => {
+const renderRolesPage = (
+  h,
+  { page, request, roles, userId, errors, formData },
+) => {
   const viewModel = createUserRolesViewModel({
-    user,
+    page,
+    request,
     roles,
     userId,
     errors,

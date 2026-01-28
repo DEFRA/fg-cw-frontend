@@ -1,11 +1,19 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
-export const createTaskListViewModel = (kase, errors = {}, values = {}) => {
+export const createTaskListViewModel = ({
+  page,
+  request,
+  errors = {},
+  values = {},
+}) => {
+  const kase = page.data;
   const stage = kase.stage;
 
   return {
     pageTitle: `Case tasks - ${stage.name}`,
     pageHeading: "Case",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [{ text: "Cases", href: "/cases" }, { text: kase.caseRef }],
     links: setActiveLink(kase.links, "tasks"),
     data: {

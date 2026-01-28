@@ -1,4 +1,5 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
 const getFieldValue = (fieldName, values) => values?.[fieldName];
 
@@ -146,7 +147,14 @@ const buildCurrentTaskData = ({
   };
 };
 
-export const createTaskDetailViewModel = (kase, query, errors, formData) => {
+export const createTaskDetailViewModel = ({
+  page,
+  request,
+  query,
+  errors,
+  formData,
+}) => {
+  const kase = page.data;
   const stage = kase.stage;
   const { taskGroupCode, taskCode } = query;
 
@@ -163,6 +171,7 @@ export const createTaskDetailViewModel = (kase, query, errors, formData) => {
     errorList: createErrorList(errors),
     pageTitle: "Case task",
     pageHeading: "Case",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "Cases", href: "/cases" },
       { text: kase.caseRef, href: "/cases/" + kase._id },

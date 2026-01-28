@@ -5,7 +5,15 @@ export const redirects = {
       server.route({
         method: "GET",
         path: "/",
-        handler: (_request, h) => h.redirect("/cases"),
+        handler: (request, h) => {
+          const { user } = request.auth.credentials;
+
+          const path = user.idpRoles.includes("FCP.Casework.Admin")
+            ? "/admin"
+            : "/cases";
+
+          return h.redirect(path);
+        },
       });
     },
   },

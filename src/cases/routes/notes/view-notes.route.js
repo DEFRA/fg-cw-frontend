@@ -16,9 +16,13 @@ export const viewNotesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseData = await findCaseByIdUseCase(authContext, caseId, "notes");
+    const page = await findCaseByIdUseCase(authContext, caseId, "notes");
 
-    const viewModel = createViewNotesViewModel(caseData, selectedNoteRef);
+    const viewModel = createViewNotesViewModel({
+      page,
+      request,
+      selectedNoteRef,
+    });
 
     logger.info(`Finished: Get notes for case ${request.params.caseId}`);
 

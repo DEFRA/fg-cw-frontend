@@ -13,8 +13,11 @@ export const adminLandingRoute = {
       user: request.auth.credentials.user,
     };
 
-    await verifyAdminAccessUseCase(authContext);
-    const viewModel = createAdminLandingViewModel();
+    const page = await verifyAdminAccessUseCase(authContext);
+    const viewModel = createAdminLandingViewModel({
+      page,
+      request,
+    });
 
     logger.info("Finished: Loading admin landing page");
 

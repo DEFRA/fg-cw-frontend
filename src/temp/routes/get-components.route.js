@@ -13,9 +13,9 @@ export const viewComponentsRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseItem = await findCaseByIdUseCase(authContext, caseId);
+    const page = await findCaseByIdUseCase(authContext, caseId);
     const content = getComponentsContentUseCase(request.yar);
-    const viewModel = createComponentsViewModel(caseItem, content);
+    const viewModel = createComponentsViewModel({ page, request, content });
 
     return h.view("temp/components", viewModel);
   },

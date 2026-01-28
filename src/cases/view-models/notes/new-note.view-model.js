@@ -1,9 +1,12 @@
 import { setActiveLink } from "../../../common/helpers/navigation-helpers.js";
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
-export const createNewNoteViewModel = (caseItem, errors, formData) => {
+export const createNewNoteViewModel = ({ page, request, errors, formData }) => {
+  const caseItem = page.data;
   return {
     pageTitle: `New Note ${caseItem.caseRef}`,
     pageHeading: `Add a note`,
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     links: setActiveLink(caseItem.links, "notes"),
     data: {

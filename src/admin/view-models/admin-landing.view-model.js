@@ -1,7 +1,10 @@
-export const createAdminLandingViewModel = () => {
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
+
+export const createAdminLandingViewModel = ({ page, request }) => {
   return {
     pageTitle: "Users and roles",
     pageHeading: "Users and roles",
+    header: createHeaderViewModel({ page, request }),
     sections: [
       {
         title: "Users",
