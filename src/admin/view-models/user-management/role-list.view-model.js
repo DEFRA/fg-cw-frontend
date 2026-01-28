@@ -1,5 +1,5 @@
 export const createRoleListViewModel = (roles) => {
-  const sortedRoles = Array.isArray(roles) ? roles.slice().sort(byCode) : [];
+  const roleList = Array.isArray(roles) ? roles : [];
 
   return {
     pageTitle: "Roles",
@@ -15,7 +15,7 @@ export const createRoleListViewModel = (roles) => {
           { text: "Description" },
           { text: "Assignable" },
         ],
-        rows: sortedRoles.map((role) => ({
+        rows: roleList.map((role) => ({
           code: {
             text: role.code,
             href: `/admin/user-management/roles/${role.code}`,
@@ -28,6 +28,3 @@ export const createRoleListViewModel = (roles) => {
     },
   };
 };
-
-const byCode = (a, b) =>
-  a.code.localeCompare(b.code, "en", { sensitivity: "base" });

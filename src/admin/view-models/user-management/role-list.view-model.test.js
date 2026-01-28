@@ -4,8 +4,8 @@ import { createRoleListViewModel } from "./role-list.view-model.js";
 describe("createRoleListViewModel", () => {
   it("maps roles to view model correctly", () => {
     const roles = [
-      { code: "ROLE_B", description: "Role B", assignable: true },
       { code: "ROLE_A", description: "Role A", assignable: false },
+      { code: "ROLE_B", description: "Role B", assignable: true },
     ];
 
     const viewModel = createRoleListViewModel(roles);
