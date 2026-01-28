@@ -1,0 +1,55 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="moj-page-header-actions">
+    <div class="moj-page-header-actions__title">
+      <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+    </div>
+    <div class="moj-page-header-actions__actions">
+      <div class="moj-button-group moj-button-group--inline">
+        {{
+          govukButton({
+          text: "Create role",
+          href: data.createRoleHref,
+          classes: "govuk-button--secondary"
+          })
+        }}
+      </div>
+    </div>
+  </div>
+
+  {% if data.roles.rows.length > 0 %}
+    {% set rows = [] %}
+    {% for row in data.roles.rows %}
+      {% set codeHtml %}
+        <a class="govuk-link" href="{{ row.code.href }}">{{ row.code.text }}</a>
+      {% endset %}
+
+      {%
+        set tableRow = [
+          { html: codeHtml },
+          { text: row.description },
+          { text: row.assignable }
+        ]
+      %}
+      {% set rows = (rows.push(tableRow), rows) %}
+    {% endfor %}
+
+    {{
+      govukTable({
+        head: data.roles.head,
+        rows: rows,
+        firstCellIsHeader: true
+      })
+    }}
+  {% else %}
+    <p class="govuk-body">There are no roles.</p>
+  {% endif %}
+{% endblock %}

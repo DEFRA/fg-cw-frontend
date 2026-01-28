@@ -17,7 +17,7 @@ exports[`adminLandingRoute > renders admin landing page 1`] = `
     <h2 class="govuk-heading-m">Roles</h2>
     <p class="govuk-body">Check and edit roles, or create new ones.</p>
     <p class="govuk-body">
-      <a class="govuk-link" href="/admin/user-management/roles-list">Manage roles</a>
+      <a class="govuk-link" href="/admin/user-management/roles">Manage roles</a>
     </p>
         "
 `;

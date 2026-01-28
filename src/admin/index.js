@@ -1,4 +1,5 @@
 import { adminLandingRoute } from "./routes/admin-landing.route.js";
+import { listRolesRoute } from "./routes/user-management/list-roles.route.js";
 import { listUsersRoute } from "./routes/user-management/list-users.route.js";
 import { saveUserRolesRoute } from "./routes/user-management/save-user-roles.route.js";
 import { viewUserRolesRoute } from "./routes/user-management/view-user-roles.route.js";
@@ -15,6 +16,7 @@ export const admin = {
         viewUserRoute,
         viewUserRolesRoute,
         saveUserRolesRoute,
+        listRolesRoute,
       ]);
     },
   },

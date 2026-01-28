@@ -13,7 +13,7 @@ export const createAdminLandingViewModel = () => {
         title: "Roles",
         description: "Check and edit roles, or create new ones.",
         linkText: "Manage roles",
-        linkHref: "/admin/user-management/roles-list",
+        linkHref: "/admin/user-management/roles",
       },
     ],
   };
