@@ -56,7 +56,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
         <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
       <th scope="col" class="govuk-table__header">Code</th>
       <th scope="col" class="govuk-table__header">Description</th>
       <th scope="col" class="govuk-table__header">Start</th>
@@ -82,6 +82,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
+                Start date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-02-01">
             </div>
 </td>
@@ -90,6 +93,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
                   <span class="govuk-visually-hidden">Error:</span>
                   End date before start date
                 </p>
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
+                End date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2026-01-01">
             </div>
 </td>
@@ -166,7 +172,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
         <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
       <th scope="col" class="govuk-table__header">Code</th>
       <th scope="col" class="govuk-table__header">Description</th>
       <th scope="col" class="govuk-table__header">Start</th>
@@ -192,6 +198,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
+                Start date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
             </div>
 </td>
@@ -200,6 +209,9 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid End Date
                 </p>
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
+                End date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="not-a-date">
             </div>
 </td>
@@ -276,7 +288,7 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
         <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
       <th scope="col" class="govuk-table__header">Code</th>
       <th scope="col" class="govuk-table__header">Description</th>
       <th scope="col" class="govuk-table__header">Start</th>
@@ -306,10 +318,16 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid Start Date
                 </p>
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
+                Start date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 govuk-input--error" id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="not-a-date">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
+                End date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
             </div>
 </td>
