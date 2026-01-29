@@ -51,7 +51,7 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
         <table class="govuk-table">
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"></th>
+      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
       <th scope="col" class="govuk-table__header">Code</th>
       <th scope="col" class="govuk-table__header">Description</th>
       <th scope="col" class="govuk-table__header">Start</th>
@@ -77,10 +77,16 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
+                Start date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
+                End date for PMF_READ
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
             </div>
 </td>
@@ -103,10 +109,16 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
       <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read write</div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ_WRITE">
+                Start date for PMF_READ_WRITE
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ_WRITE" name="startDate__PMF_READ_WRITE" type="date" value="">
             </div>
 </td>
       <td class="govuk-table__cell">            <div class="">
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ_WRITE">
+                End date for PMF_READ_WRITE
+              </label>
               <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ_WRITE" name="endDate__PMF_READ_WRITE" type="date" value="">
             </div>
 </td>

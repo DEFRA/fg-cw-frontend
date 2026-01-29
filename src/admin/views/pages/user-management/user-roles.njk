@@ -56,6 +56,12 @@
                   {{ errors[role.startKey] }}
                 </p>
               {% endif %}
+              <label
+                class="govuk-label govuk-visually-hidden"
+                for="{{ role.startKey }}"
+              >
+                Start date for {{ role.code }}
+              </label>
               <input
                 class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.startKey] }}"
                 id="{{ role.startKey }}"
@@ -75,6 +81,12 @@
                   {{ errors[role.endKey] }}
                 </p>
               {% endif %}
+              <label
+                class="govuk-label govuk-visually-hidden"
+                for="{{ role.endKey }}"
+              >
+                End date for {{ role.code }}
+              </label>
               <input
                 class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.endKey] }}"
                 id="{{ role.endKey }}"
@@ -111,7 +123,7 @@
         {{
           govukTable({
             head: [
-              { text: "" },
+              { html: '<span class="govuk-visually-hidden">Select role</span>' },
               { text: "Code" },
               { text: "Description" },
               { text: "Start" },
