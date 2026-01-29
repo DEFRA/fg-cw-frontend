@@ -1,0 +1,93 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`listRolesRoute > renders empty state when there are no roles 1`] = `
+"
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Roles</li>
+  </ol>
+</nav>
+
+
+    
+
+
+
+  <div class="moj-page-header-actions">
+    <div class="moj-page-header-actions__title">
+      <h1 class="govuk-heading-l">Roles</h1>
+    </div>
+    <div class="moj-page-header-actions__actions">
+      <div class="moj-button-group moj-button-group--inline">
+        <a href="/admin/user-management/roles/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create role
+</a>
+      </div>
+    </div>
+  </div>
+
+    <p class="govuk-body">There are no roles.</p>
+        "
+`;
+
+exports[`listRolesRoute > renders roles page with breadcrumbs 1`] = `
+"
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Roles</li>
+  </ol>
+</nav>
+
+
+    
+
+
+
+  <div class="moj-page-header-actions">
+    <div class="moj-page-header-actions__title">
+      <h1 class="govuk-heading-l">Roles</h1>
+    </div>
+    <div class="moj-page-header-actions__actions">
+      <div class="moj-button-group moj-button-group--inline">
+        <a href="/admin/user-management/roles/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create role
+</a>
+      </div>
+    </div>
+  </div>
+
+
+
+
+    <table class="govuk-table">
+  <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">Code</th>
+      <th scope="col" class="govuk-table__header">Description</th>
+      <th scope="col" class="govuk-table__header">Assignable</th>
+    </tr>
+  </thead>
+  <tbody class="govuk-table__body">
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/roles/PMF_READ">PMF_READ</a>
+</th>
+      <td class="govuk-table__cell">Pigs Might Fly read only</td>
+      <td class="govuk-table__cell">Yes</td>
+    </tr>
+    <tr class="govuk-table__row">
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/roles/PMF_WRITE">PMF_WRITE</a>
+</th>
+      <td class="govuk-table__cell">Pigs Might Fly read write</td>
+      <td class="govuk-table__cell">Yes</td>
+    </tr>
+  </tbody>
+</table>
+
+        "
+`;
