@@ -19,6 +19,12 @@ import { saveUserRolesRoute } from "./save-user-roles.route.js";
 vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
 vi.mock("../../use-cases/find-roles.use-case.js");
 vi.mock("../../use-cases/update-user-roles.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("saveUserRolesRoute", () => {
   let server;
@@ -35,13 +41,15 @@ describe("saveUserRolesRoute", () => {
   });
 
   beforeEach(() => {
-    adminFindUserByIdUseCase.mockResolvedValue({
-      id: "user-123",
-      name: "Martin Smith",
-      appRoles: {
-        PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
-      },
-    });
+    adminFindUserByIdUseCase.mockResolvedValue(
+      createMockPage({
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {
+          PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
+        },
+      }),
+    );
 
     findRolesUseCase.mockResolvedValue([
       { id: "r1", code: "PMF_READ", description: "Pigs Might Fly read only" },

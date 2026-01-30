@@ -2,13 +2,16 @@ import {
   DATE_FORMAT_SHORT_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
-export const createUserListViewModel = (users) => {
+export const createUserListViewModel = ({ page, request }) => {
+  const users = page.data;
   const sortedUsers = Array.isArray(users) ? users.slice().sort(byName) : [];
 
   return {
     pageTitle: "Users",
     pageHeading: "Users",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     data: {
       users: {

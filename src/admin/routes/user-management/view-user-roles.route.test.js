@@ -9,6 +9,12 @@ import { viewUserRolesRoute } from "./view-user-roles.route.js";
 
 vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
 vi.mock("../../use-cases/find-roles.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("viewUserRolesRoute", () => {
   let server;
@@ -25,14 +31,16 @@ describe("viewUserRolesRoute", () => {
   });
 
   it("renders user roles page and checks currently allocated roles", async () => {
-    adminFindUserByIdUseCase.mockResolvedValue({
-      id: "user-123",
-      name: "Martin Smith",
-      appRoles: {
-        PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
-        PMF_READ_WRITE: {},
-      },
-    });
+    adminFindUserByIdUseCase.mockResolvedValue(
+      createMockPage({
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {
+          PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
+          PMF_READ_WRITE: {},
+        },
+      }),
+    );
 
     findRolesUseCase.mockResolvedValue([
       {

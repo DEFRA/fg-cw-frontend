@@ -1,8 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { createTaskListViewModel } from "./task-list.view-model.js";
 
+vi.mock("../../common/view-models/header.view-model.js");
+
 describe("createTaskListViewModel", () => {
+  const mockRequest = { path: "/cases/case-123/tasks" };
+
+  const createMockPage = (caseData) => ({
+    data: caseData,
+    header: { navItems: [] },
+  });
+
   const mockCaseData = {
     _id: "case-123",
     caseRef: "CLIENT-REF-001",
@@ -73,7 +82,10 @@ describe("createTaskListViewModel", () => {
 
   describe("basic view model creation", () => {
     it("creates view model with all required properties", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
 
       expect(result.pageTitle).toBe("Case tasks - Application Review");
       expect(result.pageHeading).toBe("Case");
@@ -87,13 +99,19 @@ describe("createTaskListViewModel", () => {
     });
 
     it("transforms case data correctly", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
 
       expect(result.data.case).toEqual(mockCaseData);
     });
 
     it("includes stage data", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
 
       expect(result.data.stage.code).toBe("application-review");
       expect(result.data.stage.name).toBe("Application Review");
@@ -102,7 +120,10 @@ describe("createTaskListViewModel", () => {
 
   describe("task group mapping", () => {
     it("maps task groups with correct task properties", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const mappedTaskGroups = result.data.stage.taskGroups;
 
       expect(mappedTaskGroups).toHaveLength(1);
@@ -172,7 +193,10 @@ describe("createTaskListViewModel", () => {
         },
       };
 
-      const result = createTaskListViewModel(caseWithStatusTheme);
+      const result = createTaskListViewModel({
+        page: createMockPage(caseWithStatusTheme),
+        request: mockRequest,
+      });
       const tasks = result.data.stage.taskGroups[0].tasks;
 
       expect(tasks[0].statusText).toBe("Accepted");
@@ -190,7 +214,10 @@ describe("createTaskListViewModel", () => {
 
       kase.stage.taskGroups = [];
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
 
       expect(result.data.stage.taskGroups).toEqual([]);
     });
@@ -198,7 +225,10 @@ describe("createTaskListViewModel", () => {
 
   describe("action mapping", () => {
     it("maps actions with correct properties", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const actions = result.data.stage.actions;
 
       expect(actions.idPrefix).toBe("actionCode");
@@ -209,7 +239,10 @@ describe("createTaskListViewModel", () => {
     });
 
     it("maps action items correctly", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const [approveItem, rejectItem] = result.data.stage.actions.items;
 
       expect(approveItem).toEqual({
@@ -236,7 +269,10 @@ describe("createTaskListViewModel", () => {
 
       kase.stage.actionTitle = undefined;
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
 
       expect(result.data.stage.actions.legend).toBe("Decision");
     });
@@ -246,7 +282,10 @@ describe("createTaskListViewModel", () => {
 
       kase.stage.actions = [];
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
 
       expect(result.data.stage.actions.items).toEqual([]);
     });
@@ -255,7 +294,12 @@ describe("createTaskListViewModel", () => {
   describe("action checking logic", () => {
     it("checks action based on form values when provided", () => {
       const values = { actionCode: "reject" };
-      const result = createTaskListViewModel(mockCaseData, {}, values);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors: {},
+        values,
+      });
 
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
@@ -269,7 +313,10 @@ describe("createTaskListViewModel", () => {
     });
 
     it("checks action based on stage outcome when no form values", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
 
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
@@ -287,7 +334,10 @@ describe("createTaskListViewModel", () => {
 
       kase.stage.outcome = undefined;
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
 
       result.data.stage.actions.items.forEach((item) => {
         expect(item.checked).toBe(false);
@@ -297,7 +347,10 @@ describe("createTaskListViewModel", () => {
 
   describe("conditional textarea creation", () => {
     it("creates conditional textarea for actions with comments", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -315,7 +368,10 @@ describe("createTaskListViewModel", () => {
     });
 
     it("does not create conditional textarea for actions without comments", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const rejectItem = result.data.stage.actions.items.find(
         (item) => item.value === "reject",
       );
@@ -325,7 +381,12 @@ describe("createTaskListViewModel", () => {
 
     it("uses preserved form values for textarea", () => {
       const values = { "approve-comment": "New comment from form" };
-      const result = createTaskListViewModel(mockCaseData, {}, values);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors: {},
+        values,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -335,7 +396,11 @@ describe("createTaskListViewModel", () => {
 
     it("includes error messages in textarea", () => {
       const errors = { "approve-comment": { text: "Comment is required" } };
-      const result = createTaskListViewModel(mockCaseData, errors);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -359,7 +424,10 @@ describe("createTaskListViewModel", () => {
         },
       ];
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
       const approveItem = result.data.stage.actions.items[0];
 
       expect(approveItem.conditional.hint).toBeUndefined();
@@ -379,7 +447,10 @@ describe("createTaskListViewModel", () => {
         },
       ];
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
       const holdItem = result.data.stage.actions.items[0];
 
       expect(holdItem.conditional.required).toBe(false);
@@ -389,7 +460,12 @@ describe("createTaskListViewModel", () => {
   describe("textarea value priority", () => {
     it("prioritizes form values over stage outcome", () => {
       const values = { "approve-comment": "Form value" };
-      const result = createTaskListViewModel(mockCaseData, {}, values);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors: {},
+        values,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -398,7 +474,10 @@ describe("createTaskListViewModel", () => {
     });
 
     it("uses stage outcome when no form value", () => {
-      const result = createTaskListViewModel(mockCaseData);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -411,7 +490,10 @@ describe("createTaskListViewModel", () => {
 
       kase.stage.outcome = undefined;
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -427,7 +509,10 @@ describe("createTaskListViewModel", () => {
         comment: "Previous rejection comment",
       };
 
-      const result = createTaskListViewModel(kase);
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
       const approveItem = result.data.stage.actions.items.find(
         (item) => item.value === "approve",
       );
@@ -443,7 +528,11 @@ describe("createTaskListViewModel", () => {
         "approve-comment": { text: "Comment is required" },
       };
 
-      const result = createTaskListViewModel(mockCaseData, errors);
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors,
+      });
 
       expect(result.errors).toEqual(errors);
       expect(result.errorList).toEqual([
@@ -456,7 +545,11 @@ describe("createTaskListViewModel", () => {
     });
 
     it("handles empty errors object", () => {
-      const result = createTaskListViewModel(mockCaseData, {});
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        errors: {},
+      });
 
       expect(result.errors).toEqual({});
       expect(result.errorList).toEqual([]);
@@ -474,7 +567,10 @@ describe("createTaskListViewModel", () => {
         },
       };
 
-      const result = createTaskListViewModel(caseWithoutIdentifiers);
+      const result = createTaskListViewModel({
+        page: createMockPage(caseWithoutIdentifiers),
+        request: mockRequest,
+      });
 
       expect(result.data.case.sbi).toBeUndefined();
     });
@@ -488,7 +584,10 @@ describe("createTaskListViewModel", () => {
         },
       };
 
-      const result = createTaskListViewModel(caseWithoutAnswers);
+      const result = createTaskListViewModel({
+        page: createMockPage(caseWithoutAnswers),
+        request: mockRequest,
+      });
 
       expect(result.data.case.scheme).toBeUndefined();
     });

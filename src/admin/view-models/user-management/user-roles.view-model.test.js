@@ -1,16 +1,26 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createUserRolesViewModel } from "./user-roles.view-model.js";
+
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/admin/user-management/user-123/roles" };
+
+const createMockPage = (userData) => ({
+  data: userData,
+  header: { navItems: [] },
+});
 
 describe("createUserRolesViewModel", () => {
   it("includes roles from the table view model", () => {
     const viewModel = createUserRolesViewModel({
-      user: {
+      page: createMockPage({
         id: "user-123",
         name: "Martin Smith",
         appRoles: {
           PMF_READ: {},
         },
-      },
+      }),
+      request: mockRequest,
       userId: "user-123",
       roles: [
         {
@@ -31,11 +41,12 @@ describe("createUserRolesViewModel", () => {
 
   it("defaults errors and errorList when errors undefined", () => {
     const viewModel = createUserRolesViewModel({
-      user: {
+      page: createMockPage({
         id: "user-123",
         name: "Martin Smith",
         appRoles: {},
-      },
+      }),
+      request: mockRequest,
       userId: "user-123",
       roles: [],
       errors: undefined,
@@ -47,11 +58,12 @@ describe("createUserRolesViewModel", () => {
 
   it("builds an error summary item without href for save errors", () => {
     const viewModel = createUserRolesViewModel({
-      user: {
+      page: createMockPage({
         id: "user-123",
         name: "Martin Smith",
         appRoles: {},
-      },
+      }),
+      request: mockRequest,
       userId: "user-123",
       roles: [],
       errors: {
@@ -68,11 +80,12 @@ describe("createUserRolesViewModel", () => {
 
   it("filters out empty validation messages from errorList", () => {
     const viewModel = createUserRolesViewModel({
-      user: {
+      page: createMockPage({
         id: "user-123",
         name: "Martin Smith",
         appRoles: {},
-      },
+      }),
+      request: mockRequest,
       userId: "user-123",
       roles: [],
       errors: {

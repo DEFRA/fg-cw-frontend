@@ -11,7 +11,16 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
   ),
 }));
 
+vi.mock("../../common/view-models/header.view-model.js");
+
 describe("createTaskDetailViewModel", () => {
+  const mockRequest = { path: "/cases/case123/tasks/group1/task1" };
+
+  const createMockPage = (caseData) => ({
+    data: caseData,
+    header: { navItems: [] },
+  });
+
   const mockCaseData = {
     _id: "case123",
     caseRef: "REF123",
@@ -59,11 +68,12 @@ describe("createTaskDetailViewModel", () => {
   const mockErrors = { field1: "Error message" };
 
   it("should create a complete view model", () => {
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result).toHaveProperty("errorList", ["Error message"]);
     expect(result).toHaveProperty("pageTitle", "Case task");
@@ -80,22 +90,24 @@ describe("createTaskDetailViewModel", () => {
   });
 
   it("should format case data correctly", () => {
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.caseId).toEqual("case123");
     expect(result.data.banner).toEqual(mockCaseData.banner);
   });
 
   it("should format current task correctly for complete task", () => {
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.currentTask).toMatchObject({
       status: "complete",
@@ -109,11 +121,12 @@ describe("createTaskDetailViewModel", () => {
 
     incompleteCaseData.stage.taskGroups[0].tasks[0].status = "incomplete";
 
-    const result = createTaskDetailViewModel(
-      incompleteCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(incompleteCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.currentTask).toMatchObject({
       status: "incomplete",
@@ -126,11 +139,12 @@ describe("createTaskDetailViewModel", () => {
     caseDataNoComment.comments = [];
     caseDataNoComment.stage.taskGroups[0].tasks[0].commentRef = "nonexistent";
 
-    const result = createTaskDetailViewModel(
-      caseDataNoComment,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseDataNoComment),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.currentTask.comment).toBeNull();
   });
@@ -144,11 +158,12 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseDataNoIdentifiers,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseDataNoIdentifiers),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     // View model no longer exposes case.sbi directly
     expect(result.data.caseId).toBe("case123");
@@ -163,11 +178,12 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseDataNoAnswers,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseDataNoAnswers),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     // View model no longer exposes case.scheme directly
     expect(result.data.caseId).toBe("case123");
@@ -177,11 +193,12 @@ describe("createTaskDetailViewModel", () => {
     const caseDataWithNoAccess = structuredClone(mockCaseData);
     caseDataWithNoAccess.stage.taskGroups[0].tasks[0].canComplete = false;
 
-    const result = createTaskDetailViewModel(
-      caseDataWithNoAccess,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseDataWithNoAccess),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.currentTask.canComplete).toBe(false);
   });
@@ -191,7 +208,12 @@ describe("createTaskDetailViewModel", () => {
       await import("../../common/helpers/navigation-helpers.js"),
     );
 
-    createTaskDetailViewModel(mockCaseData, mockQuery, mockErrors);
+    createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     // getFormattedGBDate is no longer called in the simplified view model
     expect(setActiveLink).toHaveBeenCalledWith(mockCaseData.links, "tasks");
@@ -206,11 +228,12 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      interactiveCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(interactiveCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.isInteractive).toBe(true);
   });
@@ -224,21 +247,23 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      nonInteractiveCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(nonInteractiveCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.isInteractive).toBe(false);
   });
 
   it("should default isInteractive to true when stage.interactive is not provided", () => {
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.isInteractive).toBe(true);
   });
@@ -252,21 +277,23 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(
-      caseDataWithUndefinedInteractive,
-      mockQuery,
-      mockErrors,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseDataWithUndefinedInteractive),
+      request: mockRequest,
+      query: mockQuery,
+      errors: mockErrors,
+    });
 
     expect(result.data.isInteractive).toBe(true);
   });
 
   it("should handle empty errorList when errors is undefined", () => {
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      undefined,
-    );
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: undefined,
+    });
 
     expect(result.errorList).toEqual([]);
   });
@@ -302,7 +329,11 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     expect(result.data.currentTask.statusOptions).toHaveLength(3);
     expect(result.data.currentTask.statusOptions[0]).toMatchObject({
@@ -357,12 +388,13 @@ describe("createTaskDetailViewModel", () => {
       "rejected-comment": "Comment is too short",
     };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
       errors,
       formData,
-    );
+    });
 
     const rejectedOption = result.data.currentTask.statusOptions.find(
       (opt) => opt.value === "rejected",
@@ -405,7 +437,11 @@ describe("createTaskDetailViewModel", () => {
       comments: [{ ref: "comment1", text: "Existing task comment" }],
     };
 
-    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     const completeOption = result.data.currentTask.statusOptions.find(
       (opt) => opt.value === "complete",
@@ -443,7 +479,11 @@ describe("createTaskDetailViewModel", () => {
       comments: [{ ref: "comment1", text: null }],
     };
 
-    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     const completeOption = result.data.currentTask.statusOptions.find(
       (opt) => opt.value === "complete",
@@ -477,7 +517,11 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     expect(result.data.currentTask.statusOptions).toHaveLength(2);
     expect(
@@ -509,7 +553,11 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(caseWithEmptyOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithEmptyOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     expect(result.data.currentTask.statusOptions).toEqual([]);
   });
@@ -539,7 +587,11 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(caseWithStatusOptions, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     const option = result.data.currentTask.statusOptions[0];
     expect(option.conditional.hint).toBeUndefined();
@@ -572,12 +624,13 @@ describe("createTaskDetailViewModel", () => {
 
     const formData = { status: "complete" };
 
-    const result = createTaskDetailViewModel(
-      caseWithStatusOptions,
-      mockQuery,
-      undefined,
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+      errors: undefined,
       formData,
-    );
+    });
 
     expect(result.data.currentTask.status).toBe("complete");
     const completeOption = result.data.currentTask.statusOptions.find(
@@ -594,12 +647,13 @@ describe("createTaskDetailViewModel", () => {
   it("should preserve completed field from formData", () => {
     const formData = { completed: true };
 
-    const result = createTaskDetailViewModel(
-      mockCaseData,
-      mockQuery,
-      undefined,
+    const result = createTaskDetailViewModel({
+      page: createMockPage(mockCaseData),
+      request: mockRequest,
+      query: mockQuery,
+      errors: undefined,
       formData,
-    );
+    });
 
     expect(result.data.currentTask.completed).toBe(true);
   });
@@ -625,7 +679,11 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const result = createTaskDetailViewModel(caseWithCompletedTask, mockQuery);
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithCompletedTask),
+      request: mockRequest,
+      query: mockQuery,
+    });
 
     expect(result.data.currentTask.completed).toBe(true);
   });
@@ -665,7 +723,11 @@ describe("createTaskDetailViewModel", () => {
         },
       };
 
-      const result = createTaskDetailViewModel(caseWithNotesHistory, mockQuery);
+      const result = createTaskDetailViewModel({
+        page: createMockPage(caseWithNotesHistory),
+        request: mockRequest,
+        query: mockQuery,
+      });
 
       expect(result.data.currentTask.notesHistory).toHaveLength(2);
       expect(result.data.currentTask.notesHistory[0]).toEqual({
@@ -696,10 +758,11 @@ describe("createTaskDetailViewModel", () => {
         },
       };
 
-      const result = createTaskDetailViewModel(
-        caseWithNoNotesHistory,
-        mockQuery,
-      );
+      const result = createTaskDetailViewModel({
+        page: createMockPage(caseWithNoNotesHistory),
+        request: mockRequest,
+        query: mockQuery,
+      });
 
       expect(result.data.currentTask.notesHistory).toEqual([]);
     });
@@ -725,10 +788,11 @@ describe("createTaskDetailViewModel", () => {
         },
       };
 
-      const result = createTaskDetailViewModel(
-        caseWithNullNotesHistory,
-        mockQuery,
-      );
+      const result = createTaskDetailViewModel({
+        page: createMockPage(caseWithNullNotesHistory),
+        request: mockRequest,
+        query: mockQuery,
+      });
 
       expect(result.data.currentTask.notesHistory).toEqual([]);
     });

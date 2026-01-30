@@ -37,7 +37,9 @@ describe("server", () => {
       method: "GET",
       url: "/",
       auth: {
-        credentials: {},
+        credentials: {
+          user: { idpRoles: [] },
+        },
         strategy: "session",
         mode: "required",
       },

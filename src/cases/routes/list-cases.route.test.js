@@ -6,6 +6,12 @@ import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
 import { listCasesRoute } from "./list-cases.route.js";
 
 vi.mock("../use-cases/find-all-cases.use-case.js");
+vi.mock("../../common/view-models/header.view-model.js");
+
+const createMockPage = (cases) => ({
+  data: cases,
+  header: { navItems: [] },
+});
 
 describe("listCasesRoute", () => {
   let server;
@@ -23,7 +29,7 @@ describe("listCasesRoute", () => {
   });
 
   it("returns a list of cases", async () => {
-    findAllCasesUseCase.mockResolvedValue(mockCases);
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -43,7 +49,7 @@ describe("listCasesRoute", () => {
   });
 
   it("extracts assignedCaseId from query parameters and renders notification banner", async () => {
-    findAllCasesUseCase.mockResolvedValue(mockCases);
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
       method: "GET",

@@ -2,9 +2,10 @@ import {
   DATE_FORMAT_SHORT_MONTH,
   formatDate,
 } from "../../common/nunjucks/filters/format-date.js";
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
-export const createCaseListViewModel = (cases, assignedCaseId) => {
-  const casesTable = mapCasesToTable(cases);
+export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
+  const casesTable = mapCasesToTable(page.data);
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
     assignedCaseId,
     casesTable.rows,
@@ -13,6 +14,7 @@ export const createCaseListViewModel = (cases, assignedCaseId) => {
   return {
     pageTitle: "Cases",
     pageHeading: "Cases",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     data: {
       tabItems: [
