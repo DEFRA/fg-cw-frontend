@@ -9,3 +9,14 @@ export const findAll = async (authContext) => {
 
   return payload;
 };
+
+export const create = async (authContext, roleData) => {
+  const { payload } = await wreck.post("/roles", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: roleData,
+  });
+
+  return payload;
+};
