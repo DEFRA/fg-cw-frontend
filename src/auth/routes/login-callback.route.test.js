@@ -144,6 +144,7 @@ describe("loginCallbackRoute", () => {
       expiresAt: expect.any(Number),
       user: {
         id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
+        idpRoles: ["FCP.Casework.Read"],
       },
     });
   });

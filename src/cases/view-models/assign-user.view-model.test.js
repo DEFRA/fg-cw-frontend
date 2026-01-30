@@ -1,5 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createAssignUserViewModel } from "./assign-user.view-model.js";
+
+vi.mock("../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/case-123/assign" };
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("createAssignUserViewModel", () => {
   it("creates view model with case and users data", () => {
@@ -25,33 +34,33 @@ describe("createAssignUserViewModel", () => {
       },
     ];
 
-    const result = createAssignUserViewModel(mockCase, mockUsers);
-
-    expect(result).toEqual({
-      pageTitle: "Assign",
-      pageHeading: "Assign",
-      breadcrumbs: [],
-      data: {
-        caseId: "case-123",
-        usersSelect: [
-          {
-            value: "",
-            text: "Select a user",
-            selected: true,
-          },
-          {
-            value: "user-1",
-            text: "John Doe",
-            selected: false,
-          },
-          {
-            value: "user-2",
-            text: "Jane Smith",
-            selected: false,
-          },
-        ],
-      },
+    const result = createAssignUserViewModel({
+      page: createMockPage(mockCase),
+      request: mockRequest,
+      users: mockUsers,
     });
+
+    expect(result.pageTitle).toBe("Assign");
+    expect(result.pageHeading).toBe("Assign");
+    expect(result.breadcrumbs).toEqual([]);
+    expect(result.data.caseId).toBe("case-123");
+    expect(result.data.usersSelect).toEqual([
+      {
+        value: "",
+        text: "Select a user",
+        selected: true,
+      },
+      {
+        value: "user-1",
+        text: "John Doe",
+        selected: false,
+      },
+      {
+        value: "user-2",
+        text: "Jane Smith",
+        selected: false,
+      },
+    ]);
   });
 
   it("creates view model with assigned user selected", () => {
@@ -85,7 +94,11 @@ describe("createAssignUserViewModel", () => {
       },
     ];
 
-    const result = createAssignUserViewModel(mockCase, mockUsers);
+    const result = createAssignUserViewModel({
+      page: createMockPage(mockCase),
+      request: mockRequest,
+      users: mockUsers,
+    });
 
     expect(result.data.usersSelect).toEqual([
       {
@@ -129,7 +142,11 @@ describe("createAssignUserViewModel", () => {
       },
     ];
 
-    const result = createAssignUserViewModel(mockCase, mockUsers);
+    const result = createAssignUserViewModel({
+      page: createMockPage(mockCase),
+      request: mockRequest,
+      users: mockUsers,
+    });
 
     expect(result.data.usersSelect).toEqual([
       {

@@ -7,6 +7,12 @@ import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js
 import { viewNotesRoute } from "./view-notes.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("viewNotesRoute", () => {
   let server;
@@ -26,7 +32,7 @@ describe("viewNotesRoute", () => {
   it("calls use case with correct caseId", async () => {
     const mockCaseData = createMockCaseData();
 
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     await server.inject({
       method: "GET",
@@ -55,7 +61,7 @@ describe("viewNotesRoute", () => {
   it("renders page and returns 200 ok", async () => {
     const mockCaseData = createMockCaseData();
 
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -82,7 +88,7 @@ describe("viewNotesRoute", () => {
       comments: [],
     });
 
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -109,7 +115,7 @@ describe("viewNotesRoute", () => {
       comments: null,
     });
 
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -136,7 +142,7 @@ describe("viewNotesRoute", () => {
       comments: [],
     });
 
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",

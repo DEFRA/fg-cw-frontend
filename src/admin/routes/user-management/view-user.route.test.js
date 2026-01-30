@@ -7,6 +7,12 @@ import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { viewUserRoute } from "./view-user.route.js";
 
 vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("viewUserRoute", () => {
   let server;
@@ -24,24 +30,26 @@ describe("viewUserRoute", () => {
   });
 
   it("renders user details page", async () => {
-    adminFindUserByIdUseCase.mockResolvedValue({
-      id: "user-123",
-      name: "Martin Smith",
-      email: "martin@ee.com",
-      updatedAt: "2025-12-14T20:03:00.000Z",
-      lastLoginAt: "2025-12-14T20:03:00.000Z",
-      idpRoles: ["IDP_ROLE", "FCP.Casework.Read"],
-      appRoles: {
-        ROLE_RPA_CASES_APPROVE: {
-          startDate: "2025-07-01",
-          endDate: "2025-08-02",
+    adminFindUserByIdUseCase.mockResolvedValue(
+      createMockPage({
+        id: "user-123",
+        name: "Martin Smith",
+        email: "martin@ee.com",
+        updatedAt: "2025-12-14T20:03:00.000Z",
+        lastLoginAt: "2025-12-14T20:03:00.000Z",
+        idpRoles: ["IDP_ROLE", "FCP.Casework.Read"],
+        appRoles: {
+          ROLE_RPA_CASES_APPROVE: {
+            startDate: "2025-07-01",
+            endDate: "2025-08-02",
+          },
+          ROLE_RPA_CASES_CREATE: {
+            startDate: "2025-07-01",
+            endDate: "2025-08-02",
+          },
         },
-        ROLE_RPA_CASES_CREATE: {
-          startDate: "2025-07-01",
-          endDate: "2025-08-02",
-        },
-      },
-    });
+      }),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -61,19 +69,21 @@ describe("viewUserRoute", () => {
   });
 
   it("hides edit roles button when viewing own user", async () => {
-    adminFindUserByIdUseCase.mockResolvedValue({
-      id: "admin-user",
-      name: "Martin Smith",
-      email: "martin@ee.com",
-      updatedAt: "2025-12-14T20:03:00.000Z",
-      idpRoles: ["IDP_ROLE"],
-      appRoles: {
-        ROLE_RPA_CASES_APPROVE: {
-          startDate: "2025-07-01",
-          endDate: "2025-08-02",
+    adminFindUserByIdUseCase.mockResolvedValue(
+      createMockPage({
+        id: "admin-user",
+        name: "Martin Smith",
+        email: "martin@ee.com",
+        updatedAt: "2025-12-14T20:03:00.000Z",
+        idpRoles: ["IDP_ROLE"],
+        appRoles: {
+          ROLE_RPA_CASES_APPROVE: {
+            startDate: "2025-07-01",
+            endDate: "2025-08-02",
+          },
         },
-      },
-    });
+      }),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -95,13 +105,15 @@ describe("viewUserRoute", () => {
   });
 
   it("renders no roles messages when roles are missing", async () => {
-    adminFindUserByIdUseCase.mockResolvedValue({
-      id: "user-123",
-      name: "No Roles User",
-      email: "noroles@example.com",
-      idpRoles: [],
-      appRoles: {},
-    });
+    adminFindUserByIdUseCase.mockResolvedValue(
+      createMockPage({
+        id: "user-123",
+        name: "No Roles User",
+        email: "noroles@example.com",
+        idpRoles: [],
+        appRoles: {},
+      }),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",

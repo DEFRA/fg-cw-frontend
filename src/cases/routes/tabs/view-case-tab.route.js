@@ -17,13 +17,13 @@ export const viewCaseTabRoute = {
       user: request.auth.credentials.user,
     };
 
-    const tabData = await findCaseTabUseCase(
+    const page = await findCaseTabUseCase(
       authContext,
       caseId,
       tabId,
       queryString,
     );
-    const viewModel = createViewTabViewModel(tabData, tabId);
+    const viewModel = createViewTabViewModel({ page, request, tabId });
 
     logger.info(`Finished: Get tab ${tabId} for case ${caseId}`);
 

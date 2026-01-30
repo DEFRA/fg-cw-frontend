@@ -1,12 +1,15 @@
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 import { createUserRolesTableViewModel } from "./user-roles-table.view-model.js";
 
 export const createUserRolesViewModel = ({
-  user,
+  page,
+  request,
   roles,
   userId,
   errors,
   formData,
 }) => {
+  const user = page.data;
   const safeErrors = errors || {};
   const rolesTableViewModel = createUserRolesTableViewModel({
     user,
@@ -17,6 +20,7 @@ export const createUserRolesViewModel = ({
 
   return {
     pageTitle: "User roles",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "Users", href: "/admin/user-management" },
       { text: "User details", href: `/admin/user-management/${userId}` },

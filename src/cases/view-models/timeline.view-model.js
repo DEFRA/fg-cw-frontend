@@ -1,13 +1,16 @@
 import { getFormattedGBDate } from "../../common/helpers/date-helpers.js";
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
-export const createTimelineViewModel = (caseItem) => {
+export const createTimelineViewModel = ({ page, request }) => {
+  const caseItem = page.data;
   const caseRef = caseItem.caseRef;
   const code = caseItem.workflowCode;
 
   return {
     pageTitle: `Timeline ${caseRef}`,
     pageHeading: `Timeline`,
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     links: setActiveLink(caseItem.links, "timeline"),
     data: {

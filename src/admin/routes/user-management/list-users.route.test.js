@@ -7,6 +7,12 @@ import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { listUsersRoute } from "./list-users.route.js";
 
 vi.mock("../../../auth/use-cases/admin-find-users.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (users) => ({
+  data: users,
+  header: { navItems: [] },
+});
 
 describe("listUsersRoute", () => {
   let server;
@@ -24,20 +30,22 @@ describe("listUsersRoute", () => {
   });
 
   it("renders users page", async () => {
-    adminFindUsersUseCase.mockResolvedValue([
-      {
-        id: "user-2",
-        name: "Zara Zee",
-        email: "zara@example.com",
-        updatedAt: null,
-      },
-      {
-        id: "user-1",
-        name: "Alice Able",
-        email: "alice@example.com",
-        updatedAt: null,
-      },
-    ]);
+    adminFindUsersUseCase.mockResolvedValue(
+      createMockPage([
+        {
+          id: "user-2",
+          name: "Zara Zee",
+          email: "zara@example.com",
+          updatedAt: null,
+        },
+        {
+          id: "user-1",
+          name: "Alice Able",
+          email: "alice@example.com",
+          updatedAt: null,
+        },
+      ]),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -57,7 +65,7 @@ describe("listUsersRoute", () => {
   });
 
   it("renders empty state when there are no users", async () => {
-    adminFindUsersUseCase.mockResolvedValue([]);
+    adminFindUsersUseCase.mockResolvedValue(createMockPage([]));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -77,13 +85,15 @@ describe("listUsersRoute", () => {
   });
 
   it("renders blank last login when updatedAt missing", async () => {
-    adminFindUsersUseCase.mockResolvedValue([
-      {
-        id: "user-1",
-        name: "Alice Able",
-        email: "alice@example.com",
-      },
-    ]);
+    adminFindUsersUseCase.mockResolvedValue(
+      createMockPage([
+        {
+          id: "user-1",
+          name: "Alice Able",
+          email: "alice@example.com",
+        },
+      ]),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -103,7 +113,7 @@ describe("listUsersRoute", () => {
   });
 
   it("passes auth context to adminFindUsersUseCase", async () => {
-    adminFindUsersUseCase.mockResolvedValue([]);
+    adminFindUsersUseCase.mockResolvedValue(createMockPage([]));
 
     await server.inject({
       method: "GET",
