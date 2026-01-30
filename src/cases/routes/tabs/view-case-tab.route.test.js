@@ -6,6 +6,12 @@ import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { viewCaseTabRoute } from "./view-case-tab.route.js";
 
 vi.mock("../../use-cases/find-case-tab.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("viewCaseTabRoute", () => {
   let server;
@@ -141,7 +147,7 @@ describe("viewCaseTabRoute", () => {
       ],
     };
 
-    findCaseTabUseCase.mockResolvedValue(mockTabData);
+    findCaseTabUseCase.mockResolvedValue(createMockPage(mockTabData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -266,7 +272,7 @@ describe("viewCaseTabRoute", () => {
       ],
     };
 
-    findCaseTabUseCase.mockResolvedValue(mockTimelineData);
+    findCaseTabUseCase.mockResolvedValue(createMockPage(mockTimelineData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -315,7 +321,7 @@ describe("viewCaseTabRoute", () => {
       ],
     };
 
-    findCaseTabUseCase.mockResolvedValue(mockTabData);
+    findCaseTabUseCase.mockResolvedValue(createMockPage(mockTabData));
 
     const { statusCode } = await server.inject({
       method: "GET",
@@ -418,7 +424,7 @@ describe("viewCaseTabRoute", () => {
       ],
     };
 
-    findCaseTabUseCase.mockResolvedValue(mockTabData);
+    findCaseTabUseCase.mockResolvedValue(createMockPage(mockTabData));
 
     const { statusCode, result } = await server.inject({
       method: "GET",

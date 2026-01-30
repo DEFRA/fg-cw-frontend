@@ -4,11 +4,18 @@ import {
   DATE_FORMAT_SORTABLE_DATE,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
-export const createViewNotesViewModel = (caseItem, selectedNoteRef) => {
+export const createViewNotesViewModel = ({
+  page,
+  request,
+  selectedNoteRef,
+}) => {
+  const caseItem = page.data;
   return {
     pageTitle: `Notes ${caseItem.caseRef}`,
     pageHeading: `Notes`,
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     links: setActiveLink(caseItem.links, "notes"),
     data: {

@@ -1,9 +1,13 @@
-export const createRoleListViewModel = (roles) => {
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
+
+export const createRoleListViewModel = ({ page, request }) => {
+  const roles = page.data;
   const roleList = Array.isArray(roles) ? roles : [];
 
   return {
     pageTitle: "Roles",
     pageHeading: "Roles",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "User management", href: "/admin" },
       { text: "Roles" },

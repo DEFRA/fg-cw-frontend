@@ -36,6 +36,7 @@ export const loginCallbackRoute = {
       expiresAt: Date.now() + auth.credentials.expiresIn * 1000,
       user: {
         id: user.id,
+        idpRoles: user.idpRoles,
       },
     });
 

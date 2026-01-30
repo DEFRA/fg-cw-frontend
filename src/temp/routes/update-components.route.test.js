@@ -7,6 +7,12 @@ import { updateComponentsRoute } from "./update-components.route.js";
 vi.mock("../../cases/use-cases/find-case-by-id.use-case.js");
 vi.mock("../use-cases/components.use-case.js");
 vi.mock("../view-models/components.view-model.js");
+vi.mock("../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("updateComponentsRoute", () => {
   const request = {
@@ -28,7 +34,9 @@ describe("updateComponentsRoute", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-    findCaseByIdUseCase.mockResolvedValue({ caseId: "case-123" });
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({ caseId: "case-123" }),
+    );
   });
 
   it("renders the edit page with validation errors when the payload is invalid", async () => {
@@ -50,13 +58,12 @@ describe("updateComponentsRoute", () => {
       session: { mock: "session" },
       jsonPayload: '{"id":"component-1"}',
     });
-    expect(createComponentsEditViewModel).toHaveBeenCalledWith(
-      { caseId: "case-123" },
-      {
-        formData: { jsonPayload: '{"id":"component-1"}' },
-        errors,
-      },
-    );
+    expect(createComponentsEditViewModel).toHaveBeenCalledWith({
+      page: createMockPage({ caseId: "case-123" }),
+      request,
+      formData: { jsonPayload: '{"id":"component-1"}' },
+      errors,
+    });
     expect(h.view).toHaveBeenCalledWith("temp/components-edit", {
       pageTitle: "Edit components",
     });

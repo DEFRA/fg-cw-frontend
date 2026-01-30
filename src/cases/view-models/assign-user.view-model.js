@@ -1,4 +1,7 @@
-export const createAssignUserViewModel = (kase, users) => {
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
+
+export const createAssignUserViewModel = ({ page, request, users }) => {
+  const kase = page.data;
   const caseId = kase._id;
   const usersSelect = [
     {
@@ -14,8 +17,9 @@ export const createAssignUserViewModel = (kase, users) => {
   ];
 
   return {
-    pageTitle: `Assign`,
-    pageHeading: `Assign`,
+    pageTitle: "Assign",
+    pageHeading: "Assign",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [],
     data: {
       caseId,

@@ -9,6 +9,11 @@ vi.mock("../use-cases/components.use-case.js");
 vi.mock("../view-models/components.view-model.js");
 
 describe("viewComponentsRoute", () => {
+  const createMockPage = (caseData) => ({
+    header: { navItems: [] },
+    data: caseData,
+  });
+
   it("renders the components preview with the case data and session content", async () => {
     const request = {
       params: { caseId: "case-123" },
@@ -23,7 +28,9 @@ describe("viewComponentsRoute", () => {
 
     const viewModel = { pageTitle: "Components" };
 
-    findCaseByIdUseCase.mockResolvedValue({ caseId: "case-123" });
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({ caseId: "case-123" }),
+    );
     getComponentsContentUseCase.mockReturnValue([{ id: "component-1" }]);
     createComponentsViewModel.mockReturnValue(viewModel);
 
@@ -43,10 +50,16 @@ describe("viewComponentsRoute", () => {
     expect(getComponentsContentUseCase).toHaveBeenCalledWith({
       mock: "session",
     });
-    expect(createComponentsViewModel).toHaveBeenCalledWith(
-      { caseId: "case-123" },
-      [{ id: "component-1" }],
-    );
+    expect(createComponentsViewModel).toHaveBeenCalledWith({
+      page: {
+        header: {
+          navItems: [],
+        },
+        data: { caseId: "case-123" },
+      },
+      request,
+      content: [{ id: "component-1" }],
+    });
     expect(h.view).toHaveBeenCalledWith("temp/components", viewModel);
   });
 });

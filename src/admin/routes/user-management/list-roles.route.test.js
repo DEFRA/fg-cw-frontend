@@ -7,6 +7,12 @@ import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { listRolesRoute } from "./list-roles.route.js";
 
 vi.mock("../../../auth/use-cases/get-roles.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (roles) => ({
+  data: roles,
+  header: { navItems: [] },
+});
 
 describe("listRolesRoute", () => {
   let server;
@@ -29,18 +35,20 @@ describe("listRolesRoute", () => {
   });
 
   it("renders roles page with breadcrumbs", async () => {
-    getRolesUseCase.mockResolvedValue([
-      {
-        code: "PMF_READ",
-        description: "Pigs Might Fly read only",
-        assignable: true,
-      },
-      {
-        code: "PMF_WRITE",
-        description: "Pigs Might Fly read write",
-        assignable: true,
-      },
-    ]);
+    getRolesUseCase.mockResolvedValue(
+      createMockPage([
+        {
+          code: "PMF_READ",
+          description: "Pigs Might Fly read only",
+          assignable: true,
+        },
+        {
+          code: "PMF_WRITE",
+          description: "Pigs Might Fly read write",
+          assignable: true,
+        },
+      ]),
+    );
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -60,7 +68,7 @@ describe("listRolesRoute", () => {
   });
 
   it("renders empty state when there are no roles", async () => {
-    getRolesUseCase.mockResolvedValue([]);
+    getRolesUseCase.mockResolvedValue(createMockPage([]));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -80,7 +88,7 @@ describe("listRolesRoute", () => {
   });
 
   it("passes auth context to getRolesUseCase", async () => {
-    getRolesUseCase.mockResolvedValue([]);
+    getRolesUseCase.mockResolvedValue(createMockPage([]));
 
     await server.inject({
       method: "GET",

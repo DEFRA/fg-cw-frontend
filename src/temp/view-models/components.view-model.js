@@ -1,10 +1,15 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
+import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
-export const createComponentsEditViewModel = (
-  caseItem,
-  { formData, errors, content } = {},
-) => {
-  const base = buildBaseViewModel(caseItem);
+export const createComponentsEditViewModel = ({
+  page,
+  request,
+  formData,
+  errors,
+  content,
+}) => {
+  const caseItem = page.data;
+  const base = buildBaseViewModel(caseItem, page, request);
 
   return {
     ...base,
@@ -20,8 +25,9 @@ export const createComponentsEditViewModel = (
   };
 };
 
-export const createComponentsViewModel = (caseItem, content) => {
-  const base = buildBaseViewModel(caseItem);
+export const createComponentsViewModel = ({ page, request, content }) => {
+  const caseItem = page.data;
+  const base = buildBaseViewModel(caseItem, page, request);
   return {
     ...base,
     data: {
@@ -50,9 +56,10 @@ const getNavigationLinks = (caseItem) => {
   return setActiveLink(links, componentsLink.id);
 };
 
-const buildBaseViewModel = (caseItem) => ({
+const buildBaseViewModel = (caseItem, page, request) => ({
   pageTitle: `Components ${caseItem.caseRef}`,
   pageHeading: "Components",
+  header: createHeaderViewModel({ page, request }),
   breadcrumbs: [],
   data: {
     banner: caseItem.banner,

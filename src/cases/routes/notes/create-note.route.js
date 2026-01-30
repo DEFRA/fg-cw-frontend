@@ -24,6 +24,7 @@ export const createNoteRoute = {
         caseId,
         validationErrors,
         request.payload,
+        request,
       );
     }
 
@@ -54,6 +55,7 @@ export const createNoteRoute = {
         caseId,
         serverErrors,
         request.payload,
+        request,
       );
     }
   },
@@ -72,9 +74,10 @@ const renderFormWithError = async (
   caseId,
   errors,
   formData,
+  request,
 ) => {
-  const caseData = await findCaseByIdUseCase(authContext, caseId);
-  const viewModel = createNewNoteViewModel(caseData, errors, formData);
+  const page = await findCaseByIdUseCase(authContext, caseId);
+  const viewModel = createNewNoteViewModel({ page, request, errors, formData });
   return h.view(`pages/notes/new-note`, viewModel);
 };
 

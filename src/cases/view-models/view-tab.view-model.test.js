@@ -1,5 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createViewTabViewModel } from "./view-tab.view-model.js";
+
+vi.mock("../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/agreement-123/case-details" };
+
+const createMockPage = (tabData) => ({
+  data: tabData,
+  header: { navItems: [] },
+});
 
 describe("createViewTabViewModel", () => {
   const mockTabData = {
@@ -36,7 +45,11 @@ describe("createViewTabViewModel", () => {
   };
 
   it("creates view model with correct page title", () => {
-    const result = createViewTabViewModel(mockTabData, "caseDetails");
+    const result = createViewTabViewModel({
+      page: createMockPage(mockTabData),
+      request: mockRequest,
+      tabId: "caseDetails",
+    });
 
     expect(result.pageTitle).toBe("Case Details AGR-2024-001");
     expect(result.data.links.length).toBeGreaterThan(0);
@@ -83,7 +96,11 @@ describe("createViewTabViewModel with active tab", () => {
   };
 
   it("creates view model with correct page title", () => {
-    const result = createViewTabViewModel(mockTabData, "timeline");
+    const result = createViewTabViewModel({
+      page: createMockPage(mockTabData),
+      request: { path: "/cases/agreement-123/timeline" },
+      tabId: "timeline",
+    });
 
     expect(result.pageTitle).toBe("timeline AGR-2024-001");
     expect(result.data.links.length).toBeGreaterThan(0);

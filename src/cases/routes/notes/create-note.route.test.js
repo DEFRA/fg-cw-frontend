@@ -10,6 +10,12 @@ import { createNoteRoute } from "./create-note.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../use-cases/add-note-to-case.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("createNoteRoute", () => {
   let server;
@@ -60,7 +66,7 @@ describe("createNoteRoute", () => {
 
   it("shows validation error when text is empty", async () => {
     const mockCaseData = createMockCaseData();
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "POST",
@@ -97,7 +103,7 @@ describe("createNoteRoute", () => {
 
   it("shows validation error when text is only whitespace", async () => {
     const mockCaseData = createMockCaseData();
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "POST",
@@ -134,7 +140,7 @@ describe("createNoteRoute", () => {
 
   it("shows validation error when text is missing", async () => {
     const mockCaseData = createMockCaseData();
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
 
     const { statusCode, result } = await server.inject({
       method: "POST",
@@ -171,7 +177,7 @@ describe("createNoteRoute", () => {
 
   it("shows save error when save fails", async () => {
     const mockCaseData = createMockCaseData();
-    findCaseByIdUseCase.mockResolvedValue(mockCaseData);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCaseData));
     addNoteToCaseUseCase.mockRejectedValue(new Error("API Error"));
 
     const { statusCode, result } = await server.inject({

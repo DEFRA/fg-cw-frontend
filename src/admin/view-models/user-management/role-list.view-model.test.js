@@ -1,5 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createRoleListViewModel } from "./role-list.view-model.js";
+
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/admin/user-management/roles" };
+
+const createMockPage = (roles) => ({
+  data: roles,
+  header: { navItems: [] },
+});
 
 describe("createRoleListViewModel", () => {
   it("maps roles to view model correctly", () => {
@@ -8,7 +17,10 @@ describe("createRoleListViewModel", () => {
       { code: "ROLE_B", description: "Role B", assignable: true },
     ];
 
-    const viewModel = createRoleListViewModel(roles);
+    const viewModel = createRoleListViewModel({
+      page: createMockPage(roles),
+      request: mockRequest,
+    });
 
     expect(viewModel.pageTitle).toEqual("Roles");
     expect(viewModel.pageHeading).toEqual("Roles");
@@ -41,12 +53,18 @@ describe("createRoleListViewModel", () => {
   });
 
   it("handles empty roles list", () => {
-    const viewModel = createRoleListViewModel([]);
+    const viewModel = createRoleListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
     expect(viewModel.data.roles.rows).toEqual([]);
   });
 
   it("handles null roles list", () => {
-    const viewModel = createRoleListViewModel(null);
+    const viewModel = createRoleListViewModel({
+      page: createMockPage(null),
+      request: mockRequest,
+    });
     expect(viewModel.data.roles.rows).toEqual([]);
   });
 });

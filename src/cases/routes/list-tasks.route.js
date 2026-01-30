@@ -14,14 +14,19 @@ export const listTasksRoute = {
 
     logger.info(`Get tasks for case ${request.params.caseId}`);
 
-    const caseData = await findCaseByIdUseCase(
+    const page = await findCaseByIdUseCase(
       authContext,
       request.params.caseId,
       "tasks",
     );
 
     const { errors, formData } = getFlashData(request);
-    const viewModel = createTaskListViewModel(caseData, errors, formData);
+    const viewModel = createTaskListViewModel({
+      page,
+      request,
+      errors,
+      formData,
+    });
 
     logger.info(`Finished: Get tasks for case ${request.params.caseId}`);
 

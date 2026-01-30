@@ -15,9 +15,9 @@ export const timelineRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseData = await findCaseByIdUseCase(authContext, caseId, "timeline");
+    const page = await findCaseByIdUseCase(authContext, caseId, "timeline");
 
-    const viewModel = createTimelineViewModel(caseData);
+    const viewModel = createTimelineViewModel({ page, request });
 
     logger.info(`Finished: Get timeline for case ${caseId}`);
 

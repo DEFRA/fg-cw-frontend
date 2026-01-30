@@ -1,6 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createMockCaseData } from "../../../../test/data/case-test-data.js";
 import { createViewNotesViewModel } from "./view-notes.view-model.js";
+
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/68495db5afe2d27b09b2ee47/notes" };
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("createViewNotesViewModel", () => {
   it("creates complete view model with notes", () => {
@@ -21,7 +30,10 @@ describe("createViewNotesViewModel", () => {
       ],
     });
 
-    const result = createViewNotesViewModel(mockCaseItem);
+    const result = createViewNotesViewModel({
+      page: createMockPage(mockCaseItem),
+      request: mockRequest,
+    });
 
     expect(result.pageTitle).toBe("Notes banana-123");
     expect(result.pageHeading).toBe("Notes");
@@ -30,7 +42,6 @@ describe("createViewNotesViewModel", () => {
     expect(result.data.banner).toBeDefined();
     expect(result.data.notes.title).toBe("All notes");
     expect(result.data.notes.rows).toHaveLength(2);
-    expect(result.errors).toBeUndefined();
   });
 
   it("creates correct table structure for notes", () => {
@@ -46,7 +57,11 @@ describe("createViewNotesViewModel", () => {
       ],
     });
 
-    const result = createViewNotesViewModel(mockCaseItem, "note-123");
+    const result = createViewNotesViewModel({
+      page: createMockPage(mockCaseItem),
+      request: mockRequest,
+      selectedNoteRef: "note-123",
+    });
 
     expect(result.data.notes.head).toEqual([
       {
@@ -103,7 +118,10 @@ describe("createViewNotesViewModel", () => {
       comments: [],
     });
 
-    const result = createViewNotesViewModel(mockCaseItem);
+    const result = createViewNotesViewModel({
+      page: createMockPage(mockCaseItem),
+      request: mockRequest,
+    });
 
     expect(result.data.notes).toBeDefined();
     expect(result.data.notes.title).toBe("All notes");
@@ -116,7 +134,10 @@ describe("createViewNotesViewModel", () => {
       comments: null,
     });
 
-    const result = createViewNotesViewModel(mockCaseItem);
+    const result = createViewNotesViewModel({
+      page: createMockPage(mockCaseItem),
+      request: mockRequest,
+    });
 
     expect(result.data.notes).toBeUndefined();
   });

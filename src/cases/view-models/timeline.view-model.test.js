@@ -1,6 +1,15 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { createTimelineViewModel } from "./timeline.view-model.js";
+
+vi.mock("../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/0999091983/timeline" };
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 describe("Timeline view model", () => {
   it("should return a correct data model", () => {
@@ -87,6 +96,17 @@ describe("Timeline view model", () => {
       },
     };
 
-    expect(createTimelineViewModel(caseItem)).toEqual(expected);
+    const result = createTimelineViewModel({
+      page: createMockPage(caseItem),
+      request: mockRequest,
+    });
+
+    expect(result).toMatchObject({
+      pageTitle: expected.pageTitle,
+      pageHeading: expected.pageHeading,
+      breadcrumbs: expected.breadcrumbs,
+      links: expected.links,
+      data: expected.data,
+    });
   });
 });

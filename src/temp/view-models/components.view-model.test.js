@@ -1,8 +1,17 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   createComponentsEditViewModel,
   createComponentsViewModel,
 } from "./components.view-model.js";
+
+vi.mock("../../common/view-models/header.view-model.js");
+
+const mockRequest = { path: "/cases/case-123/components" };
+
+const createMockPage = (caseData) => ({
+  data: caseData,
+  header: { navItems: [] },
+});
 
 const buildCaseItem = (overrides = {}) => ({
   _id: "case-123",
@@ -19,35 +28,33 @@ describe("components.view-model", () => {
     it("adds the components navigation link when it is missing", () => {
       const caseItem = buildCaseItem();
 
-      const viewModel = createComponentsViewModel(caseItem, [
-        { id: "component-1" },
-      ]);
-
-      expect(viewModel).toEqual({
-        pageTitle: "Components REF-123",
-        pageHeading: "Components",
-        breadcrumbs: [],
-        data: {
-          banner: caseItem.banner,
-          caseRef: "REF-123",
-          caseId: "case-123",
-          links: [
-            {
-              id: "tasks",
-              text: "Tasks",
-              href: "/cases/case-123",
-              active: false,
-            },
-            {
-              id: "components",
-              text: "Components",
-              href: "/cases/case-123/components",
-              active: true,
-            },
-          ],
-          content: [{ id: "component-1" }],
-        },
+      const viewModel = createComponentsViewModel({
+        page: createMockPage(caseItem),
+        request: mockRequest,
+        content: [{ id: "component-1" }],
       });
+
+      expect(viewModel.pageTitle).toBe("Components REF-123");
+      expect(viewModel.pageHeading).toBe("Components");
+      expect(viewModel.breadcrumbs).toEqual([]);
+      expect(viewModel.data.banner).toEqual(caseItem.banner);
+      expect(viewModel.data.caseRef).toBe("REF-123");
+      expect(viewModel.data.caseId).toBe("case-123");
+      expect(viewModel.data.content).toEqual([{ id: "component-1" }]);
+      expect(viewModel.data.links).toEqual([
+        {
+          id: "tasks",
+          text: "Tasks",
+          href: "/cases/case-123",
+          active: false,
+        },
+        {
+          id: "components",
+          text: "Components",
+          href: "/cases/case-123/components",
+          active: true,
+        },
+      ]);
     });
   });
 
@@ -56,7 +63,9 @@ describe("components.view-model", () => {
       const caseItem = buildCaseItem();
       const errors = { jsonPayload: "Enter a JSON payload" };
 
-      const viewModel = createComponentsEditViewModel(caseItem, {
+      const viewModel = createComponentsEditViewModel({
+        page: createMockPage(caseItem),
+        request: mockRequest,
         formData: {
           jsonPayload: '{"foo":"bar"}',
         },

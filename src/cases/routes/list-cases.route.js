@@ -15,9 +15,13 @@ export const listCasesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const cases = await findAllCasesUseCase(authContext);
+    const page = await findAllCasesUseCase(authContext);
 
-    const viewModel = createCaseListViewModel(cases, assignedCaseId);
+    const viewModel = createCaseListViewModel({
+      page,
+      request,
+      assignedCaseId,
+    });
 
     logger.info(`Finished: Find users assigned to case ${assignedCaseId}`);
 

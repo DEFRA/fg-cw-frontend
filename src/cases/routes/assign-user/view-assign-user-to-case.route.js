@@ -29,14 +29,14 @@ export const viewAssignUserToCaseRoute = {
       user: request.auth.credentials.user,
     };
 
-    const kase = await findCaseByIdUseCase(authContext, caseId);
+    const page = await findCaseByIdUseCase(authContext, caseId);
 
     const users = await findAssigneesUseCase(authContext, {
-      allAppRoles: kase.requiredRoles.allOf,
-      anyAppRoles: kase.requiredRoles.anyOf,
+      allAppRoles: page.data.requiredRoles.allOf,
+      anyAppRoles: page.data.requiredRoles.anyOf,
     });
 
-    const viewModel = createAssignUserViewModel(kase, users);
+    const viewModel = createAssignUserViewModel({ page, request, users });
 
     logger.info(
       `Assigning to userId ${request.auth.credentials.user.id} to case ${caseId}`,

@@ -13,6 +13,12 @@ import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../../auth/use-cases/find-assignees.use-case.js");
 vi.mock("../../use-cases/find-all-cases.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = (data) => ({
+  data,
+  header: { navItems: [] },
+});
 
 describe("viewAssignUserToCaseRoute", () => {
   let server;
@@ -45,7 +51,7 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("returns a case and list of valid users", async () => {
-    findCaseByIdUseCase.mockResolvedValue(mockCase);
+    findCaseByIdUseCase.mockResolvedValue(createMockPage(mockCase));
     findAssigneesUseCase.mockResolvedValue(mockUsers);
 
     const { statusCode, result } = await server.inject({
@@ -66,7 +72,7 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
-    findAllCasesUseCase.mockResolvedValue([]);
+    findAllCasesUseCase.mockResolvedValue(createMockPage([]));
 
     // First request - triggers redirect and sets flash
     const { statusCode, headers } = await server.inject({

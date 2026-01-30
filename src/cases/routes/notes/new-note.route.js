@@ -15,8 +15,8 @@ export const newNoteRoute = {
       user: request.auth.credentials.user,
     };
 
-    const caseData = await findCaseByIdUseCase(authContext, caseId);
-    const viewModel = createNewNoteViewModel(caseData);
+    const page = await findCaseByIdUseCase(authContext, caseId);
+    const viewModel = createNewNoteViewModel({ page, request });
 
     logger.info(`Finished: Adding new note to case ${caseId}`);
 
