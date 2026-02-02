@@ -15,7 +15,7 @@ export const viewUserRolesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const [page, rolesPage] = await Promise.all([
+    const [page, roles] = await Promise.all([
       adminFindUserByIdUseCase(authContext, id),
       findRolesUseCase(authContext),
     ]);
@@ -23,7 +23,7 @@ export const viewUserRolesRoute = {
     const viewModel = createUserRolesViewModel({
       page,
       request,
-      roles: rolesPage.data,
+      roles,
       userId: id,
     });
 

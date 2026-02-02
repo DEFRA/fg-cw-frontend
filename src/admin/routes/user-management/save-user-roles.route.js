@@ -59,12 +59,12 @@ export const saveUserRolesRoute = {
 };
 
 const loadPageData = async (authContext, userId) => {
-  const [page, rolesPage] = await Promise.all([
+  const [page, roles] = await Promise.all([
     adminFindUserByIdUseCase(authContext, userId),
     findRolesUseCase(authContext),
   ]);
 
-  return { page, roles: rolesPage.data };
+  return { page, roles };
 };
 
 const persistRolesOrRenderError = async (
