@@ -42,20 +42,23 @@ describe("viewUserRolesRoute", () => {
       }),
     );
 
-    findRolesUseCase.mockResolvedValue([
-      {
-        id: "r2",
-        code: "PMF_READ_WRITE",
-        description: "Pigs Might Fly read write",
-        assignable: false,
-      },
-      {
-        id: "r1",
-        code: "PMF_READ",
-        description: "Pigs Might Fly read only",
-        assignable: true,
-      },
-    ]);
+    findRolesUseCase.mockResolvedValue({
+      header: { navItems: [] },
+      data: [
+        {
+          id: "r2",
+          code: "PMF_READ_WRITE",
+          description: "Pigs Might Fly read write",
+          assignable: false,
+        },
+        {
+          id: "r1",
+          code: "PMF_READ",
+          description: "Pigs Might Fly read only",
+          assignable: true,
+        },
+      ],
+    });
 
     const { statusCode, result } = await server.inject({
       method: "GET",
