@@ -13,7 +13,7 @@ export const createUserRolesViewModel = ({
   const safeErrors = errors || {};
   const rolesTableViewModel = createUserRolesTableViewModel({
     user,
-    roles,
+    roles: mapRolesData(roles),
     errors: safeErrors,
     formData,
   });
@@ -44,3 +44,5 @@ const buildErrorList = (errors) =>
       text: message,
       ...(key !== "save" && { href: `#${key}` }),
     }));
+
+const mapRolesData = (roles) => roles?.data ?? [];
