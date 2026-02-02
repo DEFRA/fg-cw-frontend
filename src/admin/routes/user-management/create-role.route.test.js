@@ -11,6 +11,11 @@ import { newRoleRoute } from "./new-role.route.js";
 vi.mock("../../../auth/use-cases/verify-admin-access.use-case.js");
 vi.mock("../../use-cases/create-role.use-case.js");
 
+const createMockPage = () => ({
+  data: {},
+  header: { navItems: [] },
+});
+
 describe("createRoleRoutes", () => {
   let server;
 
@@ -26,7 +31,7 @@ describe("createRoleRoutes", () => {
   });
 
   it("renders create role page", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -46,7 +51,7 @@ describe("createRoleRoutes", () => {
   });
 
   it("creates role and redirects to list", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
     createRoleUseCase.mockResolvedValue(undefined);
 
     const { statusCode, headers } = await server.inject({
@@ -68,7 +73,7 @@ describe("createRoleRoutes", () => {
   });
 
   it("renders validation errors when form is incomplete", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
 
     const { statusCode, result } = await server.inject({
       method: "POST",
@@ -84,17 +89,14 @@ describe("createRoleRoutes", () => {
 
     const $ = load(result);
 
-    expect($(".govuk-error-summary").text()).toContain("Enter a role code");
-    expect($(".govuk-error-summary").text()).toContain(
-      "Enter a role description",
-    );
-    expect($(".govuk-error-summary").text()).toContain(
-      "Select whether the role is assignable",
-    );
+    const errorSummary = $(".govuk-error-summary").text();
+    expect(errorSummary).toContain("Enter a role code");
+    expect(errorSummary).toContain("Enter a role description");
+    expect(errorSummary).toContain("Select whether the role is assignable");
   });
 
   it("renders duplicate error when role code exists", async () => {
-    verifyAdminAccessUseCase.mockResolvedValue({ ok: true });
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
     createRoleUseCase.mockRejectedValue(Boom.conflict("Duplicate"));
 
     const { statusCode, result } = await server.inject({

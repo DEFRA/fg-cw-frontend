@@ -13,9 +13,9 @@ export const newRoleRoute = {
       user: request.auth.credentials.user,
     };
 
-    await verifyAdminAccessUseCase(authContext);
+    const page = await verifyAdminAccessUseCase(authContext);
 
-    const viewModel = createNewRoleViewModel();
+    const viewModel = createNewRoleViewModel({ page, request });
 
     logger.info("Finished: Loading create role page");
 

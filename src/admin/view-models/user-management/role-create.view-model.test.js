@@ -3,7 +3,10 @@ import { createNewRoleViewModel } from "./role-create.view-model.js";
 
 describe("createNewRoleViewModel", () => {
   it("defaults form data and errors", () => {
-    const viewModel = createNewRoleViewModel();
+    const viewModel = createNewRoleViewModel({
+      page: { header: { navItems: [] } },
+      request: { path: "/admin/user-management/roles/new" },
+    });
 
     expect(viewModel.data.formData).toEqual({
       code: "",
@@ -16,6 +19,8 @@ describe("createNewRoleViewModel", () => {
 
   it("maps errors to errorList with anchors", () => {
     const viewModel = createNewRoleViewModel({
+      page: { header: { navItems: [] } },
+      request: { path: "/admin/user-management/roles/new" },
       errors: {
         code: "Enter a role code",
         description: "Enter a role description",

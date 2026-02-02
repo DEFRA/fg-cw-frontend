@@ -3,5 +3,5 @@ export const toStringOrEmpty = (value) => {
     return "";
   }
 
-  return String(value);
+  return String(value).trim();
 };

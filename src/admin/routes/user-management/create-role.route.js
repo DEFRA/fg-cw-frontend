@@ -1,12 +1,14 @@
 import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
+import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
+import {
+  addError,
+  hasValidationErrors,
+  isForbidden,
+} from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
 import { createRoleUseCase } from "../../use-cases/create-role.use-case.js";
 import { createNewRoleViewModel } from "../../view-models/user-management/role-create.view-model.js";
-
-const CODE_PATTERN = /^ROLE_[A-Z0-9_]+$/;
-const SAVE_ERROR_MESSAGE =
-  "There was a problem creating the role. Please try again.";
 
 export const createRoleRoute = {
   method: "POST",
@@ -19,17 +21,18 @@ export const createRoleRoute = {
       user: request.auth.credentials.user,
     };
 
-    await verifyAdminAccessUseCase(authContext);
+    const page = await verifyAdminAccessUseCase(authContext);
 
     const formData = request.payload || {};
     const { roleData, errors } = validateForm(formData);
 
     if (hasValidationErrors(errors)) {
-      return renderCreateRolePage(h, { errors, formData });
+      return renderCreateRolePage(h, { page, request, errors, formData });
     }
 
-    return await persistRoleOrRenderError(request, h, {
+    return await saveRoleOrRenderError(request, h, {
       authContext,
+      page,
       roleData,
       formData,
     });
@@ -39,65 +42,98 @@ export const createRoleRoute = {
 const validateForm = (formData) => {
   const errors = {};
 
-  const codeRaw = toTrimmed(formData.code);
-  const descriptionRaw = toTrimmed(formData.description);
-  const assignableRaw = toTrimmed(formData.assignable);
+  const codeRaw = toStringOrEmpty(formData.code);
+  const descriptionRaw = toStringOrEmpty(formData.description);
+  const assignableRaw = toStringOrEmpty(formData.assignable);
 
-  if (!codeRaw) {
-    errors.code = "Enter a role code";
-  } else if (!CODE_PATTERN.test(codeRaw)) {
-    errors.code =
-      "Role code must start with ROLE_ and use only uppercase letters, numbers, and underscores";
-  }
+  addError(errors, "code", validateCode(codeRaw));
+  addError(errors, "description", validateDescription(descriptionRaw));
+  addError(errors, "assignable", validateAssignable(assignableRaw));
 
-  if (!descriptionRaw) {
-    errors.description = "Enter a role description";
-  }
-
-  if (!isAssignableValue(assignableRaw)) {
-    errors.assignable = "Select whether the role is assignable";
-  }
-
-  const roleData = {
-    code: codeRaw,
-    description: descriptionRaw,
-    assignable: assignableRaw === "true",
-  };
+  const roleData = buildRoleData({
+    codeRaw,
+    descriptionRaw,
+    assignableRaw,
+  });
 
   return { errors, roleData };
 };
 
-const renderCreateRolePage = (h, { errors, formData }) => {
-  const viewModel = createNewRoleViewModel({ errors, formData });
+const renderCreateRolePage = (h, { page, request, errors, formData }) => {
+  const viewModel = createNewRoleViewModel({
+    page,
+    request,
+    errors,
+    formData,
+  });
 
   return h.view("pages/user-management/role-create", viewModel);
 };
 
-const persistRoleOrRenderError = async (
+const saveRoleOrRenderError = async (
   request,
   h,
-  { authContext, roleData, formData },
+  { authContext, page, roleData, formData },
 ) => {
   try {
     await createRoleUseCase(authContext, roleData);
     logger.info(`Finished: Creating role ${roleData.code}`);
     return h.redirect("/admin/user-management/roles");
   } catch (error) {
-    request.log("error", {
-      message: "Failed to create role",
-      roleCode: roleData.code,
-      error: error.message,
-      stack: error.stack,
+    return handleCreateRoleError(request, h, {
+      page,
+      formData,
+      roleData,
+      error,
     });
-
-    if (isForbidden(error)) {
-      throw error;
-    }
-
-    const errors = buildErrorsFromFailure(error);
-
-    return renderCreateRolePage(h, { errors, formData });
   }
+};
+
+const requiredField = (message) => (value) => (value ? null : message);
+
+const requiredOneOf = (message, allowed) => (value) =>
+  allowed.includes(value) ? null : message;
+
+const validateCode = requiredField("Enter a role code");
+
+const validateDescription = requiredField("Enter a role description");
+
+const validateAssignable = requiredOneOf(
+  "Select whether the role is assignable",
+  ["true", "false"],
+);
+
+const buildRoleData = ({ codeRaw, descriptionRaw, assignableRaw }) => ({
+  code: codeRaw,
+  description: descriptionRaw,
+  assignable: assignableRaw === "true",
+});
+
+const handleCreateRoleError = (
+  request,
+  h,
+  { page, formData, roleData, error },
+) => {
+  logger.error({
+    message: "Failed to create role",
+    roleCode: roleData.code,
+    error: error.message,
+    stack: error.stack,
+  });
+
+  if (isForbidden(error)) {
+    throw error;
+  }
+
+  const errors = buildErrorsFromFailure(error);
+
+  return renderCreateRolePage(h, { page, request, errors, formData });
+};
+
+const isConflict = (error) => {
+  const statusCodesToCheck = [error?.output?.statusCode, error?.statusCode];
+
+  return statusCodesToCheck.includes(statusCodes.CONFLICT);
 };
 
 const buildErrorsFromFailure = (error) => {
@@ -105,24 +141,5 @@ const buildErrorsFromFailure = (error) => {
     return { code: "Role code already exists" };
   }
 
-  return { save: SAVE_ERROR_MESSAGE };
+  return { save: "There was a problem creating the role. Please try again." };
 };
-
-const isAssignableValue = (value) => value === "true" || value === "false";
-
-const toTrimmed = (value) => {
-  if (!value) {
-    return "";
-  }
-
-  return value.toString().trim();
-};
-
-const isForbidden = (error) =>
-  error?.output?.statusCode === statusCodes.FORBIDDEN;
-
-const isConflict = (error) =>
-  error?.output?.statusCode === statusCodes.CONFLICT ||
-  error?.statusCode === statusCodes.CONFLICT;
-
-const hasValidationErrors = (errors) => Object.keys(errors).length > 0;

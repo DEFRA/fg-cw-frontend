@@ -1,27 +1,38 @@
-export const createNewRoleViewModel = ({ formData, errors } = {}) => {
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
+
+export const createNewRoleViewModel = (options = {}) => {
+  const { page, request, formData, errors } = options;
   const safeErrors = errors || {};
-  const safeFormData = formData || {};
+  const safeFormData = normalizeFormData(formData);
 
   return {
     pageTitle: "Create role",
     pageHeading: "Create role",
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "User management", href: "/admin" },
       { text: "Roles", href: "/admin/user-management/roles" },
       { text: "Create role" },
     ],
     data: {
-      formData: {
-        code: safeFormData.code ?? "",
-        description: safeFormData.description ?? "",
-        assignable: safeFormData.assignable ?? "",
-      },
+      formData: safeFormData,
       cancelHref: "/admin/user-management/roles",
     },
     errors: safeErrors,
     errorList: buildErrorList(safeErrors),
   };
 };
+
+const defaultFormData = {
+  code: "",
+  description: "",
+  assignable: "",
+};
+
+const normalizeFormData = (formData = {}) => ({
+  ...defaultFormData,
+  ...formData,
+});
 
 const buildErrorList = (errors) =>
   Object.entries(errors)
