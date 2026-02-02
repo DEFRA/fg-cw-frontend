@@ -1,7 +1,6 @@
 import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import {
-  addError,
   hasValidationErrors,
   isForbidden,
 } from "../../../common/helpers/validation-helpers.js";
@@ -39,22 +38,18 @@ export const createRoleRoute = {
   },
 };
 
-const validateForm = (formData) => {
-  const errors = {};
+const validateForm = ({ code, description, assignable }) => {
+  const errors = {
+    code: validateCode(code),
+    description: validateDescription(description),
+    assignable: validateAssignable(assignable),
+  };
 
-  const codeRaw = toStringOrEmpty(formData.code);
-  const descriptionRaw = toStringOrEmpty(formData.description);
-  const assignableRaw = toStringOrEmpty(formData.assignable);
-
-  addError(errors, "code", validateCode(codeRaw));
-  addError(errors, "description", validateDescription(descriptionRaw));
-  addError(errors, "assignable", validateAssignable(assignableRaw));
-
-  const roleData = buildRoleData({
-    codeRaw,
-    descriptionRaw,
-    assignableRaw,
-  });
+  const roleData = {
+    code: toStringOrEmpty(code).toUpperCase(),
+    description: toStringOrEmpty(description),
+    assignable: toStringOrEmpty(assignable) === "true",
+  };
 
   return { errors, roleData };
 };
@@ -89,25 +84,20 @@ const saveRoleOrRenderError = async (
   }
 };
 
-const requiredField = (message) => (value) => (value ? null : message);
+const requiredField = (message) => (value) =>
+  toStringOrEmpty(value) === "" ? message : null;
 
-const requiredOneOf = (message, allowed) => (value) =>
-  allowed.includes(value) ? null : message;
+const requiredBoolean = (message, allowed) => (value) =>
+  allowed.includes(toStringOrEmpty(value)) ? null : message;
 
 const validateCode = requiredField("Enter a role code");
 
 const validateDescription = requiredField("Enter a role description");
 
-const validateAssignable = requiredOneOf(
+const validateAssignable = requiredBoolean(
   "Select whether the role is assignable",
   ["true", "false"],
 );
-
-const buildRoleData = ({ codeRaw, descriptionRaw, assignableRaw }) => ({
-  code: codeRaw,
-  description: descriptionRaw,
-  assignable: assignableRaw === "true",
-});
 
 const handleCreateRoleError = (
   request,

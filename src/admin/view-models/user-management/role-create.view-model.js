@@ -3,7 +3,7 @@ import { createHeaderViewModel } from "../../../common/view-models/header.view-m
 export const createNewRoleViewModel = (options = {}) => {
   const { page, request, formData, errors } = options;
   const safeErrors = errors || {};
-  const safeFormData = normalizeFormData(formData);
+  const safeFormData = { ...defaultFormData, ...formData };
 
   return {
     pageTitle: "Create role",
@@ -28,11 +28,6 @@ const defaultFormData = {
   description: "",
   assignable: "",
 };
-
-const normalizeFormData = (formData = {}) => ({
-  ...defaultFormData,
-  ...formData,
-});
 
 const buildErrorList = (errors) =>
   Object.entries(errors)

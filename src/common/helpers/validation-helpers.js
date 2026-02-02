@@ -6,7 +6,8 @@ export const addError = (errors, key, message) => {
   }
 };
 
-export const hasValidationErrors = (errors) => Object.keys(errors).length > 0;
+export const hasValidationErrors = (errors) =>
+  Object.values(errors).some(Boolean);
 
 export const isForbidden = (error) =>
   error?.output?.statusCode === statusCodes.FORBIDDEN;
