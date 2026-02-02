@@ -30,7 +30,7 @@ export const createRoleRoute = {
     }
 
     const roleData = mapFormData(formData);
-    return await createRole(request, h, {
+    return createRole(request, h, {
       authContext,
       page,
       roleData,
