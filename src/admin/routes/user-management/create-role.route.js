@@ -29,7 +29,7 @@ export const createRoleRoute = {
       return renderCreateRolePage(h, { page, request, errors, formData });
     }
 
-    return await saveRoleOrRenderError(request, h, {
+    return await createRole(request, h, {
       authContext,
       page,
       roleData,
@@ -65,7 +65,7 @@ const renderCreateRolePage = (h, { page, request, errors, formData }) => {
   return h.view("pages/user-management/role-create", viewModel);
 };
 
-const saveRoleOrRenderError = async (
+const createRole = async (
   request,
   h,
   { authContext, page, roleData, formData },
