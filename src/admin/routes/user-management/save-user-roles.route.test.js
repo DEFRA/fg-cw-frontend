@@ -51,14 +51,17 @@ describe("saveUserRolesRoute", () => {
       }),
     );
 
-    findRolesUseCase.mockResolvedValue([
-      { id: "r1", code: "PMF_READ", description: "Pigs Might Fly read only" },
-      {
-        id: "r2",
-        code: "PMF_READ_WRITE",
-        description: "Pigs Might Fly read write",
-      },
-    ]);
+    findRolesUseCase.mockResolvedValue({
+      header: { navItems: [] },
+      data: [
+        { id: "r1", code: "PMF_READ", description: "Pigs Might Fly read only" },
+        {
+          id: "r2",
+          code: "PMF_READ_WRITE",
+          description: "Pigs Might Fly read write",
+        },
+      ],
+    });
   });
 
   it("persists selected roles and redirects back to user details", async () => {

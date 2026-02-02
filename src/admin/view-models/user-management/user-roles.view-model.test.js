@@ -22,14 +22,17 @@ describe("createUserRolesViewModel", () => {
       }),
       request: mockRequest,
       userId: "user-123",
-      roles: [
-        {
-          id: "r1",
-          code: "PMF_READ",
-          description: "Pigs Might Fly read only",
-          assignable: true,
-        },
-      ],
+      roles: {
+        header: { navItems: [] },
+        data: [
+          {
+            id: "r1",
+            code: "PMF_READ",
+            description: "Pigs Might Fly read only",
+            assignable: true,
+          },
+        ],
+      },
     });
 
     expect(viewModel.data.roles).toEqual([
