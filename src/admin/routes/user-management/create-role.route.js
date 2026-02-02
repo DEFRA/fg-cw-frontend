@@ -23,12 +23,13 @@ export const createRoleRoute = {
     const page = await verifyAdminAccessUseCase(authContext);
 
     const formData = request.payload || {};
-    const { roleData, errors } = validateForm(formData);
+    const errors = validateForm(formData);
 
     if (hasValidationErrors(errors)) {
       return renderCreateRolePage(h, { page, request, errors, formData });
     }
 
+    const roleData = mapFormData(formData);
     return await createRole(request, h, {
       authContext,
       page,
@@ -39,19 +40,19 @@ export const createRoleRoute = {
 };
 
 const validateForm = ({ code, description, assignable }) => {
-  const errors = {
+  return {
     code: validateCode(code),
     description: validateDescription(description),
     assignable: validateAssignable(assignable),
   };
+};
 
-  const roleData = {
+const mapFormData = ({ code, description, assignable }) => {
+  return {
     code: toStringOrEmpty(code).toUpperCase(),
     description: toStringOrEmpty(description),
     assignable: toStringOrEmpty(assignable) === "true",
   };
-
-  return { errors, roleData };
 };
 
 const renderCreateRolePage = (h, { page, request, errors, formData }) => {
