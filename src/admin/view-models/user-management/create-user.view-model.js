@@ -1,11 +1,13 @@
+const PAGE_TITLE = "Create user";
+
 export const createCreateUserViewModel = (errors, formData) => {
   return {
-    pageTitle: "Create user",
-    pageHeading: "Create user",
+    pageTitle: PAGE_TITLE,
+    pageHeading: PAGE_TITLE,
     breadcrumbs: [
       { text: "User management", href: "/admin/user-management" },
       { text: "Users", href: "/admin/user-management" },
-      { text: "Create user" },
+      { text: PAGE_TITLE },
     ],
     data: {
       formData: formData || {},

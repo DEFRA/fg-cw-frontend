@@ -3,7 +3,8 @@ import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
 import { createCreateUserViewModel } from "../../view-models/user-management/create-user.view-model.js";
 
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// Using a possessive-style regex pattern to prevent ReDoS
+const EMAIL_REGEX = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/;
 
 export const getCreateUserRoute = {
   method: "GET",
@@ -98,8 +99,12 @@ const validateForm = ({ name, email }) => {
   const nameError = validateName(name);
   const emailError = validateEmail(email);
 
-  if (nameError) errors.name = nameError;
-  if (emailError) errors.email = emailError;
+  if (nameError) {
+    errors.name = nameError;
+  }
+  if (emailError) {
+    errors.email = emailError;
+  }
 
   return Object.keys(errors).length > 0 ? errors : null;
 };
