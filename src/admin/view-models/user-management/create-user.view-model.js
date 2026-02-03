@@ -1,17 +1,18 @@
 const PAGE_TITLE = "Create user";
+const USER_MANAGEMENT_HREF = "/admin/user-management";
 
 export const createCreateUserViewModel = (errors, formData) => {
   return {
     pageTitle: PAGE_TITLE,
     pageHeading: PAGE_TITLE,
     breadcrumbs: [
-      { text: "User management", href: "/admin/user-management" },
-      { text: "Users", href: "/admin/user-management" },
+      { text: "User management", href: USER_MANAGEMENT_HREF },
+      { text: "Users", href: USER_MANAGEMENT_HREF },
       { text: PAGE_TITLE },
     ],
     data: {
       formData: formData || {},
-      cancelHref: "/admin/user-management",
+      cancelHref: USER_MANAGEMENT_HREF,
     },
     errors: errors || {},
     errorList: buildErrorList(errors),
