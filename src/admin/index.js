@@ -1,4 +1,8 @@
 import { adminLandingRoute } from "./routes/admin-landing.route.js";
+import {
+  getCreateUserRoute,
+  postCreateUserRoute,
+} from "./routes/user-management/create-user.route.js";
 import { listRolesRoute } from "./routes/user-management/list-roles.route.js";
 import { listUsersRoute } from "./routes/user-management/list-users.route.js";
 import { saveUserRolesRoute } from "./routes/user-management/save-user-roles.route.js";
@@ -13,6 +17,8 @@ export const admin = {
       server.route([
         adminLandingRoute,
         listUsersRoute,
+        getCreateUserRoute,
+        postCreateUserRoute,
         viewUserRoute,
         viewUserRolesRoute,
         saveUserRolesRoute,
