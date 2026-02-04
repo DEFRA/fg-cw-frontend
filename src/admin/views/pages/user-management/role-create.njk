@@ -1,0 +1,82 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+
+      <form action="/admin/user-management/roles/new" method="post">
+        {{
+          govukInput({
+          label: {
+            text: "Code",
+            classes: "govuk-label--s"
+          },
+          hint: {
+            text: "You can find this in your grant documentation."
+          },
+          id: "code",
+          name: "code",
+          classes: "govuk-input--width-20",
+          value: data.formData.code,
+          errorMessage: errors.code and { text: errors.code }
+          })
+        }}
+
+        {{
+          govukInput({
+          label: {
+            text: "Description",
+            classes: "govuk-label--s"
+          },
+          id: "description",
+          name: "description",
+          classes: "govuk-input--width-20",
+          value: data.formData.description,
+          errorMessage: errors.description and { text: errors.description }
+          })
+        }}
+
+        {{
+          govukRadios({
+          idPrefix: "assignable",
+          name: "assignable",
+          classes: "govuk-radios--inline",
+          fieldset: {
+            legend: {
+              html: "<h3 class=\"govuk-fieldset__heading\">Allow this role to be assigned?</h3>",
+              classes: "govuk-fieldset__legend--s"
+            }
+          },
+          items: [
+            {
+              value: "true",
+              text: "Yes",
+              checked: data.formData.assignable == "true"
+            },
+            {
+              value: "false",
+              text: "No",
+              checked: data.formData.assignable == "false"
+            }
+          ],
+          errorMessage: errors.assignable and { text: errors.assignable }
+          })
+        }}
+
+        {{ govukButton({ text: "Confirm", classes: "govuk-!-margin-bottom-3" }) }}
+        <p class="govuk-body govuk-!-margin-top-0">
+          <a class="govuk-link" href="{{ data.cancelHref }}">Cancel</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}
