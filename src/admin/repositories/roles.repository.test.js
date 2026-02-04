@@ -1,10 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
 
-import { findAll } from "./roles.repository.js";
+import { findAll, findByCode, updateRole } from "./roles.repository.js";
 
 vi.mock("../../common/wreck.js", () => ({
   wreck: {
     get: vi.fn(),
+    put: vi.fn(),
   },
 }));
 
@@ -26,5 +27,50 @@ describe("rolesRepository", () => {
       },
     });
     expect(result).toEqual([{ code: "PMF_READ" }]);
+  });
+
+  it("fetches a role by code", async () => {
+    const { wreck } = await import("../../common/wreck.js");
+
+    wreck.get.mockResolvedValue({
+      payload: { code: "PMF_READ" },
+    });
+
+    const authContext = { token: "token-123" };
+
+    const result = await findByCode(authContext, "PMF_READ");
+
+    expect(wreck.get).toHaveBeenCalledWith("/roles/PMF_READ", {
+      headers: {
+        authorization: "Bearer token-123",
+      },
+    });
+    expect(result).toEqual({ code: "PMF_READ" });
+  });
+
+  it("updates a role", async () => {
+    const { wreck } = await import("../../common/wreck.js");
+
+    wreck.put.mockResolvedValue({
+      payload: { code: "PMF_READ" },
+    });
+
+    const authContext = { token: "token-123" };
+
+    const result = await updateRole(authContext, "PMF_READ", {
+      description: "Read only",
+      assignable: true,
+    });
+
+    expect(wreck.put).toHaveBeenCalledWith("/roles/PMF_READ", {
+      headers: {
+        authorization: "Bearer token-123",
+      },
+      payload: {
+        description: "Read only",
+        assignable: true,
+      },
+    });
+    expect(result).toEqual({ code: "PMF_READ" });
   });
 });
