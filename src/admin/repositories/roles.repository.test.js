@@ -1,11 +1,11 @@
 import { describe, expect, it, vi } from "vitest";
-
-import { findAll, findByCode, updateRole } from "./roles.repository.js";
+import { create, findAll, findByCode, updateRole } from "./roles.repository.js";
 
 vi.mock("../../common/wreck.js", () => ({
   wreck: {
     get: vi.fn(),
     put: vi.fn(),
+    post: vi.fn(),
   },
 }));
 
@@ -72,5 +72,27 @@ describe("rolesRepository", () => {
       },
     });
     expect(result).toEqual({ code: "PMF_READ" });
+  });
+
+  it("creates role with bearer token", async () => {
+    const { wreck } = await import("../../common/wreck.js");
+
+    wreck.post.mockResolvedValue({ payload: undefined });
+
+    const authContext = { token: "token-123" };
+    const roleData = {
+      code: "ROLE_PMF_READ",
+      description: "Pigs might fly read only",
+      assignable: true,
+    };
+
+    await create(authContext, roleData);
+
+    expect(wreck.post).toHaveBeenCalledWith("/roles", {
+      headers: {
+        authorization: "Bearer token-123",
+      },
+      payload: roleData,
+    });
   });
 });

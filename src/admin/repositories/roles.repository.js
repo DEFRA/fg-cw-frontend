@@ -30,3 +30,14 @@ export const updateRole = async (authContext, roleCode, role) => {
 
   return payload;
 };
+
+export const create = async (authContext, roleData) => {
+  const { payload } = await wreck.post("/roles", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: roleData,
+  });
+
+  return payload;
+};
