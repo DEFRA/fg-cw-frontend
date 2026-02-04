@@ -134,7 +134,7 @@ const createRolesMap = (roles) =>
   new Map(roles.map((role) => [role.code, role]));
 
 const normaliseDateForHtmlInput = (value) => {
-  const raw = toStringOrEmpty(value).trim();
+  const raw = toStringOrEmpty(value);
   if (!raw) {
     return "";
   }

@@ -7,8 +7,11 @@ import {
   normaliseRoleCodes,
 } from "../../../common/helpers/role-helpers.js";
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
+import {
+  hasValidationErrors,
+  isForbidden,
+} from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
-import { statusCodes } from "../../../common/status-codes.js";
 import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
 import { updateUserRolesUseCase } from "../../use-cases/update-user-roles.use-case.js";
 import { createUserRolesViewModel } from "../../view-models/user-management/user-roles.view-model.js";
@@ -116,8 +119,6 @@ const renderRolesPage = (
   return h.view("pages/user-management/user-roles", viewModel);
 };
 
-const hasValidationErrors = (errors) => Object.keys(errors).length > 0;
-
 const buildAppRolesFromForm = (selectedRoleCodes, formData) => {
   const errors = {};
   const appRoles = {};
@@ -137,8 +138,8 @@ const buildRoleAllocationResult = (code, formData) => {
   const startDateRaw = toStringOrEmpty(formData[startKey]);
   const endDateRaw = toStringOrEmpty(formData[endKey]);
 
-  const startDate = startDateRaw.trim();
-  const endDate = endDateRaw.trim();
+  const startDate = startDateRaw;
+  const endDate = endDateRaw;
 
   const start = parseDate(startDate);
   const end = parseDate(endDate);
@@ -266,6 +267,3 @@ const isValidDate = (value) => {
 
   return isValid(value);
 };
-
-const isForbidden = (error) =>
-  error?.output?.statusCode === statusCodes.FORBIDDEN;
