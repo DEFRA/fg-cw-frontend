@@ -1,4 +1,5 @@
 import { adminCreateUserUseCase } from "../../../auth/use-cases/admin-create-user.use-case.js";
+import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
 import { createCreateUserViewModel } from "../../view-models/user-management/create-user.view-model.js";
@@ -9,8 +10,15 @@ const EMAIL_REGEX = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/;
 export const getCreateUserRoute = {
   method: "GET",
   path: "/admin/user-management/create",
-  handler: async (_request, h) => {
-    const viewModel = createCreateUserViewModel(null, null);
+  handler: async (request, h) => {
+    logger.info("Loading create user page");
+
+    const authContext = getAuthContext(request);
+    const page = await verifyAdminAccessUseCase(authContext);
+    const viewModel = createCreateUserViewModel({ page, request });
+
+    logger.info("Finished: Loading create user page");
+
     return h.view("pages/user-management/create-user", viewModel);
   },
 };
@@ -21,13 +29,17 @@ export const postCreateUserRoute = {
   handler: async (request, h) => {
     const { name, email } = request.payload;
     const authContext = getAuthContext(request);
+    const page = await verifyAdminAccessUseCase(authContext);
 
     const validationErrors = validateForm({ name, email });
     if (validationErrors) {
-      return renderFormWithError(h, validationErrors, request.payload);
+      return renderFormWithError(h, validationErrors, request.payload, {
+        page,
+        request,
+      });
     }
 
-    return createUser(request, h, authContext, { name, email });
+    return createUser(request, h, authContext, { name, email }, page);
   },
 };
 
@@ -36,7 +48,7 @@ const getAuthContext = (request) => ({
   user: request.auth.credentials.user,
 });
 
-const createUser = async (request, h, authContext, { name, email }) => {
+const createUser = async (request, h, authContext, { name, email }, page) => {
   try {
     logger.info("Creating user via admin");
     const response = await adminCreateUserUseCase(authContext, { name, email });
@@ -44,11 +56,11 @@ const createUser = async (request, h, authContext, { name, email }) => {
     logger.info(`Finished: Creating user via admin with id ${createdUser.id}`);
     return h.redirect(`/admin/user-management/${createdUser.id}`);
   } catch (error) {
-    return handleCreateError(request, h, error);
+    return handleCreateError(request, h, error, page);
   }
 };
 
-const handleCreateError = (request, h, error) => {
+const handleCreateError = (request, h, error, page) => {
   request.log("error", {
     message: "Failed to create user",
     error: error.message,
@@ -64,6 +76,7 @@ const handleCreateError = (request, h, error) => {
       h,
       { email: "A user with this email address already exists" },
       request.payload,
+      { page, request },
     );
   }
 
@@ -71,6 +84,7 @@ const handleCreateError = (request, h, error) => {
     h,
     { save: "There was a problem creating the user. Please try again." },
     request.payload,
+    { page, request },
   );
 };
 
@@ -109,8 +123,13 @@ const validateForm = ({ name, email }) => {
   return Object.keys(errors).length > 0 ? errors : null;
 };
 
-const renderFormWithError = (h, errors, formData) => {
-  const viewModel = createCreateUserViewModel(errors, formData);
+const renderFormWithError = (h, errors, formData, { page, request }) => {
+  const viewModel = createCreateUserViewModel({
+    page,
+    request,
+    errors,
+    formData,
+  });
   return h.view("pages/user-management/create-user", viewModel);
 };
 

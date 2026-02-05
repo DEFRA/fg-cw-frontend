@@ -1,8 +1,17 @@
 import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { adminCreateUserUseCase } from "../../../auth/use-cases/admin-create-user.use-case.js";
+import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import {
   getCreateUserRoute,
@@ -10,6 +19,13 @@ import {
 } from "./create-user.route.js";
 
 vi.mock("../../../auth/use-cases/admin-create-user.use-case.js");
+vi.mock("../../../auth/use-cases/verify-admin-access.use-case.js");
+vi.mock("../../../common/view-models/header.view-model.js");
+
+const createMockPage = () => ({
+  data: {},
+  header: { navItems: [] },
+});
 
 const createMockResponse = (data) => ({
   data,
@@ -25,6 +41,11 @@ describe("createUserRoutes", () => {
     await server.register([nunjucks]);
 
     await server.initialize();
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
   });
 
   afterAll(async () => {
@@ -48,6 +69,37 @@ describe("createUserRoutes", () => {
       expect($("h1").text()).toContain("Create user");
       expect($("#name").length).toBe(1);
       expect($("#email").length).toBe(1);
+    });
+
+    it("passes auth context to verifyAdminAccessUseCase", async () => {
+      await server.inject({
+        method: "GET",
+        url: "/admin/user-management/create",
+        auth: {
+          credentials: { token: "mock-token", user: { id: "admin-user" } },
+          strategy: "session",
+        },
+      });
+
+      expect(verifyAdminAccessUseCase).toHaveBeenCalledWith({
+        token: "mock-token",
+        user: { id: "admin-user" },
+      });
+    });
+
+    it("returns 403 when admin verification fails", async () => {
+      verifyAdminAccessUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+
+      const { statusCode } = await server.inject({
+        method: "GET",
+        url: "/admin/user-management/create",
+        auth: {
+          credentials: { token: "mock-token", user: { id: "admin-user" } },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toEqual(403);
     });
   });
 
@@ -227,6 +279,53 @@ describe("createUserRoutes", () => {
       const $ = load(result);
       expect($(".govuk-error-summary").length).toBe(1);
       expect(result).toContain("There was a problem creating the user");
+    });
+
+    it("passes auth context to verifyAdminAccessUseCase", async () => {
+      adminCreateUserUseCase.mockResolvedValue(
+        createMockResponse({
+          id: "new-user-123",
+          name: "New User",
+          email: "new@example.com",
+        }),
+      );
+
+      await server.inject({
+        method: "POST",
+        url: "/admin/user-management/create",
+        payload: {
+          name: "New User",
+          email: "new@example.com",
+        },
+        auth: {
+          credentials: { token: "mock-token", user: { id: "admin-user" } },
+          strategy: "session",
+        },
+      });
+
+      expect(verifyAdminAccessUseCase).toHaveBeenCalledWith({
+        token: "mock-token",
+        user: { id: "admin-user" },
+      });
+    });
+
+    it("returns 403 when admin verification fails", async () => {
+      verifyAdminAccessUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+
+      const { statusCode } = await server.inject({
+        method: "POST",
+        url: "/admin/user-management/create",
+        payload: {
+          name: "Test User",
+          email: "test@example.com",
+        },
+        auth: {
+          credentials: { token: "mock-token", user: { id: "admin-user" } },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toEqual(403);
     });
   });
 });

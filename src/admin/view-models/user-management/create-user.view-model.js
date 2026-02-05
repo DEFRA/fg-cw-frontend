@@ -1,10 +1,18 @@
+import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
+
 const PAGE_TITLE = "Create user";
 const USER_MANAGEMENT_HREF = "/admin/user-management";
 
-export const createCreateUserViewModel = (errors, formData) => {
+export const createCreateUserViewModel = ({
+  page,
+  request,
+  errors,
+  formData,
+}) => {
   return {
     pageTitle: PAGE_TITLE,
     pageHeading: PAGE_TITLE,
+    header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "User management", href: USER_MANAGEMENT_HREF },
       { text: "Users", href: USER_MANAGEMENT_HREF },
