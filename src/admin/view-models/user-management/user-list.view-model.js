@@ -12,21 +12,23 @@ export const createUserListViewModel = ({ page, request }) => {
     pageTitle: "Users",
     pageHeading: "Users",
     header: createHeaderViewModel({ page, request }),
-    breadcrumbs: [],
+    breadcrumbs: [
+      { text: "User management", href: "/admin" },
+      { text: "Users" },
+    ],
     data: {
       users: {
         head: [
           { text: "Name", classes: "govuk-!-width-one-third" },
           { text: "Email", classes: "govuk-!-width-one-third" },
           { text: "Last login" },
-          { html: '<span class="govuk-visually-hidden">Actions</span>' },
         ],
         rows: sortedUsers.map(({ id, name, email, lastLoginAt }) => ({
           id,
           name,
           email,
           lastLogin: formatDate(lastLoginAt, DATE_FORMAT_SHORT_DATE_TIME),
-          viewHref: `/admin/user-management/${id}`,
+          nameHref: `/admin/user-management/${id}`,
         })),
       },
     },

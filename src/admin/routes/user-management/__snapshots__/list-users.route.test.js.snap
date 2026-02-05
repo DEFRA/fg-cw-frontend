@@ -2,6 +2,15 @@
 
 exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
@@ -17,16 +26,14 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Email</th>
       <th scope="col" class="govuk-table__header">Last login</th>
-      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">Alice Able</th>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-1">Alice Able</a>
+</th>
       <td class="govuk-table__cell">alice@example.com</td>
       <td class="govuk-table__cell"></td>
-      <td class="govuk-table__cell">        <a class="govuk-link" href="/admin/user-management/user-1">View</a>
-</td>
     </tr>
   </tbody>
 </table>
@@ -36,6 +43,15 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
 
 exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
@@ -49,6 +65,15 @@ exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 
 exports[`listUsersRoute > renders users page 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
@@ -65,23 +90,20 @@ exports[`listUsersRoute > renders users page 1`] = `
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Name</th>
       <th scope="col" class="govuk-table__header govuk-!-width-one-third">Email</th>
       <th scope="col" class="govuk-table__header">Last login</th>
-      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Actions</span></th>
     </tr>
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">Alice Able</th>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-1">Alice Able</a>
+</th>
       <td class="govuk-table__cell">alice@example.com</td>
       <td class="govuk-table__cell"></td>
-      <td class="govuk-table__cell">        <a class="govuk-link" href="/admin/user-management/user-1">View</a>
-</td>
     </tr>
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">Zara Zee</th>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-2">Zara Zee</a>
+</th>
       <td class="govuk-table__cell">zara@example.com</td>
       <td class="govuk-table__cell"></td>
-      <td class="govuk-table__cell">        <a class="govuk-link" href="/admin/user-management/user-2">View</a>
-</td>
     </tr>
   </tbody>
 </table>

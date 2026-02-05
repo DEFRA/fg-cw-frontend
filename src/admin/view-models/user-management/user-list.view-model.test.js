@@ -70,14 +70,26 @@ describe("createUserListViewModel", () => {
     expect(viewModel.data.users.rows).toEqual([]);
   });
 
-  it("builds view link hrefs from user id", () => {
+  it("builds name link hrefs from user id", () => {
     const viewModel = createUserListViewModel({
       page: createMockPage([{ id: "user-123", name: "Alice Able" }]),
       request: mockRequest,
     });
 
-    expect(viewModel.data.users.rows[0].viewHref).toEqual(
+    expect(viewModel.data.users.rows[0].nameHref).toEqual(
       "/admin/user-management/user-123",
     );
+  });
+
+  it("returns breadcrumbs back to admin index page", () => {
+    const viewModel = createUserListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+
+    expect(viewModel.breadcrumbs).toEqual([
+      { text: "User management", href: "/admin" },
+      { text: "Users" },
+    ]);
   });
 });
