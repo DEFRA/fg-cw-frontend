@@ -1,10 +1,9 @@
 import { adminLandingRoute } from "./routes/admin-landing.route.js";
+import { createRoleRoute } from "./routes/user-management/create-role.route.js";
 import {
-  createRoleRoute,
   getCreateUserRoute,
   postCreateUserRoute,
 } from "./routes/user-management/create-user.route.js";
-import { createRoleRoute } from "./routes/user-management/create-role.route.js";
 import { listRolesRoute } from "./routes/user-management/list-roles.route.js";
 import { listUsersRoute } from "./routes/user-management/list-users.route.js";
 import { newRoleRoute } from "./routes/user-management/new-role.route.js";
