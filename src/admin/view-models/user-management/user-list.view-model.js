@@ -19,7 +19,6 @@ export const createUserListViewModel = ({ page, request }) => {
           { text: "Name", classes: "govuk-!-width-one-third" },
           { text: "Email", classes: "govuk-!-width-one-third" },
           { text: "Last login" },
-          { html: '<span class="govuk-visually-hidden">Actions</span>' },
         ],
         rows: sortedUsers.map(({ id, name, email, lastLoginAt }) => ({
           id,

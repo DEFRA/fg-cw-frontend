@@ -5,9 +5,12 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">User details</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">No Roles User</li>
   </ol>
 </nav>
 
@@ -18,17 +21,9 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">User details</h1>
+      <h1 class="govuk-heading-l">No Roles User details</h1>
 
       <dl class="govuk-summary-list">
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Full name
-    </dt>
-    <dd class="govuk-summary-list__value">
-      No Roles User
-    </dd>
-  </div>
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Email
@@ -45,17 +40,27 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
       
     </dd>
   </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Identity provider (IDP) roles
+    </dt>
+    <dd class="govuk-summary-list__value">
+      No IDP roles have been allocated to this user
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Manage grants roles
+    </dt>
+    <dd class="govuk-summary-list__value">
+      No Manage grants roles have been allocated to this user
+    </dd>
+  </div>
 </dl>
 
-      <h2 class="govuk-heading-m">IDP roles</h2>
-        <p class="govuk-body">No IDP roles have been allocated to this user</p>
-
-      <h2 class="govuk-heading-m govuk-!-margin-top-8">App roles</h2>
-        <p class="govuk-body">No App Roles have been allocated to this user</p>
-
         <div class="govuk-button-group govuk-!-margin-top-8">
-          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-  Edit roles
+          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Update roles
 </a>
         </div>
     </div>
@@ -68,9 +73,12 @@ exports[`viewUserRoute > renders user details page 1`] = `
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">User details</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith</li>
   </ol>
 </nav>
 
@@ -81,17 +89,9 @@ exports[`viewUserRoute > renders user details page 1`] = `
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">User details</h1>
+      <h1 class="govuk-heading-l">Martin Smith details</h1>
 
       <dl class="govuk-summary-list">
-  <div class="govuk-summary-list__row">
-    <dt class="govuk-summary-list__key">
-      Full name
-    </dt>
-    <dd class="govuk-summary-list__value">
-      Martin Smith
-    </dd>
-  </div>
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">
       Email
@@ -108,31 +108,27 @@ exports[`viewUserRoute > renders user details page 1`] = `
       14 December 2025 20:03
     </dd>
   </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Identity provider (IDP) roles
+    </dt>
+    <dd class="govuk-summary-list__value">
+      FCP.Casework.Read
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Manage grants roles
+    </dt>
+    <dd class="govuk-summary-list__value">
+      ROLE_RPA_CASES_APPROVE,<br>ROLE_RPA_CASES_CREATE
+    </dd>
+  </div>
 </dl>
 
-      <h2 class="govuk-heading-m">IDP roles</h2>
-        <div class="govuk-button-group tag-button-group">
-            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
-  FCP.Casework.Read
-</strong>
-
-        </div>
-
-      <h2 class="govuk-heading-m govuk-!-margin-top-8">App roles</h2>
-        <div class="govuk-button-group tag-button-group">
-            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
-  ROLE_RPA_CASES_APPROVE
-</strong>
-
-            <strong class="govuk-tag govuk-tag--green tag-no-wrap">
-  ROLE_RPA_CASES_CREATE
-</strong>
-
-        </div>
-
         <div class="govuk-button-group govuk-!-margin-top-8">
-          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
-  Edit roles
+          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Update roles
 </a>
         </div>
     </div>
