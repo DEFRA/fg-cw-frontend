@@ -53,7 +53,7 @@ describe("viewUserRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/user-123",
+      url: "/admin/user-management/users/user-123",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",
@@ -87,7 +87,7 @@ describe("viewUserRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/admin-user",
+      url: "/admin/user-management/users/admin-user",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",
@@ -98,9 +98,9 @@ describe("viewUserRoute", () => {
 
     const $ = load(result);
 
-    expect($("a[href='/admin/user-management/admin-user/roles']").length).toBe(
-      0,
-    );
+    expect(
+      $("a[href='/admin/user-management/users/admin-user/roles']").length,
+    ).toBe(0);
     expect($("a.govuk-button").text()).not.toContain("Edit roles");
   });
 
@@ -117,7 +117,7 @@ describe("viewUserRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/user-123",
+      url: "/admin/user-management/users/user-123",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",
@@ -137,7 +137,7 @@ describe("viewUserRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/user-123",
+      url: "/admin/user-management/users/user-123",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",

@@ -4,7 +4,7 @@ import { createUserListViewModel } from "../../view-models/user-management/user-
 
 export const listUsersRoute = {
   method: "GET",
-  path: "/admin/user-management",
+  path: "/admin/user-management/users",
   async handler(request, h) {
     logger.info("Finding all users for user management");
 

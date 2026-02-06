@@ -1,5 +1,10 @@
 {% extends "layouts/case-layout.njk" %}
 {% from "govuk/components/table/macro.njk" import govukTable %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
 
 {% block contentMain %}
   <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
@@ -7,16 +12,15 @@
   {% if data.users.rows.length > 0 %}
     {% set rows = [] %}
     {% for row in data.users.rows %}
-      {% set viewLinkHtml %}
-        <a class="govuk-link" href="{{ row.viewHref }}">View</a>
+      {% set nameLinkHtml %}
+        <a class="govuk-link" href="{{ row.nameHref }}">{{ row.name }}</a>
       {% endset %}
 
       {%
         set tableRow = [
-          { text: row.name },
+          { html: nameLinkHtml },
           { text: row.email },
-          { text: row.lastLogin },
-          { html: viewLinkHtml }
+          { text: row.lastLogin }
         ]
       %}
       {% set rows = (rows.push(tableRow), rows) %}

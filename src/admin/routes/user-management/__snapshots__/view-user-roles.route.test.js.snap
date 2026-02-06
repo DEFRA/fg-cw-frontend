@@ -5,10 +5,10 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
   </ol>
@@ -25,7 +25,7 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form action="/admin/user-management/user-123/roles" method="post">
+      <form action="/admin/user-management/users/user-123/roles" method="post">
 
 
 
@@ -131,7 +131,7 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
+          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
         </div>
       </form>
     </div>

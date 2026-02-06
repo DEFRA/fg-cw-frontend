@@ -3,7 +3,7 @@ import { createUserRolesViewModel } from "./user-roles.view-model.js";
 
 vi.mock("../../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/admin/user-management/user-123/roles" };
+const mockRequest = { path: "/admin/user-management/users/user-123/roles" };
 
 const createMockPage = (userData) => ({
   data: userData,

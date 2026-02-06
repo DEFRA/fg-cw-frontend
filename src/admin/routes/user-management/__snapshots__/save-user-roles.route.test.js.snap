@@ -5,10 +5,10 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
   </ol>
@@ -40,7 +40,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form action="/admin/user-management/user-123/roles" method="post">
+      <form action="/admin/user-management/users/user-123/roles" method="post">
 
 
 
@@ -108,7 +108,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
+          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
         </div>
       </form>
     </div>
@@ -121,10 +121,10 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
   </ol>
@@ -156,7 +156,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form action="/admin/user-management/user-123/roles" method="post">
+      <form action="/admin/user-management/users/user-123/roles" method="post">
 
 
 
@@ -224,7 +224,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
+          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
         </div>
       </form>
     </div>
@@ -237,10 +237,10 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
   </ol>
@@ -272,7 +272,7 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
 
       <p class="govuk-body">User: Martin Smith</p>
 
-      <form action="/admin/user-management/user-123/roles" method="post">
+      <form action="/admin/user-management/users/user-123/roles" method="post">
 
 
 
@@ -340,7 +340,7 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
           <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
 </button>
-          <a class="govuk-link" href="/admin/user-management/user-123">Cancel</a>
+          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
         </div>
       </form>
     </div>

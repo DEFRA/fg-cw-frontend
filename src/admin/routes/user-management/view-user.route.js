@@ -4,7 +4,7 @@ import { createUserDetailsViewModel } from "../../view-models/user-management/us
 
 export const viewUserRoute = {
   method: "GET",
-  path: "/admin/user-management/{id}",
+  path: "/admin/user-management/users/{id}",
   async handler(request, h) {
     const { id } = request.params;
     logger.info(`Viewing User details ${id}`);

@@ -16,7 +16,7 @@
       <p class="govuk-body">User: {{ data.userName }}</p>
 
       <form
-        action="/admin/user-management/{{ data.userId }}/roles"
+        action="/admin/user-management/users/{{ data.userId }}/roles"
         method="post"
       >
         {% set rows = [] %}
@@ -136,7 +136,9 @@
 
         <div class="govuk-button-group govuk-!-margin-top-6">
           {{ govukButton({ text: "Save" }) }}
-          <a class="govuk-link" href="/admin/user-management/{{ data.userId }}"
+          <a
+            class="govuk-link"
+            href="/admin/user-management/users/{{ data.userId }}"
             >Cancel</a
           >
         </div>

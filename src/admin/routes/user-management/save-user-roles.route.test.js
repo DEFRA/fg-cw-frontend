@@ -69,7 +69,7 @@ describe("saveUserRolesRoute", () => {
 
     const { statusCode, headers } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       payload: {
         roles: ["PMF_READ_WRITE"],
         startDate__PMF_READ_WRITE: "2026-01-01",
@@ -90,13 +90,13 @@ describe("saveUserRolesRoute", () => {
     );
 
     expect(statusCode).toEqual(302);
-    expect(headers.location).toEqual("/admin/user-management/user-123");
+    expect(headers.location).toEqual("/admin/user-management/users/user-123");
   });
 
   it("shows validation error when start date is invalid", async () => {
     const { statusCode, result } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       payload: {
         roles: ["PMF_READ"],
         startDate__PMF_READ: "not-a-date",
@@ -118,7 +118,7 @@ describe("saveUserRolesRoute", () => {
   it("shows validation error when end date is invalid", async () => {
     const { statusCode, result } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       payload: {
         roles: ["PMF_READ"],
         endDate__PMF_READ: "not-a-date",
@@ -140,7 +140,7 @@ describe("saveUserRolesRoute", () => {
   it("shows validation error when end date is before start date", async () => {
     const { statusCode, result } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       payload: {
         roles: ["PMF_READ"],
         startDate__PMF_READ: "2026-02-01",
@@ -167,7 +167,7 @@ describe("saveUserRolesRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       payload: {
         roles: ["PMF_READ"],
       },
