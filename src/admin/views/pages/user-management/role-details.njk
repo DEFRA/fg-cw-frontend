@@ -1,0 +1,74 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+
+      <form action="{{ data.formAction }}" method="post">
+        <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Code</h3>
+        <p class="govuk-body">{{ data.roleCode }}</p>
+
+        {{
+          govukInput({
+            id: "description",
+            name: "description",
+            label: {
+              text: "Description",
+              classes: "govuk-label--s"
+            },
+            classes: "govuk-input--width-20",
+            value: data.form.description,
+            errorMessage: errors.description and { text: errors.description }
+          })
+        }}
+
+        {{
+          govukRadios({
+            idPrefix: "assignable",
+            name: "assignable",
+            classes: "govuk-radios--inline",
+            fieldset: {
+              legend: {
+                html: "<h3 class=\"govuk-fieldset__heading\">Allow this role to be assigned?</h3>",
+                classes: "govuk-fieldset__legend--s"
+              }
+            },
+            errorMessage: errors.assignable and { text: errors.assignable },
+            items: [
+              {
+                value: "true",
+                text: "Yes",
+                checked: data.form.assignable == "true"
+              },
+              {
+                value: "false",
+                text: "No",
+                checked: data.form.assignable == "false"
+              }
+            ]
+          })
+        }}
+
+        {{
+          govukButton({
+            text: "Confirm",
+            classes: "govuk-!-margin-top-0 govuk-!-margin-bottom-3"
+          })
+        }}
+        <br />
+        <a class="govuk-link" href="{{ data.cancelHref }}"
+          >Cancel without update</a
+        >
+      </form>
+    </div>
+  </div>
+{% endblock %}

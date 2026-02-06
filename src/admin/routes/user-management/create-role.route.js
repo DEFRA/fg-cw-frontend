@@ -11,7 +11,7 @@ import { createNewRoleViewModel } from "../../view-models/user-management/role-c
 
 export const createRoleRoute = {
   method: "POST",
-  path: "/admin/user-management/roles/new",
+  path: "/admin/user-management/roles",
   async handler(request, h) {
     logger.info("Creating new role");
 
