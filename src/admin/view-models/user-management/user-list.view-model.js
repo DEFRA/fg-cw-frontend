@@ -28,7 +28,7 @@ export const createUserListViewModel = ({ page, request }) => {
           name,
           email,
           lastLogin: formatDate(lastLoginAt, DATE_FORMAT_SHORT_DATE_TIME),
-          nameHref: `/admin/user-management/${id}`,
+          nameHref: `/admin/user-management/users/${id}`,
         })),
       },
     },

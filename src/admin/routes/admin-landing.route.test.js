@@ -78,7 +78,7 @@ describe("adminLandingRoute", () => {
     });
 
     const $ = load(result);
-    expect($("a[href='/admin/user-management']").text()).toEqual(
+    expect($("a[href='/admin/user-management/users']").text()).toEqual(
       "Manage users",
     );
   });

@@ -13,10 +13,10 @@ export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
     pageTitle: "User details",
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
-      { text: "Users", href: "/admin/user-management" },
+      { text: "Users", href: "/admin/user-management/users" },
       { text: "User details" },
     ],
-    backLink: "/admin/user-management",
+    backLink: "/admin/user-management/users",
     data: {
       summary: {
         rows: [
@@ -39,7 +39,7 @@ export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
       idpRoles,
       appRoles,
       showEditRoles: canEditRoles(user.id, currentUser),
-      editRolesHref: `/admin/user-management/${user.id}/roles`,
+      editRolesHref: `/admin/user-management/users/${user.id}/roles`,
     },
   };
 };

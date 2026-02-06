@@ -30,7 +30,7 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-1">Alice Able</a>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/users/user-1">Alice Able</a>
 </th>
       <td class="govuk-table__cell">alice@example.com</td>
       <td class="govuk-table__cell"></td>
@@ -94,13 +94,13 @@ exports[`listUsersRoute > renders users page 1`] = `
   </thead>
   <tbody class="govuk-table__body">
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-1">Alice Able</a>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/users/user-1">Alice Able</a>
 </th>
       <td class="govuk-table__cell">alice@example.com</td>
       <td class="govuk-table__cell"></td>
     </tr>
     <tr class="govuk-table__row">
-      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/user-2">Zara Zee</a>
+      <th scope="row" class="govuk-table__header">        <a class="govuk-link" href="/admin/user-management/users/user-2">Zara Zee</a>
 </th>
       <td class="govuk-table__cell">zara@example.com</td>
       <td class="govuk-table__cell"></td>

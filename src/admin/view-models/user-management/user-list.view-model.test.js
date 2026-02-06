@@ -7,7 +7,7 @@ import { createUserListViewModel } from "./user-list.view-model.js";
 
 vi.mock("../../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/admin/user-management" };
+const mockRequest = { path: "/admin/user-management/users" };
 
 const createMockPage = (users) => ({
   data: users,
@@ -77,7 +77,7 @@ describe("createUserListViewModel", () => {
     });
 
     expect(viewModel.data.users.rows[0].nameHref).toEqual(
-      "/admin/user-management/user-123",
+      "/admin/user-management/users/user-123",
     );
   });
 
