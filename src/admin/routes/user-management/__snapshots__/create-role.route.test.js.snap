@@ -23,7 +23,7 @@ exports[`createRoleRoutes > renders create role page 1`] = `
     <div class="govuk-grid-column-two-thirds">
       <h1 class="govuk-heading-l">Create role</h1>
 
-      <form action="/admin/user-management/roles/new" method="post">
+      <form action="/admin/user-management/roles" method="post">
         <div class="govuk-form-group">
   <label class="govuk-label govuk-label--s" for="code">
     Code
