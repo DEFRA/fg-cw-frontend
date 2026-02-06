@@ -36,24 +36,32 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
-    <form method="GET" action="/cases/assign-user">
+    <form method="GET" action="/cases/assign-user" class="case-tabs">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-visually-hidden">
           <h1>Cases</h1>
         </legend>
-    
         <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
-    
-        <table class="govuk-table" data-module="moj-sortable-table">
+        <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header" aria-sort="none">ID</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none"><a href="/cases?caseRef=asc">ID 
+    <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+    <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+    </svg>
+    </a></th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Business</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">SBI</th>
-          <th scope="col" class="govuk-table__header" aria-sort="none">Submitted</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none"><a href="/cases?createdAt=asc">Submitted 
+    <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+    <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+    </svg>
+    </a></th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Assignee</th>
         </tr>
@@ -61,6 +69,11 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
       <tbody class="govuk-table__body">
       </tbody>
     </table>
+    
+        <nav class="govuk-pagination govuk-!-margin-bottom-2" aria-label="Pagination">
+      <ul class="govuk-pagination__list">
+      </ul>
+    </nav>
     
       </fieldset>
     </form>

@@ -18,6 +18,19 @@ describe("Case Repository", () => {
   const authContext = { token: "mock-token" };
 
   describe("findAll", () => {
+    it("calls /cases with no query string when criteria is falsy", async () => {
+      wreck.get.mockResolvedValueOnce({ payload: [] });
+
+      const result = await findAll(authContext);
+
+      expect(wreck.get).toHaveBeenCalledWith("/cases", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
+      expect(result).toEqual([]);
+    });
+
     it("returns array of case objects when API call succeeds", async () => {
       wreck.get.mockResolvedValueOnce({
         payload: [
@@ -48,13 +61,21 @@ describe("Case Repository", () => {
         ],
       });
 
-      const result = await findAll(authContext);
-
-      expect(wreck.get).toHaveBeenCalledWith("/cases", {
-        headers: {
-          authorization: `Bearer ${authContext.token}`,
-        },
+      const result = await findAll(authContext, {
+        cursor: "c",
+        direction: "forward",
+        sortCaseRef: "asc",
+        sortCreatedAt: "asc",
       });
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/cases?cursor=c&direction=forward&sortCaseRef=asc&sortCreatedAt=asc",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
+      );
 
       expect(result).toEqual([
         {
