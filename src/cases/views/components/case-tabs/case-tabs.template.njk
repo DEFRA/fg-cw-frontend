@@ -1,37 +1,26 @@
 {% from "govuk/components/table/macro.njk" import govukTable %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/pagination/macro.njk" import govukPagination %}
 {% from "checkbox/macro.njk" import checkbox %}
 {% from "components/dynamic-content/components/status.njk" import defraStatus %}
-
 {% macro radio(params) %}
   {% set id = "caseId-" + params.value %}
   <div class="govuk-radios__item">
-    <input
-      class="govuk-radios__input"
-      id="{{ id }}"
-      name="{{ params.name }}"
-      type="radio"
-      value="{{ params.value }}"
-      aria-label="Select case ID {{ params.value }}"
-    /><label class="govuk-label govuk-radios__label" for="{{ id }}">
+    <input class="govuk-radios__input" id="{{ id }}" name="{{ params.name }}" type="radio" value="{{ params.value }}" aria-label="Select case ID {{ params.value }}"/>
+    <label class="govuk-label govuk-radios__label" for="{{ id }}">
       <span class="govuk-visually-hidden">
         Select case ID {{ params.value }}
       </span>
     </label>
   </div>
 {% endmacro %}
-
 {% macro idLink(href, text) %}
-  <a href="{{ href }}" class="govuk-link govuk-!-font-weight-bold"
-    >{{ text }}</a
-  >
+  <a href="{{ href }}" class="govuk-link govuk-!-font-weight-bold">{{ text }}</a>
 {% endmacro %}
-
 {% set tableRows = [] %}
 {% for row in params.data.rows %}
-  {%
-    set processedRow = [
+  {% set processedRow = [
       { html: radio({ name: "caseId", value: row.select.value }) },
       { html: idLink(row.id.href, row.id.text), attributes: row.id.attributes },
       row.business,
@@ -39,31 +28,21 @@
       row.submitted,
       { html: defraStatus(row.status) },
       row.assignee
-    ]
-  %}
+    ] %}
   {% set tableRows = (tableRows.push(processedRow), tableRows) %}
 {% endfor %}
-
-<form method="GET" action="/cases/assign-user">
+<form method="GET" action="/cases/assign-user" class="case-tabs">
   <fieldset class="govuk-fieldset">
     <legend class="govuk-fieldset__legend govuk-visually-hidden">
       <h1>Cases</h1>
     </legend>
-
-    {{
-      govukButton({
+    {{ govukButton({
         text: "Assign"
-      })
-    }}
-
-    {{
-      govukTable({
-         attributes: {
-          "data-module": "moj-sortable-table"
-        },
+      }) }}
+    {{ govukTable({
         head: params.data.head,
         rows: tableRows
-      })
-    }}
+      }) }}
+    {{ govukPagination(params.pagination) }}
   </fieldset>
 </form>
