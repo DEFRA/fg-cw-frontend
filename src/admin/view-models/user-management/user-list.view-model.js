@@ -12,8 +12,12 @@ export const createUserListViewModel = ({ page, request }) => {
     pageTitle: "Users",
     pageHeading: "Users",
     header: createHeaderViewModel({ page, request }),
-    breadcrumbs: [],
+    breadcrumbs: [
+      { text: "User management", href: "/admin/user-management" },
+      { text: "Users" },
+    ],
     data: {
+      createUserHref: "/admin/user-management/create",
       users: {
         head: [
           { text: "Name", classes: "govuk-!-width-one-third" },

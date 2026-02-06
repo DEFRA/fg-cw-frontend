@@ -8,8 +8,9 @@ vi.mock("../../auth/repositories/user.repository.js", () => ({
 
 describe("updateUserRolesUseCase", () => {
   it("calls user repository update with appRoles payload", async () => {
-    const { update } =
-      await import("../../auth/repositories/user.repository.js");
+    const { update } = await import(
+      "../../auth/repositories/user.repository.js"
+    );
 
     const authContext = { token: "token-123" };
     const userId = "user-123";

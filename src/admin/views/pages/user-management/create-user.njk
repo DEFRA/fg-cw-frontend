@@ -1,0 +1,67 @@
+{% extends "layouts/case-layout.njk" %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+
+{% block contentHeader %}
+  {{ govukBreadcrumbs({ items: breadcrumbs }) }}
+{% endblock %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-l">{{ pageHeading }}</h1>
+
+      <p class="govuk-body">
+        Creating a user allows you to allocate someone’s roles before their
+        first login.
+      </p>
+
+      <form action="/admin/user-management/create" method="post">
+        {{
+          govukInput({
+            label: {
+              text: "Name",
+              classes: "govuk-label--s"
+            },
+            id: "name",
+            name: "name",
+            classes: "govuk-input--width-20",
+            value: data.formData.name,
+            errorMessage: errors.name and { text: errors.name }
+          })
+        }}
+
+        {{
+          govukInput({
+            label: {
+              text: "Email",
+              classes: "govuk-label--s"
+            },
+            hint: {
+              text: "Must be the same as their Entra ID email"
+            },
+            id: "email",
+            name: "email",
+            type: "email",
+            classes: "govuk-input--width-20",
+            value: data.formData.email,
+            errorMessage: errors.email and { text: errors.email }
+          })
+        }}
+
+        <div class="govuk-button-group">
+          {{
+            govukButton({
+              text: "Confirm"
+            })
+          }}
+        </div>
+
+        <p class="govuk-body">
+          <a class="govuk-link" href="{{ data.cancelHref }}">Cancel</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}

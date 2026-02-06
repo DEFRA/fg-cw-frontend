@@ -20,6 +20,8 @@ describe("admin", () => {
     expect(routes).toEqual(
       expect.arrayContaining([
         { method: "get", path: "/admin/user-management" },
+        { method: "get", path: "/admin/user-management/create" },
+        { method: "post", path: "/admin/user-management/create" },
         { method: "get", path: "/admin/user-management/{id}/roles" },
         { method: "post", path: "/admin/user-management/{id}/roles" },
       ]),
