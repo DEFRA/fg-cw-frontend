@@ -4,20 +4,23 @@ import {
 } from "../../../common/nunjucks/filters/format-date.js";
 import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
+const PAGE_TITLE = "Users";
+const USER_MANAGEMENT_HREF = "/admin";
+
 export const createUserListViewModel = ({ page, request }) => {
   const users = page.data;
   const sortedUsers = Array.isArray(users) ? users.slice().sort(byName) : [];
 
   return {
-    pageTitle: "Users",
-    pageHeading: "Users",
+    pageTitle: PAGE_TITLE,
+    pageHeading: PAGE_TITLE,
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
-      { text: "User management", href: "/admin/user-management" },
-      { text: "Users" },
+      { text: "User management", href: USER_MANAGEMENT_HREF },
+      { text: PAGE_TITLE },
     ],
     data: {
-      createUserHref: "/admin/user-management/create",
+      createUserHref: "/admin/user-management/users/new",
       users: {
         head: [
           { text: "Name", classes: "govuk-!-width-one-third" },

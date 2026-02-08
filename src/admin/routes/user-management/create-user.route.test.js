@@ -13,10 +13,7 @@ import {
 import { adminCreateUserUseCase } from "../../../auth/use-cases/admin-create-user.use-case.js";
 import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
-import {
-  getCreateUserRoute,
-  postCreateUserRoute,
-} from "./create-user.route.js";
+import { createUserRoute } from "./create-user.route.js";
 
 vi.mock("../../../auth/use-cases/admin-create-user.use-case.js");
 vi.mock("../../../auth/use-cases/verify-admin-access.use-case.js");
@@ -32,12 +29,12 @@ const createMockResponse = (data) => ({
   header: { navItems: [] },
 });
 
-describe("createUserRoutes", () => {
+describe("createUserRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
-    server.route([getCreateUserRoute, postCreateUserRoute]);
+    server.route([createUserRoute]);
     await server.register([nunjucks]);
 
     await server.initialize();
@@ -52,58 +49,7 @@ describe("createUserRoutes", () => {
     await server.stop();
   });
 
-  describe("GET /admin/user-management/create", () => {
-    it("renders create user form", async () => {
-      const { statusCode, result } = await server.inject({
-        method: "GET",
-        url: "/admin/user-management/create",
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(statusCode).toEqual(200);
-
-      const $ = load(result);
-      expect($("h1").text()).toContain("Create user");
-      expect($("#name").length).toBe(1);
-      expect($("#email").length).toBe(1);
-    });
-
-    it("passes auth context to verifyAdminAccessUseCase", async () => {
-      await server.inject({
-        method: "GET",
-        url: "/admin/user-management/create",
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(verifyAdminAccessUseCase).toHaveBeenCalledWith({
-        token: "mock-token",
-        user: { id: "admin-user" },
-      });
-    });
-
-    it("returns 403 when admin verification fails", async () => {
-      verifyAdminAccessUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
-
-      const { statusCode } = await server.inject({
-        method: "GET",
-        url: "/admin/user-management/create",
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(statusCode).toEqual(403);
-    });
-  });
-
-  describe("POST /admin/user-management/create", () => {
+  describe("POST /admin/user-management/users/new", () => {
     it("redirects to user details on successful creation", async () => {
       adminCreateUserUseCase.mockResolvedValue(
         createMockResponse({
@@ -115,7 +61,7 @@ describe("createUserRoutes", () => {
 
       const { statusCode, headers } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "New User",
           email: "new@example.com",
@@ -133,7 +79,7 @@ describe("createUserRoutes", () => {
     it("shows error when name is empty", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "",
           email: "test@example.com",
@@ -154,7 +100,7 @@ describe("createUserRoutes", () => {
     it("shows error when name is too short", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "A",
           email: "test@example.com",
@@ -175,7 +121,7 @@ describe("createUserRoutes", () => {
     it("shows error when email is empty", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "",
@@ -196,7 +142,7 @@ describe("createUserRoutes", () => {
     it("shows error when email is invalid", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "invalid-email",
@@ -221,7 +167,7 @@ describe("createUserRoutes", () => {
 
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "existing@example.com",
@@ -244,7 +190,7 @@ describe("createUserRoutes", () => {
 
       const { statusCode } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "test@example.com",
@@ -263,7 +209,7 @@ describe("createUserRoutes", () => {
 
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "test@example.com",
@@ -292,7 +238,7 @@ describe("createUserRoutes", () => {
 
       await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "New User",
           email: "new@example.com",
@@ -314,7 +260,7 @@ describe("createUserRoutes", () => {
 
       const { statusCode } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/create",
+        url: "/admin/user-management/users/new",
         payload: {
           name: "Test User",
           email: "test@example.com",

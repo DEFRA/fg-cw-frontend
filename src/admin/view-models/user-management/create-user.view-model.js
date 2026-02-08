@@ -1,47 +1,39 @@
 import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
 const PAGE_TITLE = "Create user";
-const USER_MANAGEMENT_HREF = "/admin/user-management";
 
-export const createCreateUserViewModel = ({
-  page,
-  request,
-  errors,
-  formData,
-}) => {
+export const createCreateUserViewModel = (options = {}) => {
+  const { page, request, formData, errors } = options;
+  const safeErrors = errors || {};
+  const safeFormData = { ...defaultFormData, ...formData };
+
   return {
     pageTitle: PAGE_TITLE,
     pageHeading: PAGE_TITLE,
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
-      { text: "User management", href: USER_MANAGEMENT_HREF },
-      { text: "Users", href: USER_MANAGEMENT_HREF },
+      { text: "User management", href: "/admin" },
+      { text: "Users", href: "/admin/user-management" },
       { text: PAGE_TITLE },
     ],
     data: {
-      formData: formData || {},
-      cancelHref: USER_MANAGEMENT_HREF,
+      formData: safeFormData,
+      cancelHref: "/admin/user-management",
     },
-    errors: errors || {},
-    errorList: buildErrorList(errors),
+    errors: safeErrors,
+    errorList: buildErrorList(safeErrors),
   };
 };
 
-const errorFields = [
-  { key: "name", href: "#name" },
-  { key: "email", href: "#email" },
-  { key: "save", href: null },
-];
-
-const buildErrorList = (errors) => {
-  if (!errors) {
-    return [];
-  }
-
-  return errorFields
-    .filter(({ key }) => errors[key])
-    .map(({ key, href }) => ({
-      text: errors[key],
-      ...(href && { href }),
-    }));
+const defaultFormData = {
+  name: "",
+  email: "",
 };
+
+const buildErrorList = (errors) =>
+  Object.entries(errors)
+    .filter(([, message]) => Boolean(message))
+    .map(([key, message]) => ({
+      text: message,
+      ...(key !== "save" && { href: `#${key}` }),
+    }));

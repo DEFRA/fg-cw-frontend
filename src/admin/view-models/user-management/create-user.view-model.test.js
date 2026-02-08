@@ -10,7 +10,7 @@ const createMockPage = () => ({
 });
 
 const createMockRequest = () => ({
-  path: "/admin/user-management/create",
+  path: "/admin/user-management/users/new",
 });
 
 describe("createCreateUserViewModel", () => {
@@ -24,11 +24,11 @@ describe("createCreateUserViewModel", () => {
     expect(viewModel.pageTitle).toBe("Create user");
     expect(viewModel.pageHeading).toBe("Create user");
     expect(viewModel.breadcrumbs).toEqual([
-      { text: "User management", href: "/admin/user-management" },
+      { text: "User management", href: "/admin" },
       { text: "Users", href: "/admin/user-management" },
       { text: "Create user" },
     ]);
-    expect(viewModel.data.formData).toEqual({});
+    expect(viewModel.data.formData).toEqual({ name: "", email: "" });
     expect(viewModel.data.cancelHref).toBe("/admin/user-management");
     expect(viewModel.errors).toEqual({});
     expect(viewModel.errorList).toEqual([]);
