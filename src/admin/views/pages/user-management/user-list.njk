@@ -29,7 +29,7 @@
     {% set rows = [] %}
     {% for row in data.users.rows %}
       {% set nameLinkHtml %}
-        <a class="govuk-link" href="{{ row.viewHref }}">{{ row.name }}</a>
+        <a class="govuk-link" href="{{ row.nameHref }}">{{ row.name }}</a>
       {% endset %}
 
       {%

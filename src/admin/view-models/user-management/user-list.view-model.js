@@ -5,7 +5,6 @@ import {
 import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
 const PAGE_TITLE = "Users";
-const USER_MANAGEMENT_HREF = "/admin";
 
 export const createUserListViewModel = ({ page, request }) => {
   const users = page.data;
@@ -16,7 +15,7 @@ export const createUserListViewModel = ({ page, request }) => {
     pageHeading: PAGE_TITLE,
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
-      { text: "User management", href: USER_MANAGEMENT_HREF },
+      { text: "User management", href: "/admin" },
       { text: PAGE_TITLE },
     ],
     data: {
@@ -32,7 +31,7 @@ export const createUserListViewModel = ({ page, request }) => {
           name,
           email,
           lastLogin: formatDate(lastLoginAt, DATE_FORMAT_SHORT_DATE_TIME),
-          viewHref: `/admin/user-management/${id}`,
+          nameHref: `/admin/user-management/users/${id}`,
         })),
       },
     },

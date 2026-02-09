@@ -10,7 +10,7 @@ export const createAdminLandingViewModel = ({ page, request }) => {
         title: "Users",
         description: "Check and update what users can do.",
         linkText: "Manage users",
-        linkHref: "/admin/user-management",
+        linkHref: "/admin/user-management/users",
       },
       {
         title: "Roles",

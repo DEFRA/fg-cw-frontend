@@ -22,11 +22,11 @@ export const createUserRolesViewModel = ({
     pageTitle: "User roles",
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
-      { text: "Users", href: "/admin/user-management" },
-      { text: "User details", href: `/admin/user-management/${userId}` },
+      { text: "Users", href: "/admin/user-management/users" },
+      { text: "User details", href: `/admin/user-management/users/${userId}` },
       { text: "User roles" },
     ],
-    backLink: `/admin/user-management/${userId}`,
+    backLink: `/admin/user-management/users/${userId}`,
     data: {
       userId,
       userName: user?.name ?? "",

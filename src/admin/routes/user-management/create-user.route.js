@@ -76,7 +76,7 @@ const createUser = async (
     const response = await adminCreateUserUseCase(authContext, userData);
     const createdUser = response.data;
     logger.info(`Finished: Creating user with id ${createdUser.id}`);
-    return h.redirect(`/admin/user-management/${createdUser.id}`);
+    return h.redirect(`/admin/user-management/users/${createdUser.id}`);
   } catch (error) {
     return handleCreateUserError(request, h, {
       page,

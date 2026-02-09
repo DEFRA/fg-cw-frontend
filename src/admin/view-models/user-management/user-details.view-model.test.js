@@ -7,7 +7,7 @@ import { createUserDetailsViewModel } from "./user-details.view-model.js";
 
 vi.mock("../../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/admin/user-management/user-123" };
+const mockRequest = { path: "/admin/user-management/users/user-123" };
 
 const createMockPage = (userData) => ({
   data: userData,
@@ -189,7 +189,7 @@ describe("createUserDetailsViewModel", () => {
 
     expect(viewModel.data.appRoles).toEqual(["Role.A", "Role.B"]);
     expect(viewModel.data.editRolesHref).toEqual(
-      "/admin/user-management/user-123/roles",
+      "/admin/user-management/users/user-123/roles",
     );
   });
 });
