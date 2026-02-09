@@ -120,4 +120,79 @@ describe("createRoleRoutes", () => {
       "Role code already exists",
     );
   });
+
+  it("renders validation error when role code contains invalid characters", async () => {
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
+
+    const { statusCode, result } = await server.inject({
+      method: "POST",
+      url: "/admin/user-management/roles",
+      payload: {
+        code: "ROLE-TEST",
+        description: "Test role",
+        assignable: "true",
+      },
+      auth: {
+        credentials: { token: "mock-token", user: { id: "user-123" } },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    expect($(".govuk-error-summary").text()).toContain(
+      "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+    );
+  });
+
+  it("renders validation error when role code starts with underscore", async () => {
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
+
+    const { statusCode, result } = await server.inject({
+      method: "POST",
+      url: "/admin/user-management/roles",
+      payload: {
+        code: "_ROLE_TEST",
+        description: "Test role",
+        assignable: "true",
+      },
+      auth: {
+        credentials: { token: "mock-token", user: { id: "user-123" } },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    const $ = load(result);
+    expect($(".govuk-error-summary").text()).toContain(
+      "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+    );
+  });
+
+  it("allows role code starting with number", async () => {
+    verifyAdminAccessUseCase.mockResolvedValue(createMockPage());
+    createRoleUseCase.mockResolvedValue(undefined);
+
+    const { statusCode, headers } = await server.inject({
+      method: "POST",
+      url: "/admin/user-management/roles",
+      payload: {
+        code: "1ROLE_TEST",
+        description: "Test role",
+        assignable: "true",
+      },
+      auth: {
+        credentials: { token: "mock-token", user: { id: "user-123" } },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toEqual("/admin/user-management/roles");
+    expect(createRoleUseCase).toHaveBeenCalledWith(
+      expect.any(Object),
+      expect.objectContaining({ code: "1ROLE_TEST" }),
+    );
+  });
 });

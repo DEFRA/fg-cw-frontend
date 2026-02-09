@@ -91,7 +91,16 @@ const requiredField = (message) => (value) =>
 const requiredBoolean = (message, allowed) => (value) =>
   allowed.includes(toStringOrEmpty(value)) ? null : message;
 
-const validateCode = requiredField("Enter a role code");
+const validateCodeCharacters = (message) => (value) => {
+  const code = toStringOrEmpty(value).toUpperCase();
+  return /^[A-Z0-9][A-Z0-9_]*$/.test(code) ? null : message;
+};
+
+const validateCode = (value) =>
+  requiredField("Enter a role code")(value) ||
+  validateCodeCharacters(
+    "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+  )(value);
 
 const validateDescription = requiredField("Enter a role description");
 
