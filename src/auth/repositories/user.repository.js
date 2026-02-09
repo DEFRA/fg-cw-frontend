@@ -33,6 +33,17 @@ export const adminFindUsers = async (
   return payload;
 };
 
+export const adminCreateUser = async (authContext, { name, email }) => {
+  const { payload } = await wreck.post("/admin/users", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: { name, email },
+  });
+
+  return payload;
+};
+
 export const findAssignees = async (
   authContext,
   { allAppRoles = [], anyAppRoles = [] },

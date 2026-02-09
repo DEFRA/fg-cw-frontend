@@ -18,6 +18,12 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
 
   <h1 class="govuk-heading-l">Users</h1>
 
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
+
 
 
     <table class="govuk-table">
@@ -59,6 +65,12 @@ exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 
   <h1 class="govuk-heading-l">Users</h1>
 
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
+
     <p class="govuk-body">There are no users.</p>
         "
 `;
@@ -80,6 +92,12 @@ exports[`listUsersRoute > renders users page 1`] = `
 
 
   <h1 class="govuk-heading-l">Users</h1>
+
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
 
 
 
