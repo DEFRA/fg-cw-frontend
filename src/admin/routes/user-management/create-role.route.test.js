@@ -56,7 +56,7 @@ describe("createRoleRoutes", () => {
 
     const { statusCode, headers } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/roles/new",
+      url: "/admin/user-management/roles",
       payload: {
         code: "ROLE_TEST",
         description: "Test role",
@@ -77,7 +77,7 @@ describe("createRoleRoutes", () => {
 
     const { statusCode, result } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/roles/new",
+      url: "/admin/user-management/roles",
       payload: {},
       auth: {
         credentials: { token: "mock-token", user: { id: "user-123" } },
@@ -101,7 +101,7 @@ describe("createRoleRoutes", () => {
 
     const { statusCode, result } = await server.inject({
       method: "POST",
-      url: "/admin/user-management/roles/new",
+      url: "/admin/user-management/roles",
       payload: {
         code: "ROLE_DUPLICATE",
         description: "Duplicate role",
