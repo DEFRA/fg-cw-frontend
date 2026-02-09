@@ -15,6 +15,20 @@ const createMockPage = (users) => ({
 });
 
 describe("createUserListViewModel", () => {
+  it("creates view model with correct page title and breadcrumbs", () => {
+    const viewModel = createUserListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+
+    expect(viewModel.pageTitle).toBe("Users");
+    expect(viewModel.pageHeading).toBe("Users");
+    expect(viewModel.breadcrumbs).toEqual([
+      { text: "User management", href: "/admin" },
+      { text: "Users" },
+    ]);
+  });
+
   it("sorts users by name ascending", () => {
     const viewModel = createUserListViewModel({
       page: createMockPage([

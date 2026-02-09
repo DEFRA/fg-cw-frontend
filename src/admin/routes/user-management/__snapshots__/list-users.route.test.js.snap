@@ -2,12 +2,27 @@
 
 exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
 
 
   <h1 class="govuk-heading-l">Users</h1>
+
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
 
 
 
@@ -36,12 +51,27 @@ exports[`listUsersRoute > renders blank last login when updatedAt missing 1`] = 
 
 exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
 
 
   <h1 class="govuk-heading-l">Users</h1>
+
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
 
     <p class="govuk-body">There are no users.</p>
         "
@@ -49,12 +79,27 @@ exports[`listUsersRoute > renders empty state when there are no users 1`] = `
 
 exports[`listUsersRoute > renders users page 1`] = `
 "
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Users</li>
+  </ol>
+</nav>
+
 
     
 
 
 
   <h1 class="govuk-heading-l">Users</h1>
+
+  <div class="govuk-!-text-align-right">
+    <a href="/admin/user-management/users/new" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Create user
+</a>
+  </div>
 
 
 
