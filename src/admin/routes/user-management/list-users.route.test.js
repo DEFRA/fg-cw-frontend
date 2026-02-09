@@ -49,7 +49,7 @@ describe("listUsersRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management",
+      url: "/admin/user-management/users",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
@@ -69,7 +69,7 @@ describe("listUsersRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management",
+      url: "/admin/user-management/users",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
@@ -97,7 +97,7 @@ describe("listUsersRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management",
+      url: "/admin/user-management/users",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
@@ -117,7 +117,7 @@ describe("listUsersRoute", () => {
 
     await server.inject({
       method: "GET",
-      url: "/admin/user-management",
+      url: "/admin/user-management/users",
       auth: {
         credentials: { token: "mock-token", user: { id: "user-123" } },
         strategy: "session",
@@ -138,7 +138,7 @@ describe("listUsersRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "GET",
-      url: "/admin/user-management",
+      url: "/admin/user-management/users",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",

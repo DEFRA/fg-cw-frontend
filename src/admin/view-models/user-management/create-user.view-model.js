@@ -13,12 +13,12 @@ export const createCreateUserViewModel = (options = {}) => {
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
       { text: "User management", href: "/admin" },
-      { text: "Users", href: "/admin/user-management" },
+      { text: "Users", href: "/admin/user-management/users" },
       { text: PAGE_TITLE },
     ],
     data: {
       formData: safeFormData,
-      cancelHref: "/admin/user-management",
+      cancelHref: "/admin/user-management/users",
     },
     errors: safeErrors,
     errorList: buildErrorList(safeErrors),

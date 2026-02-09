@@ -5,7 +5,7 @@ import { createUserRolesViewModel } from "../../view-models/user-management/user
 
 export const viewUserRolesRoute = {
   method: "GET",
-  path: "/admin/user-management/{id}/roles",
+  path: "/admin/user-management/users/{id}/roles",
   async handler(request, h) {
     const { id } = request.params;
     logger.info(`Viewing user roles ${id}`);

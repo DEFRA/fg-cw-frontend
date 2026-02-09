@@ -62,7 +62,7 @@ describe("viewUserRolesRoute", () => {
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",
@@ -83,7 +83,7 @@ describe("viewUserRolesRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "GET",
-      url: "/admin/user-management/user-123/roles",
+      url: "/admin/user-management/users/user-123/roles",
       auth: {
         credentials: { token: "mock-token", user: { id: "admin-user" } },
         strategy: "session",

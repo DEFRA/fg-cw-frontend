@@ -73,7 +73,9 @@ describe("createUserRoute", () => {
       });
 
       expect(statusCode).toEqual(302);
-      expect(headers.location).toBe("/admin/user-management/new-user-123");
+      expect(headers.location).toBe(
+        "/admin/user-management/users/new-user-123",
+      );
     });
 
     it("shows error when name is empty", async () => {
