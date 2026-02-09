@@ -21,7 +21,7 @@ const SAVE_ERROR_MESSAGE =
 
 export const saveUserRolesRoute = {
   method: "POST",
-  path: "/admin/user-management/{id}/roles",
+  path: "/admin/user-management/users/{id}/roles",
   async handler(request, h) {
     const userId = request.params.id;
 
@@ -79,7 +79,7 @@ const persistRolesOrRenderError = async (
     logger.info(`Saving user roles ${userId}`);
     await updateUserRolesUseCase(authContext, userId, appRoles);
     logger.info(`Finished: Saving user roles ${userId}`);
-    return h.redirect(`/admin/user-management/${userId}`);
+    return h.redirect(`/admin/user-management/users/${userId}`);
   } catch (error) {
     request.log("error", {
       message: "Failed to save user roles",

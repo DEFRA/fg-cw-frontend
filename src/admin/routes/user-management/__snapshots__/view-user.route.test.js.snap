@@ -5,7 +5,7 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User details</li>
   </ol>
@@ -54,7 +54,7 @@ exports[`viewUserRoute > renders no roles messages when roles are missing 1`] = 
         <p class="govuk-body">No App Roles have been allocated to this user</p>
 
         <div class="govuk-button-group govuk-!-margin-top-8">
-          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+          <a href="/admin/user-management/users/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
   Edit roles
 </a>
         </div>
@@ -68,7 +68,7 @@ exports[`viewUserRoute > renders user details page 1`] = `
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management">Users</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item" aria-current="page">User details</li>
   </ol>
@@ -131,7 +131,7 @@ exports[`viewUserRoute > renders user details page 1`] = `
         </div>
 
         <div class="govuk-button-group govuk-!-margin-top-8">
-          <a href="/admin/user-management/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
+          <a href="/admin/user-management/users/user-123/roles" role="button" draggable="false" class="govuk-button" data-module="govuk-button">
   Edit roles
 </a>
         </div>

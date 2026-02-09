@@ -25,11 +25,11 @@ describe("createCreateUserViewModel", () => {
     expect(viewModel.pageHeading).toBe("Create user");
     expect(viewModel.breadcrumbs).toEqual([
       { text: "User management", href: "/admin" },
-      { text: "Users", href: "/admin/user-management" },
+      { text: "Users", href: "/admin/user-management/users" },
       { text: "Create user" },
     ]);
     expect(viewModel.data.formData).toEqual({ name: "", email: "" });
-    expect(viewModel.data.cancelHref).toBe("/admin/user-management");
+    expect(viewModel.data.cancelHref).toBe("/admin/user-management/users");
     expect(viewModel.errors).toEqual({});
     expect(viewModel.errorList).toEqual([]);
   });

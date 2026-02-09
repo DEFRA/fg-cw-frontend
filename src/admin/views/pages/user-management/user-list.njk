@@ -23,16 +23,15 @@
   {% if data.users.rows.length > 0 %}
     {% set rows = [] %}
     {% for row in data.users.rows %}
-      {% set viewLinkHtml %}
-        <a class="govuk-link" href="{{ row.viewHref }}">View</a>
+      {% set nameLinkHtml %}
+        <a class="govuk-link" href="{{ row.nameHref }}">{{ row.name }}</a>
       {% endset %}
 
       {%
         set tableRow = [
-          { text: row.name },
+          { html: nameLinkHtml },
           { text: row.email },
-          { text: row.lastLogin },
-          { html: viewLinkHtml }
+          { text: row.lastLogin }
         ]
       %}
       {% set rows = (rows.push(tableRow), rows) %}
