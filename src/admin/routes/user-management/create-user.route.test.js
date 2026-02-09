@@ -49,7 +49,7 @@ describe("createUserRoute", () => {
     await server.stop();
   });
 
-  describe("POST /admin/user-management/users/new", () => {
+  describe("POST /admin/user-management/users", () => {
     it("redirects to user details on successful creation", async () => {
       adminCreateUserUseCase.mockResolvedValue(
         createMockResponse({
@@ -61,7 +61,7 @@ describe("createUserRoute", () => {
 
       const { statusCode, headers } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "New User",
           email: "new@example.com",
@@ -79,7 +79,7 @@ describe("createUserRoute", () => {
     it("shows error when name is empty", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "",
           email: "test@example.com",
@@ -100,7 +100,7 @@ describe("createUserRoute", () => {
     it("shows error when name is too short", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "A",
           email: "test@example.com",
@@ -121,7 +121,7 @@ describe("createUserRoute", () => {
     it("shows error when email is empty", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "",
@@ -142,7 +142,7 @@ describe("createUserRoute", () => {
     it("shows error when email is invalid", async () => {
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "invalid-email",
@@ -167,7 +167,7 @@ describe("createUserRoute", () => {
 
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "existing@example.com",
@@ -190,7 +190,7 @@ describe("createUserRoute", () => {
 
       const { statusCode } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "test@example.com",
@@ -209,7 +209,7 @@ describe("createUserRoute", () => {
 
       const { statusCode, result } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "test@example.com",
@@ -238,7 +238,7 @@ describe("createUserRoute", () => {
 
       await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "New User",
           email: "new@example.com",
@@ -260,7 +260,7 @@ describe("createUserRoute", () => {
 
       const { statusCode } = await server.inject({
         method: "POST",
-        url: "/admin/user-management/users/new",
+        url: "/admin/user-management/users",
         payload: {
           name: "Test User",
           email: "test@example.com",

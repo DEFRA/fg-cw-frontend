@@ -14,7 +14,7 @@ const EMAIL_REGEX = /^[^\s@]{1,64}@[^\s@]{1,255}\.[^\s@]{2,}$/;
 
 export const createUserRoute = {
   method: "POST",
-  path: "/admin/user-management/users/new",
+  path: "/admin/user-management/users",
   async handler(request, h) {
     logger.info("Creating new user");
 
