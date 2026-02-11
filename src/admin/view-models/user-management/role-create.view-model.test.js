@@ -30,13 +30,13 @@ describe("createNewRoleViewModel", () => {
     });
 
     expect(viewModel.errorList).toEqual([
-      { text: "Enter a role code", href: "#code" },
-      { text: "Enter a role description", href: "#description" },
+      { html: "Enter a role code", href: "#code" },
+      { html: "Enter a role description", href: "#description" },
       {
-        text: "Select whether the role is assignable",
+        html: "Select whether the role is assignable",
         href: "#assignable",
       },
-      { text: "There was a problem" },
+      { html: "There was a problem" },
     ]);
   });
 });

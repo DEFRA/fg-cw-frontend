@@ -35,6 +35,6 @@ const buildErrorList = (errors) =>
   Object.entries(errors)
     .filter(([, message]) => Boolean(message))
     .map(([key, message]) => ({
-      text: message,
+      html: message,
       ...(key !== "save" && { href: `#${key}` }),
     }));
