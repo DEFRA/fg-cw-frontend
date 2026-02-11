@@ -99,7 +99,7 @@ const validateCodeCharacters = (message) => (value) => {
 const validateCode = (value) =>
   requiredField("Enter a role code")(value) ||
   validateCodeCharacters(
-    "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+    "Code can only contain letters, numbers and '_' (underscores). <br /> Code cannot start with '_' (underscore).",
   )(value);
 
 const validateDescription = requiredField("Enter a role description");

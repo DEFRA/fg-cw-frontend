@@ -142,7 +142,10 @@ describe("createRoleRoutes", () => {
 
     const $ = load(result);
     expect($(".govuk-error-summary").text()).toContain(
-      "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+      "Code can only contain letters, numbers and '_' (underscores).",
+    );
+    expect($(".govuk-error-summary").text()).toContain(
+      "Code cannot start with '_' (underscore).",
     );
   });
 
@@ -166,7 +169,7 @@ describe("createRoleRoutes", () => {
     expect(statusCode).toEqual(200);
     const $ = load(result);
     expect($(".govuk-error-summary").text()).toContain(
-      "Role code must contain only letters (A-Z), numbers (0-9), and underscores (_). It cannot start with an underscore.",
+      "Code can only contain letters, numbers and '_' (underscores).  Code cannot start with '_' (underscore).",
     );
   });
 
