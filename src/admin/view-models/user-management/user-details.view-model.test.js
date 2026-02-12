@@ -81,7 +81,7 @@ describe("createUserDetailsViewModel", () => {
       currentUser: { id: "someone-else" },
     });
 
-    expect(viewModel.data.summary.rows[2].value.text).toEqual(
+    expect(viewModel.data.summary.rows[1].value.text).toEqual(
       formatDate(updatedAt, DATE_FORMAT_FULL_DATE_TIME),
     );
   });
@@ -99,7 +99,7 @@ describe("createUserDetailsViewModel", () => {
       currentUser: { id: "someone-else" },
     });
 
-    expect(viewModel.data.summary.rows[2].value.text).toEqual("");
+    expect(viewModel.data.summary.rows[1].value.text).toEqual("");
   });
 
   it("hides edit roles when viewing own record", () => {
