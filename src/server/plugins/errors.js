@@ -24,6 +24,15 @@ export const errors = {
         };
       };
 
+      const logError = (statusCode, response) => {
+        if (statusCode === statusCodes.NOT_FOUND) {
+          return;
+        }
+        const level =
+          statusCode >= statusCodes.INTERNAL_SERVER_ERROR ? "error" : "warn";
+        logger[level](response);
+      };
+
       server.ext("onPreResponse", (request, h) => {
         const { response } = request;
 
@@ -33,10 +42,15 @@ export const errors = {
 
         const statusCode = response.output.statusCode;
 
-        if (statusCode !== statusCodes.NOT_FOUND) {
-          const level =
-            statusCode >= statusCodes.INTERNAL_SERVER_ERROR ? "error" : "warn";
-          logger[level](response);
+        logError(statusCode, response);
+
+        if (statusCode === statusCodes.FORBIDDEN) {
+          return h
+            .view("pages/403", {
+              pageTitle: "You do not have access to this page",
+              pageHeading: "You do not have access to this page",
+            })
+            .code(statusCode);
         }
 
         return h
