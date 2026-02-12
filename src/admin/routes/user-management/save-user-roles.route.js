@@ -30,32 +30,24 @@ export const saveUserRolesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const formData = request.payload || {};
-
     const { page, roles } = await loadPageData(authContext, userId);
+
+    const formData = request.payload || {};
     const selectedRoleCodes = normaliseRoleCodes(formData.roles);
 
-    const { appRoles, errors } = buildAppRolesFromForm(
+    const { appRoles, errors } = buildAppRolesFromForm({
       selectedRoleCodes,
       formData,
-    );
-    if (hasValidationErrors(errors)) {
-      return renderRolesPage(h, {
-        page,
-        request,
-        roles,
-        userId,
-        errors,
-        formData,
-      });
-    }
+      currentAppRoles: page?.data?.appRoles,
+    });
 
-    return await persistRolesOrRenderError(request, h, {
+    return await saveRoles(request, h, {
       authContext,
       page,
       roles,
       userId,
       appRoles,
+      errors,
       formData,
     });
   },
@@ -70,7 +62,7 @@ const loadPageData = async (authContext, userId) => {
   return { page, roles };
 };
 
-const persistRolesOrRenderError = async (
+const saveRolesOrRenderError = async (
   request,
   h,
   { authContext, page, roles, userId, appRoles, formData },
@@ -119,12 +111,20 @@ const renderRolesPage = (
   return h.view("pages/user-management/user-roles", viewModel);
 };
 
-const buildAppRolesFromForm = (selectedRoleCodes, formData) => {
+const buildAppRolesFromForm = ({
+  selectedRoleCodes,
+  formData,
+  currentAppRoles,
+}) => {
   const errors = {};
   const appRoles = {};
 
   for (const code of selectedRoleCodes) {
-    const roleResult = buildRoleAllocationResult(code, formData);
+    const roleResult = buildRoleAllocationResult({
+      code,
+      formData,
+      currentRoleAllocation: currentAppRoles?.[code],
+    });
     appRoles[code] = roleResult.allocation;
     Object.assign(errors, roleResult.errors);
   }
@@ -132,14 +132,15 @@ const buildAppRolesFromForm = (selectedRoleCodes, formData) => {
   return { appRoles, errors };
 };
 
-const buildRoleAllocationResult = (code, formData) => {
+const buildRoleAllocationResult = ({
+  code,
+  formData,
+  currentRoleAllocation,
+}) => {
   const { startKey, endKey } = buildRoleDateKeys(code);
 
-  const startDateRaw = toStringOrEmpty(formData[startKey]);
-  const endDateRaw = toStringOrEmpty(formData[endKey]);
-
-  const startDate = startDateRaw;
-  const endDate = endDateRaw;
+  const startDate = toStringOrEmpty(formData[startKey]);
+  const endDate = toStringOrEmpty(formData[endKey]);
 
   const start = parseDate(startDate);
   const end = parseDate(endDate);
@@ -151,6 +152,7 @@ const buildRoleAllocationResult = (code, formData) => {
     endDate,
     start,
     end,
+    currentRoleAllocation,
   });
   const allocation = buildAllocation({ startDate, endDate, start, end });
 
@@ -164,6 +166,7 @@ const collectRoleErrors = ({
   endDate,
   start,
   end,
+  currentRoleAllocation,
 }) => {
   const errors = {};
 
@@ -171,7 +174,15 @@ const collectRoleErrors = ({
   Object.assign(errors, validateEndDate(endKey, endDate, end));
   Object.assign(
     errors,
-    validateDateOrder(endKey, startDate, endDate, start, end),
+    validateDateOrder({
+      startKey,
+      endKey,
+      startDate,
+      endDate,
+      start,
+      end,
+      currentRoleAllocation,
+    }),
   );
 
   return errors;
@@ -205,7 +216,15 @@ const validateEndDate = (endKey, endDate, end) => {
   return errors;
 };
 
-const validateDateOrder = (endKey, startDate, endDate, start, end) => {
+const validateDateOrder = ({
+  startKey,
+  endKey,
+  startDate,
+  endDate,
+  start,
+  end,
+  currentRoleAllocation,
+}) => {
   const errors = {};
 
   if (!shouldValidateDateOrder(startDate, endDate, start, end)) {
@@ -213,11 +232,50 @@ const validateDateOrder = (endKey, startDate, endDate, start, end) => {
   }
 
   if (isBefore(end, start)) {
-    errors[endKey] = "End date before start date";
+    const errorField = determineDateOrderErrorField({
+      startKey,
+      endKey,
+      startDate,
+      endDate,
+      currentRoleAllocation,
+    });
+    errors[errorField] =
+      errorField === startKey
+        ? "Start date cannot be after end date"
+        : "End date cannot be before start date";
   }
 
   return errors;
 };
+
+const determineDateOrderErrorField = ({
+  startKey,
+  endKey,
+  startDate,
+  endDate,
+  currentRoleAllocation,
+}) => {
+  const { previousStartDate, previousEndDate } = getCurrentRoleDates(
+    currentRoleAllocation,
+  );
+  const startChanged = startDate !== previousStartDate;
+  const endChanged = endDate !== previousEndDate;
+
+  if (!startChanged) {
+    return endKey;
+  }
+
+  if (endChanged) {
+    return endKey;
+  }
+
+  return startKey;
+};
+
+const getCurrentRoleDates = (currentRoleAllocation) => ({
+  previousStartDate: toStringOrEmpty(currentRoleAllocation?.startDate),
+  previousEndDate: toStringOrEmpty(currentRoleAllocation?.endDate),
+});
 
 const shouldValidateDateOrder = (startDate, endDate, start, end) => {
   return Boolean(
@@ -266,4 +324,30 @@ const isValidDate = (value) => {
   }
 
   return isValid(value);
+};
+
+const saveRoles = async (
+  request,
+  h,
+  { authContext, page, roles, userId, appRoles, errors, formData },
+) => {
+  if (hasValidationErrors(errors)) {
+    return renderRolesPage(h, {
+      page,
+      request,
+      roles,
+      userId,
+      errors,
+      formData,
+    });
+  }
+
+  return await saveRolesOrRenderError(request, h, {
+    authContext,
+    page,
+    roles,
+    userId,
+    appRoles,
+    formData,
+  });
 };

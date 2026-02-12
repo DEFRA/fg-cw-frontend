@@ -17,20 +17,30 @@ export const createUserRolesViewModel = ({
     errors: safeErrors,
     formData,
   });
+  const selectedRoles = rolesTableViewModel.filter((role) => role.checked);
+  const unselectedRoles = rolesTableViewModel.filter((role) => !role.checked);
+  const userName = user?.name ?? "";
+  const userDetailsHref = `/admin/user-management/users/${userId}`;
+  const formAction = `${userDetailsHref}/roles`;
 
   return {
-    pageTitle: "User roles",
+    pageTitle: `${userName} roles`,
     header: createHeaderViewModel({ page, request }),
     breadcrumbs: [
+      { text: "User management", href: "/admin" },
       { text: "Users", href: "/admin/user-management/users" },
-      { text: "User details", href: `/admin/user-management/users/${userId}` },
-      { text: "User roles" },
+      { text: userName, href: userDetailsHref },
+      { text: `${userName}'s roles` },
     ],
-    backLink: `/admin/user-management/users/${userId}`,
+    backLink: userDetailsHref,
     data: {
       userId,
-      userName: user?.name ?? "",
-      roles: rolesTableViewModel,
+      userName,
+      selectedRoles,
+      unselectedRoles,
+      formAction,
+      cancelHref: userDetailsHref,
+      rolesHref: "/admin/user-management/roles",
     },
     errors: safeErrors,
     errorList: buildErrorList(safeErrors),

@@ -5,12 +5,15 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Martin Smith</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith's roles</li>
   </ol>
 </nav>
 
@@ -25,7 +28,7 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
-            <a href="#endDate__PMF_READ">End date before start date</a>
+            <a href="#endDate__PMF_READ">End date cannot be before start date</a>
           </li>
         </ul>
     </div>
@@ -34,38 +37,35 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
 
 
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-l">User roles</h1>
+  <h1 class="govuk-heading-l">Martin Smith roles</h1>
 
-      <p class="govuk-body">User: Martin Smith</p>
+  <p class="govuk-body">
+    Leave the start date blank for the role to start immediately. Leave the end
+    date blank for the role to go on indefinitely.
+  </p>
+  <p class="govuk-body">Date format is 12/09/2025</p>
 
-      <form action="/admin/user-management/users/user-123/roles" method="post">
+  <form action="/admin/user-management/users/user-123/roles" method="post">
+      <h2 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-2">
+    Selected roles
+  </h2>
 
-
-
-
-
-
-
-
-
-
-
-
-        <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
-      <th scope="col" class="govuk-table__header">Code</th>
-      <th scope="col" class="govuk-table__header">Description</th>
-      <th scope="col" class="govuk-table__header">Start</th>
-      <th scope="col" class="govuk-table__header">End</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">
+          <span class="govuk-visually-hidden">Select role</span>
+        </th>
+        <th scope="col" class="govuk-table__header">Role</th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Start date (optional)</th>
+        <th scope="col" class="govuk-table__header">End date (optional)</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-padding-left-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
                 <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
@@ -73,46 +73,50 @@ exports[`saveUserRolesRoute > shows validation error when end date is before sta
                 </label>
               </div>
             </div>
-</td>
-      <td class="govuk-table__cell">            <strong class="govuk-tag govuk-tag--green tag-no-wrap govuk-!-margin-top-1">
-  PMF_READ
-</strong>
-
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
-</td>
-      <td class="govuk-table__cell">            <div class="">
+          </td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-quarter">
+            PMF_READ
+          </th>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            Pigs Might Fly read only
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
               <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
                 Start date for PMF_READ
               </label>
-              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-02-01">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
             </div>
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-form-group--error">
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
                 <p id="endDate__PMF_READ-error" class="govuk-error-message">
                   <span class="govuk-visually-hidden">Error:</span>
-                  End date before start date
+                  End date cannot be before start date
                 </p>
               <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
                 End date for PMF_READ
               </label>
-              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2026-01-01">
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-01-01">
             </div>
-</td>
-    </tr>
-  </tbody>
-</table>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
 
-        <div class="govuk-button-group govuk-!-margin-top-6">
-          <button type="submit" class="govuk-button" data-module="govuk-button">
+    
+
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
-</button>
-          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
-        </div>
-      </form>
-    </div>
-  </div>
+</button> <br>
+
+    <a href="/admin/user-management/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Check, edit or create roles
+</a>
+    <br>
+    <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel and return</a>
+  </form>
         "
 `;
 
@@ -121,12 +125,15 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Martin Smith</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith's roles</li>
   </ol>
 </nav>
 
@@ -150,38 +157,35 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
 
 
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-l">User roles</h1>
+  <h1 class="govuk-heading-l">Martin Smith roles</h1>
 
-      <p class="govuk-body">User: Martin Smith</p>
+  <p class="govuk-body">
+    Leave the start date blank for the role to start immediately. Leave the end
+    date blank for the role to go on indefinitely.
+  </p>
+  <p class="govuk-body">Date format is 12/09/2025</p>
 
-      <form action="/admin/user-management/users/user-123/roles" method="post">
+  <form action="/admin/user-management/users/user-123/roles" method="post">
+      <h2 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-2">
+    Selected roles
+  </h2>
 
-
-
-
-
-
-
-
-
-
-
-
-        <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
-      <th scope="col" class="govuk-table__header">Code</th>
-      <th scope="col" class="govuk-table__header">Description</th>
-      <th scope="col" class="govuk-table__header">Start</th>
-      <th scope="col" class="govuk-table__header">End</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">
+          <span class="govuk-visually-hidden">Select role</span>
+        </th>
+        <th scope="col" class="govuk-table__header">Role</th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Start date (optional)</th>
+        <th scope="col" class="govuk-table__header">End date (optional)</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-padding-left-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
                 <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
@@ -189,22 +193,23 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
                 </label>
               </div>
             </div>
-</td>
-      <td class="govuk-table__cell">            <strong class="govuk-tag govuk-tag--green tag-no-wrap govuk-!-margin-top-1">
-  PMF_READ
-</strong>
-
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
-</td>
-      <td class="govuk-table__cell">            <div class="">
+          </td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-quarter">
+            PMF_READ
+          </th>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            Pigs Might Fly read only
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
               <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
                 Start date for PMF_READ
               </label>
               <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2025-07-01">
             </div>
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-form-group--error">
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
                 <p id="endDate__PMF_READ-error" class="govuk-error-message">
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid End Date
@@ -214,21 +219,144 @@ exports[`saveUserRolesRoute > shows validation error when end date is invalid 1`
               </label>
               <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="not-a-date">
             </div>
-</td>
-    </tr>
-  </tbody>
-</table>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
 
-        <div class="govuk-button-group govuk-!-margin-top-6">
-          <button type="submit" class="govuk-button" data-module="govuk-button">
+    
+
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
-</button>
-          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
-        </div>
-      </form>
+</button> <br>
+
+    <a href="/admin/user-management/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Check, edit or create roles
+</a>
+    <br>
+    <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel and return</a>
+  </form>
+        "
+`;
+
+exports[`saveUserRolesRoute > shows validation error when start date is after end date 1`] = `
+"
+  <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="govuk-breadcrumbs__list">
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Martin Smith</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith's roles</li>
+  </ol>
+</nav>
+
+
+    
+
+      <div class="govuk-error-summary" data-module="govuk-error-summary">
+  <div role="alert">
+    <h2 class="govuk-error-summary__title">
+      There is a problem
+    </h2>
+    <div class="govuk-error-summary__body">
+        <ul class="govuk-list govuk-error-summary__list">
+          <li>
+            <a href="#startDate__PMF_READ">Start date cannot be after end date</a>
+          </li>
+        </ul>
     </div>
   </div>
+</div>
+
+
+
+  <h1 class="govuk-heading-l">Martin Smith roles</h1>
+
+  <p class="govuk-body">
+    Leave the start date blank for the role to start immediately. Leave the end
+    date blank for the role to go on indefinitely.
+  </p>
+  <p class="govuk-body">Date format is 12/09/2025</p>
+
+  <form action="/admin/user-management/users/user-123/roles" method="post">
+      <h2 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-2">
+    Selected roles
+  </h2>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">
+          <span class="govuk-visually-hidden">Select role</span>
+        </th>
+        <th scope="col" class="govuk-table__header">Role</th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Start date (optional)</th>
+        <th scope="col" class="govuk-table__header">End date (optional)</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-padding-left-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
+                <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
+                  <span class="govuk-visually-hidden">Select PMF_READ</span>
+                </label>
+              </div>
+            </div>
+          </td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-quarter">
+            PMF_READ
+          </th>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            Pigs Might Fly read only
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
+                <p id="startDate__PMF_READ-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  Start date cannot be after end date
+                </p>
+              <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
+                Start date for PMF_READ
+              </label>
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-09-01">
+            </div>
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
+              <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
+                End date for PMF_READ
+              </label>
+              <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
+            </div>
+          </td>
+        </tr>
+    </tbody>
+  </table>
+
+
+    
+
+    <button type="submit" class="govuk-button" data-module="govuk-button">
+  Save
+</button> <br>
+
+    <a href="/admin/user-management/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Check, edit or create roles
+</a>
+    <br>
+    <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel and return</a>
+  </form>
         "
 `;
 
@@ -237,12 +365,15 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
   <nav class="govuk-breadcrumbs" aria-label="Breadcrumb">
   <ol class="govuk-breadcrumbs__list">
     <li class="govuk-breadcrumbs__list-item">
+      <a class="govuk-breadcrumbs__link" href="/admin">User management</a>
+    </li>
+    <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">User details</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Martin Smith</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">User roles</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith's roles</li>
   </ol>
 </nav>
 
@@ -266,38 +397,35 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
 
 
 
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-full">
-      <h1 class="govuk-heading-l">User roles</h1>
+  <h1 class="govuk-heading-l">Martin Smith roles</h1>
 
-      <p class="govuk-body">User: Martin Smith</p>
+  <p class="govuk-body">
+    Leave the start date blank for the role to start immediately. Leave the end
+    date blank for the role to go on indefinitely.
+  </p>
+  <p class="govuk-body">Date format is 12/09/2025</p>
 
-      <form action="/admin/user-management/users/user-123/roles" method="post">
+  <form action="/admin/user-management/users/user-123/roles" method="post">
+      <h2 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-2">
+    Selected roles
+  </h2>
 
-
-
-
-
-
-
-
-
-
-
-
-        <table class="govuk-table">
-  <thead class="govuk-table__head">
-    <tr class="govuk-table__row">
-      <th scope="col" class="govuk-table__header"><span class="govuk-visually-hidden">Select role</span></th>
-      <th scope="col" class="govuk-table__header">Code</th>
-      <th scope="col" class="govuk-table__header">Description</th>
-      <th scope="col" class="govuk-table__header">Start</th>
-      <th scope="col" class="govuk-table__header">End</th>
-    </tr>
-  </thead>
-  <tbody class="govuk-table__body">
-    <tr class="govuk-table__row">
-      <td class="govuk-table__cell">            <div class="govuk-checkboxes govuk-checkboxes--small">
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">
+          <span class="govuk-visually-hidden">Select role</span>
+        </th>
+        <th scope="col" class="govuk-table__header">Role</th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Start date (optional)</th>
+        <th scope="col" class="govuk-table__header">End date (optional)</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+        <tr class="govuk-table__row">
+          <td class="govuk-table__cell govuk-!-padding-left-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0">
+            <div class="govuk-checkboxes govuk-checkboxes--small">
               <div class="govuk-checkboxes__item">
                 <input class="govuk-checkboxes__input" id="role__PMF_READ" name="roles" type="checkbox" value="PMF_READ" checked="">
                 <label class="govuk-label govuk-checkboxes__label" for="role__PMF_READ">
@@ -305,15 +433,15 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
                 </label>
               </div>
             </div>
-</td>
-      <td class="govuk-table__cell">            <strong class="govuk-tag govuk-tag--green tag-no-wrap govuk-!-margin-top-1">
-  PMF_READ
-</strong>
-
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-!-margin-top-1">Pigs Might Fly read only</div>
-</td>
-      <td class="govuk-table__cell">            <div class="govuk-form-group--error">
+          </td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-quarter">
+            PMF_READ
+          </th>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            Pigs Might Fly read only
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
                 <p id="startDate__PMF_READ-error" class="govuk-error-message">
                   <span class="govuk-visually-hidden">Error:</span>
                   Invalid Start Date
@@ -323,27 +451,31 @@ exports[`saveUserRolesRoute > shows validation error when start date is invalid 
               </label>
               <input class="govuk-input govuk-input--width-10 govuk-input--error" id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="not-a-date">
             </div>
-</td>
-      <td class="govuk-table__cell">            <div class="">
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
               <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
                 End date for PMF_READ
               </label>
               <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
             </div>
-</td>
-    </tr>
-  </tbody>
-</table>
+          </td>
+        </tr>
+    </tbody>
+  </table>
 
 
-        <div class="govuk-button-group govuk-!-margin-top-6">
-          <button type="submit" class="govuk-button" data-module="govuk-button">
+    
+
+    <button type="submit" class="govuk-button" data-module="govuk-button">
   Save
-</button>
-          <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel</a>
-        </div>
-      </form>
-    </div>
-  </div>
+</button> <br>
+
+    <a href="/admin/user-management/roles" role="button" draggable="false" class="govuk-button govuk-button--secondary" data-module="govuk-button">
+  Check, edit or create roles
+</a>
+    <br>
+    <a class="govuk-link" href="/admin/user-management/users/user-123">Cancel and return</a>
+  </form>
         "
 `;
