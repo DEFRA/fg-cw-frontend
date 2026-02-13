@@ -9,7 +9,12 @@ vi.mock("../use-cases/find-all-cases.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
 
 const createMockPage = (cases) => ({
-  data: cases,
+  data: {
+    cases,
+    pagination: {
+      totalCount: cases.length,
+    },
+  },
   header: { navItems: [] },
 });
 
@@ -74,7 +79,7 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee47",
     caseRef: "banana-123",
     workflowCode: "frps-private-beta",
-    dateReceived: "2025-06-11T10:43:01.603Z",
+    createdAt: "2025-06-11T10:43:01.603Z",
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "NEW",
@@ -82,7 +87,6 @@ const mockCases = [
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
-      createdAt: "2025-06-11T10:43:01.417Z",
       submittedAt: "2023-10-01T12:00:00.000Z",
       identifiers: {
         sbi: "SBI001",
@@ -141,7 +145,7 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee99",
     caseRef: "case-ref-2",
     workflowCode: "frps-private-beta",
-    dateReceived: "2025-06-11T10:43:01.603Z",
+    createdAt: "2025-06-11T10:43:01.603Z",
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "OLD",
@@ -149,7 +153,6 @@ const mockCases = [
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
-      createdAt: "2025-06-11T10:43:01.417Z",
       submittedAt: "2023-10-01T12:00:00.000Z",
       identifiers: {
         sbi: "SBI001",

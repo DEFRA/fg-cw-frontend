@@ -15,7 +15,7 @@ export const listCasesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const page = await findAllCasesUseCase(authContext);
+    const page = await findAllCasesUseCase(authContext, request.query);
 
     const viewModel = createCaseListViewModel({
       page,

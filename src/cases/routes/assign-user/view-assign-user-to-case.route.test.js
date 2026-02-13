@@ -72,7 +72,13 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
-    findAllCasesUseCase.mockResolvedValue(createMockPage([]));
+    findAllCasesUseCase.mockResolvedValue({
+      data: {
+        cases: [],
+        pagination: { totalCount: 0 },
+      },
+      header: { navItems: [] },
+    });
 
     // First request - triggers redirect and sets flash
     const { statusCode, headers } = await server.inject({

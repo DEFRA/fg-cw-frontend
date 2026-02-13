@@ -7,10 +7,18 @@ import {
 
 vi.mock("../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/cases" };
+const mockRequest = {
+  path: "/cases",
+  url: new URL("http://localhost:3000/cases"),
+};
 
 const createMockPage = (cases) => ({
-  data: cases,
+  data: {
+    cases,
+    pagination: {
+      totalCount: cases.length,
+    },
+  },
   header: { navItems: [] },
 });
 
@@ -110,8 +118,8 @@ describe("case-list.model", () => {
       {
         _id: "case-1",
         caseRef: "CASE-REF-001",
+        createdAt: "2021-03-10T00:00:00.000Z",
         payload: {
-          submittedAt: "2021-03-10T00:00:00.000Z",
           identifiers: {
             sbi: "123456789",
           },
@@ -133,8 +141,8 @@ describe("case-list.model", () => {
       {
         _id: "case-2",
         caseRef: "CASE-REF-002",
+        createdAt: "2021-03-15T00:00:00.000Z",
         payload: {
-          submittedAt: "2021-03-15T00:00:00.000Z",
           identifiers: {
             sbi: "987654321",
           },
@@ -171,34 +179,28 @@ describe("case-list.model", () => {
                 head: [
                   { text: "Select" },
                   {
-                    text: "ID",
+                    html: expect.stringContaining("ID"),
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                   {
                     text: "Business",
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                   {
                     text: "SBI",
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                   {
-                    text: "Submitted",
+                    html: expect.stringContaining("Submitted"),
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                   {
                     text: "Status",
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                   {
                     text: "Assignee",
                     attributes: { "aria-sort": "none" },
-                    headerClasses: "sortable-header",
                   },
                 ],
                 rows: [
@@ -208,13 +210,11 @@ describe("case-list.model", () => {
                     id: {
                       href: "/cases/case-1",
                       text: "CASE-REF-001",
-                      attributes: { "data-sort-value": "CASE-REF-001" },
                     },
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
                     submitted: {
                       text: "10 Mar 2021",
-                      attributes: { "data-sort-value": 1615334400000 },
                     },
                     status: { text: "New", theme: "INFO" },
                     assignee: { text: "John Doe" },
@@ -225,13 +225,11 @@ describe("case-list.model", () => {
                     id: {
                       href: "/cases/case-2",
                       text: "CASE-REF-002",
-                      attributes: { "data-sort-value": "CASE-REF-002" },
                     },
                     business: { text: "[business name]" },
                     sbi: { text: "987654321" },
                     submitted: {
                       text: "15 Mar 2021",
-                      attributes: { "data-sort-value": 1615766400000 },
                     },
                     status: {
                       text: "In progress",
@@ -244,6 +242,10 @@ describe("case-list.model", () => {
             },
           ],
           assignedUserSuccessMessage: null,
+          pagination: {
+            items: [],
+            classes: "govuk-!-margin-bottom-2",
+          },
         },
       });
     });
@@ -406,6 +408,7 @@ describe("table structure mapping", () => {
       {
         _id: "test-case-id",
         caseRef: "CASE-REF-123",
+        createdAt: "2021-06-15T14:30:00.000Z",
         payload: {
           submittedAt: "2021-06-15T14:30:00.000Z",
           identifiers: { sbi: "555666777" },
@@ -432,46 +435,40 @@ describe("table structure mapping", () => {
     expect(tableData.head).toEqual([
       { text: "Select" },
       {
-        text: "ID",
+        html: expect.stringContaining("ID"),
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
       {
         text: "Business",
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
       {
         text: "SBI",
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
       {
-        text: "Submitted",
+        html: expect.stringContaining("Submitted"),
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
       {
         text: "Status",
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
       {
         text: "Assignee",
         attributes: {
           "aria-sort": "none",
         },
-        headerClasses: "sortable-header",
       },
     ]);
 
@@ -483,15 +480,11 @@ describe("table structure mapping", () => {
       id: {
         href: "/cases/test-case-id",
         text: "CASE-REF-123",
-        attributes: { "data-sort-value": "CASE-REF-123" },
       },
       business: { text: "[business name]" },
       sbi: { text: "555666777" },
       submitted: {
         text: "15 Jun 2021",
-        attributes: {
-          "data-sort-value": Date.parse("2021-06-15T14:30:00.000Z"),
-        },
       },
       status: { text: "New", theme: "INFO" },
       assignee: { text: "Test User" },
@@ -524,5 +517,167 @@ describe("table structure mapping", () => {
     expect(row.submitted.text).toBe("");
     expect(row.status.text).toBe("Unknown");
     expect(row.assignee.text).toBe("Not assigned");
+  });
+});
+
+describe("sortable headers", () => {
+  it("links to ?caseRef=asc when no sort is active", () => {
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+    const idHeader = result.data.tabItems[0].data.head[1];
+
+    expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
+    expect(idHeader.attributes["aria-sort"]).toBe("none");
+  });
+
+  it("shows ascending state and links to ?caseRef=desc when ?caseRef=asc is in URL", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?caseRef=asc"),
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+    const idHeader = result.data.tabItems[0].data.head[1];
+
+    expect(idHeader.html).toContain('href="/cases?caseRef=desc"');
+    expect(idHeader.attributes["aria-sort"]).toBe("ascending");
+  });
+
+  it("shows descending state and links to /cases (no params) when ?caseRef=desc is in URL", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?caseRef=desc"),
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+    const idHeader = result.data.tabItems[0].data.head[1];
+
+    expect(idHeader.html).toContain('href="/cases"');
+    expect(idHeader.attributes["aria-sort"]).toBe("descending");
+  });
+
+  it("shows ascending state for Submitted header when ?createdAt=asc is in URL", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?createdAt=asc"),
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+    const submittedHeader = result.data.tabItems[0].data.head[4];
+
+    expect(submittedHeader.html).toContain('href="/cases?createdAt=desc"');
+    expect(submittedHeader.attributes["aria-sort"]).toBe("ascending");
+  });
+});
+
+describe("pagination", () => {
+  const createMockPageWithPagination = (paginationData) => ({
+    data: {
+      cases: [],
+      pagination: {
+        totalCount: 0,
+        ...paginationData,
+      },
+    },
+    header: { navItems: [] },
+  });
+
+  it("has no previous or next links when neither hasPreviousPage nor hasNextPage", () => {
+    const result = createCaseListViewModel({
+      page: createMockPageWithPagination({
+        hasPreviousPage: false,
+        hasNextPage: false,
+      }),
+      request: mockRequest,
+    });
+
+    expect(result.data.pagination.previous).toBeUndefined();
+    expect(result.data.pagination.next).toBeUndefined();
+  });
+
+  it("has previous link when hasPreviousPage is true", () => {
+    const result = createCaseListViewModel({
+      page: createMockPageWithPagination({
+        hasPreviousPage: true,
+        hasNextPage: false,
+        startCursor: "cursor-abc",
+      }),
+      request: mockRequest,
+    });
+
+    expect(result.data.pagination.previous.href).toBe(
+      "/cases?cursor=cursor-abc&direction=backward",
+    );
+    expect(result.data.pagination.next).toBeUndefined();
+  });
+
+  it("has next link when hasNextPage is true", () => {
+    const result = createCaseListViewModel({
+      page: createMockPageWithPagination({
+        hasPreviousPage: false,
+        hasNextPage: true,
+        endCursor: "cursor-xyz",
+      }),
+      request: mockRequest,
+    });
+
+    expect(result.data.pagination.next.href).toBe(
+      "/cases?cursor=cursor-xyz&direction=forward",
+    );
+    expect(result.data.pagination.previous).toBeUndefined();
+  });
+
+  it("has both previous and next links when both flags are true", () => {
+    const result = createCaseListViewModel({
+      page: createMockPageWithPagination({
+        hasPreviousPage: true,
+        hasNextPage: true,
+        startCursor: "cursor-prev",
+        endCursor: "cursor-next",
+      }),
+      request: mockRequest,
+    });
+
+    expect(result.data.pagination.previous.href).toBe(
+      "/cases?cursor=cursor-prev&direction=backward",
+    );
+    expect(result.data.pagination.next.href).toBe(
+      "/cases?cursor=cursor-next&direction=forward",
+    );
+  });
+
+  it("preserves existing search params in pagination links", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?caseRef=asc"),
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPageWithPagination({
+        hasPreviousPage: true,
+        hasNextPage: true,
+        startCursor: "cursor-prev",
+        endCursor: "cursor-next",
+      }),
+      request,
+    });
+
+    expect(result.data.pagination.previous.href).toBe(
+      "/cases?caseRef=asc&cursor=cursor-prev&direction=backward",
+    );
+    expect(result.data.pagination.next.href).toBe(
+      "/cases?caseRef=asc&cursor=cursor-next&direction=forward",
+    );
   });
 });
