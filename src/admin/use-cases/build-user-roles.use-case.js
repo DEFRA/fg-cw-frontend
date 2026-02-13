@@ -60,11 +60,21 @@ const buildRoleErrors = ({ startKey, endKey, startRaw, endRaw }) => {
     endRaw,
   });
 
-  return {
-    ...toErrorEntry(startKey, startError),
-    ...toErrorEntry(endKey, endError),
-    ...toErrorEntry(dateOrderError?.key, dateOrderError?.message),
-  };
+  const errors = {};
+
+  if (startError) {
+    errors[startKey] = startError;
+  }
+
+  if (endError) {
+    errors[endKey] = endError;
+  }
+
+  if (dateOrderError) {
+    errors[dateOrderError.key] = dateOrderError.message;
+  }
+
+  return errors;
 };
 
 const getDateError = ({ rawDate, message }) => {
@@ -106,28 +116,31 @@ const hasProvidedDates = (startRaw, endRaw) => Boolean(startRaw && endRaw);
 const hasValidDates = (startDate, endDate) =>
   Boolean(isValid(startDate) && isValid(endDate));
 
-const buildAllocation = ({ startRaw, endRaw }) => ({
-  ...getAllocationDateEntry({ key: "startDate", rawDate: startRaw }),
-  ...getAllocationDateEntry({ key: "endDate", rawDate: endRaw }),
-});
+const buildAllocation = ({ startRaw, endRaw }) => {
+  const allocation = {};
+  const startDate = getFormattedDateOrNull(startRaw);
+  const endDate = getFormattedDateOrNull(endRaw);
 
-const getAllocationDateEntry = ({ key, rawDate }) => {
-  if (!rawDate) {
-    return {};
+  if (startDate) {
+    allocation.startDate = startDate;
   }
 
-  const date = parseDate(rawDate);
-  if (!isValid(date)) {
-    return {};
+  if (endDate) {
+    allocation.endDate = endDate;
   }
 
-  return { [key]: format(date, "yyyy-MM-dd") };
+  return allocation;
 };
 
-const toErrorEntry = (key, message) => {
-  if (!key || !message) {
-    return {};
+const getFormattedDateOrNull = (rawDate) => {
+  if (!rawDate) {
+    return null;
   }
 
-  return { [key]: message };
+  const parsedDate = parseDate(rawDate);
+  if (!isValid(parsedDate)) {
+    return null;
+  }
+
+  return format(parsedDate, "yyyy-MM-dd");
 };
