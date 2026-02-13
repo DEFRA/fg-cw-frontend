@@ -3,11 +3,7 @@ export const normaliseRoleCodes = (roles) => {
     return [];
   }
 
-  if (Array.isArray(roles)) {
-    return roles;
-  }
-
-  return [roles];
+  return Array.isArray(roles) ? roles : [roles];
 };
 
 export const buildRoleDateKeys = (code) => ({

@@ -3,7 +3,7 @@ import { createUserRolesViewModel } from "./user-roles.view-model.js";
 
 vi.mock("../../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/admin/user-management/users/user-123/roles" };
+const mockCurrentPath = "/admin/user-management/users/user-123/roles";
 
 const createMockPage = (userData) => ({
   data: userData,
@@ -20,7 +20,7 @@ describe("createUserRolesViewModel", () => {
           PMF_READ: {},
         },
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: {
         header: { navItems: [] },
@@ -35,11 +35,18 @@ describe("createUserRolesViewModel", () => {
       },
     });
 
-    expect(viewModel.data.roles).toEqual([
+    expect(viewModel.data.selectedRoles).toEqual([
       expect.objectContaining({
         code: "PMF_READ",
       }),
     ]);
+    expect(viewModel.data.unselectedRoles).toEqual([]);
+    expect(viewModel.data.formAction).toEqual(
+      "/admin/user-management/users/user-123/roles",
+    );
+    expect(viewModel.data.cancelHref).toEqual(
+      "/admin/user-management/users/user-123",
+    );
   });
 
   it("defaults errors and errorList when errors undefined", () => {
@@ -49,7 +56,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: undefined,
@@ -66,7 +73,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: {
@@ -88,7 +95,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: {
@@ -97,5 +104,33 @@ describe("createUserRolesViewModel", () => {
     });
 
     expect(viewModel.errorList).toEqual([]);
+  });
+
+  it("uses date order field errors directly in summary", () => {
+    const viewModel = createUserRolesViewModel({
+      page: createMockPage({
+        id: "user-123",
+        name: "Martin Smith",
+        appRoles: {},
+      }),
+      currentPath: mockCurrentPath,
+      userId: "user-123",
+      roles: [],
+      errors: {
+        startDate__PMF_READ: "Start date cannot be after end date",
+        endDate__PMF_WRITE: "End date cannot be before start date",
+      },
+    });
+
+    expect(viewModel.errorList).toEqual([
+      {
+        text: "Start date cannot be after end date",
+        href: "#startDate__PMF_READ",
+      },
+      {
+        text: "End date cannot be before start date",
+        href: "#endDate__PMF_WRITE",
+      },
+    ]);
   });
 });
