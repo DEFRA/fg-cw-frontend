@@ -10,14 +10,12 @@ import {
   it,
   vi,
 } from "vitest";
-import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
-import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
+import { findUserRolesDataUseCase } from "../../use-cases/find-user-roles-data.use-case.js";
 import { updateUserRolesUseCase } from "../../use-cases/update-user-roles.use-case.js";
 import { saveUserRolesRoute } from "./save-user-roles.route.js";
 
-vi.mock("../../../auth/use-cases/admin-find-user-by-id.use-case.js");
-vi.mock("../../use-cases/find-roles.use-case.js");
+vi.mock("../../use-cases/find-user-roles-data.use-case.js");
 vi.mock("../../use-cases/update-user-roles.use-case.js");
 vi.mock("../../../common/view-models/header.view-model.js");
 
@@ -41,26 +39,29 @@ describe("saveUserRolesRoute", () => {
   });
 
   beforeEach(() => {
-    adminFindUserByIdUseCase.mockResolvedValue(
-      createMockPage({
+    findUserRolesDataUseCase.mockResolvedValue({
+      page: createMockPage({
         id: "user-123",
         name: "Martin Smith",
         appRoles: {
           PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
         },
       }),
-    );
-
-    findRolesUseCase.mockResolvedValue({
-      header: { navItems: [] },
-      data: [
-        { id: "r1", code: "PMF_READ", description: "Pigs Might Fly read only" },
-        {
-          id: "r2",
-          code: "PMF_READ_WRITE",
-          description: "Pigs Might Fly read write",
-        },
-      ],
+      roles: {
+        header: { navItems: [] },
+        data: [
+          {
+            id: "r1",
+            code: "PMF_READ",
+            description: "Pigs Might Fly read only",
+          },
+          {
+            id: "r2",
+            code: "PMF_READ_WRITE",
+            description: "Pigs Might Fly read write",
+          },
+        ],
+      },
     });
   });
 
@@ -158,10 +159,10 @@ describe("saveUserRolesRoute", () => {
     expect($("#main-content").html()).toMatchSnapshot();
 
     expect($(".govuk-error-summary").text()).toContain(
-      "Start date cannot be after end date",
+      "End date cannot be before start date",
     );
-    expect($("#startDate__PMF_READ-error").text()).toContain(
-      "Start date cannot be after end date",
+    expect($("#endDate__PMF_READ-error").text()).toContain(
+      "End date cannot be before start date",
     );
   });
 

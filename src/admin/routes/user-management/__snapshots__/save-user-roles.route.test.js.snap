@@ -268,7 +268,7 @@ exports[`saveUserRolesRoute > shows validation error when start date is after en
     <div class="govuk-error-summary__body">
         <ul class="govuk-list govuk-error-summary__list">
           <li>
-            <a href="#startDate__PMF_READ">Start date cannot be after end date</a>
+            <a href="#endDate__PMF_READ">End date cannot be before start date</a>
           </li>
         </ul>
     </div>
@@ -321,23 +321,23 @@ exports[`saveUserRolesRoute > shows validation error when start date is after en
             Pigs Might Fly read only
           </td>
           <td class="govuk-table__cell govuk-!-width-one-quarter">
-            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
-                <p id="startDate__PMF_READ-error" class="govuk-error-message">
-                  <span class="govuk-visually-hidden">Error:</span>
-                  Start date cannot be after end date
-                </p>
+            <div class="govuk-form-group govuk-!-margin-bottom-0">
               <label class="govuk-label govuk-visually-hidden" for="startDate__PMF_READ">
                 Start date for PMF_READ
               </label>
-              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-09-01">
+              <input class="govuk-input govuk-input--width-10 " id="startDate__PMF_READ" name="startDate__PMF_READ" type="date" value="2026-09-01">
             </div>
           </td>
           <td class="govuk-table__cell govuk-!-width-one-quarter">
-            <div class="govuk-form-group govuk-!-margin-bottom-0">
+            <div class="govuk-form-group govuk-form-group--error govuk-!-margin-bottom-0">
+                <p id="endDate__PMF_READ-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  End date cannot be before start date
+                </p>
               <label class="govuk-label govuk-visually-hidden" for="endDate__PMF_READ">
                 End date for PMF_READ
               </label>
-              <input class="govuk-input govuk-input--width-10 " id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
+              <input class="govuk-input govuk-input--width-10 govuk-input--error" id="endDate__PMF_READ" name="endDate__PMF_READ" type="date" value="2025-08-02">
             </div>
           </td>
         </tr>

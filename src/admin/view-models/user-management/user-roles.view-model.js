@@ -3,7 +3,7 @@ import { createUserRolesTableViewModel } from "./user-roles-table.view-model.js"
 
 export const createUserRolesViewModel = ({
   page,
-  request,
+  currentPath,
   roles,
   userId,
   errors,
@@ -25,7 +25,7 @@ export const createUserRolesViewModel = ({
 
   return {
     pageTitle: `${userName} roles`,
-    header: createHeaderViewModel({ page, request }),
+    header: createHeaderViewModel({ page, request: { path: currentPath } }),
     breadcrumbs: [
       { text: "User management", href: "/admin" },
       { text: "Users", href: "/admin/user-management/users" },

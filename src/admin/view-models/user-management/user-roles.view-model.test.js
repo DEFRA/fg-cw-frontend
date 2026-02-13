@@ -3,7 +3,7 @@ import { createUserRolesViewModel } from "./user-roles.view-model.js";
 
 vi.mock("../../../common/view-models/header.view-model.js");
 
-const mockRequest = { path: "/admin/user-management/users/user-123/roles" };
+const mockCurrentPath = "/admin/user-management/users/user-123/roles";
 
 const createMockPage = (userData) => ({
   data: userData,
@@ -20,7 +20,7 @@ describe("createUserRolesViewModel", () => {
           PMF_READ: {},
         },
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: {
         header: { navItems: [] },
@@ -56,7 +56,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: undefined,
@@ -73,7 +73,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: {
@@ -95,7 +95,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: {
@@ -113,7 +113,7 @@ describe("createUserRolesViewModel", () => {
         name: "Martin Smith",
         appRoles: {},
       }),
-      request: mockRequest,
+      currentPath: mockCurrentPath,
       userId: "user-123",
       roles: [],
       errors: {
