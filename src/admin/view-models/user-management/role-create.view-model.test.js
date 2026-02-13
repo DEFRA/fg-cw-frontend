@@ -23,7 +23,7 @@ describe("createNewRoleViewModel", () => {
       request: { path: "/admin/user-management/roles/new" },
       errors: {
         code: "Enter a role code",
-        description: "Enter a role description",
+        description: "Enter a description",
         assignable: "Select whether the role is assignable",
         save: "There was a problem",
       },
@@ -31,7 +31,7 @@ describe("createNewRoleViewModel", () => {
 
     expect(viewModel.errorList).toEqual([
       { html: "Enter a role code", href: "#code" },
-      { html: "Enter a role description", href: "#description" },
+      { html: "Enter a description", href: "#description" },
       {
         html: "Select whether the role is assignable",
         href: "#assignable",

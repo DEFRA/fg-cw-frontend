@@ -90,8 +90,12 @@ describe("saveRoleRoute", () => {
     expect(statusCode).toEqual(200);
 
     const $ = load(result);
-    expect($(".govuk-error-summary").text()).toContain("Enter a description");
-    expect($(".govuk-error-message").text()).toContain("Enter a description");
+    expect($(".govuk-error-summary").text()).toContain(
+      "Enter a role description",
+    );
+    expect($(".govuk-error-message").text()).toContain(
+      "Enter a role description",
+    );
   });
 
   it("shows validation error when assignable is missing", async () => {
