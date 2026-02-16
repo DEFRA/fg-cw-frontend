@@ -1,0 +1,110 @@
+{%- set roles = params.roles if params.roles else [] -%}
+{%- set heading = params.heading -%}
+{%- set errors = params.errors -%}
+{%- set shouldRender = roles.length > 0 -%}
+
+{% if shouldRender %}
+  <h2 class="govuk-heading-m govuk-!-margin-top-5 govuk-!-margin-bottom-2">
+    {{ heading }}
+  </h2>
+
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">
+          <span class="govuk-visually-hidden">Select role</span>
+        </th>
+        <th scope="col" class="govuk-table__header">Role</th>
+        <th scope="col" class="govuk-table__header">Description</th>
+        <th scope="col" class="govuk-table__header">Start date (optional)</th>
+        <th scope="col" class="govuk-table__header">End date (optional)</th>
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for role in roles %}
+        <tr class="govuk-table__row">
+          <td
+            class="govuk-table__cell govuk-!-padding-left-1 govuk-!-padding-top-0 govuk-!-padding-bottom-0"
+          >
+            <div class="govuk-checkboxes govuk-checkboxes--small">
+              <div class="govuk-checkboxes__item">
+                <input
+                  class="govuk-checkboxes__input"
+                  id="role__{{ role.code }}"
+                  name="roles"
+                  type="checkbox"
+                  value="{{ role.code }}"
+                  {{ "checked" if role.checked }}
+                />
+                <label
+                  class="govuk-label govuk-checkboxes__label"
+                  for="role__{{ role.code }}"
+                >
+                  <span class="govuk-visually-hidden"
+                    >Select {{ role.code }}</span
+                  >
+                </label>
+              </div>
+            </div>
+          </td>
+          <th scope="row" class="govuk-table__header govuk-!-width-one-quarter">
+            {{ role.code }}
+          </th>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            {{ role.description }}
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div
+              class="{{ 'govuk-form-group govuk-form-group--error' if errors[role.startKey] else 'govuk-form-group' }} govuk-!-margin-bottom-0"
+            >
+              {% if errors[role.startKey] %}
+                <p id="{{ role.startKey }}-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  {{ errors[role.startKey] }}
+                </p>
+              {% endif %}
+              <label
+                class="govuk-label govuk-visually-hidden"
+                for="{{ role.startKey }}"
+              >
+                Start date for {{ role.code }}
+              </label>
+              <input
+                class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.startKey] }}"
+                id="{{ role.startKey }}"
+                name="{{ role.startKey }}"
+                type="date"
+                value="{{ role.startDate }}"
+              />
+            </div>
+          </td>
+          <td class="govuk-table__cell govuk-!-width-one-quarter">
+            <div
+              class="{{ 'govuk-form-group govuk-form-group--error' if errors[role.endKey] else 'govuk-form-group' }} govuk-!-margin-bottom-0"
+            >
+              {% if errors[role.endKey] %}
+                <p id="{{ role.endKey }}-error" class="govuk-error-message">
+                  <span class="govuk-visually-hidden">Error:</span>
+                  {{ errors[role.endKey] }}
+                </p>
+              {% endif %}
+              <label
+                class="govuk-label govuk-visually-hidden"
+                for="{{ role.endKey }}"
+              >
+                End date for {{ role.code }}
+              </label>
+              <input
+                class="govuk-input govuk-input--width-10 {{ 'govuk-input--error' if errors[role.endKey] }}"
+                id="{{ role.endKey }}"
+                name="{{ role.endKey }}"
+                type="date"
+                value="{{ role.endDate }}"
+              />
+            </div>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endif %}

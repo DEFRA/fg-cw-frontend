@@ -1,6 +1,5 @@
-import { adminFindUserByIdUseCase } from "../../../auth/use-cases/admin-find-user-by-id.use-case.js";
 import { logger } from "../../../common/logger.js";
-import { findRolesUseCase } from "../../use-cases/find-roles.use-case.js";
+import { findUserRolesDataUseCase } from "../../use-cases/find-user-roles-data.use-case.js";
 import { createUserRolesViewModel } from "../../view-models/user-management/user-roles.view-model.js";
 
 export const viewUserRolesRoute = {
@@ -8,6 +7,7 @@ export const viewUserRolesRoute = {
   path: "/admin/user-management/users/{id}/roles",
   async handler(request, h) {
     const { id } = request.params;
+    const currentPath = request.path;
     logger.info(`Viewing user roles ${id}`);
 
     const authContext = {
@@ -15,14 +15,11 @@ export const viewUserRolesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const [page, roles] = await Promise.all([
-      adminFindUserByIdUseCase(authContext, id),
-      findRolesUseCase(authContext),
-    ]);
+    const { page, roles } = await findUserRolesDataUseCase(authContext, id);
 
     const viewModel = createUserRolesViewModel({
       page,
-      request,
+      currentPath,
       roles,
       userId: id,
     });
