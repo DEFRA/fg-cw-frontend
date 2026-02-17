@@ -70,11 +70,6 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
       </tbody>
     </table>
     
-        <nav class="govuk-pagination govuk-!-margin-bottom-2" aria-label="Pagination">
-      <ul class="govuk-pagination__list">
-      </ul>
-    </nav>
-    
       </fieldset>
     </form>
   </div>

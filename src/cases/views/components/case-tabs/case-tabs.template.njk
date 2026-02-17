@@ -58,6 +58,8 @@
         rows: tableRows
       })
     }}
-    {{ govukPagination(params.pagination) }}
+    {% if params.pagination and params.pagination.items and params.pagination.items.length > 0 %}
+      {{ govukPagination(params.pagination) }}
+    {% endif %}
   </fieldset>
 </form>
