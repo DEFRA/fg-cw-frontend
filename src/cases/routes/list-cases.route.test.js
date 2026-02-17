@@ -51,6 +51,10 @@ describe("listCasesRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user: undefined },
+      {},
+    );
   });
 
   it("extracts assignedCaseId from query parameters and renders notification banner", async () => {
@@ -71,6 +75,10 @@ describe("listCasesRoute", () => {
     const view = $(".govuk-notification-banner--success").html();
 
     expect(view).toMatchSnapshot();
+    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user: undefined },
+      {},
+    );
   });
 });
 

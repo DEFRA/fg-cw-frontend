@@ -6,7 +6,7 @@ export const listCasesRoute = {
   method: "GET",
   path: "/cases",
   async handler(request, h) {
-    const { assignedCaseId } = request.query;
+    const { assignedCaseId, ...criteria } = request.query;
 
     logger.info(`Find users assigned to case ${assignedCaseId}`);
 
@@ -15,7 +15,7 @@ export const listCasesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const page = await findAllCasesUseCase(authContext, request.query);
+    const page = await findAllCasesUseCase(authContext, criteria);
 
     const viewModel = createCaseListViewModel({
       page,

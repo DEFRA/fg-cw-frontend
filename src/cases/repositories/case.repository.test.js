@@ -64,12 +64,12 @@ describe("Case Repository", () => {
       const result = await findAll(authContext, {
         cursor: "c",
         direction: "forward",
-        sortCaseRef: "asc",
-        sortCreatedAt: "asc",
+        caseRef: "asc",
+        createdAt: "asc",
       });
 
       expect(wreck.get).toHaveBeenCalledWith(
-        "/cases?cursor=c&direction=forward&sortCaseRef=asc&sortCreatedAt=asc",
+        "/cases?cursor=c&direction=forward&caseRef=asc&createdAt=asc",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
