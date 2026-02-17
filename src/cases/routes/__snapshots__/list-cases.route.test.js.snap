@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`listCasesRoute > extracts assignedCaseId from query parameters and renders notification banner 1`] = `
+exports[`listCasesRoute > extracts assignedCaseId from flash and renders notification banner 1`] = `
 "
   <div class="govuk-notification-banner__header">
     <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">

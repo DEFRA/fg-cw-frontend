@@ -1,3 +1,4 @@
+import { setFlashValue } from "../../../common/helpers/flash-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { assignUserToCaseUseCase } from "../../use-cases/assign-user-to-case.use-case.js";
 
@@ -15,9 +16,11 @@ export const assignUserToCaseRoute = {
 
     await assignUserToCaseUseCase(authContext, request.payload);
 
+    setFlashValue(request, "assignedCaseId", request.payload.caseId);
+
     logger.info(
       `Finished: Assigning user ${request.payload.assignedUserId} to case ${request.payload.caseId}`,
     );
-    return h.redirect(`/cases?assignedCaseId=${request.payload.caseId}`);
+    return h.redirect("/cases");
   },
 };

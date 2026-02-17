@@ -20,9 +20,22 @@ const createMockPage = (cases) => ({
 
 describe("listCasesRoute", () => {
   let server;
+  let flashAssignedCaseId;
 
   beforeAll(async () => {
     server = hapi.server();
+    server.ext("onPreHandler", (request, h) => {
+      request.yar = {
+        flash: (key) => {
+          if (key === "assignedCaseId") {
+            return flashAssignedCaseId ? [flashAssignedCaseId] : [];
+          }
+
+          return [];
+        },
+      };
+      return h.continue;
+    });
     server.route(listCasesRoute);
     await server.register([nunjucks]);
 
@@ -34,6 +47,7 @@ describe("listCasesRoute", () => {
   });
 
   it("returns a list of cases", async () => {
+    flashAssignedCaseId = undefined;
     findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
@@ -57,12 +71,13 @@ describe("listCasesRoute", () => {
     );
   });
 
-  it("extracts assignedCaseId from query parameters and renders notification banner", async () => {
+  it("extracts assignedCaseId from flash and renders notification banner", async () => {
+    flashAssignedCaseId = mockCases[0]._id;
     findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: `/cases?assignedCaseId=${mockCases[0]._id}`,
+      url: "/cases",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
