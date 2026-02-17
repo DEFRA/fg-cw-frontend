@@ -141,12 +141,11 @@ describe("createRoleRoutes", () => {
     expect(statusCode).toEqual(200);
 
     const $ = load(result);
-    expect($(".govuk-error-summary").text()).toContain(
+    const summary = $(".govuk-error-summary").text();
+    expect(summary).toContain(
       "Code can only contain letters, numbers and '_' (underscores).",
     );
-    expect($(".govuk-error-summary").text()).toContain(
-      "Code cannot start with '_' (underscore).",
-    );
+    expect(summary).toContain("Code cannot start with '_' (underscore).");
   });
 
   it("renders validation error when role code starts with underscore", async () => {
