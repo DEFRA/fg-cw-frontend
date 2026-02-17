@@ -3,6 +3,10 @@ import {
   hasValidationErrors,
   isForbidden,
 } from "../../../common/helpers/validation-helpers.js";
+import {
+  validateRoleAssignable,
+  validateRoleDescription,
+} from "../../../common/helpers/role-validation-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { findRoleUseCase } from "../../use-cases/find-role.use-case.js";
 import { updateRoleUseCase } from "../../use-cases/update-role.use-case.js";
@@ -49,8 +53,8 @@ export const saveRoleRoute = {
 
 const validateForm = ({ description, assignable }) => {
   return {
-    description: validateDescription(description),
-    assignable: validateAssignable(assignable),
+    description: validateRoleDescription(description),
+    assignable: validateRoleAssignable(assignable),
   };
 };
 
@@ -60,19 +64,6 @@ const mapFormData = ({ description, assignable }) => {
     assignable: toStringOrEmpty(assignable) === "true",
   };
 };
-
-const requiredField = (message) => (value) =>
-  toStringOrEmpty(value) === "" ? message : null;
-
-const requiredBoolean = (message, allowed) => (value) =>
-  allowed.includes(toStringOrEmpty(value)) ? null : message;
-
-const validateDescription = requiredField("Enter a description");
-
-const validateAssignable = requiredBoolean(
-  "Select whether the role is assignable",
-  ["true", "false"],
-);
 
 const persistRoleOrRenderError = async (
   request,

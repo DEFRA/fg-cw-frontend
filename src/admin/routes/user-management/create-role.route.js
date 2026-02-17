@@ -6,6 +6,10 @@ import {
 } from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
+import {
+  validateRoleAssignable,
+  validateRoleDescription,
+} from "../../../common/helpers/role-validation-helpers.js";
 import { createRoleUseCase } from "../../use-cases/create-role.use-case.js";
 import { createNewRoleViewModel } from "../../view-models/user-management/role-create.view-model.js";
 
@@ -42,8 +46,8 @@ export const createRoleRoute = {
 const validateForm = ({ code, description, assignable }) => {
   return {
     code: validateCode(code),
-    description: validateDescription(description),
-    assignable: validateAssignable(assignable),
+    description: validateRoleDescription(description),
+    assignable: validateRoleAssignable(assignable),
   };
 };
 
@@ -88,9 +92,6 @@ const createRole = async (
 const requiredField = (message) => (value) =>
   toStringOrEmpty(value) === "" ? message : null;
 
-const requiredBoolean = (message, allowed) => (value) =>
-  allowed.includes(toStringOrEmpty(value)) ? null : message;
-
 const validateCodeCharacters = (message) => (value) => {
   const code = toStringOrEmpty(value).toUpperCase();
   return /^[A-Z0-9][A-Z0-9_]*$/.test(code) ? null : message;
@@ -101,13 +102,6 @@ const validateCode = (value) =>
   validateCodeCharacters(
     "Code can only contain letters, numbers and '_' (underscores). <br /> Code cannot start with '_' (underscore).",
   )(value);
-
-const validateDescription = requiredField("Enter a role description");
-
-const validateAssignable = requiredBoolean(
-  "Select whether the role is assignable",
-  ["true", "false"],
-);
 
 const handleCreateRoleError = (
   request,
