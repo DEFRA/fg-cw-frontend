@@ -8,11 +8,12 @@ import { listCasesRoute } from "./list-cases.route.js";
 vi.mock("../use-cases/find-all-cases.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
 
-const createMockPage = (cases) => ({
+const createMockPage = (cases, pagination = {}) => ({
   data: {
     cases,
     pagination: {
       totalCount: cases.length,
+      ...pagination,
     },
   },
   header: { navItems: [] },
@@ -94,6 +95,29 @@ describe("listCasesRoute", () => {
       { token: "mock-token", user: undefined },
       {},
     );
+  });
+
+  it("renders pagination when next page is available", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(
+      createMockPage(mockCases, {
+        hasNextPage: true,
+        endCursor: "cursor-next",
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    expect(result).toContain("govuk-pagination");
+    expect(result).toContain("cursor=cursor-next&amp;direction=forward");
   });
 });
 

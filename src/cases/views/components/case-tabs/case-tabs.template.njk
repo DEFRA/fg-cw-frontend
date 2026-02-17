@@ -58,7 +58,7 @@
         rows: tableRows
       })
     }}
-    {% if params.pagination and params.pagination.items and params.pagination.items.length > 0 %}
+    {% if params.pagination and (params.pagination.previous or params.pagination.next) %}
       {{ govukPagination(params.pagination) }}
     {% endif %}
   </fieldset>
