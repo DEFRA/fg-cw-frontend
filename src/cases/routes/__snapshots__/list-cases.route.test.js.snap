@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`listCasesRoute > extracts assignedCaseId from query parameters and renders notification banner 1`] = `
+exports[`listCasesRoute > extracts assignedCaseId from flash and renders notification banner 1`] = `
 "
   <div class="govuk-notification-banner__header">
     <h2 class="govuk-notification-banner__title" id="govuk-notification-banner-title">
@@ -41,24 +41,32 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
     </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
-    <form method="GET" action="/cases/assign-user">
+    <form method="GET" action="/cases/assign-user" class="case-tabs">
       <fieldset class="govuk-fieldset">
         <legend class="govuk-fieldset__legend govuk-visually-hidden">
           <h1>Cases</h1>
         </legend>
-    
         <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
-    
-        <table class="govuk-table" data-module="moj-sortable-table">
+        <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
-          <th scope="col" class="govuk-table__header" aria-sort="none">ID</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none"><a href="/cases?caseRef=asc">ID 
+    <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+    <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+    </svg>
+    </a></th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Business</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">SBI</th>
-          <th scope="col" class="govuk-table__header" aria-sort="none">Submitted</th>
+          <th scope="col" class="govuk-table__header" aria-sort="none"><a href="/cases?createdAt=asc">Submitted 
+    <svg width="22" height="22" focusable="false" aria-hidden="true" role="img" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M8.1875 9.5L10.9609 3.95703L13.7344 9.5H8.1875Z" fill="currentColor"></path>
+    <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor"></path>
+    </svg>
+    </a></th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Status</th>
           <th scope="col" class="govuk-table__header" aria-sort="none">Assignee</th>
         </tr>
@@ -66,18 +74,19 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       <tbody class="govuk-table__body">
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="Select case ID 68495db5afe2d27b09b2ee47"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee47" name="caseId" type="radio" value="68495db5afe2d27b09b2ee47" aria-label="Select case ID 68495db5afe2d27b09b2ee47">
+        <label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee47">
           <span class="govuk-visually-hidden">
             Select case ID 68495db5afe2d27b09b2ee47
           </span>
         </label>
       </div>
     </td>
-          <td class="govuk-table__cell" data-sort-value="banana-123">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
+          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-weight-bold">banana-123</a>
     </td>
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
-          <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
+          <td class="govuk-table__cell">11 Jun 2025</td>
           <td class="govuk-table__cell">    <strong class="govuk-tag govuk-tag--blue">
       New
     </strong>
@@ -86,18 +95,19 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">
-        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="Select case ID 68495db5afe2d27b09b2ee99"><label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99">
+        <input class="govuk-radios__input" id="caseId-68495db5afe2d27b09b2ee99" name="caseId" type="radio" value="68495db5afe2d27b09b2ee99" aria-label="Select case ID 68495db5afe2d27b09b2ee99">
+        <label class="govuk-label govuk-radios__label" for="caseId-68495db5afe2d27b09b2ee99">
           <span class="govuk-visually-hidden">
             Select case ID 68495db5afe2d27b09b2ee99
           </span>
         </label>
       </div>
     </td>
-          <td class="govuk-table__cell" data-sort-value="case-ref-2">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">case-ref-2</a>
+          <td class="govuk-table__cell">  <a href="/cases/68495db5afe2d27b09b2ee99" class="govuk-link govuk-!-font-weight-bold">case-ref-2</a>
     </td>
           <td class="govuk-table__cell"></td>
           <td class="govuk-table__cell">SBI001</td>
-          <td class="govuk-table__cell" data-sort-value="1696161600000">1 Oct 2023</td>
+          <td class="govuk-table__cell">11 Jun 2025</td>
           <td class="govuk-table__cell">    <strong class="govuk-tag govuk-tag--grey">
       Old
     </strong>

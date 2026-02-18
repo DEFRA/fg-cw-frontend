@@ -47,7 +47,7 @@ describe("findAllCasesUseCase", () => {
     const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith(authContext);
+    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
     expect(result).toEqual(mockCases);
   });
 
@@ -59,7 +59,7 @@ describe("findAllCasesUseCase", () => {
     const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith(authContext);
+    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
     expect(result).toEqual([]);
   });
 
@@ -104,6 +104,18 @@ describe("findAllCasesUseCase", () => {
 
     await findAllCasesUseCase(authContext);
 
-    expect(findAll).toHaveBeenCalledWith(authContext);
+    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
+  });
+
+  test("passes query parameter through to repository", async () => {
+    const mockCases = [];
+    const query = { cursor: "abc", direction: "forward" };
+    findAll.mockResolvedValueOnce(mockCases);
+
+    const result = await findAllCasesUseCase(authContext, query);
+
+    expect(findAll).toHaveBeenCalledOnce();
+    expect(findAll).toHaveBeenCalledWith(authContext, query);
+    expect(result).toEqual(mockCases);
   });
 });

@@ -1,7 +1,8 @@
 import { wreck } from "../../common/wreck.js";
 
-export const findAll = async (authContext) => {
-  const { payload } = await wreck.get("/cases", {
+export const findAll = async (authContext, criteria) => {
+  const params = criteria ? `?${new URLSearchParams(criteria)}` : "";
+  const { payload } = await wreck.get(`/cases${params}`, {
     headers: {
       authorization: `Bearer ${authContext.token}`,
     },

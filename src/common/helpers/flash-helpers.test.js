@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from "vitest";
 import {
+  getFlashValue,
   getFlashData,
   getFlashNotification,
+  setFlashValue,
   setFlashData,
   setFlashNotification,
 } from "./flash-helpers.js";
@@ -12,6 +14,39 @@ describe("flash-helpers", () => {
       flash: vi.fn(),
     },
     ...overrides,
+  });
+
+  describe("setFlashValue", () => {
+    it("sets a flash value for a given key", () => {
+      const mockRequest = createMockRequest();
+
+      setFlashValue(mockRequest, "assignedCaseId", "case-id-1");
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith(
+        "assignedCaseId",
+        "case-id-1",
+      );
+    });
+
+    it("does not throw when request has no yar", () => {
+      expect(() => setFlashValue({}, "key", "value")).not.toThrow();
+    });
+  });
+
+  describe("getFlashValue", () => {
+    it("returns the first flashed value for a key", () => {
+      const mockRequest = createMockRequest();
+      mockRequest.yar.flash.mockReturnValueOnce(["value-1", "value-2"]);
+
+      const result = getFlashValue(mockRequest, "someKey");
+
+      expect(mockRequest.yar.flash).toHaveBeenCalledWith("someKey");
+      expect(result).toBe("value-1");
+    });
+
+    it("returns undefined when request has no yar", () => {
+      expect(getFlashValue({}, "someKey")).toBeUndefined();
+    });
   });
 
   describe("setFlashNotification", () => {
