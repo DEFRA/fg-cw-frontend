@@ -8,16 +8,35 @@ import { listCasesRoute } from "./list-cases.route.js";
 vi.mock("../use-cases/find-all-cases.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
 
-const createMockPage = (cases) => ({
-  data: cases,
+const createMockPage = (cases, pagination = {}) => ({
+  data: {
+    cases,
+    pagination: {
+      totalCount: cases.length,
+      ...pagination,
+    },
+  },
   header: { navItems: [] },
 });
 
 describe("listCasesRoute", () => {
   let server;
+  let flashAssignedCaseId;
 
   beforeAll(async () => {
     server = hapi.server();
+    server.ext("onPreHandler", (request, h) => {
+      request.yar = {
+        flash: (key) => {
+          if (key === "assignedCaseId") {
+            return flashAssignedCaseId ? [flashAssignedCaseId] : [];
+          }
+
+          return [];
+        },
+      };
+      return h.continue;
+    });
     server.route(listCasesRoute);
     await server.register([nunjucks]);
 
@@ -29,6 +48,7 @@ describe("listCasesRoute", () => {
   });
 
   it("returns a list of cases", async () => {
+    flashAssignedCaseId = undefined;
     findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
@@ -46,14 +66,19 @@ describe("listCasesRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user: undefined },
+      {},
+    );
   });
 
-  it("extracts assignedCaseId from query parameters and renders notification banner", async () => {
+  it("extracts assignedCaseId from flash and renders notification banner", async () => {
+    flashAssignedCaseId = mockCases[0]._id;
     findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
-      url: `/cases?assignedCaseId=${mockCases[0]._id}`,
+      url: "/cases",
       auth: {
         credentials: { token: "mock-token" },
         strategy: "session",
@@ -66,6 +91,33 @@ describe("listCasesRoute", () => {
     const view = $(".govuk-notification-banner--success").html();
 
     expect(view).toMatchSnapshot();
+    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user: undefined },
+      {},
+    );
+  });
+
+  it("renders pagination when next page is available", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(
+      createMockPage(mockCases, {
+        hasNextPage: true,
+        endCursor: "cursor-next",
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    expect(result).toContain("govuk-pagination");
+    expect(result).toContain("cursor=cursor-next&amp;direction=forward");
   });
 });
 
@@ -74,7 +126,7 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee47",
     caseRef: "banana-123",
     workflowCode: "frps-private-beta",
-    dateReceived: "2025-06-11T10:43:01.603Z",
+    createdAt: "2025-06-11T10:43:01.603Z",
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "NEW",
@@ -82,7 +134,6 @@ const mockCases = [
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
-      createdAt: "2025-06-11T10:43:01.417Z",
       submittedAt: "2023-10-01T12:00:00.000Z",
       identifiers: {
         sbi: "SBI001",
@@ -141,7 +192,7 @@ const mockCases = [
     _id: "68495db5afe2d27b09b2ee99",
     caseRef: "case-ref-2",
     workflowCode: "frps-private-beta",
-    dateReceived: "2025-06-11T10:43:01.603Z",
+    createdAt: "2025-06-11T10:43:01.603Z",
     currentPhase: "phase-1",
     currentStage: "contract",
     currentStatus: "OLD",
@@ -149,7 +200,6 @@ const mockCases = [
     payload: {
       clientRef: "banana-123",
       code: "frps-private-beta",
-      createdAt: "2025-06-11T10:43:01.417Z",
       submittedAt: "2023-10-01T12:00:00.000Z",
       identifiers: {
         sbi: "SBI001",

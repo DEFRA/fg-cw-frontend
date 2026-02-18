@@ -1,12 +1,12 @@
 export const setFlashData = (request, { errors, formData, notification }) => {
   if (errors !== undefined) {
-    request.yar.flash("errors", errors);
+    setFlashValue(request, "errors", errors);
   }
   if (formData !== undefined) {
-    request.yar.flash("formData", formData);
+    setFlashValue(request, "formData", formData);
   }
   if (notification !== undefined) {
-    request.yar.flash("notification", notification);
+    setFlashValue(request, "notification", notification);
   }
 };
 
@@ -15,10 +15,18 @@ export const setFlashNotification = (request, notification) => {
 };
 
 export const getFlashData = (request) => {
-  const errors = request.yar.flash("errors")?.[0];
-  const formData = request.yar.flash("formData")?.[0];
+  const errors = getFlashValue(request, "errors");
+  const formData = getFlashValue(request, "formData");
   return { errors, formData };
 };
 
 export const getFlashNotification = (request) =>
-  request.yar.flash("notification")?.[0];
+  getFlashValue(request, "notification");
+
+export const setFlashValue = (request, key, value) => {
+  request.yar?.flash?.(key, value);
+};
+
+export const getFlashValue = (request, key) => {
+  return request.yar?.flash?.(key)?.[0];
+};

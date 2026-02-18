@@ -34,7 +34,10 @@
               label: tab.label,
               id: tab.id,
               panel: {
-                html: caseTabs({ data: tab.data })
+                html: caseTabs({
+                  data: tab.data,
+                  pagination: data.pagination
+                })
               }
             }
           %}

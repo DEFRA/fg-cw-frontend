@@ -21,7 +21,7 @@ describe("assignUserToCaseRoute", () => {
     await server.stop();
   });
 
-  it("assigns user to case and redirects to case list with assignedCaseId parameter", async () => {
+  it("assigns user to case, stores assigned case id in flash, and redirects to case list", async () => {
     const { statusCode, headers } = await server.inject({
       method: "POST",
       url: "/cases/assign-user",
@@ -49,6 +49,6 @@ describe("assignUserToCaseRoute", () => {
     });
 
     expect(statusCode).toEqual(302);
-    expect(headers.location).toEqual("/cases?assignedCaseId=case-id-1");
+    expect(headers.location).toEqual("/cases");
   });
 });
