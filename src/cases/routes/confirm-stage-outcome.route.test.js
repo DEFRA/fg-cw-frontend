@@ -12,6 +12,7 @@ import {
   getFlashData,
   setFlashData,
 } from "../../common/helpers/flash-helpers.js";
+import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
 import { createConfirmStageOutcomeViewModel } from "../view-models/confirm-stage-outcome.view-model.js";
@@ -51,12 +52,8 @@ describe("confirmStageOutcomeRoute", () => {
 
   beforeAll(async () => {
     server = hapi.server();
-    server.views({
-      engines: { njk: { compile: () => () => "rendered" } },
-      relativeTo: __dirname,
-      path: "../views",
-    });
     server.route([viewConfirmStageOutcomeRoute, confirmStageOutcomeRoute]);
+    await server.register([nunjucks]);
     await server.initialize();
   });
 
