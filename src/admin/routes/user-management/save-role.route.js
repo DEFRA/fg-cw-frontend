@@ -1,12 +1,12 @@
+import {
+  validateRoleAssignable,
+  validateRoleDescription,
+} from "../../../common/helpers/role-validation-helpers.js";
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import {
   hasValidationErrors,
   isForbidden,
 } from "../../../common/helpers/validation-helpers.js";
-import {
-  validateRoleAssignable,
-  validateRoleDescription,
-} from "../../../common/helpers/role-validation-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { findRoleUseCase } from "../../use-cases/find-role.use-case.js";
 import { updateRoleUseCase } from "../../use-cases/update-role.use-case.js";
