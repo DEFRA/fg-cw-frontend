@@ -4,6 +4,10 @@ import { updateComponentsRoute } from "../temp/routes/update-components.route.js
 import { agreementsProxyRoutes } from "./routes/agreements-proxy.route.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
+import {
+  confirmStageOutcomeRoute,
+  viewConfirmStageOutcomeRoute,
+} from "./routes/confirm-stage-outcome.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
 import { getSecretRoute } from "./routes/get-secret.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
@@ -34,6 +38,8 @@ export const cases = {
         viewTaskRoute,
         updateTaskStatusRoute,
         updateStageOutcomeRoute,
+        viewConfirmStageOutcomeRoute,
+        confirmStageOutcomeRoute,
         getSecretRoute,
         getSecretWorkflowRoute,
         viewAssignUserToCaseRoute,

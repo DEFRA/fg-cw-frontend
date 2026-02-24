@@ -1,14 +1,55 @@
 import hapi from "@hapi/hapi";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
 import { updateStageOutcomeRoute } from "./update-stage-outcome.route.js";
 
 vi.mock("../use-cases/update-stage-outcome-use.case.js");
+vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../common/helpers/flash-helpers.js");
 
 describe("updateStageOutcomeRoute", () => {
   let server;
+
+  const mockCaseDataWithoutConfirm = {
+    data: {
+      stage: {
+        actions: [
+          { code: "approve", name: "Approve", confirm: null },
+          { code: "reject", name: "Reject", confirm: null },
+          {
+            code: "conditional-approval",
+            name: "Conditional Approval",
+            confirm: null,
+          },
+        ],
+      },
+    },
+  };
+
+  const mockCaseDataWithConfirm = {
+    data: {
+      stage: {
+        actions: [
+          { code: "approve", name: "Approve", confirm: null },
+          {
+            code: "reject",
+            name: "Reject",
+            confirm: { details: [], yes: null, no: null },
+          },
+        ],
+      },
+    },
+  };
 
   beforeAll(async () => {
     server = hapi.server();
@@ -18,6 +59,11 @@ describe("updateStageOutcomeRoute", () => {
 
   afterAll(async () => {
     await server.stop();
+  });
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+    findCaseByIdUseCase.mockResolvedValue(mockCaseDataWithoutConfirm);
   });
 
   describe("POST /cases/{caseId}/stage/outcome", () => {
@@ -58,6 +104,34 @@ describe("updateStageOutcomeRoute", () => {
           comment: "This looks good to me",
         },
       });
+    });
+
+    it("should redirect to confirmation page when action has confirm property", async () => {
+      findCaseByIdUseCase.mockResolvedValue(mockCaseDataWithConfirm);
+
+      const payload = {
+        actionCode: "reject",
+        "reject-comment": "Rejection reason",
+      };
+
+      const { statusCode, headers } = await server.inject({
+        method: "POST",
+        url: "/cases/case-123/stage/outcome",
+        payload,
+        auth: {
+          credentials: { token: "mock-token", user: {} },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe(
+        "/cases/case-123/stage/outcome/confirm?actionCode=reject",
+      );
+      expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
+        formData: payload,
+      });
+      expect(updateStageOutcomeUseCase).not.toHaveBeenCalled();
     });
 
     it("should handle validation errors and redirect with flash data", async () => {

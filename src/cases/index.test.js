@@ -52,11 +52,11 @@ describe("cases", () => {
       },
       {
         method: "get",
-        path: "/cases/{caseId}/timeline",
+        path: "/cases/{caseId}/notes",
       },
       {
         method: "get",
-        path: "/cases/{caseId}/notes",
+        path: "/cases/{caseId}/timeline",
       },
       {
         method: "get",
@@ -76,6 +76,10 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/cases/{caseId}/stage/outcome/confirm",
+      },
+      {
+        method: "get",
         path: "/cases/{caseId}/tasks/{taskGroupCode}/{taskCode}",
       },
       {
@@ -84,11 +88,11 @@ describe("cases", () => {
       },
       {
         method: "post",
-        path: "/cases/{caseId}/notes",
+        path: "/cases/{caseId}/page-action",
       },
       {
         method: "post",
-        path: "/cases/{caseId}/page-action",
+        path: "/cases/{caseId}/notes",
       },
       {
         method: "post",
@@ -97,6 +101,10 @@ describe("cases", () => {
       {
         method: "post",
         path: "/cases/{caseId}/stage/outcome",
+      },
+      {
+        method: "post",
+        path: "/cases/{caseId}/stage/outcome/confirm",
       },
       {
         method: "post",

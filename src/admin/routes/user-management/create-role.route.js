@@ -1,4 +1,8 @@
 import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
+import {
+  validateRoleAssignable,
+  validateRoleDescription,
+} from "../../../common/helpers/role-validation-helpers.js";
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import {
   hasValidationErrors,
@@ -6,10 +10,6 @@ import {
 } from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
 import { statusCodes } from "../../../common/status-codes.js";
-import {
-  validateRoleAssignable,
-  validateRoleDescription,
-} from "../../../common/helpers/role-validation-helpers.js";
 import { createRoleUseCase } from "../../use-cases/create-role.use-case.js";
 import { createNewRoleViewModel } from "../../view-models/user-management/role-create.view-model.js";
 

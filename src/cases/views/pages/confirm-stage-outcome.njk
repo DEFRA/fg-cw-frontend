@@ -1,0 +1,84 @@
+{% extends '../layouts/case-detail-layout.njk' %}
+{% from "govuk/components/radios/macro.njk" import govukRadios %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/error-summary/macro.njk" import govukErrorSummary %}
+{% from "../components/dynamic-content/macro.njk" import dynamicContent %}
+
+{% block contentMain %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      {% if errorList and errorList.length > 0 %}
+        {{
+          govukErrorSummary({
+            titleText: "There is a problem",
+            errorList: errorList
+          })
+        }}
+      {% endif %}
+
+      <form
+        method="POST"
+        action="/cases/{{ data.caseId }}/stage/outcome/confirm"
+      >
+        <input type="hidden" name="actionCode" value="{{ data.actionCode }}" />
+        <input type="hidden" name="comment" value="{{ data.comment }}" />
+
+        {% if data.confirmConfig.details and data.confirmConfig.details.length > 0 %}
+          {{ dynamicContent(data.confirmConfig.details) }}
+        {% else %}
+          <h1 class="govuk-heading-l">{{ data.confirmConfig.title }}</h1>
+        {% endif %}
+
+
+        {% set yesHtml %}
+          {% if data.confirmConfig.yes.components %}
+            {{ dynamicContent([data.confirmConfig.yes.components]) }}
+          {% else %}
+            {{ data.confirmConfig.yes.label }}
+          {% endif %}
+        {% endset %}
+
+
+        {% set noHtml %}
+          {% if data.confirmConfig.no.components %}
+            {{ dynamicContent([data.confirmConfig.no.components]) }}
+          {% else %}
+            {{ data.confirmConfig.no.label }}
+          {% endif %}
+        {% endset %}
+
+        {{
+          govukRadios({
+            name: "confirmation",
+            idPrefix: "confirmation",
+            errorMessage: errors.confirmation,
+            items: [
+              {
+                value: "yes",
+                html: yesHtml,
+                checked: values.confirmation === "yes"
+              },
+              {
+                value: "no",
+                html: noHtml,
+                checked: values.confirmation === "no"
+              }
+            ]
+          })
+        }}
+
+        {{
+          govukButton({
+            text: "Confirm"
+          })
+        }}
+      </form>
+
+      <p class="govuk-body">
+        <a href="/cases/{{ data.caseId }}" class="govuk-link"
+          >Cancel and return</a
+        >
+      </p>
+    </div>
+  </div>
+{% endblock %}

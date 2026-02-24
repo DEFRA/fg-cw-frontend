@@ -1,6 +1,43 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { logger } from "../../common/logger.js";
+import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+
+const getAuthContext = (request) => ({
+  token: request.auth.credentials.token,
+  user: request.auth.credentials.user,
+});
+
+const findActionByCode = (page, actionCode) =>
+  page.data?.stage?.actions?.find((a) => a.code === actionCode);
+
+const redirectToConfirmation = (request, h, caseId, actionCode, payload) => {
+  setFlashData(request, { formData: payload });
+  logger.info(`Redirecting to confirmation page for action ${actionCode}`);
+  return h.redirect(
+    `/cases/${caseId}/stage/outcome/confirm?actionCode=${actionCode}`,
+  );
+};
+
+const handleUpdateOutcome = async (
+  request,
+  h,
+  authContext,
+  caseId,
+  payload,
+) => {
+  const { errors } = await updateStageOutcomeUseCase(authContext, {
+    caseId,
+    actionData: extractActionData(payload),
+  });
+
+  if (errors) {
+    setFlashData(request, { errors, formData: payload });
+  }
+
+  logger.info(`Finished: Updating stage outcome for case ${caseId}`);
+  return h.redirect(`/cases/${caseId}`);
+};
 
 export const updateStageOutcomeRoute = {
   method: "POST",
@@ -10,29 +47,19 @@ export const updateStageOutcomeRoute = {
       params: { caseId },
       payload,
     } = request;
+    const { actionCode } = payload;
 
     logger.info(`Updating stage outcome for case ${caseId}`);
 
-    const authContext = {
-      token: request.auth.credentials.token,
-      user: request.auth.credentials.user,
-    };
+    const authContext = getAuthContext(request);
+    const page = await findCaseByIdUseCase(authContext, caseId);
+    const action = findActionByCode(page, actionCode);
 
-    const { errors } = await updateStageOutcomeUseCase(authContext, {
-      caseId,
-      actionData: extractActionData(payload),
-    });
-
-    if (errors) {
-      setFlashData(request, {
-        errors,
-        formData: payload,
-      });
+    if (action?.confirm) {
+      return redirectToConfirmation(request, h, caseId, actionCode, payload);
     }
 
-    logger.info(`Finished: Updating stage outcome for case ${caseId}`);
-
-    return h.redirect(`/cases/${caseId}`);
+    return handleUpdateOutcome(request, h, authContext, caseId, payload);
   },
 };
 
