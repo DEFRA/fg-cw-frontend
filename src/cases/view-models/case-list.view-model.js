@@ -69,7 +69,7 @@ const getOrder = (order) => {
   }
 
   return {
-    code: null,
+    code: "asc",
     icon: sortIcons.desc,
     ariaSort: "descending",
   };

@@ -548,7 +548,7 @@ describe("sortable headers", () => {
     expect(idHeader.attributes["aria-sort"]).toBe("ascending");
   });
 
-  it("shows descending state and links to /cases (no params) when ?caseRef=desc is in URL", () => {
+  it("shows descending state and links to ?caseRef=asc when ?caseRef=desc is in URL", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=desc"),
@@ -560,7 +560,7 @@ describe("sortable headers", () => {
     });
     const idHeader = result.data.tabItems[0].data.head[1];
 
-    expect(idHeader.html).toContain('href="/cases"');
+    expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
     expect(idHeader.attributes["aria-sort"]).toBe("descending");
   });
 
