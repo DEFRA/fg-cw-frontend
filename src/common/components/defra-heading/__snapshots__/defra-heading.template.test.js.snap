@@ -12,7 +12,7 @@ exports[`defra-heading > renders 1`] = `
       <img
         class="logo-light"
         src="/public/assets/images/defra-logo.svg"
-        alt="Department for Environment Food & Rural Affairs"
+        alt=""
       />
       <span
         class="defra-header__service-name"
