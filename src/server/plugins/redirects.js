@@ -8,9 +8,11 @@ export const redirects = {
         handler: (request, h) => {
           const { user } = request.auth.credentials;
 
-          const path = user.idpRoles.includes("FCP.Casework.Admin")
-            ? "/admin"
-            : "/cases";
+          const hasCaseworkAccess =
+            user.idpRoles.includes("FCP.Casework.ReadWrite") ||
+            user.idpRoles.includes("FCP.Casework.Read");
+
+          const path = hasCaseworkAccess ? "/cases" : "/admin";
 
           return h.redirect(path);
         },
