@@ -1,3 +1,5 @@
+import Boom from "@hapi/boom";
+
 export const redirects = {
   plugin: {
     name: "redirects",
@@ -12,9 +14,17 @@ export const redirects = {
             user.idpRoles.includes("FCP.Casework.ReadWrite") ||
             user.idpRoles.includes("FCP.Casework.Read");
 
-          const path = hasCaseworkAccess ? "/cases" : "/admin";
+          if (hasCaseworkAccess) {
+            return h.redirect("/cases");
+          }
 
-          return h.redirect(path);
+          const hasAdminAccess = user.idpRoles.includes("FCP.Casework.Admin");
+
+          if (hasAdminAccess) {
+            return h.redirect("/admin");
+          }
+
+          throw Boom.forbidden("You do not have access to this application");
         },
       });
     },

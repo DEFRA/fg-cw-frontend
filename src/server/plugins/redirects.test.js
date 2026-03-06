@@ -102,4 +102,18 @@ describe("redirects plugin", () => {
       expect(response.headers.location).toBe("/cases");
     });
   });
+
+  describe("user with no valid roles", () => {
+    it("should return 403 Forbidden", async () => {
+      const response = await injectWithRoles([]);
+
+      expect(response.statusCode).toBe(403);
+    });
+
+    it("should return 403 for unrecognised roles", async () => {
+      const response = await injectWithRoles(["Some.Other.Role"]);
+
+      expect(response.statusCode).toBe(403);
+    });
+  });
 });
