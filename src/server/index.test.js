@@ -38,7 +38,7 @@ describe("server", () => {
       url: "/",
       auth: {
         credentials: {
-          user: { idpRoles: [] },
+          user: { idpRoles: ["FCP.Casework.Read"] },
         },
         strategy: "session",
         mode: "required",
