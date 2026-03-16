@@ -113,7 +113,7 @@
     "source-map-loader": "^5.0.0",
     "stylelint": "^16.26.1",
     "stylelint-config-gds": "^2.0.0",
-    "terser-webpack-plugin": "^5.3.16",
+    "terser-webpack-plugin": "^5.4.0",
     "vitest": "^4.0.18",
     "webpack": "^5.105.0",
     "webpack-assets-manifest": "^6.5.0",
