@@ -18,47 +18,39 @@ export const initSelectAllCheckboxes = () => {
       const isChecked = event.target.checked;
       selectAllCheckbox.indeterminate = false;
 
-      rowCheckboxes.forEach((rowCheckbox) => {
-        rowCheckbox.checked = isChecked;
-      });
+      updateRowCheckboxes(rowCheckboxes, isChecked);
     });
 
     // Handler for individual row checkboxes
     rowCheckboxes.forEach((rowCheckbox) => {
       rowCheckbox.addEventListener("change", () => {
-        const total = rowCheckboxes.length;
-        const checkedCount = Array.from(rowCheckboxes).filter(
-          (cb) => cb.checked,
-        ).length;
-
-        if (checkedCount === 0) {
-          selectAllCheckbox.checked = false;
-          selectAllCheckbox.indeterminate = false;
-        } else if (checkedCount === total) {
-          selectAllCheckbox.checked = true;
-          selectAllCheckbox.indeterminate = false;
-        } else {
-          selectAllCheckbox.checked = false;
-          selectAllCheckbox.indeterminate = true;
-        }
+        updateSelectAllState(selectAllCheckbox, rowCheckboxes);
       });
     });
 
     // Set initial state on load
-    const total = rowCheckboxes.length;
-    const checkedCount = Array.from(rowCheckboxes).filter(
-      (cb) => cb.checked,
-    ).length;
-
-    if (checkedCount === 0) {
-      selectAllCheckbox.checked = false;
-      selectAllCheckbox.indeterminate = false;
-    } else if (checkedCount === total) {
-      selectAllCheckbox.checked = true;
-      selectAllCheckbox.indeterminate = false;
-    } else {
-      selectAllCheckbox.checked = false;
-      selectAllCheckbox.indeterminate = true;
-    }
+    updateSelectAllState(selectAllCheckbox, rowCheckboxes);
   });
+};
+
+const updateRowCheckboxes = (rowCheckboxes, isChecked) => {
+  rowCheckboxes.forEach((rowCheckbox) => {
+    rowCheckbox.checked = isChecked;
+  });
+};
+
+const getCheckedCount = (checkboxes) =>
+  Array.from(checkboxes).filter((checkbox) => checkbox.checked).length;
+
+const updateSelectAllState = (selectAllCheckbox, rowCheckboxes) => {
+  const checkboxTotal = rowCheckboxes.length;
+  const selectedCheckboxCount = getCheckedCount(rowCheckboxes);
+  const hasCheckboxes = checkboxTotal > 0;
+  const areAllCheckboxesSelected =
+    hasCheckboxes && selectedCheckboxCount === checkboxTotal;
+  const hasSelectedCheckboxes = selectedCheckboxCount > 0;
+
+  selectAllCheckbox.checked = areAllCheckboxesSelected;
+  selectAllCheckbox.indeterminate =
+    hasSelectedCheckboxes && !areAllCheckboxesSelected;
 };
