@@ -39,18 +39,15 @@ const updateRowCheckboxes = (rowCheckboxes, isChecked) => {
   });
 };
 
-const getCheckedCount = (checkboxes) =>
-  Array.from(checkboxes).filter((checkbox) => checkbox.checked).length;
-
 const updateSelectAllState = (selectAllCheckbox, rowCheckboxes) => {
-  const checkboxTotal = rowCheckboxes.length;
-  const selectedCheckboxCount = getCheckedCount(rowCheckboxes);
-  const hasCheckboxes = checkboxTotal > 0;
-  const areAllCheckboxesSelected =
-    hasCheckboxes && selectedCheckboxCount === checkboxTotal;
+  const selectedCheckboxes = Array.from(rowCheckboxes).filter(
+    (checkbox) => checkbox.checked,
+  );
+  const selectedCheckboxCount = selectedCheckboxes.length;
   const hasSelectedCheckboxes = selectedCheckboxCount > 0;
 
-  selectAllCheckbox.checked = areAllCheckboxesSelected;
+  selectAllCheckbox.checked =
+    hasSelectedCheckboxes && selectedCheckboxCount === rowCheckboxes.length;
   selectAllCheckbox.indeterminate =
-    hasSelectedCheckboxes && !areAllCheckboxesSelected;
+    hasSelectedCheckboxes && selectedCheckboxCount < rowCheckboxes.length;
 };
