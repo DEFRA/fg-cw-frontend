@@ -22,12 +22,16 @@ export const viewTaskRoute = {
       "task",
     );
 
+    const hasWriteAccess =
+      authContext.user?.idpRoles?.includes("FCP.Casework.ReadWrite") ?? false;
+
     const viewModel = createTaskDetailViewModel({
       page,
       request,
       query: request.params,
       errors,
       formData,
+      hasWriteAccess,
     });
 
     logger.info(`Finished: Get task details for case ${request.params.caseId}`);

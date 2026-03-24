@@ -10,6 +10,7 @@ describe("task-details", () => {
       taskGroupCode: "task-group-code",
       taskCode: "task-id",
       isInteractive: true,
+      hasWriteAccess: true,
       currentTask: {
         code: "task1",
         description: [{ component: "heading", level: 2, text: "Test Task" }],
@@ -50,6 +51,7 @@ describe("task-details", () => {
       taskGroupCode: "task-group-code",
       taskCode: "task-id",
       isInteractive: true,
+      hasWriteAccess: true,
       currentTask: {
         code: "task1",
         description: [{ component: "heading", level: 2, text: "Test Task" }],
@@ -70,6 +72,7 @@ describe("task-details", () => {
       taskGroupCode: "task-group-code",
       taskCode: "task-id",
       isInteractive: true,
+      hasWriteAccess: true,
       currentTask: {
         code: "task1",
         description: [{ component: "heading", level: 2, text: "Test Task" }],
@@ -160,6 +163,7 @@ describe("task-details", () => {
       taskGroupCode: "task-group-code",
       taskCode: "task-id",
       isInteractive: true,
+      hasWriteAccess: true,
       currentTask: {
         code: "task1",
         description: [{ component: "heading", level: 2, text: "Test Task" }],
@@ -210,5 +214,31 @@ describe("task-details", () => {
     });
 
     expect(component).not.toContain("Outcome history");
+  });
+
+  test("renders disabled form controls for read-only user", () => {
+    const component = render("task-details", {
+      caseId: "case-id",
+      phaseCode: "phase-1",
+      stageCode: "strage-id",
+      taskGroupCode: "task-group-code",
+      taskCode: "task-id",
+      isInteractive: true,
+      hasWriteAccess: false,
+      currentTask: {
+        code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
+        name: "Test Task",
+        type: "boolean",
+        canComplete: true,
+        statusOptions: [
+          { code: "accept", name: "Accept" },
+          { code: "reject", name: "Reject" },
+        ],
+      },
+    });
+
+    expect(component).toContain("disabled");
+    expect(component).toContain("Confirm");
   });
 });

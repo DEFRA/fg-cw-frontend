@@ -32,7 +32,8 @@
             status: currentTask.status,
             completed: currentTask.completed,
             statusError: currentTask.statusError,
-            isInteractive: params.isInteractive
+            isInteractive: params.isInteractive,
+            disabled: not params.hasWriteAccess
           })
         }}
       {% elif currentTask.requiredRoles %}
@@ -91,7 +92,8 @@
             statusOptions: currentTask.statusOptions,
             status: currentTask.status,
             completed: currentTask.completed,
-            statusError: currentTask.statusError
+            statusError: currentTask.statusError,
+            disabled: not params.hasWriteAccess
           })
         }}
       {% endif %}

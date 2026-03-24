@@ -6,6 +6,7 @@
 {%- set statusOptions = params.statusOptions -%}
 {%- set completed = params.completed -%}
 {%- set errorMessage = params.errorMessage -%}
+{%- set disabled = params.disabled -%}
 
 {% if statusOptions and statusOptions.length > 0 %}
   {% set radioItems = [] %}
@@ -16,6 +17,7 @@
           value: option.value,
           text: option.text,
           checked: option.checked,
+          disabled: disabled,
           conditional: { html: govukTextarea(option.conditional) }
         }), radioItems)
       %}
@@ -24,7 +26,8 @@
         set radioItems = (radioItems.push({
           value: option.value,
           text: option.text,
-          checked: option.checked
+          checked: option.checked,
+          disabled: disabled
         }), radioItems)
       %}
     {% endif %}
@@ -51,7 +54,8 @@
           value: true,
           id: "task-completed",
           text: "Completed",
-          checked: completed
+          checked: completed,
+          disabled: disabled
         }
       ]
     })
