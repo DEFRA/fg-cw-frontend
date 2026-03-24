@@ -797,4 +797,38 @@ describe("createTaskDetailViewModel", () => {
       expect(result.data.currentTask.notesHistory).toEqual([]);
     });
   });
+
+  describe("hasWriteAccess", () => {
+    it("should pass through hasWriteAccess as true when provided", () => {
+      const result = createTaskDetailViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        query: mockQuery,
+        hasWriteAccess: true,
+      });
+
+      expect(result.data.hasWriteAccess).toBe(true);
+    });
+
+    it("should pass through hasWriteAccess as false when provided", () => {
+      const result = createTaskDetailViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        query: mockQuery,
+        hasWriteAccess: false,
+      });
+
+      expect(result.data.hasWriteAccess).toBe(false);
+    });
+
+    it("should set hasWriteAccess to undefined when not provided", () => {
+      const result = createTaskDetailViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+        query: mockQuery,
+      });
+
+      expect(result.data.hasWriteAccess).toBeUndefined();
+    });
+  });
 });
