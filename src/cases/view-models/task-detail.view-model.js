@@ -153,6 +153,7 @@ export const createTaskDetailViewModel = ({
   query,
   errors,
   formData,
+  hasWriteAccess,
 }) => {
   const kase = page.data;
   const stage = kase.stage;
@@ -181,6 +182,7 @@ export const createTaskDetailViewModel = ({
       banner: kase.banner,
       caseId: kase._id,
       isInteractive,
+      hasWriteAccess,
       currentTask: buildCurrentTaskData({
         kase,
         currentTask,

@@ -6,6 +6,7 @@
 {%- set completed = params.completed -%}
 {%- set statusError = params.statusError -%}
 {%- set caseLink = "/cases/" + params.caseId -%}
+{%- set disabled = params.disabled -%}
 
 <form
   class="task-outcome-form"
@@ -18,7 +19,8 @@
       status: status,
       statusOptions: statusOptions,
       completed: completed,
-      errorMessage: statusError
+      errorMessage: statusError,
+      disabled: disabled
     })
   }}
   <button
@@ -28,6 +30,7 @@
     class="govuk-button task-outcome-form__button"
     data-module="govuk-button"
     data-govuk-button-init=""
+    {% if disabled %}disabled{% endif %}
   >
     Confirm
   </button>

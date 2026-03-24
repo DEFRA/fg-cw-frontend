@@ -138,4 +138,154 @@ describe("viewTaskRoute", () => {
 
     expect(view).toMatchSnapshot();
   });
+
+  it("enables form controls for user with FCP.Casework.ReadWrite role", async () => {
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({
+        _id: "68495db5afe2d27b09b2ee47",
+        caseRef: "banana-123",
+        workflowCode: "frps-private-beta",
+        status: "NEW",
+        dateReceived: "2025-06-11T10:43:01.603Z",
+        currentPhase: "phase-1",
+        currentStage: "application-receipt",
+        currentStatus: "NEW",
+        links: createMockLinks("68495db5afe2d27b09b2ee47"),
+        payload: {
+          clientRef: "banana-123",
+          code: "frps-private-beta",
+          createdAt: "2025-06-11T10:43:01.417Z",
+          submittedAt: "2023-10-01T12:00:00.000Z",
+          identifiers: { sbi: "SBI001" },
+          answers: { scheme: "SFI" },
+        },
+        stage: {
+          code: "application-receipt",
+          name: "Application Receipt",
+          taskGroups: [
+            {
+              code: "application-receipt-tasks",
+              name: "Application Receipt Tasks",
+              tasks: [
+                {
+                  code: "simple-review",
+                  name: "Simple Review",
+                  description: [
+                    { component: "heading", text: "Simple Review", level: 2 },
+                  ],
+                  status: "pending",
+                  type: "OPTIONAL",
+                  statusOptions: [
+                    { code: "accept", name: "Accept" },
+                    { code: "reject", name: "Reject" },
+                  ],
+                  canComplete: true,
+                },
+              ],
+            },
+          ],
+        },
+        comments: [],
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {
+            id: "mock-user-id",
+            idpRoles: ["FCP.Casework.ReadWrite"],
+          },
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    const submitButton = $('button[data-testid="save-and-continue-button"]');
+    const radioInputs = $('input[name="status"]');
+
+    expect(submitButton.attr("disabled")).toBeUndefined();
+    expect(radioInputs.first().attr("disabled")).toBeUndefined();
+  });
+
+  it("disables form controls for user with only FCP.Casework.Read role", async () => {
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({
+        _id: "68495db5afe2d27b09b2ee47",
+        caseRef: "banana-123",
+        workflowCode: "frps-private-beta",
+        status: "NEW",
+        dateReceived: "2025-06-11T10:43:01.603Z",
+        currentPhase: "phase-1",
+        currentStage: "application-receipt",
+        currentStatus: "NEW",
+        links: createMockLinks("68495db5afe2d27b09b2ee47"),
+        payload: {
+          clientRef: "banana-123",
+          code: "frps-private-beta",
+          createdAt: "2025-06-11T10:43:01.417Z",
+          submittedAt: "2023-10-01T12:00:00.000Z",
+          identifiers: { sbi: "SBI001" },
+          answers: { scheme: "SFI" },
+        },
+        stage: {
+          code: "application-receipt",
+          name: "Application Receipt",
+          taskGroups: [
+            {
+              code: "application-receipt-tasks",
+              name: "Application Receipt Tasks",
+              tasks: [
+                {
+                  code: "simple-review",
+                  name: "Simple Review",
+                  description: [
+                    { component: "heading", text: "Simple Review", level: 2 },
+                  ],
+                  status: "pending",
+                  type: "OPTIONAL",
+                  statusOptions: [
+                    { code: "accept", name: "Accept" },
+                    { code: "reject", name: "Reject" },
+                  ],
+                  canComplete: true,
+                },
+              ],
+            },
+          ],
+        },
+        comments: [],
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/68495db5afe2d27b09b2ee47/tasks/application-receipt-tasks/simple-review",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {
+            id: "mock-user-id",
+            idpRoles: ["FCP.Casework.Read"],
+          },
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    const submitButton = $('button[data-testid="save-and-continue-button"]');
+    const radioInputs = $('input[name="status"]');
+
+    expect(submitButton.attr("disabled")).toBeDefined();
+    expect(radioInputs.first().attr("disabled")).toBeDefined();
+  });
 });
