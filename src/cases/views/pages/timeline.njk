@@ -6,7 +6,7 @@
 {% block contentMain %}
   <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
     {{ pageHeading }}
-    {% if data.case.caseSeries.seriesDetails %}(multiple cases){% endif %}
+    {% if data.case.caseSeries.length > 1 %}(multiple cases){% endif %}
   </h2>
 
   {{ timelineSeriesTable(data.case.caseSeries) }}

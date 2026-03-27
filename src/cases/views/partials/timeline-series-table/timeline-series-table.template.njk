@@ -9,7 +9,7 @@
   {% endif %}
 {% endmacro %}
 
-{% if params.seriesDetails %}
+{% if params.seriesDetails.length > 1 %}
   {% set tableRows = [] %}
   {%
     set heads = [
