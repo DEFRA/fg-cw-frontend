@@ -50,7 +50,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.28.6",
+    "@babel/runtime": "^7.29.2",
     "@defra/hapi-tracing": "^1.30.0",
     "@elastic/ecs-pino-format": "^1.5.0",
     "@hapi/bell": "^13.1.0",
@@ -67,7 +67,7 @@
     "@hapi/yar": "^11.0.3",
     "@ministryofjustice/frontend": "^8.0.0",
     "aws-embedded-metrics": "^4.2.1",
-    "babel-plugin-module-resolver": "^5.0.2",
+    "babel-plugin-module-resolver": "^5.0.3",
     "convict": "^6.2.4",
     "cssnano": "^7.1.2",
     "cssnano-preset-default": "^7.0.9",
@@ -85,10 +85,10 @@
   "devDependencies": {
     "@babel/cli": "^7.28.6",
     "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.0",
+    "@babel/preset-env": "^7.29.2",
     "@vitest/coverage-v8": "^4.0.18",
-    "autoprefixer": "^10.4.24",
-    "babel-loader": "^10.0.0",
+    "autoprefixer": "^10.4.27",
+    "babel-loader": "^10.1.1",
     "babel-plugin-transform-import-meta": "^2.3.3",
     "baseline-browser-mapping": "^2.9.19",
     "cheerio": "^1.2.0",
@@ -115,8 +115,8 @@
     "stylelint-config-gds": "^2.0.0",
     "terser-webpack-plugin": "^5.3.16",
     "vitest": "^4.0.18",
-    "webpack": "^5.105.0",
-    "webpack-assets-manifest": "^6.5.0",
-    "webpack-cli": "^6.0.1"
+    "webpack": "^5.105.4",
+    "webpack-assets-manifest": "^6.5.1",
+    "webpack-cli": "^7.0.2"
   }
 }
