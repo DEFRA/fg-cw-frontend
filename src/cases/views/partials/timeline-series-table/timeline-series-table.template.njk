@@ -3,9 +3,7 @@
   {% if not href %}
     <strong>{{ text }} </strong>
   {% else %}
-    <a href="{{ href }}" class="govuk-link"
-      >{{ text }}</a
-    >
+    <a href="{{ href }}" class="govuk-link">{{ text }}</a>
   {% endif %}
 {% endmacro %}
 
@@ -32,9 +30,7 @@
     %}
     {% set tableRows = (tableRows.push(processedRow), tableRows) %}
   {% endfor %}
-  <div
-    class="govuk-!-padding-left-0 govuk-!-margin-top-4"
-  >
+  <div class="govuk-!-padding-left-0 govuk-!-margin-top-4">
     {{
       govukTable({
         head: heads,
