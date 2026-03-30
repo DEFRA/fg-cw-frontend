@@ -5,10 +5,63 @@ import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
 export const updateStageOutcomeUseCase = async (
   authContext,
-  { caseId, actionData: { actionCode, commentFieldName, comment } },
+  { caseId, actionData },
 ) => {
   logger.info(`Updating stage outcome for case ${caseId}`);
 
+  const actionCodeValidation = validateActionCode(actionData.actionCode);
+
+  if (!actionCodeValidation.success) {
+    return actionCodeValidation;
+  }
+
+  const page = await findCaseByIdUseCase(authContext, caseId);
+  const validation = validateStageOutcomeAction(page.data, actionData);
+
+  if (!validation.success) {
+    return validation;
+  }
+
+  const { actionCode, comment } = actionData;
+
+  await updateStageOutcome(authContext, {
+    caseId,
+    actionCode,
+    comment,
+  });
+
+  logger.info(`Finished: Updating stage outcome for case ${caseId}`);
+
+  return { success: true };
+};
+
+export const validateStageOutcomeAction = (caseData, actionData) => {
+  const { actionCode, commentFieldName, comment } = actionData;
+
+  const actionCodeValidation = validateActionCode(actionCode);
+
+  if (!actionCodeValidation.success) {
+    return actionCodeValidation;
+  }
+
+  const action = findSelectedAction(caseData, actionCode);
+
+  if (validComment(action, comment)) {
+    return { success: true };
+  }
+
+  return {
+    success: false,
+    errors: {
+      [commentFieldName]: {
+        text: `${action.comment.label} is required`,
+        href: `#${commentFieldName}`,
+      },
+    },
+  };
+};
+
+const validateActionCode = (actionCode) => {
   if (!actionCode) {
     return {
       success: false,
@@ -21,30 +74,7 @@ export const updateStageOutcomeUseCase = async (
     };
   }
 
-  const page = await findCaseByIdUseCase(authContext, caseId);
-  const action = findSelectedAction(page.data, actionCode);
-
-  if (validComment(action, comment)) {
-    await updateStageOutcome(authContext, {
-      caseId,
-      actionCode,
-      comment,
-    });
-
-    logger.info(`Finished: Updating stage outcome for case ${caseId}`);
-
-    return { success: true };
-  } else {
-    return {
-      success: false,
-      errors: {
-        [commentFieldName]: {
-          text: `${action.comment.label} is required`,
-          href: `#${commentFieldName}`,
-        },
-      },
-    };
-  }
+  return { success: true };
 };
 
 const findSelectedAction = (caseData, actionCode) => {

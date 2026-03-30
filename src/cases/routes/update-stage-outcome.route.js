@@ -1,7 +1,10 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+import {
+  updateStageOutcomeUseCase,
+  validateStageOutcomeAction,
+} from "../use-cases/update-stage-outcome-use.case.js";
 
 const getAuthContext = (request) => ({
   token: request.auth.credentials.token,
@@ -56,6 +59,16 @@ export const updateStageOutcomeRoute = {
     const action = findActionByCode(page, actionCode);
 
     if (action?.confirm) {
+      const { errors } = validateStageOutcomeAction(
+        page.data,
+        extractActionData(payload),
+      );
+
+      if (errors) {
+        setFlashData(request, { errors, formData: payload });
+        return h.redirect(`/cases/${caseId}`);
+      }
+
       return redirectToConfirmation(request, h, caseId, actionCode, payload);
     }
 

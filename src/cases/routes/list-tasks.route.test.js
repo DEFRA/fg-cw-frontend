@@ -2,6 +2,7 @@ import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createMockLinks } from "../../../test/data/case-test-data.js";
+import { getFlashData } from "../../common/helpers/flash-helpers.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { listTasksRoute } from "./list-tasks.route.js";
@@ -121,5 +122,74 @@ describe("listTasksRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
+  });
+
+  it("preserves selected action from flash form data", async () => {
+    getFlashData.mockReturnValue({
+      errors: {
+        "reject-comment": {
+          text: "Explain this decision is required",
+          href: "#reject-comment",
+        },
+      },
+      formData: {
+        actionCode: "reject",
+        "reject-comment": "",
+      },
+    });
+
+    findCaseByIdUseCase.mockResolvedValue(
+      createMockPage({
+        _id: "68495db5afe2d27b09b2ee47",
+        caseRef: "banana-123",
+        links: createMockLinks("68495db5afe2d27b09b2ee47"),
+        stage: {
+          code: "application-receipt",
+          name: "Application Receipt",
+          taskGroups: [],
+          actions: [
+            {
+              code: "approve",
+              name: "Approve",
+              comment: {
+                label: "Explain this decision",
+                helpText: "Give a reason",
+                mandatory: true,
+              },
+            },
+            {
+              code: "reject",
+              name: "Reject",
+              comment: {
+                label: "Explain this decision",
+                helpText: "Give a reason",
+                mandatory: true,
+              },
+            },
+          ],
+        },
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/case-id-123",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+
+    expect($('input[name="actionCode"][value="reject"]').attr("checked")).toBe(
+      "checked",
+    );
+    expect($("#reject-comment").length).toBe(1);
   });
 });

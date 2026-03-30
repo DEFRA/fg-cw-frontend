@@ -25,7 +25,7 @@ export const listTasksRoute = {
       page,
       request,
       errors,
-      formData,
+      values: formData,
     });
 
     logger.info(`Finished: Get tasks for case ${request.params.caseId}`);
