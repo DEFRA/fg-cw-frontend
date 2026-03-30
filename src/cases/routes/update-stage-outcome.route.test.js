@@ -8,6 +8,7 @@ import {
   it,
   vi,
 } from "vitest";
+import { setPendingStageOutcomeConfirmation } from "../../common/helpers/pending-stage-outcome-confirmation-helpers.js";
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
@@ -16,6 +17,7 @@ import { updateStageOutcomeRoute } from "./update-stage-outcome.route.js";
 vi.mock("../use-cases/update-stage-outcome-use.case.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../common/helpers/flash-helpers.js");
+vi.mock("../../common/helpers/pending-stage-outcome-confirmation-helpers.js");
 
 describe("updateStageOutcomeRoute", () => {
   let server;
@@ -127,6 +129,14 @@ describe("updateStageOutcomeRoute", () => {
       expect(statusCode).toBe(302);
       expect(headers.location).toBe(
         "/cases/case-123/stage/outcome/confirm?actionCode=reject",
+      );
+      expect(setPendingStageOutcomeConfirmation).toHaveBeenCalledWith(
+        expect.any(Object),
+        {
+          caseId: "case-123",
+          actionCode: "reject",
+          comment: "Rejection reason",
+        },
       );
       expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
         formData: payload,
