@@ -37,7 +37,9 @@ export const clearPendingStageOutcomeConfirmation = (
     return;
   }
 
-  const { [entryKey]: _removed, ...nextStore } = store;
+  const nextStore = { ...store };
+
+  delete nextStore[entryKey];
 
   request.yar?.set?.(pendingStageOutcomeConfirmationKey, nextStore);
 };
