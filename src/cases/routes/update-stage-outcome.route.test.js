@@ -10,7 +10,10 @@ import {
 } from "vitest";
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+import {
+  updateStageOutcomeUseCase,
+  validateStageOutcomeAction,
+} from "../use-cases/update-stage-outcome-use.case.js";
 import { updateStageOutcomeRoute } from "./update-stage-outcome.route.js";
 
 vi.mock("../use-cases/update-stage-outcome-use.case.js");
@@ -64,6 +67,7 @@ describe("updateStageOutcomeRoute", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     findCaseByIdUseCase.mockResolvedValue(mockCaseDataWithoutConfirm);
+    validateStageOutcomeAction.mockReturnValue({ success: true });
   });
 
   describe("POST /cases/{caseId}/stage/outcome", () => {
@@ -108,6 +112,7 @@ describe("updateStageOutcomeRoute", () => {
 
     it("should redirect to confirmation page when action has confirm property", async () => {
       findCaseByIdUseCase.mockResolvedValue(mockCaseDataWithConfirm);
+      updateStageOutcomeUseCase.mockResolvedValue({ success: true });
 
       const payload = {
         actionCode: "reject",
@@ -131,7 +136,55 @@ describe("updateStageOutcomeRoute", () => {
       expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
         formData: payload,
       });
+      expect(validateStageOutcomeAction).toHaveBeenCalledWith(
+        mockCaseDataWithConfirm.data,
+        {
+          actionCode: "reject",
+          commentFieldName: "reject-comment",
+          comment: "Rejection reason",
+        },
+      );
       expect(updateStageOutcomeUseCase).not.toHaveBeenCalled();
+    });
+
+    it("should redirect back to case page when confirm action validation fails", async () => {
+      findCaseByIdUseCase.mockResolvedValue(mockCaseDataWithConfirm);
+      validateStageOutcomeAction.mockReturnValue({
+        success: false,
+        errors: {
+          "reject-comment": {
+            text: "Rejection reason is required",
+            href: "#reject-comment",
+          },
+        },
+      });
+
+      const payload = {
+        actionCode: "reject",
+        "reject-comment": "",
+      };
+
+      const { statusCode, headers } = await server.inject({
+        method: "POST",
+        url: "/cases/case-123/stage/outcome",
+        payload,
+        auth: {
+          credentials: { token: "mock-token", user: {} },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe("/cases/case-123");
+      expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
+        errors: {
+          "reject-comment": {
+            text: "Rejection reason is required",
+            href: "#reject-comment",
+          },
+        },
+        formData: payload,
+      });
     });
 
     it("should handle validation errors and redirect with flash data", async () => {
