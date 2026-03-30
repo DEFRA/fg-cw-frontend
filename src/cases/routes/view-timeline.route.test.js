@@ -40,6 +40,7 @@ describe("timelineRoute", () => {
         currentStage: "application-receipt",
         currentStatus: "NEW",
         links: createMockLinks("68495db5afe2d27b09b2ee47"),
+        caseSeries: { length: 1 },
         payload: {
           clientRef: "banana-123",
           code: "frps-private-beta",

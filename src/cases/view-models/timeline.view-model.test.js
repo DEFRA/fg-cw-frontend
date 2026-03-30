@@ -24,6 +24,7 @@ describe("Timeline view model", () => {
       assignedUser: "Dumbledore",
       timeline: [],
       banner: {},
+      caseSeries: { length: 1 },
       links: createMockLinks("0999091983"),
       payload: {
         identifiers: {
@@ -92,6 +93,9 @@ describe("Timeline view model", () => {
           },
           timeline: [],
           banner: {},
+          caseSeries: {
+            length: 1,
+          },
         },
       },
     };
@@ -108,5 +112,48 @@ describe("Timeline view model", () => {
       links: expected.links,
       data: expected.data,
     });
+  });
+
+  it("should return caseSeries data when there are multiple cases in the series", () => {
+    const seriesDetails = [
+      {
+        caseRef: "ABC-122",
+        dateReceived: "2025-01-01T00:00:00.000Z",
+        dateClosed: "2025-03-01T00:00:00.000Z",
+        status: "CLOSED",
+        link: { href: "/cases/111", text: "View" },
+      },
+      {
+        caseRef: "ABC-123",
+        dateReceived: "2025-06-16T09:01:14.072Z",
+        dateClosed: null,
+        status: "NEW",
+        link: { href: null, text: "ABC-123" },
+      },
+    ];
+
+    const caseItem = {
+      caseRef: "ABC-123",
+      workflowCode: "wf-123",
+      _id: "0999091983",
+      currentStatus: "great",
+      dateReceived: { $date: "2025-06-16T09:01:14.072Z" },
+      assignedUser: "Dumbledore",
+      timeline: [],
+      banner: {},
+      caseSeries: { seriesDetails },
+      links: createMockLinks("0999091983"),
+      payload: {
+        identifiers: { sbi: "HHG-1", submittedAt: "2025-03-28T11:30:52.000Z" },
+        answers: { scheme: "JKI-009", agreementName: "Donald's Agreement" },
+      },
+    };
+
+    const result = createTimelineViewModel({
+      page: createMockPage(caseItem),
+      request: mockRequest,
+    });
+
+    expect(result.data.case.caseSeries).toEqual({ seriesDetails });
   });
 });
