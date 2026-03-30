@@ -12,9 +12,6 @@ import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
 import { createConfirmStageOutcomeViewModel } from "../view-models/confirm-stage-outcome.view-model.js";
 
-const confirmStageOutcomePath = (caseId, actionCode) =>
-  `/cases/${caseId}/stage/outcome/confirm?actionCode=${actionCode}`;
-
 const redirectToCaseWithExpiredMessage = (request, h, caseId) => {
   setFlashNotification(request, {
     type: "warning",
@@ -64,7 +61,7 @@ const resolvePendingConfirmation = (
 };
 
 const redirectToConfirmPage = (h, caseId, actionCode) =>
-  h.redirect(confirmStageOutcomePath(caseId, actionCode));
+  h.redirect(`/cases/${caseId}/stage/outcome/confirm?actionCode=${actionCode}`);
 
 const withPendingConfirmation = (
   request,
