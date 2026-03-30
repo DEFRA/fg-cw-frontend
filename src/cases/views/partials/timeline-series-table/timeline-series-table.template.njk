@@ -1,0 +1,41 @@
+{% from "govuk/components/table/macro.njk" import govukTable %}
+{% macro idLink(href, text) %}
+  {% if not href %}
+    <strong>{{ text }} </strong>
+  {% else %}
+    <a href="{{ href }}" class="govuk-link">{{ text }}</a>
+  {% endif %}
+{% endmacro %}
+
+{% if params.seriesDetails.length > 1 %}
+  {% set tableRows = [] %}
+  {%
+    set heads = [
+      { text: "ID" },
+      { text: "Date Received" },
+      { text: "Date Ended" },
+      { text: "Status" },
+      {}
+    ]
+  %}
+  {% for row in params.seriesDetails %}
+    {%
+      set processedRow = [
+        { text: row.caseRef },
+        { text: row.dateReceived | formatDate("d MMM yyyy")},
+        { text: row.dateClosed | formatDate("d MMM yyyy") },
+        { html: row.status },
+        { html: idLink(row.link.href, row.link.text) }
+      ]
+    %}
+    {% set tableRows = (tableRows.push(processedRow), tableRows) %}
+  {% endfor %}
+  <div class="govuk-!-padding-left-0 govuk-!-margin-top-4">
+    {{
+      govukTable({
+        head: heads,
+        rows: tableRows
+      })
+    }}
+  </div>
+{% endif %}
