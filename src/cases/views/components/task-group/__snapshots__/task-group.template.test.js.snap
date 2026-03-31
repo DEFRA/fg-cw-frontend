@@ -9,8 +9,8 @@ exports[`task-group > renders 1`] = `
     </h2>
 
 
-      <h3 class="govuk-heading-m">Group 1</h3>
-      
+        <h3 class="govuk-heading-m">Group 1</h3>
+        
   <ul
     class="govuk-task-list govuk-!-margin-bottom-6"
     data-testid="taskList-list"

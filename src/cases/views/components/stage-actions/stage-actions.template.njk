@@ -15,7 +15,8 @@
         govukButton({
           name: params.stage.actions.name,
           text: item.text,
-          value: item.value
+          value: item.value,
+          classes: item.classes
         })
       }}
     {% else %}
