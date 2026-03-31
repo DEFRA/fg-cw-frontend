@@ -131,6 +131,7 @@ describe("case-list.model", () => {
             },
           },
         },
+        hasLinkedCases: true,
         currentStatus: "NEW",
         currentStatusTheme: "INFO",
         assignedUser: {
@@ -142,6 +143,7 @@ describe("case-list.model", () => {
         _id: "case-2",
         caseRef: "CASE-REF-002",
         createdAt: "2021-03-15T00:00:00.000Z",
+        hasLinkedCases: false,
         payload: {
           identifiers: {
             sbi: "987654321",
@@ -178,6 +180,7 @@ describe("case-list.model", () => {
               data: {
                 head: [
                   { text: "Select" },
+                  { html: expect.stringContaining("Linked cases") },
                   {
                     html: expect.stringContaining("ID"),
                     attributes: { "aria-sort": "none" },
@@ -211,6 +214,7 @@ describe("case-list.model", () => {
                       href: "/cases/case-1",
                       text: "CASE-REF-001",
                     },
+                    linked: { html: expect.stringContaining("Linked case") },
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
                     submitted: {
@@ -222,6 +226,9 @@ describe("case-list.model", () => {
                   {
                     _id: "case-2",
                     select: { value: "case-2" },
+                    linked: {
+                      html: expect.stringContaining("Case not linked"),
+                    },
                     id: {
                       href: "/cases/case-2",
                       text: "CASE-REF-002",
@@ -420,6 +427,7 @@ describe("table structure mapping", () => {
             },
           },
         },
+        hasLinkedCases: true,
         currentStatus: "NEW",
         currentStatusTheme: "INFO",
         assignedUser: { name: "Test User" },
@@ -434,6 +442,7 @@ describe("table structure mapping", () => {
 
     expect(tableData.head).toEqual([
       { text: "Select" },
+      { html: expect.stringContaining("Linked cases") },
       {
         html: expect.stringContaining("ID"),
         attributes: {
@@ -481,6 +490,9 @@ describe("table structure mapping", () => {
         href: "/cases/test-case-id",
         text: "CASE-REF-123",
       },
+      linked: {
+        html: expect.stringContaining("Linked case"),
+      },
       business: { text: "[business name]" },
       sbi: { text: "555666777" },
       submitted: {
@@ -526,7 +538,7 @@ describe("sortable headers", () => {
       page: createMockPage([]),
       request: mockRequest,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[2];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
     expect(idHeader.attributes["aria-sort"]).toBe("none");
@@ -542,7 +554,7 @@ describe("sortable headers", () => {
       page: createMockPage([]),
       request,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[2];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=desc"');
     expect(idHeader.attributes["aria-sort"]).toBe("ascending");
@@ -558,7 +570,7 @@ describe("sortable headers", () => {
       page: createMockPage([]),
       request,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[2];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
     expect(idHeader.attributes["aria-sort"]).toBe("descending");
@@ -574,7 +586,7 @@ describe("sortable headers", () => {
       page: createMockPage([]),
       request,
     });
-    const submittedHeader = result.data.tabItems[0].data.head[4];
+    const submittedHeader = result.data.tabItems[0].data.head[5];
 
     expect(submittedHeader.html).toContain('href="/cases?createdAt=desc"');
     expect(submittedHeader.attributes["aria-sort"]).toBe("ascending");
