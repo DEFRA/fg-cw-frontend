@@ -32,6 +32,7 @@
   {%
     set processedRow = [
       { html: radio({ name: "caseId", value: row.select.value }) },
+      row.linked,
       { html: idLink(row.id.href, row.id.text), attributes: row.id.attributes },
       row.business,
       row.sbi,
