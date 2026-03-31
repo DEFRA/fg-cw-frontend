@@ -51,6 +51,12 @@
           govukRadios({
             name: "confirmation",
             idPrefix: "confirmation",
+            fieldset: {
+              legend: {
+                text: data.confirmConfig.title,
+                classes: "govuk-visually-hidden"
+              }
+            },
             errorMessage: errors.confirmation,
             items: [
               {
