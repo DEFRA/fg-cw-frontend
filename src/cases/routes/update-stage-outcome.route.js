@@ -1,7 +1,11 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { setPendingStageOutcomeConfirmation } from "../../common/helpers/pending-stage-outcome-confirmation-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+import {
+  updateStageOutcomeUseCase,
+  validateStageOutcomeAction,
+} from "../use-cases/update-stage-outcome-use.case.js";
 
 const getAuthContext = (request) => ({
   token: request.auth.credentials.token,
@@ -12,6 +16,13 @@ const findActionByCode = (page, actionCode) =>
   page.data?.stage?.actions?.find((a) => a.code === actionCode);
 
 const redirectToConfirmation = (request, h, caseId, actionCode, payload) => {
+  const { comment } = extractActionData(payload);
+
+  setPendingStageOutcomeConfirmation(request, {
+    caseId,
+    actionCode,
+    comment,
+  });
   setFlashData(request, { formData: payload });
   logger.info(`Redirecting to confirmation page for action ${actionCode}`);
   return h.redirect(
@@ -56,6 +67,16 @@ export const updateStageOutcomeRoute = {
     const action = findActionByCode(page, actionCode);
 
     if (action?.confirm) {
+      const { errors } = validateStageOutcomeAction(
+        page.data,
+        extractActionData(payload),
+      );
+
+      if (errors) {
+        setFlashData(request, { errors, formData: payload });
+        return h.redirect(`/cases/${caseId}`);
+      }
+
       return redirectToConfirmation(request, h, caseId, actionCode, payload);
     }
 
