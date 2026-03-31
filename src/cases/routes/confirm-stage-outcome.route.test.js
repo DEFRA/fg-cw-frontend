@@ -1,4 +1,5 @@
 import hapi from "@hapi/hapi";
+import { load } from "cheerio";
 import {
   afterAll,
   beforeAll,
@@ -78,12 +79,31 @@ describe("confirmStageOutcomeRoute", () => {
     findCaseByIdUseCase.mockResolvedValue(mockCaseData);
     createConfirmStageOutcomeViewModel.mockReturnValue({
       pageTitle: "Confirm",
-      data: { caseId: "case-123" },
+      data: {
+        caseId: "case-123",
+        actionCode: "REJECT_APPLICATION",
+        comment: "Stored comment",
+        confirmConfig: {
+          title: "Return application to customer",
+          details: [],
+          yes: {
+            label: "Yes",
+            components: null,
+          },
+          no: {
+            label: "No",
+            components: null,
+          },
+        },
+      },
+      errors: {},
+      errorList: [],
+      values: {},
     });
   });
 
   describe("GET /cases/{caseId}/stage/outcome/confirm", () => {
-    it("should render confirmation page", async () => {
+    it("should get confirmation page data", async () => {
       const { statusCode } = await server.inject({
         method: "GET",
         url: "/cases/case-123/stage/outcome/confirm?actionCode=REJECT_APPLICATION",
@@ -108,6 +128,27 @@ describe("confirmStageOutcomeRoute", () => {
         formData: { comment: "Stored comment" },
         errors: null,
       });
+    });
+
+    it("should render confirmation page", async () => {
+      const { result, statusCode } = await server.inject({
+        method: "GET",
+        url: "/cases/case-123/stage/outcome/confirm?actionCode=REJECT_APPLICATION",
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: { id: "user-1" },
+          },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(200);
+
+      const $ = load(result);
+      const view = $("#main-content").html();
+
+      expect(view).toMatchSnapshot();
     });
 
     it("should pass flash data to view model", async () => {
