@@ -79,6 +79,12 @@
               name: "confirmation",
               idPrefix: "confirmation",
               errorMessage: errors.confirmation,
+              fieldset: {
+                legend: {
+                  text: data.confirmConfig.title,
+                  classes: "govuk-visually-hidden"
+                }
+              },
               items: [
                 {
                   value: "yes",
