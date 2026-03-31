@@ -72,6 +72,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
       text: action.name,
       checked,
       conditional,
+      classes: action.classes,
     };
   }) || [];
 

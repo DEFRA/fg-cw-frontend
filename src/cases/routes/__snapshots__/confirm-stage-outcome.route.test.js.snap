@@ -53,7 +53,7 @@ exports[`confirmStageOutcomeRoute > GET /cases/{caseId}/stage/outcome/confirm > 
 
 
 
-        <div class="govuk-form-group">
+          <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
   <legend class="govuk-fieldset__legend govuk-visually-hidden">
     Return application to customer
