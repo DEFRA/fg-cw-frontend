@@ -1,0 +1,90 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`confirmStageOutcomeRoute > GET /cases/{caseId}/stage/outcome/confirm > should render confirmation page 1`] = `
+"
+    
+
+<div class="app-case-banner">
+  <div class="govuk-width-container">
+    <div class="app-case-banner__top govuk-!-margin-bottom-4">
+      <div class="app-case-banner__title">
+        <a href="/cases" class="govuk-back-link">Back to applications</a>
+        <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
+          
+        </h1>
+      </div>
+    </div>
+    <div>
+      <div class="app-case-row">
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    
+
+
+  
+  <div class="govuk-service-navigation govuk-!-margin-top-5 govuk-!-margin-bottom-8" data-module="govuk-service-navigation">
+      <div class="govuk-width-container">
+
+    <div class="govuk-service-navigation__container">
+      
+
+      
+    </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form method="POST" action="/cases/case-123/stage/outcome/confirm">
+        <input type="hidden" name="actionCode" value="REJECT_APPLICATION">
+        <input type="hidden" name="comment" value="Stored comment">
+
+          <h1 class="govuk-heading-l">Return application to customer</h1>
+
+
+
+
+
+        <div class="govuk-form-group">
+  <fieldset class="govuk-fieldset">
+  <legend class="govuk-fieldset__legend govuk-visually-hidden">
+    Return application to customer
+  </legend>
+  <div class="govuk-radios" data-module="govuk-radios">
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="confirmation" name="confirmation" type="radio" value="yes">
+      <label class="govuk-label govuk-radios__label" for="confirmation">
+        Yes
+      </label>
+    </div>
+    <div class="govuk-radios__item">
+      <input class="govuk-radios__input" id="confirmation-2" name="confirmation" type="radio" value="no">
+      <label class="govuk-label govuk-radios__label" for="confirmation-2">
+        No
+      </label>
+    </div>
+  </div>
+</fieldset>
+</div>
+
+
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+  Confirm
+</button>
+      </form>
+
+      <p class="govuk-body">
+        <a href="/cases/case-123" class="govuk-link">Cancel and return</a>
+      </p>
+    </div>
+  </div>
+        "
+`;
