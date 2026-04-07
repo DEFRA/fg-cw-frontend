@@ -16,60 +16,7 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
 
 vi.mock("../../common/view-models/header.view-model.js");
 
-describe("createTaskDetailViewModel", () => {
-  const mockRequest = { path: "/cases/case123/tasks/group1/task1" };
-
-  const createMockPage = (caseData) => ({
-    data: caseData,
-    header: { navItems: [] },
-  });
-
-  const mockCaseData = {
-    _id: "case123",
-    caseRef: "REF123",
-    workflowCode: "workflow1",
-    currentPhase: "phase1",
-    currentStage: "stage1",
-    currentStatus: "active",
-    dateReceived: "2024-01-01",
-    assignedUser: "user123",
-    banner: { type: "info", message: "Test banner" },
-    links: [
-      { id: "tasks", text: "Tasks", href: "/tasks" },
-      { id: "details", text: "Details", href: "/details" },
-    ],
-    payload: {
-      submittedAt: "2024-01-01T10:00:00Z",
-      identifiers: { sbi: "SBI123" },
-      answers: { scheme: "Test Scheme" },
-    },
-    stage: {
-      code: "stage1",
-      taskGroups: [
-        {
-          code: "group1",
-          tasks: [
-            {
-              code: "task1",
-              status: "complete",
-              commentRef: "comment1",
-              requiredRoles: { allOf: ["role1"], anyOf: [] },
-              canComplete: true,
-            },
-          ],
-        },
-      ],
-    },
-    comments: [{ ref: "comment1", text: "Test comment" }],
-  };
-
-  const mockQuery = {
-    taskGroupCode: "group1",
-    taskCode: "task1",
-  };
-
-  const mockErrors = { field1: "Error message" };
-
+describe("mapStatusOptions", () => {
   it("should use statusOption comment if it is defined", () => {
     const result = mapStatusOptions({
       statusOptions: [
@@ -161,6 +108,61 @@ describe("createTaskDetailViewModel", () => {
       required: false,
     });
   });
+});
+
+describe("createTaskDetailViewModel", () => {
+  const mockRequest = { path: "/cases/case123/tasks/group1/task1" };
+
+  const createMockPage = (caseData) => ({
+    data: caseData,
+    header: { navItems: [] },
+  });
+
+  const mockCaseData = {
+    _id: "case123",
+    caseRef: "REF123",
+    workflowCode: "workflow1",
+    currentPhase: "phase1",
+    currentStage: "stage1",
+    currentStatus: "active",
+    dateReceived: "2024-01-01",
+    assignedUser: "user123",
+    banner: { type: "info", message: "Test banner" },
+    links: [
+      { id: "tasks", text: "Tasks", href: "/tasks" },
+      { id: "details", text: "Details", href: "/details" },
+    ],
+    payload: {
+      submittedAt: "2024-01-01T10:00:00Z",
+      identifiers: { sbi: "SBI123" },
+      answers: { scheme: "Test Scheme" },
+    },
+    stage: {
+      code: "stage1",
+      taskGroups: [
+        {
+          code: "group1",
+          tasks: [
+            {
+              code: "task1",
+              status: "complete",
+              commentRef: "comment1",
+              requiredRoles: { allOf: ["role1"], anyOf: [] },
+              canComplete: true,
+            },
+          ],
+        },
+      ],
+    },
+    comments: [{ ref: "comment1", text: "Test comment" }],
+  };
+
+  const mockQuery = {
+    taskGroupCode: "group1",
+    taskCode: "task1",
+  };
+
+  const mockErrors = { field1: "Error message" };
 
   it("should create a complete view model", () => {
     const result = createTaskDetailViewModel({

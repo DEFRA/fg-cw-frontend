@@ -89,7 +89,7 @@ export const mapStatusOptions = ({
 
     const conditional = createConditionalTextarea({
       statusCode: option.code,
-      commentInputDef: option.comment ? option.comment : commentInputDef,
+      commentInputDef: option.comment ?? commentInputDef,
       commentText,
       commentError,
     });
