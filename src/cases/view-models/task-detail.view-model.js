@@ -65,7 +65,7 @@ const getInitialCommentValue = ({
   return "";
 };
 
-const mapStatusOptions = ({
+export const mapStatusOptions = ({
   statusOptions,
   currentStatus,
   commentInputDef,
@@ -89,7 +89,7 @@ const mapStatusOptions = ({
 
     const conditional = createConditionalTextarea({
       statusCode: option.code,
-      commentInputDef,
+      commentInputDef: option.comment ? option.comment : commentInputDef,
       commentText,
       commentError,
     });
