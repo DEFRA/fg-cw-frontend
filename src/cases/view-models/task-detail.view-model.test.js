@@ -23,7 +23,7 @@ describe("mapStatusOptions", () => {
         {
           code: "complete",
           name: "Complete",
-          comment: {
+          commentInputDef: {
             label: "Option-specific comment",
             helpText: "Option-specific help text",
             mandatory: true,
@@ -75,7 +75,7 @@ describe("mapStatusOptions", () => {
         {
           code: "approved",
           name: "Approved",
-          comment: {
+          commentInputDef: {
             label: "Approval notes",
             helpText: "Explain why approved",
             mandatory: true,
