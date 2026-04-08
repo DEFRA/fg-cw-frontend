@@ -1,5 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
-import { createTaskDetailViewModel } from "./task-detail.view-model.js";
+import {
+  createTaskDetailViewModel,
+  mapStatusOptions,
+} from "./task-detail.view-model.js";
 
 vi.mock("../../common/helpers/date-helpers.js", () => ({
   getFormattedGBDate: vi.fn((date) => `formatted-${date}`),
@@ -12,6 +15,100 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
 }));
 
 vi.mock("../../common/view-models/header.view-model.js");
+
+describe("mapStatusOptions", () => {
+  it("should use statusOption comment if it is defined", () => {
+    const result = mapStatusOptions({
+      statusOptions: [
+        {
+          code: "complete",
+          name: "Complete",
+          commentInputDef: {
+            label: "Option-specific comment",
+            helpText: "Option-specific help text",
+            mandatory: true,
+          },
+        },
+      ],
+      currentStatus: "complete",
+      commentInputDef: {
+        label: "Default comment",
+        helpText: "Default help text",
+        mandatory: false,
+      },
+      currentTaskComment: null,
+      formData: {},
+      errors: {},
+    });
+
+    expect(result[0].conditional).toMatchObject({
+      label: { text: "Option-specific comment" },
+      hint: { text: "Option-specific help text" },
+      required: true,
+    });
+  });
+
+  it("should fallback to commentInputDef when option comment is not defined", () => {
+    const result = mapStatusOptions({
+      statusOptions: [{ code: "complete", name: "Complete" }],
+      currentStatus: "complete",
+      commentInputDef: {
+        label: "Default comment",
+        helpText: "Default help text",
+        mandatory: false,
+      },
+      currentTaskComment: null,
+      formData: {},
+      errors: {},
+    });
+
+    expect(result[0].conditional).toMatchObject({
+      label: { text: "Default comment" },
+      hint: { text: "Default help text" },
+      required: false,
+    });
+  });
+
+  it("should apply comment definitions per status option", () => {
+    const result = mapStatusOptions({
+      statusOptions: [
+        {
+          code: "approved",
+          name: "Approved",
+          commentInputDef: {
+            label: "Approval notes",
+            helpText: "Explain why approved",
+            mandatory: true,
+          },
+        },
+        { code: "rejected", name: "Rejected" },
+      ],
+      currentStatus: "approved",
+      commentInputDef: {
+        label: "General comment",
+        helpText: "Optional details",
+        mandatory: false,
+      },
+      currentTaskComment: null,
+      formData: {},
+      errors: {},
+    });
+
+    const approvedOption = result.find((option) => option.value === "approved");
+    const rejectedOption = result.find((option) => option.value === "rejected");
+
+    expect(approvedOption.conditional).toMatchObject({
+      label: { text: "Approval notes" },
+      hint: { text: "Explain why approved" },
+      required: true,
+    });
+    expect(rejectedOption.conditional).toMatchObject({
+      label: { text: "General comment" },
+      hint: { text: "Optional details" },
+      required: false,
+    });
+  });
+});
 
 describe("createTaskDetailViewModel", () => {
   const mockRequest = { path: "/cases/case123/tasks/group1/task1" };
