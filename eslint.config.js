@@ -11,6 +11,7 @@ export default [
   {
     files: ["src/**/*"],
     rules: {
+      curly: "error",
       "func-style": ["error", "expression"],
       "no-console": "error",
       complexity: ["error", { max: 4 }],
