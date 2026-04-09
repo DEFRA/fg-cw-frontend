@@ -110,7 +110,7 @@ const mapCasesToTable = (cases, currentURL) => {
         html: `${linkIcon} <span class="govuk-visually-hidden">Linked cases</span>`,
       },
       getSortableHeader({
-        text: "Case Type",
+        text: "Type",
         field: "workflowCode",
         currentURL,
       }),

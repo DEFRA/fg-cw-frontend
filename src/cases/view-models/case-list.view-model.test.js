@@ -184,7 +184,7 @@ describe("case-list.model", () => {
                   { text: "Select" },
                   { html: expect.stringContaining("Linked cases") },
                   {
-                    html: expect.stringContaining("Case Type"),
+                    html: expect.stringContaining("Type"),
                     attributes: { "aria-sort": "none" },
                   },
                   {
@@ -458,7 +458,7 @@ describe("table structure mapping", () => {
       { text: "Select" },
       { html: expect.stringContaining("Linked cases") },
       {
-        html: expect.stringContaining("Case Type"),
+        html: expect.stringContaining("Type"),
         attributes: {
           "aria-sort": "none",
         },
