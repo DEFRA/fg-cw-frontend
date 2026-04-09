@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
@@ -191,5 +191,152 @@ describe("createUserDetailsViewModel", () => {
     expect(viewModel.data.editRolesHref).toEqual(
       "/admin/user-management/users/user-123/roles",
     );
+  });
+
+  describe("app role filtering by date", () => {
+    const findRow = (rows, keyText) =>
+      rows.find((row) => row.key.text === keyText);
+
+    beforeEach(() => {
+      vi.useFakeTimers();
+      vi.setSystemTime(new Date("2025-06-01"));
+    });
+
+    afterEach(() => {
+      vi.useRealTimers();
+    });
+
+    it("splits roles into active, expired and future rows", () => {
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_ACTIVE: { startDate: "2005-01-01", endDate: "2026-01-01" },
+            ROLE_EXPIRED: { startDate: "2005-01-01", endDate: "2025-01-01" },
+            ROLE_FUTURE: { startDate: "2026-01-01", endDate: "2027-01-01" },
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.html).toEqual(
+        "ROLE_ACTIVE",
+      );
+      expect(findRow(rows, "Expired Manage grants roles").value.html).toEqual(
+        "ROLE_EXPIRED",
+      );
+      expect(findRow(rows, "Future Manage grants roles").value.html).toEqual(
+        "ROLE_FUTURE",
+      );
+    });
+
+    it("omits expired and future rows when no roles match", () => {
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_NO_END: { startDate: "2005-01-01" },
+            ROLE_EMPTY: {},
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.html).toEqual(
+        "ROLE_NO_END,<br>ROLE_EMPTY",
+      );
+      expect(findRow(rows, "Expired Manage grants roles")).toBeUndefined();
+      expect(findRow(rows, "Future Manage grants roles")).toBeUndefined();
+    });
+
+    it("shows future row and omits expired row when only future roles exist", () => {
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_FUTURE: { startDate: "2026-01-01" },
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.text).toEqual(
+        "No Manage grants roles have been allocated to this user",
+      );
+      expect(findRow(rows, "Expired Manage grants roles")).toBeUndefined();
+      expect(findRow(rows, "Future Manage grants roles").value.html).toEqual(
+        "ROLE_FUTURE",
+      );
+    });
+
+    it("treats a role as active on its endDate", () => {
+      vi.setSystemTime(new Date("2025-06-01T14:30:00"));
+
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_ENDS_TODAY: { startDate: "2025-01-01", endDate: "2025-06-01" },
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.html).toEqual(
+        "ROLE_ENDS_TODAY",
+      );
+      expect(findRow(rows, "Expired Manage grants roles")).toBeUndefined();
+    });
+
+    it("shows expired row and omits future row when all roles are expired", () => {
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_EXPIRED_A: { endDate: "2024-01-01" },
+            ROLE_EXPIRED_B: { endDate: "2023-06-15" },
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.text).toEqual(
+        "No Manage grants roles have been allocated to this user",
+      );
+      expect(findRow(rows, "Expired Manage grants roles").value.html).toEqual(
+        "ROLE_EXPIRED_A,<br>ROLE_EXPIRED_B",
+      );
+      expect(findRow(rows, "Future Manage grants roles")).toBeUndefined();
+    });
   });
 });
