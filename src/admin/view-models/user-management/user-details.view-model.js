@@ -8,14 +8,6 @@ export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
   const user = page.data;
   const idpRoles = mapIdpRoles(user.idpRoles);
   const appRoles = Object.keys(user.appRoles || {});
-  const idpRolesValue = formatRolesValue(
-    idpRoles,
-    "No IDP roles have been allocated to this user",
-  );
-  const appRolesValue = formatRolesValue(
-    appRoles,
-    "No Manage grants roles have been allocated to this user",
-  );
   const pageHeading = `${user.name} details`;
 
   return {
@@ -29,34 +21,54 @@ export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
     ],
     backLink: "/admin/user-management/users",
     data: {
-      summary: {
-        rows: [
-          {
-            key: { text: "Email" },
-            value: { text: user.email },
-          },
-          {
-            key: { text: "Last login" },
-            value: {
-              text: formatDate(user.lastLoginAt, DATE_FORMAT_FULL_DATE_TIME),
-            },
-          },
-          {
-            key: { text: "Identity provider (IDP) roles" },
-            value: idpRolesValue,
-          },
-          {
-            key: { text: "Manage grants roles" },
-            value: appRolesValue,
-          },
-        ],
-      },
+      summary: { rows: buildSummaryRows(user, idpRoles) },
       idpRoles,
       appRoles,
       showEditRoles: canEditRoles(user.id, currentUser),
       editRolesHref: `/admin/user-management/users/${user.id}/roles`,
     },
   };
+};
+
+const buildSummaryRows = (user, idpRoles) => {
+  const activeAppRoles = Object.keys(filterActiveAppRoles(user.appRoles));
+  const expiredAppRoles = Object.keys(filterExpiredAppRoles(user.appRoles));
+  const futureAppRoles = Object.keys(filterFutureAppRoles(user.appRoles));
+
+  return [
+    {
+      key: { text: "Email" },
+      value: { text: user.email },
+    },
+    {
+      key: { text: "Last login" },
+      value: {
+        text: formatDate(user.lastLoginAt, DATE_FORMAT_FULL_DATE_TIME),
+      },
+    },
+    {
+      key: { text: "Identity provider (IDP) roles" },
+      value: formatRolesValue(
+        idpRoles,
+        "No IDP roles have been allocated to this user",
+      ),
+    },
+    {
+      key: { text: "Manage grants roles" },
+      value: formatRolesValue(
+        activeAppRoles,
+        "No Manage grants roles have been allocated to this user",
+      ),
+    },
+    expiredAppRoles.length && {
+      key: { text: "Expired Manage grants roles" },
+      value: { html: expiredAppRoles.join(",<br>") },
+    },
+    futureAppRoles.length && {
+      key: { text: "Future Manage grants roles" },
+      value: { html: futureAppRoles.join(",<br>") },
+    },
+  ].filter(Boolean);
 };
 
 const mapIdpRoles = (idpRoles) =>
@@ -68,6 +80,43 @@ const formatRolesValue = (roles, emptyMessage) => {
   }
 
   return { html: roles.join(",<br>") };
+};
+
+const isBeforeNow = (dateStr, now) => dateStr && new Date(dateStr) < now;
+
+const isAfterNow = (dateStr, now) => dateStr && new Date(dateStr) > now;
+
+const filterActiveAppRoles = (appRoles) => {
+  if (!appRoles) return {};
+
+  const now = new Date();
+  return Object.fromEntries(
+    Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
+      return !isAfterNow(startDate, now) && !isBeforeNow(endDate, now);
+    }),
+  );
+};
+
+const filterExpiredAppRoles = (appRoles) => {
+  if (!appRoles) return {};
+
+  const now = new Date();
+  return Object.fromEntries(
+    Object.entries(appRoles).filter(([, { endDate } = {}]) => {
+      return isBeforeNow(endDate, now);
+    }),
+  );
+};
+
+const filterFutureAppRoles = (appRoles) => {
+  if (!appRoles) return {};
+
+  const now = new Date();
+  return Object.fromEntries(
+    Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
+      return isAfterNow(startDate, now) && !isBeforeNow(endDate, now);
+    }),
+  );
 };
 
 const canEditRoles = (userId, currentUser) => {
