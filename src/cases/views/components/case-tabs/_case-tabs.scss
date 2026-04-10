@@ -1,6 +1,20 @@
 @use "govuk-frontend" as *;
 
+.govuk-width-container:has(.app-case-list-page) {
+  max-width: none;
+}
+
+.app-case-list-page {
+  width: fit-content;
+  max-width: 80vw;
+  margin-inline: auto;
+}
+
 .case-tabs {
+  .govuk-table {
+    width: 100%;
+  }
+
   [aria-sort] a,
   [aria-sort] a:hover {
     display: inline-flex;
@@ -21,6 +35,13 @@
     text-decoration: none;
     cursor: pointer;
     align-items: center;
+  }
+
+  .govuk-tag {
+    display: inline-block;
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: anywhere;
   }
 
   [aria-sort] a:focus {
