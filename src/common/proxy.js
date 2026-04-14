@@ -1,4 +1,4 @@
-import { bootstrap } from "global-agent";
+import { bootstrap } from "global-agent/bootstrap.js";
 import { config } from "./config.js";
 
 bootstrap();
