@@ -21,7 +21,7 @@ export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
     data: {
       tabItems: [
         {
-          label: `SFI applications (${page.data.pagination.totalCount})`,
+          label: `All cases (${page.data.pagination.totalCount})`,
           id: "all-cases",
           data: casesTable,
         },
@@ -110,6 +110,11 @@ const mapCasesToTable = (cases, currentURL) => {
         html: `${linkIcon} <span class="govuk-visually-hidden">Linked cases</span>`,
       },
       getSortableHeader({
+        text: "Type",
+        field: "workflowCode",
+        currentURL,
+      }),
+      getSortableHeader({
         text: "ID",
         field: "caseRef",
         currentURL,
@@ -128,6 +133,7 @@ const mapCasesToTable = (cases, currentURL) => {
       ({
         _id,
         caseRef,
+        workflowCode,
         payload,
         createdAt,
         currentStatus,
@@ -142,6 +148,9 @@ const mapCasesToTable = (cases, currentURL) => {
         },
         linked: {
           html: getLinkedHtml(hasLinkedCases),
+        },
+        caseType: {
+          text: mapText(workflowCode),
         },
         id: {
           href: `/cases/${_id}`,

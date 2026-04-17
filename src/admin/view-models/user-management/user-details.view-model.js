@@ -1,3 +1,4 @@
+import { isBefore, isAfter, startOfDay } from "date-fns";
 import {
   DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
@@ -35,7 +36,7 @@ const buildSummaryRows = (user, idpRoles) => {
   const expiredAppRoles = Object.keys(filterExpiredAppRoles(user.appRoles));
   const futureAppRoles = Object.keys(filterFutureAppRoles(user.appRoles));
 
-  return [
+  const rows = [
     {
       key: { text: "Email" },
       value: { text: user.email },
@@ -60,15 +61,23 @@ const buildSummaryRows = (user, idpRoles) => {
         "No Manage grants roles have been allocated to this user",
       ),
     },
-    expiredAppRoles.length && {
+  ];
+
+  if (expiredAppRoles.length) {
+    rows.push({
       key: { text: "Expired Manage grants roles" },
-      value: { html: expiredAppRoles.join(",<br>") },
-    },
-    futureAppRoles.length && {
+      value: formatRolesValue(expiredAppRoles, ""),
+    });
+  }
+
+  if (futureAppRoles.length) {
+    rows.push({
       key: { text: "Future Manage grants roles" },
-      value: { html: futureAppRoles.join(",<br>") },
-    },
-  ].filter(Boolean);
+      value: formatRolesValue(futureAppRoles, ""),
+    });
+  }
+
+  return rows;
 };
 
 const mapIdpRoles = (idpRoles) =>
@@ -82,39 +91,47 @@ const formatRolesValue = (roles, emptyMessage) => {
   return { html: roles.join(",<br>") };
 };
 
-const isBeforeNow = (dateStr, now) => dateStr && new Date(dateStr) < now;
+const hasStarted = (startDate, today) =>
+  !startDate || !isAfter(new Date(startDate), today);
 
-const isAfterNow = (dateStr, now) => dateStr && new Date(dateStr) > now;
+const hasExpired = (endDate, today) =>
+  endDate && isBefore(new Date(endDate), today);
 
 const filterActiveAppRoles = (appRoles) => {
-  if (!appRoles) return {};
+  if (!appRoles) {
+    return {};
+  }
 
-  const now = new Date();
+  const today = startOfDay(new Date());
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
-      return !isAfterNow(startDate, now) && !isBeforeNow(endDate, now);
+      return hasStarted(startDate, today) && !hasExpired(endDate, today);
     }),
   );
 };
 
 const filterExpiredAppRoles = (appRoles) => {
-  if (!appRoles) return {};
+  if (!appRoles) {
+    return {};
+  }
 
-  const now = new Date();
+  const today = startOfDay(new Date());
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { endDate } = {}]) => {
-      return isBeforeNow(endDate, now);
+      return hasExpired(endDate, today);
     }),
   );
 };
 
 const filterFutureAppRoles = (appRoles) => {
-  if (!appRoles) return {};
+  if (!appRoles) {
+    return {};
+  }
 
-  const now = new Date();
+  const today = startOfDay(new Date());
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
-      return isAfterNow(startDate, now) && !isBeforeNow(endDate, now);
+      return !hasStarted(startDate, today) && !hasExpired(endDate, today);
     }),
   );
 };

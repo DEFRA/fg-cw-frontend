@@ -287,6 +287,31 @@ describe("createUserDetailsViewModel", () => {
       );
     });
 
+    it("treats a role as active on its endDate", () => {
+      vi.setSystemTime(new Date("2025-06-01T14:30:00"));
+
+      const viewModel = createUserDetailsViewModel({
+        page: createMockPage({
+          id: "user-123",
+          name: "Test User",
+          email: "test@example.com",
+          updatedAt: null,
+          idpRoles: [],
+          appRoles: {
+            ROLE_ENDS_TODAY: { startDate: "2025-01-01", endDate: "2025-06-01" },
+          },
+        }),
+        request: mockRequest,
+        currentUser: { id: "admin-user" },
+      });
+
+      const { rows } = viewModel.data.summary;
+      expect(findRow(rows, "Manage grants roles").value.html).toEqual(
+        "ROLE_ENDS_TODAY",
+      );
+      expect(findRow(rows, "Expired Manage grants roles")).toBeUndefined();
+    });
+
     it("shows expired row and omits future row when all roles are expired", () => {
       const viewModel = createUserDetailsViewModel({
         page: createMockPage({
