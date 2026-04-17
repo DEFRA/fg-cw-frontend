@@ -1,8 +1,8 @@
-import { isBefore, isAfter, startOfDay } from "date-fns";
 import {
   DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
+import { format } from "date-fns";
 import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
 export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
@@ -91,18 +91,18 @@ const formatRolesValue = (roles, emptyMessage) => {
   return { html: roles.join(",<br>") };
 };
 
-const hasStarted = (startDate, today) =>
-  !startDate || !isAfter(new Date(startDate), today);
+const getToday = () => format(new Date(), "yyyy-MM-dd");
 
-const hasExpired = (endDate, today) =>
-  endDate && isBefore(new Date(endDate), today);
+const hasStarted = (startDate, today) => !startDate || startDate <= today;
+
+const hasExpired = (endDate, today) => Boolean(endDate && endDate < today);
 
 const filterActiveAppRoles = (appRoles) => {
   if (!appRoles) {
     return {};
   }
 
-  const today = startOfDay(new Date());
+  const today = getToday();
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
       return hasStarted(startDate, today) && !hasExpired(endDate, today);
@@ -115,7 +115,7 @@ const filterExpiredAppRoles = (appRoles) => {
     return {};
   }
 
-  const today = startOfDay(new Date());
+  const today = getToday();
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { endDate } = {}]) => {
       return hasExpired(endDate, today);
@@ -128,7 +128,7 @@ const filterFutureAppRoles = (appRoles) => {
     return {};
   }
 
-  const today = startOfDay(new Date());
+  const today = getToday();
   return Object.fromEntries(
     Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
       return !hasStarted(startDate, today) && !hasExpired(endDate, today);
