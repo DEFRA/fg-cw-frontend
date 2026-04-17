@@ -121,6 +121,14 @@ exports[`viewUserRoute > renders user details page 1`] = `
       Manage grants roles
     </dt>
     <dd class="govuk-summary-list__value">
+      No Manage grants roles have been allocated to this user
+    </dd>
+  </div>
+  <div class="govuk-summary-list__row">
+    <dt class="govuk-summary-list__key">
+      Future Manage grants roles
+    </dt>
+    <dd class="govuk-summary-list__value">
       ROLE_RPA_CASES_APPROVE,<br>ROLE_RPA_CASES_CREATE
     </dd>
   </div>
