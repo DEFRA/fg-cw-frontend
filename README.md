@@ -2,6 +2,7 @@
 
 Case worker frontend application
 
+- [Running with other services](#running-with-other-services)
 - [Requirements](#requirements)
   - [Node.js](#nodejs)
 - [Server-side Caching](#server-side-caching)
@@ -22,6 +23,10 @@ Case worker frontend application
   - [SonarCloud](#sonarcloud)
 - [Licence](#licence)
   - [About the licence](#about-the-licence)
+
+## Running with other services
+
+If you want to run this service with other farming grants applications see [fg-grants-core](https://github.com/DEFRA/fg-grants-core)
 
 ## Requirements
 

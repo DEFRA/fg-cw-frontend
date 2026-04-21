@@ -1,8 +1,8 @@
+import { format } from "date-fns";
 import {
   DATE_FORMAT_FULL_DATE_TIME,
   formatDate,
 } from "../../../common/nunjucks/filters/format-date.js";
-import { format } from "date-fns";
 import { createHeaderViewModel } from "../../../common/view-models/header.view-model.js";
 
 export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
