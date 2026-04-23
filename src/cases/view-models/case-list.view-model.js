@@ -12,6 +12,7 @@ export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
   );
 
   const pagination = mapDataToPagination(page.data.pagination, request.url);
+  const searchValue = request.query.search || "";
 
   return {
     pageTitle: "Cases",
@@ -24,10 +25,12 @@ export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
           label: `All cases (${page.data.pagination.totalCount})`,
           id: "all-cases",
           data: casesTable,
+          searchValue,
         },
       ],
       assignedUserSuccessMessage,
       pagination,
+      searchValue,
     },
   };
 };

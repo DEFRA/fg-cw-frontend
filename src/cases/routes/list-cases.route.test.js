@@ -119,6 +119,104 @@ describe("listCasesRoute", () => {
     expect(result).toContain("govuk-pagination");
     expect(result).toContain("cursor=cursor-next&amp;direction=forward");
   });
+
+  it("redirects to /cases when search query is empty", async () => {
+    flashAssignedCaseId = undefined;
+
+    const { statusCode, headers } = await server.inject({
+      method: "GET",
+      url: "/cases?search=",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toBe("/cases");
+    expect(findAllCasesUseCase).not.toHaveBeenCalled();
+  });
+
+  it("passes search query parameter to use case", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/cases?search=12345",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user: undefined },
+      { search: "12345" },
+    );
+  });
+
+  it("renders search component with heading and input", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    expect($("h2").text()).toContain("Search for cases");
+    expect($("input#search").length).toBe(1);
+    expect($("button").text()).toContain("Search");
+  });
+
+  it("preserves search value in input field", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases?search=SBI123",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    expect($("input#search").val()).toBe("SBI123");
+  });
+
+  it("renders empty state message when no cases match search", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage([]));
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases?search=nonexistent",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+
+    const $ = load(result);
+    expect($("p").text()).toContain(
+      "There are no cases matching your search criteria",
+    );
+  });
 });
 
 const mockCases = [
