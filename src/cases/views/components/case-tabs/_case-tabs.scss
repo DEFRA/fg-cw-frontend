@@ -4,8 +4,16 @@
   max-width: none;
 }
 
+.app-search-form {
+  display: flex;
+  gap: govuk-spacing(2);
+
+  .govuk-button {
+    margin-bottom: 0;
+  }
+}
+
 .app-case-list-page {
-  width: fit-content;
   max-width: 80vw;
   margin-inline: auto;
 }

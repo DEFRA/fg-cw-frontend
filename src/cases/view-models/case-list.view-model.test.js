@@ -10,6 +10,7 @@ vi.mock("../../common/view-models/header.view-model.js");
 const mockRequest = {
   path: "/cases",
   url: new URL("http://localhost:3000/cases"),
+  query: {},
 };
 
 const createMockPage = (cases) => ({
@@ -259,6 +260,7 @@ describe("case-list.model", () => {
                   },
                 ],
               },
+              searchValue: "",
             },
           ],
           assignedUserSuccessMessage: null,
@@ -266,6 +268,7 @@ describe("case-list.model", () => {
             items: [],
             classes: "govuk-!-margin-bottom-2",
           },
+          searchValue: "",
         },
       });
     });
@@ -575,6 +578,7 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?workflowCode=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -591,6 +595,7 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?workflowCode=desc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -618,6 +623,7 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -634,6 +640,7 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=desc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -650,6 +657,7 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?createdAt=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -743,6 +751,7 @@ describe("pagination", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -761,5 +770,61 @@ describe("pagination", () => {
     expect(result.data.pagination.next.href).toBe(
       "/cases?caseRef=asc&cursor=cursor-next&direction=forward",
     );
+  });
+});
+
+describe("search functionality", () => {
+  it("includes searchValue in data when search query param is provided", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search=12345"),
+      query: { search: "12345" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.searchValue).toBe("12345");
+  });
+
+  it("includes searchValue in tabItems when search query param is provided", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search=SBI123"),
+      query: { search: "SBI123" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.tabItems[0].searchValue).toBe("SBI123");
+  });
+
+  it("sets searchValue to empty string when no search query param", () => {
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+
+    expect(result.data.searchValue).toBe("");
+  });
+
+  it("sets searchValue to empty string when search query param is empty", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search="),
+      query: { search: "" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.searchValue).toBe("");
   });
 });

@@ -23,6 +23,16 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">
       <div class="govuk-body app-case-list-page" data-testid="app-page-body">
+        <h2 class="govuk-heading-m">Search for cases</h2>
+        <p class="govuk-body">You can search by case ID or SBI.</p>
+        <form method="GET" action="/cases" class="govuk-!-margin-bottom-6">
+          <div class="app-search-form">
+            <input class="govuk-input govuk-input--width-10" id="search" name="search" type="text" value="">
+            <button type="submit" class="govuk-button" data-module="govuk-button">
+              Search
+            </button>
+          </div>
+        </form>
 
         <div class="govuk-tabs" data-module="govuk-tabs">
   <h2 class="govuk-tabs__title">
@@ -37,14 +47,14 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
     <form method="GET" action="/cases/assign-user" class="case-tabs">
-      <fieldset class="govuk-fieldset">
-        <legend class="govuk-fieldset__legend govuk-visually-hidden">
-          <h1>Cases</h1>
-        </legend>
-        <button type="submit" class="govuk-button" data-module="govuk-button">
+        <fieldset class="govuk-fieldset">
+          <legend class="govuk-fieldset__legend govuk-visually-hidden">
+            <h1>Cases</h1>
+          </legend>
+          <button type="submit" class="govuk-button" data-module="govuk-button">
       Assign
     </button>
-        <table class="govuk-table">
+          <table class="govuk-table">
       <thead class="govuk-table__head">
         <tr class="govuk-table__row">
           <th scope="col" class="govuk-table__header">Select</th>
@@ -77,8 +87,8 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
       </tbody>
     </table>
     
-      </fieldset>
-    </form>
+        </fieldset>
+      </form>
   </div>
 </div>
 

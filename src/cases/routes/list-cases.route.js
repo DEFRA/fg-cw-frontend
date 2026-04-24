@@ -7,6 +7,10 @@ export const listCasesRoute = {
   method: "GET",
   path: "/cases",
   async handler(request, h) {
+    if ("search" in request.query && !request.query.search) {
+      return h.redirect("/cases");
+    }
+
     const assignedCaseId = getFlashValue(request, "assignedCaseId");
     if (assignedCaseId) {
       logger.info(`Assigned user to case ${assignedCaseId}`);
