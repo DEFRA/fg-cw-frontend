@@ -27,6 +27,9 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
         <p class="govuk-body">You can search by case ID or SBI.</p>
         <form method="GET" action="/cases" class="govuk-!-margin-bottom-6">
           <div class="app-search-form">
+            <label class="govuk-label govuk-visually-hidden" for="search">
+              Search by case ID or SBI
+            </label>
             <input class="govuk-input govuk-input--width-10" id="search" name="search" type="text" value="">
             <button type="submit" class="govuk-button" data-module="govuk-button">
               Search
