@@ -44,24 +44,28 @@
   %}
   {% set tableRows = (tableRows.push(processedRow), tableRows) %}
 {% endfor %}
-<form method="GET" action="/cases/assign-user" class="case-tabs">
-  <fieldset class="govuk-fieldset">
-    <legend class="govuk-fieldset__legend govuk-visually-hidden">
-      <h1>Cases</h1>
-    </legend>
-    {{
-      govukButton({
-        text: "Assign"
-      })
-    }}
-    {{
-      govukTable({
-        head: params.data.head,
-        rows: tableRows
-      })
-    }}
-    {% if params.pagination and (params.pagination.previous or params.pagination.next) %}
-      {{ govukPagination(params.pagination) }}
-    {% endif %}
-  </fieldset>
-</form>
+{% if params.data.rows.length == 0 and params.searchValue %}
+  <p class="govuk-body">There are no cases matching your search criteria</p>
+{% else %}
+  <form method="GET" action="/cases/assign-user" class="case-tabs">
+    <fieldset class="govuk-fieldset">
+      <legend class="govuk-fieldset__legend govuk-visually-hidden">
+        <h1>Cases</h1>
+      </legend>
+      {{
+        govukButton({
+          text: "Assign"
+        })
+      }}
+      {{
+        govukTable({
+          head: params.data.head,
+          rows: tableRows
+        })
+      }}
+      {% if params.pagination and (params.pagination.previous or params.pagination.next) %}
+        {{ govukPagination(params.pagination) }}
+      {% endif %}
+    </fieldset>
+  </form>
+{% endif %}
