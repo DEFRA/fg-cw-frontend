@@ -65,6 +65,8 @@ disable setting `SESSION_CACHE_ENGINE=false` or changing the default value in `~
 
 ### Setup
 
+**It's recommended if running with other services (i.e. fg-cw-backend) to run [fg-grants-core](https://github.com/DEFRA/fg-grants-core)**
+
 Install application dependencies:
 
 ```bash
@@ -75,7 +77,7 @@ npm install
 
 To run the application locally:
 
-1. Clone and run the backend service (https://github.com/DEFRA/fg-cw-backend) using `CW_PORT=3001 docker compose up` (Note: The backend service runs on port 3001 (not the default 3000))
+1. Clone and run the backend service (https://github.com/DEFRA/fg-cw-backend) using `CW_PORT=3101 docker compose up` (Note: The backend service runs on port 3101 (not the default 3000))
 2. run `docker compose up redis`
 3. Once the backend is running, you can start the frontend application using the provided script
 
@@ -210,7 +212,7 @@ docker build --target development --no-cache --tag fg-cw-frontend:development .
 Run:
 
 ```bash
-docker run -p 3000:3000 fg-cw-frontend:development
+docker run -p 3100:3000 fg-cw-frontend:development
 ```
 
 ### Production image
@@ -224,7 +226,7 @@ docker build --no-cache --tag fg-cw-frontend .
 Run:
 
 ```bash
-docker run -p 3000:3000 fg-cw-frontend
+docker run -p 3100:3000 fg-cw-frontend
 ```
 
 ### Docker Compose
@@ -248,7 +250,7 @@ When running both the frontend and backend services together, port conflicts hav
 - Frontend localstack uses port 4567 (mapped to container's internal 4566)
 - Frontend Redis uses port 6380 (mapped to container's internal 6379)
 - Frontend MongoDB uses port 27018 (mapped to container's internal 27017)
-- Frontend app runs on port 3000 (mapped to container's internal 3000)
+- Frontend app runs on port 3100 (mapped to container's internal 3000)
 
 To run both services:
 
@@ -268,8 +270,8 @@ docker compose up -d
 
 You can then access:
 
-- Backend API at http://localhost:3001
-- Frontend app at http://localhost:3000
+- Backend API at http://localhost:3101
+- Frontend app at http://localhost:3100
 
 ### Dependabot
 
