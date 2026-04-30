@@ -49,7 +49,7 @@ COPY --from=production_build /home/node/.public/ ./.public/
 COPY --chown=node:node scripts/run.sh scripts/run.sh
 
 RUN npm ci --omit=dev  --ignore-scripts \
-  chmod +x scripts/run.sh
+  && chmod +x scripts/run.sh
 
 ARG PORT
 ENV PORT=${PORT}

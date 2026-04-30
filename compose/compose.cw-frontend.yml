@@ -1,0 +1,15 @@
+services:
+  fg-cw-frontend:
+    build: .
+    ports:
+      - "3100:3100"
+    env_file:
+      - ".env"
+    environment:
+      PORT: 3100
+      NODE_ENV: development
+      FG_CW_BACKEND: http://fg-cw-backend:3101
+      OIDC_TOKEN_ENDPOINT: http://entra:3010/token
+      REDIS_HOST: redis
+    networks:
+      - cdp-tenant

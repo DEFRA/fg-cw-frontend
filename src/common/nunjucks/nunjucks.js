@@ -6,19 +6,24 @@ import { config } from "../config.js";
 import { context } from "./context/context.js";
 import { formatDate } from "./filters/format-date.js";
 
+const globExclude = (path) => {
+  const name = path.split("/").pop();
+  return path.includes("node_modules") || name.includes(".");
+};
+
 const njkPaths = [
   "node_modules/govuk-frontend/dist/",
   "node_modules/@ministryofjustice/frontend/",
   ...(await Array.fromAsync(
     glob(["**/views", "**/*(layouts|components|pages|partials)/"], {
-      exclude: ["node_modules", "*.*"],
+      exclude: globExclude,
     }),
   )),
 ];
 
 const viewPaths = await Array.fromAsync(
   glob(["**/views"], {
-    exclude: ["node_modules", "*.*"],
+    exclude: globExclude,
   }),
 );
 
