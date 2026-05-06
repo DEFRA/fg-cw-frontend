@@ -1262,6 +1262,26 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Section 1");
   });
 
+  test("renders accordion section content with role region for accessibility", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "a11y-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [{ component: "text", text: "Content 1" }],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('role="region"');
+    expect(result).toContain('aria-labelledby="a11y-accordion-heading-1"');
+  });
+
   test("renders line-break component", () => {
     const params = [
       {
