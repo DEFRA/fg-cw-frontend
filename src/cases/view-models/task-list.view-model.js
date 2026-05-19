@@ -108,12 +108,27 @@ const getInitialTextareaValue = (action, stage) => {
   return isCurrentAction(action, stage) ? stage.outcome?.comment || "" : "";
 };
 
+export const createLabelObject = (label) => {
+  if (typeof label === "string") {
+    return {
+      text: label,
+    };
+  } else if (label.text) {
+    return {
+      text: label.text,
+      classes: label.classes,
+    };
+  } else {
+    throw new Error(`Label is not valid '${JSON.stringify(label)}'`);
+  }
+};
+
 const createTextarea = ({ name, value, comment, errorMessage }) => {
   return {
     id: name,
     name,
     value,
-    label: { text: comment.label },
+    label: createLabelObject(comment.label),
     hint: comment.helpText ? { text: comment.helpText } : undefined,
     required: comment.mandatory,
     errorMessage,

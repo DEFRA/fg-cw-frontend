@@ -1,8 +1,34 @@
 import { describe, expect, it, vi } from "vitest";
 import { createMockLinks } from "../../../test/data/case-test-data.js";
-import { createTaskListViewModel } from "./task-list.view-model.js";
+import {
+  createLabelObject,
+  createTaskListViewModel,
+} from "./task-list.view-model.js";
 
 vi.mock("../../common/view-models/header.view-model.js");
+
+describe("createLabelObject", () => {
+  it("should use label as string", () => {
+    expect(createLabelObject("hello")).toEqual({ text: "hello" });
+  });
+
+  it("should use label as object and ignore invalid props", () => {
+    expect(
+      createLabelObject({
+        text: "goodbye",
+        classes: "one, two",
+        invalid: true,
+      }),
+    ).toEqual({
+      text: "goodbye",
+      classes: "one, two",
+    });
+  });
+
+  it("should throw if label is unknown type", () => {
+    expect(() => createLabelObject(true)).toThrow("Label is not valid 'true'");
+  });
+});
 
 describe("createTaskListViewModel", () => {
   const mockRequest = { path: "/cases/case-123/tasks" };
