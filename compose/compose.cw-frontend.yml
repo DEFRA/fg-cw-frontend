@@ -5,6 +5,11 @@ services:
       - "3100:3100"
     env_file:
       - ".env"
+    develop:
+      watch:
+        - path: ./src
+          target: /home/node/src
+          action: sync+restart
     environment:
       PORT: 3100
       NODE_ENV: development
