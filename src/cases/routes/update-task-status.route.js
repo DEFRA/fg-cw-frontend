@@ -1,4 +1,5 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { getLabelText } from "../../common/helpers/string-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
@@ -57,7 +58,7 @@ export const updateTaskStatusRoute = {
     if (status && !validateComment(commentInputDef, comment)) {
       errors[commentFieldName] = {
         text: commentInputDef?.label
-          ? `${commentInputDef.label} is required`
+          ? `${getLabelText(commentInputDef.label)} is required`
           : "Note is required",
         href: `#${commentFieldName}`,
       };

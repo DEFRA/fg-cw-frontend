@@ -1,4 +1,5 @@
 import Boom from "@hapi/boom";
+import { getLabelText } from "../../common/helpers/string-helpers.js";
 import { logger } from "../../common/logger.js";
 import { updateStageOutcome } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
@@ -54,7 +55,7 @@ export const validateStageOutcomeAction = (caseData, actionData) => {
     success: false,
     errors: {
       [commentFieldName]: {
-        text: `${action.comment.label} is required`,
+        text: `${getLabelText(action.comment.label)} is required`,
         href: `#${commentFieldName}`,
       },
     },
