@@ -110,17 +110,16 @@ const getInitialTextareaValue = (action, stage) => {
 
 export const createLabelObject = (label) => {
   if (typeof label === "string") {
-    return {
-      text: label,
-    };
-  } else if (label.text) {
-    return {
-      text: label.text,
-      classes: label.classes,
-    };
-  } else {
-    throw new Error(`Label is not valid '${JSON.stringify(label)}'`);
+    return { text: label };
   }
+  if (isValidLabelObject(label)) {
+    return { text: label.text, classes: label.classes };
+  }
+  throw new Error(`Label is not valid '${JSON.stringify(label)}'`);
+};
+
+const isValidLabelObject = (label) => {
+  return label && typeof label === "object" && "text" in label;
 };
 
 const createTextarea = ({ name, value, comment, errorMessage }) => {

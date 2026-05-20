@@ -25,6 +25,23 @@ describe("createLabelObject", () => {
     });
   });
 
+  it("should use label as object with empty string text", () => {
+    expect(createLabelObject({ text: "" })).toEqual({
+      text: "",
+      classes: undefined,
+    });
+  });
+
+  it("should throw if label is null", () => {
+    expect(() => createLabelObject(null)).toThrow("Label is not valid 'null'");
+  });
+
+  it("should throw if label is undefined", () => {
+    expect(() => createLabelObject(undefined)).toThrow(
+      "Label is not valid 'undefined'",
+    );
+  });
+
   it("should throw if label is unknown type", () => {
     expect(() => createLabelObject(true)).toThrow("Label is not valid 'true'");
   });
