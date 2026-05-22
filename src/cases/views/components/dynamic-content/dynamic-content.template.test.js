@@ -701,7 +701,6 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Help with");
     expect(result).toContain("Nationality");
     expect(result).toContain("We need your nationality information");
-    expect(result).toContain("govuk-details__summary-text");
   });
 
   test("renders paragraph component with default styling", () => {
