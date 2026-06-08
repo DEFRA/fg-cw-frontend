@@ -123,15 +123,24 @@ const isValidLabelObject = (label) => {
 };
 
 const createTextarea = ({ name, value, comment, errorMessage }) => {
+  const label = createLabelObject(comment.label);
+  if (!label.text) {
+    label.text = "Explain this comment";
+  }
+
   return {
     id: name,
     name,
     value,
-    label: createLabelObject(comment.label),
+    label,
     hint: comment.helpText ? { text: comment.helpText } : undefined,
     required: comment.mandatory,
     errorMessage,
     rows: 5,
+    // Add this property to pass aria-label to the macro
+    attributes: {
+      "aria-label": label.text,
+    },
   };
 };
 
