@@ -123,14 +123,14 @@ const isValidLabelObject = (label) => {
 };
 
 const createTextarea = ({ name, value, comment, errorMessage }) => {
-  const labelText =
-    typeof comment.label === "string" ? comment.label : comment.label.text;
+  const label = createLabelObject(comment.label);
+  const labelText = label.text || comment.helpText || "Comment";
 
   return {
     id: name,
     name,
     value,
-    label: createLabelObject(comment.label),
+    label,
     hint: comment.helpText ? { text: comment.helpText } : undefined,
     required: comment.mandatory,
     errorMessage,

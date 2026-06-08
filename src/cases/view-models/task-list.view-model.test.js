@@ -464,7 +464,7 @@ describe("createTaskListViewModel", () => {
           code: "approve",
           name: "Approve",
           comment: {
-            label: "Approval reason",
+            label: "",
             mandatory: true,
           },
         },
@@ -477,6 +477,33 @@ describe("createTaskListViewModel", () => {
       const approveItem = result.data.stage.actions.items[0];
 
       expect(approveItem.conditional.hint).toBeUndefined();
+      expect(approveItem.conditional.attributes["aria-label"]).toBe("Comment");
+    });
+
+    it("uses helpText as aria-label fallback if label is empty", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.actions = [
+        {
+          code: "approve",
+          name: "Approve",
+          comment: {
+            label: "",
+            helpText: "Fallback help text",
+            mandatory: true,
+          },
+        },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+      const approveItem = result.data.stage.actions.items[0];
+
+      expect(approveItem.conditional.attributes["aria-label"]).toBe(
+        "Fallback help text",
+      );
     });
 
     it("handles optional comment types", () => {
