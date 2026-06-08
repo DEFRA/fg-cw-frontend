@@ -123,6 +123,9 @@ const isValidLabelObject = (label) => {
 };
 
 const createTextarea = ({ name, value, comment, errorMessage }) => {
+  const labelText =
+    typeof comment.label === "string" ? comment.label : comment.label.text;
+
   return {
     id: name,
     name,
@@ -132,6 +135,10 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
     required: comment.mandatory,
     errorMessage,
     rows: 5,
+    // Add this property to pass aria-label to the macro
+    attributes: {
+      "aria-label": labelText,
+    },
   };
 };
 

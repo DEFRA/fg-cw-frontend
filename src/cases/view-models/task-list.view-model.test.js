@@ -407,6 +407,9 @@ describe("createTaskListViewModel", () => {
         required: true,
         errorMessage: undefined,
         rows: 5,
+        attributes: {
+          "aria-label": "Approval reason",
+        },
       });
     });
 
