@@ -22,11 +22,17 @@ const createConditionalTextarea = ({
   }
 
   const name = `${statusCode}-comment`;
+  const label = createLabelObject(commentInputDef.label);
+
+  if (!label.text) {
+    label.text = "Explain this comment";
+  }
+
   return {
     id: name,
     name,
     value: commentText,
-    label: createLabelObject(commentInputDef.label),
+    label,
     hint: commentInputDef.helpText
       ? { text: commentInputDef.helpText }
       : undefined,
