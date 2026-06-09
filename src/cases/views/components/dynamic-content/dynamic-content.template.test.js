@@ -1,3 +1,4 @@
+import { load } from "cheerio";
 import { describe, expect, test } from "vitest";
 import { render } from "../../../../common/nunjucks/render.js";
 
@@ -426,7 +427,7 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-tag--blue");
   });
 
-  test("renders summary-list component with title", () => {
+  test("renders summary-list component with title as h2 by default", () => {
     const params = [
       {
         component: "summary-list",
@@ -441,10 +442,57 @@ describe("dynamic-content template", () => {
     ];
 
     const result = render("dynamic-content", params);
+    const $ = load(result);
 
     expect(result).toContain("Check details");
+    expect($("h2.govuk-heading-m").text().trim()).toBe("Check details");
+    expect($("h3.govuk-heading-m")).toHaveLength(0);
     expect(result).toContain("Name");
     expect(result).toContain("Sarah Philips");
+  });
+
+  test("renders summary-list component with title using configured headingLevel", () => {
+    const params = [
+      {
+        component: "summary-list",
+        title: "Nested details",
+        headingLevel: 3,
+        rows: [
+          {
+            label: "Name",
+            text: "Sarah Philips",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+    const $ = load(result);
+
+    expect($("h3.govuk-heading-m").text().trim()).toBe("Nested details");
+    expect($("h2.govuk-heading-m")).toHaveLength(0);
+  });
+
+  test("renders summary-list component with title as h2 when headingLevel is invalid", () => {
+    const params = [
+      {
+        component: "summary-list",
+        title: "Fallback details",
+        headingLevel: 7,
+        rows: [
+          {
+            label: "Name",
+            text: "Sarah Philips",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+    const $ = load(result);
+
+    expect($("h2.govuk-heading-m").text().trim()).toBe("Fallback details");
+    expect($("h7")).toHaveLength(0);
   });
 
   test("renders summary-list component with rich text content", () => {
