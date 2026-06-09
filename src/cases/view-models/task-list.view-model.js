@@ -137,10 +137,6 @@ const createTextarea = ({ name, value, comment, errorMessage }) => {
     required: comment.mandatory,
     errorMessage,
     rows: 5,
-    // Add this property to pass aria-label to the macro
-    attributes: {
-      "aria-label": label.text,
-    },
   };
 };
 

@@ -39,9 +39,6 @@ const createConditionalTextarea = ({
     required: commentInputDef.mandatory,
     errorMessage: commentError,
     rows: 5,
-    attributes: {
-      "aria-label": label.text,
-    },
   };
 };
 
