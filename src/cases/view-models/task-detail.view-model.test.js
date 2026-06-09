@@ -713,6 +713,44 @@ describe("createTaskDetailViewModel", () => {
     });
   });
 
+  it("should use 'Explain this comment' as label and aria-label fallback if label is empty", () => {
+    const caseWithEmptyLabel = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                status: "complete",
+                commentRef: null,
+                statusOptions: [{ code: "complete", name: "Complete" }],
+                commentInputDef: {
+                  label: "",
+                  mandatory: false,
+                },
+              },
+            ],
+          },
+        ],
+      },
+    };
+
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithEmptyLabel),
+      request: mockRequest,
+      query: mockQuery,
+    });
+
+    const option = result.data.currentTask.statusOptions[0];
+    expect(option.conditional.label.text).toBe("Explain this comment");
+    expect(option.conditional.attributes["aria-label"]).toBe(
+      "Explain this comment",
+    );
+  });
+
   it("should override current status from formData", () => {
     const caseWithStatusOptions = {
       ...mockCaseData,
