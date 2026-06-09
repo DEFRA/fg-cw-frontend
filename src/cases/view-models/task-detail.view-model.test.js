@@ -45,9 +45,6 @@ describe("mapStatusOptions", () => {
       label: { text: "Option-specific comment" },
       hint: { text: "Option-specific help text" },
       required: true,
-      attributes: {
-        "aria-label": "Option-specific comment",
-      },
     });
   });
 
@@ -69,9 +66,6 @@ describe("mapStatusOptions", () => {
       label: { text: "Default comment" },
       hint: { text: "Default help text" },
       required: false,
-      attributes: {
-        "aria-label": "Default comment",
-      },
     });
   });
 
@@ -107,17 +101,11 @@ describe("mapStatusOptions", () => {
       label: { text: "Approval notes" },
       hint: { text: "Explain why approved" },
       required: true,
-      attributes: {
-        "aria-label": "Approval notes",
-      },
     });
     expect(rejectedOption.conditional).toMatchObject({
       label: { text: "General comment" },
       hint: { text: "Optional details" },
       required: false,
-      attributes: {
-        "aria-label": "General comment",
-      },
     });
   });
 });
@@ -457,9 +445,6 @@ describe("createTaskDetailViewModel", () => {
       hint: { text: "Explain your decision" },
       required: true,
       rows: 5,
-      attributes: {
-        "aria-label": "Add a comment",
-      },
     });
   });
 
@@ -708,12 +693,9 @@ describe("createTaskDetailViewModel", () => {
     const option = result.data.currentTask.statusOptions[0];
     expect(option.conditional.hint).toBeUndefined();
     expect(option.conditional.required).toBe(false);
-    expect(option.conditional.attributes).toEqual({
-      "aria-label": "Add a comment",
-    });
   });
 
-  it("should use 'Explain this comment' as label and aria-label fallback if label is empty", () => {
+  it("should use 'Explain this comment' as label fallback if label is empty", () => {
     const caseWithEmptyLabel = {
       ...mockCaseData,
       stage: {
@@ -746,9 +728,6 @@ describe("createTaskDetailViewModel", () => {
 
     const option = result.data.currentTask.statusOptions[0];
     expect(option.conditional.label.text).toBe("Explain this comment");
-    expect(option.conditional.attributes["aria-label"]).toBe(
-      "Explain this comment",
-    );
   });
 
   it("should override current status from formData", () => {
