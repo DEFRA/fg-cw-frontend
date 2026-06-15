@@ -9,6 +9,7 @@ export const createTaskListViewModel = ({
 }) => {
   const kase = page.data;
   const stage = kase.stage;
+  const taskGroups = mapTaskGroups(stage.taskGroups, kase._id);
 
   return {
     pageTitle: `Case tasks - ${stage.name}`,
@@ -20,7 +21,8 @@ export const createTaskListViewModel = ({
       case: kase,
       stage: {
         ...stage,
-        taskGroups: mapTaskGroups(stage.taskGroups, kase._id),
+        taskGroups,
+        hasTasks: taskGroups.some((taskGroup) => taskGroup.tasks.length > 0),
         actions: mapActions({ stage, errors, values }),
       },
       beforeContent: kase.beforeContent,

@@ -7,6 +7,7 @@ describe("task-group", () => {
       caseId: "123",
       stage: {
         name: "Test Stage",
+        hasTasks: true,
         taskGroups: [
           {
             name: "Group 1",
@@ -35,6 +36,21 @@ describe("task-group", () => {
       },
     });
 
+    expect(component).toMatchSnapshot();
+  });
+
+  test("renders an empty state message when there are no tasks", () => {
+    const component = render("task-group", {
+      caseId: "123",
+      stage: {
+        name: "Application withdrawn",
+        hasTasks: false,
+        taskGroups: [],
+        actions: [],
+      },
+    });
+
+    expect(component).toContain("There are no tasks to complete.");
     expect(component).toMatchSnapshot();
   });
 });

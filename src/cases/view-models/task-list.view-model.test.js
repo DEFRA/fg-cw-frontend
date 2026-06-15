@@ -264,6 +264,43 @@ describe("createTaskListViewModel", () => {
 
       expect(result.data.stage.taskGroups).toEqual([]);
     });
+
+    it("sets hasTasks to true when there are tasks", () => {
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.hasTasks).toBe(true);
+    });
+
+    it("sets hasTasks to false when there are no task groups", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.hasTasks).toBe(false);
+    });
+
+    it("sets hasTasks to false when task groups contain no tasks", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [
+        { code: "empty-group", name: "Empty Group", tasks: [] },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.hasTasks).toBe(false);
+    });
   });
 
   describe("action mapping", () => {
