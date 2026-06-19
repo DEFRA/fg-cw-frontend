@@ -21,12 +21,12 @@
       {% endfor %}
     {% endif %}
 
-    {% if params.stage.actions.items.length > 0 %}
-      {{ stageActions({ caseId: params.caseId, stage: params.stage }) }}
-    {% endif %}
-
     {% if params.afterContent %}
       {{ dynamicContent(params.afterContent) }}
+    {% endif %}
+
+    {% if params.stage.actions.items.length > 0 %}
+      {{ stageActions({ caseId: params.caseId, stage: params.stage }) }}
     {% endif %}
   </div>
 </div>
