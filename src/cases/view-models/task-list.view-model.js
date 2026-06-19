@@ -24,6 +24,7 @@ export const createTaskListViewModel = ({
         actions: mapActions({ stage, errors, values }),
       },
       beforeContent: kase.beforeContent,
+      afterContent: kase.afterContent,
     },
     errors,
     errorList: Object.values(errors),
