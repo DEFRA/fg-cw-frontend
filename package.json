@@ -50,7 +50,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^7.29.2",
+    "@babel/runtime": "^8.0.0",
     "@defra/hapi-tracing": "^1.30.0",
     "@elastic/ecs-pino-format": "^1.5.0",
     "@hapi/bell": "^13.1.0",
@@ -83,9 +83,9 @@
     "pino": "^10.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.6",
-    "@babel/core": "^7.29.0",
-    "@babel/preset-env": "^7.29.5",
+    "@babel/cli": "^8.0.1",
+    "@babel/core": "^8.0.1",
+    "@babel/preset-env": "^8.0.2",
     "@vitest/coverage-v8": "^4.0.18",
     "autoprefixer": "^10.4.27",
     "babel-loader": "^10.1.1",
@@ -115,8 +115,8 @@
     "stylelint-config-gds": "^2.0.0",
     "terser-webpack-plugin": "^5.4.0",
     "vitest": "^4.0.18",
-    "webpack": "^5.106.2",
-    "webpack-assets-manifest": "^6.5.1",
-    "webpack-cli": "^7.0.2"
+    "webpack": "^5.107.2",
+    "webpack-assets-manifest": "^6.5.2",
+    "webpack-cli": "^7.0.3"
   }
 }
