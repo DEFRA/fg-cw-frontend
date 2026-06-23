@@ -301,6 +301,75 @@ describe("createTaskListViewModel", () => {
 
       expect(result.data.stage.hasTasks).toBe(false);
     });
+
+    it("sets showEmptyState to true when there are no tasks and no dynamic content", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.showEmptyState).toBe(true);
+    });
+
+    it("sets showEmptyState to false when there are tasks", () => {
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.showEmptyState).toBe(false);
+    });
+
+    it("sets showEmptyState to false when beforeContent is present", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [];
+      kase.beforeContent = [
+        { component: "paragraph", text: "There are no tasks to complete." },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.showEmptyState).toBe(false);
+    });
+
+    it("sets showEmptyState to false when afterContent is present", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [];
+      kase.afterContent = [
+        { component: "paragraph", text: "Some after content." },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.showEmptyState).toBe(false);
+    });
+
+    it("sets showEmptyState to true when content arrays are empty", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.taskGroups = [];
+      kase.beforeContent = [];
+      kase.afterContent = [];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.showEmptyState).toBe(true);
+    });
   });
 
   describe("action mapping", () => {

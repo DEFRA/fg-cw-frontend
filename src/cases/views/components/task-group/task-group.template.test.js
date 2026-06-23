@@ -45,6 +45,7 @@ describe("task-group", () => {
       stage: {
         name: "Application withdrawn",
         hasTasks: false,
+        showEmptyState: true,
         taskGroups: [],
         actions: [],
       },
@@ -52,5 +53,28 @@ describe("task-group", () => {
 
     expect(component).toContain("There are no tasks to complete.");
     expect(component).toMatchSnapshot();
+  });
+
+  test("does not render the empty state message when dynamic content is present", () => {
+    const component = render("task-group", {
+      caseId: "123",
+      stage: {
+        name: "Customer agreement review",
+        hasTasks: false,
+        showEmptyState: false,
+        taskGroups: [],
+        actions: [],
+      },
+      beforeContent: [
+        {
+          component: "paragraph",
+          text: "There are no tasks to complete.",
+        },
+      ],
+    });
+
+    // The message should only appear once (from the backend dynamic content),
+    // not duplicated by the frontend empty state.
+    expect(component).not.toContain('data-testid="no-tasks-message"');
   });
 });
