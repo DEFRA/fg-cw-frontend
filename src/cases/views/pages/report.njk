@@ -25,7 +25,11 @@
         {{ govukButton({ text: "Update report" }) }}
       </form>
 
-      {% if data.hasResults %}
+      {% if not data.hasSelection %}
+        <p class="govuk-body" data-testid="report-prompt">
+          Select a case type to view the report.
+        </p>
+      {% elif data.hasResults %}
         <p class="govuk-body" data-testid="report-total">
           Showing <strong>{{ data.total }}</strong>
           {{ data.selectedCaseTypeLabel }} case(s).

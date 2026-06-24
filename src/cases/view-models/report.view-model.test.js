@@ -42,16 +42,34 @@ const buildPage = (overrides = {}) => ({
 const request = { path: "/reports", url: new URL("http://localhost/reports") };
 
 describe("createReportViewModel", () => {
-  it("builds the case-type select with the current selection marked", () => {
+  it("builds the case-type select with a blank placeholder and the current selection marked", () => {
     const viewModel = createReportViewModel({ page: buildPage(), request });
 
     expect(viewModel.data.caseTypeItems).toEqual([
+      { value: "", text: "Select a case type", selected: false },
       { value: "frps", text: "Frps", selected: false },
       { value: "woodland", text: "Woodland", selected: true },
     ]);
     expect(viewModel.data.selectedCaseTypeLabel).toBe("Woodland");
     expect(viewModel.data.total).toBe(90);
+    expect(viewModel.data.hasSelection).toBe(true);
     expect(viewModel.data.hasResults).toBe(true);
+  });
+
+  it("selects the blank placeholder and makes no selection on first visit", () => {
+    const viewModel = createReportViewModel({
+      page: buildPage({ selectedCaseType: null, phases: [], total: 0 }),
+      request,
+    });
+
+    expect(viewModel.data.caseTypeItems).toEqual([
+      { value: "", text: "Select a case type", selected: true },
+      { value: "frps", text: "Frps", selected: false },
+      { value: "woodland", text: "Woodland", selected: false },
+    ]);
+    expect(viewModel.data.hasSelection).toBe(false);
+    expect(viewModel.data.hasResults).toBe(false);
+    expect(viewModel.data.table.rows).toEqual([]);
   });
 
   it("flattens phases into indented numeric table rows", () => {

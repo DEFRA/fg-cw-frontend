@@ -108,4 +108,27 @@ describe("reportRoute", () => {
     expect(result).toContain('data-testid="report-empty"');
     expect(result).toContain("No cases found");
   });
+
+  it("prompts for a case type and shows no table on first visit", async () => {
+    reportCasesUseCase.mockResolvedValue(
+      createMockPage({
+        selectedCaseType: null,
+        availableCaseTypes: ["frps", "woodland"],
+        total: 0,
+        phases: [],
+      }),
+    );
+
+    const { statusCode, result } = await inject(server);
+
+    expect(statusCode).toEqual(200);
+    expect(result).toContain('data-testid="report-prompt"');
+    expect(result).toContain("Select a case type to view the report");
+    expect(result).not.toContain('data-testid="report-table"');
+    expect(result).not.toContain('data-testid="report-empty"');
+
+    // The blank placeholder is the selected option.
+    const $ = load(result);
+    expect($("#workflowCode option[selected]").attr("value")).toBe("");
+  });
 });

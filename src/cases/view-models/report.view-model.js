@@ -42,11 +42,24 @@ const mapPhasesToRows = (phases = []) => phases.flatMap(phaseRows);
 export const createReportViewModel = ({ page, request }) => {
   const data = page.data;
 
-  const caseTypeItems = data.availableCaseTypes.map((code) => ({
-    value: code,
-    text: capitalise(code),
-    selected: code === data.selectedCaseType,
-  }));
+  const hasSelection = Boolean(data.selectedCaseType);
+
+  // A blank placeholder leads the list so the dropdown starts unselected on the
+  // first visit; it is selected only while no case type has been chosen.
+  const placeholder = {
+    value: "",
+    text: "Select a case type",
+    selected: !hasSelection,
+  };
+
+  const caseTypeItems = [
+    placeholder,
+    ...data.availableCaseTypes.map((code) => ({
+      value: code,
+      text: capitalise(code),
+      selected: code === data.selectedCaseType,
+    })),
+  ];
 
   const rows = mapPhasesToRows(data.phases);
 
@@ -61,6 +74,7 @@ export const createReportViewModel = ({ page, request }) => {
       caseTypeItems,
       total: data.total,
       table: { rows },
+      hasSelection,
       hasResults: rows.length > 0,
     },
   };

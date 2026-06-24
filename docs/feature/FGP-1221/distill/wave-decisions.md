@@ -28,3 +28,23 @@ contradictions to reconcile.
 
 No Gherkin runner exists. `acceptance.feature` is the canonical human-readable spec; the
 executable acceptance tests are the named vitest tests, kept in step via `Tested by:`.
+
+## DWD-05 — Blank case-type dropdown on first visit (three-way page state)
+
+Change request (FGP-1221): the case-type dropdown must start blank on first visit. Paired with
+the backend change (fg-cw-backend DWD-05) that stops defaulting and returns
+`selectedCaseType: null` when no case type is requested.
+
+Decisions (user-confirmed):
+
+1. The view-model prepends a blank placeholder option (`value: ""`, "Select a case type"),
+   selected while `selectedCaseType` is null, and exposes `hasSelection`.
+2. The page now has **three** states, not two:
+   - **No selection** (first visit) → a "Select a case type to view the report" prompt
+     (`data-testid="report-prompt"`), no table.
+   - **Selected, has cases** → total + roll-up table.
+   - **Selected, no cases** → the existing "no cases for this case type" message.
+     This distinguishes "you haven't chosen yet" from "this case type is empty" — previously the
+     single empty state conflated them.
+3. The repository (`getReport`) is unchanged: no case type chosen still means no query string;
+   the backend now answers that with `selectedCaseType: null`.

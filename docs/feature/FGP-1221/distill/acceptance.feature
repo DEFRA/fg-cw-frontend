@@ -34,11 +34,24 @@ Feature: Case lifecycle report page
 
   Scenario: The case-type filter offers the available types
     # Tested by: view-models/report.view-model.test.js
-    #            "builds the case-type select with the current selection marked"
+    #            "builds the case-type select with a blank placeholder and the current selection marked"
     Given I am permitted to see more than one case type
+    And I have chosen a case type
     When the page is shown
     Then I can choose from those case types
     And my current choice is pre-selected
+
+  @edge
+  Scenario: On first visit the case type is unchosen and no report is shown
+    # Tested by: view-models/report.view-model.test.js
+    #            "selects the blank placeholder and makes no selection on first visit"
+    #            routes/report.route.test.js
+    #            "prompts for a case type and shows no table on first visit"
+    Given I have not chosen a case type
+    When I open the reports page
+    Then the case-type chooser starts blank
+    And I am prompted to choose a case type to view the report
+    And no report is shown until I choose one
 
   @edge
   Scenario: A case type with no cases shows a clear message
@@ -56,9 +69,10 @@ Feature: Case lifecycle report page
     Then it asks the service for the "Woodland" report only
 
   @edge
-  Scenario: Opening the page with no choice asks for the default report
+  Scenario: Opening the page with no choice does not name a case type
     # Tested by: repositories/report.repository.test.js
     #            "calls /cases/report with no query string when criteria is falsy"
     Given I have not chosen a case type
     When the page fetches the report
-    Then it asks the service for the report without naming a case type
+    Then it asks the service without naming a case type
+    And the service replies with nothing selected (see backend AC-6)
