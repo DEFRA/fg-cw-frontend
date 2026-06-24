@@ -43,5 +43,20 @@ describe("Report Repository", () => {
       );
       expect(result).toEqual(report);
     });
+
+    // Given the blank case-type placeholder has been submitted
+    // When the report is fetched
+    // Then the backend is called as if no case type has been selected
+    it("does not send workflowCode when the selected case type is blank", async () => {
+      wreck.get.mockResolvedValueOnce({ payload: { phases: [] } });
+
+      await getReport(authContext, { workflowCode: "" });
+
+      expect(wreck.get).toHaveBeenCalledWith("/cases/report", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
+    });
   });
 });
