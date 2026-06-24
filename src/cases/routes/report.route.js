@@ -5,6 +5,12 @@ export const reportRoute = {
   method: "GET",
   path: "/reports",
   async handler(request, h) {
+    // The blank "Select a case type" option submits workflowCode=""; redirect to
+    // the clean URL so the page renders its first-visit prompt (mirrors /cases).
+    if ("workflowCode" in request.query && !request.query.workflowCode) {
+      return h.redirect("/reports");
+    }
+
     const authContext = {
       token: request.auth.credentials.token,
       user: request.auth.credentials.user,

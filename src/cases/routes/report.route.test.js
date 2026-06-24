@@ -64,6 +64,20 @@ describe("reportRoute", () => {
     await server.stop();
   });
 
+  // Regression (FGP-1221): choosing the blank "Select a case type" option and
+  // submitting sends ?workflowCode= — redirect to the clean URL rather than
+  // forwarding an empty case type to the service.
+  it("redirects to /reports when workflowCode is empty", async () => {
+    const { statusCode, headers } = await inject(
+      server,
+      "/reports?workflowCode=",
+    );
+
+    expect(statusCode).toEqual(302);
+    expect(headers.location).toBe("/reports");
+    expect(reportCasesUseCase).not.toHaveBeenCalled();
+  });
+
   it("renders the lifecycle report table", async () => {
     reportCasesUseCase.mockResolvedValue(createMockPage(mockReport));
 
