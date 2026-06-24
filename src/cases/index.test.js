@@ -24,6 +24,10 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/reports",
+      },
+      {
+        method: "get",
         path: "/secret",
       },
       {
