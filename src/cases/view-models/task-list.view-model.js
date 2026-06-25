@@ -24,7 +24,12 @@ export const createTaskListViewModel = ({
         ...stage,
         taskGroups,
         hasTasks,
-        showEmptyState: shouldShowEmptyState({ kase, hasTasks }),
+        // The frontend is the single source of truth for the empty-state
+        // message: render it whenever the stage has no tasks. The backend no
+        // longer embeds "There are no tasks to complete." in workflow content
+        // (see fg-cw-backend migration removing the duplicate), so there is no
+        // risk of the message rendering twice.
+        showEmptyState: !hasTasks,
         actions: mapActions({ stage, errors, values }),
       },
       beforeContent: kase.beforeContent,
@@ -34,20 +39,6 @@ export const createTaskListViewModel = ({
     errorList: Object.values(errors),
     values,
   };
-};
-
-const hasDynamicContent = (content) =>
-  Array.isArray(content) && content.length > 0;
-
-// The backend already embeds an empty-state message inside the dynamic
-// before/after content for some no-task stages. Only render the generic
-// empty-state message when there is no such content, to avoid duplicates.
-const shouldShowEmptyState = ({ kase, hasTasks }) => {
-  const hasContent =
-    hasDynamicContent(kase.beforeContent) ||
-    hasDynamicContent(kase.afterContent);
-
-  return !hasTasks && !hasContent;
 };
 
 const mapTaskGroups = (taskGroups, caseId) => {

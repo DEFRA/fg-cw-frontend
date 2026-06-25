@@ -302,7 +302,7 @@ describe("createTaskListViewModel", () => {
       expect(result.data.stage.hasTasks).toBe(false);
     });
 
-    it("sets showEmptyState to true when there are no tasks and no dynamic content", () => {
+    it("sets showEmptyState to true when there are no tasks", () => {
       const kase = structuredClone(mockCaseData);
 
       kase.stage.taskGroups = [];
@@ -324,12 +324,12 @@ describe("createTaskListViewModel", () => {
       expect(result.data.stage.showEmptyState).toBe(false);
     });
 
-    it("sets showEmptyState to false when beforeContent is present", () => {
+    it("sets showEmptyState to true when there are no tasks even if beforeContent is present", () => {
       const kase = structuredClone(mockCaseData);
 
       kase.stage.taskGroups = [];
       kase.beforeContent = [
-        { component: "paragraph", text: "There are no tasks to complete." },
+        { component: "paragraph", text: "Some before content." },
       ];
 
       const result = createTaskListViewModel({
@@ -337,31 +337,16 @@ describe("createTaskListViewModel", () => {
         request: mockRequest,
       });
 
-      expect(result.data.stage.showEmptyState).toBe(false);
+      expect(result.data.stage.showEmptyState).toBe(true);
     });
 
-    it("sets showEmptyState to false when afterContent is present", () => {
+    it("sets showEmptyState to true when there are no tasks even if afterContent is present", () => {
       const kase = structuredClone(mockCaseData);
 
       kase.stage.taskGroups = [];
       kase.afterContent = [
         { component: "paragraph", text: "Some after content." },
       ];
-
-      const result = createTaskListViewModel({
-        page: createMockPage(kase),
-        request: mockRequest,
-      });
-
-      expect(result.data.stage.showEmptyState).toBe(false);
-    });
-
-    it("sets showEmptyState to true when content arrays are empty", () => {
-      const kase = structuredClone(mockCaseData);
-
-      kase.stage.taskGroups = [];
-      kase.beforeContent = [];
-      kase.afterContent = [];
 
       const result = createTaskListViewModel({
         page: createMockPage(kase),
