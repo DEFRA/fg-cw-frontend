@@ -15,10 +15,16 @@
     {% endif %}
 
     {% if not params.stage.hideTaskGroups %}
-      {% for taskGroup in params.stage.taskGroups %}
-        <h3 class="govuk-heading-m">{{ taskGroup.name }}</h3>
-        {{ taskList({tasks: taskGroup.tasks}) }}
-      {% endfor %}
+      {% if params.stage.hasTasks %}
+        {% for taskGroup in params.stage.taskGroups %}
+          <h3 class="govuk-heading-m">{{ taskGroup.name }}</h3>
+          {{ taskList({tasks: taskGroup.tasks}) }}
+        {% endfor %}
+      {% elif params.stage.showEmptyState %}
+        <p class="govuk-body" data-testid="no-tasks-message">
+          There are no tasks to complete.
+        </p>
+      {% endif %}
     {% endif %}
 
     {% if params.afterContent %}
