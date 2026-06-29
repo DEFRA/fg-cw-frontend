@@ -552,7 +552,7 @@ describe("createTaskListViewModel", () => {
           code: "approve",
           name: "Approve",
           comment: {
-            label: "Approval reason",
+            label: "",
             mandatory: true,
           },
         },
@@ -565,6 +565,31 @@ describe("createTaskListViewModel", () => {
       const approveItem = result.data.stage.actions.items[0];
 
       expect(approveItem.conditional.hint).toBeUndefined();
+      expect(approveItem.conditional.label.text).toBe("Explain this comment");
+    });
+
+    it("uses 'Explain this comment' as fallback if label is empty", () => {
+      const kase = structuredClone(mockCaseData);
+
+      kase.stage.actions = [
+        {
+          code: "approve",
+          name: "Approve",
+          comment: {
+            label: "",
+            helpText: "Fallback help text",
+            mandatory: true,
+          },
+        },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+      const approveItem = result.data.stage.actions.items[0];
+
+      expect(approveItem.conditional.label.text).toBe("Explain this comment");
     });
 
     it("handles optional comment types", () => {
