@@ -1,5 +1,6 @@
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { globalIgnores } from "eslint/config";
+import importX from "eslint-plugin-import-x";
 import neostandard from "neostandard";
 
 export default [
@@ -10,6 +11,9 @@ export default [
   eslintConfigPrettier,
   {
     files: ["src/**/*"],
+    plugins: {
+      "import-x": importX,
+    },
     rules: {
       curly: "error",
       "func-style": ["error", "expression"],
