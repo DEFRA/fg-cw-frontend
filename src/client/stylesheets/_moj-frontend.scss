@@ -1,1 +1,3 @@
-@use "pkg:@ministryofjustice/frontend";
+@use "pkg:@ministryofjustice/frontend" with (
+  $moj-assets-path: "/public/assets/"
+);
