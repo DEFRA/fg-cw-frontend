@@ -12,7 +12,7 @@
     "build": "NODE_ENV=production webpack",
     "dev": "run-p frontend:watch server:watch",
     "dev:debug": "run-p frontend:watch server:debug",
-    "format": "prettier --write \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\"",
+    "format": "prettier --write \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\" && eslint --fix",
     "format:check": "prettier --check \"src/**/*.js\" \"**/*.{js,cjs,md,json,config.js,test.js,njk}\" --plugin prettier-plugin-jinja-template",
     "frontend:watch": "NODE_ENV=development webpack --watch",
     "git:pre-commit-hook": "npm run format:check && npm run lint && npm test",
@@ -34,8 +34,7 @@
   "license": "OGL-UK-3.0",
   "prettier": {
     "plugins": [
-      "prettier-plugin-jinja-template",
-      "prettier-plugin-organize-imports"
+      "prettier-plugin-jinja-template"
     ],
     "overrides": [
       {
@@ -81,8 +80,7 @@
     "lodash": "^4.17.23",
     "moment": "^2.30.1",
     "nunjucks": "^3.2.4",
-    "pino": "^10.3.0",
-    "typescript": "^6.0.3"
+    "pino": "^10.3.0"
   },
   "devDependencies": {
     "@babel/cli": "^8.0.1",
@@ -110,7 +108,6 @@
     "postcss-loader": "^8.2.1",
     "prettier": "^3.9.4",
     "prettier-plugin-jinja-template": "^2.1.0",
-    "prettier-plugin-organize-imports": "^4.3.0",
     "sass-embedded": "^1.98.0",
     "sass-loader": "^16.0.7",
     "source-map-loader": "^5.0.0",

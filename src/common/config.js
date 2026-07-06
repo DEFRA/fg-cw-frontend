@@ -1,6 +1,6 @@
-import convict from "convict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import convict from "convict";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
