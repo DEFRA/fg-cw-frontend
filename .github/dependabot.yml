@@ -53,6 +53,20 @@ updates:
     allow:
       - dependency-type: direct
 
+  - package-ecosystem: docker
+    directory: /
+    open-pull-requests-limit: 10
+
+    groups:
+      docker-images:
+        patterns:
+          - "*"
+
+    schedule:
+      interval: weekly
+      time: "10:30"
+      timezone: "Europe/London"
+
   - package-ecosystem: github-actions
     directory: /
 
