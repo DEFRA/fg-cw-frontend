@@ -105,8 +105,6 @@ export default async () => {
               [
                 "@babel/preset-env",
                 {
-                  bugfixes: true,
-                  loose: true,
                   modules: false,
                 },
               ],
