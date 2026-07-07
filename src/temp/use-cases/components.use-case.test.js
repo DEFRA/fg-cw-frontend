@@ -20,61 +20,43 @@ describe("components.use-case", () => {
   });
 
   describe("updateComponentsPreviewUseCase", () => {
-    it("returns an error when the payload is missing", () => {
-      const session = { set: vi.fn() };
-
-      const result = updateComponentsPreviewUseCase({
-        session,
+    it.each([
+      {
+        description: "payload is missing",
         jsonPayload: "",
-      });
-
-      expect(result).toEqual({
-        errors: { jsonPayload: "Enter a JSON payload" },
-      });
-      expect(session.set).not.toHaveBeenCalled();
-    });
-
-    it("returns an error when the payload only contains whitespace", () => {
-      const session = { set: vi.fn() };
-
-      const result = updateComponentsPreviewUseCase({
-        session,
+        expectedError: "Enter a JSON payload",
+      },
+      {
+        description: "payload only contains whitespace",
         jsonPayload: "   ",
-      });
-
-      expect(result).toEqual({
-        errors: { jsonPayload: "Enter a JSON payload" },
-      });
-      expect(session.set).not.toHaveBeenCalled();
-    });
-
-    it("returns an error when the payload cannot be parsed as JSON", () => {
-      const session = { set: vi.fn() };
-
-      const result = updateComponentsPreviewUseCase({
-        session,
+        expectedError: "Enter a JSON payload",
+      },
+      {
+        description: "payload cannot be parsed as JSON",
         jsonPayload: "{invalid-json}",
-      });
-
-      expect(result).toEqual({
-        errors: { jsonPayload: "Enter a valid JSON payload" },
-      });
-      expect(session.set).not.toHaveBeenCalled();
-    });
-
-    it("returns an error when the parsed payload is not an array", () => {
-      const session = { set: vi.fn() };
-
-      const result = updateComponentsPreviewUseCase({
-        session,
+        expectedError: "Enter a valid JSON payload",
+      },
+      {
+        description: "parsed payload is not an array",
         jsonPayload: '{"foo":"bar"}',
-      });
+        expectedError: "JSON payload must be an array of components",
+      },
+    ])(
+      "returns an error when the $description",
+      ({ jsonPayload, expectedError }) => {
+        const session = { set: vi.fn() };
 
-      expect(result).toEqual({
-        errors: { jsonPayload: "JSON payload must be an array of components" },
-      });
-      expect(session.set).not.toHaveBeenCalled();
-    });
+        const result = updateComponentsPreviewUseCase({
+          session,
+          jsonPayload,
+        });
+
+        expect(result).toEqual({
+          errors: { jsonPayload: expectedError },
+        });
+        expect(session.set).not.toHaveBeenCalled();
+      },
+    );
 
     it("stores the parsed content in the session and returns it", () => {
       const session = { set: vi.fn() };
