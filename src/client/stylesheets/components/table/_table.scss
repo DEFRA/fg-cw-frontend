@@ -8,7 +8,7 @@
 
 .govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected) {
   border-left: 4px solid #00a33b;
-  background-color: govuk-colour("light-grey");
+  background-color: govuk-colour("black", $variant: "tint-95");
 }
 
 .govuk-table__row:has(.govuk-table__cell.govuk-table__cell--selected)

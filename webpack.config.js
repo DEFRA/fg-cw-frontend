@@ -105,8 +105,6 @@ export default async () => {
               [
                 "@babel/preset-env",
                 {
-                  bugfixes: true,
-                  loose: true,
                   modules: false,
                 },
               ],
@@ -184,6 +182,12 @@ export default async () => {
       sideEffects: true,
       usedExports: true,
     },
+    ignoreWarnings: [
+      {
+        message: /The `govuk-text-colour` mixin is deprecated/,
+        module: /stylesheets\/application\.scss/,
+      },
+    ],
     plugins: [
       new CleanWebpackPlugin(),
       new WebpackAssetsManifest(),

@@ -1,7 +1,7 @@
+import { glob } from "node:fs/promises";
 import Vision from "@hapi/vision";
 import Nunjucks from "nunjucks";
 
-import { glob } from "node:fs/promises";
 import { config } from "../config.js";
 import { context } from "./context/context.js";
 import { formatDate } from "./filters/format-date.js";
