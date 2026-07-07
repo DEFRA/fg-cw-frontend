@@ -78,14 +78,32 @@ describe("createUserRoute", () => {
       );
     });
 
-    it("shows error when name is empty", async () => {
+    it.each([
+      {
+        description: "name is empty",
+        payload: { name: "", email: "test@example.com" },
+        expectedError: "Enter a name",
+      },
+      {
+        description: "name is too short",
+        payload: { name: "A", email: "test@example.com" },
+        expectedError: "Enter a name with at least 2 characters",
+      },
+      {
+        description: "email is empty",
+        payload: { name: "Test User", email: "" },
+        expectedError: "Enter an email address",
+      },
+      {
+        description: "email is invalid",
+        payload: { name: "Test User", email: "invalid-email" },
+        expectedError: "Enter a valid email address",
+      },
+    ])("shows error when $description", async ({ payload, expectedError }) => {
       const { statusCode, result } = await server.inject({
         method: "POST",
         url: "/admin/user-management/users",
-        payload: {
-          name: "",
-          email: "test@example.com",
-        },
+        payload,
         auth: {
           credentials: { token: "mock-token", user: { id: "admin-user" } },
           strategy: "session",
@@ -96,70 +114,7 @@ describe("createUserRoute", () => {
 
       const $ = load(result);
       expect($(".govuk-error-summary").length).toBe(1);
-      expect(result).toContain("Enter a name");
-    });
-
-    it("shows error when name is too short", async () => {
-      const { statusCode, result } = await server.inject({
-        method: "POST",
-        url: "/admin/user-management/users",
-        payload: {
-          name: "A",
-          email: "test@example.com",
-        },
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(statusCode).toEqual(200);
-
-      const $ = load(result);
-      expect($(".govuk-error-summary").length).toBe(1);
-      expect(result).toContain("Enter a name with at least 2 characters");
-    });
-
-    it("shows error when email is empty", async () => {
-      const { statusCode, result } = await server.inject({
-        method: "POST",
-        url: "/admin/user-management/users",
-        payload: {
-          name: "Test User",
-          email: "",
-        },
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(statusCode).toEqual(200);
-
-      const $ = load(result);
-      expect($(".govuk-error-summary").length).toBe(1);
-      expect(result).toContain("Enter an email address");
-    });
-
-    it("shows error when email is invalid", async () => {
-      const { statusCode, result } = await server.inject({
-        method: "POST",
-        url: "/admin/user-management/users",
-        payload: {
-          name: "Test User",
-          email: "invalid-email",
-        },
-        auth: {
-          credentials: { token: "mock-token", user: { id: "admin-user" } },
-          strategy: "session",
-        },
-      });
-
-      expect(statusCode).toEqual(200);
-
-      const $ = load(result);
-      expect($(".govuk-error-summary").length).toBe(1);
-      expect(result).toContain("Enter a valid email address");
+      expect(result).toContain(expectedError);
     });
 
     it("shows error when email already exists", async () => {
