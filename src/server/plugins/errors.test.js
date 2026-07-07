@@ -207,69 +207,49 @@ describe("errors plugin", () => {
   });
 
   describe("error messages", () => {
-    it("should use 'Bad Request' message for 400", async () => {
-      config.get.mockReturnValue(false);
-
-      const response = await server.inject({
-        method: "GET",
+    it.each([
+      {
+        code: 400,
         url: "/bad-request",
-      });
-
-      expect(response.statusCode).toBe(400);
-      expect(response.result.template).toBe("pages/error");
-      expect(response.result.context.message).toBe("Bad Request");
-    });
-
-    it("should use 'Unauthorized' message for 401", async () => {
-      config.get.mockReturnValue(false);
-
-      const response = await server.inject({
-        method: "GET",
+        expectedMessage: "Bad Request",
+        description: "should use 'Bad Request' message for 400",
+      },
+      {
+        code: 401,
         url: "/unauthorized",
-      });
-
-      expect(response.statusCode).toBe(401);
-      expect(response.result.template).toBe("pages/error");
-      expect(response.result.context.message).toBe("Unauthorized");
-    });
-
-    it("should use 'Page not found' message for 404", async () => {
-      config.get.mockReturnValue(false);
-
-      const response = await server.inject({
-        method: "GET",
+        expectedMessage: "Unauthorized",
+        description: "should use 'Unauthorized' message for 401",
+      },
+      {
+        code: 404,
         url: "/not-found",
-      });
-
-      expect(response.statusCode).toBe(404);
-      expect(response.result.template).toBe("pages/error");
-      expect(response.result.context.message).toBe("Page not found");
-    });
-
-    it("should use 'Something went wrong' fallback for unknown status codes", async () => {
-      config.get.mockReturnValue(false);
-
-      const response = await server.inject({
-        method: "GET",
+        expectedMessage: "Page not found",
+        description: "should use 'Page not found' message for 404",
+      },
+      {
+        code: 500,
         url: "/server-error",
-      });
-
-      expect(response.statusCode).toBe(500);
-      expect(response.result.template).toBe("pages/error");
-      expect(response.result.context.message).toBe("Something went wrong");
-    });
-
-    it("should use 'Something went wrong' fallback for 502", async () => {
+        expectedMessage: "Something went wrong",
+        description:
+          "should use 'Something went wrong' fallback for unknown status codes",
+      },
+      {
+        code: 502,
+        url: "/bad-gateway",
+        expectedMessage: "Something went wrong",
+        description: "should use 'Something went wrong' fallback for 502",
+      },
+    ])("$description", async ({ code, url, expectedMessage }) => {
       config.get.mockReturnValue(false);
 
       const response = await server.inject({
         method: "GET",
-        url: "/bad-gateway",
+        url,
       });
 
-      expect(response.statusCode).toBe(502);
+      expect(response.statusCode).toBe(code);
       expect(response.result.template).toBe("pages/error");
-      expect(response.result.context.message).toBe("Something went wrong");
+      expect(response.result.context.message).toBe(expectedMessage);
     });
   });
 
