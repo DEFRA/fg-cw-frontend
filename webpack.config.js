@@ -28,7 +28,8 @@ export default async () => {
   const components = (
     await Array.fromAsync(
       glob("**/components", {
-        exclude: ["node_modules", "*.*"],
+        cwd: dirname,
+        nodir: false,
       }),
     )
   ).map((p) => path.join(dirname, p));
