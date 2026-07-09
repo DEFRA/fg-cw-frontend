@@ -1,9 +1,7 @@
 @use "moj-frontend";
-@use "pkg:govuk-frontend";
-@use "node_modules/govuk-frontend/dist/govuk/core/global-styles.mixin" as govuk-global;
+@use "govuk-frontend";
+
 @use "variables";
 @use "helpers";
 @use "core";
 @use "components";
-
-@include govuk-global.govuk-global-styles;
