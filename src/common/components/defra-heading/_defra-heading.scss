@@ -31,6 +31,8 @@
 }
 
 .defra-header__service-name {
+  @include govuk-typography-common;
+
   font-size: 24px;
   font-weight: 400;
   color: #0b0c0c;
@@ -43,6 +45,8 @@
   height: 75px;
 
   &__link {
+    @include govuk-typography-common;
+
     color: govuk-colour(
       "black"
     ) !important; /* stylelint-disable-line declaration-no-important */
