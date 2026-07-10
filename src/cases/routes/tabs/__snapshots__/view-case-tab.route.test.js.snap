@@ -89,25 +89,25 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
                 106284736
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Reference:</strong>
                 10f-f72-e22
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Scheme:</strong>
                 SFI
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Created At:</strong>
                 11 Sept 2025
               </p>
@@ -232,25 +232,25 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
                 106284736
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Reference:</strong>
                 10f-f72-e22
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Scheme:</strong>
                 SFI
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Created At:</strong>
                 11 Sept 2025
               </p>
