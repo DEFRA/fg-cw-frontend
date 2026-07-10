@@ -66,7 +66,7 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1"
                   >SBI:</strong
                 >
@@ -74,7 +74,7 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1"
                   >Reference:</strong
                 >
@@ -104,7 +104,7 @@ exports[`case-summary > renders without callToAction 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1"
                   >SBI:</strong
                 >
@@ -112,7 +112,7 @@ exports[`case-summary > renders without callToAction 1`] = `
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1"
                   >Reference:</strong
                 >
@@ -120,7 +120,7 @@ exports[`case-summary > renders without callToAction 1`] = `
               </p>
             </div>
             <div class="app-case-cell">
-              <p class="govuk-body govuk-!-margin-bottom-0">
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1"
                   >Scheme:</strong
                 >
