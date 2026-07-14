@@ -560,6 +560,45 @@ describe("table structure mapping", () => {
     expect(row.status.text).toBe("Unknown");
     expect(row.assignee.text).toBe("Not assigned");
   });
+
+  it("uses schemeName in the Type column when it is defined", () => {
+    const mockCases = [
+      {
+        _id: "scheme-case",
+        workflowCode: "grasslands",
+        schemeName: "Grassland Private Beta",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("Grassland Private Beta");
+  });
+
+  it("falls back to workflowCode in the Type column when schemeName is not defined", () => {
+    const mockCases = [
+      {
+        _id: "no-scheme-case",
+        workflowCode: "grasslands",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("grasslands");
+  });
 });
 
 describe("sortable headers", () => {
