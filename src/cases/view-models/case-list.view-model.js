@@ -136,7 +136,6 @@ const mapCasesToTable = (cases, currentURL) => {
       ({
         _id,
         caseRef,
-        workflowCode,
         schemeName,
         payload,
         createdAt,
@@ -154,7 +153,7 @@ const mapCasesToTable = (cases, currentURL) => {
           html: getLinkedHtml(hasLinkedCases),
         },
         caseType: {
-          text: mapText(schemeName || workflowCode),
+          text: mapText(schemeName),
         },
         id: {
           href: `/cases/${_id}`,

@@ -120,6 +120,7 @@ describe("case-list.model", () => {
         _id: "case-1",
         caseRef: "CASE-REF-001",
         workflowCode: "wmp",
+        schemeName: "wmp",
         createdAt: "2021-03-10T00:00:00.000Z",
         payload: {
           identifiers: {
@@ -145,6 +146,7 @@ describe("case-list.model", () => {
         _id: "case-2",
         caseRef: "CASE-REF-002",
         workflowCode: "frps-private-beta",
+        schemeName: "frps-private-beta",
         createdAt: "2021-03-15T00:00:00.000Z",
         hasLinkedCases: false,
         payload: {
@@ -432,6 +434,7 @@ describe("table structure mapping", () => {
         _id: "test-case-id",
         caseRef: "CASE-REF-123",
         workflowCode: "pmf",
+        schemeName: "pmf",
         createdAt: "2021-06-15T14:30:00.000Z",
         payload: {
           submittedAt: "2021-06-15T14:30:00.000Z",
@@ -581,11 +584,11 @@ describe("table structure mapping", () => {
     expect(row.caseType.text).toBe("Grassland Private Beta");
   });
 
-  it("falls back to workflowCode in the Type column when schemeName is not defined", () => {
+  it("uses the workflow code supplied as schemeName by the backend", () => {
     const mockCases = [
       {
         _id: "no-scheme-case",
-        workflowCode: "grasslands",
+        schemeName: "grasslands",
         currentStatus: "NEW",
         assignedUser: null,
       },
