@@ -120,6 +120,7 @@ describe("case-list.model", () => {
         _id: "case-1",
         caseRef: "CASE-REF-001",
         workflowCode: "wmp",
+        schemeName: "wmp",
         createdAt: "2021-03-10T00:00:00.000Z",
         payload: {
           identifiers: {
@@ -145,6 +146,7 @@ describe("case-list.model", () => {
         _id: "case-2",
         caseRef: "CASE-REF-002",
         workflowCode: "frps-private-beta",
+        schemeName: "frps-private-beta",
         createdAt: "2021-03-15T00:00:00.000Z",
         hasLinkedCases: false,
         payload: {
@@ -432,6 +434,7 @@ describe("table structure mapping", () => {
         _id: "test-case-id",
         caseRef: "CASE-REF-123",
         workflowCode: "pmf",
+        schemeName: "pmf",
         createdAt: "2021-06-15T14:30:00.000Z",
         payload: {
           submittedAt: "2021-06-15T14:30:00.000Z",
@@ -559,6 +562,45 @@ describe("table structure mapping", () => {
     expect(row.submitted.text).toBe("");
     expect(row.status.text).toBe("Unknown");
     expect(row.assignee.text).toBe("Not assigned");
+  });
+
+  it("uses schemeName in the Type column when it is defined", () => {
+    const mockCases = [
+      {
+        _id: "scheme-case",
+        workflowCode: "grasslands",
+        schemeName: "Grassland Private Beta",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("Grassland Private Beta");
+  });
+
+  it("uses the workflow code supplied as schemeName by the backend", () => {
+    const mockCases = [
+      {
+        _id: "no-scheme-case",
+        schemeName: "grasslands",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("grasslands");
   });
 });
 
