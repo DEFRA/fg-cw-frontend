@@ -1,5 +1,6 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
+import { createLabelObject } from "./task-list.view-model.js";
 
 const getFieldValue = (fieldName, values) => values?.[fieldName];
 
@@ -25,7 +26,7 @@ const createConditionalTextarea = ({
     id: name,
     name,
     value: commentText,
-    label: { text: commentInputDef.label },
+    label: createLabelObject(commentInputDef.label),
     hint: commentInputDef.helpText
       ? { text: commentInputDef.helpText }
       : undefined,
@@ -65,7 +66,7 @@ const getInitialCommentValue = ({
   return "";
 };
 
-const mapStatusOptions = ({
+export const mapStatusOptions = ({
   statusOptions,
   currentStatus,
   commentInputDef,
@@ -89,7 +90,7 @@ const mapStatusOptions = ({
 
     const conditional = createConditionalTextarea({
       statusCode: option.code,
-      commentInputDef,
+      commentInputDef: option.commentInputDef ?? commentInputDef,
       commentText,
       commentError,
     });
@@ -153,6 +154,7 @@ export const createTaskDetailViewModel = ({
   query,
   errors,
   formData,
+  hasWriteAccess,
 }) => {
   const kase = page.data;
   const stage = kase.stage;
@@ -181,6 +183,7 @@ export const createTaskDetailViewModel = ({
       banner: kase.banner,
       caseId: kase._id,
       isInteractive,
+      hasWriteAccess,
       currentTask: buildCurrentTaskData({
         kase,
         currentTask,

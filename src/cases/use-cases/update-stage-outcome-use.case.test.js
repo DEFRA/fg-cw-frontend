@@ -2,7 +2,10 @@ import Boom from "@hapi/boom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { updateStageOutcome } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "./update-stage-outcome-use.case.js";
+import {
+  updateStageOutcomeUseCase,
+  validateStageOutcomeAction,
+} from "./update-stage-outcome-use.case.js";
 
 vi.mock("../repositories/case.repository.js");
 vi.mock("./find-case-by-id.use-case.js");
@@ -141,6 +144,19 @@ describe("updateStageOutcomeUseCase", () => {
         actionCode: "no-comment",
         comment: undefined,
       });
+      expect(result).toEqual({ success: true });
+    });
+
+    it("validates required comment without submitting via helper", async () => {
+      const actionData = {
+        actionCode: "approve",
+        commentFieldName: "approve-comment",
+        comment: "This application looks good",
+      };
+
+      const result = validateStageOutcomeAction(mockCaseData, actionData);
+
+      expect(updateStageOutcome).not.toHaveBeenCalled();
       expect(result).toEqual({ success: true });
     });
   });

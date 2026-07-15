@@ -1,21 +1,13 @@
+include:
+  - path: ./compose/compose.cw-frontend.yml
+    project_directory: .
+
 services:
   redis:
     image: redis:7.2.3-alpine3.18
     ports:
       - "6379:6379"
     restart: always
-    networks:
-      - cdp-tenant
-
-  fg-cw-frontend:
-    build: ./
-    ports:
-      - "3000:3000"
-    env_file:
-      - ".env"
-    environment:
-      PORT: 3000
-      NODE_ENV: development
     networks:
       - cdp-tenant
 

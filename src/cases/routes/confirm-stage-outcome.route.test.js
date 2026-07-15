@@ -1,4 +1,5 @@
 import hapi from "@hapi/hapi";
+import { load } from "cheerio";
 import {
   afterAll,
   beforeAll,
@@ -11,7 +12,12 @@ import {
 import {
   getFlashData,
   setFlashData,
+  setFlashNotification,
 } from "../../common/helpers/flash-helpers.js";
+import {
+  clearPendingStageOutcomeConfirmation,
+  getPendingStageOutcomeConfirmation,
+} from "../../common/helpers/pending-stage-outcome-confirmation-helpers.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
@@ -22,6 +28,7 @@ import {
 } from "./confirm-stage-outcome.route.js";
 
 vi.mock("../../common/helpers/flash-helpers.js");
+vi.mock("../../common/helpers/pending-stage-outcome-confirmation-helpers.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../use-cases/update-stage-outcome-use.case.js");
 vi.mock("../view-models/confirm-stage-outcome.view-model.js");
@@ -64,15 +71,39 @@ describe("confirmStageOutcomeRoute", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     getFlashData.mockReturnValue({ errors: null, formData: {} });
+    getPendingStageOutcomeConfirmation.mockReturnValue({
+      caseId: "case-123",
+      actionCode: "REJECT_APPLICATION",
+      comment: "Stored comment",
+    });
     findCaseByIdUseCase.mockResolvedValue(mockCaseData);
     createConfirmStageOutcomeViewModel.mockReturnValue({
       pageTitle: "Confirm",
-      data: { caseId: "case-123" },
+      data: {
+        caseId: "case-123",
+        actionCode: "REJECT_APPLICATION",
+        comment: "Stored comment",
+        confirmConfig: {
+          title: "Return application to customer",
+          details: [],
+          yes: {
+            label: "Yes",
+            components: null,
+          },
+          no: {
+            label: "No",
+            components: null,
+          },
+        },
+      },
+      errors: {},
+      errorList: [],
+      values: {},
     });
   });
 
   describe("GET /cases/{caseId}/stage/outcome/confirm", () => {
-    it("should render confirmation page", async () => {
+    it("should get confirmation page data", async () => {
       const { statusCode } = await server.inject({
         method: "GET",
         url: "/cases/case-123/stage/outcome/confirm?actionCode=REJECT_APPLICATION",
@@ -94,9 +125,30 @@ describe("confirmStageOutcomeRoute", () => {
         page: mockCaseData,
         request: expect.any(Object),
         actionCode: "REJECT_APPLICATION",
-        formData: {},
+        formData: { comment: "Stored comment" },
         errors: null,
       });
+    });
+
+    it("should render confirmation page", async () => {
+      const { result, statusCode } = await server.inject({
+        method: "GET",
+        url: "/cases/case-123/stage/outcome/confirm?actionCode=REJECT_APPLICATION",
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: { id: "user-1" },
+          },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(200);
+
+      const $ = load(result);
+      const view = $("#main-content").html();
+
+      expect(view).toMatchSnapshot();
     });
 
     it("should pass flash data to view model", async () => {
@@ -119,9 +171,31 @@ describe("confirmStageOutcomeRoute", () => {
         page: mockCaseData,
         request: expect.any(Object),
         actionCode: "REJECT_APPLICATION",
-        formData: { confirmation: "yes" },
+        formData: { confirmation: "yes", comment: "Stored comment" },
         errors: { confirmation: { text: "Select an option" } },
       });
+    });
+
+    it("should redirect to the case when pending confirmation state is missing", async () => {
+      getPendingStageOutcomeConfirmation.mockReturnValue(undefined);
+
+      const { statusCode, headers } = await server.inject({
+        method: "GET",
+        url: "/cases/case-123/stage/outcome/confirm?actionCode=REJECT_APPLICATION",
+        auth: {
+          credentials: { token: "mock-token", user: {} },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe("/cases/case-123");
+      expect(setFlashNotification).toHaveBeenCalledWith(expect.any(Object), {
+        type: "warning",
+        title: "Confirmation page expired",
+        text: "Enter the decision details again before confirming this action.",
+      });
+      expect(createConfirmStageOutcomeViewModel).not.toHaveBeenCalled();
     });
   });
 
@@ -153,7 +227,10 @@ describe("confirmStageOutcomeRoute", () => {
             href: "#confirmation",
           },
         },
-        formData: payload,
+        formData: {
+          ...payload,
+          comment: "Stored comment",
+        },
       });
     });
 
@@ -185,8 +262,15 @@ describe("confirmStageOutcomeRoute", () => {
           actionData: {
             actionCode: "REJECT_APPLICATION",
             commentFieldName: "REJECT_APPLICATION-comment",
-            comment: "Rejected due to ineligibility",
+            comment: "Stored comment",
           },
+        },
+      );
+      expect(clearPendingStageOutcomeConfirmation).toHaveBeenCalledWith(
+        expect.any(Object),
+        {
+          caseId: "case-123",
+          actionCode: "REJECT_APPLICATION",
         },
       );
     });
@@ -211,6 +295,13 @@ describe("confirmStageOutcomeRoute", () => {
       expect(statusCode).toBe(302);
       expect(headers.location).toBe("/cases/case-123");
       expect(updateStageOutcomeUseCase).not.toHaveBeenCalled();
+      expect(clearPendingStageOutcomeConfirmation).toHaveBeenCalledWith(
+        expect.any(Object),
+        {
+          caseId: "case-123",
+          actionCode: "REJECT_APPLICATION",
+        },
+      );
     });
 
     it("should handle use case errors", async () => {
@@ -247,8 +338,37 @@ describe("confirmStageOutcomeRoute", () => {
       );
       expect(setFlashData).toHaveBeenCalledWith(expect.any(Object), {
         errors: mockErrors,
-        formData: payload,
+        formData: {
+          ...payload,
+          comment: "Stored comment",
+        },
       });
+    });
+
+    it("should redirect to the case when pending confirmation state is missing", async () => {
+      getPendingStageOutcomeConfirmation.mockReturnValue(undefined);
+
+      const { statusCode, headers } = await server.inject({
+        method: "POST",
+        url: "/cases/case-123/stage/outcome/confirm",
+        payload: {
+          confirmation: "yes",
+          actionCode: "REJECT_APPLICATION",
+        },
+        auth: {
+          credentials: { token: "mock-token", user: {} },
+          strategy: "session",
+        },
+      });
+
+      expect(statusCode).toBe(302);
+      expect(headers.location).toBe("/cases/case-123");
+      expect(setFlashNotification).toHaveBeenCalledWith(expect.any(Object), {
+        type: "warning",
+        title: "Confirmation page expired",
+        text: "Enter the decision details again before confirming this action.",
+      });
+      expect(updateStageOutcomeUseCase).not.toHaveBeenCalled();
     });
   });
 });

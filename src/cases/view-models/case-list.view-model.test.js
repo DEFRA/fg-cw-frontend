@@ -10,6 +10,7 @@ vi.mock("../../common/view-models/header.view-model.js");
 const mockRequest = {
   path: "/cases",
   url: new URL("http://localhost:3000/cases"),
+  query: {},
 };
 
 const createMockPage = (cases) => ({
@@ -118,6 +119,8 @@ describe("case-list.model", () => {
       {
         _id: "case-1",
         caseRef: "CASE-REF-001",
+        workflowCode: "wmp",
+        schemeName: "wmp",
         createdAt: "2021-03-10T00:00:00.000Z",
         payload: {
           identifiers: {
@@ -131,6 +134,7 @@ describe("case-list.model", () => {
             },
           },
         },
+        hasLinkedCases: true,
         currentStatus: "NEW",
         currentStatusTheme: "INFO",
         assignedUser: {
@@ -141,7 +145,10 @@ describe("case-list.model", () => {
       {
         _id: "case-2",
         caseRef: "CASE-REF-002",
+        workflowCode: "frps-private-beta",
+        schemeName: "frps-private-beta",
         createdAt: "2021-03-15T00:00:00.000Z",
+        hasLinkedCases: false,
         payload: {
           identifiers: {
             sbi: "987654321",
@@ -173,11 +180,16 @@ describe("case-list.model", () => {
         data: {
           tabItems: [
             {
-              label: "SFI applications (2)",
+              label: "All cases (2)",
               id: "all-cases",
               data: {
                 head: [
                   { text: "Select" },
+                  { html: expect.stringContaining("Linked cases") },
+                  {
+                    html: expect.stringContaining("Type"),
+                    attributes: { "aria-sort": "none" },
+                  },
                   {
                     html: expect.stringContaining("ID"),
                     attributes: { "aria-sort": "none" },
@@ -211,17 +223,28 @@ describe("case-list.model", () => {
                       href: "/cases/case-1",
                       text: "CASE-REF-001",
                     },
+                    linked: {
+                      html: expect.stringContaining("Linked case"),
+                    },
+                    caseType: { text: "wmp" },
                     business: { text: "[business name]" },
                     sbi: { text: "123456789" },
                     submitted: {
                       text: "10 Mar 2021",
                     },
-                    status: { text: "New", theme: "INFO" },
+                    status: {
+                      text: "New",
+                      theme: "INFO",
+                    },
                     assignee: { text: "John Doe" },
                   },
                   {
                     _id: "case-2",
                     select: { value: "case-2" },
+                    linked: {
+                      html: expect.stringContaining("Case not linked"),
+                    },
+                    caseType: { text: "frps-private-beta" },
                     id: {
                       href: "/cases/case-2",
                       text: "CASE-REF-002",
@@ -239,6 +262,7 @@ describe("case-list.model", () => {
                   },
                 ],
               },
+              searchValue: "",
             },
           ],
           assignedUserSuccessMessage: null,
@@ -246,6 +270,7 @@ describe("case-list.model", () => {
             items: [],
             classes: "govuk-!-margin-bottom-2",
           },
+          searchValue: "",
         },
       });
     });
@@ -257,7 +282,7 @@ describe("case-list.model", () => {
       });
 
       expect(result.data.tabItems[0].data.rows).toEqual([]);
-      expect(result.data.tabItems[0].label).toBe("SFI applications (0)");
+      expect(result.data.tabItems[0].label).toBe("All cases (0)");
     });
 
     it("has consistent page title and page heading", () => {
@@ -408,6 +433,8 @@ describe("table structure mapping", () => {
       {
         _id: "test-case-id",
         caseRef: "CASE-REF-123",
+        workflowCode: "pmf",
+        schemeName: "pmf",
         createdAt: "2021-06-15T14:30:00.000Z",
         payload: {
           submittedAt: "2021-06-15T14:30:00.000Z",
@@ -420,6 +447,7 @@ describe("table structure mapping", () => {
             },
           },
         },
+        hasLinkedCases: true,
         currentStatus: "NEW",
         currentStatusTheme: "INFO",
         assignedUser: { name: "Test User" },
@@ -434,6 +462,13 @@ describe("table structure mapping", () => {
 
     expect(tableData.head).toEqual([
       { text: "Select" },
+      { html: expect.stringContaining("Linked cases") },
+      {
+        html: expect.stringContaining("Type"),
+        attributes: {
+          "aria-sort": "none",
+        },
+      },
       {
         html: expect.stringContaining("ID"),
         attributes: {
@@ -481,12 +516,21 @@ describe("table structure mapping", () => {
         href: "/cases/test-case-id",
         text: "CASE-REF-123",
       },
+      linked: {
+        html: expect.stringContaining("Linked case"),
+      },
+      caseType: {
+        text: "pmf",
+      },
       business: { text: "[business name]" },
       sbi: { text: "555666777" },
       submitted: {
         text: "15 Jun 2021",
       },
-      status: { text: "New", theme: "INFO" },
+      status: {
+        text: "New",
+        theme: "INFO",
+      },
       assignee: { text: "Test User" },
     });
   });
@@ -512,21 +556,106 @@ describe("table structure mapping", () => {
     });
     const row = result.data.tabItems[0].data.rows[0];
 
+    expect(row.caseType.text).toBe("");
     expect(row.id.text).toBe("");
     expect(row.sbi.text).toBe("");
     expect(row.submitted.text).toBe("");
     expect(row.status.text).toBe("Unknown");
     expect(row.assignee.text).toBe("Not assigned");
   });
+
+  it("uses schemeName in the Type column when it is defined", () => {
+    const mockCases = [
+      {
+        _id: "scheme-case",
+        workflowCode: "grasslands",
+        schemeName: "Grassland Private Beta",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("Grassland Private Beta");
+  });
+
+  it("uses the workflow code supplied as schemeName by the backend", () => {
+    const mockCases = [
+      {
+        _id: "no-scheme-case",
+        schemeName: "grasslands",
+        currentStatus: "NEW",
+        assignedUser: null,
+      },
+    ];
+
+    const result = createCaseListViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+    });
+    const row = result.data.tabItems[0].data.rows[0];
+
+    expect(row.caseType.text).toBe("grasslands");
+  });
 });
 
 describe("sortable headers", () => {
+  it("links to ?workflowCode=asc when no sort is active", () => {
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+    const caseTypeHeader = result.data.tabItems[0].data.head[2];
+
+    expect(caseTypeHeader.html).toContain('href="/cases?workflowCode=asc"');
+    expect(caseTypeHeader.attributes["aria-sort"]).toBe("none");
+  });
+
+  it("shows ascending state and links to ?workflowCode=desc when ?workflowCode=asc is in URL", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?workflowCode=asc"),
+      query: {},
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+    const caseTypeHeader = result.data.tabItems[0].data.head[2];
+
+    expect(caseTypeHeader.html).toContain('href="/cases?workflowCode=desc"');
+    expect(caseTypeHeader.attributes["aria-sort"]).toBe("ascending");
+  });
+
+  it("shows descending state and links to ?workflowCode=asc when ?workflowCode=desc is in URL", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?workflowCode=desc"),
+      query: {},
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+    const caseTypeHeader = result.data.tabItems[0].data.head[2];
+
+    expect(caseTypeHeader.html).toContain('href="/cases?workflowCode=asc"');
+    expect(caseTypeHeader.attributes["aria-sort"]).toBe("descending");
+  });
+
   it("links to ?caseRef=asc when no sort is active", () => {
     const result = createCaseListViewModel({
       page: createMockPage([]),
       request: mockRequest,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[3];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
     expect(idHeader.attributes["aria-sort"]).toBe("none");
@@ -536,13 +665,14 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
       page: createMockPage([]),
       request,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[3];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=desc"');
     expect(idHeader.attributes["aria-sort"]).toBe("ascending");
@@ -552,13 +682,14 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=desc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
       page: createMockPage([]),
       request,
     });
-    const idHeader = result.data.tabItems[0].data.head[1];
+    const idHeader = result.data.tabItems[0].data.head[3];
 
     expect(idHeader.html).toContain('href="/cases?caseRef=asc"');
     expect(idHeader.attributes["aria-sort"]).toBe("descending");
@@ -568,13 +699,14 @@ describe("sortable headers", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?createdAt=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
       page: createMockPage([]),
       request,
     });
-    const submittedHeader = result.data.tabItems[0].data.head[4];
+    const submittedHeader = result.data.tabItems[0].data.head[6];
 
     expect(submittedHeader.html).toContain('href="/cases?createdAt=desc"');
     expect(submittedHeader.attributes["aria-sort"]).toBe("ascending");
@@ -661,6 +793,7 @@ describe("pagination", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?caseRef=asc"),
+      query: {},
     };
 
     const result = createCaseListViewModel({
@@ -679,5 +812,61 @@ describe("pagination", () => {
     expect(result.data.pagination.next.href).toBe(
       "/cases?caseRef=asc&cursor=cursor-next&direction=forward",
     );
+  });
+});
+
+describe("search functionality", () => {
+  it("includes searchValue in data when search query param is provided", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search=12345"),
+      query: { search: "12345" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.searchValue).toBe("12345");
+  });
+
+  it("includes searchValue in tabItems when search query param is provided", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search=SBI123"),
+      query: { search: "SBI123" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.tabItems[0].searchValue).toBe("SBI123");
+  });
+
+  it("sets searchValue to empty string when no search query param", () => {
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+    });
+
+    expect(result.data.searchValue).toBe("");
+  });
+
+  it("sets searchValue to empty string when search query param is empty", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search="),
+      query: { search: "" },
+    };
+
+    const result = createCaseListViewModel({
+      page: createMockPage([]),
+      request,
+    });
+
+    expect(result.data.searchValue).toBe("");
   });
 });

@@ -1,5 +1,6 @@
 import eslintConfigPrettier from "eslint-config-prettier/flat";
 import { globalIgnores } from "eslint/config";
+import importX from "eslint-plugin-import-x";
 import neostandard from "neostandard";
 
 export default [
@@ -10,7 +11,11 @@ export default [
   eslintConfigPrettier,
   {
     files: ["src/**/*"],
+    plugins: {
+      "import-x": importX,
+    },
     rules: {
+      curly: "error",
       "func-style": ["error", "expression"],
       "no-console": "error",
       complexity: ["error", { max: 4 }],
@@ -22,6 +27,26 @@ export default [
       "import-x/no-default-export": "error",
       "import-x/no-mutable-exports": "error",
       "import-x/no-duplicates": "error",
+      "import-x/order": [
+        "error",
+        {
+          alphabetize: {
+            order: "asc",
+            caseInsensitive: true,
+          },
+          groups: [
+            "builtin",
+            "external",
+            "internal",
+            "parent",
+            "sibling",
+            "index",
+            "object",
+            "type",
+          ],
+          "newlines-between": "ignore",
+        },
+      ],
       "import-x/no-useless-path-segments": "error",
       "import-x/no-cycle": "error",
       "import-x/no-extraneous-dependencies": [

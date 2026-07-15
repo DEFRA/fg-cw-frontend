@@ -99,7 +99,7 @@ Timeline
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
-      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" disabled="">
       <label class="govuk-label govuk-checkboxes__label" for="task-completed">
         Completed
       </label>
@@ -108,7 +108,7 @@ Timeline
 </div>
 
 
-  <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button task-outcome-form__button" data-module="govuk-button" data-govuk-button-init="">
+  <button type="submit" data-prevent-double-click="true" data-testid="save-and-continue-button" class="govuk-button task-outcome-form__button" data-module="govuk-button" data-govuk-button-init="" disabled="">
     Confirm
   </button>
   <a href="/cases/68495db5afe2d27b09b2ee47" class="govuk-link govuk-!-font-size-16" data-testid="back-link">

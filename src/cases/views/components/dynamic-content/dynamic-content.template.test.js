@@ -1,3 +1,4 @@
+import { load } from "cheerio";
 import { describe, expect, test } from "vitest";
 import { render } from "../../../../common/nunjucks/render.js";
 
@@ -426,7 +427,7 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-tag--blue");
   });
 
-  test("renders summary-list component with title", () => {
+  test("renders summary-list component with title as h2 by default", () => {
     const params = [
       {
         component: "summary-list",
@@ -441,10 +442,57 @@ describe("dynamic-content template", () => {
     ];
 
     const result = render("dynamic-content", params);
+    const $ = load(result);
 
     expect(result).toContain("Check details");
+    expect($("h2.govuk-heading-m").text().trim()).toBe("Check details");
+    expect($("h3.govuk-heading-m")).toHaveLength(0);
     expect(result).toContain("Name");
     expect(result).toContain("Sarah Philips");
+  });
+
+  test("renders summary-list component with title using configured headingLevel", () => {
+    const params = [
+      {
+        component: "summary-list",
+        title: "Nested details",
+        headingLevel: 3,
+        rows: [
+          {
+            label: "Name",
+            text: "Sarah Philips",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+    const $ = load(result);
+
+    expect($("h3.govuk-heading-m").text().trim()).toBe("Nested details");
+    expect($("h2.govuk-heading-m")).toHaveLength(0);
+  });
+
+  test("renders summary-list component with title as h2 when headingLevel is invalid", () => {
+    const params = [
+      {
+        component: "summary-list",
+        title: "Fallback details",
+        headingLevel: 7,
+        rows: [
+          {
+            label: "Name",
+            text: "Sarah Philips",
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+    const $ = load(result);
+
+    expect($("h2.govuk-heading-m").text().trim()).toBe("Fallback details");
+    expect($("h7")).toHaveLength(0);
   });
 
   test("renders summary-list component with rich text content", () => {
@@ -701,7 +749,6 @@ describe("dynamic-content template", () => {
     expect(result).toContain("Help with");
     expect(result).toContain("Nationality");
     expect(result).toContain("We need your nationality information");
-    expect(result).toContain("govuk-details__summary-text");
   });
 
   test("renders paragraph component with default styling", () => {
@@ -1260,6 +1307,26 @@ describe("dynamic-content template", () => {
     expect(result).toContain("govuk-accordion");
     expect(result).not.toContain("data-remember-expanded");
     expect(result).toContain("Section 1");
+  });
+
+  test("renders accordion section content with role region for accessibility", () => {
+    const params = [
+      {
+        component: "accordion",
+        id: "a11y-accordion",
+        items: [
+          {
+            heading: [{ component: "text", text: "Section 1" }],
+            content: [{ component: "text", text: "Content 1" }],
+          },
+        ],
+      },
+    ];
+
+    const result = render("dynamic-content", params);
+
+    expect(result).toContain('role="region"');
+    expect(result).toContain('aria-labelledby="a11y-accordion-heading-1"');
   });
 
   test("renders line-break component", () => {

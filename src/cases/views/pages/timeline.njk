@@ -1,11 +1,15 @@
 {% extends '../layouts/case-detail-layout.njk' %}
 {% from "../partials/timeline-item-title/macro.njk" import timelineItemTitle %}
 {% from "../partials/timeline-item-description/macro.njk" import timelineItemDescription %}
+{% from "../partials/timeline-series-table/macro.njk" import timelineSeriesTable %}
 
 {% block contentMain %}
   <h2 class="govuk-heading-l govuk-!-margin-bottom-1 govuk-!-margin-top-6">
     {{ pageHeading }}
+    {% if data.case.caseSeries.length > 1 %}(multiple cases){% endif %}
   </h2>
+
+  {{ timelineSeriesTable(data.case.caseSeries) }}
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-full">

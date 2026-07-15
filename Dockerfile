@@ -1,4 +1,4 @@
-ARG PARENT_VERSION=3.0.2-node24.13.1
+ARG PARENT_VERSION=3.1.1-node24.18.0
 ARG PORT=3000
 ARG PORT_DEBUG=9229
 
@@ -15,7 +15,8 @@ ENV PORT=${PORT}
 EXPOSE ${PORT} ${PORT_DEBUG}
 
 COPY --chown=node:node --chmod=755 package*.json ./
-RUN npm install --ignore-scripts
+COPY --chown=node:node --chmod=755 .npmrc ./
+RUN npm ci --ignore-scripts
 COPY --chown=node:node --chmod=755 . .
 RUN npm run build
 
@@ -44,12 +45,13 @@ ARG PARENT_VERSION
 LABEL uk.gov.defra.ffc.parent-image=defradigital/node:${PARENT_VERSION}
 
 COPY --from=production_build /home/node/package*.json ./
+COPY --from=production_build /home/node/.npmrc ./
 COPY --chown=node:node src src
 COPY --from=production_build /home/node/.public/ ./.public/
 COPY --chown=node:node scripts/run.sh scripts/run.sh
 
 RUN npm ci --omit=dev  --ignore-scripts \
-  chmod +x scripts/run.sh
+  && chmod +x scripts/run.sh
 
 ARG PORT
 ENV PORT=${PORT}

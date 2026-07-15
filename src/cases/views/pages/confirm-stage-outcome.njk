@@ -47,25 +47,59 @@
           {% endif %}
         {% endset %}
 
-        {{
-          govukRadios({
-            name: "confirmation",
-            idPrefix: "confirmation",
-            errorMessage: errors.confirmation,
-            items: [
-              {
-                value: "yes",
-                html: yesHtml,
-                checked: values.confirmation === "yes"
+        {% if data.confirmConfig.label %}
+          {{
+            govukRadios({
+              name: "confirmation",
+              idPrefix: "confirmation",
+              errorMessage: errors.confirmation,
+              fieldset: {
+                legend: {
+                  text: data.confirmConfig.label,
+                  classes: "govuk-fieldset__legend--m"
+                }
               },
-              {
-                value: "no",
-                html: noHtml,
-                checked: values.confirmation === "no"
-              }
-            ]
-          })
-        }}
+              items: [
+                {
+                  value: "yes",
+                  html: yesHtml,
+                  checked: values.confirmation === "yes"
+                },
+                {
+                  value: "no",
+                  html: noHtml,
+                  checked: values.confirmation === "no"
+                }
+              ]
+            })
+          }}
+        {% else %}
+          {{
+            govukRadios({
+              name: "confirmation",
+              idPrefix: "confirmation",
+              errorMessage: errors.confirmation,
+              fieldset: {
+                legend: {
+                  text: data.confirmConfig.title,
+                  classes: "govuk-visually-hidden"
+                }
+              },
+              items: [
+                {
+                  value: "yes",
+                  html: yesHtml,
+                  checked: values.confirmation === "yes"
+                },
+                {
+                  value: "no",
+                  html: noHtml,
+                  checked: values.confirmation === "no"
+                }
+              ]
+            })
+          }}
+        {% endif %}
 
         {{
           govukButton({

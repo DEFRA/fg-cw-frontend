@@ -14,10 +14,22 @@
       {{ dynamicContent(params.beforeContent) }}
     {% endif %}
 
-    {% for taskGroup in params.stage.taskGroups %}
-      <h3 class="govuk-heading-m">{{ taskGroup.name }}</h3>
-      {{ taskList({tasks: taskGroup.tasks}) }}
-    {% endfor %}
+    {% if not params.stage.hideTaskGroups %}
+      {% if params.stage.hasTasks %}
+        {% for taskGroup in params.stage.taskGroups %}
+          <h3 class="govuk-heading-m">{{ taskGroup.name }}</h3>
+          {{ taskList({tasks: taskGroup.tasks}) }}
+        {% endfor %}
+      {% elif params.stage.showEmptyState %}
+        <p class="govuk-body" data-testid="no-tasks-message">
+          There are no tasks to complete.
+        </p>
+      {% endif %}
+    {% endif %}
+
+    {% if params.afterContent %}
+      {{ dynamicContent(params.afterContent) }}
+    {% endif %}
 
     {% if params.stage.actions.items.length > 0 %}
       {{ stageActions({ caseId: params.caseId, stage: params.stage }) }}

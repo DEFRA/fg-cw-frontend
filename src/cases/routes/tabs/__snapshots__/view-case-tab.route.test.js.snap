@@ -67,7 +67,6 @@ Tasks
   </div>
 
 
-
   
 
         "
@@ -90,25 +89,25 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
                 106284736
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Reference:</strong>
                 10f-f72-e22
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Scheme:</strong>
                 SFI
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Created At:</strong>
                 11 Sept 2025
               </p>
@@ -188,7 +187,6 @@ Agreements
   </div>
 
 
-
   
     
     
@@ -234,25 +232,25 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
     <div>
       <div class="app-case-row">
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
                 106284736
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Reference:</strong>
                 10f-f72-e22
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Scheme:</strong>
                 SFI
               </p>
             </div>
             <div class="app-case-cell">
-              <p>
+              <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">Created At:</strong>
                 11 Sept 2025
               </p>
@@ -332,7 +330,6 @@ Agreements
   </div>
 
 
-
   
     
     
@@ -376,11 +373,7 @@ Agreements
     
 
 
-     
-  <h3 class="govuk-heading-m ">
-    Answers
-  </h3>
-
+     <h2 class="govuk-heading-m">Answers</h2>
    <dl class="govuk-summary-list">
   <div class="govuk-summary-list__row">
     <dt class="govuk-summary-list__key">

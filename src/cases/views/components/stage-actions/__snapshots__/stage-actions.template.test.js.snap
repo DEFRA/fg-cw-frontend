@@ -142,7 +142,7 @@ exports[`stage-actions > renders with error message 1`] = `
   <form method="POST" action="/cases/789/stage/outcome">
 
 
-      <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+      <button type="submit" value="approve" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
   </form>
@@ -164,7 +164,7 @@ exports[`stage-actions > renders with textarea error 1`] = `
 </div>
 
 
-      <button value="approve" type="submit" name="actionCode" class="govuk-button" data-module="govuk-button">
+      <button type="submit" value="approve" name="actionCode" class="govuk-button" data-module="govuk-button">
   Approve
 </button>
   </form>

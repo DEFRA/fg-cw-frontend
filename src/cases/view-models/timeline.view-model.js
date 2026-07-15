@@ -27,6 +27,7 @@ export const createTimelineViewModel = ({ page, request }) => {
         assignedUser: caseItem.assignedUser,
         payload: caseItem.payload,
         timeline: caseItem.timeline,
+        caseSeries: caseItem.caseSeries,
         banner: caseItem.banner,
       },
     },

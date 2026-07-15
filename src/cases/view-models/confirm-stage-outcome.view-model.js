@@ -19,6 +19,7 @@ const resolveOption = (option, defaultLabel) => {
 const createDefaultConfig = (defaultTitle) => ({
   title: defaultTitle,
   details: [],
+  label: null,
   yes: { label: "Yes", components: null },
   no: { label: "No", components: null },
 });
@@ -38,6 +39,7 @@ const getDefaultTitle = (action) =>
 const buildCustomConfig = (confirm, defaultTitle) => ({
   title: defaultTitle,
   details: confirm.details || [],
+  label: confirm.label || null,
   yes: resolveOption(confirm.yes, "Yes"),
   no: resolveOption(confirm.no, "No"),
 });
