@@ -42,7 +42,6 @@ export default async () => {
       application: {
         import: [
           "./javascripts/application.js",
-          "./javascripts/modules/checkbox-select-all.js",
           "./stylesheets/application.scss",
         ],
       },
@@ -53,9 +52,6 @@ export default async () => {
       },
       moj: {
         import: [path.join(mojFrontendPath, "moj/moj-frontend.min.js")],
-      },
-      checkboxes: {
-        import: ["./javascripts/modules/checkbox-select-all.js"],
       },
     },
     experiments: {
