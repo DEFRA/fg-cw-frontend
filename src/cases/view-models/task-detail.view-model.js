@@ -12,7 +12,7 @@ const createErrorList = (errors) => {
 };
 
 const createConditionalTextarea = ({
-  statusCode,
+  valueCode,
   commentInputDef,
   commentText,
   commentError,
@@ -21,7 +21,7 @@ const createConditionalTextarea = ({
     return undefined;
   }
 
-  const name = `${statusCode}-comment`;
+  const name = `${valueCode}-comment`;
   return {
     id: name,
     name,
@@ -36,17 +36,17 @@ const createConditionalTextarea = ({
   };
 };
 
-const isCurrentStatusWithComment = (
+const isCurrentValueWithComment = (
   optionCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
 ) => {
-  return optionCode === currentStatus && currentTaskComment;
+  return optionCode === currentValue && currentTaskComment;
 };
 
 const getInitialCommentValue = ({
   optionCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
   formData,
 }) => {
@@ -57,39 +57,37 @@ const getInitialCommentValue = ({
     return formDataValue;
   }
 
-  if (
-    isCurrentStatusWithComment(optionCode, currentStatus, currentTaskComment)
-  ) {
+  if (isCurrentValueWithComment(optionCode, currentValue, currentTaskComment)) {
     return currentTaskComment.text || "";
   }
 
   return "";
 };
 
-export const mapStatusOptions = ({
-  statusOptions,
-  currentStatus,
+export const mapOptions = ({
+  options,
+  currentValue,
   commentInputDef,
   currentTaskComment,
   formData,
   errors,
 }) => {
-  if (!statusOptions || statusOptions.length === 0) {
+  if (!options || options.length === 0) {
     return [];
   }
 
-  return statusOptions.map((option) => {
+  return options.map((option) => {
     const commentFieldName = `${option.code}-comment`;
     const commentText = getInitialCommentValue({
       optionCode: option.code,
-      currentStatus,
+      currentValue,
       currentTaskComment,
       formData,
     });
     const commentError = getFieldValue(commentFieldName, errors);
 
     const conditional = createConditionalTextarea({
-      statusCode: option.code,
+      valueCode: option.code,
       commentInputDef: option.commentInputDef ?? commentInputDef,
       commentText,
       commentError,
@@ -98,7 +96,7 @@ export const mapStatusOptions = ({
     return {
       value: option.code,
       text: option.name,
-      checked: option.code === currentStatus,
+      checked: option.code === currentValue,
       conditional,
     };
   });
@@ -119,19 +117,19 @@ const buildCurrentTaskData = ({
   currentTask,
   taskGroupCode,
   taskCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
   canComplete,
   formData,
   errors,
 }) => {
   return {
-    formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
+    formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/value`,
     description: currentTask.description,
-    status: currentStatus,
-    statusOptions: mapStatusOptions({
-      statusOptions: currentTask.statusOptions,
-      currentStatus,
+    value: currentValue,
+    valueOptions: mapOptions({
+      options: currentTask.valueOptions,
+      currentValue,
       commentInputDef: currentTask.commentInputDef,
       currentTaskComment,
       formData,
@@ -139,7 +137,7 @@ const buildCurrentTaskData = ({
     }),
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
-    statusError: errors?.status,
+    valueError: errors?.value,
     canComplete,
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
@@ -167,7 +165,7 @@ export const createTaskDetailViewModel = ({
   );
   const canComplete = currentTask.canComplete;
   const isInteractive = stage.interactive ?? true;
-  const currentStatus = getFieldValue("status", formData) ?? currentTask.status;
+  const currentValue = getFieldValue("value", formData) ?? currentTask.value;
 
   return {
     errorList: createErrorList(errors),
@@ -189,7 +187,7 @@ export const createTaskDetailViewModel = ({
         currentTask,
         taskGroupCode,
         taskCode,
-        currentStatus,
+        currentValue,
         currentTaskComment,
         canComplete,
         formData,
