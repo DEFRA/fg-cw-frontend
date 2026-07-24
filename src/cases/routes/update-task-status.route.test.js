@@ -45,7 +45,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   commentInputDef: {
                     mandatory: true,
                   },
@@ -60,10 +60,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
       },
       auth: {
         credentials: {
@@ -78,7 +78,7 @@ describe("updateTaskStatusRoute", () => {
     expect(statusCode).toEqual(302);
   });
 
-  it("updates the task status with no comment", async () => {
+  it("updates the task value with no comment", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       data: {
         stage: {
@@ -89,7 +89,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   commentInputDef: {
                     mandatory: false,
                   },
@@ -104,10 +104,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
       },
       auth: {
         credentials: {
@@ -128,14 +128,14 @@ describe("updateTaskStatusRoute", () => {
       taskGroupCode: "tg01",
       taskCode: "t01",
       completed: true,
-      status: "approved",
+      value: "approved",
       comment: null,
     });
 
     expect(statusCode).toEqual(302);
   });
 
-  it("updates the task status with comment if required", async () => {
+  it("updates the task value with comment if required", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       data: {
         stage: {
@@ -146,7 +146,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   commentInputDef: {
                     mandatory: true,
                   },
@@ -161,10 +161,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
         "approved-comment": "This is a comment",
       },
       auth: {
@@ -186,14 +186,14 @@ describe("updateTaskStatusRoute", () => {
       taskGroupCode: "tg01",
       taskCode: "t01",
       completed: true,
-      status: "approved",
+      value: "approved",
       comment: "This is a comment",
     });
 
     expect(statusCode).toEqual(302);
   });
 
-  it("updates with status value but completed=false", async () => {
+  it("updates with value but completed=false", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       data: {
         stage: {
@@ -204,7 +204,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "on-hold" }],
+                  valueOptions: [{ code: "on-hold" }],
                   commentInputDef: null,
                 },
               ],
@@ -217,10 +217,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: false,
-        status: "on-hold",
+        value: "on-hold",
       },
       auth: {
         credentials: {
@@ -235,7 +235,7 @@ describe("updateTaskStatusRoute", () => {
       expect.any(Object),
       expect.objectContaining({
         completed: false,
-        status: "on-hold",
+        value: "on-hold",
       }),
     );
 
@@ -253,7 +253,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   commentInputDef: {
                     mandatory: false,
                   },
@@ -268,10 +268,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
         "approved-comment": "",
       },
       auth: {
@@ -304,7 +304,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   // No commentInputDef
                 },
               ],
@@ -317,10 +317,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
       },
       auth: {
         credentials: {
@@ -347,7 +347,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }],
+                  valueOptions: [{ code: "approved" }],
                   commentInputDef: {
                     mandatory: true,
                   },
@@ -362,10 +362,10 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
-        status: "approved",
+        value: "approved",
         // comment is undefined (not sent)
       },
       auth: {
@@ -381,7 +381,7 @@ describe("updateTaskStatusRoute", () => {
     expect(statusCode).toEqual(302); // Redirects back to form
   });
 
-  it("rejects when status is required but missing", async () => {
+  it("rejects when value is required but missing", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       data: {
         stage: {
@@ -392,7 +392,7 @@ describe("updateTaskStatusRoute", () => {
               tasks: [
                 {
                   code: "t01",
-                  statusOptions: [{ code: "approved" }, { code: "rejected" }],
+                  valueOptions: [{ code: "approved" }, { code: "rejected" }],
                   commentInputDef: null,
                 },
               ],
@@ -405,7 +405,7 @@ describe("updateTaskStatusRoute", () => {
 
     const { statusCode } = await server.inject({
       method: "POST",
-      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/status",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
       payload: {
         completed: true,
       },

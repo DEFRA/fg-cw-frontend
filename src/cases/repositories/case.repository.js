@@ -34,16 +34,16 @@ export const findTabById = async (authContext, caseId, tabId, queryString) => {
 
 export const updateTaskStatus = async (
   authContext,
-  { caseId, taskGroupCode, taskCode, status, completed, comment = null },
+  { caseId, taskGroupCode, taskCode, value, completed, comment = null },
 ) => {
   await wreck.patch(
-    `/cases/${caseId}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
+    `/cases/${caseId}/task-groups/${taskGroupCode}/tasks/${taskCode}/value`,
     {
       headers: {
         authorization: `Bearer ${authContext.token}`,
       },
       payload: {
-        status,
+        value,
         completed,
         comment: comment === "" ? null : comment,
       },

@@ -123,21 +123,14 @@ exports[`task-details > renders completed task with editable form when case is i
   action=""
 >
     <div class="govuk-form-group">
-  <fieldset class="govuk-fieldset">
-  <legend class="govuk-fieldset__legend govuk-fieldset__legend--m">
-    Outcome
-  </legend>
-  <div class="govuk-radios" data-module="govuk-radios">
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="">
-      
-    </div>
-    <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="">
-      
+  <div class="govuk-checkboxes" data-module="govuk-checkboxes">
+    <div class="govuk-checkboxes__item">
+      <input class="govuk-checkboxes__input" id="task-completed" name="completed" type="checkbox" value="true" checked>
+      <label class="govuk-label govuk-checkboxes__label" for="task-completed">
+        Completed
+      </label>
     </div>
   </div>
-</fieldset>
 </div>
 
 
