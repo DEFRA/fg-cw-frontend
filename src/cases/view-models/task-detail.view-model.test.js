@@ -519,7 +519,11 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRefs: [{ status: "complete", ref: "comment1" }],
+                commentRefs: [
+                  { status: "in review", ref: "comment2" },
+                  { status: "complete", ref: "comment1" },
+                  { status: "foo", ref: "comment3" },
+                ],
                 statusOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
@@ -533,7 +537,11 @@ describe("createTaskDetailViewModel", () => {
           },
         ],
       },
-      comments: [{ ref: "comment1", text: "Existing task comment" }],
+      comments: [
+        { ref: "comment1", text: "Existing task comment" },
+        { ref: "comment2", text: "foo" },
+        { ref: "comment3", text: "comment 3 text" },
+      ],
     };
 
     const result = createTaskDetailViewModel({
