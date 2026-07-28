@@ -146,8 +146,8 @@ const buildCurrentTaskData = ({
   };
 };
 
-const findLastCommentRef = (commentRefs, taskStatus) => {
-  return commentRefs?.findLast((cr) => cr.status === taskStatus)?.ref;
+const findLastCommentRef = (commentRefs, taskValue) => {
+  return commentRefs?.findLast((cr) => cr.value === taskValue)?.ref;
 };
 
 export const createTaskDetailViewModel = ({
@@ -165,7 +165,7 @@ export const createTaskDetailViewModel = ({
   const currentTask = findCurrentTask(stage, taskGroupCode, taskCode);
   const currentCommentRef = findLastCommentRef(
     currentTask.commentRefs,
-    currentTask.status,
+    currentTask.value,
   );
   const currentTaskComment = findTaskComment(kase.comments, currentCommentRef);
   const canComplete = currentTask.canComplete;
