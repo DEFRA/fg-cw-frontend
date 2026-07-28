@@ -146,7 +146,7 @@ describe("createTaskDetailViewModel", () => {
             {
               code: "task1",
               status: "complete",
-              commentRef: "comment1",
+              commentRefs: [{ status: "complete", ref: "comment1" }],
               requiredRoles: { allOf: ["role1"], anyOf: [] },
               canComplete: true,
             },
@@ -234,7 +234,9 @@ describe("createTaskDetailViewModel", () => {
     const caseDataNoComment = structuredClone(mockCaseData);
 
     caseDataNoComment.comments = [];
-    caseDataNoComment.stage.taskGroups[0].tasks[0].commentRef = "nonexistent";
+    caseDataNoComment.stage.taskGroups[0].tasks[0].commentRefs = [
+      { status: "complete", ref: "nonexistent" },
+    ];
 
     const result = createTaskDetailViewModel({
       page: createMockPage(caseDataNoComment),
@@ -407,7 +409,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "in_progress",
-                commentRef: "comment1",
+                commentRefs: [{ ref: "comment1", status: "in_progress" }],
                 requiredRoles: { allOf: ["role1"], anyOf: [] },
                 statusOptions: [
                   { code: "in_progress", name: "In Progress" },
@@ -460,7 +462,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRef: null,
+                commentRefs: null,
                 statusOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
@@ -517,7 +519,11 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRef: "comment1",
+                commentRefs: [
+                  { status: "in review", ref: "comment2" },
+                  { status: "complete", ref: "comment1" },
+                  { status: "foo", ref: "comment3" },
+                ],
                 statusOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
@@ -531,7 +537,11 @@ describe("createTaskDetailViewModel", () => {
           },
         ],
       },
-      comments: [{ ref: "comment1", text: "Existing task comment" }],
+      comments: [
+        { ref: "comment1", text: "Existing task comment" },
+        { ref: "comment2", text: "foo" },
+        { ref: "comment3", text: "comment 3 text" },
+      ],
     };
 
     const result = createTaskDetailViewModel({
@@ -559,7 +569,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRef: "comment1",
+                commentRefs: [{ status: "complete", ref: "comment1" }],
                 statusOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
@@ -601,7 +611,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "in_progress",
-                commentRef: null,
+                commentRefs: null,
                 statusOptions: [
                   { code: "in_progress", name: "In Progress" },
                   { code: "complete", name: "Complete" },
@@ -641,7 +651,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRef: null,
+                commentRefs: null,
                 statusOptions: [],
               },
             ],
@@ -671,7 +681,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "complete",
-                commentRef: null,
+                commentRefs: null,
                 statusOptions: [{ code: "complete", name: "Complete" }],
                 commentInputDef: {
                   label: "Add a comment",
@@ -707,7 +717,7 @@ describe("createTaskDetailViewModel", () => {
               {
                 code: "task1",
                 status: "in_progress",
-                commentRef: null,
+                commentRefs: null,
                 statusOptions: [
                   { code: "in_progress", name: "In Progress" },
                   { code: "complete", name: "Complete" },
@@ -768,7 +778,7 @@ describe("createTaskDetailViewModel", () => {
                 code: "task1",
                 status: "complete",
                 completed: true,
-                commentRef: null,
+                commentRefs: null,
               },
             ],
           },
@@ -798,7 +808,7 @@ describe("createTaskDetailViewModel", () => {
                 {
                   code: "task1",
                   status: "complete",
-                  commentRef: null,
+                  commentRefs: null,
                   notesHistory: [
                     {
                       date: "2025-01-09T10:00:00.000Z",
@@ -847,7 +857,7 @@ describe("createTaskDetailViewModel", () => {
                 {
                   code: "task1",
                   status: "complete",
-                  commentRef: null,
+                  commentRefs: null,
                 },
               ],
             },
@@ -876,7 +886,7 @@ describe("createTaskDetailViewModel", () => {
                 {
                   code: "task1",
                   status: "complete",
-                  commentRef: null,
+                  commentRefs: null,
                   notesHistory: null,
                 },
               ],
