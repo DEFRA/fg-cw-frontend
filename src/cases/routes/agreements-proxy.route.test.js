@@ -4,7 +4,7 @@ import { config } from "../../common/config.js";
 import * as proxyUseCase from "../use-cases/proxy-to-agreements.use-case.js";
 import { agreementsProxyRoutes } from "./agreements-proxy.route.js";
 
-const proxyAgreementRequest = async function (path) {
+const proxyAgreementRequest = async function (path, contexts = []) {
   let proxyOptions;
   const h = {
     proxy: vi.fn(async (options) => {
@@ -18,6 +18,7 @@ const proxyAgreementRequest = async function (path) {
     headers: {},
     app: { cspNonce: "test-nonce" },
     info: { id: "test-request-id" },
+    yar: { get: vi.fn(() => contexts) },
   };
 
   await agreementsProxyRoutes[0].handler(request, h);
@@ -47,24 +48,33 @@ describe("agreementsProxyRoute", () => {
   });
 
   describe("signed Agreements authentication", () => {
-    const originalGrantCode = config.get("agreements.pmfGrantCode");
     const originalJwtSecret = config.get("agreements.jwtSecret");
 
     beforeEach(() => {
       vi.restoreAllMocks();
-      config.set("agreements.pmfGrantCode", "configured-test-grant");
       config.set("agreements.jwtSecret", "route-level-test-secret");
     });
 
     afterAll(() => {
-      config.set("agreements.pmfGrantCode", originalGrantCode);
       config.set("agreements.jwtSecret", originalJwtSecret);
     });
 
-    test.each(["PMF823153883", "PMF823153883/print"])(
-      "maps %s with the configured grant code in a valid JWT",
-      async (path) => {
-        const { mappedRequest, payload } = await proxyAgreementRequest(path);
+    test.each([
+      ["ALPHA-001", "alpha-grant"],
+      ["ALPHA-001/print", "alpha-grant"],
+      ["BETA-002", "beta-grant"],
+      ["BETA-002/print", "beta-grant"],
+    ])(
+      "maps %s with its grant code in a valid JWT",
+      async (path, grantCode) => {
+        const contexts = [
+          { agreementRef: "ALPHA-001", grantCode: "alpha-grant" },
+          { agreementRef: "BETA-002", grantCode: "beta-grant" },
+        ];
+        const { mappedRequest, payload } = await proxyAgreementRequest(
+          path,
+          contexts,
+        );
 
         expect(mappedRequest.uri).toBe(`http://localhost:3000/${path}`);
         expect(mappedRequest.headers).toMatchObject({
@@ -75,25 +85,23 @@ describe("agreementsProxyRoute", () => {
         expect(payload).toEqual({
           source: "entra",
           sbi: "123456789",
-          grantCode: "configured-test-grant",
+          grantCode,
           iat: expect.any(Number),
         });
       },
     );
 
-    test.each(["WMP123456789", "FPTT123456789/print"])(
-      "maps legacy path %s without changing its JWT claims",
-      async (path) => {
-        const { mappedRequest, payload } = await proxyAgreementRequest(path);
+    test("maps an agreement without context using unchanged legacy JWT claims", async () => {
+      const { mappedRequest, payload } =
+        await proxyAgreementRequest("LEGACY-001/print");
 
-        expect(mappedRequest.uri).toBe(`http://localhost:3000/${path}`);
-        expect(payload).toEqual({
-          source: "entra",
-          sbi: "123456789",
-          iat: expect.any(Number),
-        });
-      },
-    );
+      expect(mappedRequest.uri).toBe("http://localhost:3000/LEGACY-001/print");
+      expect(payload).toEqual({
+        source: "entra",
+        sbi: "123456789",
+        iat: expect.any(Number),
+      });
+    });
   });
 
   describe("handler function", () => {

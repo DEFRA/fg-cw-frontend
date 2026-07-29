@@ -2,9 +2,11 @@ import Bell from "@hapi/bell";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
+import { findAgreementGrantContextsUseCase } from "../../use-cases/find-agreement-grant-contexts.use-case.js";
 import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { viewCaseTabRoute } from "./view-case-tab.route.js";
 
+vi.mock("../../use-cases/find-agreement-grant-contexts.use-case.js");
 vi.mock("../../use-cases/find-case-tab.use-case.js");
 vi.mock("../../../common/view-models/header.view-model.js");
 
@@ -17,6 +19,7 @@ describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
+    findAgreementGrantContextsUseCase.mockResolvedValue([]);
     Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
@@ -347,6 +350,10 @@ describe("viewCaseTabRoute", () => {
       "case-query",
       "agreements",
       "runId=2",
+    );
+    expect(findAgreementGrantContextsUseCase).toHaveBeenCalledWith(
+      authContext,
+      "case-query",
     );
   });
 

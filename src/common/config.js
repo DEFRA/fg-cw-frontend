@@ -287,13 +287,6 @@ export const config = convict({
       sensitive: true,
       env: "AGREEMENTS_JWT_SECRET",
     },
-    pmfGrantCode: {
-      doc: "Grant code used to route PMF agreements",
-      format: String,
-      nullable: true,
-      default: null,
-      env: "AGREEMENTS_PMF_GRANT_CODE",
-    },
     proxyTimeoutMs: {
       doc: "Proxy timeout in milliseconds",
       format: Number,

@@ -46,14 +46,14 @@ describe("generateAgreementsJwt", () => {
 
   test("should include configured grant code alongside existing claims", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
-    const token = generateAgreementsJwt("123456789", "pigs-might-fly");
+    const token = generateAgreementsJwt("123456789", "soil-improvement");
 
     const parts = token.split(".");
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload).toMatchObject({
       sbi: "123456789",
       source: "entra",
-      grantCode: "pigs-might-fly",
+      grantCode: "soil-improvement",
     });
   });
 

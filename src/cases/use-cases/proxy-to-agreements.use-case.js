@@ -1,4 +1,5 @@
 import { config } from "../../common/config.js";
+import { findAgreementGrantCode } from "../../common/helpers/agreement-grant-context.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
 
@@ -37,23 +38,6 @@ const buildTargetUri = function (baseUrl, path) {
   return cleanPath ? `${cleanBaseUrl}/${cleanPath}` : cleanBaseUrl;
 };
 
-const pmfAgreementPathPattern = /^PMF[^/]+(?:\/print)?$/;
-
-const getGrantCode = function (path) {
-  const cleanPath = String(path).replace(/^\//, "");
-  if (!pmfAgreementPathPattern.test(cleanPath)) {
-    return undefined;
-  }
-
-  const grantCode = config.get("agreements.pmfGrantCode");
-  if (!grantCode) {
-    throw new Error(
-      "Missing required configuration: agreements PMF grant code",
-    );
-  }
-  return String(grantCode);
-};
-
 /**
  * Adds the Agreements UI JWT authentication header.
  * @param {object} headers - The proxy headers
@@ -69,7 +53,7 @@ const addJwtHeader = function (headers, request, path) {
     // Always generate JWT for 'entra' source (SBI is optional)
     headers["x-encrypted-auth"] = generateAgreementsJwt(
       sbi,
-      getGrantCode(path),
+      findAgreementGrantCode(request, path),
     );
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
