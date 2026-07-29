@@ -88,6 +88,17 @@ export const login = async (authContext, userData) => {
   return payload;
 };
 
+export const logout = async (authContext, { userId }) => {
+  const { payload } = await wreck.post("/users/logout", {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+    payload: { userId },
+  });
+
+  return payload;
+};
+
 export const update = async (authContext, id, userData) => {
   const { payload } = await wreck.patch(`/admin/users/${id}`, {
     headers: {

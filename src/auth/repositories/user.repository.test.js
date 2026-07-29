@@ -5,6 +5,7 @@ import {
   adminFindUsers,
   findAssignees,
   login,
+  logout,
 } from "./user.repository.js";
 
 vi.mock("../../common/wreck.js");
@@ -233,5 +234,22 @@ describe("login", () => {
     });
 
     expect(user).toEqual(responseUser);
+  });
+});
+
+describe("logout", () => {
+  const authContext = { token: "mock-token" };
+
+  it("posts the user id to the logout endpoint", async () => {
+    wreck.post.mockResolvedValue({ payload: null });
+
+    await logout(authContext, { userId: "69691417bd385df3ac6aa25f" });
+
+    expect(wreck.post).toHaveBeenCalledWith("/users/logout", {
+      headers: {
+        authorization: `Bearer ${authContext.token}`,
+      },
+      payload: { userId: "69691417bd385df3ac6aa25f" },
+    });
   });
 });
