@@ -1,6 +1,36 @@
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import Jwt from "@hapi/jwt";
+import { afterAll, beforeEach, describe, expect, test, vi } from "vitest";
+import { config } from "../../common/config.js";
 import * as proxyUseCase from "../use-cases/proxy-to-agreements.use-case.js";
 import { agreementsProxyRoutes } from "./agreements-proxy.route.js";
+
+const proxyAgreementRequest = async function (path) {
+  let proxyOptions;
+  const h = {
+    proxy: vi.fn(async (options) => {
+      proxyOptions = options;
+      return { statusCode: 200 };
+    }),
+  };
+  const request = {
+    params: { path },
+    auth: { credentials: { sbi: "123456789" } },
+    headers: {},
+    app: { cspNonce: "test-nonce" },
+    info: { id: "test-request-id" },
+  };
+
+  await agreementsProxyRoutes[0].handler(request, h);
+
+  const mappedRequest = proxyOptions.mapUri();
+  const jwt = Jwt.token.decode(mappedRequest.headers["x-encrypted-auth"]);
+  Jwt.token.verifySignature(jwt, "route-level-test-secret");
+
+  return {
+    mappedRequest,
+    payload: jwt.decoded.payload,
+  };
+};
 
 describe("agreementsProxyRoute", () => {
   test("should export routes array with GET method", () => {
@@ -14,6 +44,56 @@ describe("agreementsProxyRoute", () => {
     expect(typeof agreementsProxyRoutes[0].handler).toBe("function");
     expect(agreementsProxyRoutes[0].options.auth.mode).toBe("required");
     expect(agreementsProxyRoutes[0].options.auth.strategy).toBe("session");
+  });
+
+  describe("signed Agreements authentication", () => {
+    const originalGrantCode = config.get("agreements.pmfGrantCode");
+    const originalJwtSecret = config.get("agreements.jwtSecret");
+
+    beforeEach(() => {
+      vi.restoreAllMocks();
+      config.set("agreements.pmfGrantCode", "configured-test-grant");
+      config.set("agreements.jwtSecret", "route-level-test-secret");
+    });
+
+    afterAll(() => {
+      config.set("agreements.pmfGrantCode", originalGrantCode);
+      config.set("agreements.jwtSecret", originalJwtSecret);
+    });
+
+    test.each(["PMF823153883", "PMF823153883/print"])(
+      "maps %s with the configured grant code in a valid JWT",
+      async (path) => {
+        const { mappedRequest, payload } = await proxyAgreementRequest(path);
+
+        expect(mappedRequest.uri).toBe(`http://localhost:3000/${path}`);
+        expect(mappedRequest.headers).toMatchObject({
+          Authorization: "Bearer default-agreements-ui-token",
+          "x-base-url": "/agreement",
+          "x-csp-nonce": "test-nonce",
+        });
+        expect(payload).toEqual({
+          source: "entra",
+          sbi: "123456789",
+          grantCode: "configured-test-grant",
+          iat: expect.any(Number),
+        });
+      },
+    );
+
+    test.each(["WMP123456789", "FPTT123456789/print"])(
+      "maps legacy path %s without changing its JWT claims",
+      async (path) => {
+        const { mappedRequest, payload } = await proxyAgreementRequest(path);
+
+        expect(mappedRequest.uri).toBe(`http://localhost:3000/${path}`);
+        expect(payload).toEqual({
+          source: "entra",
+          sbi: "123456789",
+          iat: expect.any(Number),
+        });
+      },
+    );
   });
 
   describe("handler function", () => {
