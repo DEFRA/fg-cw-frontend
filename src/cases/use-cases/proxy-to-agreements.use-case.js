@@ -37,19 +37,40 @@ const buildTargetUri = function (baseUrl, path) {
   return cleanPath ? `${cleanBaseUrl}/${cleanPath}` : cleanBaseUrl;
 };
 
+const pmfAgreementPathPattern = /^PMF[^/]+(?:\/print)?$/;
+
+const getGrantCode = function (path) {
+  const cleanPath = String(path).replace(/^\//, "");
+  if (!pmfAgreementPathPattern.test(cleanPath)) {
+    return undefined;
+  }
+
+  const grantCode = config.get("agreements.pmfGrantCode");
+  if (!grantCode) {
+    throw new Error(
+      "Missing required configuration: agreements PMF grant code",
+    );
+  }
+  return String(grantCode);
+};
+
 /**
- * Builds proxy headers for the request
- * @param {string} uiToken - The UI token
- * @param {object} request - The incoming request object
- * @returns {object} The proxy headers object
+ * Adds the Agreements UI JWT authentication header.
+ * @param {object} headers - The proxy headers
+ * @param {object} request - The incoming request
+ * @param {string} path - The Agreements UI request path
+ * @returns {object} The proxy headers
  */
 // eslint-disable-next-line complexity
-const addJwtHeader = function (headers, request) {
+const addJwtHeader = function (headers, request, path) {
   const sbi = request?.auth?.credentials?.sbi;
 
   try {
     // Always generate JWT for 'entra' source (SBI is optional)
-    headers["x-encrypted-auth"] = generateAgreementsJwt(sbi);
+    headers["x-encrypted-auth"] = generateAgreementsJwt(
+      sbi,
+      getGrantCode(path),
+    );
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
     throw new Error(`Failed to generate JWT token: ${error.message}`);
@@ -57,7 +78,7 @@ const addJwtHeader = function (headers, request) {
   return headers;
 };
 
-const buildProxyHeaders = function (uiToken, request) {
+const buildProxyHeaders = function (uiToken, request, path) {
   const headers = {
     Authorization: `Bearer ${uiToken}`,
     "x-base-url": config.get("agreements.baseUrl"),
@@ -67,7 +88,7 @@ const buildProxyHeaders = function (uiToken, request) {
     "X-Correlation-ID": request.headers["x-correlation-id"] || request.info.id,
   };
 
-  return addJwtHeader(headers, request);
+  return addJwtHeader(headers, request, path);
 };
 
 /**
@@ -88,7 +109,7 @@ export const proxyToAgreements = function (path, request) {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
-  const headers = buildProxyHeaders(uiToken, request);
+  const headers = buildProxyHeaders(uiToken, request, path);
 
   logger.info(
     `Finished: Proxying request to agreements UI: ${uri} and path: ${path}`,

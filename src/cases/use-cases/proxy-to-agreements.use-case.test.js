@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import * as proxyUseCase from "./proxy-to-agreements.use-case.js";
 
 // Mock config
@@ -10,6 +11,7 @@ vi.mock("../../common/config.js", () => ({
         "agreements.uiToken": "test-token",
         "agreements.jwtSecret": "test-secret",
         "agreements.baseUrl": "/agreement",
+        "agreements.pmfGrantCode": "pigs-might-fly",
       };
       return values[key];
     }),
@@ -50,7 +52,56 @@ describe("proxyToAgreements", () => {
     expect(result.headers["x-base-url"]).toBe("/agreement");
     expect(result.headers["x-csp-nonce"]).toBe("test-nonce");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
+    expect(generateAgreementsJwt).toHaveBeenCalledWith("123456789", undefined);
   });
+
+  test("should include configured PMF grant code for agreement view", () => {
+    const mockRequest = {
+      auth: { credentials: {} },
+      headers: {},
+      app: { cspNonce: "test-nonce" },
+      info: { id: "test-id" },
+    };
+
+    proxyUseCase.proxyToAgreements("PMF823153883", mockRequest);
+
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(
+      undefined,
+      "pigs-might-fly",
+    );
+  });
+
+  test("should include configured PMF grant code for agreement print", () => {
+    const mockRequest = {
+      auth: { credentials: {} },
+      headers: {},
+      app: { cspNonce: "test-nonce" },
+      info: { id: "test-id" },
+    };
+
+    proxyUseCase.proxyToAgreements("PMF823153883/print", mockRequest);
+
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(
+      undefined,
+      "pigs-might-fly",
+    );
+  });
+
+  test.each(["WMP123456789", "FPTT123456789/print"])(
+    "should preserve legacy JWT claims for %s",
+    (path) => {
+      const mockRequest = {
+        auth: { credentials: {} },
+        headers: {},
+        app: { cspNonce: "test-nonce" },
+        info: { id: "test-id" },
+      };
+
+      proxyUseCase.proxyToAgreements(path, mockRequest);
+
+      expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, undefined);
+    },
+  );
 
   test("should return uri and headers with JWT even when no SBI (entra source)", () => {
     const mockRequest = {
@@ -64,6 +115,7 @@ describe("proxyToAgreements", () => {
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, undefined);
   });
 
   test("should handle paths with leading slash", () => {

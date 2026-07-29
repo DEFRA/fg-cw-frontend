@@ -41,6 +41,20 @@ describe("generateAgreementsJwt", () => {
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.sbi).toBe("123456789");
     expect(payload.source).toBe("entra");
+    expect(payload.grantCode).toBeUndefined();
+  });
+
+  test("should include configured grant code alongside existing claims", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt("123456789", "pigs-might-fly");
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+    expect(payload).toMatchObject({
+      sbi: "123456789",
+      source: "entra",
+      grantCode: "pigs-might-fly",
+    });
   });
 
   test("should include SBI and source in payload", async () => {
@@ -76,6 +90,7 @@ describe("generateAgreementsJwt", () => {
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.source).toBe("entra");
     expect(payload.sbi).toBeUndefined();
+    expect(payload.grantCode).toBeUndefined();
   });
 
   test("should generate JWT with null SBI for 'entra' source", async () => {
@@ -89,6 +104,7 @@ describe("generateAgreementsJwt", () => {
     const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
     expect(payload.source).toBe("entra");
     expect(payload.sbi).toBeUndefined();
+    expect(payload.grantCode).toBeUndefined();
   });
 
   test("should throw error when JWT secret is missing", async () => {
