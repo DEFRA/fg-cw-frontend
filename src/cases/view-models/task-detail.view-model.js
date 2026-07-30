@@ -148,6 +148,10 @@ const buildCurrentTaskData = ({
   };
 };
 
+const findLastCommentRef = (commentRefs, taskStatus) => {
+  return commentRefs?.findLast((cr) => cr.status === taskStatus)?.ref;
+};
+
 export const createTaskDetailViewModel = ({
   page,
   request,
@@ -161,10 +165,11 @@ export const createTaskDetailViewModel = ({
   const { taskGroupCode, taskCode } = query;
 
   const currentTask = findCurrentTask(stage, taskGroupCode, taskCode);
-  const currentTaskComment = findTaskComment(
-    kase.comments,
-    currentTask.commentRef,
+  const currentCommentRef = findLastCommentRef(
+    currentTask.commentRefs,
+    currentTask.status,
   );
+  const currentTaskComment = findTaskComment(kase.comments, currentCommentRef);
   const canComplete = currentTask.canComplete;
   const isInteractive = stage.interactive ?? true;
   const currentStatus = getFieldValue("status", formData) ?? currentTask.status;
