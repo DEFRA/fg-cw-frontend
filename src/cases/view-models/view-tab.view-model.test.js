@@ -60,6 +60,57 @@ describe("createViewTabViewModel", () => {
     expect(result.data.businessName).toBe("Test Farm Ltd");
     expect(result.data.payload).toEqual(mockTabData.payload);
   });
+
+  it("adds tokens only to matching agreement links", () => {
+    const request = {
+      auth: { credentials: { sbi: "123456789" } },
+      url: new URL("https://caseworking.local/cases/agreement-123/agreements"),
+    };
+    const content = [
+      {
+        component: "url",
+        href: "/agreement/AGR%202024-001?mode=view#summary",
+      },
+      {
+        component: "url",
+        href: "https://caseworking.local/agreement/AGR%202024-001/print",
+      },
+      {
+        component: "url",
+        href: "https://example.com/agreement/AGR%202024-001",
+      },
+      { component: "url", href: "/agreement/OTHER-001" },
+      { component: "url", href: "http://[" },
+    ];
+    const result = createViewTabViewModel({
+      page: createMockPage({
+        ...mockTabData,
+        agreements: [
+          { agreementRef: "AGR 2024-001", grantCode: "grant-alpha" },
+        ],
+        content,
+      }),
+      request,
+      tabId: "agreements",
+    });
+
+    const relativeUrl = new URL(
+      result.data.content[0].href,
+      request.url.origin,
+    );
+    expect(relativeUrl.pathname).toBe("/agreement/AGR%202024-001");
+    expect(relativeUrl.searchParams.get("mode")).toBe("view");
+    expect(relativeUrl.searchParams.get("x-encrypted-auth")).toBeTruthy();
+    expect(relativeUrl.hash).toBe("#summary");
+
+    const absoluteUrl = new URL(result.data.content[1].href);
+    expect(absoluteUrl.origin).toBe(request.url.origin);
+    expect(absoluteUrl.searchParams.get("x-encrypted-auth")).toBeTruthy();
+
+    expect(result.data.content.slice(2).map(({ href }) => href)).toEqual(
+      content.slice(2).map(({ href }) => href),
+    );
+  });
 });
 
 describe("createViewTabViewModel with active tab", () => {

@@ -4,7 +4,7 @@ import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
 const authenticationTokenParameter = "x-encrypted-auth";
-const relativeUrlOrigin = "http://caseworking.local";
+const relativeUrlOrigin = "https://caseworking.local";
 
 const normalizeBasePath = function (basePath) {
   const path = String(basePath || "");
