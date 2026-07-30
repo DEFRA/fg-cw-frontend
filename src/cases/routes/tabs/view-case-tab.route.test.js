@@ -423,11 +423,7 @@ describe("viewCaseTabRoute", () => {
 
       for (const [text, path, grantCode] of [
         ["ALPHA-001", "/agreement/ALPHA-001", "alpha-grant"],
-        [
-          "Print ALPHA-001",
-          "/agreement/ALPHA-001/print",
-          "alpha-grant",
-        ],
+        ["Print ALPHA-001", "/agreement/ALPHA-001/print", "alpha-grant"],
         ["BETA-002", "/agreement/BETA-002", "beta-grant"],
         ["Print BETA-002", "/agreement/BETA-002/print", "beta-grant"],
       ]) {

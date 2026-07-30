@@ -11,35 +11,53 @@ const normalizeBasePath = function (basePath) {
   return path.endsWith("/") ? path.slice(0, -1) : path;
 };
 
+const addAgreementTokens = function (tokensByPath, basePath, sbi, agreement) {
+  const { agreementRef, grantCode } = agreement || {};
+  if (!agreementRef || !grantCode) {
+    return;
+  }
+
+  const agreementPath = `${basePath}/${encodeURIComponent(agreementRef)}`;
+  const token = generateAgreementsJwt(sbi, grantCode);
+  tokensByPath.set(agreementPath, token);
+  tokensByPath.set(`${agreementPath}/print`, token);
+};
+
 const buildAgreementTokensByPath = function (agreements, sbi) {
   const basePath = normalizeBasePath(config.get("agreements.baseUrl"));
   const tokensByPath = new Map();
 
   for (const agreement of agreements || []) {
-    const { agreementRef, grantCode } = agreement || {};
-    if (!agreementRef || !grantCode) {
-      continue;
-    }
-
-    const agreementPath = `${basePath}/${encodeURIComponent(agreementRef)}`;
-    const token = generateAgreementsJwt(sbi, grantCode);
-    tokensByPath.set(agreementPath, token);
-    tokensByPath.set(`${agreementPath}/print`, token);
+    addAgreementTokens(tokensByPath, basePath, sbi, agreement);
   }
 
   return tokensByPath;
 };
 
-const parseHref = function (href) {
+const tryParseUrl = function (href, base) {
   try {
-    return { url: new URL(href), absolute: true };
+    return new URL(href, base);
   } catch {
-    try {
-      return { url: new URL(href, relativeUrlOrigin), absolute: false };
-    } catch {
-      return undefined;
-    }
+    return undefined;
   }
+};
+
+const parseHref = function (href) {
+  const absoluteUrl = tryParseUrl(href);
+  if (absoluteUrl) {
+    return { url: absoluteUrl, absolute: true };
+  }
+
+  const relativeUrl = tryParseUrl(href, relativeUrlOrigin);
+  return relativeUrl ? { url: relativeUrl, absolute: false } : undefined;
+};
+
+const isAllowedOrigin = function (url, absolute, requestOrigin) {
+  return !absolute || !requestOrigin || url.origin === requestOrigin;
+};
+
+const stringifyHref = function (url, absolute) {
+  return absolute ? url.toString() : `${url.pathname}${url.search}${url.hash}`;
 };
 
 const addAuthenticationToken = function (href, tokensByPath, requestOrigin) {
@@ -51,14 +69,23 @@ const addAuthenticationToken = function (href, tokensByPath, requestOrigin) {
   const { url, absolute } = parsedHref;
   const token = tokensByPath.get(url.pathname);
 
-  if (!token || (absolute && requestOrigin && url.origin !== requestOrigin)) {
+  if (!token) {
+    return href;
+  }
+  if (!isAllowedOrigin(url, absolute, requestOrigin)) {
     return href;
   }
 
   url.searchParams.set(authenticationTokenParameter, token);
-  return absolute
-    ? url.toString()
-    : `${url.pathname}${url.search}${url.hash}`;
+  return stringifyHref(url, absolute);
+};
+
+const isTraversableObject = function (value) {
+  return value && typeof value === "object";
+};
+
+const isUrlComponent = function (value) {
+  return value.component === "url" && typeof value.href === "string";
 };
 
 const authenticateAgreementLinks = function (
@@ -72,7 +99,7 @@ const authenticateAgreementLinks = function (
     );
   }
 
-  if (!value || typeof value !== "object") {
+  if (!isTraversableObject(value)) {
     return value;
   }
 
@@ -83,7 +110,7 @@ const authenticateAgreementLinks = function (
     ]),
   );
 
-  if (value.component === "url" && typeof value.href === "string") {
+  if (isUrlComponent(value)) {
     authenticated.href = addAuthenticationToken(
       value.href,
       tokensByPath,
@@ -94,17 +121,25 @@ const authenticateAgreementLinks = function (
   return authenticated;
 };
 
+const getSbi = function (request) {
+  return request?.auth?.credentials?.sbi;
+};
+
+const getRequestOrigin = function (request) {
+  return request?.url?.origin;
+};
+
 const buildContent = function ({ tabData, request, tabId }) {
   if (tabId !== "agreements") {
     return tabData.content;
   }
 
-  const sbi = request?.auth?.credentials?.sbi;
+  const sbi = getSbi(request);
   const tokensByPath = buildAgreementTokensByPath(tabData.agreements, sbi);
   return authenticateAgreementLinks(
     tabData.content,
     tokensByPath,
-    request?.url?.origin,
+    getRequestOrigin(request),
   );
 };
 

@@ -59,20 +59,23 @@ describe("proxyToAgreements", () => {
     ["ALPHA-001/print", "signed-alpha-token"],
     ["BETA-002", "signed-beta-token"],
     ["BETA-002/print", "signed-beta-token"],
-  ])("should forward link authentication for %s", (path, authenticationToken) => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-      query: { "x-encrypted-auth": authenticationToken },
-    };
+  ])(
+    "should forward link authentication for %s",
+    (path, authenticationToken) => {
+      const mockRequest = {
+        auth: { credentials: {} },
+        headers: {},
+        app: { cspNonce: "test-nonce" },
+        info: { id: "test-id" },
+        query: { "x-encrypted-auth": authenticationToken },
+      };
 
-    const result = proxyUseCase.proxyToAgreements(path, mockRequest);
+      const result = proxyUseCase.proxyToAgreements(path, mockRequest);
 
-    expect(result.headers["x-encrypted-auth"]).toBe(authenticationToken);
-    expect(generateAgreementsJwt).not.toHaveBeenCalled();
-  });
+      expect(result.headers["x-encrypted-auth"]).toBe(authenticationToken);
+      expect(generateAgreementsJwt).not.toHaveBeenCalled();
+    },
+  );
 
   test("should preserve legacy JWT generation without link authentication", () => {
     const mockRequest = {

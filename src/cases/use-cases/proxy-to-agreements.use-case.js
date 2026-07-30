@@ -39,6 +39,8 @@ const buildTargetUri = function (baseUrl, path) {
 
 /**
  * Adds the Agreements UI JWT authentication header.
+ * Uses a signed link token when supplied, which keeps grantCode inside the JWT.
+ * Without one, it generates a legacy token.
  * @param {object} headers - The proxy headers
  * @param {object} request - The incoming request
  * @returns {object} The proxy headers
