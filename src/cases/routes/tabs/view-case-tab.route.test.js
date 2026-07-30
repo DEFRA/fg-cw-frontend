@@ -1,12 +1,12 @@
 import Bell from "@hapi/bell";
+import Jwt from "@hapi/jwt";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { config } from "../../../common/config.js";
 import { createServer } from "../../../server/index.js";
-import { findAgreementGrantContextsUseCase } from "../../use-cases/find-agreement-grant-contexts.use-case.js";
 import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { viewCaseTabRoute } from "./view-case-tab.route.js";
 
-vi.mock("../../use-cases/find-agreement-grant-contexts.use-case.js");
 vi.mock("../../use-cases/find-case-tab.use-case.js");
 vi.mock("../../../common/view-models/header.view-model.js");
 
@@ -19,7 +19,6 @@ describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
-    findAgreementGrantContextsUseCase.mockResolvedValue([]);
     Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
@@ -351,10 +350,108 @@ describe("viewCaseTabRoute", () => {
       "agreements",
       "runId=2",
     );
-    expect(findAgreementGrantContextsUseCase).toHaveBeenCalledWith(
-      authContext,
-      "case-query",
+  });
+
+  it("signs backend agreement grant codes for view and print links", async () => {
+    const originalJwtSecret = config.get("agreements.jwtSecret");
+    config.set("agreements.jwtSecret", "view-tab-test-secret");
+    findCaseTabUseCase.mockResolvedValue(
+      createMockPage({
+        _id: "case-agreements",
+        caseRef: "CASE-AGREEMENTS",
+        tabId: "agreements",
+        links: [
+          { id: "tasks", text: "Tasks", href: "/cases/case-agreements" },
+          {
+            id: "agreements",
+            text: "Agreements",
+            href: "/cases/case-agreements/agreements",
+          },
+        ],
+        agreements: [
+          { agreementRef: "ALPHA-001", grantCode: "alpha-grant" },
+          { agreementRef: "BETA-002", grantCode: "beta-grant" },
+          { agreementRef: "LEGACY-003" },
+        ],
+        content: [
+          {
+            component: "url",
+            text: "ALPHA-001",
+            href: "/agreement/ALPHA-001",
+          },
+          {
+            component: "url",
+            text: "Print ALPHA-001",
+            href: "/agreement/ALPHA-001/print",
+          },
+          {
+            component: "url",
+            text: "BETA-002",
+            href: "/agreement/BETA-002",
+          },
+          {
+            component: "url",
+            text: "Print BETA-002",
+            href: "/agreement/BETA-002/print",
+          },
+          {
+            component: "url",
+            text: "LEGACY-003",
+            href: "/agreement/LEGACY-003",
+          },
+        ],
+      }),
     );
+
+    try {
+      const { statusCode, result } = await server.inject({
+        method: "GET",
+        url: "/cases/case-agreements/agreements",
+        auth: {
+          credentials: {
+            token: "mock-token",
+            user: {},
+            sbi: "123456789",
+          },
+          strategy: "session",
+          mode: "required",
+        },
+      });
+
+      expect(statusCode).toBe(200);
+      const $ = load(result);
+
+      for (const [text, path, grantCode] of [
+        ["ALPHA-001", "/agreement/ALPHA-001", "alpha-grant"],
+        [
+          "Print ALPHA-001",
+          "/agreement/ALPHA-001/print",
+          "alpha-grant",
+        ],
+        ["BETA-002", "/agreement/BETA-002", "beta-grant"],
+        ["Print BETA-002", "/agreement/BETA-002/print", "beta-grant"],
+      ]) {
+        const href = $(`a:contains("${text}")`).attr("href");
+        const url = new URL(href, "http://caseworking.local");
+        const token = url.searchParams.get("x-encrypted-auth");
+        const jwt = Jwt.token.decode(token);
+
+        expect(url.pathname).toBe(path);
+        Jwt.token.verifySignature(jwt, "view-tab-test-secret");
+        expect(jwt.decoded.payload).toEqual({
+          source: "entra",
+          sbi: "123456789",
+          grantCode,
+          iat: expect.any(Number),
+        });
+      }
+
+      expect($('a:contains("LEGACY-003")').attr("href")).toBe(
+        "/agreement/LEGACY-003",
+      );
+    } finally {
+      config.set("agreements.jwtSecret", originalJwtSecret);
+    }
   });
 
   it("handles use case returning null", async () => {

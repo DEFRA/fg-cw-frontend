@@ -4,7 +4,7 @@ import { config } from "../../common/config.js";
 import * as proxyUseCase from "../use-cases/proxy-to-agreements.use-case.js";
 import { agreementsProxyRoutes } from "./agreements-proxy.route.js";
 
-const proxyAgreementRequest = async function (path, contexts = []) {
+const proxyAgreementRequest = async function (path, authenticationToken) {
   let proxyOptions;
   const h = {
     proxy: vi.fn(async (options) => {
@@ -18,7 +18,9 @@ const proxyAgreementRequest = async function (path, contexts = []) {
     headers: {},
     app: { cspNonce: "test-nonce" },
     info: { id: "test-request-id" },
-    yar: { get: vi.fn(() => contexts) },
+    query: authenticationToken
+      ? { "x-encrypted-auth": authenticationToken }
+      : {},
   };
 
   await agreementsProxyRoutes[0].handler(request, h);
@@ -67,13 +69,17 @@ describe("agreementsProxyRoute", () => {
     ])(
       "maps %s with its grant code in a valid JWT",
       async (path, grantCode) => {
-        const contexts = [
-          { agreementRef: "ALPHA-001", grantCode: "alpha-grant" },
-          { agreementRef: "BETA-002", grantCode: "beta-grant" },
-        ];
+        const authenticationToken = Jwt.token.generate(
+          {
+            source: "entra",
+            sbi: "123456789",
+            grantCode,
+          },
+          "route-level-test-secret",
+        );
         const { mappedRequest, payload } = await proxyAgreementRequest(
           path,
-          contexts,
+          authenticationToken,
         );
 
         expect(mappedRequest.uri).toBe(`http://localhost:3000/${path}`);

@@ -1,5 +1,4 @@
 import { config } from "../../common/config.js";
-import { findAgreementGrantCode } from "../../common/helpers/agreement-grant-context.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
 
@@ -42,19 +41,17 @@ const buildTargetUri = function (baseUrl, path) {
  * Adds the Agreements UI JWT authentication header.
  * @param {object} headers - The proxy headers
  * @param {object} request - The incoming request
- * @param {string} path - The Agreements UI request path
  * @returns {object} The proxy headers
  */
 // eslint-disable-next-line complexity
-const addJwtHeader = function (headers, request, path) {
+const addJwtHeader = function (headers, request) {
   const sbi = request?.auth?.credentials?.sbi;
+  const authenticationToken = request?.query?.["x-encrypted-auth"];
 
   try {
     // Always generate JWT for 'entra' source (SBI is optional)
-    headers["x-encrypted-auth"] = generateAgreementsJwt(
-      sbi,
-      findAgreementGrantCode(request, path),
-    );
+    headers["x-encrypted-auth"] =
+      authenticationToken || generateAgreementsJwt(sbi);
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
     throw new Error(`Failed to generate JWT token: ${error.message}`);
@@ -62,7 +59,7 @@ const addJwtHeader = function (headers, request, path) {
   return headers;
 };
 
-const buildProxyHeaders = function (uiToken, request, path) {
+const buildProxyHeaders = function (uiToken, request) {
   const headers = {
     Authorization: `Bearer ${uiToken}`,
     "x-base-url": config.get("agreements.baseUrl"),
@@ -72,7 +69,7 @@ const buildProxyHeaders = function (uiToken, request, path) {
     "X-Correlation-ID": request.headers["x-correlation-id"] || request.info.id,
   };
 
-  return addJwtHeader(headers, request, path);
+  return addJwtHeader(headers, request);
 };
 
 /**
@@ -93,7 +90,7 @@ export const proxyToAgreements = function (path, request) {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
-  const headers = buildProxyHeaders(uiToken, request, path);
+  const headers = buildProxyHeaders(uiToken, request);
 
   logger.info(
     `Finished: Proxying request to agreements UI: ${uri} and path: ${path}`,

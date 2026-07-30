@@ -51,34 +51,30 @@ describe("proxyToAgreements", () => {
     expect(result.headers["x-base-url"]).toBe("/agreement");
     expect(result.headers["x-csp-nonce"]).toBe("test-nonce");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
-    expect(generateAgreementsJwt).toHaveBeenCalledWith("123456789", undefined);
+    expect(generateAgreementsJwt).toHaveBeenCalledWith("123456789");
   });
 
   test.each([
-    ["ALPHA-001", "alpha-grant"],
-    ["ALPHA-001/print", "alpha-grant"],
-    ["BETA-002", "beta-grant"],
-    ["BETA-002/print", "beta-grant"],
-  ])("should include the agreement grant code for %s", (path, grantCode) => {
+    ["ALPHA-001", "signed-alpha-token"],
+    ["ALPHA-001/print", "signed-alpha-token"],
+    ["BETA-002", "signed-beta-token"],
+    ["BETA-002/print", "signed-beta-token"],
+  ])("should forward link authentication for %s", (path, authenticationToken) => {
     const mockRequest = {
       auth: { credentials: {} },
       headers: {},
       app: { cspNonce: "test-nonce" },
       info: { id: "test-id" },
-      yar: {
-        get: vi.fn(() => [
-          { agreementRef: "ALPHA-001", grantCode: "alpha-grant" },
-          { agreementRef: "BETA-002", grantCode: "beta-grant" },
-        ]),
-      },
+      query: { "x-encrypted-auth": authenticationToken },
     };
 
-    proxyUseCase.proxyToAgreements(path, mockRequest);
+    const result = proxyUseCase.proxyToAgreements(path, mockRequest);
 
-    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, grantCode);
+    expect(result.headers["x-encrypted-auth"]).toBe(authenticationToken);
+    expect(generateAgreementsJwt).not.toHaveBeenCalled();
   });
 
-  test("should preserve legacy JWT claims without an agreement grant context", () => {
+  test("should preserve legacy JWT generation without link authentication", () => {
     const mockRequest = {
       auth: { credentials: {} },
       headers: {},
@@ -88,7 +84,7 @@ describe("proxyToAgreements", () => {
 
     proxyUseCase.proxyToAgreements("LEGACY-001/print", mockRequest);
 
-    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, undefined);
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined);
   });
 
   test("should return uri and headers with JWT even when no SBI (entra source)", () => {
@@ -103,7 +99,7 @@ describe("proxyToAgreements", () => {
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
-    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, undefined);
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined);
   });
 
   test("should handle paths with leading slash", () => {
