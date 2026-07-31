@@ -1,8 +1,8 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
+import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 import * as proxyUseCase from "./proxy-to-agreements.use-case.js";
 
-// Mock config
 vi.mock("../../common/config.js", () => ({
   config: {
     get: vi.fn((key) => {
@@ -17,12 +17,10 @@ vi.mock("../../common/config.js", () => ({
   },
 }));
 
-// Mock JWT helper
 vi.mock("../../common/helpers/agreements-jwt.js", () => ({
   generateAgreementsJwt: vi.fn(() => "mock-jwt-token"),
 }));
 
-// Mock logger
 vi.mock("../../common/logger.js", () => ({
   logger: {
     info: vi.fn(),
@@ -31,144 +29,130 @@ vi.mock("../../common/logger.js", () => ({
   },
 }));
 
+vi.mock("./find-case-by-id.use-case.js", () => ({
+  findCaseByIdUseCase: vi.fn(),
+}));
+
+const createRequest = (credentials = {}) => ({
+  auth: { credentials },
+  headers: {},
+  app: { cspNonce: "test-nonce" },
+  info: { id: "test-id" },
+});
+
 describe("proxyToAgreements", () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test("should return uri and headers with JWT when SBI exists", () => {
-    const mockRequest = {
-      auth: { credentials: { sbi: "123456789" } },
-      headers: { "content-type": "application/json" },
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
+    const request = createRequest({ sbi: "123456789" });
+    request.headers["content-type"] = "application/json";
 
-    const result = proxyUseCase.proxyToAgreements("test-path", mockRequest);
+    const result = proxyUseCase.proxyToAgreements("test-path", request);
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers.Authorization).toBe("Bearer test-token");
     expect(result.headers["x-base-url"]).toBe("/agreement");
     expect(result.headers["x-csp-nonce"]).toBe("test-nonce");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
-    expect(generateAgreementsJwt).toHaveBeenCalledWith("123456789");
+    expect(generateAgreementsJwt).toHaveBeenCalledWith("123456789", undefined);
   });
 
-  test.each([
-    ["ALPHA-001", "signed-alpha-token"],
-    ["ALPHA-001/print", "signed-alpha-token"],
-    ["BETA-002", "signed-beta-token"],
-    ["BETA-002/print", "signed-beta-token"],
-  ])(
-    "should forward link authentication for %s",
-    (path, authenticationToken) => {
-      const mockRequest = {
-        auth: { credentials: {} },
-        headers: {},
-        app: { cspNonce: "test-nonce" },
-        info: { id: "test-id" },
-        query: { "x-encrypted-auth": authenticationToken },
-      };
-
-      const result = proxyUseCase.proxyToAgreements(path, mockRequest);
-
-      expect(result.headers["x-encrypted-auth"]).toBe(authenticationToken);
-      expect(generateAgreementsJwt).not.toHaveBeenCalled();
-    },
-  );
-
-  test("should preserve legacy JWT generation without link authentication", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
-
-    proxyUseCase.proxyToAgreements("LEGACY-001/print", mockRequest);
-
-    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined);
-  });
-
-  test("should return uri and headers with JWT even when no SBI (entra source)", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: { "content-type": "application/json" },
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
-
-    const result = proxyUseCase.proxyToAgreements("test-path", mockRequest);
+  test("should return uri and headers with JWT even when no SBI", () => {
+    const result = proxyUseCase.proxyToAgreements("test-path", createRequest());
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
-    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined);
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(undefined, undefined);
   });
 
   test("should handle paths with leading slash", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
+    const result = proxyUseCase.proxyToAgreements(
+      "/test-path",
+      createRequest(),
+    );
 
-    const result = proxyUseCase.proxyToAgreements("/test-path", mockRequest);
     expect(result.uri).toBe("http://localhost:3000/test-path");
   });
 
   test("should use default content-type when not provided", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
+    const result = proxyUseCase.proxyToAgreements("test", createRequest());
 
-    const result = proxyUseCase.proxyToAgreements("test", mockRequest);
     expect(result.headers["content-type"]).toBe("text/html");
   });
 
   test("should use correlation headers from request when available", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {
-        "x-request-id": "custom-request-id",
-        "x-correlation-id": "custom-correlation-id",
-      },
-      app: { cspNonce: "test-nonce" },
-      info: { id: "default-id" },
+    const request = createRequest();
+    request.headers = {
+      "x-request-id": "custom-request-id",
+      "x-correlation-id": "custom-correlation-id",
     };
 
-    const result = proxyUseCase.proxyToAgreements("test", mockRequest);
+    const result = proxyUseCase.proxyToAgreements("test", request);
 
     expect(result.headers["X-Request-ID"]).toBe("custom-request-id");
     expect(result.headers["X-Correlation-ID"]).toBe("custom-correlation-id");
   });
 
-  test("should use info.id for correlation when headers not provided", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "default-id" },
-    };
+  test("should use info.id for correlation when headers are absent", () => {
+    const result = proxyUseCase.proxyToAgreements("test", createRequest());
 
-    const result = proxyUseCase.proxyToAgreements("test", mockRequest);
-
-    expect(result.headers["X-Request-ID"]).toBe("default-id");
-    expect(result.headers["X-Correlation-ID"]).toBe("default-id");
+    expect(result.headers["X-Request-ID"]).toBe("test-id");
+    expect(result.headers["X-Correlation-ID"]).toBe("test-id");
   });
 
-  test("should handle empty path", () => {
-    const mockRequest = {
-      auth: { credentials: {} },
-      headers: {},
-      app: { cspNonce: "test-nonce" },
-      info: { id: "test-id" },
-    };
+  test("should handle an empty path", () => {
+    const result = proxyUseCase.proxyToAgreements("", createRequest());
 
-    const result = proxyUseCase.proxyToAgreements("", mockRequest);
     expect(result.uri).toBe("http://localhost:3000");
+  });
+});
+
+describe("proxyCaseAgreement", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test("uses the trusted case workflow code in the Agreements JWT", async () => {
+    findCaseByIdUseCase.mockResolvedValue({
+      data: { workflowCode: "pigs-might-fly" },
+    });
+    const request = createRequest({
+      token: "caseworking-token",
+      user: { id: "caseworker-1" },
+      sbi: "123456789",
+    });
+
+    const result = await proxyUseCase.proxyCaseAgreement(
+      "case-123",
+      "PMF823153883",
+      request,
+    );
+
+    expect(findCaseByIdUseCase).toHaveBeenCalledWith(
+      {
+        token: "caseworking-token",
+        user: { id: "caseworker-1" },
+      },
+      "case-123",
+    );
+    expect(generateAgreementsJwt).toHaveBeenCalledWith(
+      "123456789",
+      "pigs-might-fly",
+    );
+    expect(result.uri).toBe("http://localhost:3000/PMF823153883");
+  });
+
+  test("fails when the case workflow code is unavailable", async () => {
+    findCaseByIdUseCase.mockResolvedValue({ data: {} });
+
+    await expect(
+      proxyUseCase.proxyCaseAgreement(
+        "case-123",
+        "PMF823153883",
+        createRequest({ token: "caseworking-token", user: {} }),
+      ),
+    ).rejects.toThrow("Case workflow code is unavailable");
   });
 });

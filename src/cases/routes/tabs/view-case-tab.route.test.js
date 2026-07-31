@@ -1,8 +1,6 @@
 import Bell from "@hapi/bell";
-import Jwt from "@hapi/jwt";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { config } from "../../../common/config.js";
 import { createServer } from "../../../server/index.js";
 import { findCaseTabUseCase } from "../../use-cases/find-case-tab.use-case.js";
 import { viewCaseTabRoute } from "./view-case-tab.route.js";
@@ -352,14 +350,15 @@ describe("viewCaseTabRoute", () => {
     );
   });
 
-  it("signs backend agreement grant codes for view and print links", async () => {
-    const originalJwtSecret = config.get("agreements.jwtSecret");
-    config.set("agreements.jwtSecret", "view-tab-test-secret");
+  it("renders the backend agreement URL unchanged", async () => {
+    const agreementUrl =
+      "https://fg-cw-frontend.dev.cdp-int.defra.cloud/cases/case-agreements/agreement/ALPHA-001";
     findCaseTabUseCase.mockResolvedValue(
       createMockPage({
-        _id: "case-agreements",
+        caseId: "case-agreements",
         caseRef: "CASE-AGREEMENTS",
         tabId: "agreements",
+        workflowCode: "alpha-grant",
         links: [
           { id: "tasks", text: "Tasks", href: "/cases/case-agreements" },
           {
@@ -368,86 +367,37 @@ describe("viewCaseTabRoute", () => {
             href: "/cases/case-agreements/agreements",
           },
         ],
-        agreements: [
-          { agreementRef: "ALPHA-001", grantCode: "alpha-grant" },
-          { agreementRef: "BETA-002", grantCode: "beta-grant" },
-          { agreementRef: "LEGACY-003" },
-        ],
         content: [
           {
             component: "url",
-            text: "ALPHA-001",
-            href: "/agreement/ALPHA-001",
-          },
-          {
-            component: "url",
-            text: "Print ALPHA-001",
-            href: "/agreement/ALPHA-001/print",
-          },
-          {
-            component: "url",
-            text: "BETA-002",
-            href: "/agreement/BETA-002",
-          },
-          {
-            component: "url",
-            text: "Print BETA-002",
-            href: "/agreement/BETA-002/print",
-          },
-          {
-            component: "url",
-            text: "LEGACY-003",
-            href: "/agreement/LEGACY-003",
+            text: "View agreement",
+            href: agreementUrl,
+            target: "_blank",
+            rel: "noopener",
           },
         ],
       }),
     );
 
-    try {
-      const { statusCode, result } = await server.inject({
-        method: "GET",
-        url: "/cases/case-agreements/agreements",
-        auth: {
-          credentials: {
-            token: "mock-token",
-            user: {},
-            sbi: "123456789",
-          },
-          strategy: "session",
-          mode: "required",
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/case-agreements/agreements",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
         },
-      });
+        strategy: "session",
+        mode: "required",
+      },
+    });
 
-      expect(statusCode).toBe(200);
-      const $ = load(result);
-
-      for (const [text, path, grantCode] of [
-        ["ALPHA-001", "/agreement/ALPHA-001", "alpha-grant"],
-        ["Print ALPHA-001", "/agreement/ALPHA-001/print", "alpha-grant"],
-        ["BETA-002", "/agreement/BETA-002", "beta-grant"],
-        ["Print BETA-002", "/agreement/BETA-002/print", "beta-grant"],
-      ]) {
-        const href = $(`a:contains("${text}")`).attr("href");
-        const url = new URL(href, "http://caseworking.local");
-        const token = url.searchParams.get("x-encrypted-auth");
-        const jwt = Jwt.token.decode(token);
-
-        expect(url.pathname).toBe(path);
-        Jwt.token.verifySignature(jwt, "view-tab-test-secret");
-        expect(jwt.decoded.payload).toEqual({
-          source: "entra",
-          sbi: "123456789",
-          grantCode,
-          iat: expect.any(Number),
-        });
-      }
-
-      expect($('a:contains("LEGACY-003")').attr("href")).toBe(
-        "/agreement/LEGACY-003",
-      );
-    } finally {
-      config.set("agreements.jwtSecret", originalJwtSecret);
-    }
+    expect(statusCode).toBe(200);
+    const $ = load(result);
+    const agreementLink = $('a:contains("View agreement")');
+    expect(agreementLink.attr("href")).toBe(agreementUrl);
+    expect(agreementLink.attr("target")).toBe("_blank");
+    expect(agreementLink.attr("rel")).toBe("noopener");
   });
 
   it("handles use case returning null", async () => {

@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
 import { createViewTabViewModel } from "./view-tab.view-model.js";
-
 vi.mock("../../common/view-models/header.view-model.js");
 
 const mockRequest = { path: "/cases/agreement-123/case-details" };
@@ -61,55 +60,23 @@ describe("createViewTabViewModel", () => {
     expect(result.data.payload).toEqual(mockTabData.payload);
   });
 
-  it("adds tokens only to matching agreement links", () => {
-    const request = {
-      auth: { credentials: { sbi: "123456789" } },
-      url: new URL("https://caseworking.local/cases/agreement-123/agreements"),
-    };
+  it("preserves agreement links supplied by the backend", () => {
     const content = [
       {
         component: "url",
-        href: "/agreement/AGR%202024-001?mode=view#summary",
+        text: "View agreement",
+        href: "/cases/case-123/agreement/AGR-001",
+        target: "_blank",
+        rel: "noopener",
       },
-      {
-        component: "url",
-        href: "https://caseworking.local/agreement/AGR%202024-001/print",
-      },
-      {
-        component: "url",
-        href: "https://example.com/agreement/AGR%202024-001",
-      },
-      { component: "url", href: "/agreement/OTHER-001" },
-      { component: "url", href: "http://[" },
     ];
     const result = createViewTabViewModel({
-      page: createMockPage({
-        ...mockTabData,
-        agreements: [
-          { agreementRef: "AGR 2024-001", grantCode: "grant-alpha" },
-        ],
-        content,
-      }),
-      request,
+      page: createMockPage({ ...mockTabData, content }),
+      request: mockRequest,
       tabId: "agreements",
     });
 
-    const relativeUrl = new URL(
-      result.data.content[0].href,
-      request.url.origin,
-    );
-    expect(relativeUrl.pathname).toBe("/agreement/AGR%202024-001");
-    expect(relativeUrl.searchParams.get("mode")).toBe("view");
-    expect(relativeUrl.searchParams.get("x-encrypted-auth")).toBeTruthy();
-    expect(relativeUrl.hash).toBe("#summary");
-
-    const absoluteUrl = new URL(result.data.content[1].href);
-    expect(absoluteUrl.origin).toBe(request.url.origin);
-    expect(absoluteUrl.searchParams.get("x-encrypted-auth")).toBeTruthy();
-
-    expect(result.data.content.slice(2).map(({ href }) => href)).toEqual(
-      content.slice(2).map(({ href }) => href),
-    );
+    expect(result.data.content).toEqual(content);
   });
 });
 
