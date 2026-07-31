@@ -82,12 +82,13 @@ export const getAgreementsBaseUrl = function () {
 
 /**
  * Proxy to agreements use case
- * @param {string} path - The path to proxy
- * @param {object} request - The incoming request
- * @param {string|undefined} grantCode - Trusted case workflow code
+ * @param {object} options - Proxy request options
+ * @param {string} options.path - The path to proxy
+ * @param {object} options.request - The incoming request
+ * @param {string|undefined} options.grantCode - Trusted case workflow code
  * @returns {{uri: string, headers: object}}
  */
-export const proxyToAgreements = function (path, request, grantCode) {
+export const proxyToAgreements = ({ path, request, grantCode }) => {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
@@ -114,5 +115,9 @@ const getWorkflowCode = (page) => {
 
 export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
   const page = await findCaseByIdUseCase(getAuthContext(request), caseId);
-  return proxyToAgreements(agreementRef, request, getWorkflowCode(page));
+  return proxyToAgreements({
+    path: agreementRef,
+    request,
+    grantCode: getWorkflowCode(page),
+  });
 };

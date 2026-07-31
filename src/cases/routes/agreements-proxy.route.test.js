@@ -1,4 +1,7 @@
+import Jwt from "@hapi/jwt";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { config } from "../../common/config.js";
+import { wreck } from "../../common/wreck.js";
 import * as proxyUseCase from "../use-cases/proxy-to-agreements.use-case.js";
 import { agreementsProxyRoutes } from "./agreements-proxy.route.js";
 
@@ -63,7 +66,10 @@ describe("agreementsProxyRoute", () => {
 
       await handler(mockRequest, mockH);
 
-      expect(proxySpy).toHaveBeenCalledWith("test-path", mockRequest);
+      expect(proxySpy).toHaveBeenCalledWith({
+        path: "test-path",
+        request: mockRequest,
+      });
       expect(mockProxy).toHaveBeenCalled();
     });
 
@@ -172,7 +178,10 @@ describe("agreementsProxyRoute", () => {
 
       const response = await handler(mockRequest, mockH);
 
-      expect(proxySpy).toHaveBeenCalledWith("success", mockRequest);
+      expect(proxySpy).toHaveBeenCalledWith({
+        path: "success",
+        request: mockRequest,
+      });
       expect(info).toHaveBeenCalledWith(
         {
           agreementProxyTarget: "https://service.test/path",
@@ -287,6 +296,47 @@ describe("agreementsProxyRoute", () => {
       expect(mockH.proxy.mock.calls[0][0].mapUri()).toEqual({
         uri: "http://localhost:3000/WMP936292242",
         headers: { "x-encrypted-auth": "signed-case-token" },
+      });
+    });
+
+    test("signs the trusted case workflow code through the composed route", async () => {
+      vi.spyOn(wreck, "get").mockResolvedValue({
+        payload: { data: { workflowCode: "pigs-might-fly" } },
+      });
+      const request = {
+        params: {
+          caseId: "6a69fb35c9339ac5a18a89f0",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+            sbi: "123456789",
+          },
+        },
+        headers: {},
+        app: { cspNonce: "test-nonce" },
+        info: { id: "test-id" },
+      };
+
+      await handler(request, mockH);
+
+      const { uri, headers } = mockH.proxy.mock.calls[0][0].mapUri();
+      const jwt = Jwt.token.decode(headers["x-encrypted-auth"]);
+      Jwt.token.verifySignature(jwt, config.get("agreements.jwtSecret"));
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/cases/6a69fb35c9339ac5a18a89f0",
+        {
+          headers: { authorization: "Bearer caseworking-token" },
+        },
+      );
+      expect(uri).toBe(`${config.get("agreements.uiUrl")}/PMF823153883`);
+      expect(jwt.decoded.payload).toMatchObject({
+        source: "entra",
+        sbi: "123456789",
+        grantCode: "pigs-might-fly",
       });
     });
 

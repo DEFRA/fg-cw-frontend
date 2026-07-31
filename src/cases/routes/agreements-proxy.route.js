@@ -109,7 +109,7 @@ const executeProxyRequest = async function ({ uri, headers }, request, h) {
 };
 
 const executeProxy = async (path, request, h) =>
-  executeProxyRequest(proxyToAgreements(path, request), request, h);
+  executeProxyRequest(proxyToAgreements({ path, request }), request, h);
 
 const executeCaseAgreementProxy = async (caseId, agreementRef, request, h) =>
   executeProxyRequest(

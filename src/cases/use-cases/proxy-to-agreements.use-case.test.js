@@ -49,7 +49,10 @@ describe("proxyToAgreements", () => {
     const request = createRequest({ sbi: "123456789" });
     request.headers["content-type"] = "application/json";
 
-    const result = proxyUseCase.proxyToAgreements("test-path", request);
+    const result = proxyUseCase.proxyToAgreements({
+      path: "test-path",
+      request,
+    });
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers.Authorization).toBe("Bearer test-token");
@@ -60,7 +63,10 @@ describe("proxyToAgreements", () => {
   });
 
   test("should return uri and headers with JWT even when no SBI", () => {
-    const result = proxyUseCase.proxyToAgreements("test-path", createRequest());
+    const result = proxyUseCase.proxyToAgreements({
+      path: "test-path",
+      request: createRequest(),
+    });
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
     expect(result.headers["x-encrypted-auth"]).toBe("mock-jwt-token");
@@ -68,16 +74,19 @@ describe("proxyToAgreements", () => {
   });
 
   test("should handle paths with leading slash", () => {
-    const result = proxyUseCase.proxyToAgreements(
-      "/test-path",
-      createRequest(),
-    );
+    const result = proxyUseCase.proxyToAgreements({
+      path: "/test-path",
+      request: createRequest(),
+    });
 
     expect(result.uri).toBe("http://localhost:3000/test-path");
   });
 
   test("should use default content-type when not provided", () => {
-    const result = proxyUseCase.proxyToAgreements("test", createRequest());
+    const result = proxyUseCase.proxyToAgreements({
+      path: "test",
+      request: createRequest(),
+    });
 
     expect(result.headers["content-type"]).toBe("text/html");
   });
@@ -89,21 +98,27 @@ describe("proxyToAgreements", () => {
       "x-correlation-id": "custom-correlation-id",
     };
 
-    const result = proxyUseCase.proxyToAgreements("test", request);
+    const result = proxyUseCase.proxyToAgreements({ path: "test", request });
 
     expect(result.headers["X-Request-ID"]).toBe("custom-request-id");
     expect(result.headers["X-Correlation-ID"]).toBe("custom-correlation-id");
   });
 
   test("should use info.id for correlation when headers are absent", () => {
-    const result = proxyUseCase.proxyToAgreements("test", createRequest());
+    const result = proxyUseCase.proxyToAgreements({
+      path: "test",
+      request: createRequest(),
+    });
 
     expect(result.headers["X-Request-ID"]).toBe("test-id");
     expect(result.headers["X-Correlation-ID"]).toBe("test-id");
   });
 
   test("should handle an empty path", () => {
-    const result = proxyUseCase.proxyToAgreements("", createRequest());
+    const result = proxyUseCase.proxyToAgreements({
+      path: "",
+      request: createRequest(),
+    });
 
     expect(result.uri).toBe("http://localhost:3000");
   });
