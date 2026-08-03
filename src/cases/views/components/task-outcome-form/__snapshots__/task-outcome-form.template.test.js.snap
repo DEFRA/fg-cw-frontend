@@ -5,7 +5,7 @@ exports[`task-outcome-form > renders checkbox with completed state 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -45,7 +45,7 @@ exports[`task-outcome-form > renders minimal form (no options, no comment) 1`] =
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -85,7 +85,7 @@ exports[`task-outcome-form > renders with comment input without help text 1`] = 
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -125,7 +125,7 @@ exports[`task-outcome-form > renders with error message 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -134,12 +134,12 @@ exports[`task-outcome-form > renders with error message 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked data-aria-controls="conditional-status">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" checked data-aria-controls="conditional-value">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-status">
+    <div class="govuk-radios__conditional" id="conditional-value">
       <div class="govuk-form-group govuk-form-group--error">
   <label class="govuk-label" for="approved-comment">
     Approval reason
@@ -181,7 +181,7 @@ exports[`task-outcome-form > renders with optional comment input 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -221,7 +221,7 @@ exports[`task-outcome-form > renders with pre-filled comment text 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -230,12 +230,12 @@ exports[`task-outcome-form > renders with pre-filled comment text 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" data-aria-controls="conditional-status">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" data-aria-controls="conditional-value">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status">
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-value">
       <div class="govuk-form-group">
   <label class="govuk-label" for="approved-comment">
     Reason for hold
@@ -247,12 +247,12 @@ exports[`task-outcome-form > renders with pre-filled comment text 1`] = `
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" data-aria-controls="conditional-status-2">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected" data-aria-controls="conditional-value-2">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
-    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-2">
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-value-2">
       <div class="govuk-form-group">
   <label class="govuk-label" for="rejected-comment">
     Reason for hold
@@ -264,12 +264,12 @@ exports[`task-outcome-form > renders with pre-filled comment text 1`] = `
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold" checked data-aria-controls="conditional-status-3">
-      <label class="govuk-label govuk-radios__label" for="status-3">
+      <input class="govuk-radios__input" id="value-3" name="value" type="radio" value="on-hold" checked data-aria-controls="conditional-value-3">
+      <label class="govuk-label govuk-radios__label" for="value-3">
         Put on hold
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-status-3">
+    <div class="govuk-radios__conditional" id="conditional-value-3">
       <div class="govuk-form-group">
   <label class="govuk-label" for="on-hold-comment">
     Reason for hold
@@ -311,7 +311,7 @@ exports[`task-outcome-form > renders with required comment input 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -320,12 +320,12 @@ exports[`task-outcome-form > renders with required comment input 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked data-aria-controls="conditional-status">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" checked data-aria-controls="conditional-value">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
-    <div class="govuk-radios__conditional" id="conditional-status">
+    <div class="govuk-radios__conditional" id="conditional-value">
       <div class="govuk-form-group">
   <label class="govuk-label" for="approved-comment">
     Approval reason
@@ -337,12 +337,12 @@ exports[`task-outcome-form > renders with required comment input 1`] = `
 </div>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" data-aria-controls="conditional-status-2">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected" data-aria-controls="conditional-value-2">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
-    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-status-2">
+    <div class="govuk-radios__conditional govuk-radios__conditional--hidden" id="conditional-value-2">
       <div class="govuk-form-group">
   <label class="govuk-label" for="rejected-comment">
     Approval reason
@@ -384,7 +384,7 @@ exports[`task-outcome-form > renders with status options (radio buttons) 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -393,20 +393,20 @@ exports[`task-outcome-form > renders with status options (radio buttons) 1`] = `
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" checked>
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold">
-      <label class="govuk-label govuk-radios__label" for="status-3">
+      <input class="govuk-radios__input" id="value-3" name="value" type="radio" value="on-hold">
+      <label class="govuk-label govuk-radios__label" for="value-3">
         Put on hold
       </label>
     </div>
@@ -441,7 +441,7 @@ exports[`task-outcome-form > renders without status options (checkbox) 1`] = `
   class="task-outcome-form"
   method="post"
   id="completeTaskForm"
-  action="/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status"
+  action="/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value"
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">

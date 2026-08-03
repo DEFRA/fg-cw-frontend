@@ -116,7 +116,7 @@ describe("cases", () => {
       },
       {
         method: "post",
-        path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+        path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
       },
     ]);
   });

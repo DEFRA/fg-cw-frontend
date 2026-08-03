@@ -82,10 +82,10 @@ describe("task-details", () => {
         canComplete: true,
         updatedBy: "John Doe",
         updatedAt: "2024-01-15T10:30:00Z",
-        status: "approved",
-        statusOptions: [
-          { code: "approved", name: "Approve" },
-          { code: "rejected", name: "Reject" },
+        value: "approved",
+        valueOptions: [
+          { value: "approved", text: "Approve" },
+          { value: "rejected", text: "Reject" },
         ],
         comment: { text: "Initial review completed" },
       },
@@ -231,9 +231,9 @@ describe("task-details", () => {
         name: "Test Task",
         type: "boolean",
         canComplete: true,
-        statusOptions: [
-          { code: "accept", name: "Accept" },
-          { code: "reject", name: "Reject" },
+        valueOptions: [
+          { value: "accept", text: "Accept" },
+          { value: "reject", text: "Reject" },
         ],
       },
     });

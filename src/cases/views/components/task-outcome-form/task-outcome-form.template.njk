@@ -1,10 +1,10 @@
 {%- from "../task-outcome-selector/macro.njk" import taskOutcomeSelector -%}
 
 {%- set formAction = params.formAction -%}
-{%- set status = params.status -%}
-{%- set statusOptions = params.statusOptions -%}
+{%- set value = params.value -%}
+{%- set valueOptions = params.valueOptions -%}
 {%- set completed = params.completed -%}
-{%- set statusError = params.statusError -%}
+{%- set valueError = params.valueError -%}
 {%- set caseLink = "/cases/" + params.caseId -%}
 {%- set disabled = params.disabled -%}
 
@@ -16,10 +16,10 @@
 >
   {{
     taskOutcomeSelector({
-      status: status,
-      statusOptions: statusOptions,
+      value: value,
+      valueOptions: valueOptions,
       completed: completed,
-      errorMessage: statusError,
+      errorMessage: valueError,
       disabled: disabled
     })
   }}
