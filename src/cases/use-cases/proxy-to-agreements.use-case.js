@@ -1,6 +1,8 @@
+import Boom from "@hapi/boom";
 import { config } from "../../common/config.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
+import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
 export { statusCodes } from "../../common/status-codes.js";
 
@@ -38,18 +40,19 @@ const buildTargetUri = function (baseUrl, path) {
 };
 
 /**
- * Builds proxy headers for the request
- * @param {string} uiToken - The UI token
- * @param {object} request - The incoming request object
- * @returns {object} The proxy headers object
+ * Adds the Agreements UI JWT authentication header.
+ * @param {object} headers - The proxy headers
+ * @param {object} request - The incoming request
+ * @param {string|undefined} grantCode - Trusted case workflow code
+ * @returns {object} The proxy headers
  */
 // eslint-disable-next-line complexity
-const addJwtHeader = function (headers, request) {
+const addJwtHeader = function (headers, request, grantCode) {
   const sbi = request?.auth?.credentials?.sbi;
 
   try {
     // Always generate JWT for 'entra' source (SBI is optional)
-    headers["x-encrypted-auth"] = generateAgreementsJwt(sbi);
+    headers["x-encrypted-auth"] = generateAgreementsJwt(sbi, grantCode);
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
     throw new Error(`Failed to generate JWT token: ${error.message}`);
@@ -57,7 +60,7 @@ const addJwtHeader = function (headers, request) {
   return headers;
 };
 
-const buildProxyHeaders = function (uiToken, request) {
+const buildProxyHeaders = function (uiToken, request, grantCode) {
   const headers = {
     Authorization: `Bearer ${uiToken}`,
     "x-base-url": config.get("agreements.baseUrl"),
@@ -67,7 +70,7 @@ const buildProxyHeaders = function (uiToken, request) {
     "X-Correlation-ID": request.headers["x-correlation-id"] || request.info.id,
   };
 
-  return addJwtHeader(headers, request);
+  return addJwtHeader(headers, request, grantCode);
 };
 
 /**
@@ -80,18 +83,42 @@ export const getAgreementsBaseUrl = function () {
 
 /**
  * Proxy to agreements use case
- * @param {string} path - The path to proxy
- * @param {object} request - The incoming request
+ * @param {object} options - Proxy request options
+ * @param {string} options.path - The path to proxy
+ * @param {object} options.request - The incoming request
+ * @param {string|undefined} options.grantCode - Trusted case workflow code
  * @returns {{uri: string, headers: object}}
  */
-export const proxyToAgreements = function (path, request) {
+export const proxyToAgreements = ({ path, request, grantCode }) => {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
-  const headers = buildProxyHeaders(uiToken, request);
+  const headers = buildProxyHeaders(uiToken, request, grantCode);
 
   logger.info(
     `Finished: Proxying request to agreements UI: ${uri} and path: ${path}`,
   );
   return { uri, headers };
+};
+
+const getAuthContext = (request) => ({
+  token: request.auth.credentials.token,
+  user: request.auth.credentials.user,
+});
+
+const getWorkflowCode = (page) => {
+  const workflowCode = page?.data?.workflowCode;
+  if (!workflowCode) {
+    throw Boom.badGateway("Case workflow code is unavailable");
+  }
+  return workflowCode;
+};
+
+export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
+  const page = await findCaseByIdUseCase(getAuthContext(request), caseId);
+  return proxyToAgreements({
+    path: agreementRef,
+    request,
+    grantCode: getWorkflowCode(page),
+  });
 };

@@ -1,5 +1,6 @@
 import {
   getAgreementsBaseUrl,
+  proxyCaseAgreement,
   proxyToAgreements,
   statusCodes,
 } from "../use-cases/proxy-to-agreements.use-case.js";
@@ -86,8 +87,7 @@ const handleProxyError = function (error, h) {
     .code(statusCode);
 };
 
-const executeProxy = async function (path, request, h) {
-  const { uri, headers } = proxyToAgreements(path, request);
+const executeProxyRequest = async function ({ uri, headers }, request, h) {
   const requestLogger = resolveLogger(request?.logger);
   const proxyResponse = await h.proxy({
     mapUri: () => ({ uri, headers }),
@@ -108,6 +108,16 @@ const executeProxy = async function (path, request, h) {
   return proxyResponse;
 };
 
+const executeProxy = async (path, request, h) =>
+  executeProxyRequest(proxyToAgreements({ path, request }), request, h);
+
+const executeCaseAgreementProxy = async (caseId, agreementRef, request, h) =>
+  executeProxyRequest(
+    await proxyCaseAgreement(caseId, agreementRef, request),
+    request,
+    h,
+  );
+
 const agreementsProxyHandler = async function (request, h) {
   const { path } = request.params;
 
@@ -124,6 +134,16 @@ const agreementsProxyHandler = async function (request, h) {
   );
 };
 
+const caseAgreementProxyHandler = async (request, h) => {
+  const { caseId, agreementRef } = request.params;
+  const path = `${caseId}/agreement/${agreementRef}`;
+  const requestLogger = resolveLogger(request?.logger);
+
+  return executeCaseAgreementProxy(caseId, agreementRef, request, h).catch(
+    (error) => handleProxyFailure({ error, logger: requestLogger, path, h }),
+  );
+};
+
 const handleProxyFailure = function ({ error, logger, path, h }) {
   logger.warn(
     {
@@ -137,13 +157,19 @@ const handleProxyFailure = function ({ error, logger, path, h }) {
   return handleProxyError(error, h);
 };
 
+const sessionAuth = { mode: "required", strategy: "session" };
+
 export const agreementsProxyRoutes = [
   {
     method: "GET",
     path: `${baseUrl}/{path*}`,
-    options: {
-      auth: { mode: "required", strategy: "session" },
-    },
+    options: { auth: sessionAuth },
     handler: agreementsProxyHandler,
+  },
+  {
+    method: "GET",
+    path: "/cases/{caseId}/agreement/{agreementRef}",
+    options: { auth: sessionAuth },
+    handler: caseAgreementProxyHandler,
   },
 ];
