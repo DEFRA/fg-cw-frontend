@@ -168,6 +168,9 @@ describe("proxyCaseAgreement", () => {
         "PMF823153883",
         createRequest({ token: "caseworking-token", user: {} }),
       ),
-    ).rejects.toThrow("Case workflow code is unavailable");
+    ).rejects.toMatchObject({
+      message: "Case workflow code is unavailable",
+      output: { statusCode: 502 },
+    });
   });
 });

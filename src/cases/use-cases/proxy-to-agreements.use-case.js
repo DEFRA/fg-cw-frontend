@@ -1,3 +1,4 @@
+import Boom from "@hapi/boom";
 import { config } from "../../common/config.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
@@ -108,7 +109,7 @@ const getAuthContext = (request) => ({
 const getWorkflowCode = (page) => {
   const workflowCode = page?.data?.workflowCode;
   if (!workflowCode) {
-    throw new Error("Case workflow code is unavailable");
+    throw Boom.badGateway("Case workflow code is unavailable");
   }
   return workflowCode;
 };

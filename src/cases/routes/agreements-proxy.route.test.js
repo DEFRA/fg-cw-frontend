@@ -340,14 +340,18 @@ describe("agreementsProxyRoute", () => {
       });
     });
 
-    test("returns a safe error when case context cannot be loaded", async () => {
-      vi.spyOn(proxyUseCase, "proxyCaseAgreement").mockRejectedValue(
-        new Error("Case workflow code is unavailable"),
-      );
+    test("returns 502 when the case has no workflow code", async () => {
+      vi.spyOn(wreck, "get").mockResolvedValue({ payload: { data: {} } });
       const request = {
         params: {
           caseId: "case-123",
           agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
         },
       };
 
@@ -357,7 +361,7 @@ describe("agreementsProxyRoute", () => {
         error: "External Service Unavailable",
         message: "Unable to process request",
       });
-      expect(mockH.code).toHaveBeenCalledWith(503);
+      expect(mockH.code).toHaveBeenCalledWith(502);
     });
   });
 });
