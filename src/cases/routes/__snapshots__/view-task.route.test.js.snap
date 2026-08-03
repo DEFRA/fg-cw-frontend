@@ -95,7 +95,7 @@ Timeline
 
 
 
-        <form class="task-outcome-form" method="post" id="completeTaskForm" action="/cases/68495db5afe2d27b09b2ee47/task-groups/application-receipt-tasks/tasks/simple-review/status">
+        <form class="task-outcome-form" method="post" id="completeTaskForm" action="/cases/68495db5afe2d27b09b2ee47/task-groups/application-receipt-tasks/tasks/simple-review/value">
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">

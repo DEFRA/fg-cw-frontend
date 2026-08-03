@@ -101,7 +101,7 @@ describe("viewTaskRoute", () => {
                       level: 2,
                     },
                   ],
-                  status: "pending",
+                  value: "pending",
                   type: "OPTIONAL",
                   requiredRoles: {
                     allOf: ["role1"],
@@ -173,9 +173,9 @@ describe("viewTaskRoute", () => {
                   description: [
                     { component: "heading", text: "Simple Review", level: 2 },
                   ],
-                  status: "pending",
+                  value: "pending",
                   type: "OPTIONAL",
-                  statusOptions: [
+                  valueOptions: [
                     { code: "accept", name: "Accept" },
                     { code: "reject", name: "Reject" },
                   ],
@@ -208,7 +208,7 @@ describe("viewTaskRoute", () => {
 
     const $ = load(result);
     const submitButton = $('button[data-testid="save-and-continue-button"]');
-    const radioInputs = $('input[name="status"]');
+    const radioInputs = $('input[name="value"]');
 
     expect(submitButton.attr("disabled")).toBeUndefined();
     expect(radioInputs.first().attr("disabled")).toBeUndefined();
@@ -248,9 +248,9 @@ describe("viewTaskRoute", () => {
                   description: [
                     { component: "heading", text: "Simple Review", level: 2 },
                   ],
-                  status: "pending",
+                  value: "pending",
                   type: "OPTIONAL",
-                  statusOptions: [
+                  valueOptions: [
                     { code: "accept", name: "Accept" },
                     { code: "reject", name: "Reject" },
                   ],
@@ -283,7 +283,7 @@ describe("viewTaskRoute", () => {
 
     const $ = load(result);
     const submitButton = $('button[data-testid="save-and-continue-button"]');
-    const radioInputs = $('input[name="status"]');
+    const radioInputs = $('input[name="value"]');
 
     expect(submitButton.attr("disabled")).toBeDefined();
     expect(radioInputs.first().attr("disabled")).toBeDefined();

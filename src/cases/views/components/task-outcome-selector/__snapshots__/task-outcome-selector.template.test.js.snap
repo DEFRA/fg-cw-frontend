@@ -30,7 +30,7 @@ exports[`task-outcome-selector > renders checkbox in unchecked state 1`] = `
 "
 `;
 
-exports[`task-outcome-selector > renders checkbox when no status options 1`] = `
+exports[`task-outcome-selector > renders checkbox when no value options 1`] = `
 "  <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
@@ -45,7 +45,7 @@ exports[`task-outcome-selector > renders checkbox when no status options 1`] = `
 "
 `;
 
-exports[`task-outcome-selector > renders checkbox when statusOptions is null 1`] = `
+exports[`task-outcome-selector > renders checkbox when valueOptions is null 1`] = `
 "  <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">
@@ -68,14 +68,14 @@ exports[`task-outcome-selector > renders radio buttons with first option selecte
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" checked>
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
@@ -94,14 +94,14 @@ exports[`task-outcome-selector > renders radio buttons with long option names 1`
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved-with-conditions" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved-with-conditions" checked>
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve with conditions that need to be met before final approval
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected-insufficient-info">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected-insufficient-info">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject due to insufficient information provided in the application
       </label>
     </div>
@@ -120,20 +120,20 @@ exports[`task-outcome-selector > renders radio buttons with middle option select
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="on-hold" checked>
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="on-hold" checked>
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Put on hold
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-3">
+      <input class="govuk-radios__input" id="value-3" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-3">
         Reject
       </label>
     </div>
@@ -152,26 +152,26 @@ exports[`task-outcome-selector > renders radio buttons with multiple options 1`]
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected" checked>
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected" checked>
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold">
-      <label class="govuk-label govuk-radios__label" for="status-3">
+      <input class="govuk-radios__input" id="value-3" name="value" type="radio" value="on-hold">
+      <label class="govuk-label govuk-radios__label" for="value-3">
         Put on hold
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-4" name="status" type="radio" value="more-info">
-      <label class="govuk-label govuk-radios__label" for="status-4">
+      <input class="govuk-radios__input" id="value-4" name="value" type="radio" value="more-info">
+      <label class="govuk-label govuk-radios__label" for="value-4">
         Request more information
       </label>
     </div>
@@ -190,20 +190,20 @@ exports[`task-outcome-selector > renders radio buttons with no option selected 1
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved">
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="rejected">
-      <label class="govuk-label govuk-radios__label" for="status-2">
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-2">
         Reject
       </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-3" name="status" type="radio" value="on-hold">
-      <label class="govuk-label govuk-radios__label" for="status-3">
+      <input class="govuk-radios__input" id="value-3" name="value" type="radio" value="on-hold">
+      <label class="govuk-label govuk-radios__label" for="value-3">
         Put on hold
       </label>
     </div>
@@ -222,8 +222,8 @@ exports[`task-outcome-selector > renders radio buttons with single option 1`] = 
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="approved" checked>
-      <label class="govuk-label govuk-radios__label" for="status">
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved" checked>
+      <label class="govuk-label govuk-radios__label" for="value">
         Approve
       </label>
     </div>
@@ -234,7 +234,7 @@ exports[`task-outcome-selector > renders radio buttons with single option 1`] = 
 "
 `;
 
-exports[`task-outcome-selector > renders with empty statusOptions array 1`] = `
+exports[`task-outcome-selector > renders with empty valueOptions array 1`] = `
 "  <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
     <div class="govuk-checkboxes__item">

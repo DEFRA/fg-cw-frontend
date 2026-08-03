@@ -2,15 +2,15 @@
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
-{%- set status = params.status -%}
-{%- set statusOptions = params.statusOptions -%}
+{%- set value = params.value -%}
+{%- set valueOptions = params.valueOptions -%}
 {%- set completed = params.completed -%}
 {%- set errorMessage = params.errorMessage -%}
 {%- set disabled = params.disabled -%}
 
-{% if statusOptions and statusOptions.length > 0 %}
+{% if valueOptions and valueOptions.length > 0 %}
   {% set radioItems = [] %}
-  {% for option in statusOptions %}
+  {% for option in valueOptions %}
     {% if option.conditional %}
       {%
         set radioItems = (radioItems.push({
@@ -34,7 +34,7 @@
   {% endfor %}
   {{
     govukRadios({
-      name: "status",
+      name: "value",
       fieldset: {
         legend: {
           text: "Outcome",

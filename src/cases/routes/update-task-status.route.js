@@ -17,8 +17,8 @@ const validateComment = (taskComment, comment) => {
   return true;
 };
 
-const validateStatusOptions = (statusOptions, status) => {
-  if (statusOptions?.length > 0 && !status) {
+const validateValueOptions = (valueOptions, value) => {
+  if (valueOptions?.length > 0 && !value) {
     return false;
   }
 
@@ -27,14 +27,14 @@ const validateStatusOptions = (statusOptions, status) => {
 
 export const updateTaskStatusRoute = {
   method: "POST",
-  path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+  path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
   // eslint-disable-next-line complexity
   handler: async (request, h) => {
-    const { caseId, taskGroupCode, taskCode, completed, status, comment } =
+    const { caseId, taskGroupCode, taskCode, completed, value, comment } =
       mapRequest(request);
 
     logger.info(
-      `Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+      `Updating task value for case ${caseId} for taskCode ${taskCode} with value ${value}`,
     );
 
     const authContext = {
@@ -47,15 +47,15 @@ export const updateTaskStatusRoute = {
 
     const errors = {};
 
-    const commentFieldName = status ? `${status}-comment` : "comment";
+    const commentFieldName = value ? `${value}-comment` : "comment";
 
-    // find statusOption
-    const statusOption = task.statusOptions?.find((so) => so.code === status);
+    // find valueOption
+    const valueOption = task.valueOptions?.find((so) => so.code === value);
     const commentInputDef =
-      statusOption?.commentInputDef ?? task?.commentInputDef;
+      valueOption?.commentInputDef ?? task?.commentInputDef;
 
-    // Only validate comment if a status option has been selected
-    if (status && !validateComment(commentInputDef, comment)) {
+    // Only validate comment if a value option has been selected
+    if (value && !validateComment(commentInputDef, comment)) {
       errors[commentFieldName] = {
         text: commentInputDef?.label
           ? `${getLabelText(commentInputDef.label)} is required`
@@ -64,17 +64,17 @@ export const updateTaskStatusRoute = {
       };
     }
 
-    if (!validateStatusOptions(task?.statusOptions, status)) {
-      errors.status = {
+    if (!validateValueOptions(task?.valueOptions, value)) {
+      errors.value = {
         text: "Choose an option",
-        href: "#status",
+        href: "#value",
       };
     }
 
     if (Object.keys(errors).length > 0) {
       setFlashData(request, {
         errors,
-        formData: { completed, status, [commentFieldName]: comment },
+        formData: { completed, value, [commentFieldName]: comment },
       });
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
     }
@@ -83,34 +83,34 @@ export const updateTaskStatusRoute = {
       caseId,
       taskGroupCode,
       taskCode,
-      status,
+      value,
       completed,
       comment,
     });
 
     logger.info(
-      `Finished: Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+      `Finished: Updating task value for case ${caseId} for taskCode ${taskCode} with value ${value}`,
     );
 
     return h.redirect(`/cases/${caseId}`);
   },
 };
 
-const extractComment = (payload, status) => {
-  const commentFieldName = status ? `${status}-comment` : "comment";
+const extractComment = (payload, value) => {
+  const commentFieldName = value ? `${value}-comment` : "comment";
   return payload[commentFieldName] || null;
 };
 
 const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
-  const { completed = false, status = null } = request.payload;
+  const { completed = false, value = null } = request.payload;
 
   return {
     caseId,
     taskGroupCode,
     taskCode,
     completed,
-    status,
-    comment: extractComment(request.payload, status),
+    value,
+    comment: extractComment(request.payload, value),
   };
 };

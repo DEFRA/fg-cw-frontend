@@ -129,12 +129,16 @@ exports[`task-details > renders completed task with editable form when case is i
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="">
-      
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="value">
+        Approve
+      </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="">
-      
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-2">
+        Reject
+      </label>
     </div>
   </div>
 </fieldset>
