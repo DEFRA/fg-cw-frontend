@@ -301,7 +301,12 @@ describe("agreementsProxyRoute", () => {
 
     test("signs the trusted case workflow code through the composed route", async () => {
       vi.spyOn(wreck, "get").mockResolvedValue({
-        payload: { data: { workflowCode: "pigs-might-fly" } },
+        payload: {
+          data: {
+            workflowCode: "pigs-might-fly",
+            payload: { identifiers: { sbi: "123456789" } },
+          },
+        },
       });
       const request = {
         params: {
@@ -312,7 +317,6 @@ describe("agreementsProxyRoute", () => {
           credentials: {
             token: "caseworking-token",
             user: { id: "caseworker-1" },
-            sbi: "123456789",
           },
         },
         headers: {},

@@ -131,12 +131,14 @@ describe("proxyCaseAgreement", () => {
 
   test("uses the trusted case workflow code in the Agreements JWT", async () => {
     findCaseByIdUseCase.mockResolvedValue({
-      data: { workflowCode: "pigs-might-fly" },
+      data: {
+        workflowCode: "pigs-might-fly",
+        payload: { identifiers: { sbi: "123456789" } },
+      },
     });
     const request = createRequest({
       token: "caseworking-token",
       user: { id: "caseworker-1" },
-      sbi: "123456789",
     });
 
     const result = await proxyUseCase.proxyCaseAgreement(
