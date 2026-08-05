@@ -25,6 +25,74 @@ const validateValueOptions = (valueOptions, value) => {
   return true;
 };
 
+const validateMaxLength = (value, { maxlength, label }) =>
+  maxlength !== undefined && value.length > maxlength
+    ? `${getLabelText(label)} must be ${maxlength} characters or fewer`
+    : null;
+
+// Anchored to match the whole value, mirroring the backend. Keep the two in
+// step or a value passes here and comes back a 400.
+const validatePattern = (value, { pattern, label }) =>
+  pattern !== undefined && !new RegExp(`^(?:${pattern})$`).test(value)
+    ? `Enter ${getLabelText(label)} in the correct format`
+    : null;
+
+const validateTextInput = (value, input) =>
+  validateMaxLength(value, input) ?? validatePattern(value, input);
+
+const isOutOfRange = (numericValue, { min, max }) =>
+  (min !== undefined && numericValue < min) ||
+  (max !== undefined && numericValue > max);
+
+const rangeMessage = ({ min, max, label }) => {
+  if (min === undefined) {
+    return `${getLabelText(label)} must be ${max} or less`;
+  }
+
+  if (max === undefined) {
+    return `${getLabelText(label)} must be ${min} or more`;
+  }
+
+  return `Enter a number between ${min} and ${max}`;
+};
+
+const validateNumberInput = (value, input) => {
+  const numericValue = Number(value);
+
+  if (!Number.isFinite(numericValue)) {
+    return `${getLabelText(input.label)} must be a number`;
+  }
+
+  return isOutOfRange(numericValue, input) ? rangeMessage(input) : null;
+};
+
+const isRealDate = (value) => {
+  const parsed = new Date(`${value}T00:00:00Z`);
+
+  return (
+    !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(value)
+  );
+};
+
+const validateDateInput = (value) =>
+  /^\d{4}-\d{2}-\d{2}$/.test(value) && isRealDate(value)
+    ? null
+    : "Enter a valid date";
+
+const inputValidators = {
+  text: validateTextInput,
+  number: validateNumberInput,
+  date: validateDateInput,
+};
+
+const validateInput = (task, value) => {
+  if (value === null) {
+    return task.mandatory ? `Enter ${getLabelText(task.input.label)}` : null;
+  }
+
+  return inputValidators[task.input.type](value, task.input);
+};
+
 export const updateTaskStatusRoute = {
   method: "POST",
   path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
@@ -49,26 +117,39 @@ export const updateTaskStatusRoute = {
 
     const commentFieldName = value ? `${value}-comment` : "comment";
 
-    // find valueOption
-    const valueOption = task.valueOptions?.find((so) => so.code === value);
-    const commentInputDef =
-      valueOption?.commentInputDef ?? task?.commentInputDef;
+    // Input tasks have no outcomes, so no value option and no outcome comment.
+    if (task?.input) {
+      const message = validateInput(task, value);
 
-    // Only validate comment if a value option has been selected
-    if (value && !validateComment(commentInputDef, comment)) {
-      errors[commentFieldName] = {
-        text: commentInputDef?.label
-          ? `${getLabelText(commentInputDef.label)} is required`
-          : "Note is required",
-        href: `#${commentFieldName}`,
-      };
-    }
+      if (message) {
+        errors.value = { text: message, href: "#value" };
+        setFlashData(request, { errors, formData: { value } });
+        return h.redirect(
+          `/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`,
+        );
+      }
+    } else {
+      // find valueOption
+      const valueOption = task.valueOptions?.find((so) => so.code === value);
+      const commentInputDef =
+        valueOption?.commentInputDef ?? task?.commentInputDef;
 
-    if (!validateValueOptions(task?.valueOptions, value)) {
-      errors.value = {
-        text: "Choose an option",
-        href: "#value",
-      };
+      // Only validate comment if a value option has been selected
+      if (value && !validateComment(commentInputDef, comment)) {
+        errors[commentFieldName] = {
+          text: commentInputDef?.label
+            ? `${getLabelText(commentInputDef.label)} is required`
+            : "Note is required",
+          href: `#${commentFieldName}`,
+        };
+      }
+
+      if (!validateValueOptions(task?.valueOptions, value)) {
+        errors.value = {
+          text: "Choose an option",
+          href: "#value",
+        };
+      }
     }
 
     if (Object.keys(errors).length > 0) {
@@ -105,12 +186,16 @@ const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
   const { completed = false, value = null } = request.payload;
 
+  // An empty input field posts "", and the API rejects "" - Joi.string() does
+  // not allow it. null is how a value is cleared.
+  const submittedValue = value === "" ? null : value;
+
   return {
     caseId,
     taskGroupCode,
     taskCode,
     completed,
-    value,
-    comment: extractComment(request.payload, value),
+    value: submittedValue,
+    comment: extractComment(request.payload, submittedValue),
   };
 };

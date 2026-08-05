@@ -102,6 +102,51 @@ export const mapOptions = ({
   });
 };
 
+const inputAttributes = {
+  text: ({ maxlength }) => (maxlength ? { maxlength } : {}),
+  number: ({ min, max }) => ({
+    ...(min === undefined ? {} : { min }),
+    ...(max === undefined ? {} : { max }),
+  }),
+  date: () => ({}),
+};
+
+const inputTypeParams = {
+  text: ({ pattern }) => ({
+    type: "text",
+    ...(pattern ? { pattern } : {}),
+  }),
+  // GDS guidance: use a text input with a numeric inputmode rather than
+  // type="number", which has a spinner and awkward assistive tech behaviour.
+  number: () => ({ type: "text", inputmode: "numeric" }),
+  // The GDS standard for dates is govukDateInput - three separate day, month
+  // and year fields - not a native picker. We use type="date" for now because
+  // it submits YYYY-MM-DD directly, which is the format the backend validates,
+  // whereas three fields have to be assembled and zero-padded, and need their
+  // own handling for partial entry. Revisit before public beta.
+  date: () => ({ type: "date" }),
+};
+
+const inputHint = (hint) =>
+  hint?.length ? { text: hint.join(" ") } : undefined;
+
+export const mapInput = ({ input, value, error }) => {
+  if (!input) {
+    return undefined;
+  }
+
+  return {
+    id: "value",
+    name: "value",
+    value: value ?? "",
+    label: createLabelObject(input.label),
+    hint: inputHint(input.hint),
+    errorMessage: error,
+    ...inputTypeParams[input.type](input),
+    attributes: inputAttributes[input.type](input),
+  };
+};
+
 const findCurrentTask = (stage, taskGroupCode, taskCode) => {
   const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupCode);
   const currentGroupTasks = currentGroup.tasks;
@@ -123,6 +168,8 @@ const buildCurrentTaskData = ({
   formData,
   errors,
 }) => {
+  const valueError = errors?.value;
+
   return {
     formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/value`,
     description: currentTask.description,
@@ -135,9 +182,14 @@ const buildCurrentTaskData = ({
       formData,
       errors,
     }),
+    input: mapInput({
+      input: currentTask.input,
+      value: currentValue,
+      error: valueError,
+    }),
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
-    valueError: errors?.value,
+    valueError,
     canComplete,
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,

@@ -1,6 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createTaskDetailViewModel,
+  mapInput,
   mapOptions,
 } from "./task-detail.view-model.js";
 
@@ -15,6 +16,98 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
 }));
 
 vi.mock("../../common/view-models/header.view-model.js");
+
+describe("mapInput", () => {
+  const map = (input, value = null, error = undefined) =>
+    mapInput({ input, value, error });
+
+  it("returns undefined for an option task", () => {
+    expect(map(undefined)).toBeUndefined();
+  });
+
+  it("maps a text input with its constraints", () => {
+    expect(
+      map({
+        type: "text",
+        label: "Siti/FC reference",
+        hint: ["For example, SF123456"],
+        pattern: "[A-Z]{2}[0-9]{6}",
+        maxlength: 20,
+      }),
+    ).toEqual({
+      id: "value",
+      name: "value",
+      type: "text",
+      value: "",
+      label: { text: "Siti/FC reference" },
+      hint: { text: "For example, SF123456" },
+      errorMessage: undefined,
+      pattern: "[A-Z]{2}[0-9]{6}",
+      attributes: { maxlength: 20 },
+    });
+  });
+
+  it("maps a number input to a text field with a numeric inputmode", () => {
+    expect(
+      map({ type: "number", label: "Herd size", min: 1, max: 5000 }),
+    ).toEqual({
+      id: "value",
+      name: "value",
+      type: "text",
+      inputmode: "numeric",
+      value: "",
+      label: { text: "Herd size" },
+      hint: undefined,
+      errorMessage: undefined,
+      attributes: { min: 1, max: 5000 },
+    });
+  });
+
+  it("maps a date input", () => {
+    expect(map({ type: "date", label: "Date of last inspection" })).toEqual({
+      id: "value",
+      name: "value",
+      type: "date",
+      value: "",
+      label: { text: "Date of last inspection" },
+      hint: undefined,
+      errorMessage: undefined,
+      attributes: {},
+    });
+  });
+
+  it("omits constraints that are not set", () => {
+    const result = map({ type: "text", label: "Reference" });
+
+    expect(result.attributes).toEqual({});
+    expect(result).not.toHaveProperty("pattern");
+  });
+
+  it("joins a multi-line hint into one string", () => {
+    expect(
+      map({ type: "text", label: "Reference", hint: ["First line", "Second"] })
+        .hint,
+    ).toEqual({ text: "First line Second" });
+  });
+
+  it("renders a saved value back into the field", () => {
+    expect(map({ type: "text", label: "Reference" }, "SF123456").value).toBe(
+      "SF123456",
+    );
+  });
+
+  it("renders an empty string rather than null for a cleared value", () => {
+    expect(map({ type: "text", label: "Reference" }, null).value).toBe("");
+  });
+
+  it("attaches the field error", () => {
+    const error = { text: "Enter Reference" };
+
+    expect(
+      map({ type: "text", label: "Reference" }, null, error).errorMessage,
+    ).toBe(error);
+  });
+});
 
 describe("mapOptions", () => {
   it("should use valueOption comment if it is defined", () => {
@@ -932,6 +1025,87 @@ describe("createTaskDetailViewModel", () => {
       });
 
       expect(result.data.hasWriteAccess).toBeUndefined();
+    });
+
+    describe("input tasks", () => {
+      const inputCaseData = (overrides = {}) => ({
+        ...mockCaseData,
+        stage: {
+          ...mockCaseData.stage,
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  value: "SF123456",
+                  commentRefs: [],
+                  requiredRoles: { allOf: [], anyOf: [] },
+                  canComplete: true,
+                  valueOptions: [],
+                  input: { type: "text", label: "Reference", maxlength: 20 },
+                  ...overrides,
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      it("surfaces the input field on the current task", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+        });
+
+        expect(result.data.currentTask.input).toEqual(
+          expect.objectContaining({
+            name: "value",
+            type: "text",
+            value: "SF123456",
+            label: { text: "Reference" },
+            attributes: { maxlength: 20 },
+          }),
+        );
+        expect(result.data.currentTask.valueOptions).toEqual([]);
+      });
+
+      it("prefers a flashed form value over the saved one", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+          formData: { value: "REJECTED-BY-SERVER" },
+        });
+
+        expect(result.data.currentTask.input.value).toBe("REJECTED-BY-SERVER");
+      });
+
+      it("attaches the value error to the field and the error list", () => {
+        const errors = { value: { text: "Enter Reference", href: "#value" } };
+
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+          errors,
+        });
+
+        expect(result.data.currentTask.input.errorMessage).toBe(errors.value);
+        expect(result.data.currentTask.valueError).toBe(errors.value);
+        expect(result.errorList).toEqual([errors.value]);
+      });
+
+      it("leaves input undefined for an option task", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(mockCaseData),
+          request: mockRequest,
+          query: mockQuery,
+        });
+
+        expect(result.data.currentTask.input).toBeUndefined();
+      });
     });
   });
 });
