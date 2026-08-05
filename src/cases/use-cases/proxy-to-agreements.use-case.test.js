@@ -175,4 +175,31 @@ describe("proxyCaseAgreement", () => {
       output: { statusCode: 502 },
     });
   });
+
+  test.each([
+    ["payload", { data: { workflowCode: "pigs-might-fly" } }],
+    ["identifiers", { data: { workflowCode: "pigs-might-fly", payload: {} } }],
+    [
+      "SBI",
+      {
+        data: {
+          workflowCode: "pigs-might-fly",
+          payload: { identifiers: {} },
+        },
+      },
+    ],
+  ])("fails when the case %s is unavailable", async (_field, page) => {
+    findCaseByIdUseCase.mockResolvedValue(page);
+
+    await expect(
+      proxyUseCase.proxyCaseAgreement(
+        "case-123",
+        "PMF823153883",
+        createRequest({ token: "caseworking-token", user: {} }),
+      ),
+    ).rejects.toMatchObject({
+      message: "Case SBI is unavailable",
+      output: { statusCode: 502 },
+    });
+  });
 });
