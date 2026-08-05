@@ -42,13 +42,11 @@ const buildTargetUri = function (baseUrl, path) {
 /**
  * Adds the Agreements UI JWT authentication header.
  * @param {object} headers - The proxy headers
- * @param {object} request - The incoming request
- * @param {string|undefined} grantCode - Trusted case workflow code
+ * @param {{sbi?: string, grantCode?: string}} trustedClaims - Trusted agreement claims
  * @returns {object} The proxy headers
  */
-// eslint-disable-next-line complexity
-const addJwtHeader = function (headers, request, grantCode) {
-  const sbi = request?.auth?.credentials?.sbi;
+const addJwtHeader = (headers, trustedClaims) => {
+  const { sbi, grantCode } = trustedClaims;
 
   try {
     // Always generate JWT for 'entra' source (SBI is optional)
@@ -60,7 +58,7 @@ const addJwtHeader = function (headers, request, grantCode) {
   return headers;
 };
 
-const buildProxyHeaders = function (uiToken, request, grantCode) {
+const buildProxyHeaders = (uiToken, request, trustedClaims) => {
   const headers = {
     Authorization: `Bearer ${uiToken}`,
     "x-base-url": config.get("agreements.baseUrl"),
@@ -70,7 +68,7 @@ const buildProxyHeaders = function (uiToken, request, grantCode) {
     "X-Correlation-ID": request.headers["x-correlation-id"] || request.info.id,
   };
 
-  return addJwtHeader(headers, request, grantCode);
+  return addJwtHeader(headers, trustedClaims);
 };
 
 /**
@@ -86,14 +84,17 @@ export const getAgreementsBaseUrl = function () {
  * @param {object} options - Proxy request options
  * @param {string} options.path - The path to proxy
  * @param {object} options.request - The incoming request
- * @param {string|undefined} options.grantCode - Trusted case workflow code
+ * @param {{sbi?: string, grantCode?: string}} [options.trustedClaims] - Trusted agreement claims
  * @returns {{uri: string, headers: object}}
  */
-export const proxyToAgreements = ({ path, request, grantCode }) => {
+export const proxyToAgreements = ({ path, request, trustedClaims }) => {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
+  const agreementClaims = trustedClaims ?? {
+    sbi: request.auth.credentials.sbi,
+  };
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
-  const headers = buildProxyHeaders(uiToken, request, grantCode);
+  const headers = buildProxyHeaders(uiToken, request, agreementClaims);
 
   logger.info(
     `Finished: Proxying request to agreements UI: ${uri} and path: ${path}`,
@@ -114,11 +115,28 @@ const getWorkflowCode = (page) => {
   return workflowCode;
 };
 
+const getCaseIdentifiers = (page) => page?.data?.payload?.identifiers;
+
+const getCaseSbi = (page) => {
+  const sbi = getCaseIdentifiers(page)?.sbi;
+  if (!sbi) {
+    throw Boom.badGateway("Case SBI is unavailable");
+  }
+  return sbi;
+};
+
+const getTrustedClaims = (page) => ({
+  grantCode: getWorkflowCode(page),
+  sbi: getCaseSbi(page),
+});
+
 export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
   const page = await findCaseByIdUseCase(getAuthContext(request), caseId);
+  const trustedClaims = getTrustedClaims(page);
+
   return proxyToAgreements({
     path: agreementRef,
     request,
-    grantCode: getWorkflowCode(page),
+    trustedClaims,
   });
 };
