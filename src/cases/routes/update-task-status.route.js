@@ -59,10 +59,25 @@ const rangeMessage = ({ min, max, label }) => {
 // Matches the backend: Number() would accept hex ("0x10") and the value is stored as typed, so the field would redisplay as
 // "0x10". Keep the two in step.
 const DECIMAL_NUMBER = /^-?\d+(\.\d+)?$/;
+const WHOLE_NUMBER = /^-?\d+$/;
+
+const numberFormatError = (value, { integer }) => {
+  if (!DECIMAL_NUMBER.test(value)) {
+    return "must be a number";
+  }
+
+  if (integer && !WHOLE_NUMBER.test(value)) {
+    return "must be a whole number";
+  }
+
+  return null;
+};
 
 const validateNumberInput = (value, input) => {
-  if (!DECIMAL_NUMBER.test(value)) {
-    return `${getLabelText(input.label)} must be a number`;
+  const formatError = numberFormatError(value, input);
+
+  if (formatError) {
+    return `${getLabelText(input.label)} ${formatError}`;
   }
 
   return isOutOfRange(Number(value), input) ? rangeMessage(input) : null;

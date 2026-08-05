@@ -47,7 +47,13 @@ describe("mapInput", () => {
 
   it("maps a number input to a text field with a numeric inputmode", () => {
     expect(
-      map({ type: "number", label: "Herd size", min: 1, max: 5000 }),
+      map({
+        type: "number",
+        label: "Herd size",
+        min: 1,
+        max: 5000,
+        integer: true,
+      }),
     ).toEqual({
       id: "value",
       name: "value",
@@ -64,6 +70,16 @@ describe("mapInput", () => {
     const result = map({ type: "number", label: "Herd size", min: 1, max: 5 });
 
     expect(result.attributes).toEqual({});
+  });
+
+  // A "numeric" keypad has no decimal point, so it is only right for a
+  // whole-number field.
+  it("uses a numeric inputmode only for an integer-only number input", () => {
+    expect(
+      map({ type: "number", label: "Herd size", integer: true }).inputmode,
+    ).toBe("numeric");
+
+    expect(map({ type: "number", label: "Area" }).inputmode).toBe("decimal");
   });
 
   it("maps a date input", () => {

@@ -471,11 +471,14 @@ describe("updateTaskStatusRoute", () => {
       min: 1,
       max: 5000,
     };
+    const integerInput = { ...numberInput, integer: true };
     const dateInput = { type: "date", label: "Date of last inspection" };
 
     it.each([
       ["text", textInput, "SF123456"],
       ["number", numberInput, "1200"],
+      ["decimal number", numberInput, "12.5"],
+      ["integer-only number", integerInput, "1200"],
       ["date", dateInput, "2026-03-27"],
     ])("submits a valid %s value", async (_type, input, value) => {
       mockInputTask({ input });
@@ -509,6 +512,7 @@ describe("updateTaskStatusRoute", () => {
       // so the field would come back reading "0x10".
       ["a hexadecimal number", numberInput, "0x10"],
       ["a number in exponent form", numberInput, "1e3"],
+      ["a decimal on an integer-only input", integerInput, "12.5"],
       ["a malformed date", dateInput, "27-03-2026"],
       ["a date that does not exist", dateInput, "2026-02-30"],
     ])("rejects a value %s", async (_case, input, value) => {

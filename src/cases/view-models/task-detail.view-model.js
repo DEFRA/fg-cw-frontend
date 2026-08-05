@@ -119,7 +119,12 @@ const inputTypeParams = {
   }),
   // GDS guidance: use a text input with a numeric inputmode rather than
   // type="number", which has a spinner and awkward assistive tech behaviour.
-  number: () => ({ type: "text", inputmode: "numeric" }),
+  // "numeric" gives a keypad with no decimal point, so it is only right for a
+  // whole-number field; anything accepting decimals needs "decimal".
+  number: ({ integer }) => ({
+    type: "text",
+    inputmode: integer ? "numeric" : "decimal",
+  }),
   // The GDS standard for dates is govukDateInput - three separate day, month
   // and year fields - not a native picker. We use type="date" for now because
   // it submits YYYY-MM-DD directly, which is the format the backend validates,
