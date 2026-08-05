@@ -151,7 +151,9 @@ describe("task-outcome-selector", () => {
           inputmode: "numeric",
           value: "1200",
           label: { text: "Herd size" },
-          attributes: { min: 1, max: 5000 },
+          // No min/max - a text input ignores them, so the view model omits
+          // them rather than imply a constraint the browser will not apply.
+          attributes: {},
         },
         valueOptions: [],
       });

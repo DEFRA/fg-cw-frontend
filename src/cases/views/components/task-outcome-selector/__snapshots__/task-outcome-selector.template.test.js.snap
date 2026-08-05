@@ -33,7 +33,7 @@ exports[`task-outcome-selector > input tasks > renders a number input as text wi
   <label class="govuk-label" for="value">
     Herd size
   </label>
-  <input class="govuk-input" id="value" name="value" type="text" value="1200" inputmode="numeric" min="1" max="5000">
+  <input class="govuk-input" id="value" name="value" type="text" value="1200" inputmode="numeric">
 </div>
 
 "

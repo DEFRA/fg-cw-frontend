@@ -505,6 +505,10 @@ describe("updateTaskStatusRoute", () => {
       ["below min", numberInput, "0"],
       ["above max", numberInput, "5001"],
       ["not a number", numberInput, "abc"],
+      // Number() would take these as 16 and 1000; the value is stored as typed,
+      // so the field would come back reading "0x10".
+      ["a hexadecimal number", numberInput, "0x10"],
+      ["a number in exponent form", numberInput, "1e3"],
       ["a malformed date", dateInput, "27-03-2026"],
       ["a date that does not exist", dateInput, "2026-02-30"],
     ])("rejects a value %s", async (_case, input, value) => {
@@ -518,14 +522,41 @@ describe("updateTaskStatusRoute", () => {
       expect(headers.location).toBe(taskUrl);
     });
 
-    it("rejects an empty value on a mandatory task", async () => {
+    it.each([
+      ["an empty", ""],
+      // Spaces would otherwise skip the mandatory check and store as blanks
+      // that redisplay as a filled-in field.
+      ["a whitespace-only", "   "],
+    ])("rejects %s value on a mandatory task", async (_case, value) => {
       mockInputTask({ input: textInput, mandatory: true });
 
-      const { statusCode, headers } = await submit({ value: "" });
+      const { statusCode, headers } = await submit({ value });
 
       expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
       expect(statusCode).toEqual(302);
       expect(headers.location).toBe(taskUrl);
+    });
+
+    it("trims surrounding whitespace from a submitted value", async () => {
+      mockInputTask({ input: textInput });
+
+      await submit({ value: "  SF12345  " });
+
+      expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
+        authContext,
+        expect.objectContaining({ value: "SF12345" }),
+      );
+    });
+
+    it("clears an optional value submitted as whitespace", async () => {
+      mockInputTask({ input: textInput, mandatory: false });
+
+      await submit({ value: "   " });
+
+      expect(updateTaskStatusUseCase).toHaveBeenCalledWith(
+        authContext,
+        expect.objectContaining({ value: null }),
+      );
     });
 
     // An emptied field posts "", but the API rejects "" - it must reach the

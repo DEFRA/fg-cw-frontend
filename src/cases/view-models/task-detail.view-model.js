@@ -104,10 +104,11 @@ export const mapOptions = ({
 
 const inputAttributes = {
   text: ({ maxlength }) => (maxlength ? { maxlength } : {}),
-  number: ({ min, max }) => ({
-    ...(min === undefined ? {} : { min }),
-    ...(max === undefined ? {} : { max }),
-  }),
+  // No min/max: HTML only honours them on numeric and date inputs, and this
+  // renders as type="text" (see inputTypeParams). Emitting them would suggest a
+  // client-side constraint that does not exist - the range is enforced by the
+  // route and by the API.
+  number: () => ({}),
   date: () => ({}),
 };
 
@@ -130,7 +131,9 @@ const inputTypeParams = {
 const inputHint = (hint) =>
   hint?.length ? { text: hint.join(" ") } : undefined;
 
-export const mapInput = ({ input, value, error }) => {
+// No errorMessage here - the selector template takes it from the outer
+// valueError param, which every branch shares.
+export const mapInput = ({ input, value }) => {
   if (!input) {
     return undefined;
   }
@@ -141,7 +144,6 @@ export const mapInput = ({ input, value, error }) => {
     value: value ?? "",
     label: createLabelObject(input.label),
     hint: inputHint(input.hint),
-    errorMessage: error,
     ...inputTypeParams[input.type](input),
     attributes: inputAttributes[input.type](input),
   };
@@ -182,11 +184,7 @@ const buildCurrentTaskData = ({
       formData,
       errors,
     }),
-    input: mapInput({
-      input: currentTask.input,
-      value: currentValue,
-      error: valueError,
-    }),
+    input: mapInput({ input: currentTask.input, value: currentValue }),
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
     valueError,

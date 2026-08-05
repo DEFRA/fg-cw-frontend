@@ -18,8 +18,7 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
 vi.mock("../../common/view-models/header.view-model.js");
 
 describe("mapInput", () => {
-  const map = (input, value = null, error = undefined) =>
-    mapInput({ input, value, error });
+  const map = (input, value = null) => mapInput({ input, value });
 
   it("returns undefined for an option task", () => {
     expect(map(undefined)).toBeUndefined();
@@ -41,7 +40,6 @@ describe("mapInput", () => {
       value: "",
       label: { text: "Siti/FC reference" },
       hint: { text: "For example, SF123456" },
-      errorMessage: undefined,
       pattern: "[A-Z]{2}[0-9]{6}",
       attributes: { maxlength: 20 },
     });
@@ -58,9 +56,14 @@ describe("mapInput", () => {
       value: "",
       label: { text: "Herd size" },
       hint: undefined,
-      errorMessage: undefined,
-      attributes: { min: 1, max: 5000 },
+      attributes: {},
     });
+  });
+
+  it("does not emit min/max, which a text input would ignore", () => {
+    const result = map({ type: "number", label: "Herd size", min: 1, max: 5 });
+
+    expect(result.attributes).toEqual({});
   });
 
   it("maps a date input", () => {
@@ -71,7 +74,6 @@ describe("mapInput", () => {
       value: "",
       label: { text: "Date of last inspection" },
       hint: undefined,
-      errorMessage: undefined,
       attributes: {},
     });
   });
@@ -100,12 +102,12 @@ describe("mapInput", () => {
     expect(map({ type: "text", label: "Reference" }, null).value).toBe("");
   });
 
-  it("attaches the field error", () => {
-    const error = { text: "Enter Reference" };
-
-    expect(
-      map({ type: "text", label: "Reference" }, null, error).errorMessage,
-    ).toBe(error);
+  // The error is not carried on the input object - the selector template reads
+  // the outer valueError param, shared by every branch.
+  it("does not carry an error message of its own", () => {
+    expect(map({ type: "text", label: "Reference" })).not.toHaveProperty(
+      "errorMessage",
+    );
   });
 });
 
@@ -1092,7 +1094,6 @@ describe("createTaskDetailViewModel", () => {
           errors,
         });
 
-        expect(result.data.currentTask.input.errorMessage).toBe(errors.value);
         expect(result.data.currentTask.valueError).toBe(errors.value);
         expect(result.errorList).toEqual([errors.value]);
       });

@@ -56,14 +56,16 @@ const rangeMessage = ({ min, max, label }) => {
   return `Enter a number between ${min} and ${max}`;
 };
 
-const validateNumberInput = (value, input) => {
-  const numericValue = Number(value);
+// Matches the backend: Number() would accept hex ("0x10") and the value is stored as typed, so the field would redisplay as
+// "0x10". Keep the two in step.
+const DECIMAL_NUMBER = /^-?\d+(\.\d+)?$/;
 
-  if (!Number.isFinite(numericValue)) {
+const validateNumberInput = (value, input) => {
+  if (!DECIMAL_NUMBER.test(value)) {
     return `${getLabelText(input.label)} must be a number`;
   }
 
-  return isOutOfRange(numericValue, input) ? rangeMessage(input) : null;
+  return isOutOfRange(Number(value), input) ? rangeMessage(input) : null;
 };
 
 const isRealDate = (value) => {
@@ -182,13 +184,17 @@ const extractComment = (payload, value) => {
   return payload[commentFieldName] || null;
 };
 
+// An empty input field posts "", and the API rejects "" - Joi.string() does
+// not allow it. null is how a value is cleared.
+// Whitespace-only counts as empty, otherwise it skips the check
+// and stores as blank that redisplay as a filled-in.
+const normaliseValue = (value) => (value?.trim() ? value.trim() : null);
+
 const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
   const { completed = false, value = null } = request.payload;
 
-  // An empty input field posts "", and the API rejects "" - Joi.string() does
-  // not allow it. null is how a value is cleared.
-  const submittedValue = value === "" ? null : value;
+  const submittedValue = normaliseValue(value);
 
   return {
     caseId,
