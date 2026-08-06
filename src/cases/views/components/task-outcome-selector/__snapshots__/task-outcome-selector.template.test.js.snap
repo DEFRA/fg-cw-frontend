@@ -1,5 +1,92 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
+exports[`task-outcome-selector > input tasks > renders a date input 1`] = `
+"  
+  <div class="govuk-form-group">
+  <label class="govuk-label" for="value">
+    Date of last inspection
+  </label>
+  <input class="govuk-input" id="value" name="value" type="date" value="2026-03-27">
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > input tasks > renders a disabled field without write access 1`] = `
+"  
+  <div class="govuk-form-group">
+  <label class="govuk-label" for="value">
+    Siti/FC reference
+  </label>
+  <div id="value-hint" class="govuk-hint">
+    For example, SF123456
+  </div>
+  <input class="govuk-input" id="value" name="value" type="text" value="" disabled aria-describedby="value-hint" maxlength="20">
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > input tasks > renders a number input as text with a numeric inputmode 1`] = `
+"  
+  <div class="govuk-form-group">
+  <label class="govuk-label" for="value">
+    Herd size
+  </label>
+  <input class="govuk-input" id="value" name="value" type="text" value="1200" inputmode="numeric">
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > input tasks > renders a saved value back into the field 1`] = `
+"  
+  <div class="govuk-form-group">
+  <label class="govuk-label" for="value">
+    Siti/FC reference
+  </label>
+  <div id="value-hint" class="govuk-hint">
+    For example, SF123456
+  </div>
+  <input class="govuk-input" id="value" name="value" type="text" value="SF123456" aria-describedby="value-hint" maxlength="20">
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > input tasks > renders a text input with hint and maxlength 1`] = `
+"  
+  <div class="govuk-form-group">
+  <label class="govuk-label" for="value">
+    Siti/FC reference
+  </label>
+  <div id="value-hint" class="govuk-hint">
+    For example, SF123456
+  </div>
+  <input class="govuk-input" id="value" name="value" type="text" value="" aria-describedby="value-hint" pattern="[A-Z]{2}[0-9]{6}" maxlength="20">
+</div>
+
+"
+`;
+
+exports[`task-outcome-selector > input tasks > renders an error message against the field 1`] = `
+"  
+  <div class="govuk-form-group govuk-form-group--error">
+  <label class="govuk-label" for="value">
+    Siti/FC reference
+  </label>
+  <div id="value-hint" class="govuk-hint">
+    For example, SF123456
+  </div>
+  <p id="value-error" class="govuk-error-message">
+    <span class="govuk-visually-hidden">Error:</span> Enter a value
+  </p>
+  <input class="govuk-input govuk-input--error" id="value" name="value" type="text" value="" aria-describedby="value-hint value-error" maxlength="20">
+</div>
+
+"
+`;
+
 exports[`task-outcome-selector > renders checkbox in checked state 1`] = `
 "  <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">

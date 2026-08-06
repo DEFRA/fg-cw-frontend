@@ -1,14 +1,34 @@
 {% from "govuk/components/checkboxes/macro.njk" import govukCheckboxes %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
 {% from "govuk/components/radios/macro.njk" import govukRadios %}
 {% from "govuk/components/textarea/macro.njk" import govukTextarea %}
 
 {%- set value = params.value -%}
 {%- set valueOptions = params.valueOptions -%}
+{%- set input = params.input -%}
 {%- set completed = params.completed -%}
 {%- set errorMessage = params.errorMessage -%}
 {%- set disabled = params.disabled -%}
 
-{% if valueOptions and valueOptions.length > 0 %}
+{% if input %}
+  {# Input tasks have no outcomes: completion is inferred from the value, so
+     render neither radios nor the "Completed" checkbox. #}
+  {{
+    govukInput({
+      id: input.id,
+      name: input.name,
+      type: input.type,
+      inputmode: input.inputmode,
+      pattern: input.pattern,
+      value: input.value,
+      label: input.label,
+      hint: input.hint,
+      errorMessage: errorMessage,
+      disabled: disabled,
+      attributes: input.attributes
+    })
+  }}
+{% elif valueOptions and valueOptions.length > 0 %}
   {% set radioItems = [] %}
   {% for option in valueOptions %}
     {% if option.conditional %}

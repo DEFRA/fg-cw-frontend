@@ -18,6 +18,7 @@ exports[`task-details > renders 1`] = `
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -121,6 +122,7 @@ exports[`task-details > renders completed task with editable form when case is i
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -247,6 +249,7 @@ exports[`task-details > renders with interactive form 1`] = `
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -334,6 +337,7 @@ exports[`task-details > renders with notes history table when task has notesHist
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">

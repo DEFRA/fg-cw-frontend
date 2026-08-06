@@ -102,6 +102,58 @@ export const mapOptions = ({
   });
 };
 
+const inputAttributes = {
+  text: ({ maxlength }) => (maxlength ? { maxlength } : {}),
+  // No min/max: HTML only honours them on numeric and date inputs, and this
+  // renders as type="text" (see inputTypeParams). Emitting them would suggest a
+  // client-side constraint that does not exist - the range is enforced by the
+  // route and by the API.
+  number: () => ({}),
+  date: () => ({}),
+};
+
+const inputTypeParams = {
+  text: ({ pattern }) => ({
+    type: "text",
+    ...(pattern ? { pattern } : {}),
+  }),
+  // GDS guidance: use a text input with a numeric inputmode rather than
+  // type="number", which has a spinner and awkward assistive tech behaviour.
+  // "numeric" gives a keypad with no decimal point, so it is only right for a
+  // whole-number field; anything accepting decimals needs "decimal".
+  number: ({ integer }) => ({
+    type: "text",
+    inputmode: integer ? "numeric" : "decimal",
+  }),
+  // The GDS standard for dates is govukDateInput - three separate day, month
+  // and year fields - not a native picker. We use type="date" for now because
+  // it submits YYYY-MM-DD directly, which is the format the backend validates,
+  // whereas three fields have to be assembled and zero-padded, and need their
+  // own handling for partial entry. Revisit before public beta.
+  date: () => ({ type: "date" }),
+};
+
+const inputHint = (hint) =>
+  hint?.length ? { text: hint.join(" ") } : undefined;
+
+// No errorMessage here - the selector template takes it from the outer
+// valueError param, which every branch shares.
+export const mapInput = ({ input, value }) => {
+  if (!input) {
+    return undefined;
+  }
+
+  return {
+    id: "value",
+    name: "value",
+    value: value ?? "",
+    label: createLabelObject(input.label),
+    hint: inputHint(input.hint),
+    ...inputTypeParams[input.type](input),
+    attributes: inputAttributes[input.type](input),
+  };
+};
+
 const findCurrentTask = (stage, taskGroupCode, taskCode) => {
   const currentGroup = stage.taskGroups.find((g) => g.code === taskGroupCode);
   const currentGroupTasks = currentGroup.tasks;
@@ -123,6 +175,8 @@ const buildCurrentTaskData = ({
   formData,
   errors,
 }) => {
+  const valueError = errors?.value;
+
   return {
     formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/value`,
     description: currentTask.description,
@@ -135,9 +189,10 @@ const buildCurrentTaskData = ({
       formData,
       errors,
     }),
+    input: mapInput({ input: currentTask.input, value: currentValue }),
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
-    valueError: errors?.value,
+    valueError,
     canComplete,
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
