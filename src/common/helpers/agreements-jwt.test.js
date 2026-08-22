@@ -44,6 +44,31 @@ describe("generateAgreementsJwt", () => {
     expect(payload.grantCode).toBeUndefined();
   });
 
+  test("should include FGP-1307 hardened claims (iss, aud, sub, exp)", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const before = Math.floor(Date.now() / 1000);
+    const token = generateAgreementsJwt("123456789", "soil-improvement");
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+
+    expect(payload.iss).toBe("fg-cw-frontend");
+    expect(payload.aud).toEqual(["agreements-ui", "gas"]);
+    expect(payload.sub).toBe("123456789");
+    expect(payload.exp).toBeGreaterThanOrEqual(before + 300);
+    expect(payload.exp).toBeLessThanOrEqual(before + 300 + 5);
+  });
+
+  test("should fall back to the issuer as subject when no SBI is present", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt(undefined);
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+
+    expect(payload.sub).toBe("fg-cw-frontend");
+  });
+
   test("should include configured grant code alongside existing claims", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt("123456789", "soil-improvement");
