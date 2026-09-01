@@ -118,7 +118,7 @@
     "terser-webpack-plugin": "^5.4.0",
     "typescript": "^5.5.0",
     "vitest": "^4.0.18",
-    "glob": "^11.0.1",
+    "glob": "^13.0.6",
     "webpack": "^5.108.4",
     "webpack-assets-manifest": "^6.5.2",
     "webpack-cli": "^7.2.1"
