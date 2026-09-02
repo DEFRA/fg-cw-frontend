@@ -287,6 +287,12 @@ export const config = convict({
       sensitive: true,
       env: "AGREEMENTS_JWT_SECRET",
     },
+    jwtKid: {
+      doc: "Key id (kid) stamped in the caller JWT header so consumers can select the verifying key during rotation",
+      format: String,
+      default: "agreements-hs256-1",
+      env: "AGREEMENTS_JWT_KID",
+    },
     proxyTimeoutMs: {
       doc: "Proxy timeout in milliseconds",
       format: Number,

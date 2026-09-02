@@ -45,8 +45,12 @@ export const generateAgreementsJwt = function (sbi, grantCode) {
 
   try {
     const payload = buildJwtPayload(sbi, grantCode);
+    // FGP-1307: stamp a `kid` in the JWT header so consumers can select the
+    // verifying secret from their keyring and support key rotation via overlap.
+    const kid = config.get("agreements.jwtKid");
     return Jwt.token.generate(payload, jwtSecret, {
       ttlSec: TOKEN_TTL_SECONDS,
+      ...(kid ? { header: { kid } } : {}),
     });
   } catch (error) {
     logger.error("Failed to generate agreements JWT", { error: error.message });
