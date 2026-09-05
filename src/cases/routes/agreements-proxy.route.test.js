@@ -301,7 +301,12 @@ describe("agreementsProxyRoute", () => {
 
     test("signs the trusted case workflow code through the composed route", async () => {
       vi.spyOn(wreck, "get").mockResolvedValue({
-        payload: { data: { workflowCode: "pigs-might-fly" } },
+        payload: {
+          data: {
+            workflowCode: "pigs-might-fly",
+            payload: { identifiers: { sbi: "123456789" } },
+          },
+        },
       });
       const request = {
         params: {
@@ -312,7 +317,6 @@ describe("agreementsProxyRoute", () => {
           credentials: {
             token: "caseworking-token",
             user: { id: "caseworker-1" },
-            sbi: "123456789",
           },
         },
         headers: {},
@@ -342,6 +346,32 @@ describe("agreementsProxyRoute", () => {
 
     test("returns 502 when the case has no workflow code", async () => {
       vi.spyOn(wreck, "get").mockResolvedValue({ payload: { data: {} } });
+      const request = {
+        params: {
+          caseId: "case-123",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(mockH.response).toHaveBeenCalledWith({
+        error: "External Service Unavailable",
+        message: "Unable to process request",
+      });
+      expect(mockH.code).toHaveBeenCalledWith(502);
+    });
+
+    test("returns 502 when the case has no SBI data", async () => {
+      vi.spyOn(wreck, "get").mockResolvedValue({
+        payload: { data: { workflowCode: "pigs-might-fly" } },
+      });
       const request = {
         params: {
           caseId: "case-123",
