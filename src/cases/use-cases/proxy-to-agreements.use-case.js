@@ -171,13 +171,28 @@ const getAgreementRefs = (content, caseId, refs = new Set()) => {
   return refs;
 };
 
+const getAllAgreementRefs = (page, caseId) => {
+  const refs = new Set();
+  const caseData = page?.data ?? {};
+  [caseData.beforeContent, caseData.content, caseData.afterContent].forEach(
+    (content) => {
+      getAgreementRefs(content, caseId, refs);
+    },
+  );
+  return refs;
+};
+
 const ensureAgreementBelongsToCase = async (
   authContext,
   caseId,
   agreementRef,
 ) => {
   const page = await findCaseTabUseCase(authContext, caseId, "agreements");
-  const agreementRefs = getAgreementRefs(page?.data?.content, caseId);
+  if (!page?.data) {
+    throw Boom.badGateway("Case agreements tab is unavailable");
+  }
+
+  const agreementRefs = getAllAgreementRefs(page, caseId);
 
   if (!agreementRefs.has(agreementRef)) {
     throw Boom.forbidden("Agreement does not belong to this case");
