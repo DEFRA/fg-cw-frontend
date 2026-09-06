@@ -94,6 +94,10 @@ describe("mapInput", () => {
     });
   });
 
+  it("returns undefined for unsupported input types", () => {
+    expect(map({ type: "currency", label: "Grant amount" })).toBeUndefined();
+  });
+
   it("omits constraints that are not set", () => {
     const result = map({ type: "text", label: "Reference" });
 

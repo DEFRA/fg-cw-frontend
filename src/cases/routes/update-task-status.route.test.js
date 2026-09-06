@@ -526,6 +526,18 @@ describe("updateTaskStatusRoute", () => {
       expect(headers.location).toBe(taskUrl);
     });
 
+    it("rejects unsupported input types without throwing", async () => {
+      mockInputTask({
+        input: { type: "currency", label: "Grant amount" },
+      });
+
+      const { statusCode, headers } = await submit({ value: "100" });
+
+      expect(updateTaskStatusUseCase).not.toHaveBeenCalled();
+      expect(statusCode).toEqual(302);
+      expect(headers.location).toBe(taskUrl);
+    });
+
     it.each([
       ["an empty", ""],
       // Spaces would otherwise skip the mandatory check and store as blanks

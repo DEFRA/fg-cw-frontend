@@ -3,6 +3,7 @@ import { config } from "../../common/config.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
+import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 
 export { statusCodes } from "../../common/status-codes.js";
 
@@ -130,9 +131,79 @@ const getTrustedClaims = (page) => ({
   sbi: getCaseSbi(page),
 });
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const extractAgreementRef = (href, caseId) => {
+  const pattern = new RegExp(`/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`);
+  const match = href.match(pattern);
+  return match?.[1];
+};
+
+const collectAgreementRef = (content, caseId, refs) => {
+  if (typeof content.href !== "string") {
+    return;
+  }
+
+  const agreementRef = extractAgreementRef(content.href, caseId);
+  if (agreementRef) {
+    refs.add(agreementRef);
+  }
+};
+
+const isObjectContent = (content) =>
+  typeof content === "object" && content !== null;
+
+const getAgreementRefs = (content, caseId, refs = new Set()) => {
+  if (Array.isArray(content)) {
+    content.forEach((item) => getAgreementRefs(item, caseId, refs));
+    return refs;
+  }
+
+  if (!isObjectContent(content)) {
+    return refs;
+  }
+
+  collectAgreementRef(content, caseId, refs);
+
+  Object.values(content).forEach((value) =>
+    getAgreementRefs(value, caseId, refs),
+  );
+  return refs;
+};
+
+const getAllAgreementRefs = (page, caseId) => {
+  const refs = new Set();
+  const caseData = page?.data ?? {};
+  [caseData.beforeContent, caseData.content, caseData.afterContent].forEach(
+    (content) => {
+      getAgreementRefs(content, caseId, refs);
+    },
+  );
+  return refs;
+};
+
+const ensureAgreementBelongsToCase = async (
+  authContext,
+  caseId,
+  agreementRef,
+) => {
+  const page = await findCaseTabUseCase(authContext, caseId, "agreements");
+  if (!page?.data) {
+    throw Boom.badGateway("Case agreements tab is unavailable");
+  }
+
+  const agreementRefs = getAllAgreementRefs(page, caseId);
+
+  if (!agreementRefs.has(agreementRef)) {
+    throw Boom.forbidden("Agreement does not belong to this case");
+  }
+};
+
 export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
-  const page = await findCaseByIdUseCase(getAuthContext(request), caseId);
+  const authContext = getAuthContext(request);
+  const page = await findCaseByIdUseCase(authContext, caseId);
   const trustedClaims = getTrustedClaims(page);
+  await ensureAgreementBelongsToCase(authContext, caseId, agreementRef);
 
   return proxyToAgreements({
     path: agreementRef,

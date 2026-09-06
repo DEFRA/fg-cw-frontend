@@ -285,6 +285,20 @@ describe("case-list.model", () => {
       expect(result.data.tabItems[0].label).toBe("All cases (0)");
     });
 
+    it("falls back to workflowCode when schemeName is missing", () => {
+      const result = createCaseListViewModel({
+        page: createMockPage([
+          {
+            ...mockCases[0],
+            schemeName: undefined,
+          },
+        ]),
+        request: mockRequest,
+      });
+
+      expect(result.data.tabItems[0].data.rows[0].caseType.text).toBe("wmp");
+    });
+
     it("has consistent page title and page heading", () => {
       const result = createCaseListViewModel({
         page: createMockPage([]),

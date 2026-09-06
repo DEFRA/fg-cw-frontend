@@ -107,7 +107,10 @@ const validateInput = (task, value) => {
     return task.mandatory ? `Enter ${getLabelText(task.input.label)}` : null;
   }
 
-  return inputValidators[task.input.type](value, task.input);
+  const validator = inputValidators[task.input.type];
+  return validator
+    ? validator(value, task.input)
+    : "This task input type is not supported";
 };
 
 export const updateTaskStatusRoute = {

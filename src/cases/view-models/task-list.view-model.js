@@ -9,8 +9,14 @@ export const createTaskListViewModel = ({
 }) => {
   const kase = page.data;
   const stage = kase.stage;
-  const taskGroups = mapTaskGroups(stage.taskGroups, kase._id);
-  const hasTasks = taskGroups.some((taskGroup) => taskGroup.tasks.length > 0);
+  const stageViewModel = createStageViewModel({
+    stage,
+    caseId: kase._id,
+    beforeContent: kase.beforeContent,
+    afterContent: kase.afterContent,
+    errors,
+    values,
+  });
 
   return {
     pageTitle: `Case tasks - ${stage.name}`,
@@ -20,18 +26,7 @@ export const createTaskListViewModel = ({
     links: setActiveLink(kase.links, "tasks"),
     data: {
       case: kase,
-      stage: {
-        ...stage,
-        taskGroups,
-        hasTasks,
-        // The frontend is the single source of truth for the empty-state
-        // message: render it whenever the stage has no tasks. The backend no
-        // longer embeds "There are no tasks to complete." in workflow content
-        // (see fg-cw-backend migration removing the duplicate), so there is no
-        // risk of the message rendering twice.
-        showEmptyState: !hasTasks,
-        actions: mapActions({ stage, errors, values }),
-      },
+      stage: stageViewModel,
       beforeContent: kase.beforeContent,
       afterContent: kase.afterContent,
     },
@@ -40,6 +35,39 @@ export const createTaskListViewModel = ({
     values,
   };
 };
+
+const createStageViewModel = ({
+  stage,
+  caseId,
+  beforeContent,
+  afterContent,
+  errors,
+  values,
+}) => {
+  const taskGroups = mapTaskGroups(stage.taskGroups, caseId);
+  const hasTasks = hasTaskGroups(taskGroups);
+
+  return {
+    ...stage,
+    taskGroups,
+    hasTasks,
+    showEmptyState: shouldShowEmptyState(taskGroups, beforeContent, afterContent),
+    actions: mapActions({ stage, errors, values }),
+  };
+};
+
+const hasTaskGroups = (taskGroups) =>
+  taskGroups.some((taskGroup) => taskGroup.tasks.length > 0);
+
+const shouldShowEmptyState = (taskGroups, beforeContent, afterContent) => {
+  const hasTasks = hasTaskGroups(taskGroups);
+  const hasEmptyStateContent = hasAnyEmptyStateContent(beforeContent, afterContent);
+  return !hasTasks && !hasEmptyStateContent;
+};
+
+const hasAnyEmptyStateContent = (beforeContent, afterContent) =>
+  containsEmptyStateContent(beforeContent) ||
+  containsEmptyStateContent(afterContent);
 
 const mapTaskGroups = (taskGroups, caseId) => {
   return taskGroups.map((taskGroup) => ({
@@ -53,6 +81,30 @@ const mapTaskGroups = (taskGroups, caseId) => {
       };
     }),
   }));
+};
+
+const EMPTY_STATE_MESSAGE = "There are no tasks to complete.";
+
+const containsEmptyStateContent = (content) => {
+  if (Array.isArray(content)) {
+    return content.some(containsEmptyStateContent);
+  }
+
+  if (isObjectContent(content)) {
+    return Object.values(content).some(containsEmptyStateContent);
+  }
+
+  return includesEmptyStateMessage(content);
+};
+
+const isObjectContent = (content) =>
+  typeof content === "object" && content !== null;
+
+const includesEmptyStateMessage = (content) => {
+  if (typeof content !== "string") {
+    return false;
+  }
+  return content.includes(EMPTY_STATE_MESSAGE);
 };
 
 const mapActions = ({ stage, errors, values }) => {

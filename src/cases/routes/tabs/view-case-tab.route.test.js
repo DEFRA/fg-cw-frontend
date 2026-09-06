@@ -400,6 +400,54 @@ describe("viewCaseTabRoute", () => {
     expect(agreementLink.attr("rel")).toBe("noopener");
   });
 
+  it("renders beforeContent ahead of the main tab content", async () => {
+    findCaseTabUseCase.mockResolvedValue(
+      createMockPage({
+        caseId: "case-before-content",
+        caseRef: "CASE-BEFORE-CONTENT",
+        tabId: "case-details",
+        links: [
+          { id: "tasks", text: "Tasks", href: "/cases/case-before-content" },
+          {
+            id: "case-details",
+            text: "Case Details",
+            href: "/cases/case-before-content/case-details",
+          },
+        ],
+        beforeContent: [
+          {
+            component: "paragraph",
+            text: "Content shown before the main section.",
+          },
+        ],
+        content: [
+          {
+            component: "paragraph",
+            text: "Main case content.",
+          },
+        ],
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/case-before-content/case-details",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
+    });
+
+    expect(statusCode).toBe(200);
+    expect(result.indexOf("Content shown before the main section.")).toBeLessThan(
+      result.indexOf("Main case content."),
+    );
+  });
+
   it("handles use case returning null", async () => {
     findCaseTabUseCase.mockResolvedValue(null);
 

@@ -21,6 +21,34 @@ describe("task-outcome-form", () => {
     expect(component).toMatchSnapshot();
   });
 
+  test("renders an input task with novalidate on the form", () => {
+    const component = render("task-outcome-form", {
+      caseId: "case-input",
+      formAction:
+        "/cases/case-input/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "SF123456",
+      input: {
+        id: "value",
+        name: "value",
+        type: "text",
+        value: "SF123456",
+        label: { text: "Siti/FC reference" },
+        hint: { text: "For example, SF123456" },
+        attributes: { maxlength: 20 },
+      },
+      completed: false,
+      valueError: null,
+      isInteractive: true,
+    });
+
+    expect(component).toContain('novalidate');
+    expect(component).toContain('name="value"');
+    expect(component).toContain('value="SF123456"');
+    expect(component).toContain("Siti/FC reference");
+    expect(component).not.toContain("Outcome");
+    expect(component).not.toContain("Completed");
+  });
+
   test("renders without status options (checkbox)", () => {
     const component = render("task-outcome-form", {
       caseId: "case-456",
