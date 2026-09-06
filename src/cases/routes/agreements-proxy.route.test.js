@@ -300,14 +300,27 @@ describe("agreementsProxyRoute", () => {
     });
 
     test("signs the trusted case workflow code through the composed route", async () => {
-      vi.spyOn(wreck, "get").mockResolvedValue({
-        payload: {
-          data: {
-            workflowCode: "pigs-might-fly",
-            payload: { identifiers: { sbi: "123456789" } },
+      vi.spyOn(wreck, "get")
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              workflowCode: "pigs-might-fly",
+              payload: { identifiers: { sbi: "123456789" } },
+            },
           },
-        },
-      });
+        })
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              content: [
+                {
+                  component: "url",
+                  href: "https://example.test/cases/6a69fb35c9339ac5a18a89f0/agreement/PMF823153883",
+                },
+              ],
+            },
+          },
+        });
       const request = {
         params: {
           caseId: "6a69fb35c9339ac5a18a89f0",
@@ -330,12 +343,17 @@ describe("agreementsProxyRoute", () => {
       const jwt = Jwt.token.decode(headers["x-encrypted-auth"]);
       Jwt.token.verifySignature(jwt, config.get("agreements.jwtSecret"));
 
-      expect(wreck.get).toHaveBeenCalledWith(
-        "/cases/6a69fb35c9339ac5a18a89f0",
-        {
-          headers: { authorization: "Bearer caseworking-token" },
-        },
+      expect(wreck.get.mock.calls[0][0]).toBe("/cases/6a69fb35c9339ac5a18a89f0");
+      expect(wreck.get.mock.calls[0][1].headers.authorization).toContain(
+        "caseworking-token",
       );
+      expect(wreck.get.mock.calls[1][0]).toBe(
+        "/cases/6a69fb35c9339ac5a18a89f0/tabs/agreements",
+      );
+      expect(wreck.get.mock.calls[1][1].headers.authorization).toContain(
+        "caseworking-token",
+      );
+      expect(wreck.get.mock.calls[1][1].timeout).toBe(10000);
       expect(uri).toBe(`${config.get("agreements.uiUrl")}/PMF823153883`);
       expect(jwt.decoded.payload).toMatchObject({
         source: "entra",
@@ -393,5 +411,50 @@ describe("agreementsProxyRoute", () => {
       });
       expect(mockH.code).toHaveBeenCalledWith(502);
     });
+
+    test("returns 403 when the requested agreement is not linked to the case", async () => {
+      vi.spyOn(wreck, "get")
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              workflowCode: "pigs-might-fly",
+              payload: { identifiers: { sbi: "123456789" } },
+            },
+          },
+        })
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              content: [
+                {
+                  component: "url",
+                  href: "https://example.test/cases/case-123/agreement/OTHER123",
+                },
+              ],
+            },
+          },
+        });
+      const request = {
+        params: {
+          caseId: "case-123",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(mockH.response).toHaveBeenCalledWith({
+        error: "External Service Unavailable",
+        message: "Unable to process request",
+      });
+      expect(mockH.code).toHaveBeenCalledWith(403);
+    });
+
   });
 });

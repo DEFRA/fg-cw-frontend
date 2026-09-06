@@ -136,6 +136,8 @@ const inputTypeParams = {
 const inputHint = (hint) =>
   hint?.length ? { text: hint.join(" ") } : undefined;
 
+const getInputValue = (value) => (value === null || value === undefined ? "" : value);
+
 // No errorMessage here - the selector template takes it from the outer
 // valueError param, which every branch shares.
 export const mapInput = ({ input, value }) => {
@@ -143,14 +145,25 @@ export const mapInput = ({ input, value }) => {
     return undefined;
   }
 
+  const typeParams = inputTypeParams[input.type];
+  const attributes = inputAttributes[input.type];
+
+  if (!typeParams) {
+    return undefined;
+  }
+
+  if (!attributes) {
+    return undefined;
+  }
+
   return {
     id: "value",
     name: "value",
-    value: value ?? "",
+    value: getInputValue(value),
     label: createLabelObject(input.label),
     hint: inputHint(input.hint),
-    ...inputTypeParams[input.type](input),
-    attributes: inputAttributes[input.type](input),
+    ...typeParams(input),
+    attributes: attributes(input),
   };
 };
 

@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
+import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 import * as proxyUseCase from "./proxy-to-agreements.use-case.js";
 
 vi.mock("../../common/config.js", () => ({
@@ -31,6 +32,10 @@ vi.mock("../../common/logger.js", () => ({
 
 vi.mock("./find-case-by-id.use-case.js", () => ({
   findCaseByIdUseCase: vi.fn(),
+}));
+
+vi.mock("./find-case-tab.use-case.js", () => ({
+  findCaseTabUseCase: vi.fn(),
 }));
 
 const createRequest = (credentials = {}) => ({
@@ -136,6 +141,16 @@ describe("proxyCaseAgreement", () => {
         payload: { identifiers: { sbi: "123456789" } },
       },
     });
+    findCaseTabUseCase.mockResolvedValue({
+      data: {
+        content: [
+          {
+            component: "url",
+            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+          },
+        ],
+      },
+    });
     const request = createRequest({
       token: "caseworking-token",
       user: { id: "caseworker-1" },
@@ -154,6 +169,14 @@ describe("proxyCaseAgreement", () => {
       },
       "case-123",
     );
+    expect(findCaseTabUseCase).toHaveBeenCalledWith(
+      {
+        token: "caseworking-token",
+        user: { id: "caseworker-1" },
+      },
+      "case-123",
+      "agreements",
+    );
     expect(generateAgreementsJwt).toHaveBeenCalledWith(
       "123456789",
       "pigs-might-fly",
@@ -161,8 +184,46 @@ describe("proxyCaseAgreement", () => {
     expect(result.uri).toBe("http://localhost:3000/PMF823153883");
   });
 
+  test("accepts agreements linked from beforeContent", async () => {
+    findCaseByIdUseCase.mockResolvedValue({
+      data: {
+        workflowCode: "pigs-might-fly",
+        payload: { identifiers: { sbi: "123456789" } },
+      },
+    });
+    findCaseTabUseCase.mockResolvedValue({
+      data: {
+        beforeContent: [
+          {
+            component: "url",
+            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+          },
+        ],
+        content: [],
+      },
+    });
+
+    const result = await proxyUseCase.proxyCaseAgreement(
+      "case-123",
+      "PMF823153883",
+      createRequest({ token: "caseworking-token", user: {} }),
+    );
+
+    expect(result.uri).toBe("http://localhost:3000/PMF823153883");
+  });
+
   test("fails when the case workflow code is unavailable", async () => {
     findCaseByIdUseCase.mockResolvedValue({ data: {} });
+    findCaseTabUseCase.mockResolvedValue({
+      data: {
+        content: [
+          {
+            component: "url",
+            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+          },
+        ],
+      },
+    });
 
     await expect(
       proxyUseCase.proxyCaseAgreement(
@@ -190,6 +251,16 @@ describe("proxyCaseAgreement", () => {
     ],
   ])("fails when the case %s is unavailable", async (_field, page) => {
     findCaseByIdUseCase.mockResolvedValue(page);
+    findCaseTabUseCase.mockResolvedValue({
+      data: {
+        content: [
+          {
+            component: "url",
+            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+          },
+        ],
+      },
+    });
 
     await expect(
       proxyUseCase.proxyCaseAgreement(
@@ -199,6 +270,57 @@ describe("proxyCaseAgreement", () => {
       ),
     ).rejects.toMatchObject({
       message: "Case SBI is unavailable",
+      output: { statusCode: 502 },
+    });
+  });
+
+  test("fails when the requested agreement does not belong to the case", async () => {
+    findCaseByIdUseCase.mockResolvedValue({
+      data: {
+        workflowCode: "pigs-might-fly",
+        payload: { identifiers: { sbi: "123456789" } },
+      },
+    });
+    findCaseTabUseCase.mockResolvedValue({
+      data: {
+        content: [
+          {
+            component: "url",
+            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+          },
+        ],
+      },
+    });
+
+    await expect(
+      proxyUseCase.proxyCaseAgreement(
+        "case-123",
+        "OTHER123",
+        createRequest({ token: "caseworking-token", user: {} }),
+      ),
+    ).rejects.toMatchObject({
+      message: "Agreement does not belong to this case",
+      output: { statusCode: 403 },
+    });
+  });
+
+  test("fails when the case agreements tab is unavailable", async () => {
+    findCaseByIdUseCase.mockResolvedValue({
+      data: {
+        workflowCode: "pigs-might-fly",
+        payload: { identifiers: { sbi: "123456789" } },
+      },
+    });
+    findCaseTabUseCase.mockResolvedValue(null);
+
+    await expect(
+      proxyUseCase.proxyCaseAgreement(
+        "case-123",
+        "PMF823153883",
+        createRequest({ token: "caseworking-token", user: {} }),
+      ),
+    ).rejects.toMatchObject({
+      message: "Case agreements tab is unavailable",
       output: { statusCode: 502 },
     });
   });
