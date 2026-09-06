@@ -11,6 +11,9 @@ export const createTaskListViewModel = ({
   const stage = kase.stage;
   const taskGroups = mapTaskGroups(stage.taskGroups, kase._id);
   const hasTasks = taskGroups.some((taskGroup) => taskGroup.tasks.length > 0);
+  const hasEmptyStateContent =
+    containsEmptyStateContent(kase.beforeContent) ||
+    containsEmptyStateContent(kase.afterContent);
 
   return {
     pageTitle: `Case tasks - ${stage.name}`,
@@ -24,12 +27,7 @@ export const createTaskListViewModel = ({
         ...stage,
         taskGroups,
         hasTasks,
-        // The frontend is the single source of truth for the empty-state
-        // message: render it whenever the stage has no tasks. The backend no
-        // longer embeds "There are no tasks to complete." in workflow content
-        // (see fg-cw-backend migration removing the duplicate), so there is no
-        // risk of the message rendering twice.
-        showEmptyState: !hasTasks,
+        showEmptyState: !hasTasks && !hasEmptyStateContent,
         actions: mapActions({ stage, errors, values }),
       },
       beforeContent: kase.beforeContent,
@@ -53,6 +51,20 @@ const mapTaskGroups = (taskGroups, caseId) => {
       };
     }),
   }));
+};
+
+const EMPTY_STATE_MESSAGE = "There are no tasks to complete.";
+
+const containsEmptyStateContent = (content) => {
+  if (Array.isArray(content)) {
+    return content.some(containsEmptyStateContent);
+  }
+
+  if (content && typeof content === "object") {
+    return Object.values(content).some(containsEmptyStateContent);
+  }
+
+  return typeof content === "string" && content.includes(EMPTY_STATE_MESSAGE);
 };
 
 const mapActions = ({ stage, errors, values }) => {
