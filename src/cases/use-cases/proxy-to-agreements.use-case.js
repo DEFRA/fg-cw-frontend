@@ -3,6 +3,7 @@ import { config } from "../../common/config.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
+import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 
 export { statusCodes } from "../../common/status-codes.js";
 
@@ -130,9 +131,53 @@ const getTrustedClaims = (page) => ({
   sbi: getCaseSbi(page),
 });
 
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const getAgreementRefs = (content, caseId, refs = new Set()) => {
+  if (Array.isArray(content)) {
+    content.forEach((item) => getAgreementRefs(item, caseId, refs));
+    return refs;
+  }
+
+  if (!content || typeof content !== "object") {
+    return refs;
+  }
+
+  if (typeof content.href === "string") {
+    const pattern = new RegExp(
+      `/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`,
+    );
+    const match = content.href.match(pattern);
+
+    if (match?.[1]) {
+      refs.add(match[1]);
+    }
+  }
+
+  Object.values(content).forEach((value) =>
+    getAgreementRefs(value, caseId, refs),
+  );
+  return refs;
+};
+
+const ensureAgreementBelongsToCase = async (
+  authContext,
+  caseId,
+  agreementRef,
+) => {
+  const page = await findCaseTabUseCase(authContext, caseId, "agreements");
+  const agreementRefs = getAgreementRefs(page?.data?.content, caseId);
+
+  if (!agreementRefs.has(agreementRef)) {
+    throw Boom.forbidden("Agreement does not belong to this case");
+  }
+};
+
 export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
-  const page = await findCaseByIdUseCase(getAuthContext(request), caseId);
+  const authContext = getAuthContext(request);
+  const page = await findCaseByIdUseCase(authContext, caseId);
   const trustedClaims = getTrustedClaims(page);
+  await ensureAgreementBelongsToCase(authContext, caseId, agreementRef);
 
   return proxyToAgreements({
     path: agreementRef,
