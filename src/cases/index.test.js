@@ -80,6 +80,10 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/cases/{caseId}/agreement/{agreementRef}",
+      },
+      {
+        method: "get",
         path: "/cases/{caseId}/stage/outcome/confirm",
       },
       {
