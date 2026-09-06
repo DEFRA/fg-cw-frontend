@@ -1,19 +1,26 @@
+import Jwt from "@hapi/jwt";
 import { beforeEach, describe, expect, test, vi } from "vitest";
+import { config } from "../../common/config.js";
+import { wreck } from "../../common/wreck.js";
 import * as proxyUseCase from "../use-cases/proxy-to-agreements.use-case.js";
 import { agreementsProxyRoutes } from "./agreements-proxy.route.js";
 
 describe("agreementsProxyRoute", () => {
-  test("should export routes array with GET method", () => {
-    expect(Array.isArray(agreementsProxyRoutes)).toBe(true);
-    expect(agreementsProxyRoutes).toHaveLength(1);
-    expect(agreementsProxyRoutes[0].method).toBe("GET");
-    expect(agreementsProxyRoutes[0].path).toContain("/agreement/");
-  });
+  test("exports authenticated legacy and case-aware proxy routes", () => {
+    expect(agreementsProxyRoutes).toHaveLength(2);
+    expect(
+      agreementsProxyRoutes.map(({ method, path }) => [method, path]),
+    ).toEqual([
+      ["GET", "/agreement/{path*}"],
+      ["GET", "/cases/{caseId}/agreement/{agreementRef}"],
+    ]);
 
-  test("should have correct handler function", () => {
-    expect(typeof agreementsProxyRoutes[0].handler).toBe("function");
-    expect(agreementsProxyRoutes[0].options.auth.mode).toBe("required");
-    expect(agreementsProxyRoutes[0].options.auth.strategy).toBe("session");
+    for (const route of agreementsProxyRoutes) {
+      expect(route.options.auth).toEqual({
+        mode: "required",
+        strategy: "session",
+      });
+    }
   });
 
   describe("handler function", () => {
@@ -59,7 +66,10 @@ describe("agreementsProxyRoute", () => {
 
       await handler(mockRequest, mockH);
 
-      expect(proxySpy).toHaveBeenCalledWith("test-path", mockRequest);
+      expect(proxySpy).toHaveBeenCalledWith({
+        path: "test-path",
+        request: mockRequest,
+      });
       expect(mockProxy).toHaveBeenCalled();
     });
 
@@ -168,7 +178,10 @@ describe("agreementsProxyRoute", () => {
 
       const response = await handler(mockRequest, mockH);
 
-      expect(proxySpy).toHaveBeenCalledWith("success", mockRequest);
+      expect(proxySpy).toHaveBeenCalledWith({
+        path: "success",
+        request: mockRequest,
+      });
       expect(info).toHaveBeenCalledWith(
         {
           agreementProxyTarget: "https://service.test/path",
@@ -236,5 +249,212 @@ describe("agreementsProxyRoute", () => {
       );
       expect(mockH.response).toHaveBeenCalled();
     });
+  });
+
+  describe("case agreement handler", () => {
+    let mockH;
+    let handler;
+
+    beforeEach(() => {
+      mockH = {
+        proxy: vi.fn().mockResolvedValue({ statusCode: 200 }),
+        response: vi.fn(() => mockH),
+        code: vi.fn(() => ({ success: true, statusCode: 200 })),
+      };
+      handler = agreementsProxyRoutes[1].handler;
+      vi.restoreAllMocks();
+    });
+
+    test("gets trusted case context before proxying the agreement", async () => {
+      const proxySpy = vi
+        .spyOn(proxyUseCase, "proxyCaseAgreement")
+        .mockResolvedValue({
+          uri: "http://localhost:3000/WMP936292242",
+          headers: { "x-encrypted-auth": "signed-case-token" },
+        });
+      const request = {
+        params: {
+          caseId: "6a69fb35c9339ac5a18a89f0",
+          agreementRef: "WMP936292242",
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(proxySpy).toHaveBeenCalledWith(
+        "6a69fb35c9339ac5a18a89f0",
+        "WMP936292242",
+        request,
+      );
+      expect(mockH.proxy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          mapUri: expect.any(Function),
+          passThrough: true,
+          rejectUnauthorized: true,
+        }),
+      );
+      expect(mockH.proxy.mock.calls[0][0].mapUri()).toEqual({
+        uri: "http://localhost:3000/WMP936292242",
+        headers: { "x-encrypted-auth": "signed-case-token" },
+      });
+    });
+
+    test("signs the trusted case workflow code through the composed route", async () => {
+      vi.spyOn(wreck, "get")
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              workflowCode: "pigs-might-fly",
+              payload: { identifiers: { sbi: "123456789" } },
+            },
+          },
+        })
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              content: [
+                {
+                  component: "url",
+                  href: "https://example.test/cases/6a69fb35c9339ac5a18a89f0/agreement/PMF823153883",
+                },
+              ],
+            },
+          },
+        });
+      const request = {
+        params: {
+          caseId: "6a69fb35c9339ac5a18a89f0",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+        headers: {},
+        app: { cspNonce: "test-nonce" },
+        info: { id: "test-id" },
+      };
+
+      await handler(request, mockH);
+
+      const { uri, headers } = mockH.proxy.mock.calls[0][0].mapUri();
+      const jwt = Jwt.token.decode(headers["x-encrypted-auth"]);
+      Jwt.token.verifySignature(jwt, config.get("agreements.jwtSecret"));
+
+      expect(wreck.get.mock.calls[0][0]).toBe("/cases/6a69fb35c9339ac5a18a89f0");
+      expect(wreck.get.mock.calls[0][1].headers.authorization).toContain(
+        "caseworking-token",
+      );
+      expect(wreck.get.mock.calls[1][0]).toBe(
+        "/cases/6a69fb35c9339ac5a18a89f0/tabs/agreements",
+      );
+      expect(wreck.get.mock.calls[1][1].headers.authorization).toContain(
+        "caseworking-token",
+      );
+      expect(wreck.get.mock.calls[1][1].timeout).toBe(10000);
+      expect(uri).toBe(`${config.get("agreements.uiUrl")}/PMF823153883`);
+      expect(jwt.decoded.payload).toMatchObject({
+        source: "entra",
+        sbi: "123456789",
+        grantCode: "pigs-might-fly",
+      });
+    });
+
+    test("returns 502 when the case has no workflow code", async () => {
+      vi.spyOn(wreck, "get").mockResolvedValue({ payload: { data: {} } });
+      const request = {
+        params: {
+          caseId: "case-123",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(mockH.response).toHaveBeenCalledWith({
+        error: "External Service Unavailable",
+        message: "Unable to process request",
+      });
+      expect(mockH.code).toHaveBeenCalledWith(502);
+    });
+
+    test("returns 502 when the case has no SBI data", async () => {
+      vi.spyOn(wreck, "get").mockResolvedValue({
+        payload: { data: { workflowCode: "pigs-might-fly" } },
+      });
+      const request = {
+        params: {
+          caseId: "case-123",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(mockH.response).toHaveBeenCalledWith({
+        error: "External Service Unavailable",
+        message: "Unable to process request",
+      });
+      expect(mockH.code).toHaveBeenCalledWith(502);
+    });
+
+    test("returns 403 when the requested agreement is not linked to the case", async () => {
+      vi.spyOn(wreck, "get")
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              workflowCode: "pigs-might-fly",
+              payload: { identifiers: { sbi: "123456789" } },
+            },
+          },
+        })
+        .mockResolvedValueOnce({
+          payload: {
+            data: {
+              content: [
+                {
+                  component: "url",
+                  href: "https://example.test/cases/case-123/agreement/OTHER123",
+                },
+              ],
+            },
+          },
+        });
+      const request = {
+        params: {
+          caseId: "case-123",
+          agreementRef: "PMF823153883",
+        },
+        auth: {
+          credentials: {
+            token: "caseworking-token",
+            user: { id: "caseworker-1" },
+          },
+        },
+      };
+
+      await handler(request, mockH);
+
+      expect(mockH.response).toHaveBeenCalledWith({
+        error: "External Service Unavailable",
+        message: "Unable to process request",
+      });
+      expect(mockH.code).toHaveBeenCalledWith(403);
+    });
+
   });
 });

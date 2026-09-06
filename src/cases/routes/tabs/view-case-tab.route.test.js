@@ -350,6 +350,104 @@ describe("viewCaseTabRoute", () => {
     );
   });
 
+  it("renders the backend agreement URL unchanged", async () => {
+    const agreementUrl =
+      "https://fg-cw-frontend.dev.cdp-int.defra.cloud/cases/case-agreements/agreement/ALPHA-001";
+    findCaseTabUseCase.mockResolvedValue(
+      createMockPage({
+        caseId: "case-agreements",
+        caseRef: "CASE-AGREEMENTS",
+        tabId: "agreements",
+        workflowCode: "alpha-grant",
+        links: [
+          { id: "tasks", text: "Tasks", href: "/cases/case-agreements" },
+          {
+            id: "agreements",
+            text: "Agreements",
+            href: "/cases/case-agreements/agreements",
+          },
+        ],
+        content: [
+          {
+            component: "url",
+            text: "View agreement",
+            href: agreementUrl,
+            target: "_blank",
+            rel: "noopener",
+          },
+        ],
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/case-agreements/agreements",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
+    });
+
+    expect(statusCode).toBe(200);
+    const $ = load(result);
+    const agreementLink = $('a:contains("View agreement")');
+    expect(agreementLink.attr("href")).toBe(agreementUrl);
+    expect(agreementLink.attr("target")).toBe("_blank");
+    expect(agreementLink.attr("rel")).toBe("noopener");
+  });
+
+  it("renders beforeContent ahead of the main tab content", async () => {
+    findCaseTabUseCase.mockResolvedValue(
+      createMockPage({
+        caseId: "case-before-content",
+        caseRef: "CASE-BEFORE-CONTENT",
+        tabId: "case-details",
+        links: [
+          { id: "tasks", text: "Tasks", href: "/cases/case-before-content" },
+          {
+            id: "case-details",
+            text: "Case Details",
+            href: "/cases/case-before-content/case-details",
+          },
+        ],
+        beforeContent: [
+          {
+            component: "paragraph",
+            text: "Content shown before the main section.",
+          },
+        ],
+        content: [
+          {
+            component: "paragraph",
+            text: "Main case content.",
+          },
+        ],
+      }),
+    );
+
+    const { statusCode, result } = await server.inject({
+      method: "GET",
+      url: "/cases/case-before-content/case-details",
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+        mode: "required",
+      },
+    });
+
+    expect(statusCode).toBe(200);
+    expect(result.indexOf("Content shown before the main section.")).toBeLessThan(
+      result.indexOf("Main case content."),
+    );
+  });
+
   it("handles use case returning null", async () => {
     findCaseTabUseCase.mockResolvedValue(null);
 

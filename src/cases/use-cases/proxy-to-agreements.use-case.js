@@ -1,6 +1,9 @@
+import Boom from "@hapi/boom";
 import { config } from "../../common/config.js";
 import { generateAgreementsJwt } from "../../common/helpers/agreements-jwt.js";
 import { logger } from "../../common/logger.js";
+import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
+import { findCaseTabUseCase } from "./find-case-tab.use-case.js";
 
 export { statusCodes } from "../../common/status-codes.js";
 
@@ -38,18 +41,17 @@ const buildTargetUri = function (baseUrl, path) {
 };
 
 /**
- * Builds proxy headers for the request
- * @param {string} uiToken - The UI token
- * @param {object} request - The incoming request object
- * @returns {object} The proxy headers object
+ * Adds the Agreements UI JWT authentication header.
+ * @param {object} headers - The proxy headers
+ * @param {{sbi?: string, grantCode?: string}} trustedClaims - Trusted agreement claims
+ * @returns {object} The proxy headers
  */
-// eslint-disable-next-line complexity
-const addJwtHeader = function (headers, request) {
-  const sbi = request?.auth?.credentials?.sbi;
+const addJwtHeader = (headers, trustedClaims) => {
+  const { sbi, grantCode } = trustedClaims;
 
   try {
     // Always generate JWT for 'entra' source (SBI is optional)
-    headers["x-encrypted-auth"] = generateAgreementsJwt(sbi);
+    headers["x-encrypted-auth"] = generateAgreementsJwt(sbi, grantCode);
   } catch (error) {
     logger.error("Failed to generate JWT", { error: error.message });
     throw new Error(`Failed to generate JWT token: ${error.message}`);
@@ -57,7 +59,7 @@ const addJwtHeader = function (headers, request) {
   return headers;
 };
 
-const buildProxyHeaders = function (uiToken, request) {
+const buildProxyHeaders = (uiToken, request, trustedClaims) => {
   const headers = {
     Authorization: `Bearer ${uiToken}`,
     "x-base-url": config.get("agreements.baseUrl"),
@@ -67,7 +69,7 @@ const buildProxyHeaders = function (uiToken, request) {
     "X-Correlation-ID": request.headers["x-correlation-id"] || request.info.id,
   };
 
-  return addJwtHeader(headers, request);
+  return addJwtHeader(headers, trustedClaims);
 };
 
 /**
@@ -80,18 +82,132 @@ export const getAgreementsBaseUrl = function () {
 
 /**
  * Proxy to agreements use case
- * @param {string} path - The path to proxy
- * @param {object} request - The incoming request
+ * @param {object} options - Proxy request options
+ * @param {string} options.path - The path to proxy
+ * @param {object} options.request - The incoming request
+ * @param {{sbi?: string, grantCode?: string}} [options.trustedClaims] - Trusted agreement claims
  * @returns {{uri: string, headers: object}}
  */
-export const proxyToAgreements = function (path, request) {
+export const proxyToAgreements = ({ path, request, trustedClaims }) => {
   const { uiUrl, uiToken } = validateConfig();
   const uri = buildTargetUri(uiUrl, path);
+  const agreementClaims = trustedClaims ?? {
+    sbi: request.auth.credentials.sbi,
+  };
   logger.info(`Proxying request to agreements UI: ${uri} and path: ${path}`);
-  const headers = buildProxyHeaders(uiToken, request);
+  const headers = buildProxyHeaders(uiToken, request, agreementClaims);
 
   logger.info(
     `Finished: Proxying request to agreements UI: ${uri} and path: ${path}`,
   );
   return { uri, headers };
+};
+
+const getAuthContext = (request) => ({
+  token: request.auth.credentials.token,
+  user: request.auth.credentials.user,
+});
+
+const getWorkflowCode = (page) => {
+  const workflowCode = page?.data?.workflowCode;
+  if (!workflowCode) {
+    throw Boom.badGateway("Case workflow code is unavailable");
+  }
+  return workflowCode;
+};
+
+const getCaseIdentifiers = (page) => page?.data?.payload?.identifiers;
+
+const getCaseSbi = (page) => {
+  const sbi = getCaseIdentifiers(page)?.sbi;
+  if (!sbi) {
+    throw Boom.badGateway("Case SBI is unavailable");
+  }
+  return sbi;
+};
+
+const getTrustedClaims = (page) => ({
+  grantCode: getWorkflowCode(page),
+  sbi: getCaseSbi(page),
+});
+
+const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+const extractAgreementRef = (href, caseId) => {
+  const pattern = new RegExp(`/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`);
+  const match = href.match(pattern);
+  return match?.[1];
+};
+
+const collectAgreementRef = (content, caseId, refs) => {
+  if (typeof content.href !== "string") {
+    return;
+  }
+
+  const agreementRef = extractAgreementRef(content.href, caseId);
+  if (agreementRef) {
+    refs.add(agreementRef);
+  }
+};
+
+const isObjectContent = (content) =>
+  typeof content === "object" && content !== null;
+
+const getAgreementRefs = (content, caseId, refs = new Set()) => {
+  if (Array.isArray(content)) {
+    content.forEach((item) => getAgreementRefs(item, caseId, refs));
+    return refs;
+  }
+
+  if (!isObjectContent(content)) {
+    return refs;
+  }
+
+  collectAgreementRef(content, caseId, refs);
+
+  Object.values(content).forEach((value) =>
+    getAgreementRefs(value, caseId, refs),
+  );
+  return refs;
+};
+
+const getAllAgreementRefs = (page, caseId) => {
+  const refs = new Set();
+  const caseData = page?.data ?? {};
+  [caseData.beforeContent, caseData.content, caseData.afterContent].forEach(
+    (content) => {
+      getAgreementRefs(content, caseId, refs);
+    },
+  );
+  return refs;
+};
+
+const ensureAgreementBelongsToCase = async (
+  authContext,
+  caseId,
+  agreementRef,
+) => {
+  const page = await findCaseTabUseCase(authContext, caseId, "agreements");
+  if (!page?.data) {
+    throw Boom.badGateway("Case agreements tab is unavailable");
+  }
+
+  const agreementRefs = getAllAgreementRefs(page, caseId);
+
+  if (!agreementRefs.has(agreementRef)) {
+    throw Boom.forbidden("Agreement does not belong to this case");
+  }
+};
+
+export const proxyCaseAgreement = async (caseId, agreementRef, request) => {
+  const authContext = getAuthContext(request);
+  const page = await findCaseByIdUseCase(authContext, caseId);
+  const trustedClaims = getTrustedClaims(page);
+  await ensureAgreementBelongsToCase(authContext, caseId, agreementRef);
+
+  return proxyToAgreements({
+    path: agreementRef,
+    request,
+    trustedClaims,
+  });
 };

@@ -1,5 +1,4 @@
 {% from "govuk/components/summary-list/macro.njk" import govukSummaryList %}
-{% from "./heading.njk" import defraHeading %}
 
 {% macro defraSummaryList(params, renderDefraComponent) %}
   {%- set rows = params.rows or [] %}
@@ -38,7 +37,9 @@
   {% endfor %}
 
    {% if params.title %}
-     {{ defraHeading({ text: params.title, level: 3 }) }}
+     {% set headingLevel = (params.headingLevel | int) or 2 %}
+     {% if headingLevel < 1 or headingLevel > 6 %}{% set headingLevel = 2 %}{% endif %}
+     <h{{ headingLevel }} class="govuk-heading-m">{{ params.title | escape }}</h{{ headingLevel }}>
    {% endif %}
    {{ govukSummaryList({ rows: summaryRows }) }}
 {% endmacro %}

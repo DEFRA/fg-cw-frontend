@@ -324,16 +324,16 @@ describe("Case Repository", () => {
       };
       await updateTaskStatus(authContext, {
         ...params,
-        status: "approved",
+        value: "approved",
         completed: true,
       });
       expect(wreck.patch).toHaveBeenCalledWith(
-        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/status",
+        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/value",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
-          payload: { status: "approved", completed: true, comment: null },
+          payload: { value: "approved", completed: true, comment: null },
         },
       );
     });
@@ -350,17 +350,17 @@ describe("Case Repository", () => {
       };
       await updateTaskStatus(authContext, {
         ...params,
-        status: "approved",
+        value: "approved",
         completed: true,
       });
       expect(wreck.patch).toHaveBeenCalledWith(
-        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/status",
+        "/cases/1234-0909/task-groups/tg-01/tasks/t-01/value",
         {
           headers: {
             authorization: `Bearer ${authContext.token}`,
           },
           payload: {
-            status: "approved",
+            value: "approved",
             completed: true,
             comment: "This is a comment",
           },

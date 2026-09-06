@@ -42,7 +42,6 @@ export default async () => {
       application: {
         import: [
           "./javascripts/application.js",
-          "./javascripts/modules/checkbox-select-all.js",
           "./stylesheets/application.scss",
         ],
       },
@@ -53,9 +52,6 @@ export default async () => {
       },
       moj: {
         import: [path.join(mojFrontendPath, "moj/moj-frontend.min.js")],
-      },
-      checkboxes: {
-        import: ["./javascripts/modules/checkbox-select-all.js"],
       },
     },
     experiments: {
@@ -105,8 +101,6 @@ export default async () => {
               [
                 "@babel/preset-env",
                 {
-                  bugfixes: true,
-                  loose: true,
                   modules: false,
                 },
               ],
@@ -184,6 +178,12 @@ export default async () => {
       sideEffects: true,
       usedExports: true,
     },
+    ignoreWarnings: [
+      {
+        message: /The `govuk-text-colour` mixin is deprecated/,
+        module: /stylesheets\/application\.scss/,
+      },
+    ],
     plugins: [
       new CleanWebpackPlugin(),
       new WebpackAssetsManifest(),

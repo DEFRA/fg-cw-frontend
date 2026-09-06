@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { health } from "./index.js";
 import { getHealthRoute } from "./routes/get-health.route.js";
+import { health } from "./index.js";
 
 vi.mock("./routes/get-health.route.js", () => ({
   getHealthRoute: { method: "GET", path: "/health" },

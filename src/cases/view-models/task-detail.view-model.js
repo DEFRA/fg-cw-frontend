@@ -1,5 +1,6 @@
 import { setActiveLink } from "../../common/helpers/navigation-helpers.js";
 import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
+import { createLabelObject } from "./task-list.view-model.js";
 
 const getFieldValue = (fieldName, values) => values?.[fieldName];
 
@@ -11,7 +12,7 @@ const createErrorList = (errors) => {
 };
 
 const createConditionalTextarea = ({
-  statusCode,
+  valueCode,
   commentInputDef,
   commentText,
   commentError,
@@ -20,12 +21,12 @@ const createConditionalTextarea = ({
     return undefined;
   }
 
-  const name = `${statusCode}-comment`;
+  const name = `${valueCode}-comment`;
   return {
     id: name,
     name,
     value: commentText,
-    label: { text: commentInputDef.label },
+    label: createLabelObject(commentInputDef.label),
     hint: commentInputDef.helpText
       ? { text: commentInputDef.helpText }
       : undefined,
@@ -35,17 +36,17 @@ const createConditionalTextarea = ({
   };
 };
 
-const isCurrentStatusWithComment = (
+const isCurrentValueWithComment = (
   optionCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
 ) => {
-  return optionCode === currentStatus && currentTaskComment;
+  return optionCode === currentValue && currentTaskComment;
 };
 
 const getInitialCommentValue = ({
   optionCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
   formData,
 }) => {
@@ -56,39 +57,37 @@ const getInitialCommentValue = ({
     return formDataValue;
   }
 
-  if (
-    isCurrentStatusWithComment(optionCode, currentStatus, currentTaskComment)
-  ) {
+  if (isCurrentValueWithComment(optionCode, currentValue, currentTaskComment)) {
     return currentTaskComment.text || "";
   }
 
   return "";
 };
 
-export const mapStatusOptions = ({
-  statusOptions,
-  currentStatus,
+export const mapOptions = ({
+  options,
+  currentValue,
   commentInputDef,
   currentTaskComment,
   formData,
   errors,
 }) => {
-  if (!statusOptions || statusOptions.length === 0) {
+  if (!options || options.length === 0) {
     return [];
   }
 
-  return statusOptions.map((option) => {
+  return options.map((option) => {
     const commentFieldName = `${option.code}-comment`;
     const commentText = getInitialCommentValue({
       optionCode: option.code,
-      currentStatus,
+      currentValue,
       currentTaskComment,
       formData,
     });
     const commentError = getFieldValue(commentFieldName, errors);
 
     const conditional = createConditionalTextarea({
-      statusCode: option.code,
+      valueCode: option.code,
       commentInputDef: option.commentInputDef ?? commentInputDef,
       commentText,
       commentError,
@@ -97,10 +96,75 @@ export const mapStatusOptions = ({
     return {
       value: option.code,
       text: option.name,
-      checked: option.code === currentStatus,
+      checked: option.code === currentValue,
       conditional,
     };
   });
+};
+
+const inputAttributes = {
+  text: ({ maxlength }) => (maxlength ? { maxlength } : {}),
+  // No min/max: HTML only honours them on numeric and date inputs, and this
+  // renders as type="text" (see inputTypeParams). Emitting them would suggest a
+  // client-side constraint that does not exist - the range is enforced by the
+  // route and by the API.
+  number: () => ({}),
+  date: () => ({}),
+};
+
+const inputTypeParams = {
+  text: ({ pattern }) => ({
+    type: "text",
+    ...(pattern ? { pattern } : {}),
+  }),
+  // GDS guidance: use a text input with a numeric inputmode rather than
+  // type="number", which has a spinner and awkward assistive tech behaviour.
+  // "numeric" gives a keypad with no decimal point, so it is only right for a
+  // whole-number field; anything accepting decimals needs "decimal".
+  number: ({ integer }) => ({
+    type: "text",
+    inputmode: integer ? "numeric" : "decimal",
+  }),
+  // The GDS standard for dates is govukDateInput - three separate day, month
+  // and year fields - not a native picker. We use type="date" for now because
+  // it submits YYYY-MM-DD directly, which is the format the backend validates,
+  // whereas three fields have to be assembled and zero-padded, and need their
+  // own handling for partial entry. Revisit before public beta.
+  date: () => ({ type: "date" }),
+};
+
+const inputHint = (hint) =>
+  hint?.length ? { text: hint.join(" ") } : undefined;
+
+const getInputValue = (value) => (value === null || value === undefined ? "" : value);
+
+// No errorMessage here - the selector template takes it from the outer
+// valueError param, which every branch shares.
+export const mapInput = ({ input, value }) => {
+  if (!input) {
+    return undefined;
+  }
+
+  const typeParams = inputTypeParams[input.type];
+  const attributes = inputAttributes[input.type];
+
+  if (!typeParams) {
+    return undefined;
+  }
+
+  if (!attributes) {
+    return undefined;
+  }
+
+  return {
+    id: "value",
+    name: "value",
+    value: getInputValue(value),
+    label: createLabelObject(input.label),
+    hint: inputHint(input.hint),
+    ...typeParams(input),
+    attributes: attributes(input),
+  };
 };
 
 const findCurrentTask = (stage, taskGroupCode, taskCode) => {
@@ -118,33 +182,40 @@ const buildCurrentTaskData = ({
   currentTask,
   taskGroupCode,
   taskCode,
-  currentStatus,
+  currentValue,
   currentTaskComment,
   canComplete,
   formData,
   errors,
 }) => {
+  const valueError = errors?.value;
+
   return {
-    formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/status`,
+    formAction: `/cases/${kase._id}/task-groups/${taskGroupCode}/tasks/${taskCode}/value`,
     description: currentTask.description,
-    status: currentStatus,
-    statusOptions: mapStatusOptions({
-      statusOptions: currentTask.statusOptions,
-      currentStatus,
+    value: currentValue,
+    valueOptions: mapOptions({
+      options: currentTask.valueOptions,
+      currentValue,
       commentInputDef: currentTask.commentInputDef,
       currentTaskComment,
       formData,
       errors,
     }),
+    input: mapInput({ input: currentTask.input, value: currentValue }),
     completed: getFieldValue("completed", formData) ?? currentTask.completed,
     comment: currentTaskComment,
-    statusError: errors?.status,
+    valueError,
     canComplete,
     requiredRoles: currentTask.requiredRoles,
     updatedBy: currentTask.updatedBy,
     updatedAt: currentTask.updatedAt,
     notesHistory: currentTask.notesHistory ?? [],
   };
+};
+
+const findLastCommentRef = (commentRefs, taskValue) => {
+  return commentRefs?.findLast((cr) => cr.value === taskValue)?.ref;
 };
 
 export const createTaskDetailViewModel = ({
@@ -160,13 +231,14 @@ export const createTaskDetailViewModel = ({
   const { taskGroupCode, taskCode } = query;
 
   const currentTask = findCurrentTask(stage, taskGroupCode, taskCode);
-  const currentTaskComment = findTaskComment(
-    kase.comments,
-    currentTask.commentRef,
+  const currentCommentRef = findLastCommentRef(
+    currentTask.commentRefs,
+    currentTask.value,
   );
+  const currentTaskComment = findTaskComment(kase.comments, currentCommentRef);
   const canComplete = currentTask.canComplete;
   const isInteractive = stage.interactive ?? true;
-  const currentStatus = getFieldValue("status", formData) ?? currentTask.status;
+  const currentValue = getFieldValue("value", formData) ?? currentTask.value;
 
   return {
     errorList: createErrorList(errors),
@@ -188,7 +260,7 @@ export const createTaskDetailViewModel = ({
         currentTask,
         taskGroupCode,
         taskCode,
-        currentStatus,
+        currentValue,
         currentTaskComment,
         canComplete,
         formData,

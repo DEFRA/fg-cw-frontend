@@ -6,30 +6,58 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-123",
       formAction:
-        "/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "approved",
-      statusOptions: [
+        "/cases/case-123/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "approved",
+      valueOptions: [
         { value: "approved", text: "Approve", checked: true },
         { value: "rejected", text: "Reject", checked: false },
         { value: "on-hold", text: "Put on hold", checked: false },
       ],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
     expect(component).toMatchSnapshot();
   });
 
+  test("renders an input task with novalidate on the form", () => {
+    const component = render("task-outcome-form", {
+      caseId: "case-input",
+      formAction:
+        "/cases/case-input/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "SF123456",
+      input: {
+        id: "value",
+        name: "value",
+        type: "text",
+        value: "SF123456",
+        label: { text: "Siti/FC reference" },
+        hint: { text: "For example, SF123456" },
+        attributes: { maxlength: 20 },
+      },
+      completed: false,
+      valueError: null,
+      isInteractive: true,
+    });
+
+    expect(component).toContain('novalidate');
+    expect(component).toContain('name="value"');
+    expect(component).toContain('value="SF123456"');
+    expect(component).toContain("Siti/FC reference");
+    expect(component).not.toContain("Outcome");
+    expect(component).not.toContain("Completed");
+  });
+
   test("renders without status options (checkbox)", () => {
     const component = render("task-outcome-form", {
       caseId: "case-456",
       formAction:
-        "/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: [],
+        "/cases/case-456/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: null,
+      valueOptions: [],
       completed: true,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -40,9 +68,9 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-789",
       formAction:
-        "/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "approved",
-      statusOptions: [
+        "/cases/case-789/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "approved",
+      valueOptions: [
         {
           value: "approved",
           text: "Approve",
@@ -73,7 +101,7 @@ describe("task-outcome-form", () => {
         },
       ],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -84,11 +112,11 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-999",
       formAction:
-        "/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: [],
+        "/cases/case-999/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: null,
+      valueOptions: [],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -99,11 +127,11 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-111",
       formAction:
-        "/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: [],
+        "/cases/case-111/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: null,
+      valueOptions: [],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -114,9 +142,9 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-error",
       formAction:
-        "/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "approved",
-      statusOptions: [
+        "/cases/case-error/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "approved",
+      valueOptions: [
         {
           value: "approved",
           text: "Approve",
@@ -136,7 +164,7 @@ describe("task-outcome-form", () => {
         },
       ],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -147,11 +175,11 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-completed",
       formAction:
-        "/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: null,
+        "/cases/case-completed/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: null,
+      valueOptions: null,
       completed: true,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -162,9 +190,9 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-prefilled",
       formAction:
-        "/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: "on-hold",
-      statusOptions: [
+        "/cases/case-prefilled/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: "on-hold",
+      valueOptions: [
         {
           value: "approved",
           text: "Approve",
@@ -209,7 +237,7 @@ describe("task-outcome-form", () => {
         },
       ],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
@@ -220,11 +248,11 @@ describe("task-outcome-form", () => {
     const component = render("task-outcome-form", {
       caseId: "case-minimal",
       formAction:
-        "/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/status",
-      status: null,
-      statusOptions: [],
+        "/cases/case-minimal/phases/phase-1/stages/stage-1/task-groups/tg-01/tasks/task-01/value",
+      value: null,
+      valueOptions: [],
       completed: false,
-      statusError: null,
+      valueError: null,
       isInteractive: true,
     });
 
