@@ -9,11 +9,14 @@ export const createTaskListViewModel = ({
 }) => {
   const kase = page.data;
   const stage = kase.stage;
-  const taskGroups = mapTaskGroups(stage.taskGroups, kase._id);
-  const hasTasks = taskGroups.some((taskGroup) => taskGroup.tasks.length > 0);
-  const hasEmptyStateContent =
-    containsEmptyStateContent(kase.beforeContent) ||
-    containsEmptyStateContent(kase.afterContent);
+  const stageViewModel = createStageViewModel({
+    stage,
+    caseId: kase._id,
+    beforeContent: kase.beforeContent,
+    afterContent: kase.afterContent,
+    errors,
+    values,
+  });
 
   return {
     pageTitle: `Case tasks - ${stage.name}`,
@@ -23,13 +26,7 @@ export const createTaskListViewModel = ({
     links: setActiveLink(kase.links, "tasks"),
     data: {
       case: kase,
-      stage: {
-        ...stage,
-        taskGroups,
-        hasTasks,
-        showEmptyState: !hasTasks && !hasEmptyStateContent,
-        actions: mapActions({ stage, errors, values }),
-      },
+      stage: stageViewModel,
       beforeContent: kase.beforeContent,
       afterContent: kase.afterContent,
     },
@@ -38,6 +35,39 @@ export const createTaskListViewModel = ({
     values,
   };
 };
+
+const createStageViewModel = ({
+  stage,
+  caseId,
+  beforeContent,
+  afterContent,
+  errors,
+  values,
+}) => {
+  const taskGroups = mapTaskGroups(stage.taskGroups, caseId);
+  const hasTasks = hasTaskGroups(taskGroups);
+
+  return {
+    ...stage,
+    taskGroups,
+    hasTasks,
+    showEmptyState: shouldShowEmptyState(taskGroups, beforeContent, afterContent),
+    actions: mapActions({ stage, errors, values }),
+  };
+};
+
+const hasTaskGroups = (taskGroups) =>
+  taskGroups.some((taskGroup) => taskGroup.tasks.length > 0);
+
+const shouldShowEmptyState = (taskGroups, beforeContent, afterContent) => {
+  const hasTasks = hasTaskGroups(taskGroups);
+  const hasEmptyStateContent = hasAnyEmptyStateContent(beforeContent, afterContent);
+  return !hasTasks && !hasEmptyStateContent;
+};
+
+const hasAnyEmptyStateContent = (beforeContent, afterContent) =>
+  containsEmptyStateContent(beforeContent) ||
+  containsEmptyStateContent(afterContent);
 
 const mapTaskGroups = (taskGroups, caseId) => {
   return taskGroups.map((taskGroup) => ({
@@ -60,11 +90,21 @@ const containsEmptyStateContent = (content) => {
     return content.some(containsEmptyStateContent);
   }
 
-  if (content && typeof content === "object") {
+  if (isObjectContent(content)) {
     return Object.values(content).some(containsEmptyStateContent);
   }
 
-  return typeof content === "string" && content.includes(EMPTY_STATE_MESSAGE);
+  return includesEmptyStateMessage(content);
+};
+
+const isObjectContent = (content) =>
+  typeof content === "object" && content !== null;
+
+const includesEmptyStateMessage = (content) => {
+  if (typeof content !== "string") {
+    return false;
+  }
+  return content.includes(EMPTY_STATE_MESSAGE);
 };
 
 const mapActions = ({ stage, errors, values }) => {

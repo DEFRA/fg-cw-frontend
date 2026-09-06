@@ -133,26 +133,37 @@ const getTrustedClaims = (page) => ({
 
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
+const extractAgreementRef = (href, caseId) => {
+  const pattern = new RegExp(`/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`);
+  const match = href.match(pattern);
+  return match?.[1];
+};
+
+const collectAgreementRef = (content, caseId, refs) => {
+  if (typeof content.href !== "string") {
+    return;
+  }
+
+  const agreementRef = extractAgreementRef(content.href, caseId);
+  if (agreementRef) {
+    refs.add(agreementRef);
+  }
+};
+
+const isObjectContent = (content) =>
+  typeof content === "object" && content !== null;
+
 const getAgreementRefs = (content, caseId, refs = new Set()) => {
   if (Array.isArray(content)) {
     content.forEach((item) => getAgreementRefs(item, caseId, refs));
     return refs;
   }
 
-  if (!content || typeof content !== "object") {
+  if (!isObjectContent(content)) {
     return refs;
   }
 
-  if (typeof content.href === "string") {
-    const pattern = new RegExp(
-      `/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`,
-    );
-    const match = content.href.match(pattern);
-
-    if (match?.[1]) {
-      refs.add(match[1]);
-    }
-  }
+  collectAgreementRef(content, caseId, refs);
 
   Object.values(content).forEach((value) =>
     getAgreementRefs(value, caseId, refs),
