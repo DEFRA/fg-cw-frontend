@@ -1,6 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
 import { createViewTabViewModel } from "./view-tab.view-model.js";
-
 vi.mock("../../common/view-models/header.view-model.js");
 
 const mockRequest = { path: "/cases/agreement-123/case-details" };
@@ -59,6 +58,25 @@ describe("createViewTabViewModel", () => {
     expect(result.data.scheme).toBe("Environmental Land Management");
     expect(result.data.businessName).toBe("Test Farm Ltd");
     expect(result.data.payload).toEqual(mockTabData.payload);
+  });
+
+  it("preserves agreement links supplied by the backend", () => {
+    const content = [
+      {
+        component: "url",
+        text: "View agreement",
+        href: "/cases/case-123/agreement/AGR-001",
+        target: "_blank",
+        rel: "noopener",
+      },
+    ];
+    const result = createViewTabViewModel({
+      page: createMockPage({ ...mockTabData, content }),
+      request: mockRequest,
+      tabId: "agreements",
+    });
+
+    expect(result.data.content).toEqual(content);
   });
 });
 
