@@ -80,6 +80,10 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/cases/{caseId}/agreement/{agreementRef}",
+      },
+      {
+        method: "get",
         path: "/cases/{caseId}/stage/outcome/confirm",
       },
       {
@@ -112,7 +116,7 @@ describe("cases", () => {
       },
       {
         method: "post",
-        path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+        path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
       },
     ]);
   });

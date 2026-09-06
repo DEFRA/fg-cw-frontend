@@ -17,7 +17,7 @@ describe("updateTaskStatusUseCase", () => {
     const mockData = {
       caseId: "case-123",
       taskCode: "task-456",
-      status: "completed",
+      value: "completed",
     };
 
     const mockResult = {
@@ -62,7 +62,7 @@ describe("updateTaskStatusUseCase", () => {
     const mockData = {
       caseId: "case-789",
       taskCode: "task-101",
-      status: "in-progress",
+      value: "in-progress",
     };
 
     const mockResult = {
@@ -119,7 +119,7 @@ describe("updateTaskStatusUseCase", () => {
     const mockData = {
       caseId: "specific-case",
       taskCode: "specific-task",
-      status: "pending",
+      value: "pending",
       customField: "custom-value",
     };
     const mockResult = { updated: true };
