@@ -131,12 +131,14 @@ describe("proxyCaseAgreement", () => {
 
   test("uses the trusted case workflow code in the Agreements JWT", async () => {
     findCaseByIdUseCase.mockResolvedValue({
-      data: { workflowCode: "pigs-might-fly" },
+      data: {
+        workflowCode: "pigs-might-fly",
+        payload: { identifiers: { sbi: "123456789" } },
+      },
     });
     const request = createRequest({
       token: "caseworking-token",
       user: { id: "caseworker-1" },
-      sbi: "123456789",
     });
 
     const result = await proxyUseCase.proxyCaseAgreement(
@@ -170,6 +172,33 @@ describe("proxyCaseAgreement", () => {
       ),
     ).rejects.toMatchObject({
       message: "Case workflow code is unavailable",
+      output: { statusCode: 502 },
+    });
+  });
+
+  test.each([
+    ["payload", { data: { workflowCode: "pigs-might-fly" } }],
+    ["identifiers", { data: { workflowCode: "pigs-might-fly", payload: {} } }],
+    [
+      "SBI",
+      {
+        data: {
+          workflowCode: "pigs-might-fly",
+          payload: { identifiers: {} },
+        },
+      },
+    ],
+  ])("fails when the case %s is unavailable", async (_field, page) => {
+    findCaseByIdUseCase.mockResolvedValue(page);
+
+    await expect(
+      proxyUseCase.proxyCaseAgreement(
+        "case-123",
+        "PMF823153883",
+        createRequest({ token: "caseworking-token", user: {} }),
+      ),
+    ).rejects.toMatchObject({
+      message: "Case SBI is unavailable",
       output: { statusCode: 502 },
     });
   });

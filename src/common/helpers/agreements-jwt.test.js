@@ -1,3 +1,4 @@
+import Jwt from "@hapi/jwt";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
 // Mock the config module
@@ -6,6 +7,9 @@ vi.mock("../config.js", () => ({
     get: vi.fn((key) => {
       if (key === "agreements.jwtSecret") {
         return "test-jwt-secret";
+      }
+      if (key === "agreements.jwtKid") {
+        return "agreements-hs256-1";
       }
       return null;
     }),
@@ -42,6 +46,31 @@ describe("generateAgreementsJwt", () => {
     expect(payload.sbi).toBe("123456789");
     expect(payload.source).toBe("entra");
     expect(payload.grantCode).toBeUndefined();
+  });
+
+  test("should include FGP-1307 hardened claims (iss, aud, sub, exp)", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const before = Math.floor(Date.now() / 1000);
+    const token = generateAgreementsJwt("123456789", "soil-improvement");
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+
+    expect(payload.iss).toBe("fg-cw-frontend");
+    expect(payload.aud).toEqual(["agreements-ui", "gas"]);
+    expect(payload.sub).toBe("123456789");
+    expect(payload.exp).toBeGreaterThanOrEqual(before + 300);
+    expect(payload.exp).toBeLessThanOrEqual(before + 300 + 5);
+  });
+
+  test("should fall back to the issuer as subject when no SBI is present", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt(undefined);
+
+    const parts = token.split(".");
+    const payload = JSON.parse(Buffer.from(parts[1], "base64").toString());
+
+    expect(payload.sub).toBe("fg-cw-frontend");
   });
 
   test("should include configured grant code alongside existing claims", async () => {
@@ -107,6 +136,15 @@ describe("generateAgreementsJwt", () => {
     expect(payload.grantCode).toBeUndefined();
   });
 
+  test("should stamp the configured kid in the JWT header", async () => {
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt("123456789");
+
+    const parts = token.split(".");
+    const header = JSON.parse(Buffer.from(parts[0], "base64").toString());
+    expect(header.kid).toBe("agreements-hs256-1");
+  });
+
   test("should throw error when JWT secret is missing", async () => {
     // Mock config to return null for JWT secret
     const config = await import("../config.js");
@@ -122,5 +160,45 @@ describe("generateAgreementsJwt", () => {
     expect(() => {
       generateAgreementsJwt("123456789");
     }).toThrow("Missing AGREEMENTS_JWT_SECRET configuration");
+  });
+
+  test("should omit the kid header when no kid is configured", async () => {
+    const config = await import("../config.js");
+    vi.mocked(config.config.get).mockImplementation((key) => {
+      if (key === "agreements.jwtSecret") {
+        return "test-jwt-secret";
+      }
+      // jwtKid (and anything else) resolves to null
+      return null;
+    });
+
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+    const token = generateAgreementsJwt("123456789");
+
+    const parts = token.split(".");
+    const header = JSON.parse(Buffer.from(parts[0], "base64").toString());
+    expect(header.kid).toBeUndefined();
+  });
+
+  test("should wrap and rethrow when JWT generation fails", async () => {
+    const generateSpy = vi
+      .spyOn(Jwt.token, "generate")
+      .mockImplementation(() => {
+        throw new Error("boom");
+      });
+
+    const { logger } = await import("../logger.js");
+    const { generateAgreementsJwt } = await import("./agreements-jwt.js");
+
+    expect(() => {
+      generateAgreementsJwt("123456789");
+    }).toThrow("Failed to generate JWT token: boom");
+
+    expect(logger.error).toHaveBeenCalledWith(
+      "Failed to generate agreements JWT",
+      { error: "boom" },
+    );
+
+    generateSpy.mockRestore();
   });
 });
