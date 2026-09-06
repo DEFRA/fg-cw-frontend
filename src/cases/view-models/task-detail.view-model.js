@@ -143,14 +143,21 @@ export const mapInput = ({ input, value }) => {
     return undefined;
   }
 
+  const typeParams = inputTypeParams[input.type];
+  const attributes = inputAttributes[input.type];
+
+  if (!typeParams || !attributes) {
+    return undefined;
+  }
+
   return {
     id: "value",
     name: "value",
     value: value ?? "",
     label: createLabelObject(input.label),
     hint: inputHint(input.hint),
-    ...inputTypeParams[input.type](input),
-    attributes: inputAttributes[input.type](input),
+    ...typeParams(input),
+    attributes: attributes(input),
   };
 };
 
