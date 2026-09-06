@@ -3,6 +3,7 @@
 {%- set formAction = params.formAction -%}
 {%- set value = params.value -%}
 {%- set valueOptions = params.valueOptions -%}
+{%- set input = params.input -%}
 {%- set completed = params.completed -%}
 {%- set valueError = params.valueError -%}
 {%- set caseLink = "/cases/" + params.caseId -%}
@@ -13,11 +14,13 @@
   method="post"
   id="completeTaskForm"
   action="{{ formAction }}"
+  novalidate
 >
   {{
     taskOutcomeSelector({
       value: value,
       valueOptions: valueOptions,
+      input: input,
       completed: completed,
       errorMessage: valueError,
       disabled: disabled
