@@ -690,6 +690,7 @@ describe("dynamic-content template", () => {
     expect(result).toContain("We need to know your nationality");
     expect(result).toContain("govuk-details");
     expect(result).toContain("govuk-details__summary");
+    expect(result).toContain("govuk-details__summary-text");
     expect(result).toContain("govuk-details__text");
   });
 

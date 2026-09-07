@@ -231,14 +231,14 @@ export const createTaskDetailViewModel = ({
   const { taskGroupCode, taskCode } = query;
 
   const currentTask = findCurrentTask(stage, taskGroupCode, taskCode);
+  const currentValue = getFieldValue("value", formData) ?? currentTask.value;
   const currentCommentRef = findLastCommentRef(
     currentTask.commentRefs,
-    currentTask.value,
+    currentValue,
   );
   const currentTaskComment = findTaskComment(kase.comments, currentCommentRef);
   const canComplete = currentTask.canComplete;
   const isInteractive = stage.interactive ?? true;
-  const currentValue = getFieldValue("value", formData) ?? currentTask.value;
 
   return {
     errorList: createErrorList(errors),

@@ -118,7 +118,7 @@ export const updateTaskStatusRoute = {
   path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
   // eslint-disable-next-line complexity
   handler: async (request, h) => {
-    const { caseId, taskGroupCode, taskCode, completed, value, comment } =
+    let { caseId, taskGroupCode, taskCode, completed, value, comment } =
       mapRequest(request);
 
     logger.info(
@@ -135,10 +135,11 @@ export const updateTaskStatusRoute = {
 
     const errors = {};
 
-    const commentFieldName = value ? `${value}-comment` : "comment";
+    let commentFieldName = "comment";
 
     // Input tasks have no outcomes, so no value option and no outcome comment.
     if (task?.input) {
+      value = normaliseValue(value);
       const message = validateInput(task, value);
 
       if (message) {
@@ -149,6 +150,7 @@ export const updateTaskStatusRoute = {
         );
       }
     } else {
+      commentFieldName = value ? `${value}-comment` : "comment";
       // find valueOption
       const valueOption = task.valueOptions?.find((so) => so.code === value);
       const commentInputDef =
@@ -212,14 +214,12 @@ const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
   const { completed = false, value = null } = request.payload;
 
-  const submittedValue = normaliseValue(value);
-
   return {
     caseId,
     taskGroupCode,
     taskCode,
     completed,
-    value: submittedValue,
-    comment: extractComment(request.payload, submittedValue),
+    value,
+    comment: extractComment(request.payload, value),
   };
 };
