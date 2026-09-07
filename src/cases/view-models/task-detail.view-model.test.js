@@ -672,6 +672,57 @@ describe("createTaskDetailViewModel", () => {
     expect(completeOption.conditional.value).toBe("Existing task comment");
   });
 
+  it("should populate the selected option comment from the effective current value", () => {
+    const caseWithStatusOptions = {
+      ...mockCaseData,
+      stage: {
+        code: "stage1",
+        taskGroups: [
+          {
+            code: "group1",
+            tasks: [
+              {
+                code: "task1",
+                value: "complete",
+                commentRefs: [
+                  { value: "complete", ref: "comment1" },
+                  { value: "rejected", ref: "comment2" },
+                ],
+                valueOptions: [
+                  { code: "complete", name: "Complete" },
+                  { code: "rejected", name: "Rejected" },
+                ],
+                commentInputDef: {
+                  label: "Add a comment",
+                  mandatory: true,
+                },
+              },
+            ],
+          },
+        ],
+      },
+      comments: [
+        { ref: "comment1", text: "Existing complete comment" },
+        { ref: "comment2", text: "Existing rejected comment" },
+      ],
+    };
+
+    const result = createTaskDetailViewModel({
+      page: createMockPage(caseWithStatusOptions),
+      request: mockRequest,
+      query: mockQuery,
+      formData: { value: "rejected" },
+      errors: { "rejected-comment": "Comment is required" },
+    });
+
+    const rejectedOption = result.data.currentTask.valueOptions.find(
+      (opt) => opt.value === "rejected",
+    );
+
+    expect(rejectedOption.checked).toBe(true);
+    expect(rejectedOption.conditional.value).toBe("Existing rejected comment");
+  });
+
   it("should handle existing comment with empty text", () => {
     const caseWithStatusOptions = {
       ...mockCaseData,
