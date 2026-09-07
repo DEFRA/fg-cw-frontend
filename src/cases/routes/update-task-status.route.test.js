@@ -193,6 +193,62 @@ describe("updateTaskStatusRoute", () => {
     expect(statusCode).toEqual(302);
   });
 
+  it("preserves outcome option codes when looking up the comment field", async () => {
+    findCaseByIdUseCase.mockResolvedValueOnce({
+      data: {
+        stage: {
+          code: "001",
+          taskGroups: [
+            {
+              code: "tg01",
+              tasks: [
+                {
+                  code: "t01",
+                  valueOptions: [
+                    {
+                      code: " approved ",
+                      commentInputDef: { mandatory: true },
+                    },
+                  ],
+                  commentInputDef: {
+                    mandatory: true,
+                  },
+                },
+              ],
+            },
+          ],
+        },
+      },
+      header: { navItems: [] },
+    });
+
+    await server.inject({
+      method: "POST",
+      url: "/cases/68495db5afe2d27b09b2ee47/task-groups/tg01/tasks/t01/value",
+      payload: {
+        completed: true,
+        value: " approved ",
+        " approved -comment": "This is a comment",
+      },
+      auth: {
+        credentials: {
+          token: "mock-token",
+          user: {},
+        },
+        strategy: "session",
+      },
+    });
+
+    expect(updateTaskStatusUseCase).toHaveBeenCalledWith(expect.any(Object), {
+      caseId: "68495db5afe2d27b09b2ee47",
+      taskGroupCode: "tg01",
+      taskCode: "t01",
+      completed: true,
+      value: " approved ",
+      comment: "This is a comment",
+    });
+  });
+
   it("updates with value but completed=false", async () => {
     findCaseByIdUseCase.mockResolvedValueOnce({
       data: {
