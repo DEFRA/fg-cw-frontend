@@ -116,7 +116,7 @@
     "stylelint": "^17.14.0",
     "stylelint-config-gds": "^3.0.0",
     "terser-webpack-plugin": "^5.4.0",
-    "typescript": "^5.5.0",
+    "typescript": "^7.0.2",
     "vitest": "^4.1.10",
     "glob": "^13.0.6",
     "webpack": "^5.108.4",
