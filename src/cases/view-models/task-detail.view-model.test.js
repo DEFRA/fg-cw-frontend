@@ -1,7 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   createTaskDetailViewModel,
-  mapStatusOptions,
+  mapInput,
+  mapOptions,
 } from "./task-detail.view-model.js";
 
 vi.mock("../../common/helpers/date-helpers.js", () => ({
@@ -16,10 +17,124 @@ vi.mock("../../common/helpers/navigation-helpers.js", () => ({
 
 vi.mock("../../common/view-models/header.view-model.js");
 
-describe("mapStatusOptions", () => {
-  it("should use statusOption comment if it is defined", () => {
-    const result = mapStatusOptions({
-      statusOptions: [
+describe("mapInput", () => {
+  const map = (input, value = null) => mapInput({ input, value });
+
+  it("returns undefined for an option task", () => {
+    expect(map(undefined)).toBeUndefined();
+  });
+
+  it("maps a text input with its constraints", () => {
+    expect(
+      map({
+        type: "text",
+        label: "Siti/FC reference",
+        hint: ["For example, SF123456"],
+        pattern: "[A-Z]{2}[0-9]{6}",
+        maxlength: 20,
+      }),
+    ).toEqual({
+      id: "value",
+      name: "value",
+      type: "text",
+      value: "",
+      label: { text: "Siti/FC reference" },
+      hint: { text: "For example, SF123456" },
+      pattern: "[A-Z]{2}[0-9]{6}",
+      attributes: { maxlength: 20 },
+    });
+  });
+
+  it("maps a number input to a text field with a numeric inputmode", () => {
+    expect(
+      map({
+        type: "number",
+        label: "Herd size",
+        min: 1,
+        max: 5000,
+        integer: true,
+      }),
+    ).toEqual({
+      id: "value",
+      name: "value",
+      type: "text",
+      inputmode: "numeric",
+      value: "",
+      label: { text: "Herd size" },
+      hint: undefined,
+      attributes: {},
+    });
+  });
+
+  it("does not emit min/max, which a text input would ignore", () => {
+    const result = map({ type: "number", label: "Herd size", min: 1, max: 5 });
+
+    expect(result.attributes).toEqual({});
+  });
+
+  // A "numeric" keypad has no decimal point, so it is only right for a
+  // whole-number field.
+  it("uses a numeric inputmode only for an integer-only number input", () => {
+    expect(
+      map({ type: "number", label: "Herd size", integer: true }).inputmode,
+    ).toBe("numeric");
+
+    expect(map({ type: "number", label: "Area" }).inputmode).toBe("decimal");
+  });
+
+  it("maps a date input", () => {
+    expect(map({ type: "date", label: "Date of last inspection" })).toEqual({
+      id: "value",
+      name: "value",
+      type: "date",
+      value: "",
+      label: { text: "Date of last inspection" },
+      hint: undefined,
+      attributes: {},
+    });
+  });
+
+  it("returns undefined for unsupported input types", () => {
+    expect(map({ type: "currency", label: "Grant amount" })).toBeUndefined();
+  });
+
+  it("omits constraints that are not set", () => {
+    const result = map({ type: "text", label: "Reference" });
+
+    expect(result.attributes).toEqual({});
+    expect(result).not.toHaveProperty("pattern");
+  });
+
+  it("joins a multi-line hint into one string", () => {
+    expect(
+      map({ type: "text", label: "Reference", hint: ["First line", "Second"] })
+        .hint,
+    ).toEqual({ text: "First line Second" });
+  });
+
+  it("renders a saved value back into the field", () => {
+    expect(map({ type: "text", label: "Reference" }, "SF123456").value).toBe(
+      "SF123456",
+    );
+  });
+
+  it("renders an empty string rather than null for a cleared value", () => {
+    expect(map({ type: "text", label: "Reference" }, null).value).toBe("");
+  });
+
+  // The error is not carried on the input object - the selector template reads
+  // the outer valueError param, shared by every branch.
+  it("does not carry an error message of its own", () => {
+    expect(map({ type: "text", label: "Reference" })).not.toHaveProperty(
+      "errorMessage",
+    );
+  });
+});
+
+describe("mapOptions", () => {
+  it("should use valueOption comment if it is defined", () => {
+    const result = mapOptions({
+      options: [
         {
           code: "complete",
           name: "Complete",
@@ -30,7 +145,7 @@ describe("mapStatusOptions", () => {
           },
         },
       ],
-      currentStatus: "complete",
+      currentValue: "complete",
       commentInputDef: {
         label: "Default comment",
         helpText: "Default help text",
@@ -49,9 +164,9 @@ describe("mapStatusOptions", () => {
   });
 
   it("should fallback to commentInputDef when option comment is not defined", () => {
-    const result = mapStatusOptions({
-      statusOptions: [{ code: "complete", name: "Complete" }],
-      currentStatus: "complete",
+    const result = mapOptions({
+      options: [{ code: "complete", name: "Complete" }],
+      currentValue: "complete",
       commentInputDef: {
         label: "Default comment",
         helpText: "Default help text",
@@ -69,9 +184,9 @@ describe("mapStatusOptions", () => {
     });
   });
 
-  it("should apply comment definitions per status option", () => {
-    const result = mapStatusOptions({
-      statusOptions: [
+  it("should apply comment definitions per value option", () => {
+    const result = mapOptions({
+      options: [
         {
           code: "approved",
           name: "Approved",
@@ -83,7 +198,7 @@ describe("mapStatusOptions", () => {
         },
         { code: "rejected", name: "Rejected" },
       ],
-      currentStatus: "approved",
+      currentValue: "approved",
       commentInputDef: {
         label: "General comment",
         helpText: "Optional details",
@@ -145,8 +260,8 @@ describe("createTaskDetailViewModel", () => {
           tasks: [
             {
               code: "task1",
-              status: "complete",
-              commentRef: "comment1",
+              value: "complete",
+              commentRefs: [{ value: "complete", ref: "comment1" }],
               requiredRoles: { allOf: ["role1"], anyOf: [] },
               canComplete: true,
             },
@@ -207,16 +322,16 @@ describe("createTaskDetailViewModel", () => {
     });
 
     expect(result.data.currentTask).toMatchObject({
-      status: "complete",
+      value: "complete",
       canComplete: true,
-      formAction: "/cases/case123/task-groups/group1/tasks/task1/status",
+      formAction: "/cases/case123/task-groups/group1/tasks/task1/value",
     });
   });
 
   it("should format current task correctly for incomplete task", () => {
     const incompleteCaseData = structuredClone(mockCaseData);
 
-    incompleteCaseData.stage.taskGroups[0].tasks[0].status = "incomplete";
+    incompleteCaseData.stage.taskGroups[0].tasks[0].value = "incomplete";
 
     const result = createTaskDetailViewModel({
       page: createMockPage(incompleteCaseData),
@@ -226,7 +341,7 @@ describe("createTaskDetailViewModel", () => {
     });
 
     expect(result.data.currentTask).toMatchObject({
-      status: "incomplete",
+      value: "incomplete",
     });
   });
 
@@ -234,7 +349,9 @@ describe("createTaskDetailViewModel", () => {
     const caseDataNoComment = structuredClone(mockCaseData);
 
     caseDataNoComment.comments = [];
-    caseDataNoComment.stage.taskGroups[0].tasks[0].commentRef = "nonexistent";
+    caseDataNoComment.stage.taskGroups[0].tasks[0].commentRefs = [
+      { value: "complete", ref: "nonexistent" },
+    ];
 
     const result = createTaskDetailViewModel({
       page: createMockPage(caseDataNoComment),
@@ -395,7 +512,7 @@ describe("createTaskDetailViewModel", () => {
     expect(result.errorList).toEqual([]);
   });
 
-  it("should map status options with comment fields", () => {
+  it("should map value options with comment fields", () => {
     const caseWithStatusOptions = {
       ...mockCaseData,
       stage: {
@@ -406,10 +523,10 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "in_progress",
-                commentRef: "comment1",
+                value: "in_progress",
+                commentRefs: [{ ref: "comment1", value: "in_progress" }],
                 requiredRoles: { allOf: ["role1"], anyOf: [] },
-                statusOptions: [
+                valueOptions: [
                   { code: "in_progress", name: "In Progress" },
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
@@ -432,13 +549,13 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    expect(result.data.currentTask.statusOptions).toHaveLength(3);
-    expect(result.data.currentTask.statusOptions[0]).toMatchObject({
+    expect(result.data.currentTask.valueOptions).toHaveLength(3);
+    expect(result.data.currentTask.valueOptions[0]).toMatchObject({
       value: "in_progress",
       text: "In Progress",
       checked: true,
     });
-    expect(result.data.currentTask.statusOptions[0].conditional).toMatchObject({
+    expect(result.data.currentTask.valueOptions[0].conditional).toMatchObject({
       id: "in_progress-comment",
       name: "in_progress-comment",
       label: { text: "Add a comment" },
@@ -459,9 +576,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
-                commentRef: null,
-                statusOptions: [
+                value: "complete",
+                commentRefs: null,
+                valueOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
                 ],
@@ -477,7 +594,7 @@ describe("createTaskDetailViewModel", () => {
     };
 
     const formData = {
-      status: "rejected",
+      value: "rejected",
       "rejected-comment": "User entered text before validation error",
     };
 
@@ -493,7 +610,7 @@ describe("createTaskDetailViewModel", () => {
       formData,
     });
 
-    const rejectedOption = result.data.currentTask.statusOptions.find(
+    const rejectedOption = result.data.currentTask.valueOptions.find(
       (opt) => opt.value === "rejected",
     );
 
@@ -516,9 +633,13 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
-                commentRef: "comment1",
-                statusOptions: [
+                value: "complete",
+                commentRefs: [
+                  { value: "in review", ref: "comment2" },
+                  { value: "complete", ref: "comment1" },
+                  { value: "foo", ref: "comment3" },
+                ],
+                valueOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
                 ],
@@ -531,7 +652,11 @@ describe("createTaskDetailViewModel", () => {
           },
         ],
       },
-      comments: [{ ref: "comment1", text: "Existing task comment" }],
+      comments: [
+        { ref: "comment1", text: "Existing task comment" },
+        { ref: "comment2", text: "foo" },
+        { ref: "comment3", text: "comment 3 text" },
+      ],
     };
 
     const result = createTaskDetailViewModel({
@@ -540,7 +665,7 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    const completeOption = result.data.currentTask.statusOptions.find(
+    const completeOption = result.data.currentTask.valueOptions.find(
       (opt) => opt.value === "complete",
     );
 
@@ -558,9 +683,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
-                commentRef: "comment1",
-                statusOptions: [
+                value: "complete",
+                commentRefs: [{ value: "complete", ref: "comment1" }],
+                valueOptions: [
                   { code: "complete", name: "Complete" },
                   { code: "rejected", name: "Rejected" },
                 ],
@@ -582,14 +707,14 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    const completeOption = result.data.currentTask.statusOptions.find(
+    const completeOption = result.data.currentTask.valueOptions.find(
       (opt) => opt.value === "complete",
     );
 
     expect(completeOption.conditional.value).toBe("");
   });
 
-  it("should handle status options without comment input definition", () => {
+  it("should handle value options without comment input definition", () => {
     const caseWithStatusOptions = {
       ...mockCaseData,
       stage: {
@@ -600,9 +725,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "in_progress",
-                commentRef: null,
-                statusOptions: [
+                value: "in_progress",
+                commentRefs: null,
+                valueOptions: [
                   { code: "in_progress", name: "In Progress" },
                   { code: "complete", name: "Complete" },
                 ],
@@ -620,16 +745,12 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    expect(result.data.currentTask.statusOptions).toHaveLength(2);
-    expect(
-      result.data.currentTask.statusOptions[0].conditional,
-    ).toBeUndefined();
-    expect(
-      result.data.currentTask.statusOptions[1].conditional,
-    ).toBeUndefined();
+    expect(result.data.currentTask.valueOptions).toHaveLength(2);
+    expect(result.data.currentTask.valueOptions[0].conditional).toBeUndefined();
+    expect(result.data.currentTask.valueOptions[1].conditional).toBeUndefined();
   });
 
-  it("should handle empty status options array", () => {
+  it("should handle empty value options array", () => {
     const caseWithEmptyOptions = {
       ...mockCaseData,
       stage: {
@@ -640,9 +761,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
-                commentRef: null,
-                statusOptions: [],
+                value: "complete",
+                commentRefs: null,
+                valueOptions: [],
               },
             ],
           },
@@ -656,7 +777,7 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    expect(result.data.currentTask.statusOptions).toEqual([]);
+    expect(result.data.currentTask.valueOptions).toEqual([]);
   });
 
   it("should handle comment input without helpText", () => {
@@ -670,9 +791,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
-                commentRef: null,
-                statusOptions: [{ code: "complete", name: "Complete" }],
+                value: "complete",
+                commentRefs: null,
+                valueOptions: [{ code: "complete", name: "Complete" }],
                 commentInputDef: {
                   label: "Add a comment",
                   mandatory: false,
@@ -690,12 +811,12 @@ describe("createTaskDetailViewModel", () => {
       query: mockQuery,
     });
 
-    const option = result.data.currentTask.statusOptions[0];
+    const option = result.data.currentTask.valueOptions[0];
     expect(option.conditional.hint).toBeUndefined();
     expect(option.conditional.required).toBe(false);
   });
 
-  it("should override current status from formData", () => {
+  it("should override current value from formData", () => {
     const caseWithStatusOptions = {
       ...mockCaseData,
       stage: {
@@ -706,9 +827,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "in_progress",
-                commentRef: null,
-                statusOptions: [
+                value: "in_progress",
+                commentRefs: null,
+                valueOptions: [
                   { code: "in_progress", name: "In Progress" },
                   { code: "complete", name: "Complete" },
                 ],
@@ -719,7 +840,7 @@ describe("createTaskDetailViewModel", () => {
       },
     };
 
-    const formData = { status: "complete" };
+    const formData = { value: "complete" };
 
     const result = createTaskDetailViewModel({
       page: createMockPage(caseWithStatusOptions),
@@ -729,13 +850,13 @@ describe("createTaskDetailViewModel", () => {
       formData,
     });
 
-    expect(result.data.currentTask.status).toBe("complete");
-    const completeOption = result.data.currentTask.statusOptions.find(
+    expect(result.data.currentTask.value).toBe("complete");
+    const completeOption = result.data.currentTask.valueOptions.find(
       (opt) => opt.value === "complete",
     );
     expect(completeOption.checked).toBe(true);
 
-    const inProgressOption = result.data.currentTask.statusOptions.find(
+    const inProgressOption = result.data.currentTask.valueOptions.find(
       (opt) => opt.value === "in_progress",
     );
     expect(inProgressOption.checked).toBe(false);
@@ -766,9 +887,9 @@ describe("createTaskDetailViewModel", () => {
             tasks: [
               {
                 code: "task1",
-                status: "complete",
+                value: "complete",
                 completed: true,
-                commentRef: null,
+                commentRefs: null,
               },
             ],
           },
@@ -797,8 +918,8 @@ describe("createTaskDetailViewModel", () => {
               tasks: [
                 {
                   code: "task1",
-                  status: "complete",
-                  commentRef: null,
+                  value: "complete",
+                  commentRefs: null,
                   notesHistory: [
                     {
                       date: "2025-01-09T10:00:00.000Z",
@@ -846,8 +967,8 @@ describe("createTaskDetailViewModel", () => {
               tasks: [
                 {
                   code: "task1",
-                  status: "complete",
-                  commentRef: null,
+                  value: "complete",
+                  commentRefs: null,
                 },
               ],
             },
@@ -875,8 +996,8 @@ describe("createTaskDetailViewModel", () => {
               tasks: [
                 {
                   code: "task1",
-                  status: "complete",
-                  commentRef: null,
+                  value: "complete",
+                  commentRefs: null,
                   notesHistory: null,
                 },
               ],
@@ -926,6 +1047,86 @@ describe("createTaskDetailViewModel", () => {
       });
 
       expect(result.data.hasWriteAccess).toBeUndefined();
+    });
+
+    describe("input tasks", () => {
+      const inputCaseData = (overrides = {}) => ({
+        ...mockCaseData,
+        stage: {
+          ...mockCaseData.stage,
+          taskGroups: [
+            {
+              code: "group1",
+              tasks: [
+                {
+                  code: "task1",
+                  value: "SF123456",
+                  commentRefs: [],
+                  requiredRoles: { allOf: [], anyOf: [] },
+                  canComplete: true,
+                  valueOptions: [],
+                  input: { type: "text", label: "Reference", maxlength: 20 },
+                  ...overrides,
+                },
+              ],
+            },
+          ],
+        },
+      });
+
+      it("surfaces the input field on the current task", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+        });
+
+        expect(result.data.currentTask.input).toEqual(
+          expect.objectContaining({
+            name: "value",
+            type: "text",
+            value: "SF123456",
+            label: { text: "Reference" },
+            attributes: { maxlength: 20 },
+          }),
+        );
+        expect(result.data.currentTask.valueOptions).toEqual([]);
+      });
+
+      it("prefers a flashed form value over the saved one", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+          formData: { value: "REJECTED-BY-SERVER" },
+        });
+
+        expect(result.data.currentTask.input.value).toBe("REJECTED-BY-SERVER");
+      });
+
+      it("attaches the value error to the field and the error list", () => {
+        const errors = { value: { text: "Enter Reference", href: "#value" } };
+
+        const result = createTaskDetailViewModel({
+          page: createMockPage(inputCaseData()),
+          request: mockRequest,
+          query: mockQuery,
+          errors,
+        });
+
+        expect(result.data.currentTask.valueError).toBe(errors.value);
+        expect(result.errorList).toEqual([errors.value]);
+      });
+
+      it("leaves input undefined for an option task", () => {
+        const result = createTaskDetailViewModel({
+          page: createMockPage(mockCaseData),
+          request: mockRequest,
+          query: mockQuery,
+        });
+
+        expect(result.data.currentTask.input).toBeUndefined();
+      });
     });
   });
 });

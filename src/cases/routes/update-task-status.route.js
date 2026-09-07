@@ -1,4 +1,5 @@
 import { setFlashData } from "../../common/helpers/flash-helpers.js";
+import { getLabelText } from "../../common/helpers/string-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { updateTaskStatusUseCase } from "../use-cases/update-task-status.use-case.js";
@@ -16,24 +17,112 @@ const validateComment = (taskComment, comment) => {
   return true;
 };
 
-const validateStatusOptions = (statusOptions, status) => {
-  if (statusOptions?.length > 0 && !status) {
+const validateValueOptions = (valueOptions, value) => {
+  if (valueOptions?.length > 0 && !value) {
     return false;
   }
 
   return true;
 };
 
+const validateMaxLength = (value, { maxlength, label }) =>
+  maxlength !== undefined && value.length > maxlength
+    ? `${getLabelText(label)} must be ${maxlength} characters or fewer`
+    : null;
+
+// Anchored to match the whole value, mirroring the backend. Keep the two in
+// step or a value passes here and comes back a 400.
+const validatePattern = (value, { pattern, label }) =>
+  pattern !== undefined && !new RegExp(`^(?:${pattern})$`).test(value)
+    ? `Enter ${getLabelText(label)} in the correct format`
+    : null;
+
+const validateTextInput = (value, input) =>
+  validateMaxLength(value, input) ?? validatePattern(value, input);
+
+const isOutOfRange = (numericValue, { min, max }) =>
+  (min !== undefined && numericValue < min) ||
+  (max !== undefined && numericValue > max);
+
+const rangeMessage = ({ min, max, label }) => {
+  if (min === undefined) {
+    return `${getLabelText(label)} must be ${max} or less`;
+  }
+
+  if (max === undefined) {
+    return `${getLabelText(label)} must be ${min} or more`;
+  }
+
+  return `Enter a number between ${min} and ${max}`;
+};
+
+// Matches the backend: Number() would accept hex ("0x10") and the value is stored as typed, so the field would redisplay as
+// "0x10". Keep the two in step.
+const DECIMAL_NUMBER = /^-?\d+(\.\d+)?$/;
+const WHOLE_NUMBER = /^-?\d+$/;
+
+const numberFormatError = (value, { integer }) => {
+  if (!DECIMAL_NUMBER.test(value)) {
+    return "must be a number";
+  }
+
+  if (integer && !WHOLE_NUMBER.test(value)) {
+    return "must be a whole number";
+  }
+
+  return null;
+};
+
+const validateNumberInput = (value, input) => {
+  const formatError = numberFormatError(value, input);
+
+  if (formatError) {
+    return `${getLabelText(input.label)} ${formatError}`;
+  }
+
+  return isOutOfRange(Number(value), input) ? rangeMessage(input) : null;
+};
+
+const isRealDate = (value) => {
+  const parsed = new Date(`${value}T00:00:00Z`);
+
+  return (
+    !Number.isNaN(parsed.getTime()) && parsed.toISOString().startsWith(value)
+  );
+};
+
+const validateDateInput = (value) =>
+  /^\d{4}-\d{2}-\d{2}$/.test(value) && isRealDate(value)
+    ? null
+    : "Enter a valid date";
+
+const inputValidators = {
+  text: validateTextInput,
+  number: validateNumberInput,
+  date: validateDateInput,
+};
+
+const validateInput = (task, value) => {
+  if (value === null) {
+    return task.mandatory ? `Enter ${getLabelText(task.input.label)}` : null;
+  }
+
+  const validator = inputValidators[task.input.type];
+  return validator
+    ? validator(value, task.input)
+    : "This task input type is not supported";
+};
+
 export const updateTaskStatusRoute = {
   method: "POST",
-  path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/status",
+  path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
   // eslint-disable-next-line complexity
   handler: async (request, h) => {
-    const { caseId, taskGroupCode, taskCode, completed, status, comment } =
+    const { caseId, taskGroupCode, taskCode, completed, value, comment } =
       mapRequest(request);
 
     logger.info(
-      `Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+      `Updating task value for case ${caseId} for taskCode ${taskCode} with value ${value}`,
     );
 
     const authContext = {
@@ -46,34 +135,47 @@ export const updateTaskStatusRoute = {
 
     const errors = {};
 
-    const commentFieldName = status ? `${status}-comment` : "comment";
+    const commentFieldName = value ? `${value}-comment` : "comment";
 
-    // find statusOption
-    const statusOption = task.statusOptions?.find((so) => so.code === status);
-    const commentInputDef =
-      statusOption?.commentInputDef ?? task?.commentInputDef;
+    // Input tasks have no outcomes, so no value option and no outcome comment.
+    if (task?.input) {
+      const message = validateInput(task, value);
 
-    // Only validate comment if a status option has been selected
-    if (status && !validateComment(commentInputDef, comment)) {
-      errors[commentFieldName] = {
-        text: commentInputDef?.label
-          ? `${commentInputDef.label} is required`
-          : "Note is required",
-        href: `#${commentFieldName}`,
-      };
-    }
+      if (message) {
+        errors.value = { text: message, href: "#value" };
+        setFlashData(request, { errors, formData: { value } });
+        return h.redirect(
+          `/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`,
+        );
+      }
+    } else {
+      // find valueOption
+      const valueOption = task.valueOptions?.find((so) => so.code === value);
+      const commentInputDef =
+        valueOption?.commentInputDef ?? task?.commentInputDef;
 
-    if (!validateStatusOptions(task?.statusOptions, status)) {
-      errors.status = {
-        text: "Choose an option",
-        href: "#status",
-      };
+      // Only validate comment if a value option has been selected
+      if (value && !validateComment(commentInputDef, comment)) {
+        errors[commentFieldName] = {
+          text: commentInputDef?.label
+            ? `${getLabelText(commentInputDef.label)} is required`
+            : "Note is required",
+          href: `#${commentFieldName}`,
+        };
+      }
+
+      if (!validateValueOptions(task?.valueOptions, value)) {
+        errors.value = {
+          text: "Choose an option",
+          href: "#value",
+        };
+      }
     }
 
     if (Object.keys(errors).length > 0) {
       setFlashData(request, {
         errors,
-        formData: { completed, status, [commentFieldName]: comment },
+        formData: { completed, value, [commentFieldName]: comment },
       });
       return h.redirect(`/cases/${caseId}/tasks/${taskGroupCode}/${taskCode}`);
     }
@@ -82,34 +184,42 @@ export const updateTaskStatusRoute = {
       caseId,
       taskGroupCode,
       taskCode,
-      status,
+      value,
       completed,
       comment,
     });
 
     logger.info(
-      `Finished: Updating task status for case ${caseId} for taskCode ${taskCode} with status ${status}`,
+      `Finished: Updating task value for case ${caseId} for taskCode ${taskCode} with value ${value}`,
     );
 
     return h.redirect(`/cases/${caseId}`);
   },
 };
 
-const extractComment = (payload, status) => {
-  const commentFieldName = status ? `${status}-comment` : "comment";
+const extractComment = (payload, value) => {
+  const commentFieldName = value ? `${value}-comment` : "comment";
   return payload[commentFieldName] || null;
 };
 
+// An empty input field posts "", and the API rejects "" - Joi.string() does
+// not allow it. null is how a value is cleared.
+// Whitespace-only counts as empty, otherwise it skips the check
+// and stores as blank that redisplay as a filled-in.
+const normaliseValue = (value) => (value?.trim() ? value.trim() : null);
+
 const mapRequest = (request) => {
   const { caseId, taskGroupCode, taskCode } = request.params;
-  const { completed = false, status = null } = request.payload;
+  const { completed = false, value = null } = request.payload;
+
+  const submittedValue = normaliseValue(value);
 
   return {
     caseId,
     taskGroupCode,
     taskCode,
     completed,
-    status,
-    comment: extractComment(request.payload, status),
+    value: submittedValue,
+    comment: extractComment(request.payload, submittedValue),
   };
 };

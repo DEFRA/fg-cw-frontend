@@ -18,6 +18,7 @@ exports[`task-details > renders 1`] = `
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -121,6 +122,7 @@ exports[`task-details > renders completed task with editable form when case is i
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <fieldset class="govuk-fieldset">
@@ -129,12 +131,16 @@ exports[`task-details > renders completed task with editable form when case is i
   </legend>
   <div class="govuk-radios" data-module="govuk-radios">
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status" name="status" type="radio" value="">
-      
+      <input class="govuk-radios__input" id="value" name="value" type="radio" value="approved">
+      <label class="govuk-label govuk-radios__label" for="value">
+        Approve
+      </label>
     </div>
     <div class="govuk-radios__item">
-      <input class="govuk-radios__input" id="status-2" name="status" type="radio" value="">
-      
+      <input class="govuk-radios__input" id="value-2" name="value" type="radio" value="rejected">
+      <label class="govuk-label govuk-radios__label" for="value-2">
+        Reject
+      </label>
     </div>
   </div>
 </fieldset>
@@ -243,6 +249,7 @@ exports[`task-details > renders with interactive form 1`] = `
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">
@@ -330,6 +337,7 @@ exports[`task-details > renders with notes history table when task has notesHist
   method="post"
   id="completeTaskForm"
   action=""
+  novalidate
 >
     <div class="govuk-form-group">
   <div class="govuk-checkboxes" data-module="govuk-checkboxes">

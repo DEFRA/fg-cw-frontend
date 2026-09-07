@@ -1,6 +1,6 @@
-import convict from "convict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import convict from "convict";
 
 const dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -286,6 +286,12 @@ export const config = convict({
       default: "default-agreements-jwt-secret",
       sensitive: true,
       env: "AGREEMENTS_JWT_SECRET",
+    },
+    jwtKid: {
+      doc: "Key id (kid) stamped in the caller JWT header so consumers can select the verifying key during rotation",
+      format: String,
+      default: "agreements-hs256-1",
+      env: "AGREEMENTS_JWT_KID",
     },
     proxyTimeoutMs: {
       doc: "Proxy timeout in milliseconds",
