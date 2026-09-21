@@ -87,7 +87,7 @@
     "@babel/cli": "^8.0.5",
     "@babel/core": "^8.0.5",
     "@babel/preset-env": "^8.0.5",
-    "@vitest/coverage-v8": "^4.1.11",
+    "@vitest/coverage-v8": "^5.0.0",
     "autoprefixer": "^10.6.0",
     "babel-loader": "^10.1.1",
     "babel-plugin-transform-import-meta": "^3.0.0",
