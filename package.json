@@ -50,7 +50,7 @@
     ]
   },
   "dependencies": {
-    "@babel/runtime": "^8.0.0",
+    "@babel/runtime": "^8.0.5",
     "@defra/hapi-tracing": "^1.30.0",
     "@elastic/ecs-pino-format": "^1.5.0",
     "@hapi/bell": "^13.1.0",
@@ -61,7 +61,7 @@
     "@hapi/h2o2": "^10.0.4",
     "@hapi/hapi": "^21.4.7",
     "@hapi/inert": "^7.1.2",
-    "@hapi/jwt": "^3.2.3",
+    "@hapi/jwt": "^3.2.4",
     "@hapi/vision": "^7.0.3",
     "@hapi/wreck": "^18.1.2",
     "@hapi/yar": "^11.0.3",
@@ -84,11 +84,11 @@
     "pino": "^10.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^8.0.4",
-    "@babel/core": "^8.0.1",
-    "@babel/preset-env": "^8.0.2",
-    "@vitest/coverage-v8": "^4.1.10",
-    "autoprefixer": "^10.5.4",
+    "@babel/cli": "^8.0.5",
+    "@babel/core": "^8.0.5",
+    "@babel/preset-env": "^8.0.5",
+    "@vitest/coverage-v8": "^4.1.11",
+    "autoprefixer": "^10.6.0",
     "babel-loader": "^10.1.1",
     "babel-plugin-transform-import-meta": "^3.0.0",
     "baseline-browser-mapping": "^2.11.20",
@@ -117,9 +117,9 @@
     "stylelint-config-gds": "^3.0.0",
     "terser-webpack-plugin": "^5.4.0",
     "typescript": "^7.0.2",
-    "vitest": "^4.1.10",
+    "vitest": "^4.1.11",
     "glob": "^13.0.6",
-    "webpack": "^5.110.2",
+    "webpack": "^5.110.3",
     "webpack-assets-manifest": "^6.5.2",
     "webpack-cli": "^7.2.3"
   }
