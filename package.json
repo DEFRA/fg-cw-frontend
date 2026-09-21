@@ -76,7 +76,7 @@
     "govuk-frontend": "^6.5.0",
     "hapi-pino": "^13.0.0",
     "hapi-pulse": "^4.0.0",
-    "ioredis": "^5.11.1",
+    "ioredis": "^6.0.0",
     "json5": "^2.2.3",
     "lodash": "^4.17.23",
     "moment": "^2.30.1",
