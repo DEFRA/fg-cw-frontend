@@ -84,11 +84,11 @@
     "pino": "^10.3.0"
   },
   "devDependencies": {
-    "@babel/cli": "^8.0.5",
-    "@babel/core": "^8.0.5",
-    "@babel/preset-env": "^8.0.5",
+    "@babel/cli": "^8.0.6",
+    "@babel/core": "^8.0.6",
+    "@babel/preset-env": "^8.0.6",
     "@vitest/coverage-v8": "^5.0.0",
-    "autoprefixer": "^10.6.0",
+    "autoprefixer": "^10.6.1",
     "babel-loader": "^10.1.1",
     "babel-plugin-transform-import-meta": "^3.0.0",
     "baseline-browser-mapping": "^2.11.20",
@@ -119,7 +119,7 @@
     "terser-webpack-plugin": "^5.4.0",
     "typescript": "^7.0.2",
     "vitest": "5.0.1",
-    "webpack": "^5.111.0",
+    "webpack": "^5.111.1",
     "webpack-assets-manifest": "^6.5.2",
     "webpack-cli": "^7.2.3"
   }
