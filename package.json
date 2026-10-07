@@ -84,6 +84,11 @@
     "openid-client": "6.8.2",
     "pino": "^10.3.0"
   },
+  "overrides": {
+    "@defra/hapi-auth-oidc": {
+      "joi": "^18.2.9"
+    }
+  },
   "devDependencies": {
     "@babel/cli": "^8.0.6",
     "@babel/core": "^8.0.6",
