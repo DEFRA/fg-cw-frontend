@@ -51,7 +51,11 @@ const createStageViewModel = ({
     ...stage,
     taskGroups,
     hasTasks,
-    showEmptyState: shouldShowEmptyState(taskGroups, beforeContent, afterContent),
+    showEmptyState: shouldShowEmptyState(
+      taskGroups,
+      beforeContent,
+      afterContent,
+    ),
     actions: mapActions({ stage, errors, values }),
   };
 };
@@ -61,7 +65,10 @@ const hasTaskGroups = (taskGroups) =>
 
 const shouldShowEmptyState = (taskGroups, beforeContent, afterContent) => {
   const hasTasks = hasTaskGroups(taskGroups);
-  const hasEmptyStateContent = hasAnyEmptyStateContent(beforeContent, afterContent);
+  const hasEmptyStateContent = hasAnyEmptyStateContent(
+    beforeContent,
+    afterContent,
+  );
   return !hasTasks && !hasEmptyStateContent;
 };
 
