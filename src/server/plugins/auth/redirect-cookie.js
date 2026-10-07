@@ -1,0 +1,52 @@
+import { config } from "../../../common/config.js";
+
+const oidcConfig = config.get("oidc");
+const isSecure = config.get("session.cookie.secure");
+
+const tenMinutesMs = 600_000;
+
+export const redirectCookieName = "auth-redirect";
+
+/**
+ * Where the user was heading before login has to survive the trip through
+ * Entra ID, which returns them by a cross-site POST. The yar session cookie is
+ * SameSite=Strict and so is withheld on that POST, hence this separate cookie,
+ * relaxed the same way as the plugin's own PKCE cookie. Iron encoding keeps it
+ * tamper proof, so it cannot be rewritten into an open redirect.
+ *
+ * This replaces the `?next=` query parameter the bell flow used.
+ */
+export const redirectCookieOptions = {
+  password: oidcConfig.cookie.password,
+  encoding: "iron",
+  isSecure,
+  isSameSite: isSecure ? "None" : "Lax",
+  isHttpOnly: true,
+  path: "/",
+  ttl: tenMinutesMs,
+  clearInvalid: true,
+  ignoreErrors: true,
+};
+
+/**
+ * `//host` reads to a browser as protocol relative and would leave the service,
+ * and so does `/\host`, because the url parser treats a backslash at the start
+ * of a path as a slash. A target counts as same site only when rooted at a
+ * single slash followed by neither.
+ */
+const isSameSitePath = (redirectTo) =>
+  typeof redirectTo === "string" && /^\/(?![/\\])/.test(redirectTo);
+
+// Remembers where the user was heading so the callback can return them there.
+export const redirectToWithMemory = (request, h, destination) => {
+  const redirectTo = `${request.url.pathname}${request.url.search}`;
+
+  return h.redirect(destination).state(redirectCookieName, redirectTo);
+};
+
+export const takeRedirectTo = (request, h) => {
+  const redirectTo = request.state[redirectCookieName];
+  h.unstate(redirectCookieName);
+
+  return isSameSitePath(redirectTo) ? redirectTo : "/";
+};

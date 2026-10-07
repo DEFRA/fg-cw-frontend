@@ -12,10 +12,13 @@ describe("cases", () => {
   });
 
   test("registers routes", async () => {
-    const routes = server.table().map((r) => ({
-      path: r.path,
-      method: r.method,
-    }));
+    const routes = server
+      .table()
+      .filter((r) => r.realm.plugin === "cases")
+      .map((r) => ({
+        path: r.path,
+        method: r.method,
+      }));
 
     expect(routes).toEqual([
       {
@@ -32,10 +35,6 @@ describe("cases", () => {
       },
       {
         method: "get",
-        path: "/",
-      },
-      {
-        method: "get",
         path: "/agreement/{path*}",
       },
       {
@@ -45,10 +44,6 @@ describe("cases", () => {
       {
         method: "get",
         path: "/cases/{caseId}",
-      },
-      {
-        method: "get",
-        path: "/public/{param*}",
       },
       {
         method: "get",

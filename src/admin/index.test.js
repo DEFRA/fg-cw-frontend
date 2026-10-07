@@ -12,10 +12,13 @@ describe("admin", () => {
   });
 
   it("registers routes", async () => {
-    const routes = server.table().map((r) => ({
-      path: r.path,
-      method: r.method,
-    }));
+    const routes = server
+      .table()
+      .filter((r) => r.realm.plugin === "admin")
+      .map((r) => ({
+        path: r.path,
+        method: r.method,
+      }));
 
     expect(routes).toEqual(
       expect.arrayContaining([

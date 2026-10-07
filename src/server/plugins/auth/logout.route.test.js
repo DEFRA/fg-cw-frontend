@@ -1,21 +1,16 @@
-import Bell from "@hapi/bell";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
-import { createServer } from "../../server/index.js";
-import { logoutRoute } from "./logout.route.js";
+import { createServer } from "../../index.js";
 
 describe("logoutRoute", () => {
   let server;
 
   beforeAll(async () => {
-    Bell.simulate(async () => ({}));
     server = await createServer();
-    server.route(logoutRoute);
     await server.initialize();
   });
 
   afterAll(async () => {
     await server.stop();
-    Bell.simulate(false);
   });
 
   it("clears the session", async () => {

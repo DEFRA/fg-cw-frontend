@@ -234,30 +234,40 @@ export const config = convict({
     },
   },
   oidc: {
-    authEndpoint: {
-      doc: "The authorization endpoint for OIDC",
+    discoveryUri: {
+      doc: "OIDC discovery document of the identity provider. Defaults to the shared Entra stub that fg-cw-backend runs on port 3010. Deployed environments point this at Entra ID, as https://login.microsoftonline.com/<tenant-id>/v2.0/.well-known/openid-configuration",
       format: String,
-      default: null,
-      env: "OIDC_AUTH_ENDPOINT",
-    },
-    tokenEndpoint: {
-      doc: "The token endpoint for OIDC",
-      format: String,
-      default: null,
-      env: "OIDC_TOKEN_ENDPOINT",
+      default: "http://localhost:3010/.well-known/openid-configuration",
+      env: "OIDC_DISCOVERY_URI",
     },
     clientId: {
-      doc: "The client ID for OIDC",
+      doc: "Application (client) id, as registered with the identity provider",
       format: String,
-      default: null,
+      default: "client1",
       env: "OIDC_CLIENT_ID",
     },
-    clientSecret: {
-      doc: "The client secret for OIDC",
+    appBaseUrl: {
+      doc: "Externally reachable base url of this app, used to build the OIDC redirect uri. Must match a redirect uri registered on the app registration exactly.",
       format: String,
-      default: null,
-      sensitive: true,
-      env: "OIDC_CLIENT_SECRET",
+      default: "http://localhost:3100",
+      env: "APP_BASE_URL",
+    },
+    cookie: {
+      password: {
+        doc: "Password used to encrypt the transient OIDC login and redirect cookies",
+        format: String,
+        default: "the-password-must-be-at-least-32-characters-long",
+        env: "AUTH_COOKIE_PASSWORD",
+        sensitive: true,
+      },
+    },
+    federatedCredentials: {
+      audience: {
+        doc: "Audience configured on the Entra ID federated credential, and requested of AWS STS",
+        format: String,
+        default: "fg-cw-frontend",
+        env: "FEDERATED_CREDENTIALS_AUDIENCE",
+      },
     },
   },
   agreements: {

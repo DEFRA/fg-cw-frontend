@@ -14,7 +14,7 @@ services:
       PORT: 3100
       NODE_ENV: development
       FG_CW_BACKEND: http://fg-cw-backend:3101
-      OIDC_TOKEN_ENDPOINT: http://entra:3010/token
+      OIDC_DISCOVERY_URI: http://entra:3010/.well-known/openid-configuration
       REDIS_HOST: redis
     networks:
       - cdp-tenant
