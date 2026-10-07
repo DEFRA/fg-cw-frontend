@@ -116,7 +116,11 @@ describe("createReportViewModel", () => {
 
     expect(viewModel.data.caseTypeItems).toEqual([
       { value: "", text: "Select a case type", selected: false },
-      { value: "FRPS-private-beta", text: "FRPS-private-beta", selected: false },
+      {
+        value: "FRPS-private-beta",
+        text: "FRPS-private-beta",
+        selected: false,
+      },
       { value: "SFI", text: "SFI", selected: true },
     ]);
     expect(viewModel.data.selectedCaseTypeLabel).toBe("SFI");

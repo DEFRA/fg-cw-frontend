@@ -14,10 +14,11 @@ export default defineConfig({
       REDIS_PASSWORD: "",
       SESSION_COOKIE_PASSWORD:
         "the-password-must-be-at-least-32-characters-long",
-      OIDC_AUTH_ENDPOINT: "http://localhost:3010/auth",
-      OIDC_TOKEN_ENDPOINT: "http://localhost:3010/token",
+      OIDC_DISCOVERY_URI:
+        "http://localhost:3010/.well-known/openid-configuration",
       OIDC_CLIENT_ID: "client1",
-      OIDC_CLIENT_SECRET: "secret1",
+      APP_BASE_URL: "http://localhost:3100",
+      AUTH_COOKIE_PASSWORD: "the-password-must-be-at-least-32-characters-long",
       TZ: "Europe/London",
     },
     coverage: {

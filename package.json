@@ -51,9 +51,9 @@
   },
   "dependencies": {
     "@babel/runtime": "^8.0.5",
+    "@defra/hapi-auth-oidc": "0.5.5",
     "@defra/hapi-tracing": "^1.30.0",
     "@elastic/ecs-pino-format": "^1.5.0",
-    "@hapi/bell": "^13.2.0",
     "@hapi/boom": "^10.0.1",
     "@hapi/catbox-memory": "^6.0.2",
     "@hapi/catbox-redis": "^7.1.0",
@@ -81,7 +81,13 @@
     "lodash": "^4.17.23",
     "moment": "^2.31.0",
     "nunjucks": "^3.2.4",
+    "openid-client": "6.8.2",
     "pino": "^10.3.0"
+  },
+  "overrides": {
+    "@defra/hapi-auth-oidc": {
+      "joi": "^18.2.9"
+    }
   },
   "devDependencies": {
     "@babel/cli": "^8.0.6",

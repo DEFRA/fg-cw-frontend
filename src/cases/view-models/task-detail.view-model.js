@@ -136,7 +136,8 @@ const inputTypeParams = {
 const inputHint = (hint) =>
   hint?.length ? { text: hint.join(" ") } : undefined;
 
-const getInputValue = (value) => (value === null || value === undefined ? "" : value);
+const getInputValue = (value) =>
+  value === null || value === undefined ? "" : value;
 
 // No errorMessage here - the selector template takes it from the outer
 // valueError param, which every branch shares.
