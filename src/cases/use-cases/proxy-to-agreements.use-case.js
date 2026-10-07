@@ -134,7 +134,9 @@ const getTrustedClaims = (page) => ({
 const escapeRegExp = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
 const extractAgreementRef = (href, caseId) => {
-  const pattern = new RegExp(`/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`);
+  const pattern = new RegExp(
+    `/cases/${escapeRegExp(caseId)}/agreement/([^/?#]+)`,
+  );
   const match = href.match(pattern);
   return match?.[1];
 };
