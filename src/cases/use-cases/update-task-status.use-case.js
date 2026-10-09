@@ -8,7 +8,7 @@ export const updateTaskStatusUseCase = async (authContext, taskDetails) => {
       (taskDetails?.caseId ? " for case " + taskDetails.caseId : "") +
       (taskDetails?.taskCode ? " with " + taskDetails.taskCode : ""),
   );
-  const result = updateTaskStatus(authContext, taskDetails);
+  const result = await updateTaskStatus(authContext, taskDetails);
   logger.info(
     "Finished: Updating task status" +
       (taskDetails?.caseId ? " for case " + taskDetails.caseId : "") +

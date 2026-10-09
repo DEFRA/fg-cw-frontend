@@ -8,8 +8,9 @@ export const assignUserToCaseUseCase = async (authContext, data) => {
     data.assignedUserId = null;
   }
 
+  const result = await assignUserToCase(authContext, data);
   logger.info(
     `Finished: Assigning user ${data.assignedUserId} to case ${data.caseId}`,
   );
-  return assignUserToCase(authContext, data);
+  return result;
 };
