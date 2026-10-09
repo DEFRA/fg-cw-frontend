@@ -443,9 +443,9 @@ describe("viewCaseTabRoute", () => {
     });
 
     expect(statusCode).toBe(200);
-    expect(result.indexOf("Content shown before the main section.")).toBeLessThan(
-      result.indexOf("Main case content."),
-    );
+    expect(
+      result.indexOf("Content shown before the main section."),
+    ).toBeLessThan(result.indexOf("Main case content."));
   });
 
   it("handles use case returning null", async () => {
