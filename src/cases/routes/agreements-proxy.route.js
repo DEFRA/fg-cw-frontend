@@ -129,9 +129,11 @@ const agreementsProxyHandler = async function (request, h) {
 
   const requestLogger = resolveLogger(request?.logger);
 
-  return executeProxy(path, request, h).catch((error) =>
-    handleProxyFailure({ error, logger: requestLogger, path, h }),
-  );
+  try {
+    return await executeProxy(path, request, h);
+  } catch (error) {
+    return handleProxyFailure({ error, logger: requestLogger, path, h });
+  }
 };
 
 const caseAgreementProxyHandler = async (request, h) => {
@@ -139,9 +141,11 @@ const caseAgreementProxyHandler = async (request, h) => {
   const path = `${caseId}/agreement/${agreementRef}`;
   const requestLogger = resolveLogger(request?.logger);
 
-  return executeCaseAgreementProxy(caseId, agreementRef, request, h).catch(
-    (error) => handleProxyFailure({ error, logger: requestLogger, path, h }),
-  );
+  try {
+    return await executeCaseAgreementProxy(caseId, agreementRef, request, h);
+  } catch (error) {
+    return handleProxyFailure({ error, logger: requestLogger, path, h });
+  }
 };
 
 const handleProxyFailure = function ({ error, logger, path, h }) {

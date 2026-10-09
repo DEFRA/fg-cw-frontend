@@ -19,6 +19,7 @@ export default [
       "func-style": ["error", "expression"],
       "no-console": "error",
       complexity: ["error", { max: 4 }],
+      "promise/prefer-await-to-then": ["error", { strict: true }],
       "import-x/extensions": ["error", { js: "always", json: "always" }],
       "import-x/no-unresolved": "error",
       "import-x/named": "error",
