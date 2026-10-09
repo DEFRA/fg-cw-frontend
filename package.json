@@ -128,7 +128,7 @@
     "typescript": "^7.0.2",
     "vitest": "5.0.1",
     "webpack": "^5.111.1",
-    "webpack-assets-manifest": "^6.5.2",
+    "webpack-assets-manifest": "^6.5.4",
     "webpack-cli": "^7.2.3"
   }
 }
