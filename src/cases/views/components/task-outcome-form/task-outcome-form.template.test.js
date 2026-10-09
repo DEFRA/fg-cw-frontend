@@ -41,7 +41,7 @@ describe("task-outcome-form", () => {
       isInteractive: true,
     });
 
-    expect(component).toContain('novalidate');
+    expect(component).toContain("novalidate");
     expect(component).toContain('name="value"');
     expect(component).toContain('value="SF123456"');
     expect(component).toContain("Siti/FC reference");
