@@ -8,7 +8,7 @@ export const findCaseByIdUseCase = async (
 ) => {
   logger.info(`Finding case ${caseId}`);
 
-  const result = findById(authContext, caseId, tabId);
+  const result = await findById(authContext, caseId, tabId);
 
   logger.info(`Finished: Finding case ${caseId}`);
 
