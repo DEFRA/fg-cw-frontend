@@ -5,7 +5,7 @@ import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import {
   updateStageOutcomeUseCase,
   validateStageOutcomeAction,
-} from "../use-cases/update-stage-outcome-use.case.js";
+} from "../use-cases/update-stage-outcome.use-case.js";
 
 const getAuthContext = (request) => ({
   token: request.auth.credentials.token,
