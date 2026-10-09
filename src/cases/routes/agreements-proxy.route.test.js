@@ -343,7 +343,9 @@ describe("agreementsProxyRoute", () => {
       const jwt = Jwt.token.decode(headers["x-encrypted-auth"]);
       Jwt.token.verifySignature(jwt, config.get("agreements.jwtSecret"));
 
-      expect(wreck.get.mock.calls[0][0]).toBe("/cases/6a69fb35c9339ac5a18a89f0");
+      expect(wreck.get.mock.calls[0][0]).toBe(
+        "/cases/6a69fb35c9339ac5a18a89f0",
+      );
       expect(wreck.get.mock.calls[0][1].headers.authorization).toContain(
         "caseworking-token",
       );
@@ -455,6 +457,5 @@ describe("agreementsProxyRoute", () => {
       });
       expect(mockH.code).toHaveBeenCalledWith(403);
     });
-
   });
 });
