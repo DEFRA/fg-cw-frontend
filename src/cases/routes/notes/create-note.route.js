@@ -1,5 +1,5 @@
+import { isForbidden } from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
-import { statusCodes } from "../../../common/status-codes.js";
 import { addNoteToCaseUseCase } from "../../use-cases/add-note-to-case.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
 import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-model.js";
@@ -80,6 +80,3 @@ const renderFormWithError = async (
   const viewModel = createNewNoteViewModel({ page, request, errors, formData });
   return h.view(`pages/notes/new-note`, viewModel);
 };
-
-const isForbidden = (error) =>
-  error?.output?.statusCode === statusCodes.FORBIDDEN;

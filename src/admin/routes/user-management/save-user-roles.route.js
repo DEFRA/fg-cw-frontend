@@ -26,11 +26,7 @@ export const saveUserRolesRoute = {
     const { page, roles } = await findUserRolesDataUseCase(authContext, userId);
 
     const formData = request.payload || {};
-    const currentAppRoles = page?.data?.appRoles;
-    const { appRoles, errors } = buildUserRolesUseCase({
-      formData,
-      currentAppRoles,
-    });
+    const { appRoles, errors } = buildUserRolesUseCase({ formData });
 
     const routeContext = {
       h,
