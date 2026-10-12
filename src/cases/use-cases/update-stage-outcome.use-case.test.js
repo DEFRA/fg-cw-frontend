@@ -5,7 +5,7 @@ import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 import {
   updateStageOutcomeUseCase,
   validateStageOutcomeAction,
-} from "./update-stage-outcome-use.case.js";
+} from "./update-stage-outcome.use-case.js";
 
 vi.mock("../repositories/case.repository.js");
 vi.mock("./find-case-by-id.use-case.js");

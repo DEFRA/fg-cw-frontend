@@ -9,7 +9,7 @@ import {
 } from "../../common/helpers/pending-stage-outcome-confirmation-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome.use-case.js";
 import { createConfirmStageOutcomeViewModel } from "../view-models/confirm-stage-outcome.view-model.js";
 
 const redirectToCaseWithExpiredMessage = (request, h, caseId) => {

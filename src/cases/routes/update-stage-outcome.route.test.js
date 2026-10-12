@@ -14,10 +14,10 @@ import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import {
   updateStageOutcomeUseCase,
   validateStageOutcomeAction,
-} from "../use-cases/update-stage-outcome-use.case.js";
+} from "../use-cases/update-stage-outcome.use-case.js";
 import { updateStageOutcomeRoute } from "./update-stage-outcome.route.js";
 
-vi.mock("../use-cases/update-stage-outcome-use.case.js");
+vi.mock("../use-cases/update-stage-outcome.use-case.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../common/helpers/flash-helpers.js");
 vi.mock("../../common/helpers/pending-stage-outcome-confirmation-helpers.js");
