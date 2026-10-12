@@ -5,7 +5,7 @@ const ROLE_ASSIGNABLE_REQUIRED_MESSAGE =
   "Select whether the role is assignable";
 const ASSIGNABLE_ALLOWED_VALUES = ["true", "false"];
 
-const requiredField = (message) => (value) =>
+export const requiredField = (message) => (value) =>
   toStringOrEmpty(value) === "" ? message : null;
 
 const requiredBoolean = (message, allowedValues) => (value) =>

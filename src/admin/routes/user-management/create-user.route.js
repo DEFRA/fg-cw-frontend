@@ -3,10 +3,10 @@ import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-a
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import {
   hasValidationErrors,
+  isConflict,
   isForbidden,
 } from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
-import { statusCodes } from "../../../common/status-codes.js";
 import { createCreateUserViewModel } from "../../view-models/user-management/create-user.view-model.js";
 
 // Using a possessive-style regex pattern to prevent ReDoS
@@ -128,12 +128,6 @@ const handleCreateUserError = (
   const errors = buildErrorsFromFailure(error);
 
   return renderCreateUserPage(h, { page, request, errors, formData });
-};
-
-const isConflict = (error) => {
-  const statusCodesToCheck = [error?.output?.statusCode, error?.statusCode];
-
-  return statusCodesToCheck.includes(statusCodes.CONFLICT);
 };
 
 const buildErrorsFromFailure = (error) => {
