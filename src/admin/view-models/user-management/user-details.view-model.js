@@ -32,9 +32,9 @@ export const createUserDetailsViewModel = ({ page, request, currentUser }) => {
 };
 
 const buildSummaryRows = (user, idpRoles) => {
-  const activeAppRoles = Object.keys(filterActiveAppRoles(user.appRoles));
-  const expiredAppRoles = Object.keys(filterExpiredAppRoles(user.appRoles));
-  const futureAppRoles = Object.keys(filterFutureAppRoles(user.appRoles));
+  const activeAppRoles = Object.keys(filterAppRoles(user.appRoles, isActive));
+  const expiredAppRoles = Object.keys(filterAppRoles(user.appRoles, isExpired));
+  const futureAppRoles = Object.keys(filterAppRoles(user.appRoles, isFuture));
 
   const rows = [
     {
@@ -97,41 +97,23 @@ const hasStarted = (startDate, today) => !startDate || startDate <= today;
 
 const hasExpired = (endDate, today) => Boolean(endDate && endDate < today);
 
-const filterActiveAppRoles = (appRoles) => {
+const isActive = ({ startDate, endDate }, today) =>
+  hasStarted(startDate, today) && !hasExpired(endDate, today);
+
+const isExpired = ({ endDate }, today) => hasExpired(endDate, today);
+
+const isFuture = ({ startDate, endDate }, today) =>
+  !hasStarted(startDate, today) && !hasExpired(endDate, today);
+
+const filterAppRoles = (appRoles, predicate) => {
   if (!appRoles) {
     return {};
   }
 
   const today = getToday();
   return Object.fromEntries(
-    Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
-      return hasStarted(startDate, today) && !hasExpired(endDate, today);
-    }),
-  );
-};
-
-const filterExpiredAppRoles = (appRoles) => {
-  if (!appRoles) {
-    return {};
-  }
-
-  const today = getToday();
-  return Object.fromEntries(
-    Object.entries(appRoles).filter(([, { endDate } = {}]) => {
-      return hasExpired(endDate, today);
-    }),
-  );
-};
-
-const filterFutureAppRoles = (appRoles) => {
-  if (!appRoles) {
-    return {};
-  }
-
-  const today = getToday();
-  return Object.fromEntries(
-    Object.entries(appRoles).filter(([, { startDate, endDate } = {}]) => {
-      return !hasStarted(startDate, today) && !hasExpired(endDate, today);
+    Object.entries(appRoles).filter(([, dates = {}]) => {
+      return predicate(dates, today);
     }),
   );
 };

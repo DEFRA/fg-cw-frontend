@@ -1,15 +1,16 @@
 import { verifyAdminAccessUseCase } from "../../../auth/use-cases/verify-admin-access.use-case.js";
 import {
+  requiredField,
   validateRoleAssignable,
   validateRoleDescription,
 } from "../../../common/helpers/role-validation-helpers.js";
 import { toStringOrEmpty } from "../../../common/helpers/string-helpers.js";
 import {
   hasValidationErrors,
+  isConflict,
   isForbidden,
 } from "../../../common/helpers/validation-helpers.js";
 import { logger } from "../../../common/logger.js";
-import { statusCodes } from "../../../common/status-codes.js";
 import { createRoleUseCase } from "../../use-cases/create-role.use-case.js";
 import { createNewRoleViewModel } from "../../view-models/user-management/role-create.view-model.js";
 
@@ -89,9 +90,6 @@ const createRole = async (
   }
 };
 
-const requiredField = (message) => (value) =>
-  toStringOrEmpty(value) === "" ? message : null;
-
 const validateCodeCharacters = (message) => (value) => {
   const code = toStringOrEmpty(value).toUpperCase();
   return /^[A-Z0-9][A-Z0-9_]*$/.test(code) ? null : message;
@@ -122,12 +120,6 @@ const handleCreateRoleError = (
   const errors = buildErrorsFromFailure(error);
 
   return renderCreateRolePage(h, { page, request, errors, formData });
-};
-
-const isConflict = (error) => {
-  const statusCodesToCheck = [error?.output?.statusCode, error?.statusCode];
-
-  return statusCodesToCheck.includes(statusCodes.CONFLICT);
 };
 
 const buildErrorsFromFailure = (error) => {
