@@ -20,7 +20,7 @@ import {
 } from "../../common/helpers/pending-stage-outcome-confirmation-helpers.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome-use.case.js";
+import { updateStageOutcomeUseCase } from "../use-cases/update-stage-outcome.use-case.js";
 import { createConfirmStageOutcomeViewModel } from "../view-models/confirm-stage-outcome.view-model.js";
 import {
   confirmStageOutcomeRoute,
@@ -30,7 +30,7 @@ import {
 vi.mock("../../common/helpers/flash-helpers.js");
 vi.mock("../../common/helpers/pending-stage-outcome-confirmation-helpers.js");
 vi.mock("../use-cases/find-case-by-id.use-case.js");
-vi.mock("../use-cases/update-stage-outcome-use.case.js");
+vi.mock("../use-cases/update-stage-outcome.use-case.js");
 vi.mock("../view-models/confirm-stage-outcome.view-model.js");
 
 describe("confirmStageOutcomeRoute", () => {

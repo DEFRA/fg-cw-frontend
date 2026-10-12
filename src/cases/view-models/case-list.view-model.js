@@ -105,6 +105,12 @@ const getLinkedHtml = (isLinked) => {
     : '<span class="govuk-visually-hidden">Case not linked</span>';
 };
 
+const getApplicant = (payload) => payload?.answers?.applicant;
+
+const getBusinessName = (payload) => getApplicant(payload)?.business?.name;
+
+const getSbi = (payload) => payload?.identifiers?.sbi;
+
 const mapCasesToTable = (cases, currentURL) => {
   return {
     head: [
@@ -144,7 +150,6 @@ const mapCasesToTable = (cases, currentURL) => {
         currentStatusTheme,
         assignedUser,
         hasLinkedCases,
-        // eslint-disable-next-line complexity
       }) => ({
         _id,
         select: {
@@ -161,10 +166,10 @@ const mapCasesToTable = (cases, currentURL) => {
           text: mapText(caseRef),
         },
         business: {
-          text: mapText(payload?.answers?.applicant?.business?.name),
+          text: mapText(getBusinessName(payload)),
         },
         sbi: {
-          text: mapText(payload?.identifiers?.sbi),
+          text: mapText(getSbi(payload)),
         },
         submitted: {
           text: mapSubmittedAt(createdAt),
