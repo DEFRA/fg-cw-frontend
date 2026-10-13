@@ -31,6 +31,19 @@ const createToken = (data) => {
 vi.mock("../use-cases/login-user.use-case.js");
 
 describe("loginCallbackRoute", () => {
+  let server;
+
+  beforeAll(async () => {
+    Bell.simulate(async () => ({}));
+    server = await createServer();
+    server.route(loginCallbackRoute);
+  });
+
+  afterAll(async () => {
+    await server.stop();
+    Bell.simulate(false);
+  });
+
   it("logs safe CDP diagnostics when token exchange fails and retains the 403", async () => {
     const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
     const underlying = Boom.badRequest("Response error", {
@@ -73,18 +86,6 @@ describe("loginCallbackRoute", () => {
       "Entra callback authentication failed",
     );
     expect(JSON.stringify(warn.mock.calls)).not.toContain("private");
-  });
-  let server;
-
-  beforeAll(async () => {
-    Bell.simulate(async () => ({}));
-    server = await createServer();
-    server.route(loginCallbackRoute);
-  });
-
-  afterAll(async () => {
-    await server.stop();
-    Bell.simulate(false);
   });
 
   it("creates or updates user and records login when authenticated and has IDP roles", async () => {
