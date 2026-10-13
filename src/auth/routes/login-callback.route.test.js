@@ -1,6 +1,7 @@
 import Bell from "@hapi/bell";
 import Boom from "@hapi/boom";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import { logger } from "../../common/logger.js";
 import { createServer } from "../../server/index.js";
 import { loginUserUseCase } from "../use-cases/login-user.use-case.js";
 import { loginCallbackRoute } from "./login-callback.route.js";
@@ -30,6 +31,49 @@ const createToken = (data) => {
 vi.mock("../use-cases/login-user.use-case.js");
 
 describe("loginCallbackRoute", () => {
+  it("logs safe CDP diagnostics when token exchange fails and retains the 403", async () => {
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
+    const underlying = Boom.badRequest("Response error", {
+      payload: Buffer.from(
+        JSON.stringify({
+          error: "invalid_client",
+          error_codes: [7000222],
+          error_description: "private-email@example.com private-secret",
+          access_token: "private-token",
+        }),
+      ),
+    });
+    const request = {
+      auth: {
+        isAuthenticated: false,
+        error: Boom.internal("Failed obtaining entra access token", underlying),
+      },
+    };
+
+    await expect(loginCallbackRoute.handler(request, {})).rejects.toMatchObject(
+      {
+        output: { statusCode: 403 },
+      },
+    );
+    expect(warn).toHaveBeenCalledWith(
+      {
+        error: {
+          type: "EntraAuthenticationError",
+          code: "AADSTS7000222",
+          message: "Entra callback authentication failed",
+        },
+        tenant: {
+          message: JSON.stringify({
+            statusCode: 400,
+            entraError: "invalid_client",
+            entraErrorCodes: [7000222],
+          }),
+        },
+      },
+      "Entra callback authentication failed",
+    );
+    expect(JSON.stringify(warn.mock.calls)).not.toContain("private");
+  });
   let server;
 
   beforeAll(async () => {
