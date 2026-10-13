@@ -1,35 +1,16 @@
-const oauthErrors = new Set([
-  "invalid_request",
-  "invalid_client",
-  "invalid_grant",
-  "unauthorized_client",
-  "unsupported_grant_type",
-  "invalid_scope",
-  "access_denied",
-  "server_error",
-  "temporarily_unavailable",
-  "interaction_required",
-  "consent_required",
-  "login_required",
-]);
+// Keep diagnostic codes open-ended but bounded to symbolic identifiers.
+// OAuth codes use lower-case identifiers; Node transport codes use upper-case.
+const oauthCodePattern = /^[a-z][a-z_\d]{0,63}$/;
+const networkCodePattern = /^[A-Z][A-Z_\d]{0,63}$/;
 
-const networkErrors = new Set([
-  "ENOTFOUND",
-  "EAI_AGAIN",
-  "ECONNREFUSED",
-  "ECONNRESET",
-  "ETIMEDOUT",
-  "ESOCKETTIMEDOUT",
-  "EHOSTUNREACH",
-  "ENETUNREACH",
-  "EPROTO",
-  "CERT_HAS_EXPIRED",
-  "DEPTH_ZERO_SELF_SIGNED_CERT",
-  "SELF_SIGNED_CERT_IN_CHAIN",
-  "UNABLE_TO_VERIFY_LEAF_SIGNATURE",
-  "UNABLE_TO_GET_ISSUER_CERT_LOCALLY",
-  "ERR_TLS_CERT_ALTNAME_INVALID",
-]);
+const symbolicCode = (value, pattern) => {
+  if (typeof value !== "string") {
+    return undefined;
+  }
+  // Comparing the entire match also rejects a trailing newline, which `$`
+  // alone would allow in JavaScript regular expressions.
+  return pattern.exec(value)?.[0] === value ? value : undefined;
+};
 
 const uuidPattern = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i;
 
@@ -76,11 +57,7 @@ const validUuid = (value) =>
   typeof value === "string" && uuidPattern.test(value) ? value : undefined;
 
 const addEntraDetails = (details, value) => {
-  put(
-    details,
-    "entraError",
-    oauthErrors.has(value.error) ? value.error : undefined,
-  );
+  put(details, "entraError", symbolicCode(value.error, oauthCodePattern));
   const codes = entraCodes(value);
   put(details, "entraErrorCodes", codes.length ? codes : undefined);
   put(details, "correlationId", validUuid(value.correlation_id));
@@ -102,7 +79,7 @@ const addTransportDetails = (details, value) => {
   put(
     details,
     "networkErrorCode",
-    networkErrors.has(value.code) ? value.code : undefined,
+    symbolicCode(value.code, networkCodePattern),
   );
 };
 

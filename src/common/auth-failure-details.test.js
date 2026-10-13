@@ -49,6 +49,55 @@ describe("authFailureDetails", () => {
     ).toEqual({ networkErrorCode: "CERT_HAS_EXPIRED" });
   });
 
+  it.each(["invalid_resource", "new_provider_failure"])(
+    "retains an unfamiliar OAuth code: %s",
+    (error) => {
+      expect(authFailureDetails({ data: { error } })).toEqual({
+        entraError: error,
+      });
+    },
+  );
+
+  it.each(["EPIPE", "ERR_TLS_HANDSHAKE_TIMEOUT"])(
+    "retains an unfamiliar transport code: %s",
+    (code) => {
+      expect(authFailureDetails({ data: { cause: { code } } })).toEqual({
+        networkErrorCode: code,
+      });
+    },
+  );
+
+  it("accepts symbolic codes up to 64 characters", () => {
+    expect(
+      authFailureDetails({
+        data: { error: "a".repeat(64), code: "E".repeat(64) },
+      }),
+    ).toEqual({
+      entraError: "a".repeat(64),
+      networkErrorCode: "E".repeat(64),
+    });
+  });
+
+  it.each([
+    "",
+    "a".repeat(65),
+    "E".repeat(65),
+    "invalid_client\n",
+    "ECONNRESET\n",
+    "error with spaces",
+    "private@example.com",
+    "https://example.com/token?secret=private",
+    "private-token",
+    "1234567890",
+    400,
+    {},
+    null,
+  ])("rejects malformed symbolic codes: %j", (value) => {
+    expect(authFailureDetails({ data: { error: value, code: value } })).toEqual(
+      {},
+    );
+  });
+
   it.each([
     undefined,
     {},
