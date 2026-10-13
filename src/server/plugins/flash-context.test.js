@@ -22,6 +22,21 @@ describe("flash-context plugin", () => {
       }),
     });
 
+    server.route({
+      method: "GET",
+      path: "/skip-yar",
+      options: {
+        plugins: {
+          yar: {
+            skip: true,
+          },
+        },
+      },
+      handler: (request) => ({
+        notification: request.app.notification ?? "not-set",
+      }),
+    });
+
     await server.initialize();
   });
 
@@ -56,5 +71,15 @@ describe("flash-context plugin", () => {
     });
 
     expect(response.result.notification).toBeNull();
+  });
+
+  it("should skip flash notification for routes with yar skip", async () => {
+    const response = await server.inject({
+      method: "GET",
+      url: "/skip-yar",
+    });
+
+    expect(getFlashNotification).not.toHaveBeenCalled();
+    expect(response.result.notification).toBe("not-set");
   });
 });
