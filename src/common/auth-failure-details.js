@@ -2,6 +2,8 @@
 // OAuth codes use lower-case identifiers; Node transport codes use upper-case.
 const oauthCodePattern = /^[a-z][a-z_\d]{0,63}$/;
 const networkCodePattern = /^[A-Z][A-Z_\d]{0,63}$/;
+const MIN_HTTP_STATUS = 100;
+const MAX_HTTP_STATUS = 599;
 
 const symbolicCode = (value, pattern) => {
   if (typeof value !== "string") {
@@ -68,7 +70,7 @@ const validStatus = (code) => {
   if (!Number.isInteger(code)) {
     return undefined;
   }
-  return code >= 100 && code <= 599 ? code : undefined;
+  return code >= MIN_HTTP_STATUS && code <= MAX_HTTP_STATUS ? code : undefined;
 };
 
 const responseStatus = (value) =>
