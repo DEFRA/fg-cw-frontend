@@ -67,7 +67,7 @@ const entraCodes = (value) => {
   }
   const match =
     typeof value.error_description === "string"
-      ? value.error_description.match(/\bAADSTS([0-9]{4,10})\b/)
+      ? value.error_description.match(/\bAADSTS(\d{4,10})\b/)
       : null;
   return match ? [Number(match[1])] : [];
 };
