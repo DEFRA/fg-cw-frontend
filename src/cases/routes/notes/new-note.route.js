@@ -5,7 +5,7 @@ import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-mo
 export const newNoteRoute = {
   method: "GET",
   path: "/cases/{caseId}/notes/new",
-  handler: async (request, h) => {
+  async handler(request, h) {
     const { caseId } = request.params;
 
     logger.info(`Adding new note to case ${caseId}`);

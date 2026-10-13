@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { findAll } from "../repositories/case.repository.js";
 import { findAllCasesUseCase } from "./find-all-cases.use-case.js";
 
@@ -14,7 +14,7 @@ describe("findAllCasesUseCase", () => {
     },
   };
 
-  test("returns all cases when repository succeeds", async () => {
+  it("returns all cases when repository succeeds", async () => {
     const mockCases = [
       {
         _id: "case-1",
@@ -51,7 +51,7 @@ describe("findAllCasesUseCase", () => {
     expect(result).toEqual(mockCases);
   });
 
-  test("returns empty array when no cases exist", async () => {
+  it("returns empty array when no cases exist", async () => {
     const mockCases = [];
 
     findAll.mockResolvedValueOnce(mockCases);
@@ -63,7 +63,7 @@ describe("findAllCasesUseCase", () => {
     expect(result).toEqual([]);
   });
 
-  test("returns single case when only one exists", async () => {
+  it("returns single case when only one exists", async () => {
     const mockCases = [
       {
         _id: "case-single",
@@ -88,7 +88,7 @@ describe("findAllCasesUseCase", () => {
     expect(result).toHaveLength(1);
   });
 
-  test("propagates error when repository throws", async () => {
+  it("propagates error when repository throws", async () => {
     const error = new Error("Repository failed");
     findAll.mockRejectedValueOnce(error);
 
@@ -98,7 +98,7 @@ describe("findAllCasesUseCase", () => {
     expect(findAll).toHaveBeenCalledOnce();
   });
 
-  test("calls repository without parameters", async () => {
+  it("calls repository without parameters", async () => {
     const mockCases = [];
     findAll.mockResolvedValueOnce(mockCases);
 
@@ -107,7 +107,7 @@ describe("findAllCasesUseCase", () => {
     expect(findAll).toHaveBeenCalledWith(authContext, undefined);
   });
 
-  test("passes query parameter through to repository", async () => {
+  it("passes query parameter through to repository", async () => {
     const mockCases = [];
     const query = { cursor: "abc", direction: "forward" };
     findAll.mockResolvedValueOnce(mockCases);

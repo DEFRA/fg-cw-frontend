@@ -20,7 +20,7 @@ const TOKEN_TTL_SECONDS = 300;
  * @returns {string} The JWT token
  * @throws {Error} If JWT generation fails
  */
-const buildJwtPayload = function (sbi, grantCode) {
+const buildJwtPayload = (sbi, grantCode) => {
   const payload = {
     source: "entra",
     iss: TOKEN_ISSUER,
@@ -36,7 +36,7 @@ const buildJwtPayload = function (sbi, grantCode) {
   return payload;
 };
 
-export const generateAgreementsJwt = function (sbi, grantCode) {
+export const generateAgreementsJwt = (sbi, grantCode) => {
   const jwtSecret = config.get("agreements.jwtSecret");
 
   if (!jwtSecret) {

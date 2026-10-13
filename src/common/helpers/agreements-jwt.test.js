@@ -1,5 +1,5 @@
 import Jwt from "@hapi/jwt";
-import { beforeEach, describe, expect, test, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 
 // Mock the config module
 vi.mock("../config.js", () => ({
@@ -28,7 +28,7 @@ describe("generateAgreementsJwt", () => {
     vi.clearAllMocks();
   });
 
-  test("should generate JWT token with correct payload", async () => {
+  it("should generate JWT token with correct payload", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const sbi = "123456789";
     const token = generateAgreementsJwt(sbi);
@@ -48,7 +48,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.grantCode).toBeUndefined();
   });
 
-  test("should include FGP-1307 hardened claims (iss, aud, sub, exp)", async () => {
+  it("should include FGP-1307 hardened claims (iss, aud, sub, exp)", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const before = Math.floor(Date.now() / 1000);
     const token = generateAgreementsJwt("123456789", "soil-improvement");
@@ -63,7 +63,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.exp).toBeLessThanOrEqual(before + 300 + 5);
   });
 
-  test("should fall back to the issuer as subject when no SBI is present", async () => {
+  it("should fall back to the issuer as subject when no SBI is present", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt(undefined);
 
@@ -73,7 +73,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.sub).toBe("fg-cw-frontend");
   });
 
-  test("should include configured grant code alongside existing claims", async () => {
+  it("should include configured grant code alongside existing claims", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt("123456789", "soil-improvement");
 
@@ -86,7 +86,7 @@ describe("generateAgreementsJwt", () => {
     });
   });
 
-  test("should include SBI and source in payload", async () => {
+  it("should include SBI and source in payload", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const sbi = "987654321";
     const token = generateAgreementsJwt(sbi);
@@ -97,7 +97,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.source).toBe("entra");
   });
 
-  test("should handle numeric SBI", async () => {
+  it("should handle numeric SBI", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const sbi = 123456789;
     const token = generateAgreementsJwt(sbi);
@@ -108,7 +108,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.source).toBe("entra");
   });
 
-  test("should generate JWT without SBI for 'entra' source", async () => {
+  it("should generate JWT without SBI for 'entra' source", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt(undefined);
 
@@ -122,7 +122,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.grantCode).toBeUndefined();
   });
 
-  test("should generate JWT with null SBI for 'entra' source", async () => {
+  it("should generate JWT with null SBI for 'entra' source", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt(null);
 
@@ -136,7 +136,7 @@ describe("generateAgreementsJwt", () => {
     expect(payload.grantCode).toBeUndefined();
   });
 
-  test("should stamp the configured kid in the JWT header", async () => {
+  it("should stamp the configured kid in the JWT header", async () => {
     const { generateAgreementsJwt } = await import("./agreements-jwt.js");
     const token = generateAgreementsJwt("123456789");
 
@@ -145,7 +145,7 @@ describe("generateAgreementsJwt", () => {
     expect(header.kid).toBe("agreements-hs256-1");
   });
 
-  test("should throw error when JWT secret is missing", async () => {
+  it("should throw error when JWT secret is missing", async () => {
     // Mock config to return null for JWT secret
     const config = await import("../config.js");
     vi.mocked(config.config.get).mockImplementation((key) => {
@@ -162,7 +162,7 @@ describe("generateAgreementsJwt", () => {
     }).toThrow("Missing AGREEMENTS_JWT_SECRET configuration");
   });
 
-  test("should omit the kid header when no kid is configured", async () => {
+  it("should omit the kid header when no kid is configured", async () => {
     const config = await import("../config.js");
     vi.mocked(config.config.get).mockImplementation((key) => {
       if (key === "agreements.jwtSecret") {
@@ -180,7 +180,7 @@ describe("generateAgreementsJwt", () => {
     expect(header.kid).toBeUndefined();
   });
 
-  test("should wrap and rethrow when JWT generation fails", async () => {
+  it("should wrap and rethrow when JWT generation fails", async () => {
     const generateSpy = vi
       .spyOn(Jwt.token, "generate")
       .mockImplementation(() => {

@@ -11,7 +11,7 @@ const createMockPage = (caseData) => ({
   header: { navItems: [] },
 });
 
-describe("Timeline view model", () => {
+describe("createTimelineViewModel", () => {
   it("should return a correct data model", () => {
     const caseItem = {
       caseRef: "ABC-123",

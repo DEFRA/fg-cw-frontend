@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { wreck } from "../../common/wreck.js";
 import { findByCode } from "./workflow.repository.js";
 
@@ -8,7 +8,7 @@ describe("workflow repository", () => {
   const authContext = { token: "mock-token" };
 
   describe("findByCode", () => {
-    test("returns workflow data when wreck request succeeds", async () => {
+    it("returns workflow data when wreck request succeeds", async () => {
       const workflowCode = "test-workflow-123";
       const mockPayload = {
         code: "test-workflow-123",
@@ -48,7 +48,7 @@ describe("workflow repository", () => {
       expect(result).toEqual(mockPayload);
     });
 
-    test("returns empty workflow when payload is empty", async () => {
+    it("returns empty workflow when payload is empty", async () => {
       const workflowCode = "empty-workflow";
       const mockPayload = {
         code: "empty-workflow",
@@ -64,7 +64,7 @@ describe("workflow repository", () => {
       expect(result.stages).toEqual([]);
     });
 
-    test("returns null payload when workflow not found", async () => {
+    it("returns null payload when workflow not found", async () => {
       const workflowCode = "non-existent-workflow";
       const mockPayload = null;
 
@@ -75,7 +75,7 @@ describe("workflow repository", () => {
       expect(result).toBeNull();
     });
 
-    test("handles HTTP 404 error", async () => {
+    it("handles HTTP 404 error", async () => {
       const workflowCode = "not-found-workflow";
       const error = new Error("Not Found");
       error.output = { statusCode: 404 };
@@ -87,7 +87,7 @@ describe("workflow repository", () => {
       );
     });
 
-    test("handles HTTP 500 server error", async () => {
+    it("handles HTTP 500 server error", async () => {
       const workflowCode = "server-error-workflow";
       const error = new Error("Internal Server Error");
       error.output = { statusCode: 500 };
@@ -99,7 +99,7 @@ describe("workflow repository", () => {
       );
     });
 
-    test("calls wreck.get with correct URL format", async () => {
+    it("calls wreck.get with correct URL format", async () => {
       const workflowCode = "url-test-workflow";
       const mockPayload = { code: workflowCode };
 
@@ -119,7 +119,7 @@ describe("workflow repository", () => {
       });
     });
 
-    test("handles undefined payload in response", async () => {
+    it("handles undefined payload in response", async () => {
       const workflowCode = "undefined-payload-workflow";
 
       wreck.get.mockResolvedValueOnce({ payload: undefined });

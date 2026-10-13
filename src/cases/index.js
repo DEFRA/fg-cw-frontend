@@ -21,7 +21,7 @@ import { viewCaseTabRoute } from "./routes/tabs/view-case-tab.route.js";
 import { updateStageOutcomeRoute } from "./routes/update-stage-outcome.route.js";
 import { updateTaskStatusRoute } from "./routes/update-task-status.route.js";
 import { viewTaskRoute } from "./routes/view-task.route.js";
-import { timelineRoute } from "./routes/view-timeline.route.js";
+import { viewTimelineRoute } from "./routes/view-timeline.route.js";
 
 export const cases = {
   plugin: {
@@ -35,7 +35,7 @@ export const cases = {
         viewNotesRoute,
         newNoteRoute,
         createNoteRoute,
-        timelineRoute,
+        viewTimelineRoute,
         listTasksRoute,
         viewTaskRoute,
         updateTaskStatusRoute,

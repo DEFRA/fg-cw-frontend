@@ -5,7 +5,7 @@ import { assignUserToCaseUseCase } from "../../use-cases/assign-user-to-case.use
 export const assignUserToCaseRoute = {
   method: "POST",
   path: "/cases/assign-user",
-  handler: async (request, h) => {
+  async handler(request, h) {
     logger.info(
       `Assigning user ${request.payload.assignedUserId} to case ${request.payload.caseId}`,
     );

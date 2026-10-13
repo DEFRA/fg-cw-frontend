@@ -7,7 +7,7 @@ import { createAssignUserViewModel } from "../../view-models/assign-user.view-mo
 export const viewAssignUserToCaseRoute = {
   method: "GET",
   path: "/cases/assign-user",
-  handler: async (request, h) => {
+  async handler(request, h) {
     const { caseId } = request.query;
 
     logger.info(

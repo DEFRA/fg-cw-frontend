@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { findById } from "../repositories/case.repository.js";
 import { findCaseByIdUseCase } from "./find-case-by-id.use-case.js";
 
@@ -13,7 +13,7 @@ describe("findCaseByIdUseCase", () => {
       roles: ["FCP.Casework.Read"],
     },
   };
-  test("returns case when repository succeeds", async () => {
+  it("returns case when repository succeeds", async () => {
     const caseId = "case-123";
     const mockCase = {
       _id: "case-123",
@@ -100,7 +100,7 @@ describe("findCaseByIdUseCase", () => {
     expect(result).toEqual(expectedResult);
   });
 
-  test("handles case with multiple stages and task groups", async () => {
+  it("handles case with multiple stages and task groups", async () => {
     const caseId = "case-456";
     const mockCase = {
       _id: "case-456",
@@ -229,7 +229,7 @@ describe("findCaseByIdUseCase", () => {
     });
   });
 
-  test("propagates error when case repository throws", async () => {
+  it("propagates error when case repository throws", async () => {
     const caseId = "case-123";
     const error = new Error("Case repository failed");
 
@@ -242,7 +242,7 @@ describe("findCaseByIdUseCase", () => {
     expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
   });
 
-  test("handles case with empty stages", async () => {
+  it("handles case with empty stages", async () => {
     const caseId = "case-empty";
     const mockCase = {
       _id: "case-empty",
@@ -258,7 +258,7 @@ describe("findCaseByIdUseCase", () => {
     expect(findById).toHaveBeenCalledWith(authContext, caseId, null);
   });
 
-  test("calls repositories with correct parameters", async () => {
+  it("calls repositories with correct parameters", async () => {
     const caseId = "specific-case-id";
     const mockCase = {
       _id: caseId,

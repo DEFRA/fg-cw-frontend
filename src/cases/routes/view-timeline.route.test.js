@@ -4,7 +4,7 @@ import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createMockLinks } from "../../../test/data/case-test-data.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
-import { timelineRoute } from "./view-timeline.route.js";
+import { viewTimelineRoute } from "./view-timeline.route.js";
 
 vi.mock("../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
@@ -14,12 +14,12 @@ const createMockPage = (caseData) => ({
   header: { navItems: [] },
 });
 
-describe("timelineRoute", () => {
+describe("viewTimelineRoute", () => {
   let server;
 
   beforeAll(async () => {
     server = hapi.server();
-    server.route(timelineRoute);
+    server.route(viewTimelineRoute);
     await server.register([nunjucks]);
 
     await server.initialize();

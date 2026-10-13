@@ -53,7 +53,7 @@ const handleUpdateOutcome = async (
 export const updateStageOutcomeRoute = {
   method: "POST",
   path: "/cases/{caseId}/stage/outcome",
-  handler: async (request, h) => {
+  async handler(request, h) {
     const {
       params: { caseId },
       payload,
