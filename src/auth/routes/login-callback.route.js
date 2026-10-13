@@ -1,5 +1,6 @@
 import Boom from "@hapi/boom";
 import { logger } from "../../common/logger.js";
+import { logAuthFailureUseCase } from "../use-cases/log-auth-failure.use-case.js";
 import { loginUserUseCase } from "../use-cases/login-user.use-case.js";
 
 export const loginCallbackRoute = {
@@ -15,6 +16,7 @@ export const loginCallbackRoute = {
     const { auth } = request;
 
     if (!auth.isAuthenticated) {
+      logAuthFailureUseCase(auth.error);
       throw Boom.forbidden(`Authentication failed: ${auth.error.message}`);
     }
 
