@@ -7,7 +7,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import { afterAll, beforeAll, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 
 const runNode = promisify(execFile);
 const certificateHost = "test.example.com";
@@ -132,5 +132,29 @@ describe("HTTPS token exchange through the configured HTTP proxy", () => {
     expect(await exchangeToken("wrong.example.com")).toEqual({
       code: "ERR_TLS_CERT_ALTNAME_INVALID",
     });
+  });
+
+  it("preserves a trusted CA for an HTTPS request through the proxy", async () => {
+    vi.stubEnv("HTTP_PROXY", `http://127.0.0.1:${proxy.address().port}`);
+    vi.stubEnv("GLOBAL_AGENT_NO_PROXY", "");
+    try {
+      await import("./proxy.js");
+      const ca = await readFile(path.join(directory, "cert.pem"));
+      const statusCode = await new Promise((resolve, reject) => {
+        https
+          .get(
+            `https://${certificateHost}:${tokenServer.address().port}/token`,
+            { ca },
+            (response) => {
+              response.resume();
+              resolve(response.statusCode);
+            },
+          )
+          .on("error", reject);
+      });
+      expect(statusCode).toBe(200);
+    } finally {
+      vi.unstubAllEnvs();
+    }
   });
 });
