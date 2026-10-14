@@ -3,6 +3,11 @@ export const getHealthRoute = {
   path: "/health",
   options: {
     auth: false,
+    plugins: {
+      yar: {
+        skip: true,
+      },
+    },
   },
   handler() {
     return {
