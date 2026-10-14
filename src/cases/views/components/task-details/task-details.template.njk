@@ -38,7 +38,7 @@
           })
         }}
       {% elif currentTask.requiredRoles %}
-        <p>You cannot edit this task.</p>
+        <p class="govuk-body">You cannot edit this task.</p>
         {% set rolesHtml %}
           <p>Someone who is a:</p>
           {# Display "All of" roles #}
@@ -81,7 +81,7 @@
       {% if currentTask.comment and currentTask.comment.text %}
         <div class="form-group">
           <h2 class="govuk-heading-m">Outcome review note</h2>
-          <p>{{ currentTask.comment.text }}</p>
+          <p class="govuk-body">{{ currentTask.comment.text }}</p>
         </div>
       {% endif %}
     {% elif currentTask.canComplete %}
@@ -103,7 +103,7 @@
       <h2 class="govuk-heading-m govuk-!-margin-top-6 govuk-!-margin-bottom-3">
         Outcome
       </h2>
-      <p>You cannot complete this task.</p>
+      <p class="govuk-body">You cannot complete this task.</p>
       {% set rolesHtml %}
         <p>Someone who is a:</p>
         {# Display "All of" roles #}
