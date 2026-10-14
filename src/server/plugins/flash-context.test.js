@@ -6,6 +6,7 @@ import { flashContext } from "./flash-context.js";
 vi.mock("../../common/helpers/flash-helpers.js");
 
 describe("flash-context plugin", () => {
+  const sessionCookie = { cookie: "session=existing" };
   let server;
 
   beforeAll(async () => {
@@ -19,6 +20,21 @@ describe("flash-context plugin", () => {
       path: "/test",
       handler: (request) => ({
         notification: request.app.notification,
+      }),
+    });
+
+    server.route({
+      method: "GET",
+      path: "/skip-yar",
+      options: {
+        plugins: {
+          yar: {
+            skip: true,
+          },
+        },
+      },
+      handler: (request) => ({
+        notification: request.app.notification ?? "not-set",
       }),
     });
 
@@ -38,6 +54,7 @@ describe("flash-context plugin", () => {
     const response = await server.inject({
       method: "GET",
       url: "/test",
+      headers: sessionCookie,
     });
 
     expect(getFlashNotification).toHaveBeenCalled();
@@ -53,8 +70,30 @@ describe("flash-context plugin", () => {
     const response = await server.inject({
       method: "GET",
       url: "/test",
+      headers: sessionCookie,
     });
 
     expect(response.result.notification).toBeNull();
+  });
+
+  it("should not read flash notification without a session cookie", async () => {
+    const response = await server.inject({
+      method: "GET",
+      url: "/test",
+    });
+
+    expect(getFlashNotification).not.toHaveBeenCalled();
+    expect(response.result.notification).toBeUndefined();
+  });
+
+  it("should skip flash notification for routes with yar skip", async () => {
+    const response = await server.inject({
+      method: "GET",
+      url: "/skip-yar",
+      headers: sessionCookie,
+    });
+
+    expect(getFlashNotification).not.toHaveBeenCalled();
+    expect(response.result.notification).toBe("not-set");
   });
 });
