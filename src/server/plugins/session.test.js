@@ -1,3 +1,4 @@
+import { Engine as CatboxMemory } from "@hapi/catbox-memory";
 import hapi from "@hapi/hapi";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { setFlashNotification } from "../../common/helpers/flash-helpers.js";
@@ -65,4 +66,16 @@ describe("session plugin with flash-context", () => {
     });
     expect(secondRead.result).toEqual({ notification: null });
   });
+
+  it.each(["/show-notification", "/unknown-path"])(
+    "does not create a session for a cookie-less request to %s",
+    async (url) => {
+      const cacheSet = vi.spyOn(CatboxMemory.prototype, "set");
+
+      const response = await server.inject({ method: "GET", url });
+
+      expect(response.headers["set-cookie"]).toBeUndefined();
+      expect(cacheSet).not.toHaveBeenCalled();
+    },
+  );
 });
