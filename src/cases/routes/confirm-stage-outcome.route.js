@@ -35,107 +35,32 @@ const getCommentFromFormData = (formData, commentFieldName) => {
 };
 
 const getPendingComment = (pendingConfirmation) =>
-  pendingConfirmation?.comment ?? "";
+  pendingConfirmation.comment ?? "";
 
-const resolvePendingConfirmation = (
-  request,
-  caseId,
-  actionCode,
-  formData = {},
-) => {
-  const pendingConfirmation = getPendingStageOutcomeConfirmation(request, {
-    caseId,
-    actionCode,
-  });
+const resolveComment = ({ formData = {}, actionCode, pendingConfirmation }) =>
+  getCommentFromFormData(formData, `${actionCode}-comment`) ??
+  getPendingComment(pendingConfirmation);
 
-  const commentFieldName = `${actionCode}-comment`;
-  const commentFromFormData = getCommentFromFormData(
-    formData,
-    commentFieldName,
-  );
-
-  return {
-    pendingConfirmation,
-    comment: commentFromFormData ?? getPendingComment(pendingConfirmation),
-  };
-};
-
-const redirectToConfirmPage = (h, caseId, actionCode) =>
-  h.redirect(`/cases/${caseId}/stage/outcome/confirm?actionCode=${actionCode}`);
-
-const withPendingConfirmation = (
-  request,
-  h,
-  caseId,
-  actionCode,
-  formData = {},
-) => {
-  const pendingState = resolvePendingConfirmation(
-    request,
-    caseId,
-    actionCode,
-    formData,
-  );
-
-  if (!pendingState.pendingConfirmation) {
-    return {
-      response: redirectToCaseWithExpiredMessage(request, h, caseId),
-    };
-  }
-
-  return { pendingState };
-};
-
-const buildFormData = (payload, comment) => ({
-  ...payload,
-  comment,
+const createConfirmationRequiredErrors = () => ({
+  confirmation: {
+    text: "Select an option",
+    href: "#confirmation",
+  },
 });
 
-const redirectWithConfirmationError = (
-  request,
-  h,
-  caseId,
-  actionCode,
-  payload,
-  comment,
-) => {
-  setFlashData(request, {
-    errors: {
-      confirmation: {
-        text: "Select an option",
-        href: "#confirmation",
-      },
-    },
-    formData: buildFormData(payload, comment),
-  });
-
-  return redirectToConfirmPage(h, caseId, actionCode);
-};
-
-const redirectWithUpdateErrors = (
-  request,
-  h,
-  caseId,
-  actionCode,
-  payload,
-  comment,
-  errors,
-) => {
-  setFlashData(request, {
-    errors,
-    formData: buildFormData(payload, comment),
-  });
-
-  return redirectToConfirmPage(h, caseId, actionCode);
-};
-
-const updateConfirmedStageOutcome = async (
+const submitConfirmation = async (
   authContext,
-  caseId,
-  actionCode,
-  comment,
-) =>
-  updateStageOutcomeUseCase(authContext, {
+  { caseId, actionCode, confirmation, comment },
+) => {
+  if (!confirmation) {
+    return createConfirmationRequiredErrors();
+  }
+
+  if (confirmation !== "yes") {
+    return undefined;
+  }
+
+  const { errors } = await updateStageOutcomeUseCase(authContext, {
     caseId,
     actionData: {
       actionCode,
@@ -144,67 +69,21 @@ const updateConfirmedStageOutcome = async (
     },
   });
 
-const handleConfirmedAction = async (
-  request,
-  h,
-  authContext,
-  caseId,
-  actionCode,
-  comment,
-) => {
-  const { errors } = await updateConfirmedStageOutcome(
-    authContext,
-    caseId,
-    actionCode,
-    comment,
-  );
-
-  if (!errors) {
-    return null;
-  }
-
-  return redirectWithUpdateErrors(
-    request,
-    h,
-    caseId,
-    actionCode,
-    request.payload,
-    comment,
-    errors,
-  );
+  return errors;
 };
 
-const processConfirmationDecision = async (
+const redirectBackWithErrors = (
   request,
   h,
-  authContext,
-  caseId,
-  actionCode,
-  confirmation,
-  comment,
+  { caseId, actionCode, comment, errors },
 ) => {
-  if (!confirmation) {
-    return redirectWithConfirmationError(
-      request,
-      h,
-      caseId,
-      actionCode,
-      request.payload,
-      comment,
-    );
-  }
+  setFlashData(request, {
+    errors,
+    formData: { ...request.payload, comment },
+  });
 
-  if (confirmation !== "yes") {
-    return null;
-  }
-
-  return handleConfirmedAction(
-    request,
-    h,
-    authContext,
-    caseId,
-    actionCode,
-    comment,
+  return h.redirect(
+    `/cases/${caseId}/stage/outcome/confirm?actionCode=${actionCode}`,
   );
 };
 
@@ -225,16 +104,13 @@ export const viewConfirmStageOutcomeRoute = {
     };
 
     const { errors, formData } = getFlashData(request);
-    const { pendingState, response } = withPendingConfirmation(
-      request,
-      h,
+    const pendingConfirmation = getPendingStageOutcomeConfirmation(request, {
       caseId,
       actionCode,
-      formData,
-    );
+    });
 
-    if (response) {
-      return response;
+    if (!pendingConfirmation) {
+      return redirectToCaseWithExpiredMessage(request, h, caseId);
     }
 
     const page = await findCaseByIdUseCase(authContext, caseId);
@@ -245,7 +121,7 @@ export const viewConfirmStageOutcomeRoute = {
       actionCode,
       formData: {
         ...formData,
-        comment: pendingState.comment,
+        comment: resolveComment({ formData, actionCode, pendingConfirmation }),
       },
       errors,
     });
@@ -274,29 +150,30 @@ export const confirmStageOutcomeRoute = {
       user: request.auth.credentials.user,
     };
 
-    const { pendingState, response } = withPendingConfirmation(
-      request,
-      h,
+    const pendingConfirmation = getPendingStageOutcomeConfirmation(request, {
       caseId,
       actionCode,
-    );
+    });
 
-    if (response) {
-      return response;
+    if (!pendingConfirmation) {
+      return redirectToCaseWithExpiredMessage(request, h, caseId);
     }
 
-    const responseFromDecision = await processConfirmationDecision(
-      request,
-      h,
-      authContext,
+    const comment = getPendingComment(pendingConfirmation);
+    const errors = await submitConfirmation(authContext, {
       caseId,
       actionCode,
       confirmation,
-      pendingState.comment,
-    );
+      comment,
+    });
 
-    if (responseFromDecision) {
-      return responseFromDecision;
+    if (errors) {
+      return redirectBackWithErrors(request, h, {
+        caseId,
+        actionCode,
+        comment,
+        errors,
+      });
     }
 
     clearPendingStageOutcomeConfirmation(request, { caseId, actionCode });
