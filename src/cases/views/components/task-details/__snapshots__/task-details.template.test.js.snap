@@ -84,7 +84,7 @@ exports[`task-details > renders completed task as read-only when case is not int
 
         <div class="form-group">
           <h2 class="govuk-heading-m">Outcome review note</h2>
-          <p>Initial review completed</p>
+          <p class="govuk-body">Initial review completed</p>
         </div>
   </div>
 </div>
@@ -197,7 +197,7 @@ exports[`task-details > renders completed task without form when user lacks perm
         10:30 AM
       </p>
 
-        <p>You cannot edit this task.</p>
+        <p class="govuk-body">You cannot edit this task.</p>
 
         <details class="govuk-details">
   <summary class="govuk-details__summary">
