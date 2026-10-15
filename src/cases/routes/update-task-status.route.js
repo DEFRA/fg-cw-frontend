@@ -117,7 +117,7 @@ export const updateTaskStatusRoute = {
   method: "POST",
   path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
   // eslint-disable-next-line complexity
-  handler: async (request, h) => {
+  async handler(request, h) {
     let { caseId, taskGroupCode, taskCode, completed, value, comment } =
       mapRequest(request);
 

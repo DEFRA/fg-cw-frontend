@@ -1,4 +1,4 @@
-import { describe, expect, test, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { updateTaskStatus } from "../repositories/case.repository.js";
 import { updateTaskStatusUseCase } from "./update-task-status.use-case.js";
 
@@ -13,7 +13,7 @@ describe("updateTaskStatusUseCase", () => {
       roles: ["FCP.Casework.Read"],
     },
   };
-  test("returns updated task when repository succeeds", async () => {
+  it("returns updated task when repository succeeds", async () => {
     const mockData = {
       caseId: "case-123",
       taskCode: "task-456",
@@ -58,7 +58,7 @@ describe("updateTaskStatusUseCase", () => {
     expect(result).toEqual(mockResult);
   });
 
-  test("handles different task status values", async () => {
+  it("handles different task status values", async () => {
     const mockData = {
       caseId: "case-789",
       taskCode: "task-101",
@@ -91,7 +91,7 @@ describe("updateTaskStatusUseCase", () => {
     expect(result).toEqual(mockResult);
   });
 
-  test("handles empty data object", async () => {
+  it("handles empty data object", async () => {
     const mockData = {};
     const mockResult = null;
 
@@ -103,7 +103,7 @@ describe("updateTaskStatusUseCase", () => {
     expect(result).toBeNull();
   });
 
-  test("handles null data parameter", async () => {
+  it("handles null data parameter", async () => {
     const mockData = null;
     const mockResult = null;
 
@@ -115,7 +115,7 @@ describe("updateTaskStatusUseCase", () => {
     expect(result).toBeNull();
   });
 
-  test("calls repository with exact data parameter", async () => {
+  it("calls repository with exact data parameter", async () => {
     const mockData = {
       caseId: "specific-case",
       taskCode: "specific-task",

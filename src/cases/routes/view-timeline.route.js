@@ -2,7 +2,7 @@ import { logger } from "../../common/logger.js";
 import { findCaseByIdUseCase } from "../use-cases/find-case-by-id.use-case.js";
 import { createTimelineViewModel } from "../view-models/timeline.view-model.js";
 
-export const timelineRoute = {
+export const viewTimelineRoute = {
   method: "GET",
   path: "/cases/{caseId}/timeline",
   async handler(request, h) {

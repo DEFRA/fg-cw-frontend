@@ -1,6 +1,6 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`timelineRoute > displays a timeline 1`] = `
+exports[`viewTimelineRoute > displays a timeline 1`] = `
 "
     
 

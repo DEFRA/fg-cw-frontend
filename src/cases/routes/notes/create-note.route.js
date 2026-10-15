@@ -7,7 +7,7 @@ import { createNewNoteViewModel } from "../../view-models/notes/new-note.view-mo
 export const createNoteRoute = {
   method: "POST",
   path: "/cases/{caseId}/notes",
-  handler: async (request, h) => {
+  async handler(request, h) {
     const { caseId } = request.params;
     const { text } = request.payload;
 
