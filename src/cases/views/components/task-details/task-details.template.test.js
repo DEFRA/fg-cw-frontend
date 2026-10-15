@@ -155,6 +155,31 @@ describe("task-details", () => {
     expect(component).not.toContain("Confirm");
   });
 
+  test("renders incomplete task without form when user lacks permission", () => {
+    const component = render("task-details", {
+      caseId: "case-id",
+      isInteractive: true,
+      currentTask: {
+        code: "task1",
+        description: [{ component: "heading", level: 2, text: "Test Task" }],
+        name: "Test Task",
+        type: "boolean",
+        completed: false,
+        canComplete: false,
+        requiredRoles: {
+          allOf: [],
+          anyOf: ["ROLE_WMP", "ROLE_WMP_CLAIMS"],
+        },
+      },
+    });
+
+    expect(component).toContain(
+      '<p class="govuk-body">You cannot complete this task.</p>',
+    );
+    expect(component).toContain("Who can complete the task");
+    expect(component).toContain("ROLE_WMP_CLAIMS");
+  });
+
   test("renders with notes history table when task has notesHistory", () => {
     const component = render("task-details", {
       caseId: "case-id",
