@@ -4,6 +4,10 @@ vi.mock("@defra/hapi-tracing", () => ({
   getTraceId: vi.fn(),
 }));
 
+vi.mock("./request-context.js", () => ({
+  getClientIp: vi.fn(),
+}));
+
 describe("wreck", () => {
   afterEach(() => {
     vi.resetModules();
@@ -38,5 +42,35 @@ describe("wreck", () => {
     wreck.events.emit("preRequest", uri);
 
     expect(uri.headers["x-cdp-request-id"]).toBeUndefined();
+  });
+
+  it("forwards the originating client ip to the backend", async () => {
+    const { getClientIp } = await import("./request-context.js");
+    getClientIp.mockReturnValue("203.0.113.7");
+
+    const { wreck } = await import("./wreck.js");
+
+    const uri = {
+      headers: {},
+    };
+
+    wreck.events.emit("preRequest", uri);
+
+    expect(uri.headers["x-forwarded-for"]).toEqual("203.0.113.7");
+  });
+
+  it("does not add x-forwarded-for outside a request", async () => {
+    const { getClientIp } = await import("./request-context.js");
+    getClientIp.mockReturnValue(undefined);
+
+    const { wreck } = await import("./wreck.js");
+
+    const uri = {
+      headers: {},
+    };
+
+    wreck.events.emit("preRequest", uri);
+
+    expect(uri.headers).not.toHaveProperty("x-forwarded-for");
   });
 });
