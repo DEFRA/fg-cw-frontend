@@ -13,6 +13,7 @@ services:
     environment:
       PORT: 3100
       NODE_ENV: development
+      LOG_FORMAT: ecs
       FG_CW_BACKEND: http://fg-cw-backend:3101
       OIDC_TOKEN_ENDPOINT: http://entra:3010/token
       REDIS_HOST: redis
