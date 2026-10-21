@@ -26,7 +26,23 @@ Case worker frontend application
 
 ## Running with other services
 
-If you want to run this service with other farming grants applications see [fg-grants-core](https://github.com/DEFRA/fg-grants-core)
+fg-cw-frontend needs fg-cw-backend (and the Entra stub to sign in) to do anything useful, so the easiest way to run it is
+with the rest of Farming Grants: check out [fg-grants-core](https://github.com/DEFRA/fg-grants-core) alongside this repo and run
+`npm run stack cw` there. fg-grants-core runs the shared infrastructure and
+wires the services together.
+
+This repo's own `compose.yml` only runs redis and this service. To work on it
+without fg-grants-core, run what it calls separately and start this service
+with `npm run dev` (see [Local Development](#local-development)).
+
+Both ways use this repo's `compose/compose.cw-frontend.yml`, so:
+
+- Container env goes in the `environment:` block of `compose/compose.cw-frontend.yml`.
+  `.env` is for running node on your machine.
+- Values that only make sense in the full stack, such as other services' URLs
+  and tokens, stay in fg-grants-core's `compose/compose.override.yml`.
+- Keep the infrastructure versions in `compose.yml` the same as
+  fg-grants-core's. `npm run stack` there warns when they differ.
 
 ## Requirements
 
@@ -64,8 +80,6 @@ disable setting `SESSION_CACHE_ENGINE=false` or changing the default value in `~
 ## Local Development
 
 ### Setup
-
-**It's recommended if running with other services (i.e. fg-cw-backend) to run [fg-grants-core](https://github.com/DEFRA/fg-grants-core)**
 
 Install application dependencies:
 
@@ -231,47 +245,16 @@ docker run -p 3100:3000 fg-cw-frontend
 
 ### Docker Compose
 
-A local environment with:
-
-- Localstack for AWS services (S3, SQS)
-- Redis
-- MongoDB
-- This service.
-- A commented out backend example.
+`compose.yml` runs redis and this service:
 
 ```bash
 docker compose up --build -d
 ```
 
-### Running with fg-cw-backend
-
-When running both the frontend and backend services together, port conflicts have been resolved by:
-
-- Frontend localstack uses port 4567 (mapped to container's internal 4566)
-- Frontend Redis uses port 6380 (mapped to container's internal 6379)
-- Frontend MongoDB uses port 27018 (mapped to container's internal 27017)
-- Frontend app runs on port 3100 (mapped to container's internal 3000)
-
-To run both services:
-
-1. Start the backend first:
-
-```bash
-cd fg-cw-backend
-docker compose up -d
-```
-
-2. Then start the frontend:
-
-```bash
-cd fg-cw-frontend
-docker compose up -d
-```
-
-You can then access:
-
-- Backend API at http://localhost:3101
-- Frontend app at http://localhost:3100
+It doesn't run fg-cw-backend, and its network isn't shared with fg-cw-backend's
+own `compose.yml`, so on its own the frontend can't reach a backend. To run them
+together use fg-grants-core (see
+[Running with other services](#running-with-other-services)).
 
 ### Dependabot
 
