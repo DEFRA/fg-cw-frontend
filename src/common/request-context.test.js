@@ -1,11 +1,24 @@
 import hapi from "@hapi/hapi";
-import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { config } from "./config.js";
+import { logger } from "./logger.js";
 import {
   getClientIp,
   getRequestContext,
   readClientIp,
   requestContext,
 } from "./request-context.js";
+
+vi.mock("./logger.js", () => ({
+  logger: { info: vi.fn() },
+}));
+
+const setCdpEnvironment = (value) => {
+  const realGet = config.get.bind(config);
+  vi.spyOn(config, "get").mockImplementation((key) =>
+    key === "cdpEnvironment" ? value : realGet(key),
+  );
+};
 
 const requestWith = (forwardedFor, remoteAddress = "10.0.0.1") => ({
   headers:
@@ -32,6 +45,8 @@ describe("requestContext", () => {
 
   afterEach(async () => {
     await server.stop();
+    vi.restoreAllMocks();
+    logger.info.mockClear();
   });
 
   it("returns null when no request context is active", () => {
@@ -57,6 +72,53 @@ describe("requestContext", () => {
     });
 
     expect(result).toEqual({ clientIp: "198.51.100.4" });
+  });
+
+  it("logs the raw forwarding facts in dev only", async () => {
+    setCdpEnvironment("dev");
+
+    await server.inject({
+      method: "GET",
+      url: "/ip",
+      headers: { "x-forwarded-for": "6.6.6.6, 203.0.113.7" },
+      remoteAddress: "10.0.0.1",
+    });
+
+    expect(logger.info).toHaveBeenCalledWith(
+      {
+        xForwardedFor: "6.6.6.6, 203.0.113.7",
+        remoteAddress: "10.0.0.1",
+        path: "/ip",
+      },
+      "FGP-1520 client ip debug",
+    );
+  });
+
+  it("logs a null header in dev when nothing was forwarded", async () => {
+    setCdpEnvironment("dev");
+
+    await server.inject({
+      method: "GET",
+      url: "/ip",
+      remoteAddress: "198.51.100.4",
+    });
+
+    expect(logger.info).toHaveBeenCalledWith(
+      { xForwardedFor: null, remoteAddress: "198.51.100.4", path: "/ip" },
+      "FGP-1520 client ip debug",
+    );
+  });
+
+  it("does not log the raw forwarding facts outside dev", async () => {
+    setCdpEnvironment("test");
+
+    await server.inject({
+      method: "GET",
+      url: "/ip",
+      headers: { "x-forwarded-for": "6.6.6.6, 203.0.113.7" },
+    });
+
+    expect(logger.info).not.toHaveBeenCalled();
   });
 });
 
