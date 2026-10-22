@@ -1,4 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks";
+import { config } from "./config.js";
+import { logger } from "./logger.js";
 
 const asyncLocalStorage = new AsyncLocalStorage();
 
@@ -23,6 +25,22 @@ export const readClientIp = (request, trustedProxyCount) => {
   return chain[Math.max(0, chain.length - 1 - trustedProxyCount)];
 };
 
+const logClientIpDebug = (request) => {
+  // TEMP FGP-1520: confirm proxy hop count in dev. Remove before merge.
+  if (config.get("cdpEnvironment") !== "dev") {
+    return;
+  }
+
+  logger.info(
+    {
+      xForwardedFor: request.headers["x-forwarded-for"] ?? null,
+      remoteAddress: request.info.remoteAddress,
+      path: request.path,
+    },
+    "FGP-1520 client ip debug",
+  );
+};
+
 const wrapCycle = (request, cycle, store) => {
   const requestCycle = request[cycle].bind(request);
   request[cycle] = () => asyncLocalStorage.run(store, requestCycle);
@@ -34,6 +52,7 @@ export const requestContext = {
     once: true,
     register(server) {
       server.ext("onRequest", (request, h) => {
+        logClientIpDebug(request);
         const store = {
           clientIp: readClientIp(request, TRUSTED_PROXY_COUNT),
         };
