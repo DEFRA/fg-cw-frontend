@@ -27,6 +27,7 @@
             set radioItem = {
               value: item.value,
               text: item.text,
+              hint: item.hint,
               checked: item.checked,
               conditional: { html: govukTextarea(item.conditional) }
             }
@@ -37,6 +38,7 @@
             set radioItem = {
               value: item.value,
               text: item.text,
+              hint: item.hint,
               checked: item.checked
             }
           %}
@@ -64,4 +66,7 @@
       }}
     {% endif %}
   </form>
+  <p class="govuk-body">
+    <a href="/cases" class="govuk-link">Cancel and return</a>
+  </p>
 {% endif %}

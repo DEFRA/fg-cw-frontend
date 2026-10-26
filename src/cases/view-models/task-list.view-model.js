@@ -139,6 +139,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
     return {
       value: action.code,
       text: action.name,
+      hint: action.hint ? { text: action.hint } : undefined,
       checked,
       conditional,
       classes: action.classes,
