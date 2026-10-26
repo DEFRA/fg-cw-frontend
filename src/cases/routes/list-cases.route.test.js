@@ -247,8 +247,8 @@ const mockCases = [
         hasCheckedLandIsUpToDate: true,
         actionApplications: [
           {
-            parcelId: "9238",
-            sheetId: "SX0679",
+            parcelId: "0118",
+            sheetId: "AA0109",
             code: "CSAM1",
             appliedFor: {
               unit: "ha",
@@ -314,8 +314,8 @@ const mockCases = [
         hasCheckedLandIsUpToDate: true,
         actionApplications: [
           {
-            parcelId: "9238",
-            sheetId: "SX0679",
+            parcelId: "0118",
+            sheetId: "AA0109",
             code: "CSAM1",
             appliedFor: {
               unit: "ha",

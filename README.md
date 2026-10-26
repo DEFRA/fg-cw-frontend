@@ -286,4 +286,4 @@ It is designed to encourage use and re-use of information freely and flexibly, w
 ## Synthetic test data
 
 > [!NOTE]
-> Keep fixtures, snapshots and documentation examples synthetic. Use clearly fictional example businesses and people, `900000...` customer identifiers, `example.test` email addresses, `ZZ99` postcodes and `AA` land references. Use reserved drama ranges for telephone numbers. Keep shared identifiers and their expected values consistent across tests and contracts. Never copy customer or staff records from a live environment.
+> Keep fixtures, snapshots and documentation examples synthetic. Use clearly fictional example businesses and people, `900000...` customer identifiers, `example.test` email addresses, `ZZ99` postcodes, `AA` land references and scheme-prefixed agreement references with `900000...` suffixes. Use reserved drama ranges for telephone numbers. Keep shared identifiers and their expected values consistent across tests and contracts. Never copy customer or staff records from a live environment.

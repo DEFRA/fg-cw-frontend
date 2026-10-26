@@ -146,7 +146,7 @@ describe("proxyCaseAgreement", () => {
         content: [
           {
             component: "url",
-            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+            href: "https://example.test/cases/case-123/agreement/PMF900000001",
           },
         ],
       },
@@ -158,7 +158,7 @@ describe("proxyCaseAgreement", () => {
 
     const result = await proxyUseCase.proxyCaseAgreement(
       "case-123",
-      "PMF823153883",
+      "PMF900000001",
       request,
     );
 
@@ -181,7 +181,7 @@ describe("proxyCaseAgreement", () => {
       "123456789",
       "pigs-might-fly",
     );
-    expect(result.uri).toBe("http://localhost:3000/PMF823153883");
+    expect(result.uri).toBe("http://localhost:3000/PMF900000001");
   });
 
   test("accepts agreements linked from beforeContent", async () => {
@@ -196,7 +196,7 @@ describe("proxyCaseAgreement", () => {
         beforeContent: [
           {
             component: "url",
-            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+            href: "https://example.test/cases/case-123/agreement/PMF900000001",
           },
         ],
         content: [],
@@ -205,11 +205,11 @@ describe("proxyCaseAgreement", () => {
 
     const result = await proxyUseCase.proxyCaseAgreement(
       "case-123",
-      "PMF823153883",
+      "PMF900000001",
       createRequest({ token: "caseworking-token", user: {} }),
     );
 
-    expect(result.uri).toBe("http://localhost:3000/PMF823153883");
+    expect(result.uri).toBe("http://localhost:3000/PMF900000001");
   });
 
   test("fails when the case workflow code is unavailable", async () => {
@@ -219,7 +219,7 @@ describe("proxyCaseAgreement", () => {
         content: [
           {
             component: "url",
-            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+            href: "https://example.test/cases/case-123/agreement/PMF900000001",
           },
         ],
       },
@@ -228,7 +228,7 @@ describe("proxyCaseAgreement", () => {
     await expect(
       proxyUseCase.proxyCaseAgreement(
         "case-123",
-        "PMF823153883",
+        "PMF900000001",
         createRequest({ token: "caseworking-token", user: {} }),
       ),
     ).rejects.toMatchObject({
@@ -256,7 +256,7 @@ describe("proxyCaseAgreement", () => {
         content: [
           {
             component: "url",
-            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+            href: "https://example.test/cases/case-123/agreement/PMF900000001",
           },
         ],
       },
@@ -265,7 +265,7 @@ describe("proxyCaseAgreement", () => {
     await expect(
       proxyUseCase.proxyCaseAgreement(
         "case-123",
-        "PMF823153883",
+        "PMF900000001",
         createRequest({ token: "caseworking-token", user: {} }),
       ),
     ).rejects.toMatchObject({
@@ -286,7 +286,7 @@ describe("proxyCaseAgreement", () => {
         content: [
           {
             component: "url",
-            href: "https://example.test/cases/case-123/agreement/PMF823153883",
+            href: "https://example.test/cases/case-123/agreement/PMF900000001",
           },
         ],
       },
@@ -316,7 +316,7 @@ describe("proxyCaseAgreement", () => {
     await expect(
       proxyUseCase.proxyCaseAgreement(
         "case-123",
-        "PMF823153883",
+        "PMF900000001",
         createRequest({ token: "caseworking-token", user: {} }),
       ),
     ).rejects.toMatchObject({
