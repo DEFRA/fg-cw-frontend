@@ -4,10 +4,6 @@ vi.mock("@defra/hapi-tracing", () => ({
   getTraceId: vi.fn(),
 }));
 
-vi.mock("./request-context.js", () => ({
-  getClientIp: vi.fn(),
-}));
-
 describe("wreck", () => {
   afterEach(() => {
     vi.resetModules();
@@ -44,25 +40,9 @@ describe("wreck", () => {
     expect(uri.headers["x-cdp-request-id"]).toBeUndefined();
   });
 
-  it("forwards the client ip to the backend, replacing any incoming chain", async () => {
-    const { getClientIp } = await import("./request-context.js");
-    getClientIp.mockReturnValue("203.0.113.7");
-
-    const { wreck } = await import("./wreck.js");
-
-    const uri = {
-      headers: { "x-forwarded-for": "6.6.6.6" },
-    };
-
-    wreck.events.emit("preRequest", uri);
-
-    expect(uri.headers["x-forwarded-for"]).toEqual("203.0.113.7");
-  });
-
-  it("does not add x-forwarded-for outside a request", async () => {
-    const { getClientIp } = await import("./request-context.js");
-    getClientIp.mockReturnValue(undefined);
-
+  // Overwriting x-forwarded-for with the browser's address got backend
+  // calls rejected with 403 before they reached fg-cw-backend on CDP.
+  it("does not add x-forwarded-for", async () => {
     const { wreck } = await import("./wreck.js");
 
     const uri = {
