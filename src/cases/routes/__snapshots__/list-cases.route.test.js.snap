@@ -11,7 +11,7 @@ exports[`listCasesRoute > extracts assignedCaseId from flash and renders notific
     <h3 class="govuk-notification-banner__heading">Case assigned successfully</h3>
           <p class="govuk-body">      <a class="govuk-notification-banner__link" href="/cases/68495db5afe2d27b09b2ee47">Case banana-123</a>
           has been assigned to
-          John Smith
+          Example Caseworker
     </p>
   </div>
 "
@@ -113,7 +113,7 @@ exports[`listCasesRoute > returns a list of cases 1`] = `
       New
     </strong>
     </td>
-          <td class="govuk-table__cell">John Smith</td>
+          <td class="govuk-table__cell">Example Caseworker</td>
         </tr>
         <tr class="govuk-table__row">
           <td class="govuk-table__cell">  <div class="govuk-radios__item">

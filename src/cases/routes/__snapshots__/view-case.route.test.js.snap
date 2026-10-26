@@ -8,7 +8,7 @@ exports[`viewCaseRoute > returns a list of cases 1`] = `
     <a href="/cases" class="govuk-back-link">Back to cases</a>
 
     <h1 class="govuk-heading-m">
-      Valley Farm
+      Example Casework Farm Ltd
     </h1>
 
     <div>

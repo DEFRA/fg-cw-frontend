@@ -339,7 +339,7 @@ describe("dynamic-content template", () => {
         rows: [
           {
             label: "Name",
-            text: "John Smith",
+            text: "Example Caseworker",
           },
           {
             label: "Date of birth",
@@ -353,7 +353,7 @@ describe("dynamic-content template", () => {
 
     expect(result).toContain("govuk-summary-list");
     expect(result).toContain("Name");
-    expect(result).toContain("John Smith");
+    expect(result).toContain("Example Caseworker");
     expect(result).toContain("Date of birth");
     expect(result).toContain("5 January 1978");
   });

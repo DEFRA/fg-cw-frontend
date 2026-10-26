@@ -284,7 +284,7 @@ const mockCases = [
     ],
     assignedUser: {
       id: "user-id-1",
-      name: "John Smith",
+      name: "Example Caseworker",
     },
   },
   {

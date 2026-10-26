@@ -161,14 +161,14 @@ describe("login", () => {
     const userData = {
       idpId: "12345678-1234-1234-1234-123456789012",
       name: "John Doe",
-      email: "john.doe@defra.gov.uk",
+      email: "example.user@example.test",
       idpRoles: ["FCP.Casework.ReadWrite"],
     };
 
     const responseUser = {
       id: "69691417bd385df3ac6aa25f",
       idpId: "12345678-1234-1234-1234-123456789012",
-      email: "john.doe@defra.gov.uk",
+      email: "example.user@example.test",
       name: "John Doe",
       idpRoles: ["FCP.Casework.ReadWrite"],
       appRoles: {},
@@ -197,7 +197,7 @@ describe("login", () => {
     const userData = {
       idpId: "12345678-1234-1234-1234-123456789012",
       name: "John Doe",
-      email: "john.doe@defra.gov.uk",
+      email: "example.user@example.test",
       idpRoles: ["FCP.Casework.ReadWrite"],
     };
 
@@ -205,7 +205,7 @@ describe("login", () => {
       id: "69691417bd385df3ac6aa25f",
       idpId: "12345678-1234-1234-1234-123456789012",
       name: "John Doe",
-      email: "john.doe@defra.gov.uk",
+      email: "example.user@example.test",
       idpRoles: ["FCP.Casework.ReadWrite"],
       appRoles: {
         ROLE_ADMIN: {

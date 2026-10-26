@@ -124,7 +124,7 @@ exports[`viewAssignUserToCaseRoute > returns a case and list of valid users 1`] 
   <select class="govuk-select" id="assignedUserId" name="assignedUserId">
     <option value="">Select a user</option>
     <option value="user-1" selected="">John Doe</option>
-    <option value="user-2">Jane Smith</option>
+    <option value="user-2">Example Assignee</option>
   </select>
 </div>
 

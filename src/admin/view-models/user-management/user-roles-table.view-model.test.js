@@ -13,7 +13,7 @@ describe("createUserRolesTableViewModel", () => {
     const viewModel = createUserRolesTableViewModel({
       user: {
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {
           PMF_B: {},
         },
@@ -44,7 +44,7 @@ describe("createUserRolesTableViewModel", () => {
     const viewModel = createUserRolesTableViewModel({
       user: {
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {
           PMF_READ_WRITE: {},
         },
@@ -70,7 +70,7 @@ describe("createUserRolesTableViewModel", () => {
     const viewModel = createUserRolesTableViewModel({
       user: {
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       },
       roles: [
@@ -89,7 +89,7 @@ describe("createUserRolesTableViewModel", () => {
     const viewModel = createUserRolesTableViewModel({
       user: {
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {
           PMF_READ: {},
         },
@@ -118,7 +118,7 @@ describe("createUserRolesTableViewModel", () => {
     const viewModel = createUserRolesTableViewModel({
       user: {
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       },
       roles: [

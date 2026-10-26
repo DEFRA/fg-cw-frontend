@@ -40,7 +40,7 @@ describe("copy-to-clipboard template", () => {
 
   test("renders with all custom parameters", () => {
     const component = render("copy-to-clipboard", {
-      text: "full-example@test.com",
+      text: "complete@example.test",
       buttonText: "Copy Email",
       feedbackText: "Email copied successfully!",
       classes: "govuk-button govuk-button--secondary",

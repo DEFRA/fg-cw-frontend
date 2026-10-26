@@ -9,13 +9,13 @@ describe("notes-history-table", () => {
           date: "2025-09-25T14:30:00.000Z",
           outcome: "Accepted",
           note: "request",
-          addedBy: "A Jones",
+          addedBy: "Example Writer A",
         },
         {
           date: "2025-09-20T10:15:00.000Z",
           outcome: "Request information from customer",
           note: "Waiting for customer to provide updated bank details",
-          addedBy: "B Smith",
+          addedBy: "Example Writer B",
         },
       ],
     });
@@ -67,7 +67,7 @@ describe("notes-history-table", () => {
           date: "2025-09-25T14:30:00.000Z",
           outcome: "Accepted",
           note: "Approved after review",
-          addedBy: "A Jones",
+          addedBy: "Example Writer A",
         },
       ],
     });

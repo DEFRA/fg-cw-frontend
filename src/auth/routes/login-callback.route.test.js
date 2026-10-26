@@ -98,7 +98,7 @@ describe("loginCallbackRoute", () => {
       },
       profile: {
         oid: "12345678-1234-1234-1234-123456789012",
-        name: "Bob Bill",
+        name: "Casey Test",
         email: "bob.bill.defra.gov.uk",
         roles: ["FCP.Casework.Read"],
       },
@@ -107,7 +107,7 @@ describe("loginCallbackRoute", () => {
     const user = {
       id: "123",
       idpId: "12345678-1234-1234-1234-123456789012",
-      name: "Bob Bill",
+      name: "Casey Test",
       email: "bob.bill.defra.gov.uk",
     };
 
@@ -141,7 +141,7 @@ describe("loginCallbackRoute", () => {
 
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-      name: "Bob Bill",
+      name: "Casey Test",
       email: "bob.bill.defra.gov.uk",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["ROLE_SING_AND_DANCE"],
@@ -160,7 +160,7 @@ describe("loginCallbackRoute", () => {
           },
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
-            name: "Bob Bill",
+            name: "Casey Test",
             email: "bob.bill.defra.gov.uk",
             roles: ["FCP.Casework.Read"],
           },
@@ -199,7 +199,7 @@ describe("loginCallbackRoute", () => {
 
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-      name: "Bob Bill",
+      name: "Casey Test",
       email: "bob.bill.defra.gov.uk",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["ROLE_SING_AND_DANCE"],
@@ -218,7 +218,7 @@ describe("loginCallbackRoute", () => {
           },
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
-            name: "Bob Bill",
+            name: "Casey Test",
             email: "bob.bill.defra.gov.uk",
             roles: ["FCP.Casework.Read"],
           },
@@ -240,7 +240,7 @@ describe("loginCallbackRoute", () => {
 
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
-      name: "Bob Bill",
+      name: "Casey Test",
       email: "bob.bill.defra.gov.uk",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["SING_AND_DANCE"],
@@ -257,7 +257,7 @@ describe("loginCallbackRoute", () => {
           query: {},
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
-            name: "Bob Bill",
+            name: "Casey Test",
             email: "bob.bill.defra.gov.uk",
             roles: ["FCP.Casework.Read"],
           },
@@ -293,7 +293,7 @@ describe("loginCallbackRoute", () => {
           query: {},
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
-            name: "Bob Bill",
+            name: "Casey Test",
             email: "bob.bill.defra.gov.uk",
             // no roles
           },

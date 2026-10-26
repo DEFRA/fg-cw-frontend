@@ -11,9 +11,9 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
       <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
     <li class="govuk-breadcrumbs__list-item">
-      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Martin Smith</a>
+      <a class="govuk-breadcrumbs__link" href="/admin/user-management/users/user-123">Example Reviewer</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith's roles</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Example Reviewer's roles</li>
   </ol>
 </nav>
 
@@ -22,7 +22,7 @@ exports[`viewUserRolesRoute > renders user roles page and checks currently alloc
 
 
 
-  <h1 class="govuk-heading-l">Martin Smith roles</h1>
+  <h1 class="govuk-heading-l">Example Reviewer roles</h1>
 
   <p class="govuk-body">
     Leave the start date blank for the role to start immediately. Leave the end

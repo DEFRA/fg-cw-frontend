@@ -394,13 +394,13 @@ exports[`task-details > renders with notes history table when task has notesHist
       <td class="govuk-table__cell" data-sort-value="2025-09-25">25 Sep 2025</td>
       <td class="govuk-table__cell">Accepted</td>
       <td class="govuk-table__cell govuk-!-width-one-half">Approved after review</td>
-      <td class="govuk-table__cell">A Jones</td>
+      <td class="govuk-table__cell">Example Writer A</td>
     </tr>
     <tr class="govuk-table__row">
       <td class="govuk-table__cell" data-sort-value="2025-09-20">20 Sep 2025</td>
       <td class="govuk-table__cell">Request information from customer</td>
       <td class="govuk-table__cell govuk-!-width-one-half">Waiting for customer to provide updated bank details</td>
-      <td class="govuk-table__cell">B Smith</td>
+      <td class="govuk-table__cell">Example Writer B</td>
     </tr>
   </tbody>
 </table>

@@ -67,7 +67,7 @@ describe("case-list.model", () => {
       {
         _id: "case-3",
         id: { text: "CLIENT-003", href: "/cases/case-3" },
-        assignee: { text: "Jane Smith" },
+        assignee: { text: "Example Assignee" },
       },
     ];
 
@@ -109,7 +109,7 @@ describe("case-list.model", () => {
         heading: "Case assigned successfully",
         ref: "CLIENT-003",
         link: "/cases/case-3",
-        assignedUserName: "Jane Smith",
+        assignedUserName: "Example Assignee",
       });
     });
   });
@@ -452,7 +452,7 @@ describe("table structure mapping", () => {
         createdAt: "2021-06-15T14:30:00.000Z",
         payload: {
           submittedAt: "2021-06-15T14:30:00.000Z",
-          identifiers: { sbi: "555666777" },
+          identifiers: { sbi: "900000105" },
           answers: {
             applicant: {
               business: {
@@ -537,7 +537,7 @@ describe("table structure mapping", () => {
         text: "pmf",
       },
       business: { text: "[business name]" },
-      sbi: { text: "555666777" },
+      sbi: { text: "900000105" },
       submitted: {
         text: "15 Jun 2021",
       },

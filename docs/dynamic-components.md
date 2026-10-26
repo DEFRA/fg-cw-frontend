@@ -392,7 +392,7 @@ Both `label` and `text` support two formats for maximum flexibility:
    ```
    {
      "label": "Name",
-     "text": "John Smith"
+     "text": "Example Caseworker"
    }
    ```
 
