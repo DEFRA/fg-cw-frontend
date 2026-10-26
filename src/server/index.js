@@ -2,7 +2,6 @@ import hapi from "@hapi/hapi";
 import { config } from "../common/config.js";
 import { logger } from "../common/logger.js";
 import { nunjucks } from "../common/nunjucks/nunjucks.js";
-import { requestContext } from "../common/request-context.js";
 import { auth } from "./plugins/auth.js";
 import { errors } from "./plugins/errors.js";
 import { files } from "./plugins/files.js";
@@ -55,7 +54,6 @@ export const createServer = async () => {
     shutdown,
     session,
     flashContext,
-    requestContext,
     tracing,
   ]);
 
