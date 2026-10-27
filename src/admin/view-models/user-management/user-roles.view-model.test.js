@@ -15,7 +15,7 @@ describe("createUserRolesViewModel", () => {
     const viewModel = createUserRolesViewModel({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {
           PMF_READ: {},
         },
@@ -53,7 +53,7 @@ describe("createUserRolesViewModel", () => {
     const viewModel = createUserRolesViewModel({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       }),
       currentPath: mockCurrentPath,
@@ -70,7 +70,7 @@ describe("createUserRolesViewModel", () => {
     const viewModel = createUserRolesViewModel({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       }),
       currentPath: mockCurrentPath,
@@ -92,7 +92,7 @@ describe("createUserRolesViewModel", () => {
     const viewModel = createUserRolesViewModel({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       }),
       currentPath: mockCurrentPath,
@@ -110,7 +110,7 @@ describe("createUserRolesViewModel", () => {
     const viewModel = createUserRolesViewModel({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {},
       }),
       currentPath: mockCurrentPath,

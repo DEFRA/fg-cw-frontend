@@ -269,13 +269,13 @@ describe("agreementsProxyRoute", () => {
       const proxySpy = vi
         .spyOn(proxyUseCase, "proxyCaseAgreement")
         .mockResolvedValue({
-          uri: "http://localhost:3000/WMP936292242",
+          uri: "http://localhost:3000/WMP900000001",
           headers: { "x-encrypted-auth": "signed-case-token" },
         });
       const request = {
         params: {
           caseId: "6a69fb35c9339ac5a18a89f0",
-          agreementRef: "WMP936292242",
+          agreementRef: "WMP900000001",
         },
       };
 
@@ -283,7 +283,7 @@ describe("agreementsProxyRoute", () => {
 
       expect(proxySpy).toHaveBeenCalledWith(
         "6a69fb35c9339ac5a18a89f0",
-        "WMP936292242",
+        "WMP900000001",
         request,
       );
       expect(mockH.proxy).toHaveBeenCalledWith(
@@ -294,7 +294,7 @@ describe("agreementsProxyRoute", () => {
         }),
       );
       expect(mockH.proxy.mock.calls[0][0].mapUri()).toEqual({
-        uri: "http://localhost:3000/WMP936292242",
+        uri: "http://localhost:3000/WMP900000001",
         headers: { "x-encrypted-auth": "signed-case-token" },
       });
     });
@@ -315,7 +315,7 @@ describe("agreementsProxyRoute", () => {
               content: [
                 {
                   component: "url",
-                  href: "https://example.test/cases/6a69fb35c9339ac5a18a89f0/agreement/PMF823153883",
+                  href: "https://example.test/cases/6a69fb35c9339ac5a18a89f0/agreement/PMF900000001",
                 },
               ],
             },
@@ -324,7 +324,7 @@ describe("agreementsProxyRoute", () => {
       const request = {
         params: {
           caseId: "6a69fb35c9339ac5a18a89f0",
-          agreementRef: "PMF823153883",
+          agreementRef: "PMF900000001",
         },
         auth: {
           credentials: {
@@ -356,7 +356,7 @@ describe("agreementsProxyRoute", () => {
         "caseworking-token",
       );
       expect(wreck.get.mock.calls[1][1].timeout).toBe(10000);
-      expect(uri).toBe(`${config.get("agreements.uiUrl")}/PMF823153883`);
+      expect(uri).toBe(`${config.get("agreements.uiUrl")}/PMF900000001`);
       expect(jwt.decoded.payload).toMatchObject({
         source: "entra",
         sbi: "123456789",
@@ -369,7 +369,7 @@ describe("agreementsProxyRoute", () => {
       const request = {
         params: {
           caseId: "case-123",
-          agreementRef: "PMF823153883",
+          agreementRef: "PMF900000001",
         },
         auth: {
           credentials: {
@@ -395,7 +395,7 @@ describe("agreementsProxyRoute", () => {
       const request = {
         params: {
           caseId: "case-123",
-          agreementRef: "PMF823153883",
+          agreementRef: "PMF900000001",
         },
         auth: {
           credentials: {
@@ -439,7 +439,7 @@ describe("agreementsProxyRoute", () => {
       const request = {
         params: {
           caseId: "case-123",
-          agreementRef: "PMF823153883",
+          agreementRef: "PMF900000001",
         },
         auth: {
           credentials: {

@@ -339,7 +339,7 @@ describe("dynamic-content template", () => {
         rows: [
           {
             label: "Name",
-            text: "John Smith",
+            text: "Example Caseworker",
           },
           {
             label: "Date of birth",
@@ -353,7 +353,7 @@ describe("dynamic-content template", () => {
 
     expect(result).toContain("govuk-summary-list");
     expect(result).toContain("Name");
-    expect(result).toContain("John Smith");
+    expect(result).toContain("Example Caseworker");
     expect(result).toContain("Date of birth");
     expect(result).toContain("5 January 1978");
   });
@@ -365,7 +365,7 @@ describe("dynamic-content template", () => {
         rows: [
           {
             label: [{ component: "text", text: "Parcel ID" }],
-            text: [{ component: "text", text: "SO3757 3059" }],
+            text: [{ component: "text", text: "AA0301 0302" }],
           },
           {
             label: [
@@ -384,7 +384,7 @@ describe("dynamic-content template", () => {
     const result = render("dynamic-content", params);
 
     expect(result).toContain("Parcel ID");
-    expect(result).toContain("SO3757 3059");
+    expect(result).toContain("AA0301 0302");
     expect(result).toContain("Status");
     expect(result).toContain("Urgent");
     expect(result).toContain("govuk-tag--red");

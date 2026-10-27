@@ -91,7 +91,7 @@ exports[`viewCaseTabRoute > handles different tab types 1`] = `
             <div class="app-case-cell">
               <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
-                106284736
+                900000005
               </p>
             </div>
             <div class="app-case-cell">
@@ -234,7 +234,7 @@ exports[`viewCaseTabRoute > renders tab view with correct data 1`] = `
             <div class="app-case-cell">
               <p class="govuk-body">
                 <strong class="govuk-!-margin-right-1">SBI:</strong>
-                106284736
+                900000005
               </p>
             </div>
             <div class="app-case-cell">

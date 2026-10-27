@@ -8,8 +8,8 @@ describe("assignUserToCaseUseCase", () => {
   const authContext = {
     profile: {
       oid: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
+      email: "casey.test@example.test",
+      name: "Casey Test",
       roles: ["FCP.Casework.Read"],
     },
   };

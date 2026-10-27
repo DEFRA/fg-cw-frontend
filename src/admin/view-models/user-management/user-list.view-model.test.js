@@ -32,15 +32,15 @@ describe("createUserListViewModel", () => {
   it("sorts users by name ascending", () => {
     const viewModel = createUserListViewModel({
       page: createMockPage([
-        { id: "2", name: "Zara Zee" },
-        { id: "1", name: "Alice Able" },
+        { id: "2", name: "Example Zulu" },
+        { id: "1", name: "Example Alpha" },
       ]),
       request: mockRequest,
     });
 
     expect(viewModel.data.users.rows.map((r) => r.name)).toEqual([
-      "Alice Able",
-      "Zara Zee",
+      "Example Alpha",
+      "Example Zulu",
     ]);
   });
 
@@ -48,7 +48,7 @@ describe("createUserListViewModel", () => {
     const lastLoginAt = "2025-01-01T14:05:00.000Z";
 
     const viewModel = createUserListViewModel({
-      page: createMockPage([{ id: "1", name: "Alice Able", lastLoginAt }]),
+      page: createMockPage([{ id: "1", name: "Example Alpha", lastLoginAt }]),
       request: mockRequest,
     });
 
@@ -59,7 +59,7 @@ describe("createUserListViewModel", () => {
 
   it("uses blank lastLogin when updatedAt is missing", () => {
     const viewModel = createUserListViewModel({
-      page: createMockPage([{ id: "1", name: "Alice Able" }]),
+      page: createMockPage([{ id: "1", name: "Example Alpha" }]),
       request: mockRequest,
     });
 
@@ -68,7 +68,9 @@ describe("createUserListViewModel", () => {
 
   it("uses blank lastLogin when updatedAt is null", () => {
     const viewModel = createUserListViewModel({
-      page: createMockPage([{ id: "1", name: "Alice Able", updatedAt: null }]),
+      page: createMockPage([
+        { id: "1", name: "Example Alpha", updatedAt: null },
+      ]),
       request: mockRequest,
     });
 
@@ -86,7 +88,7 @@ describe("createUserListViewModel", () => {
 
   it("builds name link hrefs from user id", () => {
     const viewModel = createUserListViewModel({
-      page: createMockPage([{ id: "user-123", name: "Alice Able" }]),
+      page: createMockPage([{ id: "user-123", name: "Example Alpha" }]),
       request: mockRequest,
     });
 

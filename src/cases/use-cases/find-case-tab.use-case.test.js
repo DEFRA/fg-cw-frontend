@@ -8,8 +8,8 @@ describe("findCaseTabUseCase", () => {
   const authContext = {
     profile: {
       oid: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
+      email: "casey.test@example.test",
+      name: "Casey Test",
       roles: ["FCP.Casework.Read"],
     },
   };
@@ -111,7 +111,7 @@ describe("findCaseTabUseCase", () => {
         {
           timestamp: "2023-01-16T14:20:00Z",
           event: "Task assigned",
-          user: "john.smith",
+          user: "example.caseworker",
         },
       ],
     };

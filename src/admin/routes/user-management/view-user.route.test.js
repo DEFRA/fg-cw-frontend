@@ -51,8 +51,8 @@ describe("viewUserRoute", () => {
     adminFindUserByIdUseCase.mockResolvedValue(
       createMockPage({
         id: "user-123",
-        name: "Martin Smith",
-        email: "martin@ee.com",
+        name: "Example Reviewer",
+        email: "reviewer@example.test",
         updatedAt: "2025-12-14T20:03:00.000Z",
         lastLoginAt: "2025-12-14T20:03:00.000Z",
         idpRoles: ["IDP_ROLE", "FCP.Casework.Read"],
@@ -90,8 +90,8 @@ describe("viewUserRoute", () => {
     adminFindUserByIdUseCase.mockResolvedValue(
       createMockPage({
         id: "admin-user",
-        name: "Martin Smith",
-        email: "martin@ee.com",
+        name: "Example Reviewer",
+        email: "reviewer@example.test",
         updatedAt: "2025-12-14T20:03:00.000Z",
         idpRoles: ["IDP_ROLE"],
         appRoles: {

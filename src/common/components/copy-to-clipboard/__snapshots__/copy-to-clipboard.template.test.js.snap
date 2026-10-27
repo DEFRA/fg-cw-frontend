@@ -10,8 +10,8 @@ exports[`copy-to-clipboard template > renders with all custom parameters 1`] = `
     type="button"
     class="copy-to-clipboard-button govuk-button govuk-button--secondary"
     data-module="copy-to-clipboard"
-    data-text="full-example@test.com"
-    aria-label="Copy full-example@test.com to clipboard"
+    data-text="complete@example.test"
+    aria-label="Copy complete@example.test to clipboard"
   >
     Copy Email
   </button>

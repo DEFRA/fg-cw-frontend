@@ -8,8 +8,8 @@ describe("findAllCasesUseCase", () => {
   const authContext = {
     profile: {
       oid: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
+      email: "casey.test@example.test",
+      name: "Casey Test",
       roles: ["FCP.Casework.Read"],
     },
   };
@@ -38,7 +38,7 @@ describe("findAllCasesUseCase", () => {
         createdAt: "2021-02-01T00:00:00.000Z",
         submittedAt: "2021-02-15T10:30:00.000Z",
         status: "Completed",
-        assignedUser: "jane smith",
+        assignedUser: "example assignee",
       },
     ];
 

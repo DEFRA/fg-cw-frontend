@@ -9,7 +9,7 @@ exports[`case-summary > renders with callToAction buttons 1`] = `
       <div class="app-case-banner__title">
         <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          Example Casework Farm Ltd
         </h1>
       </div>
         <div class="app-case-banner__actions">
@@ -97,7 +97,7 @@ exports[`case-summary > renders without callToAction 1`] = `
       <div class="app-case-banner__title">
         <a href="/cases" class="govuk-back-link">Back to applications</a>
         <h1 class="govuk-heading-m govuk-!-margin-bottom-0">
-          Valley Farm
+          Example Casework Farm Ltd
         </h1>
       </div>
     </div>

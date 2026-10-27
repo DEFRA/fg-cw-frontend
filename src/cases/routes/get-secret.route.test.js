@@ -31,7 +31,7 @@ describe("getSecret", () => {
       user: {
         id: "43e8508b6cbd4ac1b29ee73792ab0f4b",
         name: "Joe Bloggs",
-        email: "joe@bloggs.com",
+        email: "example.staff@example.test",
         idpRoles: ["FCP.Casework.Read"],
         appRoles: ["ROLE_SING_AND_DANCE"],
       },
