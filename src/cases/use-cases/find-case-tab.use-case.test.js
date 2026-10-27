@@ -111,7 +111,7 @@ describe("findCaseTabUseCase", () => {
         {
           timestamp: "2023-01-16T14:20:00Z",
           event: "Task assigned",
-          user: "john.smith",
+          user: "example.caseworker",
         },
       ],
     };
