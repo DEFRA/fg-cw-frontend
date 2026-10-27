@@ -17,7 +17,7 @@ describe("createViewNotesViewModel", () => {
       comments: [
         {
           createdAt: "2025-01-01T10:00:00.000Z",
-          createdBy: "John Smith",
+          createdBy: "Example Caseworker",
           title: "NOTE_ADDED",
           text: "This is a test note",
         },
@@ -50,7 +50,7 @@ describe("createViewNotesViewModel", () => {
         {
           ref: "note-123",
           createdAt: "2025-01-01T10:00:00.000Z",
-          createdBy: "John Smith",
+          createdBy: "Example Caseworker",
           title: "NOTE_ADDED",
           text: "This is a test note",
         },
@@ -108,7 +108,7 @@ describe("createViewNotesViewModel", () => {
         classes: "wrap-all-text",
       },
       addedBy: {
-        text: "John Smith",
+        text: "Example Caseworker",
       },
     });
   });

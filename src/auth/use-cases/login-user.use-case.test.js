@@ -9,8 +9,8 @@ describe("loginUserUseCase", () => {
     token: "mock-token",
     profile: {
       oid: "12345678-1234-1234-1234-123456789012",
-      name: "Bob Bill",
-      email: "bob.bill@defra.gov.uk",
+      name: "Casey Test",
+      email: "casey.test@example.test",
       roles: ["FCP.Casework.ReadWrite"],
     },
   };
@@ -19,8 +19,8 @@ describe("loginUserUseCase", () => {
     const mockUser = {
       id: "69691417bd385df3ac6aa25f",
       idpId: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
+      email: "casey.test@example.test",
+      name: "Casey Test",
       idpRoles: ["FCP.Casework.ReadWrite"],
       appRoles: {},
       createdAt: "2026-01-15T16:21:43.468Z",
@@ -47,8 +47,8 @@ describe("loginUserUseCase", () => {
       token: "mock-token",
       profile: {
         oid: "12345678-1234-1234-1234-123456789012",
-        name: "Bob Bill",
-        email: "bob.bill@defra.gov.uk",
+        name: "Casey Test",
+        email: "casey.test@example.test",
         // no roles
       },
     };
@@ -64,8 +64,8 @@ describe("loginUserUseCase", () => {
     const mockUser = {
       id: "69691417bd385df3ac6aa25f",
       idpId: "12345678-1234-1234-1234-123456789012",
-      email: "bob.bill@defra.gov.uk",
-      name: "Bob Bill",
+      email: "casey.test@example.test",
+      name: "Casey Test",
       idpRoles: ["FCP.Casework.ReadWrite"],
       appRoles: {},
       createdAt: "2026-01-15T16:21:43.468Z",

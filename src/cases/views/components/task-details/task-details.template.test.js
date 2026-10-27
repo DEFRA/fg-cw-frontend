@@ -200,13 +200,13 @@ describe("task-details", () => {
             date: "2025-09-25T14:30:00.000Z",
             outcome: "Accepted",
             note: "Approved after review",
-            addedBy: "A Jones",
+            addedBy: "Example Writer A",
           },
           {
             date: "2025-09-20T10:15:00.000Z",
             outcome: "Request information from customer",
             note: "Waiting for customer to provide updated bank details",
-            addedBy: "B Smith",
+            addedBy: "Example Writer B",
           },
         ],
       },
@@ -217,7 +217,7 @@ describe("task-details", () => {
     expect(component).toContain("25 Sep 2025");
     expect(component).toContain("Accepted");
     expect(component).toContain("Approved after review");
-    expect(component).toContain("A Jones");
+    expect(component).toContain("Example Writer A");
   });
 
   test("does not render notes history table when notesHistory is empty", () => {

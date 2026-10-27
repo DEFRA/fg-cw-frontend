@@ -355,7 +355,7 @@ The `component` property defaults to `"text"` when omitted.
   "rows": [
     {
       "label": "Parcel ID",
-      "text": "SO3757 3059"
+      "text": "AA0301 0302"
     },
     {
       "label": [
@@ -392,7 +392,7 @@ Both `label` and `text` support two formats for maximum flexibility:
    ```
    {
      "label": "Name",
-     "text": "John Smith"
+     "text": "Example Caseworker"
    }
    ```
 

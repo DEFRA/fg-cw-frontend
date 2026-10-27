@@ -34,13 +34,13 @@ describe("listUsersRoute", () => {
       createMockPage([
         {
           id: "user-2",
-          name: "Zara Zee",
+          name: "Example Zulu",
           email: "zara@example.com",
           updatedAt: null,
         },
         {
           id: "user-1",
-          name: "Alice Able",
+          name: "Example Alpha",
           email: "alice@example.com",
           updatedAt: null,
         },
@@ -89,7 +89,7 @@ describe("listUsersRoute", () => {
       createMockPage([
         {
           id: "user-1",
-          name: "Alice Able",
+          name: "Example Alpha",
           email: "alice@example.com",
         },
       ]),

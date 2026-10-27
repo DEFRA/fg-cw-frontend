@@ -6,7 +6,7 @@ describe("case-summary", () => {
     const component = render("case-summary", {
       banner: {
         title: {
-          text: "Valley Farm",
+          text: "Example Casework Farm Ltd",
           type: "string",
         },
         summary: {
@@ -36,7 +36,7 @@ describe("case-summary", () => {
     const component = render("case-summary", {
       banner: {
         title: {
-          text: "Valley Farm",
+          text: "Example Casework Farm Ltd",
           type: "string",
         },
         summary: {

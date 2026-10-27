@@ -42,7 +42,7 @@ describe("saveUserRolesRoute", () => {
     findUserRolesDataUseCase.mockResolvedValue({
       page: createMockPage({
         id: "user-123",
-        name: "Martin Smith",
+        name: "Example Reviewer",
         appRoles: {
           PMF_READ: { startDate: "2025-07-01", endDate: "2025-08-02" },
         },

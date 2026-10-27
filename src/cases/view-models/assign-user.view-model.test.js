@@ -29,7 +29,7 @@ describe("createAssignUserViewModel", () => {
       },
       {
         id: "user-2",
-        name: "Jane Smith",
+        name: "Example Assignee",
         appRoles: ["ROLE_REVIEWER"],
       },
     ];
@@ -57,7 +57,7 @@ describe("createAssignUserViewModel", () => {
       },
       {
         value: "user-2",
-        text: "Jane Smith",
+        text: "Example Assignee",
         selected: false,
       },
     ]);
@@ -72,7 +72,7 @@ describe("createAssignUserViewModel", () => {
       },
       assignedUser: {
         id: "user-2",
-        name: "Jane Smith",
+        name: "Example Assignee",
       },
     };
 
@@ -84,12 +84,12 @@ describe("createAssignUserViewModel", () => {
       },
       {
         id: "user-2",
-        name: "Jane Smith",
+        name: "Example Assignee",
         appRoles: ["ROLE_REVIEWER"],
       },
       {
         id: "user-3",
-        name: "Bob Wilson",
+        name: "Casey Example",
         appRoles: ["ROLE_MANAGer"],
       },
     ];
@@ -113,12 +113,12 @@ describe("createAssignUserViewModel", () => {
       },
       {
         value: "user-2",
-        text: "Jane Smith",
+        text: "Example Assignee",
         selected: true,
       },
       {
         value: "user-3",
-        text: "Bob Wilson",
+        text: "Casey Example",
         selected: false,
       },
     ]);
