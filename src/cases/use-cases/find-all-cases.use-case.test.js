@@ -38,7 +38,7 @@ describe("findAllCasesUseCase", () => {
         createdAt: "2021-02-01T00:00:00.000Z",
         submittedAt: "2021-02-15T10:30:00.000Z",
         status: "Completed",
-        assignedUser: "jane smith",
+        assignedUser: "example assignee",
       },
     ];
 
