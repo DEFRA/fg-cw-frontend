@@ -99,7 +99,7 @@ describe("loginCallbackRoute", () => {
       profile: {
         oid: "12345678-1234-1234-1234-123456789012",
         name: "Casey Test",
-        email: "bob.bill.defra.gov.uk",
+        email: "casey.test@example.test",
         roles: ["FCP.Casework.Read"],
       },
     };
@@ -108,7 +108,7 @@ describe("loginCallbackRoute", () => {
       id: "123",
       idpId: "12345678-1234-1234-1234-123456789012",
       name: "Casey Test",
-      email: "bob.bill.defra.gov.uk",
+      email: "casey.test@example.test",
     };
 
     loginUserUseCase.mockResolvedValue(user);
@@ -142,7 +142,7 @@ describe("loginCallbackRoute", () => {
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
       name: "Casey Test",
-      email: "bob.bill.defra.gov.uk",
+      email: "casey.test@example.test",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["ROLE_SING_AND_DANCE"],
     };
@@ -161,7 +161,7 @@ describe("loginCallbackRoute", () => {
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
             name: "Casey Test",
-            email: "bob.bill.defra.gov.uk",
+            email: "casey.test@example.test",
             roles: ["FCP.Casework.Read"],
           },
           token: createToken({
@@ -200,7 +200,7 @@ describe("loginCallbackRoute", () => {
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
       name: "Casey Test",
-      email: "bob.bill.defra.gov.uk",
+      email: "casey.test@example.test",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["ROLE_SING_AND_DANCE"],
     };
@@ -219,7 +219,7 @@ describe("loginCallbackRoute", () => {
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
             name: "Casey Test",
-            email: "bob.bill.defra.gov.uk",
+            email: "casey.test@example.test",
             roles: ["FCP.Casework.Read"],
           },
         },
@@ -241,7 +241,7 @@ describe("loginCallbackRoute", () => {
     const user = {
       id: "43e8508b-6cbd-4ac1-b29e-e73792ab0f4b",
       name: "Casey Test",
-      email: "bob.bill.defra.gov.uk",
+      email: "casey.test@example.test",
       idpRoles: ["FCP.Casework.Read"],
       appRoles: ["SING_AND_DANCE"],
     };
@@ -258,7 +258,7 @@ describe("loginCallbackRoute", () => {
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
             name: "Casey Test",
-            email: "bob.bill.defra.gov.uk",
+            email: "casey.test@example.test",
             roles: ["FCP.Casework.Read"],
           },
         },
@@ -294,7 +294,7 @@ describe("loginCallbackRoute", () => {
           profile: {
             oid: "12345678-1234-1234-1234-123456789012",
             name: "Casey Test",
-            email: "bob.bill.defra.gov.uk",
+            email: "casey.test@example.test",
             // no roles
           },
         },
