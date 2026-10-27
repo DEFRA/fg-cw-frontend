@@ -78,7 +78,7 @@ exports[`viewUserRoute > renders user details page 1`] = `
     <li class="govuk-breadcrumbs__list-item">
       <a class="govuk-breadcrumbs__link" href="/admin/user-management/users">Users</a>
     </li>
-    <li class="govuk-breadcrumbs__list-item" aria-current="page">Martin Smith</li>
+    <li class="govuk-breadcrumbs__list-item" aria-current="page">Example Reviewer</li>
   </ol>
 </nav>
 
@@ -89,7 +89,7 @@ exports[`viewUserRoute > renders user details page 1`] = `
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <h1 class="govuk-heading-l">Martin Smith details</h1>
+      <h1 class="govuk-heading-l">Example Reviewer details</h1>
 
       <dl class="govuk-summary-list">
   <div class="govuk-summary-list__row">
@@ -97,7 +97,7 @@ exports[`viewUserRoute > renders user details page 1`] = `
       Email
     </dt>
     <dd class="govuk-summary-list__value">
-      martin@ee.com
+      reviewer@example.test
     </dd>
   </div>
   <div class="govuk-summary-list__row">

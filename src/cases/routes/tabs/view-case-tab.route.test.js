@@ -41,7 +41,7 @@ describe("viewCaseTabRoute", () => {
         summary: {
           sbi: {
             label: "SBI",
-            text: "106284736",
+            text: "900000005",
             type: "string",
           },
           reference: {
@@ -194,7 +194,7 @@ describe("viewCaseTabRoute", () => {
         summary: {
           sbi: {
             label: "SBI",
-            text: "106284736",
+            text: "900000005",
             type: "string",
           },
           reference: {

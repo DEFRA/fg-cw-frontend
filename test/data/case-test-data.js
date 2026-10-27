@@ -8,7 +8,7 @@ export const createMockCaseData = (overrides = {}) => ({
   comments: [
     {
       createdAt: "2025-01-01T10:00:00.000Z",
-      createdBy: "John Smith",
+      createdBy: "Example Caseworker",
       title: "NOTE_ADDED",
       text: "This is a test note",
     },

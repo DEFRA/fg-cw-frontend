@@ -134,7 +134,7 @@ const mockUsers = [
   },
   {
     id: "user-2",
-    name: "Jane Smith",
+    name: "Example Assignee",
     appRoles: ["admin", "manager", "approver"],
   },
 ];

@@ -59,8 +59,8 @@ describe("timelineRoute", () => {
             hasCheckedLandIsUpToDate: true,
             actionApplications: [
               {
-                parcelId: "9238",
-                sheetId: "SX0679",
+                parcelId: "0118",
+                sheetId: "AA0109",
                 code: "CSAM1",
                 appliedFor: {
                   unit: "ha",
@@ -99,7 +99,7 @@ describe("timelineRoute", () => {
             eventType: "CASE_CREATED",
             createdAt: "2025-06-16T09:01:14.072Z",
             description: "Case received",
-            createdBy: { name: "Julian Kimmings" },
+            createdBy: { name: "Example Author" },
             data: {
               caseRef: "APPLICATION-REF-3",
             },
@@ -108,16 +108,16 @@ describe("timelineRoute", () => {
             eventType: "CASE_ASSIGNED",
             description: "Case assigned",
             createdAt: "2025-06-16T09:01:14.072Z",
-            createdBy: { name: "Julian Kimmings" },
+            createdBy: { name: "Example Author" },
             data: {
-              assignedTo: { name: "martin smith" },
+              assignedTo: { name: "example reviewer" },
             },
           },
           {
             eventType: "TASK_COMPLETED",
             description: "Task completed",
             createdAt: "2025-06-16T09:01:14.072Z",
-            createdBy: { name: "Nicholai Hel" },
+            createdBy: { name: "Example Auditor" },
             data: {
               taskGroupCode: "tg-01",
               taskCode: "task-01",
