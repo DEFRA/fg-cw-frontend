@@ -1,4 +1,3 @@
-import Bell from "@hapi/bell";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../server/index.js";
 import { findSecretWorkflowUseCase } from "../use-cases/find-secret-workflow.use-case.js";
@@ -10,7 +9,6 @@ describe("getSecretWorkflow", () => {
   let server;
 
   beforeAll(async () => {
-    Bell.simulate(() => ({}));
     server = await createServer();
     server.route(getSecretWorkflowRoute);
 
@@ -19,7 +17,6 @@ describe("getSecretWorkflow", () => {
 
   afterAll(async () => {
     await server.stop();
-    Bell.simulate(false);
   });
 
   it("returns 200", async () => {
