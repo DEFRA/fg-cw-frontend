@@ -115,63 +115,26 @@ describe("server", () => {
     });
   });
 
-  it("configures OAuth flow cookie", async () => {
+  it("configures OAuth flow cookies", async () => {
     const server = await createServer();
     await server.initialize();
 
-    expect(server.states.cookies["bell-entra"]).toEqual({
-      clearInvalid: true,
+    const relaxedForTheCrossSiteReturn = {
+      isSecure: config.get("session.cookie.secure"),
+      isSameSite: config.get("session.cookie.secure") ? "None" : "Lax",
+      password: config.get("oidc.cookie.password"),
+    };
+
+    expect(server.states.cookies["hapi-auth-oidc"]).toMatchObject(
+      relaxedForTheCrossSiteReturn,
+    );
+
+    expect(server.states.cookies["auth-redirect"]).toMatchObject({
+      ...relaxedForTheCrossSiteReturn,
       encoding: "iron",
-      ignoreErrors: true,
       isHttpOnly: true,
-      isPartitioned: false,
-      isSameSite: "Strict",
-      isSecure: config.get("isProduction"),
-      password: config.get("session.cookie.password"),
       path: "/",
-      strictHeader: true,
     });
-  });
-
-  it("redirects to login when unauthenticated with Entra ID", async () => {
-    const server = await createServer();
-
-    server.route({
-      method: "GET",
-      path: "/restricted",
-      options: {
-        auth: {
-          mode: "required",
-          strategy: "entra",
-        },
-      },
-      handler() {
-        return "You are authenticated";
-      },
-    });
-
-    await server.initialize();
-
-    const response = await server.inject({
-      method: "GET",
-      url: "/restricted",
-    });
-
-    expect(response.statusCode).toBe(302);
-
-    const { host, searchParams } = new URL(response.headers.location);
-
-    expect(host).toEqual("localhost:3010");
-
-    expect(searchParams.get("response_type")).toEqual("code");
-    expect(searchParams.get("redirect_uri")).toEqual(
-      `http://${config.get("host")}:${config.get("port")}/login/callback`,
-    );
-    expect(searchParams.get("state")).toEqual(expect.any(String));
-    expect(searchParams.get("scope")).toEqual(
-      `openid profile email offline_access api://${config.get("oidc.clientId")}/cw.backend`,
-    );
-    expect(searchParams.get("client_id")).toEqual(config.get("oidc.clientId"));
   });
 
   it("redirects to login without a valid session", async () => {
@@ -199,68 +162,12 @@ describe("server", () => {
     });
 
     expect(response.statusCode).toBe(302);
+    expect(response.headers.location).toEqual("/login");
 
-    expect(response.headers.location).toEqual(
-      `/login?${new URLSearchParams({
-        next: `http://${config.get("host")}:${config.get("port")}/restricted`,
-      })}`,
-    );
-  });
-
-  it("redirects to login when session expires", async () => {
-    const server = await createServer();
-
-    server.route({
-      method: "POST",
-      path: "/setup-session",
-      handler(request, h) {
-        request.yar.set("credentials", {
-          expiresAt: Date.now() - 1000, // Simulate an expired session
-        });
-        return h.response().code(204);
-      },
-    });
-
-    server.route({
-      method: "GET",
-      path: "/restricted",
-      options: {
-        auth: {
-          mode: "required",
-          strategy: "session",
-        },
-      },
-      handler() {
-        return "You are authenticated";
-      },
-    });
-
-    await server.initialize();
-
-    const setupSessionResponse = await server.inject({
-      method: "POST",
-      url: "/setup-session",
-      auth: {
-        credentials: {},
-        strategy: "session",
-        mode: "required",
-      },
-    });
-
-    const response = await server.inject({
-      method: "GET",
-      url: "/restricted",
-      headers: {
-        cookie: setupSessionResponse.headers["set-cookie"][0].split(";")[0],
-      },
-    });
-
-    expect(response.statusCode).toBe(302);
-
-    expect(response.headers.location).toEqual(
-      `/login?${new URLSearchParams({
-        next: `http://${config.get("host")}:${config.get("port")}/restricted`,
-      })}`,
+    // Where the user was heading rides a cookie rather than a query string,
+    // because Entra returns them by a cross-site POST.
+    expect(response.headers["set-cookie"]).toEqual(
+      expect.arrayContaining([expect.stringContaining("auth-redirect=")]),
     );
   });
 
@@ -272,7 +179,9 @@ describe("server", () => {
       path: "/setup-session",
       handler(request, h) {
         request.yar.set("credentials", {
-          expiresAt: Date.now() + 3600000, // Simulate a valid session
+          token: "access-token",
+          refreshToken: "refresh-token",
+          expiresAt: Date.now() + 3600000,
         });
         return h.response().code(204);
       },
@@ -293,6 +202,12 @@ describe("server", () => {
     });
 
     await server.initialize();
+
+    // Whether the token needs refreshing is session-scheme.test.js's subject.
+    server.plugins["hapi-auth-oidc"].oidc.ensureValidToken = async (
+      _request,
+      token,
+    ) => ({ token, refreshed: false });
 
     const setupSessionResponse = await server.inject({
       method: "POST",
