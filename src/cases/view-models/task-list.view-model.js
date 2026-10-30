@@ -122,6 +122,7 @@ const mapActions = ({ stage, errors, values }) => {
     legend,
     errorMessage: getFieldValue("actionCode", errors),
     items: mapActionItems({ stage, actions: stage.actions, errors, values }),
+    cancelLink: stage.cancelHref || undefined,
   };
 };
 
@@ -139,6 +140,7 @@ const mapActionItems = ({ actions, stage, errors, values }) =>
     return {
       value: action.code,
       text: action.name,
+      hint: action.hint ? { text: action.hint } : undefined,
       checked,
       conditional,
       classes: action.classes,
