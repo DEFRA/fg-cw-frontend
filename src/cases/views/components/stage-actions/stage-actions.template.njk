@@ -5,6 +5,9 @@
 {% if params.stage.actions.items.length > 0 %}
   <form method="POST" action="/cases/{{ params.caseId }}/stage/outcome">
     {% if params.stage.actions.items.length === 1 %}
+      {# Single action renders as a button, not a radio — item.hint is not
+         displayed. If a future config needs a hint on a single action,
+         render it as govuk-body text above the button. #}
       {% set item = params.stage.actions.items[0] %}
 
       {% if item.conditional %}
@@ -27,6 +30,7 @@
             set radioItem = {
               value: item.value,
               text: item.text,
+              hint: item.hint,
               checked: item.checked,
               conditional: { html: govukTextarea(item.conditional) }
             }
@@ -37,6 +41,7 @@
             set radioItem = {
               value: item.value,
               text: item.text,
+              hint: item.hint,
               checked: item.checked
             }
           %}
@@ -64,4 +69,11 @@
       }}
     {% endif %}
   </form>
+  {% if params.stage.actions.cancelLink %}
+    <p class="govuk-body">
+      <a href="{{ params.stage.actions.cancelLink }}" class="govuk-link"
+        >Cancel and return</a
+      >
+    </p>
+  {% endif %}
 {% endif %}

@@ -623,6 +623,79 @@ describe("createTaskListViewModel", () => {
     });
   });
 
+  describe("action hint mapping", () => {
+    it("maps hint string to GOV.UK hint object", () => {
+      const kase = structuredClone(mockCaseData);
+      kase.stage.actions = [
+        { code: "approve", name: "Approve", hint: "Progress to next stage" },
+        { code: "reject", name: "Reject" },
+      ];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      const approveItem = result.data.stage.actions.items.find(
+        (item) => item.value === "approve",
+      );
+      const rejectItem = result.data.stage.actions.items.find(
+        (item) => item.value === "reject",
+      );
+
+      expect(approveItem.hint).toEqual({ text: "Progress to next stage" });
+      expect(rejectItem.hint).toBeUndefined();
+    });
+
+    it("does not set hint when action has no hint", () => {
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
+
+      const rejectItem = result.data.stage.actions.items.find(
+        (item) => item.value === "reject",
+      );
+
+      expect(rejectItem.hint).toBeUndefined();
+    });
+
+    it("does not set hint when hint is null", () => {
+      const kase = structuredClone(mockCaseData);
+      kase.stage.actions = [{ code: "approve", name: "Approve", hint: null }];
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.actions.items[0].hint).toBeUndefined();
+    });
+  });
+
+  describe("cancel link mapping", () => {
+    it("passes cancelHref through as cancelLink", () => {
+      const kase = structuredClone(mockCaseData);
+      kase.stage.cancelHref = "/cases";
+
+      const result = createTaskListViewModel({
+        page: createMockPage(kase),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.actions.cancelLink).toBe("/cases");
+    });
+
+    it("does not set cancelLink when cancelHref is absent", () => {
+      const result = createTaskListViewModel({
+        page: createMockPage(mockCaseData),
+        request: mockRequest,
+      });
+
+      expect(result.data.stage.actions.cancelLink).toBeUndefined();
+    });
+  });
+
   describe("textarea value priority", () => {
     it("prioritizes form values over stage outcome", () => {
       const values = { "approve-comment": "Form value" };

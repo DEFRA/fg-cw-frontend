@@ -140,6 +140,7 @@ exports[`stage-actions > renders stage actions with conditional textarea 1`] = `
 exports[`stage-actions > renders with error message 1`] = `
 "
   <form method="POST" action="/cases/789/stage/outcome">
+      
 
 
       <button type="submit" value="approve" name="actionCode" class="govuk-button" data-module="govuk-button">
@@ -152,6 +153,7 @@ exports[`stage-actions > renders with error message 1`] = `
 exports[`stage-actions > renders with textarea error 1`] = `
 "
   <form method="POST" action="/cases/error-case/stage/outcome">
+      
 
         <div class="govuk-form-group govuk-form-group--error">
   <label class="govuk-label" for="approve-comment">

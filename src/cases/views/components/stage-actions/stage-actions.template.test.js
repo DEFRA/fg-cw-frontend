@@ -190,4 +190,37 @@ describe("stage-actions", () => {
 
     expect(component).toMatchSnapshot();
   });
+
+  test("renders radio with hint text", () => {
+    const component = render("stage-actions", {
+      caseId: "hint-case",
+      stage: {
+        actions: {
+          idPrefix: "actionCode",
+          name: "actionCode",
+          legend: "Decision",
+          cancelLink: "/cases",
+          items: [
+            {
+              value: "approve",
+              text: "Approved the plan",
+              hint: { text: "Progress to next stage" },
+              checked: false,
+            },
+            {
+              value: "reject",
+              text: "Rejected the plan",
+              checked: false,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(component).toContain("Progress to next stage");
+    expect(component).toContain("Approved the plan");
+    expect(component).toContain("Rejected the plan");
+    expect(component).toContain('href="/cases"');
+    expect(component).toContain("Cancel and return");
+  });
 });
