@@ -1,7 +1,7 @@
 import Boom from "@hapi/boom";
 import { ResponseBodyError } from "openid-client";
+import { logAuthFailureUseCase } from "../../../auth/use-cases/log-auth-failure.use-case.js";
 import { loginUserUseCase } from "../../../auth/use-cases/login-user.use-case.js";
-import { logger } from "../../../common/logger.js";
 import { loginPath } from "./paths.js";
 import { redirectToWithMemory } from "./redirect-cookie.js";
 import {
@@ -50,14 +50,17 @@ const refreshIfNeeded = async (request, credentials) => {
 
 const handleRefreshFailure = (request, h, error) => {
   if (!isRefreshRejectedByEntra(error)) {
-    logger.warn(
+    logAuthFailureUseCase(
       error,
       "Could not refresh the access token, leaving the session in place to retry",
     );
     throw Boom.serverUnavailable("Could not refresh the session");
   }
 
-  logger.warn(error, "Refresh token rejected, sending the user back to login");
+  logAuthFailureUseCase(
+    error,
+    "Refresh token rejected, sending the user back to login",
+  );
   clearAuthSession(request);
 
   return redirectToLogin(request, h);

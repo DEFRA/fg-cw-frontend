@@ -9,6 +9,7 @@ import {
   vi,
 } from "vitest";
 import { loginUserUseCase } from "../../../auth/use-cases/login-user.use-case.js";
+import { logger } from "../../../common/logger.js";
 import { createServer } from "../../index.js";
 import { redirectCookieName } from "./redirect-cookie.js";
 
@@ -236,6 +237,41 @@ describe("sessionScheme", () => {
 
     const { statusCode: onceEntraIsBack } = await visitProtected(cookie);
     expect(onceEntraIsBack).toEqual(200);
+  });
+
+  // A refresh failure carries the same secrets a callback failure does, so it
+  // goes through the same sanitiser rather than straight to the logs.
+  it("logs safe CDP diagnostics when a refresh fails", async () => {
+    const warn = vi.spyOn(logger, "warn").mockImplementation(() => {});
+
+    const rejected = new ResponseBodyError(
+      "invalid_grant (AADSTS70008: private-email@example.test private-secret)",
+      {
+        cause: { error: "invalid_grant" },
+        response: new Response(null, { status: 400 }),
+      },
+    );
+
+    server.plugins["hapi-auth-oidc"].oidc.ensureValidToken = async () => {
+      throw rejected;
+    };
+
+    const cookie = await signIn(validSession);
+    await visitProtected(cookie);
+
+    expect(warn).toHaveBeenCalledWith(
+      expect.objectContaining({
+        error: expect.objectContaining({
+          type: "EntraAuthenticationError",
+          code: "AADSTS70008",
+          message: "Refresh token rejected, sending the user back to login",
+        }),
+      }),
+      "Refresh token rejected, sending the user back to login",
+    );
+    expect(JSON.stringify(warn.mock.calls[0])).not.toContain("private");
+
+    warn.mockRestore();
   });
 
   // The deploy-safety property: a session written by the previous release is

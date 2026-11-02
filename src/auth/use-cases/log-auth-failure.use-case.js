@@ -8,19 +8,22 @@ const diagnosticCode = (details) => {
   return details.networkErrorCode ?? entraCode;
 };
 
-export const logAuthFailureUseCase = (error) => {
+export const logAuthFailureUseCase = (
+  error,
+  message = "Entra callback authentication failed",
+) => {
   const details = authFailureDetails(error);
   logger.warn(
     {
       error: {
         type: "EntraAuthenticationError",
         code: diagnosticCode(details),
-        message: "Entra callback authentication failed",
+        message,
       },
       // CDP only ingests its supported ECS fields; tenant.message carries
       // custom diagnostics as text. Do not attach raw auth errors here.
       tenant: { message: JSON.stringify(details) },
     },
-    "Entra callback authentication failed",
+    message,
   );
 };
