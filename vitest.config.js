@@ -14,6 +14,7 @@ export default defineConfig({
       REDIS_PASSWORD: "",
       SESSION_COOKIE_PASSWORD:
         "the-password-must-be-at-least-32-characters-long",
+      AUTH_COOKIE_PASSWORD: "the-password-must-be-at-least-32-characters-long",
       OIDC_CLIENT_ID: "client1",
       TZ: "Europe/London",
     },

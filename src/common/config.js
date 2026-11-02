@@ -256,7 +256,7 @@ export const config = convict({
       password: {
         doc: "password used to encrypt the transient OIDC login and redirect cookies",
         format: String,
-        default: "the-password-must-be-at-least-32-characters-long",
+        default: null,
         env: "AUTH_COOKIE_PASSWORD",
         sensitive: true,
       },
