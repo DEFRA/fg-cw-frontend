@@ -93,7 +93,7 @@
   },
   "overrides": {
     "@defra/hapi-auth-oidc": {
-      "joi": "^18.2.9"
+      "joi": "18.2.9"
     }
   },
   "devDependencies": {
