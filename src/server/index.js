@@ -2,7 +2,7 @@ import hapi from "@hapi/hapi";
 import { config } from "../common/config.js";
 import { logger } from "../common/logger.js";
 import { nunjucks } from "../common/nunjucks/nunjucks.js";
-import { auth } from "./plugins/auth.js";
+import { auth } from "./plugins/auth/index.js";
 import { errors } from "./plugins/errors.js";
 import { files } from "./plugins/files.js";
 import { flashContext } from "./plugins/flash-context.js";

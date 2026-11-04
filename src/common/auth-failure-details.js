@@ -48,10 +48,12 @@ const entraCodes = (value) => {
   if (codes.length) {
     return codes;
   }
-  const match =
-    typeof value.error_description === "string"
-      ? value.error_description.match(/\bAADSTS(\d{4,10})\b/)
-      : null;
+  // `error_description` on the raw OAuth body, and `message` once the library
+  // has folded that body into an Error.
+  const text = [value.error_description, value.message]
+    .filter((candidate) => typeof candidate === "string")
+    .join(" ");
+  const match = text.match(/\bAADSTS(\d{4,10})\b/);
   return match ? [Number(match[1])] : [];
 };
 
@@ -74,22 +76,30 @@ const validStatus = (code) => {
 };
 
 const responseStatus = (value) =>
-  value.output?.statusCode ?? value.res?.statusCode;
+  [value.output?.statusCode, value.res?.statusCode, value.status].find(
+    (code) => code !== undefined,
+  );
+
+// oauth4webapi labels its own error classes with upper-case `OAUTH_*` codes,
+// which look exactly like a Node transport code. Reporting one as the
+// diagnostic would hide the AADSTS code underneath it.
+const isLibraryErrorCode = (value) =>
+  typeof value === "string" && value.startsWith("OAUTH_");
+
+const networkErrorCode = (code) =>
+  isLibraryErrorCode(code) ? undefined : symbolicCode(code, networkCodePattern);
 
 const addTransportDetails = (details, value) => {
   put(details, "statusCode", validStatus(responseStatus(value)));
-  put(
-    details,
-    "networkErrorCode",
-    symbolicCode(value.code, networkCodePattern),
-  );
+  put(details, "networkErrorCode", networkErrorCode(value.code));
 };
 
 const isRecord = (value) => value !== null && typeof value === "object";
 
-// Bell wraps Wreck errors in .data; Wreck can wrap response bodies and
-// transport errors again. Never log the raw error, response, or description:
-// they can contain credentials, request headers, URLs, and personal data.
+// openid-client raises a ResponseBodyError carrying the parsed OAuth body on
+// .cause; hapi wraps that again in a Boom. Never log the raw error, response,
+// or description: they can contain credentials, request headers, URLs, and
+// personal data.
 export const authFailureDetails = (error) => {
   const details = {};
   const visit = (input, depth) => {
@@ -104,8 +114,6 @@ export const authFailureDetails = (error) => {
     }
   };
 
-  // Start with the underlying error; Bell's own 500 is a wrapper, not the
-  // HTTP status returned by the token endpoint.
-  visit(error?.data, 0);
+  visit(error, 0);
   return details;
 };

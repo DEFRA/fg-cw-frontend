@@ -24,6 +24,14 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/login",
+      },
+      {
+        method: "get",
+        path: "/logout",
+      },
+      {
+        method: "get",
         path: "/reports",
       },
       {
@@ -45,6 +53,10 @@ describe("cases", () => {
       {
         method: "get",
         path: "/cases/{caseId}",
+      },
+      {
+        method: "get",
+        path: "/login/callback",
       },
       {
         method: "get",
@@ -93,6 +105,10 @@ describe("cases", () => {
       {
         method: "post",
         path: "/cases/assign-user",
+      },
+      {
+        method: "post",
+        path: "/login/callback",
       },
       {
         method: "post",

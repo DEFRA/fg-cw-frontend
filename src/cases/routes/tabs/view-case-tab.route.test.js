@@ -1,4 +1,3 @@
-import Bell from "@hapi/bell";
 import { load } from "cheerio";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createServer } from "../../../server/index.js";
@@ -17,7 +16,6 @@ describe("viewCaseTabRoute", () => {
   let server;
 
   beforeEach(async () => {
-    Bell.simulate(() => ({}));
     server = await createServer();
     server.route(viewCaseTabRoute);
     await server.initialize();
@@ -25,7 +23,6 @@ describe("viewCaseTabRoute", () => {
 
   afterEach(async () => {
     await server.stop();
-    Bell.simulate(false);
   });
 
   it("renders tab view with correct data", async () => {
