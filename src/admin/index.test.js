@@ -19,6 +19,7 @@ describe("admin", () => {
 
     expect(routes).toEqual(
       expect.arrayContaining([
+        { method: "get", path: "/case-types" },
         { method: "get", path: "/admin/user-management/users/new" },
         { method: "get", path: "/admin/user-management/users" },
         { method: "post", path: "/admin/user-management/users" },
