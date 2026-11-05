@@ -2,8 +2,8 @@ import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
-import { getCaseTypesUseCase } from "../use-cases/get-case-types.use-case.js";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
+import { getCaseTypesUseCase } from "../use-cases/get-case-types.use-case.js";
 import { listCaseTypesRoute } from "./list-case-types.route.js";
 
 vi.mock("../use-cases/get-case-types.use-case.js");
