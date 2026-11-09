@@ -96,6 +96,15 @@ const addTransportDetails = (details, value) => {
 
 const isRecord = (value) => value !== null && typeof value === "object";
 
+// Node wraps a failed connection to several addresses in an AggregateError,
+// whose own code is empty and whose useful codes sit in `.errors`.
+const nestedValues = (value) => [
+  value.data,
+  value.cause,
+  value.payload,
+  ...(Array.isArray(value.errors) ? value.errors : []),
+];
+
 // openid-client raises a ResponseBodyError carrying the parsed OAuth body on
 // .cause; hapi wraps that again in a Boom. Never log the raw error, response,
 // or description: they can contain credentials, request headers, URLs, and
@@ -109,7 +118,7 @@ export const authFailureDetails = (error) => {
     }
     addTransportDetails(details, value);
     addEntraDetails(details, value);
-    for (const nested of [value.data, value.cause, value.payload]) {
+    for (const nested of nestedValues(value)) {
       visit(nested, depth + 1);
     }
   };

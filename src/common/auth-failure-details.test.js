@@ -127,4 +127,16 @@ describe("authFailureDetails", () => {
       networkErrorCode: "ECONNRESET",
     });
   });
+
+  it("finds the transport code of a fetch failure inside an AggregateError", () => {
+    const connectFailure = new TypeError("fetch failed", {
+      cause: new AggregateError([
+        Object.assign(new Error("private host"), { code: "ECONNREFUSED" }),
+      ]),
+    });
+
+    expect(authFailureDetails(connectFailure)).toEqual({
+      networkErrorCode: "ECONNREFUSED",
+    });
+  });
 });

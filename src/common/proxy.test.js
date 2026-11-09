@@ -26,6 +26,16 @@ const childScript = `
   }
 `;
 
+const fetchScript = `
+  await import('./src/common/proxy.js');
+  try {
+    const response = await fetch(process.env.TEST_TOKEN_ENDPOINT);
+    console.log(JSON.stringify({ statusCode: response.status }));
+  } catch (error) {
+    console.log(JSON.stringify({ message: error.message }));
+  }
+`;
+
 // The real proxy bootstrap runs in a child process so its global agents do
 // not affect other tests. All endpoints and certificates are local fixtures.
 describe("HTTPS token exchange through the configured HTTP proxy", () => {
@@ -105,10 +115,10 @@ describe("HTTPS token exchange through the configured HTTP proxy", () => {
     await rm(directory, { recursive: true, force: true });
   });
 
-  const exchangeToken = async (hostname) => {
+  const exchangeToken = async (hostname, script = childScript) => {
     const { stdout } = await runNode(
       process.execPath,
-      ["--input-type=module", "-e", childScript],
+      ["--input-type=module", "-e", script],
       {
         env: {
           ...process.env,
@@ -125,6 +135,13 @@ describe("HTTPS token exchange through the configured HTTP proxy", () => {
 
   it("exchanges a token with the destination hostname verified and sent as SNI", async () => {
     expect(await exchangeToken(certificateHost)).toEqual({ statusCode: 200 });
+    expect(receivedServerName).toBe(certificateHost);
+  });
+
+  it("sends native fetch through the proxy as well", async () => {
+    expect(await exchangeToken(certificateHost, fetchScript)).toEqual({
+      statusCode: 200,
+    });
     expect(receivedServerName).toBe(certificateHost);
   });
 
