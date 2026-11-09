@@ -1,3 +1,4 @@
+import { logAuthFailureUseCase } from "../../../auth/use-cases/log-auth-failure.use-case.js";
 import { loginPath } from "./paths.js";
 
 /**
@@ -14,5 +15,13 @@ export const loginRoute = {
   options: {
     auth: false,
   },
-  handler: (request, h) => request.login(h),
+  handler: async (request, h) => {
+    try {
+      return await request.login(h);
+    } catch (error) {
+      // Discovery failures surface as a bare "fetch failed"; record why.
+      logAuthFailureUseCase(error, "Entra login redirect failed");
+      throw error;
+    }
+  },
 };
