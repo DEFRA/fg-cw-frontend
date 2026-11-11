@@ -95,6 +95,9 @@
   "overrides": {
     "@defra/hapi-auth-oidc": {
       "joi": "^18.3.1"
+    },
+    "hapi-pulse": {
+      "joi": "^18.3.2"
     }
   },
   "devDependencies": {
