@@ -1,3 +1,4 @@
+import { config } from "../common/config.js";
 import { editComponentsRoute } from "../temp/routes/edit-components.route.js";
 import { viewComponentsRoute } from "../temp/routes/get-components.route.js";
 import { updateComponentsRoute } from "../temp/routes/update-components.route.js";
@@ -47,10 +48,15 @@ export const cases = {
         viewAssignUserToCaseRoute,
         assignUserToCaseRoute,
         viewCaseTabRoute,
-        viewComponentsRoute,
-        editComponentsRoute,
-        updateComponentsRoute,
       ];
+
+      if (config.get("isComponentEditorEnabled")) {
+        routes.push(
+          viewComponentsRoute,
+          editComponentsRoute,
+          updateComponentsRoute,
+        );
+      }
 
       server.route(routes);
     },

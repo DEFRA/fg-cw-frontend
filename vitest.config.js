@@ -16,6 +16,7 @@ export default defineConfig({
         "the-password-must-be-at-least-32-characters-long",
       AUTH_COOKIE_PASSWORD: "the-password-must-be-at-least-32-characters-long",
       OIDC_CLIENT_ID: "client1",
+      ENABLE_COMPONENT_EDITOR: "true",
       TZ: "Europe/London",
     },
     coverage: {

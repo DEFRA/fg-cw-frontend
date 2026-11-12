@@ -1,4 +1,5 @@
-import { beforeEach, describe, expect, test } from "vitest";
+import { afterEach, beforeEach, describe, expect, test } from "vitest";
+import { config } from "../common/config.js";
 import { createServer } from "../server/index.js";
 import { cases } from "./index.js";
 
@@ -135,5 +136,25 @@ describe("cases", () => {
         path: "/cases/{caseId}/task-groups/{taskGroupCode}/tasks/{taskCode}/value",
       },
     ]);
+  });
+
+  describe("when the component editor is disabled", () => {
+    beforeEach(async () => {
+      config.set("isComponentEditorEnabled", false);
+      server = await createServer();
+      await server.register(cases);
+      await server.initialize();
+    });
+
+    afterEach(() => {
+      config.set("isComponentEditorEnabled", true);
+    });
+
+    test("does not register the component editor routes", () => {
+      const paths = server.table().map((r) => r.path);
+
+      expect(paths).not.toContain("/cases/{caseId}/components");
+      expect(paths).not.toContain("/cases/{caseId}/components/edit");
+    });
   });
 });
