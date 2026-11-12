@@ -36,10 +36,11 @@ const createAuthProvider = () => {
   // Temporary fallback for environments whose federated credential is not yet
   // usable. Remove the secret from CDP to switch to federation.
   if (oidcConfig.clientSecret) {
-    return new MockProvider({
+    // Not MockProvider: it logs the credential it returns.
+    return {
       type: "client_secret",
-      token: oidcConfig.clientSecret,
-    });
+      getCredentials: async (_logger) => oidcConfig.clientSecret,
+    };
   }
 
   return new WebIdentityTokenProvider({

@@ -1,4 +1,4 @@
-import { MockProvider, WebIdentityTokenProvider } from "@defra/hapi-auth-oidc";
+import { WebIdentityTokenProvider } from "@defra/hapi-auth-oidc";
 import { afterEach, describe, expect, it, vi } from "vitest";
 
 const discoveryUri =
@@ -25,9 +25,15 @@ describe("oidc auth provider", () => {
     expect(provider).toBeInstanceOf(WebIdentityTokenProvider);
   });
 
-  it("falls back to the client secret when one is configured", async () => {
+  it("falls back to the client secret without logging it", async () => {
     const provider = await loadAuthProvider({ OIDC_CLIENT_SECRET: "s3cret" });
+    const logger = { info: vi.fn(), warn: vi.fn(), debug: vi.fn() };
 
-    expect(provider).toBeInstanceOf(MockProvider);
+    expect(provider.type).toBe("client_secret");
+    expect(provider.getCredentials.length).toBe(1);
+    await expect(provider.getCredentials(logger)).resolves.toBe("s3cret");
+    expect(
+      JSON.stringify(Object.values(logger).map((fn) => fn.mock.calls)),
+    ).not.toContain("s3cret");
   });
 });
