@@ -33,6 +33,15 @@ const createAuthProvider = () => {
     });
   }
 
+  // Temporary fallback for environments whose federated credential is not yet
+  // usable. Remove the secret from CDP to switch to federation.
+  if (oidcConfig.clientSecret) {
+    return new MockProvider({
+      type: "client_secret",
+      token: oidcConfig.clientSecret,
+    });
+  }
+
   return new WebIdentityTokenProvider({
     audience: [oidcConfig.federatedCredentials.audience],
     // The provider only refreshes once expiry has passed, so buy a minute of

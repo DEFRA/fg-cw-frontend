@@ -258,6 +258,14 @@ export const config = convict({
       default: "http://localhost:3100",
       env: "APP_BASE_URL",
     },
+    clientSecret: {
+      doc: "Temporary fallback: when set, authenticates to Entra with this client secret instead of federated credentials",
+      format: String,
+      default: null,
+      nullable: true,
+      env: "OIDC_CLIENT_SECRET",
+      sensitive: true,
+    },
     cookie: {
       password: {
         doc: "password used to encrypt the transient OIDC login and redirect cookies",
