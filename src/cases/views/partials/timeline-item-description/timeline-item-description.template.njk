@@ -1,4 +1,13 @@
 <div class="timeline__description">
+  {% if params.eventType == 'CASE_LABEL_CHANGED' %}
+    <p>
+      {{ params.data.namespace }}: {{ params.data.oldLabel.code or 'Not set' }}
+      →
+      {{ params.data.newLabel.code or 'Not set' }}{% if params.data.newLabel.data.duplicateOf %}
+        with {{ params.data.newLabel.data.duplicateOf }}
+      {% endif %}
+    </p>
+  {% endif %}
   {% if params.commentRef %}
     <p>
       <a
