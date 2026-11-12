@@ -119,6 +119,12 @@ export const config = convict({
     default: isProduction,
     env: "ENABLE_METRICS",
   },
+  isComponentEditorEnabled: {
+    doc: "Register the temporary case component editor routes",
+    format: Boolean,
+    default: false,
+    env: "ENABLE_COMPONENT_EDITOR",
+  },
   session: {
     cache: {
       engine: {
