@@ -5,6 +5,7 @@ import { updateComponentsRoute } from "../temp/routes/update-components.route.js
 import { agreementsProxyRoutes } from "./routes/agreements-proxy.route.js";
 import { assignUserToCaseRoute } from "./routes/assign-user/assign-user-to-case.route.js";
 import { viewAssignUserToCaseRoute } from "./routes/assign-user/view-assign-user-to-case.route.js";
+import { casePageRoutes } from "./routes/case-page.route.js";
 import {
   confirmStageOutcomeRoute,
   viewConfirmStageOutcomeRoute,
@@ -29,6 +30,7 @@ export const cases = {
     name: "cases",
     register(server) {
       const routes = [
+        ...casePageRoutes,
         ...agreementsProxyRoutes,
         listCasesRoute,
         reportRoute,

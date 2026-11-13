@@ -1,0 +1,41 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "govuk/components/select/macro.njk" import govukSelect %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% block contentMain %}
+  <a class="govuk-back-link" href="{{ data.summaryHref }}">Back to issues</a>
+  <h1 class="govuk-heading-xl">SBI {{ data.details.sbi }}</h1>
+  <p class="govuk-body">
+    {{ data.details.businessName }} · {{ data.cases.length }} applications
+  </p>
+  <form method="POST">
+    {{ govukSelect({ id: 'assignee', name: 'assignee', label: { text: 'Issue owner' }, items: data.usersSelect, disabled: not data.canEdit }) }}
+    <table class="govuk-table">
+      <caption class="govuk-visually-hidden">
+        Application labels
+      </caption>
+      <thead class="govuk-table__head">
+        <tr class="govuk-table__row">
+          <th class="govuk-table__header">Case ID</th>
+          <th class="govuk-table__header">Label</th>
+        </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+        {% for case in data.cases %}
+          <tr class="govuk-table__row">
+            <td class="govuk-table__cell">
+              <a class="govuk-link" href="/cases/{{ case.id }}"
+                >{{ case.caseRef }}</a
+              >{% if case.excluded %}
+                <div class="govuk-hint">Excluded: {{ case.status }}</div>
+              {% endif %}
+            </td>
+            <td class="govuk-table__cell">
+              {{ govukSelect({ id: 'label-' + case.caseRef, name: 'label-' + case.caseRef, label: { text: 'Label for case ' + case.caseRef, classes: 'govuk-visually-hidden' }, items: case.items, disabled: case.excluded or not data.canEdit }) }}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% if data.canEdit %}{{ govukButton({ text: 'Save and continue' }) }}{% endif %}
+  </form>
+{% endblock %}

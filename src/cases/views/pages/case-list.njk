@@ -7,6 +7,22 @@
 {% from "notification-banner/macro.njk" import notificationBanner %}
 
 {% block contentMain %}
+  {% if data.pageTabs.length %}
+    <nav aria-label="Case lists">
+      <ul class="govuk-tabs__list">
+        <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
+          <a class="govuk-tabs__tab" href="/cases" aria-current="page"
+            >All cases</a
+          >
+        </li>
+        {% for tab in data.pageTabs %}
+          <li class="govuk-tabs__list-item">
+            <a class="govuk-tabs__tab" href="{{ tab.href }}">{{ tab.title }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
   {% if data.assignedUserSuccessMessage %}
     {% set assignmentHtml %}
       <a
