@@ -11,6 +11,7 @@ import {
 } from "./routes/confirm-stage-outcome.route.js";
 import { getSecretWorkflowRoute } from "./routes/get-secret-workflow.route.js";
 import { getSecretRoute } from "./routes/get-secret.route.js";
+import { listCasesByTypeRoute } from "./routes/list-cases-by-type.route.js";
 import { listCasesRoute } from "./routes/list-cases.route.js";
 import { listTasksRoute } from "./routes/list-tasks.route.js";
 import { createNoteRoute } from "./routes/notes/create-note.route.js";
@@ -30,6 +31,7 @@ export const cases = {
     register(server) {
       const routes = [
         ...agreementsProxyRoutes,
+        listCasesByTypeRoute,
         listCasesRoute,
         reportRoute,
         pageActionRoute,
