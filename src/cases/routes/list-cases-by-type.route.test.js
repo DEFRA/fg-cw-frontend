@@ -1,11 +1,12 @@
+import Boom from "@hapi/boom";
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
-import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
+import { findCasesByTypeUseCase } from "../use-cases/find-cases-by-type.use-case.js";
 import { listCasesByTypeRoute } from "./list-cases-by-type.route.js";
 
-vi.mock("../use-cases/find-all-cases.use-case.js");
+vi.mock("../use-cases/find-cases-by-type.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
 
 const createMockPage = (cases, pagination = {}) => ({
@@ -49,7 +50,7 @@ describe("listCasesByTypeRoute", () => {
 
   it("returns a list of cases filtered by type", async () => {
     flashAssignedCaseId = undefined;
-    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -66,15 +67,16 @@ describe("listCasesByTypeRoute", () => {
     const view = $("#main-content").html();
 
     expect(view).toMatchSnapshot();
-    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+    expect(findCasesByTypeUseCase).toHaveBeenCalledWith(
       { token: "mock-token", user: undefined },
-      { caseType: "woodland" },
+      "woodland",
+      {},
     );
   });
 
   it("renders page heading with case type", async () => {
     flashAssignedCaseId = undefined;
-    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { result } = await server.inject({
       method: "GET",
@@ -91,7 +93,7 @@ describe("listCasesByTypeRoute", () => {
 
   it("renders empty state message when no cases exist for the type", async () => {
     flashAssignedCaseId = undefined;
-    findAllCasesUseCase.mockResolvedValue(createMockPage([]));
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage([]));
 
     const { statusCode, result } = await server.inject({
       method: "GET",
@@ -122,12 +124,12 @@ describe("listCasesByTypeRoute", () => {
 
     expect(statusCode).toEqual(302);
     expect(headers.location).toBe("/types/woodland/cases");
-    expect(findAllCasesUseCase).not.toHaveBeenCalled();
+    expect(findCasesByTypeUseCase).not.toHaveBeenCalled();
   });
 
-  it("passes search query parameter to use case", async () => {
+  it("passes search query parameter to repository", async () => {
     flashAssignedCaseId = undefined;
-    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { statusCode } = await server.inject({
       method: "GET",
@@ -139,15 +141,16 @@ describe("listCasesByTypeRoute", () => {
     });
 
     expect(statusCode).toEqual(200);
-    expect(findAllCasesUseCase).toHaveBeenCalledWith(
+    expect(findCasesByTypeUseCase).toHaveBeenCalledWith(
       { token: "mock-token", user: undefined },
-      { search: "12345", caseType: "woodland" },
+      "woodland",
+      { search: "12345" },
     );
   });
 
   it("sets search form action to the case-type-scoped path", async () => {
     flashAssignedCaseId = undefined;
-    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage(mockCases));
 
     const { result } = await server.inject({
       method: "GET",
@@ -160,6 +163,38 @@ describe("listCasesByTypeRoute", () => {
 
     const $ = load(result);
     expect($("form").attr("action")).toBe("/types/woodland/cases");
+  });
+
+  it("returns 404 when the backend reports case type not found", async () => {
+    flashAssignedCaseId = undefined;
+    findCasesByTypeUseCase.mockRejectedValue(Boom.notFound("Not Found"));
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/types/DOES-NOT-EXIST/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(404);
+  });
+
+  it("returns 403 when the user lacks roles for the case type", async () => {
+    flashAssignedCaseId = undefined;
+    findCasesByTypeUseCase.mockRejectedValue(Boom.forbidden("Forbidden"));
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/types/WF-RESTRICTED/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(403);
   });
 });
 

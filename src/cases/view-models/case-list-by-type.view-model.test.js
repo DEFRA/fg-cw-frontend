@@ -53,14 +53,14 @@ describe("createCaseListByTypeViewModel", () => {
     expect(result.pageHeading).toBe("Cases \u2013 woodland");
   });
 
-  it("sets the tab label to Cases – [caseType]", () => {
+  it("sets the tab label to include the case type and count", () => {
     const result = createCaseListByTypeViewModel({
       page: createMockPage(mockCases),
       request: mockRequest,
       caseType: "woodland",
     });
 
-    expect(result.data.tabItems[0].label).toBe("Cases \u2013 woodland");
+    expect(result.data.tabItems[0].label).toBe("Cases \u2013 woodland (1)");
   });
 
   it("sets formAction to the case-type-scoped path", () => {
@@ -106,6 +106,20 @@ describe("createCaseListByTypeViewModel", () => {
     expect(result.data.tabItems[0].data.rows[0].caseType.text).toBe(
       "Woodland Management Plan",
     );
+  });
+
+  it("URL-encodes the caseType in formAction", () => {
+    const result = createCaseListByTypeViewModel({
+      page: createMockPage([]),
+      request: {
+        ...mockRequest,
+        path: "/types/WF%20SPACE/cases",
+        url: new URL("http://localhost:3000/types/WF%20SPACE/cases"),
+      },
+      caseType: "WF SPACE",
+    });
+
+    expect(result.data.formAction).toBe("/types/WF%20SPACE/cases");
   });
 
   it("has empty breadcrumbs", () => {

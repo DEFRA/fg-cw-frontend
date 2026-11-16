@@ -1,6 +1,6 @@
 import { getFlashValue } from "../../common/helpers/flash-helpers.js";
 import { logger } from "../../common/logger.js";
-import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
+import { findCasesByTypeUseCase } from "../use-cases/find-cases-by-type.use-case.js";
 import { createCaseListByTypeViewModel } from "../view-models/case-list-by-type.view-model.js";
 
 export const listCasesByTypeRoute = {
@@ -10,7 +10,7 @@ export const listCasesByTypeRoute = {
     const { caseType } = request.params;
 
     if ("search" in request.query && !request.query.search) {
-      return h.redirect(`/types/${caseType}/cases`);
+      return h.redirect(`/types/${encodeURIComponent(caseType)}/cases`);
     }
 
     const assignedCaseId = getFlashValue(request, "assignedCaseId");
@@ -23,9 +23,11 @@ export const listCasesByTypeRoute = {
       user: request.auth.credentials.user,
     };
 
-    const query = { ...request.query, caseType };
-
-    const page = await findAllCasesUseCase(authContext, query);
+    const page = await findCasesByTypeUseCase(
+      authContext,
+      caseType,
+      request.query,
+    );
 
     const viewModel = createCaseListByTypeViewModel({
       page,

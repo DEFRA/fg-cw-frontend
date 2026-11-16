@@ -32,7 +32,7 @@ exports[`listCasesByTypeRoute > returns a list of cases filtered by type 1`] = `
   <ul class="govuk-tabs__list">
     <li class="govuk-tabs__list-item govuk-tabs__list-item--selected">
       <a class="govuk-tabs__tab" href="#all-cases">
-        Cases – woodland
+        Cases – woodland (1)
       </a>
     </li>
   </ul>

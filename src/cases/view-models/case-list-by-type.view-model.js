@@ -9,7 +9,7 @@ export const createCaseListByTypeViewModel = ({
   const base = createCaseListViewModel({ page, request, assignedCaseId });
 
   const totalCount = page.data.pagination.totalCount;
-  const formAction = `/types/${caseType}/cases`;
+  const formAction = `/types/${encodeURIComponent(caseType)}/cases`;
   const title = `Cases \u2013 ${caseType}`;
 
   return {
@@ -21,7 +21,7 @@ export const createCaseListByTypeViewModel = ({
       formAction,
       tabItems: base.data.tabItems.map((tab) => ({
         ...tab,
-        label: title,
+        label: `${title} (${totalCount})`,
       })),
       emptyMessage:
         totalCount === 0 ? "There are no cases for this case type" : undefined,
