@@ -1,6 +1,5 @@
 {% extends '../layouts/case-layout.njk' %}
 {% from "dynamic-content/macro.njk" import dynamicContent %}
-{% from "govuk/components/tag/macro.njk" import govukTag %}
 {% block contentMain %}
   <a class="govuk-back-link" href="{{ data.backLink.href }}"
     >{{ data.backLink.text }}</a
@@ -24,9 +23,11 @@
           <td class="govuk-table__cell">
             {{ dynamicContent(row.columns.details) }}
           </td>
-          <td class="govuk-table__cell">{{ row.assignee.name }}</td>
           <td class="govuk-table__cell">
-            {{ govukTag({ text: row.status.text, classes: row.status.classes }) }}
+            {{ dynamicContent(row.columns.assignee) }}
+          </td>
+          <td class="govuk-table__cell">
+            {{ dynamicContent(row.columns.status) }}
           </td>
         </tr>
       {% else %}

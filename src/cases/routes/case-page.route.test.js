@@ -110,9 +110,18 @@ describe("dedupe routes render backend BFF models", () => {
                 { component: "url", text: "SBI 123: Farm", href: groupUrl },
                 { component: "hint", text: "2 applications" },
               ],
+              assignee: [
+                { component: "text", text: "Owner supplied by backend" },
+              ],
+              status: [
+                {
+                  component: "status",
+                  text: "opaque-state",
+                  labelsMap: { "opaque-state": "Status supplied by backend" },
+                  classesMap: { "opaque-state": "govuk-tag--green" },
+                },
+              ],
             },
-            assignee: { name: "Not set" },
-            status: { text: "Not started", classes: "govuk-tag--blue" },
           },
         ],
       },
@@ -123,6 +132,10 @@ describe("dedupe routes render backend BFF models", () => {
     expect($("h1").text()).toBe("Clean the list");
     expect($("a[href='" + groupUrl + "']").text()).toContain("SBI 123");
     expect($(".govuk-hint").text()).toContain("2 applications");
+    expect($("tbody td").eq(1).text()).toContain("Owner supplied by backend");
+    expect($(".govuk-tag").text().trim()).toBe("Status supplied by backend");
+    expect($(".govuk-tag").attr("class")).toContain("govuk-tag--green");
+    expect($(".govuk-tag").attr("class")).not.toContain("govuk-tag--grey");
   });
   it("renders opaque choices, links, headings, notes and disabled states exactly as supplied", async () => {
     const response = await request("GET", groupUrl);
