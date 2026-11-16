@@ -14,7 +14,7 @@ const auth = (request) => ({
   user: request.auth.credentials.user,
 });
 const base = "/types/{caseType}/pages/{pageKey}";
-const group = `${base}/groups/{keyHash}`;
+const group = `${base}/groups/{groupKey}`;
 export const casePageRoutes = [
   {
     method: "GET",
@@ -42,33 +42,39 @@ export const casePageRoutes = [
     // eslint-disable-next-line complexity
     async handler(request, h) {
       try {
-        await saveCaseGroupUseCase(
+        const result = await saveCaseGroupUseCase(
           auth(request),
           request.params,
           request.payload,
         );
+        return h.redirect(result.redirectHref);
       } catch (error) {
         const status = error.output?.statusCode;
         if (![400, 409].includes(status)) {
           throw error;
         }
-        const page = await findCaseGroupUseCase(auth(request), request.params);
-        const text = error.data?.payload?.message ?? error.message;
+        const supplied = error.data?.payload;
+        const page =
+          supplied?.page ??
+          (await findCaseGroupUseCase(auth(request), request.params));
+        if (!supplied?.page) {
+          page.data.errorList = [
+            {
+              text: supplied?.message ?? error.message,
+              href: "#dedupe-review",
+            },
+          ];
+        }
         return h
           .view(
             "pages/dedupe-group",
             createCaseGroupViewModel({
               page,
               request,
-              form: request.payload,
-              error: text,
             }),
           )
           .code(status);
       }
-      return h.redirect(
-        `/types/${request.params.caseType}/pages/${request.params.pageKey}`,
-      );
     },
   },
 ];

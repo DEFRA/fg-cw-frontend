@@ -105,7 +105,7 @@ describe("cases", () => {
       },
       {
         method: "get",
-        path: "/types/{caseType}/pages/{pageKey}/groups/{keyHash}",
+        path: "/types/{caseType}/pages/{pageKey}/groups/{groupKey}",
       },
       {
         method: "post",
@@ -137,7 +137,7 @@ describe("cases", () => {
       },
       {
         method: "post",
-        path: "/types/{caseType}/pages/{pageKey}/groups/{keyHash}",
+        path: "/types/{caseType}/pages/{pageKey}/groups/{groupKey}",
       },
       {
         method: "post",

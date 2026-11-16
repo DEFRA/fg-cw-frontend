@@ -1,33 +1,25 @@
 import { describe, expect, it, vi } from "vitest";
 import { saveCaseGroup } from "../repositories/case-page.repository.js";
 import { saveCaseGroupUseCase } from "./case-page.use-case.js";
-
 vi.mock("../repositories/case-page.repository.js");
-describe("save case group", () => {
-  it("submits owner and every enabled label together, treating Not set as clear", async () => {
+describe("case group form transport", () => {
+  it("forwards choices unchanged without decoding label semantics", async () => {
     const auth = { token: "t" };
-    const identity = { caseType: "t", pageKey: "p", keyHash: "h" };
-    await saveCaseGroupUseCase(auth, identity, {
+    const identity = { caseType: "t", pageKey: "p", groupKey: "g" };
+    const form = {
       assignee: "",
-      "label-123": JSON.stringify({
-        code: "DUPLICATE",
-        data: { duplicateOf: "456" },
-      }),
+      "label-123": "opaque-choice",
       "label-456": "",
-      crumb: "not-a-label",
-    });
-    expect(saveCaseGroup).toHaveBeenCalledWith(auth, identity, {
-      assignee: null,
-      labels: {
-        123: { code: "DUPLICATE", data: { duplicateOf: "456" } },
-        456: null,
-      },
-    });
+    };
+    await saveCaseGroupUseCase(auth, identity, form);
+    expect(saveCaseGroup).toHaveBeenCalledWith(auth, identity, { form });
   });
-  it("refuses an invalid select value before calling the API", () => {
-    expect(() =>
-      saveCaseGroupUseCase({}, {}, { "label-123": "invalid JSON" }),
-    ).toThrow("Choose a valid case label");
-    expect(saveCaseGroup).not.toHaveBeenCalled();
+  it("leaves validation of any submitted token to the backend", async () => {
+    const form = {
+      assignee: "",
+      "label-123": "not JSON and not a domain object",
+    };
+    await saveCaseGroupUseCase({}, {}, form);
+    expect(saveCaseGroup).toHaveBeenCalledWith({}, {}, { form });
   });
 });

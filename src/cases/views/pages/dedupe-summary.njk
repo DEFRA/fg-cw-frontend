@@ -2,12 +2,14 @@
 {% from "dynamic-content/macro.njk" import dynamicContent %}
 {% from "govuk/components/tag/macro.njk" import govukTag %}
 {% block contentMain %}
-  <a class="govuk-back-link" href="/cases">All cases</a>
+  <a class="govuk-back-link" href="{{ data.backLink.href }}"
+    >{{ data.backLink.text }}</a
+  >
   <h1 class="govuk-heading-xl">{{ data.title }}</h1>
   <p class="govuk-body">{{ data.heading }}</p>
   <table class="govuk-table">
     <caption class="govuk-visually-hidden">
-      Issues with two or more active applications
+      {{ data.caption }}
     </caption>
     <thead class="govuk-table__head">
       <tr class="govuk-table__row">
@@ -22,16 +24,14 @@
           <td class="govuk-table__cell">
             {{ dynamicContent(row.columns.details) }}
           </td>
-          <td class="govuk-table__cell">
-            {{ row.assignee.name or 'Not set' }}
-          </td>
+          <td class="govuk-table__cell">{{ row.assignee.name }}</td>
           <td class="govuk-table__cell">
             {{ govukTag({ text: row.status.text, classes: row.status.classes }) }}
           </td>
         </tr>
       {% else %}
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell" colspan="3">No issues to review.</td>
+          <td class="govuk-table__cell" colspan="3">{{ data.emptyText }}</td>
         </tr>
       {% endfor %}
     </tbody>

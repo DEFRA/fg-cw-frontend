@@ -2,13 +2,13 @@
 {% from "govuk/components/select/macro.njk" import govukSelect %}
 {% from "govuk/components/button/macro.njk" import govukButton %}
 {% block contentMain %}
-  <a class="govuk-back-link" href="{{ data.summaryHref }}">Back to issues</a>
-  <h1 class="govuk-heading-xl">SBI {{ data.details.sbi }}</h1>
-  <p class="govuk-body">
-    {{ data.details.businessName }} · {{ data.cases.length }} applications
-  </p>
-  <form method="POST">
-    {{ govukSelect({ id: 'assignee', name: 'assignee', label: { text: 'Issue owner' }, items: data.usersSelect, disabled: not data.canEdit }) }}
+  <a class="govuk-back-link" href="{{ data.backLink.href }}"
+    >{{ data.backLink.text }}</a
+  >
+  <h1 class="govuk-heading-xl">{{ data.heading }}</h1>
+  <p class="govuk-body">{{ data.intro }}</p>
+  <form method="POST" id="{{ data.form.id }}" action="{{ data.form.action }}">
+    {{ govukSelect(data.ownerField) }}
     <table class="govuk-table">
       <caption class="govuk-visually-hidden">
         Application labels
@@ -20,22 +20,20 @@
         </tr>
       </thead>
       <tbody class="govuk-table__body">
-        {% for case in data.cases %}
+        {% for row in data.rows %}
           <tr class="govuk-table__row">
             <td class="govuk-table__cell">
-              <a class="govuk-link" href="/cases/{{ case.id }}"
-                >{{ case.caseRef }}</a
-              >{% if case.excluded %}
-                <div class="govuk-hint">Excluded: {{ case.status }}</div>
+              <a class="govuk-link" href="{{ row.caseLink.href }}"
+                >{{ row.caseLink.text }}</a
+              >{% if row.note %}
+                <div class="govuk-hint">{{ row.note }}</div>
               {% endif %}
             </td>
-            <td class="govuk-table__cell">
-              {{ govukSelect({ id: 'label-' + case.caseRef, name: 'label-' + case.caseRef, label: { text: 'Label for case ' + case.caseRef, classes: 'govuk-visually-hidden' }, items: case.items, disabled: case.excluded or not data.canEdit }) }}
-            </td>
+            <td class="govuk-table__cell">{{ govukSelect(row.labelField) }}</td>
           </tr>
         {% endfor %}
       </tbody>
     </table>
-    {% if data.canEdit %}{{ govukButton({ text: 'Save and continue' }) }}{% endif %}
+    {% if data.saveButton %}{{ govukButton(data.saveButton) }}{% endif %}
   </form>
 {% endblock %}

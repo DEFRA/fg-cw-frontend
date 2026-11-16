@@ -1,4 +1,3 @@
-import Boom from "@hapi/boom";
 import {
   findCaseGroup,
   findCasePage,
@@ -11,20 +10,5 @@ export const findCasePageUseCase = (auth, identity) =>
   findCasePage(auth, identity);
 export const findCaseGroupUseCase = (auth, identity) =>
   findCaseGroup(auth, identity);
-export const saveCaseGroupUseCase = (auth, identity, form) => {
-  const labels = Object.fromEntries(
-    Object.entries(form)
-      .filter(([key]) => key.startsWith("label-"))
-      .map(([key, value]) => {
-        try {
-          return [key.slice(6), value ? JSON.parse(value) : null];
-        } catch {
-          throw Boom.badRequest("Choose a valid case label");
-        }
-      }),
-  );
-  return saveCaseGroup(auth, identity, {
-    assignee: form.assignee || null,
-    labels,
-  });
-};
+export const saveCaseGroupUseCase = (auth, identity, form) =>
+  saveCaseGroup(auth, identity, { form });

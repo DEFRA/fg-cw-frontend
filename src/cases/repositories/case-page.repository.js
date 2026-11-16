@@ -10,14 +10,14 @@ export const findCasePage = async (auth, identity) =>
 export const findCaseGroup = async (auth, identity) =>
   (
     await wreck.get(
-      `${pagePath(identity)}/groups/${encodeURIComponent(identity.keyHash)}`,
+      `${pagePath(identity)}/groups/${encodeURIComponent(identity.groupKey)}`,
       { headers: headers(auth) },
     )
   ).payload;
 export const saveCaseGroup = async (auth, identity, payload) =>
   (
     await wreck.put(
-      `${pagePath(identity)}/groups/${encodeURIComponent(identity.keyHash)}`,
+      `${pagePath(identity)}/groups/${encodeURIComponent(identity.groupKey)}`,
       { headers: headers(auth), payload },
     )
   ).payload;
