@@ -99,6 +99,7 @@ describe("cases", () => {
         method: "get",
         path: "/cases/{caseId}/agreement/{agreementRef}",
       },
+      { method: "get", path: "/types/{caseType}/pages/{pageKey}" },
       {
         method: "get",
         path: "/cases/{caseId}/stage/outcome/confirm",
@@ -106,6 +107,10 @@ describe("cases", () => {
       {
         method: "get",
         path: "/cases/{caseId}/tasks/{taskGroupCode}/{taskCode}",
+      },
+      {
+        method: "get",
+        path: "/types/{caseType}/pages/{pageKey}/groups/{groupKey}",
       },
       {
         method: "post",
@@ -134,6 +139,10 @@ describe("cases", () => {
       {
         method: "post",
         path: "/cases/{caseId}/stage/outcome/confirm",
+      },
+      {
+        method: "post",
+        path: "/types/{caseType}/pages/{pageKey}/groups/{groupKey}",
       },
       {
         method: "post",

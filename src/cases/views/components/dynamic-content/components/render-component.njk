@@ -20,6 +20,8 @@
 
   {% if component == "text" %}
     {{ defraText(params) }}
+  {% elif component == "hint" %}
+    <div class="govuk-hint">{{ params.text }}</div>
   {% elif component == "paragraph" %}
     {{ defraParagraph(params, renderDefraComponent) }}
   {% elif component == "url" %}

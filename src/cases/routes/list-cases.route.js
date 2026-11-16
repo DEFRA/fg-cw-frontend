@@ -1,5 +1,6 @@
 import { getFlashValue } from "../../common/helpers/flash-helpers.js";
 import { logger } from "../../common/logger.js";
+import { findCasePagesUseCase } from "../use-cases/case-page.use-case.js";
 import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
 import { createCaseListViewModel } from "../view-models/case-list.view-model.js";
 
@@ -28,6 +29,9 @@ export const listCasesRoute = {
       request,
       assignedCaseId,
     });
+    viewModel.data.pageTabs = (
+      await findCasePagesUseCase(authContext)
+    ).data.pages;
 
     return h.view("pages/case-list", viewModel);
   },

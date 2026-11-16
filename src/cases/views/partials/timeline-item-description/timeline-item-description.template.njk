@@ -1,4 +1,5 @@
 <div class="timeline__description">
+  {% if params.displayText %}<p>{{ params.displayText }}</p>{% endif %}
   {% if params.commentRef %}
     <p>
       <a
