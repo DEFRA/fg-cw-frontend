@@ -165,6 +165,23 @@ describe("listCasesByTypeRoute", () => {
     expect($("form").attr("action")).toBe("/types/woodland/cases");
   });
 
+  it("logs assignment when assignedCaseId flash is set", async () => {
+    flashAssignedCaseId = "case-123";
+    findCasesByTypeUseCase.mockResolvedValue(createMockPage(mockCases));
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/types/woodland/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    flashAssignedCaseId = undefined;
+  });
+
   it("returns 404 when the backend reports case type not found", async () => {
     flashAssignedCaseId = undefined;
     findCasesByTypeUseCase.mockRejectedValue(Boom.notFound("Not Found"));

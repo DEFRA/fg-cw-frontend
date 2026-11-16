@@ -5,6 +5,7 @@ import {
   assignUserToCase,
   completeStage,
   findAll,
+  findByCaseType,
   findById,
   findTabById,
   triggerPageAction,
@@ -103,6 +104,54 @@ describe("Case Repository", () => {
           assignedUser: "user-2",
         },
       ]);
+    });
+  });
+
+  describe("findByCaseType", () => {
+    it("calls /types/{caseType}/cases with query params", async () => {
+      const mockPayload = { data: { cases: [], pagination: {} } };
+      wreck.get.mockResolvedValueOnce({ payload: mockPayload });
+
+      const result = await findByCaseType(authContext, "woodland", {
+        search: "test",
+      });
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/types/woodland/cases?search=test",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
+      );
+      expect(result).toEqual(mockPayload);
+    });
+
+    it("calls /types/{caseType}/cases without query string when criteria is falsy", async () => {
+      wreck.get.mockResolvedValueOnce({ payload: [] });
+
+      await findByCaseType(authContext, "woodland");
+
+      expect(wreck.get).toHaveBeenCalledWith("/types/woodland/cases", {
+        headers: {
+          authorization: `Bearer ${authContext.token}`,
+        },
+      });
+    });
+
+    it("URL-encodes the caseType path segment", async () => {
+      wreck.get.mockResolvedValueOnce({ payload: [] });
+
+      await findByCaseType(authContext, "type with spaces", {});
+
+      expect(wreck.get).toHaveBeenCalledWith(
+        "/types/type%20with%20spaces/cases?",
+        {
+          headers: {
+            authorization: `Bearer ${authContext.token}`,
+          },
+        },
+      );
     });
   });
 
