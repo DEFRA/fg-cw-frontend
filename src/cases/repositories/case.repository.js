@@ -11,6 +11,18 @@ export const findAll = async (authContext, criteria) => {
   return payload;
 };
 
+export const findByCaseType = async (authContext, caseType, criteria) => {
+  const params = criteria ? `?${new URLSearchParams(criteria)}` : "";
+  const encodedType = encodeURIComponent(caseType);
+  const { payload } = await wreck.get(`/types/${encodedType}/cases${params}`, {
+    headers: {
+      authorization: `Bearer ${authContext.token}`,
+    },
+  });
+
+  return payload;
+};
+
 export const findById = async (authContext, caseId, tabId = null) => {
   const qs = tabId ? `?tabId=${tabId}` : "";
   const { payload } = await wreck.get(`/cases/${caseId}${qs}`, {

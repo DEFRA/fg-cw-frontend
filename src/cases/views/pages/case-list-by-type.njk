@@ -1,0 +1,89 @@
+{% extends '../layouts/case-layout.njk' %}
+{% from "govuk/components/tabs/macro.njk" import govukTabs %}
+{% from "govuk/components/input/macro.njk" import govukInput %}
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "components/case-tabs/macro.njk" import caseTabs %}
+{% from "checkbox/macro.njk" import checkbox %}
+{% from "notification-banner/macro.njk" import notificationBanner %}
+
+{% block contentMain %}
+  {% if data.assignedUserSuccessMessage %}
+    {% set assignmentHtml %}
+      <a
+        class="govuk-notification-banner__link"
+        href="{{ data.assignedUserSuccessMessage.link }}"
+        >Case {{ data.assignedUserSuccessMessage.ref }}</a
+      >
+      has been assigned to
+      {{ data.assignedUserSuccessMessage.assignedUserName }}
+    {% endset %}
+
+    {{
+      notificationBanner({
+        heading: data.assignedUserSuccessMessage.heading,
+        html: assignmentHtml
+      })
+    }}
+  {% endif %}
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <div class="govuk-body app-case-list-page" data-testid="app-page-body">
+        <h2 class="govuk-heading-m">Search for cases</h2>
+        <p class="govuk-body">You can search by case ID or SBI.</p>
+        <form
+          method="GET"
+          action="{{ data.formAction }}"
+          class="govuk-!-margin-bottom-6"
+        >
+          <div class="app-search-form">
+            <label class="govuk-label govuk-visually-hidden" for="search">
+              Search by case ID or SBI
+            </label>
+            <input
+              class="govuk-input govuk-input--width-10"
+              id="search"
+              name="search"
+              type="text"
+              value="{{ data.searchValue }}"
+            />
+            <button
+              type="submit"
+              class="govuk-button"
+              data-module="govuk-button"
+            >
+              Search
+            </button>
+          </div>
+        </form>
+        {% if data.emptyMessage and not data.searchValue %}
+          <p class="govuk-body">{{ data.emptyMessage }}</p>
+        {% else %}
+          {% set tabItems = [] %}
+          {% for tab in data.tabItems %}
+            {%
+              set processedTab = {
+                label: tab.label,
+                id: tab.id,
+                panel: {
+                  html: caseTabs({
+                    data: tab.data,
+                    pagination: data.pagination,
+                    searchValue: data.searchValue
+                  })
+                }
+              }
+            %}
+            {% set tabItems = (tabItems.push(processedTab), tabItems) %}
+          {% endfor %}
+
+          {{ govukTabs({ items: tabItems }) }}
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+{% endblock %}

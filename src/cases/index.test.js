@@ -85,6 +85,10 @@ describe("cases", () => {
       },
       {
         method: "get",
+        path: "/types/{caseType}/cases",
+      },
+      {
+        method: "get",
         path: "/cases/{caseId}/components/edit",
       },
       {
