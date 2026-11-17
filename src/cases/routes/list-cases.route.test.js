@@ -1,11 +1,21 @@
 import hapi from "@hapi/hapi";
 import { load } from "cheerio";
-import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from "vitest";
 import { nunjucks } from "../../common/nunjucks/nunjucks.js";
 import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
+import { findMyCasesUseCase } from "../use-cases/find-my-cases.use-case.js";
 import { listCasesRoute } from "./list-cases.route.js";
 
 vi.mock("../use-cases/find-all-cases.use-case.js");
+vi.mock("../use-cases/find-my-cases.use-case.js");
 vi.mock("../../common/view-models/header.view-model.js");
 
 const createMockPage = (cases, pagination = {}) => ({
@@ -45,6 +55,10 @@ describe("listCasesRoute", () => {
 
   afterAll(async () => {
     await server.stop();
+  });
+
+  beforeEach(() => {
+    findMyCasesUseCase.mockResolvedValue(createMockPage([]));
   });
 
   it("returns a list of cases", async () => {
@@ -135,6 +149,45 @@ describe("listCasesRoute", () => {
     expect(statusCode).toEqual(302);
     expect(headers.location).toBe("/cases");
     expect(findAllCasesUseCase).not.toHaveBeenCalled();
+    expect(findMyCasesUseCase).not.toHaveBeenCalled();
+  });
+
+  it("finds my cases with the session user and the request query", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    const user = { id: "60c72b2f9b1e8d001c8e4f5a", idpRoles: [] };
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/cases?search=12345&myCursor=my-cursor&myDirection=forward",
+      auth: {
+        credentials: { token: "mock-token", user },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(200);
+    expect(findMyCasesUseCase).toHaveBeenCalledWith(
+      { token: "mock-token", user },
+      { search: "12345", myCursor: "my-cursor", myDirection: "forward" },
+    );
+  });
+
+  it("returns an error page when finding my cases fails", async () => {
+    flashAssignedCaseId = undefined;
+    findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+    findMyCasesUseCase.mockRejectedValue(new Error("backend unavailable"));
+
+    const { statusCode } = await server.inject({
+      method: "GET",
+      url: "/cases",
+      auth: {
+        credentials: { token: "mock-token" },
+        strategy: "session",
+      },
+    });
+
+    expect(statusCode).toEqual(500);
   });
 
   it("passes search query parameter to use case", async () => {
@@ -216,6 +269,113 @@ describe("listCasesRoute", () => {
     expect($("p").text()).toContain(
       "There are no cases matching your search criteria",
     );
+  });
+
+  describe("my cases tab", () => {
+    const get = (url = "/cases") =>
+      server.inject({
+        method: "GET",
+        url,
+        auth: {
+          credentials: { token: "mock-token" },
+          strategy: "session",
+        },
+      });
+
+    it("shows All cases and My cases tabs, with All cases first", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+
+      const { result } = await get();
+      const $ = load(result);
+
+      expect(
+        $(".govuk-tabs__tab")
+          .map((_, el) => $(el).attr("href"))
+          .get(),
+      ).toEqual(["#all-cases", "#my-cases"]);
+    });
+
+    it("lists the user's cases in the My cases panel", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+      findMyCasesUseCase.mockResolvedValue(createMockPage([mockCases[0]]));
+
+      const { result } = await get();
+      const $ = load(result);
+      const panel = $("#my-cases");
+
+      expect(panel.find("tbody tr")).toHaveLength(1);
+      expect(panel.find("tbody a.govuk-link").attr("href")).toBe(
+        `/cases/${mockCases[0]._id}`,
+      );
+      expect(panel.text()).not.toContain("There are no cases assigned to you");
+    });
+
+    it("keeps radio ids unique when a case is in both tabs", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+      findMyCasesUseCase.mockResolvedValue(createMockPage([mockCases[0]]));
+
+      const { result } = await get();
+      const $ = load(result);
+      const ids = $("input[type=radio]")
+        .map((_, el) => $(el).attr("id"))
+        .get();
+
+      expect(ids).toContain(`all-cases-caseId-${mockCases[0]._id}`);
+      expect(ids).toContain(`my-cases-caseId-${mockCases[0]._id}`);
+      expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it("shows the empty message in the My cases panel when the user has no cases", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+
+      const { result } = await get();
+      const $ = load(result);
+
+      expect($("#my-cases").text()).toContain(
+        "There are no cases assigned to you",
+      );
+      expect($("#my-cases table")).toHaveLength(0);
+      expect($("#all-cases tbody tr")).toHaveLength(mockCases.length);
+      expect($(".govuk-tabs__tab")).toHaveLength(2);
+    });
+
+    it("shows the search message instead of the empty message when searching", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage([]));
+
+      const { result } = await get("/cases?search=nonexistent");
+      const $ = load(result);
+
+      expect($("#my-cases").text()).toContain(
+        "There are no cases matching your search criteria",
+      );
+      expect($("#my-cases").text()).not.toContain(
+        "There are no cases assigned to you",
+      );
+    });
+
+    it("pages My cases with its own cursor and stays on the tab", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+      findMyCasesUseCase.mockResolvedValue(
+        createMockPage([mockCases[0]], {
+          hasNextPage: true,
+          endCursor: "my-next",
+        }),
+      );
+
+      const { result } = await get();
+      const $ = load(result);
+
+      expect($("#my-cases .govuk-pagination__next a").attr("href")).toBe(
+        "/cases?myCursor=my-next&myDirection=forward#my-cases",
+      );
+      expect($("#all-cases .govuk-pagination")).toHaveLength(0);
+    });
   });
 });
 

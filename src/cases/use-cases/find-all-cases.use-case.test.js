@@ -47,7 +47,7 @@ describe("findAllCasesUseCase", () => {
     const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
+    expect(findAll).toHaveBeenCalledWith(authContext, {});
     expect(result).toEqual(mockCases);
   });
 
@@ -59,7 +59,7 @@ describe("findAllCasesUseCase", () => {
     const result = await findAllCasesUseCase(authContext);
 
     expect(findAll).toHaveBeenCalledOnce();
-    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
+    expect(findAll).toHaveBeenCalledWith(authContext, {});
     expect(result).toEqual([]);
   });
 
@@ -98,16 +98,16 @@ describe("findAllCasesUseCase", () => {
     expect(findAll).toHaveBeenCalledOnce();
   });
 
-  test("calls repository without parameters", async () => {
+  test("calls repository with no criteria when there is no query", async () => {
     const mockCases = [];
     findAll.mockResolvedValueOnce(mockCases);
 
     await findAllCasesUseCase(authContext);
 
-    expect(findAll).toHaveBeenCalledWith(authContext, undefined);
+    expect(findAll).toHaveBeenCalledWith(authContext, {});
   });
 
-  test("passes query parameter through to repository", async () => {
+  test("passes cursor and direction to the repository", async () => {
     const mockCases = [];
     const query = { cursor: "abc", direction: "forward" };
     findAll.mockResolvedValueOnce(mockCases);
@@ -117,5 +117,25 @@ describe("findAllCasesUseCase", () => {
     expect(findAll).toHaveBeenCalledOnce();
     expect(findAll).toHaveBeenCalledWith(authContext, query);
     expect(result).toEqual(mockCases);
+  });
+
+  test("drops My cases paging, assignedUserId and unknown params", async () => {
+    findAll.mockResolvedValueOnce([]);
+
+    await findAllCasesUseCase(authContext, {
+      search: "CASE-1",
+      cursor: "abc",
+      direction: "forward",
+      myCursor: "xyz",
+      myDirection: "backward",
+      assignedUserId: "60c72b2f9b1e8d001c8e4f5a",
+      unknown: "value",
+    });
+
+    expect(findAll).toHaveBeenCalledWith(authContext, {
+      search: "CASE-1",
+      cursor: "abc",
+      direction: "forward",
+    });
   });
 });

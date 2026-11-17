@@ -47,6 +47,11 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
         All cases (0)
       </a>
     </li>
+    <li class="govuk-tabs__list-item">
+      <a class="govuk-tabs__tab" href="#my-cases">
+        My cases
+      </a>
+    </li>
   </ul>
   <div class="govuk-tabs__panel" id="all-cases">
     <form method="GET" action="/cases/assign-user" class="case-tabs">
@@ -92,6 +97,9 @@ exports[`viewAssignUserToCaseRoute > redirects back to cases list if no caseId s
     
         </fieldset>
       </form>
+  </div>
+  <div class="govuk-tabs__panel govuk-tabs__panel--hidden" id="my-cases">
+    <p class="govuk-body">There are no cases assigned to you</p>
   </div>
 </div>
 
