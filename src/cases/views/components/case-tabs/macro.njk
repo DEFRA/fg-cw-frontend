@@ -2,7 +2,11 @@
     tabLabel: <string>,
     tabTestId: <string>,
     tableHeaders: <array>,
-    data: <object>
+    data: <object>,
+    pagination: <object>,
+    searchValue: <string>,
+    tabId: <string>, prefixes the radio ids so they stay unique across tabs
+    emptyMessage: <string>, shown when there are no rows and no search
 #}
 
 {% macro caseTabs(params) %}

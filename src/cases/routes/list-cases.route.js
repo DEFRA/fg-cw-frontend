@@ -1,6 +1,7 @@
 import { getFlashValue } from "../../common/helpers/flash-helpers.js";
 import { logger } from "../../common/logger.js";
 import { findAllCasesUseCase } from "../use-cases/find-all-cases.use-case.js";
+import { findMyCasesUseCase } from "../use-cases/find-my-cases.use-case.js";
 import { createCaseListViewModel } from "../view-models/case-list.view-model.js";
 
 export const listCasesRoute = {
@@ -21,10 +22,14 @@ export const listCasesRoute = {
       user: request.auth.credentials.user,
     };
 
-    const page = await findAllCasesUseCase(authContext, request.query);
+    const [page, myCasesPage] = await Promise.all([
+      findAllCasesUseCase(authContext, request.query),
+      findMyCasesUseCase(authContext, request.query),
+    ]);
 
     const viewModel = createCaseListViewModel({
       page,
+      myCasesPage,
       request,
       assignedCaseId,
     });

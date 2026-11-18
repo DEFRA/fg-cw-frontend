@@ -7,12 +7,14 @@ import { nunjucks } from "../../../common/nunjucks/nunjucks.js";
 import { flashContext } from "../../../server/plugins/flash-context.js";
 import { findAllCasesUseCase } from "../../use-cases/find-all-cases.use-case.js";
 import { findCaseByIdUseCase } from "../../use-cases/find-case-by-id.use-case.js";
+import { findMyCasesUseCase } from "../../use-cases/find-my-cases.use-case.js";
 import { listCasesRoute } from "../list-cases.route.js";
 import { viewAssignUserToCaseRoute } from "./view-assign-user-to-case.route.js";
 
 vi.mock("../../use-cases/find-case-by-id.use-case.js");
 vi.mock("../../../auth/use-cases/find-assignees.use-case.js");
 vi.mock("../../use-cases/find-all-cases.use-case.js");
+vi.mock("../../use-cases/find-my-cases.use-case.js");
 vi.mock("../../../common/view-models/header.view-model.js");
 
 const createMockPage = (data) => ({
@@ -72,13 +74,15 @@ describe("viewAssignUserToCaseRoute", () => {
   });
 
   it("redirects back to cases list if no caseId supplied", async () => {
-    findAllCasesUseCase.mockResolvedValue({
+    const emptyPage = {
       data: {
         cases: [],
         pagination: { totalCount: 0 },
       },
       header: { navItems: [] },
-    });
+    };
+    findAllCasesUseCase.mockResolvedValue(emptyPage);
+    findMyCasesUseCase.mockResolvedValue(emptyPage);
 
     // First request - triggers redirect and sets flash
     const { statusCode, headers } = await server.inject({

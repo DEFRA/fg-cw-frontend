@@ -60,9 +60,11 @@
               id: tab.id,
               panel: {
                 html: caseTabs({
+                  tabId: tab.id,
                   data: tab.data,
-                  pagination: data.pagination,
-                  searchValue: data.searchValue
+                  pagination: tab.pagination,
+                  searchValue: data.searchValue,
+                  emptyMessage: tab.emptyMessage
                 })
               }
             }

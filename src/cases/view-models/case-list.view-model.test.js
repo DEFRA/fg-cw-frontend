@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   createAssignedUserSuccessMessage,
   createCaseListViewModel,
+  mapCasesToTable,
   mapText,
 } from "./case-list.view-model.js";
 
@@ -261,6 +262,10 @@ describe("case-list.model", () => {
                     assignee: { text: "Not assigned" },
                   },
                 ],
+              },
+              pagination: {
+                items: [],
+                classes: "govuk-!-margin-bottom-2",
               },
               searchValue: "",
             },
@@ -619,6 +624,29 @@ describe("table structure mapping", () => {
 });
 
 describe("sortable headers", () => {
+  it("appends the fragment to every sort link when one is given", () => {
+    const { head } = mapCasesToTable(
+      [],
+      new URL("http://localhost:3000/cases?caseRef=asc"),
+      { fragment: "#my-cases" },
+    );
+
+    expect(head[2].html).toContain('href="/cases?workflowCode=asc#my-cases"');
+    expect(head[3].html).toContain('href="/cases?caseRef=desc#my-cases"');
+    expect(head[6].html).toContain('href="/cases?createdAt=asc#my-cases"');
+  });
+
+  it("adds no fragment to sort links by default", () => {
+    const { head } = mapCasesToTable(
+      [],
+      new URL("http://localhost:3000/cases"),
+    );
+
+    expect(head[2].html).toContain('href="/cases?workflowCode=asc"');
+    expect(head[3].html).toContain('href="/cases?caseRef=asc"');
+    expect(head[6].html).toContain('href="/cases?createdAt=asc"');
+  });
+
   it("links to ?workflowCode=asc when no sort is active", () => {
     const result = createCaseListViewModel({
       page: createMockPage([]),
@@ -882,5 +910,165 @@ describe("search functionality", () => {
     });
 
     expect(result.data.searchValue).toBe("");
+  });
+});
+
+describe("my cases tab", () => {
+  const myCase = {
+    _id: "my-case-1",
+    caseRef: "MY-CASE-001",
+    workflowCode: "woodland",
+    schemeName: "Woodland",
+    createdAt: "2026-11-01T00:00:00.000Z",
+    currentStatus: "NEW",
+    currentStatusTheme: "INFO",
+    hasLinkedCases: false,
+    assignedUser: { id: "60c72b2f9b1e8d001c8e4f5a", name: "Casey Test" },
+  };
+
+  const pageWith = (cases, pagination = {}) => ({
+    data: {
+      cases,
+      pagination: { totalCount: cases.length, ...pagination },
+    },
+    header: { navItems: [] },
+  });
+
+  const myCasesTabOf = (result) =>
+    result.data.tabItems.find(({ id }) => id === "my-cases");
+
+  it("is not added when no my cases page is given", () => {
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      request: mockRequest,
+    });
+
+    expect(result.data.tabItems.map(({ id }) => id)).toEqual(["all-cases"]);
+  });
+
+  it("follows the All cases tab, labelled without a count", () => {
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      myCasesPage: pageWith([myCase]),
+      request: mockRequest,
+    });
+
+    expect(
+      result.data.tabItems.map(({ id, label }) => ({ id, label })),
+    ).toEqual([
+      { id: "all-cases", label: "All cases (0)" },
+      { id: "my-cases", label: "My cases" },
+    ]);
+  });
+
+  it("shows the user's cases with the same columns as All cases", () => {
+    const result = createCaseListViewModel({
+      page: pageWith([myCase]),
+      myCasesPage: pageWith([myCase]),
+      request: mockRequest,
+    });
+    const [allCases, myCases] = result.data.tabItems;
+
+    expect(myCases.data.rows).toEqual(allCases.data.rows);
+    expect(myCases.data.rows[0].caseType.text).toBe("Woodland");
+    expect(myCases.data.rows[0].id.href).toBe("/cases/my-case-1");
+    expect(myCases.data.head.map((h) => h.text ?? h.attributes)).toEqual(
+      allCases.data.head.map((h) => h.text ?? h.attributes),
+    );
+  });
+
+  it("keeps the user on the tab when sorting", () => {
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      myCasesPage: pageWith([]),
+      request: mockRequest,
+    });
+
+    expect(myCasesTabOf(result).data.head[3].html).toContain(
+      'href="/cases?caseRef=asc#my-cases"',
+    );
+  });
+
+  it("pages with myCursor and myDirection, keeping the All cases cursor", () => {
+    const request = {
+      path: "/cases",
+      url: new URL(
+        "http://localhost:3000/cases?cursor=all-1&direction=forward",
+      ),
+      query: { cursor: "all-1", direction: "forward" },
+    };
+
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      myCasesPage: pageWith([], {
+        hasPreviousPage: true,
+        hasNextPage: true,
+        startCursor: "my-start",
+        endCursor: "my-end",
+      }),
+      request,
+    });
+    const { pagination } = myCasesTabOf(result);
+
+    expect(pagination.previous.href).toBe(
+      "/cases?cursor=all-1&direction=forward&myCursor=my-start&myDirection=backward#my-cases",
+    );
+    expect(pagination.next.href).toBe(
+      "/cases?cursor=all-1&direction=forward&myCursor=my-end&myDirection=forward#my-cases",
+    );
+  });
+
+  it("leaves All cases paging untouched by My cases paging", () => {
+    const request = {
+      path: "/cases",
+      url: new URL(
+        "http://localhost:3000/cases?myCursor=my-1&myDirection=forward",
+      ),
+      query: { myCursor: "my-1", myDirection: "forward" },
+    };
+
+    const result = createCaseListViewModel({
+      page: pageWith([], { hasNextPage: true, endCursor: "all-end" }),
+      myCasesPage: pageWith([]),
+      request,
+    });
+    const [allCases] = result.data.tabItems;
+
+    expect(allCases.pagination.next.href).toBe(
+      "/cases?myCursor=my-1&myDirection=forward&cursor=all-end&direction=forward",
+    );
+    expect(result.data.pagination).toEqual(allCases.pagination);
+  });
+
+  it("has no paging links when there is only one page", () => {
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      myCasesPage: pageWith([myCase]),
+      request: mockRequest,
+    });
+    const { pagination } = myCasesTabOf(result);
+
+    expect(pagination.previous).toBeUndefined();
+    expect(pagination.next).toBeUndefined();
+  });
+
+  it("has the empty state message and the search value", () => {
+    const request = {
+      path: "/cases",
+      url: new URL("http://localhost:3000/cases?search=CASE-1"),
+      query: { search: "CASE-1" },
+    };
+
+    const result = createCaseListViewModel({
+      page: pageWith([]),
+      myCasesPage: pageWith([]),
+      request,
+    });
+
+    expect(myCasesTabOf(result)).toMatchObject({
+      emptyMessage: "There are no cases assigned to you",
+      searchValue: "CASE-1",
+    });
+    expect(myCasesTabOf(result).data.rows).toEqual([]);
   });
 });

@@ -4,7 +4,12 @@ import {
 } from "../../common/nunjucks/filters/format-date.js";
 import { createHeaderViewModel } from "../../common/view-models/header.view-model.js";
 
-export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
+export const createCaseListViewModel = ({
+  page,
+  myCasesPage,
+  request,
+  assignedCaseId,
+}) => {
   const casesTable = mapCasesToTable(page.data.cases, request.url);
   const assignedUserSuccessMessage = createAssignedUserSuccessMessage(
     assignedCaseId,
@@ -25,8 +30,12 @@ export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
           label: `All cases (${page.data.pagination.totalCount})`,
           id: "all-cases",
           data: casesTable,
+          pagination,
           searchValue,
         },
+        ...(myCasesPage
+          ? [createMyCasesTab({ myCasesPage, request, searchValue })]
+          : []),
       ],
       assignedUserSuccessMessage,
       pagination,
@@ -34,6 +43,21 @@ export const createCaseListViewModel = ({ page, request, assignedCaseId }) => {
     },
   };
 };
+
+const createMyCasesTab = ({ myCasesPage, request, searchValue }) => ({
+  label: "My cases",
+  id: "my-cases",
+  data: mapCasesToTable(myCasesPage.data.cases, request.url, {
+    fragment: "#my-cases",
+  }),
+  pagination: mapDataToPagination(myCasesPage.data.pagination, request.url, {
+    cursorParam: "myCursor",
+    directionParam: "myDirection",
+    fragment: "#my-cases",
+  }),
+  searchValue,
+  emptyMessage: "There are no cases assigned to you",
+});
 
 const attributes = {
   "aria-sort": "none",
@@ -80,7 +104,7 @@ const getOrder = (order) => {
   };
 };
 
-const getSortableHeader = ({ text, field, currentURL }) => {
+const getSortableHeader = ({ text, field, currentURL, fragment = "" }) => {
   const { searchParams, pathname } = currentURL;
 
   const params = new URLSearchParams();
@@ -89,7 +113,7 @@ const getSortableHeader = ({ text, field, currentURL }) => {
 
   order.code && params.set(field, order.code);
 
-  const href = `${pathname}${params.size ? "?" + params : ""}`;
+  const href = `${pathname}${params.size ? "?" + params : ""}${fragment}`;
 
   return {
     html: `<a href="${href}">${text} ${order.icon}</a>`,
@@ -111,7 +135,7 @@ const getBusinessName = (payload) => getApplicant(payload)?.business?.name;
 
 const getSbi = (payload) => payload?.identifiers?.sbi;
 
-const mapCasesToTable = (cases, currentURL) => {
+export const mapCasesToTable = (cases, currentURL, { fragment = "" } = {}) => {
   return {
     head: [
       { text: "Select" },
@@ -122,11 +146,13 @@ const mapCasesToTable = (cases, currentURL) => {
         text: "Type",
         field: "workflowCode",
         currentURL,
+        fragment,
       }),
       getSortableHeader({
         text: "ID",
         field: "caseRef",
         currentURL,
+        fragment,
       }),
       { text: "Business", attributes },
       { text: "SBI", attributes },
@@ -134,6 +160,7 @@ const mapCasesToTable = (cases, currentURL) => {
         text: "Submitted",
         field: "createdAt",
         currentURL,
+        fragment,
       }),
       { text: "Status", attributes },
       { text: "Assignee", attributes },
@@ -231,29 +258,35 @@ const buildSuccessMessage = ({ id, assignee }) => ({
   assignedUserName: assignee.text,
 });
 
-const mapDataToPagination = (data, currentURL) => {
+const allCasesPaging = {
+  cursorParam: "cursor",
+  directionParam: "direction",
+  fragment: "",
+};
+
+const mapDataToPagination = (data, currentURL, paging = allCasesPaging) => {
   const pagination = {
     items: [],
     classes: "govuk-!-margin-bottom-2",
   };
 
-  if (data.hasPreviousPage) {
+  const pageHref = (cursor, direction) => {
     const params = new URLSearchParams(currentURL.searchParams);
-    params.set("cursor", data.startCursor);
-    params.set("direction", "backward");
+    params.set(paging.cursorParam, cursor);
+    params.set(paging.directionParam, direction);
 
+    return `${currentURL.pathname}?${params}${paging.fragment}`;
+  };
+
+  if (data.hasPreviousPage) {
     pagination.previous = {
-      href: `${currentURL.pathname}?${params}`,
+      href: pageHref(data.startCursor, "backward"),
     };
   }
 
   if (data.hasNextPage) {
-    const params = new URLSearchParams(currentURL.searchParams);
-    params.set("cursor", data.endCursor);
-    params.set("direction", "forward");
-
     pagination.next = {
-      href: `${currentURL.pathname}?${params}`,
+      href: pageHref(data.endCursor, "forward"),
     };
   }
 
