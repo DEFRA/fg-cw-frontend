@@ -30,6 +30,13 @@ export const createCaseListViewModel = ({
           label: `All cases (${page.data.pagination.totalCount})`,
           id: "all-cases",
           data: casesTable,
+          emptyState: createEmptyState({
+            rows: casesTable.rows,
+            totalCount: page.data.pagination.totalCount,
+            searchValue,
+            noCasesMessage: "There are no cases",
+            firstPageHref: createFirstPageHref(request.url, allCasesPaging),
+          }),
           pagination,
           searchValue,
         },
@@ -44,20 +51,56 @@ export const createCaseListViewModel = ({
   };
 };
 
-const createMyCasesTab = ({ myCasesPage, request, searchValue }) => ({
-  label: "My cases",
-  id: "my-cases",
-  data: mapCasesToTable(myCasesPage.data.cases, request.url, {
-    fragment: "#my-cases",
-  }),
-  pagination: mapDataToPagination(myCasesPage.data.pagination, request.url, {
-    cursorParam: "myCursor",
-    directionParam: "myDirection",
-    fragment: "#my-cases",
-  }),
+const createEmptyState = ({
+  rows,
+  totalCount,
   searchValue,
-  emptyMessage: "There are no cases assigned to you",
-});
+  noCasesMessage,
+  firstPageHref,
+}) => {
+  if (rows.length > 0) return undefined;
+
+  // totalCount is counted with the search filter but without the cursor, so
+  // a positive count means matching cases exist and this cursor is stale.
+  if (totalCount > 0) {
+    return { message: "There are no cases on this page", firstPageHref };
+  }
+
+  if (searchValue) {
+    return { message: "There are no cases matching your search criteria" };
+  }
+
+  return resolveNoCaseMessage(noCasesMessage);
+};
+
+const resolveNoCaseMessage = (message) => {
+  return message ? { message } : undefined;
+};
+
+const createMyCasesTab = ({ myCasesPage, request, searchValue }) => {
+  const table = mapCasesToTable(myCasesPage.data.cases, request.url, {
+    fragment: myCasesPaging.fragment,
+  });
+
+  return {
+    label: "My cases",
+    id: "my-cases",
+    data: table,
+    emptyState: createEmptyState({
+      rows: table.rows,
+      totalCount: myCasesPage.data.pagination.totalCount,
+      searchValue,
+      noCasesMessage: "There are no cases assigned to you",
+      firstPageHref: createFirstPageHref(request.url, myCasesPaging),
+    }),
+    pagination: mapDataToPagination(
+      myCasesPage.data.pagination,
+      request.url,
+      myCasesPaging,
+    ),
+    searchValue,
+  };
+};
 
 const attributes = {
   "aria-sort": "none",
@@ -262,6 +305,24 @@ const allCasesPaging = {
   cursorParam: "cursor",
   directionParam: "direction",
   fragment: "",
+};
+
+const myCasesPaging = {
+  cursorParam: "myCursor",
+  directionParam: "myDirection",
+  fragment: "#my-cases",
+};
+
+// Keeps the search, sort and the other tab's position; drops only this tab's
+// cursor so it starts again from page 1.
+const createFirstPageHref = (currentURL, paging) => {
+  const params = new URLSearchParams(currentURL.searchParams);
+  params.delete(paging.cursorParam);
+  params.delete(paging.directionParam);
+
+  const query = params.size > 0 ? `?${params}` : "";
+
+  return `${currentURL.pathname}${query}${paging.fragment}`;
 };
 
 const mapDataToPagination = (data, currentURL, paging = allCasesPaging) => {

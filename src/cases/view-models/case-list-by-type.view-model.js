@@ -13,15 +13,19 @@ export const createCaseListByTypeViewModel = ({
   const title = `Cases \u2013 ${caseType}`;
 
   return {
-    ...base,
     pageTitle: title,
     pageHeading: title,
+    header: base.header,
+    breadcrumbs: base.breadcrumbs,
     data: {
-      ...base.data,
       formAction,
+      assignedUserSuccessMessage: base.data.assignedUserSuccessMessage,
+      pagination: base.data.pagination,
+      searchValue: base.data.searchValue,
       tabItems: base.data.tabItems.map((tab) => ({
-        ...tab,
+        id: tab.id,
         label: `${title} (${totalCount})`,
+        data: tab.data,
       })),
       emptyMessage:
         totalCount === 0 ? "There are no cases for this case type" : undefined,

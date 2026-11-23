@@ -6,7 +6,7 @@
     pagination: <object>,
     searchValue: <string>,
     tabId: <string>, prefixes the radio ids so they stay unique across tabs
-    emptyMessage: <string>, shown when there are no rows and no search
+    emptyState: { message, firstPageHref? }, shown in place of the table when set
 #}
 
 {% macro caseTabs(params) %}

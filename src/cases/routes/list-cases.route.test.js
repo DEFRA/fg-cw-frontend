@@ -358,6 +358,40 @@ describe("listCasesRoute", () => {
       );
     });
 
+    it("links My cases back to its first page when its cursor is out of date", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));
+      findMyCasesUseCase.mockResolvedValue(
+        createMockPage([], { totalCount: 4 }),
+      );
+
+      const { result } = await get("/cases?myCursor=old&myDirection=backward");
+      const $ = load(result);
+      const panel = $("#my-cases");
+
+      expect(panel.text()).toContain("There are no cases on this page");
+      expect(panel.text()).not.toContain("There are no cases assigned to you");
+      expect(panel.find("a.govuk-link").attr("href")).toBe("/cases#my-cases");
+      expect($("#all-cases tbody tr")).toHaveLength(mockCases.length);
+      expect($(".govuk-tabs__tab")).toHaveLength(2);
+    });
+
+    it("links All cases back to its first page when its cursor is out of date", async () => {
+      flashAssignedCaseId = undefined;
+      findAllCasesUseCase.mockResolvedValue(
+        createMockPage([], { totalCount: 4 }),
+      );
+
+      const { result } = await get("/cases?cursor=old&direction=backward");
+      const $ = load(result);
+      const panel = $("#all-cases");
+
+      expect(panel.text()).toContain("There are no cases on this page");
+      expect(panel.find("a.govuk-link").attr("href")).toBe("/cases");
+      expect(panel.find("table")).toHaveLength(0);
+      expect($(".govuk-tabs__tab")).toHaveLength(2);
+    });
+
     it("pages My cases with its own cursor and stays on the tab", async () => {
       flashAssignedCaseId = undefined;
       findAllCasesUseCase.mockResolvedValue(createMockPage(mockCases));

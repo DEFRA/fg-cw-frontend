@@ -63,6 +63,45 @@ describe("createCaseListByTypeViewModel", () => {
     expect(result.data.tabItems[0].label).toBe("Cases \u2013 woodland (1)");
   });
 
+  it("copies only the id, label and table onto the tab", () => {
+    const result = createCaseListByTypeViewModel({
+      page: createMockPage([]),
+      request: mockRequest,
+      caseType: "woodland",
+    });
+
+    expect(result.data.tabItems).toHaveLength(1);
+    expect(Object.keys(result.data.tabItems[0])).toEqual([
+      "id",
+      "label",
+      "data",
+    ]);
+  });
+
+  it("copies only the fields the case-type page uses", () => {
+    const result = createCaseListByTypeViewModel({
+      page: createMockPage(mockCases),
+      request: mockRequest,
+      caseType: "woodland",
+    });
+
+    expect(Object.keys(result)).toEqual([
+      "pageTitle",
+      "pageHeading",
+      "header",
+      "breadcrumbs",
+      "data",
+    ]);
+    expect(Object.keys(result.data)).toEqual([
+      "formAction",
+      "assignedUserSuccessMessage",
+      "pagination",
+      "searchValue",
+      "tabItems",
+      "emptyMessage",
+    ]);
+  });
+
   it("sets formAction to the case-type-scoped path", () => {
     const result = createCaseListByTypeViewModel({
       page: createMockPage(mockCases),
