@@ -54,6 +54,8 @@
     </p>
   {% endif %}
 {% elif params.data.rows.length == 0 and params.searchValue %}
+  {# Fallback for the case-type page, which doesn't pass emptyState. The Case
+     List gets this message from createEmptyState in case-list.view-model.js. #}
   <p class="govuk-body">There are no cases matching your search criteria</p>
 {% else %}
   <form method="GET" action="/cases/assign-user" class="case-tabs">

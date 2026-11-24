@@ -58,7 +58,9 @@ const createEmptyState = ({
   noCasesMessage,
   firstPageHref,
 }) => {
-  if (rows.length > 0) return undefined;
+  if (rows.length > 0) {
+    return undefined;
+  }
 
   // totalCount is counted with the search filter but without the cursor, so
   // a positive count means matching cases exist and this cursor is stale.
@@ -70,11 +72,7 @@ const createEmptyState = ({
     return { message: "There are no cases matching your search criteria" };
   }
 
-  return resolveNoCaseMessage(noCasesMessage);
-};
-
-const resolveNoCaseMessage = (message) => {
-  return message ? { message } : undefined;
+  return { message: noCasesMessage };
 };
 
 const createMyCasesTab = ({ myCasesPage, request, searchValue }) => {
