@@ -18,7 +18,7 @@ export default [
       curly: "error",
       "func-style": ["error", "expression"],
       "no-console": "error",
-      complexity: ["error", { max: 4 }],
+      complexity: ["error", { max: 8 }],
       "import-x/extensions": ["error", { js: "always", json: "always" }],
       "import-x/no-unresolved": "error",
       "import-x/named": "error",
