@@ -1052,7 +1052,7 @@ describe("my cases tab", () => {
     expect(pagination.next).toBeUndefined();
   });
 
-  it("has the empty state message and the search value", () => {
+  it("has the search value", () => {
     const request = {
       path: "/cases",
       url: new URL("http://localhost:3000/cases?search=CASE-1"),
@@ -1065,10 +1065,142 @@ describe("my cases tab", () => {
       request,
     });
 
-    expect(myCasesTabOf(result)).toMatchObject({
-      emptyMessage: "There are no cases assigned to you",
-      searchValue: "CASE-1",
-    });
+    expect(myCasesTabOf(result).searchValue).toBe("CASE-1");
     expect(myCasesTabOf(result).data.rows).toEqual([]);
+  });
+});
+
+describe("empty state", () => {
+  const aCase = {
+    _id: "case-1",
+    caseRef: "CASE-001",
+    workflowCode: "woodland",
+    schemeName: "Woodland",
+    createdAt: "2026-11-01T00:00:00.000Z",
+    currentStatus: "NEW",
+    currentStatusTheme: "INFO",
+    hasLinkedCases: false,
+    assignedUser: { id: "60c72b2f9b1e8d001c8e4f5a", name: "Casey Test" },
+  };
+
+  const pageWith = (cases, totalCount = cases.length) => ({
+    data: { cases, pagination: { totalCount } },
+    header: { navItems: [] },
+  });
+
+  const requestFor = (query = "") => {
+    const url = new URL(`http://localhost:3000/cases${query}`);
+
+    return {
+      path: "/cases",
+      url,
+      query: Object.fromEntries(url.searchParams),
+    };
+  };
+
+  const tabsOf = ({ page, myCasesPage, request = requestFor() }) => {
+    const [allCases, myCases] = createCaseListViewModel({
+      page,
+      myCasesPage,
+      request,
+    }).data.tabItems;
+
+    return { allCases, myCases };
+  };
+
+  it("is not set on a tab that has cases", () => {
+    const { allCases, myCases } = tabsOf({
+      page: pageWith([aCase]),
+      myCasesPage: pageWith([aCase]),
+    });
+
+    expect(allCases.emptyState).toBeUndefined();
+    expect(myCases.emptyState).toBeUndefined();
+  });
+
+  it("tells the user there are no assigned cases when My cases is empty", () => {
+    const { myCases } = tabsOf({
+      page: pageWith([aCase]),
+      myCasesPage: pageWith([], 0),
+      request: requestFor("?myCursor=my-1&myDirection=backward"),
+    });
+
+    expect(myCases.emptyState).toEqual({
+      message: "There are no cases assigned to you",
+    });
+  });
+
+  it("tells the user there are no cases when All cases is empty", () => {
+    const { allCases } = tabsOf({ page: pageWith([], 0) });
+
+    expect(allCases.emptyState).toEqual({ message: "There are no cases" });
+  });
+
+  it("links My cases back to its first page when its cursor is out of date", () => {
+    const { myCases } = tabsOf({
+      page: pageWith([aCase]),
+      myCasesPage: pageWith([], 4),
+      request: requestFor("?myCursor=my-1&myDirection=backward"),
+    });
+
+    expect(myCases.emptyState).toEqual({
+      message: "There are no cases on this page",
+      firstPageHref: "/cases#my-cases",
+    });
+  });
+
+  it("links All cases back to its first page when its cursor is out of date", () => {
+    const { allCases } = tabsOf({
+      page: pageWith([], 4),
+      request: requestFor("?cursor=all-1&direction=backward"),
+    });
+
+    expect(allCases.emptyState).toEqual({
+      message: "There are no cases on this page",
+      firstPageHref: "/cases",
+    });
+  });
+
+  it("keeps the search, sort and the other tab's cursor in the first page link", () => {
+    const { allCases, myCases } = tabsOf({
+      page: pageWith([], 4),
+      myCasesPage: pageWith([], 2),
+      request: requestFor(
+        "?search=CASE&caseRef=asc&cursor=all-1&direction=backward&myCursor=my-1&myDirection=backward",
+      ),
+    });
+
+    expect(allCases.emptyState.firstPageHref).toBe(
+      "/cases?search=CASE&caseRef=asc&myCursor=my-1&myDirection=backward",
+    );
+    expect(myCases.emptyState.firstPageHref).toBe(
+      "/cases?search=CASE&caseRef=asc&cursor=all-1&direction=backward#my-cases",
+    );
+  });
+
+  it("tells the user nothing matches when a search has no results", () => {
+    const { allCases, myCases } = tabsOf({
+      page: pageWith([], 0),
+      myCasesPage: pageWith([], 0),
+      request: requestFor("?search=NOPE"),
+    });
+
+    const noMatches = {
+      message: "There are no cases matching your search criteria",
+    };
+    expect(allCases.emptyState).toEqual(noMatches);
+    expect(myCases.emptyState).toEqual(noMatches);
+  });
+
+  it("treats a search with matches but an out-of-date cursor as an empty page", () => {
+    const { allCases } = tabsOf({
+      page: pageWith([], 3),
+      request: requestFor("?search=CASE&cursor=all-1&direction=backward"),
+    });
+
+    expect(allCases.emptyState).toEqual({
+      message: "There are no cases on this page",
+      firstPageHref: "/cases?search=CASE",
+    });
   });
 });

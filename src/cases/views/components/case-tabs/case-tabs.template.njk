@@ -44,10 +44,19 @@
   %}
   {% set tableRows = (tableRows.push(processedRow), tableRows) %}
 {% endfor %}
-{% if params.data.rows.length == 0 and params.searchValue %}
+{% if params.emptyState %}
+  <p class="govuk-body">{{ params.emptyState.message }}</p>
+  {% if params.emptyState.firstPageHref %}
+    <p class="govuk-body">
+      <a href="{{ params.emptyState.firstPageHref }}" class="govuk-link"
+        >Go to the first page</a
+      >
+    </p>
+  {% endif %}
+{% elif params.data.rows.length == 0 and params.searchValue %}
+  {# Fallback for the case-type page, which doesn't pass emptyState. The Case
+     List gets this message from createEmptyState in case-list.view-model.js. #}
   <p class="govuk-body">There are no cases matching your search criteria</p>
-{% elif params.data.rows.length == 0 and params.emptyMessage %}
-  <p class="govuk-body">{{ params.emptyMessage }}</p>
 {% else %}
   <form method="GET" action="/cases/assign-user" class="case-tabs">
     <fieldset class="govuk-fieldset">
